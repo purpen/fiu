@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    >
+
+    <com.taihuoniao.fineix.view.TopAndBottomLinear
+        android:id="@+id/fragment_photo_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:background="#ff121212"/>
+
+
+    <LinearLayout
+        android:id="@+id/fragment_photo_listlinear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ff121212"
+        android:orientation="vertical"
+        >
+
+        <com.taihuoniao.fineix.view.ListViewForScrollView
+            android:id="@+id/fragment_photo_albmlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#ff6d6d6d"
+            android:dividerHeight="1dp"
+            android:paddingLeft="15dp"
+            />
+    </LinearLayout>
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/fragment_photo_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</FrameLayout>

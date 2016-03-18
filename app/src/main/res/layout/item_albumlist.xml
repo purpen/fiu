@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ff121212"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+    >
+
+    <ImageView
+        android:id="@+id/item_albumlist_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/item_albumlist_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:text="1124"
+        android:textColor="#ff878787"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/item_albumlist_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/item_albumlist_number"
+        android:layout_toRightOf="@id/item_albumlist_img"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:singleLine="true"
+        android:text="全景图片"
+        android:textColor="@color/white"
+        android:textSize="15sp"/>
+</RelativeLayout>

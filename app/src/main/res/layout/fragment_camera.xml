@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/fragment_camera_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="#212121">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/fragment_camera_cancel"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:padding="16dp"-->
+    <!--android:src="@drawable/cancel_red"/>-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/fragment_camera_flash"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:contentDescription="@null"-->
+    <!--android:padding="12dp"-->
+    <!--android:src="@drawable/flash_off"/>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_toLeftOf="@id/fragment_camera_flash"-->
+    <!--android:layout_toRightOf="@id/fragment_camera_cancel"-->
+    <!--android:gravity="center"-->
+    <!--android:text="拍照"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="16sp"/>-->
+    <!--</RelativeLayout>-->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SurfaceView
+            android:id="@+id/fragment_camera_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/fragment_camera_bottomrelative"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/backround_black"
+                />
+
+            <View
+                android:id="@+id/fragment_camera_focus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_above="@id/fragment_camera_bottomrelative"
+                android:background="@drawable/camera_focus"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/fragment_camera_takepic"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/take_picture"/>
+        </RelativeLayout>
+
+    </FrameLayout>
+</LinearLayout>

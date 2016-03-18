@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- 网络请求 -->
+    <string name="host_failure">连接失败，请检查网络</string>
 </resources>
