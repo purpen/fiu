@@ -46,7 +46,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                startActivity(new Intent(MainActivity.this,SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.activity_main_homepagebtn:
-                Toast.makeText(MainActivity.this, "首页切换未做", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, LocationActivity.class));
+//                Toast.makeText(MainActivity.this, "首页切换未做", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_main_findbtn:
                 Toast.makeText(MainActivity.this, "发现切换未做", Toast.LENGTH_SHORT).show();

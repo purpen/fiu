@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by taihuoniao on 2016/3/15.
@@ -28,7 +29,7 @@ public class ImageUtils {
         if (isDir) {
             File fileFolder = new File(fileFolderStr);
             Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss"); // 格式化时间
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA); // 格式化时间
             String filename = format.format(date) + ".jpg";
             if (!fileFolder.exists()) { // 如果目录不存在，则创建一个名为"finger"的目录
                 mkdir(fileFolder);
