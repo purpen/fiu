@@ -76,7 +76,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/take_picture"/>
+                android:background="@mipmap/take_picture" />
         </RelativeLayout>
 
     </FrameLayout>

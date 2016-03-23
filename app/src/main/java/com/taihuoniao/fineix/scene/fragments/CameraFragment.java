@@ -43,6 +43,10 @@ import java.util.List;
  * Created by taihuoniao on 2016/3/14.
  */
 public class CameraFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener {
+    // 最小预览界面的分辨率
+    private static final int MIN_PREVIEW_PIXELS = 480 * 320;
+    private static final int FOCUS = 0;
+    private static final int ZOOM = 1;
     //    private ImageView titleCancel;
 //    private ImageView titleFlash;
     private GlobalTitleLayout titleLayout;
@@ -56,12 +60,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private Camera.Parameters parameters;
     private Camera.Size adapterSize = null;
     private Camera.Size previewSize = null;
-    // 最小预览界面的分辨率
-    private static final int MIN_PREVIEW_PIXELS = 480 * 320;
     private float pointX, pointY;//点击预览界面时的坐标
     private int mode;//判断点击预览界面的状态 FOCUS聚焦 ZOOM放大或缩小
-    private static final int FOCUS = 0;
-    private static final int ZOOM = 1;
     private float dist;//两点间距
     //放大缩小
     private int curZoomValue = 0;
@@ -198,45 +198,6 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         return false;
     }
 
-
-    private class SurfaceCallback implements SurfaceHolder.Callback {
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            if (null == cameraInst) {
-                Log.e("<<<", "surfaceCreate");
-                try {
-                    cameraInst = Camera.open();
-                    cameraInst.setPreviewDisplay(holder);
-                    initCamera();
-                    cameraInst.startPreview();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e("<<<", "surfaceChanged");
-            autoFocus();
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            Log.e("<<<", "surfaceDestroyed");
-            try {
-                if (cameraInst != null) {
-                    cameraInst.stopPreview();
-                    cameraInst.release();
-                    cameraInst = null;
-                }
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), "相机已经关了", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
     private void initCamera() {
         parameters = cameraInst.getParameters();
         parameters.setPictureFormat(PixelFormat.JPEG);
@@ -293,9 +254,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         Method downPolymorphic;
         try {
             downPolymorphic = camera.getClass().getMethod("setDisplayOrientation",
-                    new Class[]{int.class});
+                    int.class);
             if (downPolymorphic != null) {
-                downPolymorphic.invoke(camera, new Object[]{i});
+                downPolymorphic.invoke(camera, i);
             }
         } catch (Exception e) {
             Log.e("<<<", "图像出错");
@@ -450,7 +411,6 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         return FloatMath.sqrt(x * x + y * y);
     }
 
-
     private void addZoomIn(int delta) {
         try {
             Camera.Parameters params = cameraInst.getParameters();
@@ -515,50 +475,13 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 && supportedModes.contains(Camera.Parameters.FLASH_MODE_ON)) {//关闭状态
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
             mCamera.setParameters(parameters);
-            titleLayout.setFlashImgResource(R.drawable.flash_on);
+            titleLayout.setFlashImgResource(R.mipmap.flash_on);
         } else if (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) && supportedModes.contains(Camera.Parameters.FLASH_MODE_OFF)) {//开启状态
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            titleLayout.setFlashImgResource(R.drawable.flash_off);
+            titleLayout.setFlashImgResource(R.mipmap.flash_off);
             mCamera.setParameters(parameters);
         }
     }
-
-    private class SavePicTask extends AsyncTask<Void, Void, String> {
-        private byte[] data;
-
-        protected void onPreExecute() {
-            dialog.show();
-        }
-
-        ;
-
-        SavePicTask(byte[] data) {
-            this.data = data;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                return saveToSDCard(data);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            if (result != null) {
-                dialog.dismiss();
-                ImageUtils.processPhotoItem(getActivity(), new PhotoItem(result, System.currentTimeMillis()));
-            } else {
-                Toast.makeText(getActivity(), "拍照失败，请稍后重试！", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
     private String saveToSDCard(byte[] data) throws IOException {
         Bitmap croppedImage;
@@ -610,6 +533,78 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         if (rotatedImage != croppedImage)
             croppedImage.recycle();
         return rotatedImage;
+    }
+
+    private class SurfaceCallback implements SurfaceHolder.Callback {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            if (null == cameraInst) {
+                Log.e("<<<", "surfaceCreate");
+                try {
+                    cameraInst = Camera.open();
+                    cameraInst.setPreviewDisplay(holder);
+                    initCamera();
+                    cameraInst.startPreview();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            Log.e("<<<", "surfaceChanged");
+            autoFocus();
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            Log.e("<<<", "surfaceDestroyed");
+            try {
+                if (cameraInst != null) {
+                    cameraInst.stopPreview();
+                    cameraInst.release();
+                    cameraInst = null;
+                }
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "相机已经关了", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private class SavePicTask extends AsyncTask<Void, Void, String> {
+        private byte[] data;
+
+        SavePicTask(byte[] data) {
+            this.data = data;
+        }
+
+        protected void onPreExecute() {
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                return saveToSDCard(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                dialog.dismiss();
+                ImageUtils.processPhotoItem(getActivity(), new PhotoItem(result, System.currentTimeMillis()));
+            } else {
+                Toast.makeText(getActivity(), "拍照失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

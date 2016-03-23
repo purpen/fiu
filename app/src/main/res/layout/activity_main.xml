@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="5dp"
-            android:src="@drawable/scene"/>
+            android:src="@mipmap/scene" />
 
         <ImageView
             android:id="@+id/activity_main_shopbtn"

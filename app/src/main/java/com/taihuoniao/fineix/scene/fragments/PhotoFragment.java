@@ -136,14 +136,14 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 if (isUp) {
                     isUp = false;
                     ObjectAnimator.ofFloat(listLinear, "translationY", DensityUtils.dp2px(getActivity(), 50) - MainApplication.getContext().getScreenHeight()).setDuration(500).start();
-                    titleLayout.setArrowImgResource(R.drawable.arrow_up_white);
+                    titleLayout.setArrowImgResource(R.mipmap.arrow_up_white);
                     titleLayout.setContinueTvVisible(false);
                     titleLayout.setBackImgVisible(true);
                     titleLayout.setCancelImgVisible(false);
                 } else {
                     isUp = true;
                     ObjectAnimator.ofFloat(listLinear, "translationY", listLinear.getMeasuredHeight() - DensityUtils.dp2px(getActivity(), 50)).setDuration(500).start();
-                    titleLayout.setArrowImgResource(R.drawable.arrow_down_white);
+                    titleLayout.setArrowImgResource(R.mipmap.arrow_down_white);
                     titleLayout.setContinueTvVisible(true);
                     titleLayout.setBackImgVisible(false);
                     titleLayout.setCancelImgVisible(true);
@@ -211,7 +211,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             linear.showTop();
             isUp = true;
             ObjectAnimator.ofFloat(listLinear, "translationY", listLinear.getMeasuredHeight() - DensityUtils.dp2px(getActivity(), 50)).setDuration(500).start();
-            titleLayout.setArrowImgResource(R.drawable.arrow_down_white);
+            titleLayout.setArrowImgResource(R.mipmap.arrow_down_white);
             titleLayout.setContinueTvVisible(true);
             titleLayout.setCancelImgVisible(true);
             titleLayout.setBackImgVisible(false);

@@ -10,14 +10,14 @@
         android:layout_height="match_parent"
         android:contentDescription="@null"
         android:padding="16dp"
-        android:src="@drawable/back_red"/>
+        android:src="@mipmap/back_red" />
 
     <ImageView
         android:id="@+id/title_cancel"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:src="@drawable/cancel_red"
+        android:src="@mipmap/cancel_red"
         android:visibility="gone"
         />
     <!-- 右侧按钮和文字-->
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:padding="12dp"
-        android:src="@drawable/flash_off"
+        android:src="@mipmap/flash_off"
         android:visibility="gone"/>
     <!-- 中间按钮和图片文字等-->
     <LinearLayout
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/arrow_down_white"
+            android:src="@mipmap/arrow_down_white"
             android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>
