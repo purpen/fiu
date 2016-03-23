@@ -2,6 +2,6 @@
     <string name="app_name">fineix</string>
     <!-- 网络请求 -->
     <string name="host_failure">连接失败，请检查网络</string>
-    <string name="startlocation">定位</string>
-    <string name="stoplocation">停止</string>
+    <string name="startlocation">开始定位</string>
+    <string name="stoplocation">停止定位</string>
 </resources>

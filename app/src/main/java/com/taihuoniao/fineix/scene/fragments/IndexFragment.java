@@ -1,14 +1,14 @@
 package com.taihuoniao.fineix.scene.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.BaseFragment;
 
-public class IndexFragment extends Fragment {
+public class IndexFragment extends BaseFragment {
 
     public IndexFragment() {
         // Required empty public constructor
@@ -27,6 +27,20 @@ public class IndexFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_index, container, false);
     }
 
+    @Override
+    protected View initView() {
+        return null;
+    }
+
+    @Override
+    protected void requestNet() {
+
+    }
+
+    @Override
+    protected void initList() {
+
+    }
 
     @Override
     public void onDetach() {
