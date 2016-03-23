@@ -15,12 +15,12 @@
         <ImageView
             android:id="@+id/activity_main_homepagebtn"
             style="@style/MainButtonStyle"
-            android:src="@drawable/main_tab_homepage_selector"/>
+            android:src="@mipmap/homepage_grey" />
 
         <ImageView
             android:id="@+id/activity_main_findbtn"
             style="@style/MainButtonStyle"
-            android:src="@drawable/main_tab_find_selector"/>
+            android:src="@mipmap/find_grey" />
 
         <ImageView
             android:id="@+id/activity_main_scenebtn"
@@ -33,12 +33,12 @@
         <ImageView
             android:id="@+id/activity_main_shopbtn"
             style="@style/MainButtonStyle"
-            android:src="@drawable/main_tab_shop_selector"/>
+            android:src="@mipmap/shop_grey" />
 
         <ImageView
             android:id="@+id/activity_main_minebtn"
             style="@style/MainButtonStyle"
-            android:src="@drawable/main_tab_mine_selector"/>
+            android:src="@mipmap/mine_grey" />
     </LinearLayout>
 
     <RelativeLayout
