@@ -4,11 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.taihuoniao.fineix.utils.LogUtil;
+
+import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -25,6 +29,20 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            List<Fragment> fragments = fm.getFragments();
+            for (Fragment fragment : fragments) {
+                if (TextUtils.isEmpty(fragment.getTag())) {
+                    continue;
+                }
+                if (TextUtils.equals(TAG, fragment.getTag())) {
+                    fm.beginTransaction().show(fm.findFragmentByTag(TAG)).commit();
+                } else {
+                    fm.beginTransaction().hide(fm.findFragmentByTag(fragment.getTag())).commit();
+                }
+            }
+        }
         LogUtil.e(TAG, "onCreate");
     }
 
