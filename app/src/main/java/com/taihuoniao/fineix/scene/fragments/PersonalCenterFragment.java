@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 
-public class IndexFragment extends BaseFragment {
+public class PersonalCenterFragment extends BaseFragment {
 
-    public IndexFragment() {
+    public PersonalCenterFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +28,7 @@ public class IndexFragment extends BaseFragment {
 
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_index, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_personalcenter, null);
 
         return view;
     }

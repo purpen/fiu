@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.ImageView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.scene.fragments.FindFragment;
+import com.taihuoniao.fineix.scene.fragments.IndexFragment;
+import com.taihuoniao.fineix.scene.fragments.PersonalCenterFragment;
+import com.taihuoniao.fineix.scene.fragments.WellGoodsFragment;
 
 import java.util.ArrayList;
 
@@ -17,15 +22,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView homepageImg, findImg, sceneImg, shopImg, mineImg;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
-
+    private Fragment from, to;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fm = getSupportFragmentManager();
         initView();
         setListener();
     }
-
     private void setListener() {
         homepageImg.setOnClickListener(this);
         findImg.setOnClickListener(this);
@@ -40,11 +45,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         } else {
             tabList = new ArrayList<TabItem>();
         }
-
-        if (tabList == null) {
-            return;
-        }
-
         homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
         initTabItem(homepageImg, R.id.activity_main_homepagebtn, R.mipmap.homepage_red, R.mipmap.homepage_grey);
 
@@ -60,6 +60,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initTabItem(mineImg, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_grey);
 
         setCurTab(R.id.activity_main_homepagebtn);
+        to = from = new IndexFragment();
+        fm.beginTransaction().add(R.id.activity_main_fragment_group, to, IndexFragment.class.getSimpleName()).commit();
     }
 
     private void initTabItem(ImageView imageView, int resId, int selId, int unselId) {
@@ -78,21 +80,66 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.activity_main_homepagebtn://主页
+                try {
+                    setCurTab(R.id.activity_main_homepagebtn);
+                    switchFragment(IndexFragment.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //                startActivity(new Intent(MainActivity.this, LocationActivity.class));
-
-                setCurTab(R.id.activity_main_homepagebtn);
                 break;
             case R.id.activity_main_findbtn: //发现
-                setCurTab(R.id.activity_main_findbtn);
+                try {
+                    setCurTab(R.id.activity_main_findbtn);
+                    switchFragment(FindFragment.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.activity_main_shopbtn:  //好货
-                setCurTab(R.id.activity_main_shopbtn);
+                try {
+                    setCurTab(R.id.activity_main_shopbtn);
+                    switchFragment(WellGoodsFragment.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.activity_main_minebtn: //个人中心
-                setCurTab(R.id.activity_main_minebtn);
+                try {
+                    setCurTab(R.id.activity_main_minebtn);
+                    switchFragment(PersonalCenterFragment.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
+
+
+    /**
+     * 切换fragment
+     *
+     * @param clazz
+     * @throws Exception
+     */
+    private void switchFragment(Class clazz) throws Exception {
+        to = fm.findFragmentByTag(clazz.getSimpleName());
+        if (to == null) {
+            to = (Fragment) clazz.newInstance();
+            if (from != null) {
+                fm.beginTransaction().hide(from).commit();
+            }
+            fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
+        } else {
+            if (from != null) {
+                fm.beginTransaction().hide(from).show(to).commit();
+            } else {
+                //TODO
+            }
+        }
+        from = to;
+    }
+
 
     private void setCurTab(int imgId) {
         for (TabItem tabItem : tabList) {
