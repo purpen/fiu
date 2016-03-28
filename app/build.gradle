@@ -26,8 +26,15 @@ android {
 
 dependencies {
     compile files('libs/universal-image-loader-1.9.4.jar')
-    compile files('libs/locSDK_6.23.jar')
-    compile files('libs/baidumapapi_v3_5_0.jar')
-    compile 'com.android.support:support-v4:24.0.0-alpha1'
+    compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile files('libs/baidumapapi_cloud_v3_7_1.jar')
+    compile files('libs/baidumapapi_radar_v3_7_1.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile files('libs/baidumapapi_search_v3_7_1.jar')
+    compile files('libs/baidumapapi_base_v3_7_1.jar')
+    compile files('libs/baidumapapi_map_v3_7_1.jar')
+    compile files('libs/baidumapapi_util_v3_7_1.jar')
+    compile files('libs/locSDK_6.23.jar')
 }

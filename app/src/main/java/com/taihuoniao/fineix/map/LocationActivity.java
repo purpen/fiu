@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.main;
+package com.taihuoniao.fineix.map;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,19 +12,21 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.service.LocationService;
 
 /***
  * 单点定位示例，用来展示基本的定位结果，配置在LocationService.java中
  * 默认配置也可以在LocationService中修改
  * 默认配置的内容自于开发者论坛中对开发者长期提出的疑问内容
+ *
+ * @author baidu
  */
 public class LocationActivity extends Activity {
     private LocationService locationService;
     private TextView LocationResult;
     private Button startLocation;
     /*****
-     * @see copy funtion to you project
      * 定位结果回调，重写onReceiveLocation方法，可以直接拷贝如下代码到自己工程中修改
      */
     private BDLocationListener mListener = new BDLocationListener() {

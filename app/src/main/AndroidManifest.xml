@@ -28,26 +28,32 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".scene.SelectPhotoOrCameraActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity
-            android:name=".scene.CropPictureActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity
-            android:name=".scene.EditPictureActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name=".main.LocationActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:name=".map.POIListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".map.LocationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <!--<activity-->
+        <!--android:name=".scene.SelectPhotoOrCameraActivity"-->
+        <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" />-->
+        <!--<activity-->
+        <!--android:name=".scene.CropPictureActivity"-->
+        <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait"/>-->
+        <!--<activity-->
+        <!--android:name=".scene.EditPictureActivity"-->
+        <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" />-->
 
         <service
             android:name="com.baidu.location.f"

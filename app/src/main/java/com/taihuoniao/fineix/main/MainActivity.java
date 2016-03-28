@@ -1,16 +1,14 @@
 package com.taihuoniao.fineix.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
-import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.scene.fragments.FindFragment;
 import com.taihuoniao.fineix.scene.fragments.IndexFragment;
 import com.taihuoniao.fineix.scene.fragments.PersonalCenterFragment;
@@ -18,20 +16,25 @@ import com.taihuoniao.fineix.scene.fragments.WellGoodsFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+//import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView homepageImg, findImg, sceneImg, shopImg, mineImg;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
+
+    public MainActivity() {
+        super(R.layout.activity_main);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         fm = getSupportFragmentManager();
-        initView();
-        setListener();
+        super.onCreate(savedInstanceState);
     }
-    private void setListener() {
+
+    @Override
+    protected void installListener() {
         homepageImg.setOnClickListener(this);
         findImg.setOnClickListener(this);
         sceneImg.setOnClickListener(this);
@@ -39,7 +42,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mineImg.setOnClickListener(this);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         if (tabList != null) {
             tabList.clear();
         } else {
@@ -60,8 +64,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initTabItem(mineImg, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_grey);
 
         setCurTab(R.id.activity_main_homepagebtn);
-        to = from = new IndexFragment();
-        fm.beginTransaction().add(R.id.activity_main_fragment_group, to, IndexFragment.class.getSimpleName()).commit();
+//        to = from = new IndexFragment();
+        try {
+            switchFragment(IndexFragment.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        fm.beginTransaction().add(R.id.activity_main_fragment_group, to, IndexFragment.class.getSimpleName()).commit();
     }
 
     private void initTabItem(ImageView imageView, int resId, int selId, int unselId) {
@@ -77,9 +86,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main_scenebtn:
-                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+//                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.activity_main_homepagebtn://主页
+
                 try {
                     setCurTab(R.id.activity_main_homepagebtn);
                     switchFragment(IndexFragment.class);
@@ -154,7 +164,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     /**
      * 设置选中和未选中状态
-     *
      * @param tabItem
      * @param id
      * @param imgId

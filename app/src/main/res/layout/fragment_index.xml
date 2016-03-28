@@ -1,11 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.taihuoniao.fineix.scene.fragments.IndexFragment">
 
-    <TextView
+    <Button
+        android:id="@+id/location_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="index" />
-</FrameLayout>
+        android:text="定位" />
+
+    <Button
+        android:id="@+id/poi_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_btn"
+        android:text="POI" />
+</RelativeLayout>

@@ -1,6 +1,6 @@
 package com.taihuoniao.fineix.base;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.taihuoniao.fineix.utils.LogUtil;
-
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -20,15 +20,12 @@ import java.util.List;
 public abstract class BaseFragment extends Fragment {
     protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
     protected final String TAG = getClass().getSimpleName();
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
+    protected Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = getActivity();
         if (savedInstanceState != null) {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             List<Fragment> fragments = fm.getFragments();
@@ -43,15 +40,14 @@ public abstract class BaseFragment extends Fragment {
                 }
             }
         }
-        LogUtil.e(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = initView();
+        ButterKnife.bind(this, view);
         initList();
         requestNet();
-        LogUtil.e(TAG, "onCreateView");
         return view;
     }
 
@@ -60,6 +56,14 @@ public abstract class BaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        installListener();
+    }
+
+    protected void installListener() {
+    }
     @Override
     public void onStart() {
         super.onStart();
