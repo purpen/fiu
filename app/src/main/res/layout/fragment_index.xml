@@ -16,4 +16,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/location_btn"
         android:text="POI" />
+
+    <Button
+        android:id="@+id/share_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/poi_btn"
+        android:text="分享" />
+    <Button
+        android:id="@+id/sliding_tab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/share_btn"
+        android:text="滑动界面" />
 </RelativeLayout>

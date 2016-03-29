@@ -45,6 +45,10 @@
             android:name=".map.LocationActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".order.OrderListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
         <!--<activity-->
         <!--android:name=".scene.SelectPhotoOrCameraActivity"-->
         <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" />-->

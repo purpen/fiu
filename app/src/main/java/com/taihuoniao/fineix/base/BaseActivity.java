@@ -20,17 +20,14 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = this;
-        ButterKnife.bind(this);
         setContentView(layoutResID);
+        ButterKnife.bind(this);
         initView();
         installListener();
         initList();
         requestNet();
     }
 
-    /**
-     * 获得界面跳转数据
-     */
     protected void getIntentData() {
     }
 
@@ -44,4 +41,8 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     protected abstract void initView();
+
+    protected void refreshUI(){
+
+    }
 }
