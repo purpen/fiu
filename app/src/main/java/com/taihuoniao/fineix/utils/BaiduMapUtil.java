@@ -68,7 +68,7 @@ public class BaiduMapUtil {
      * @return Bitmap
      * @throws
      * @Title: getBitmapFromView
-     * @Description: 通過view得到位圖
+     * @Description:
      */
     public static Bitmap getBitmapFromView(View view) {
         view.destroyDrawingCache();
@@ -90,7 +90,7 @@ public class BaiduMapUtil {
      * @return Marker
      * @throws
      * @Title: showMarkerByResource
-     * @Description: 通過resource來顯示Marker
+     * @Description:
      */
     public static Marker showMarkerByResource(double lat, double lon,
                                               int resource, BaiduMap mBaiduMap, int distance, boolean isMoveTo) {
@@ -115,7 +115,7 @@ public class BaiduMapUtil {
      * @return Marker
      * @throws
      * @Title: showMarkerByBitmap
-     * @Description: 通過bitmap來顯示Marker
+     * @Description:
      */
     public static Marker showMarkerByBitmap(double lat, double lon,
                                             Bitmap mBitmap, BaiduMap mBaiduMap, int distance, boolean isMoveTo) {
@@ -152,7 +152,7 @@ public class BaiduMapUtil {
      * @return Marker
      * @throws
      * @Title: showMarkerByView
-     * @Description: 通過view來顯示Marker
+     * @Description:
      */
     public static Marker showMarkerByView(double lat, double lon, View mView,
                                           BaiduMap mBaiduMap, int distance, boolean isMoveTo) {
@@ -176,7 +176,7 @@ public class BaiduMapUtil {
      * @return InfoWindow
      * @throws
      * @Title: showInfoWindowByBitmap
-     * @Description: 通過bitmap來顯示InfoWindow
+     * @Description:
      */
     public static InfoWindow showInfoWindowByBitmap(double lat, double lon,
                                                     Bitmap mBitmap, BaiduMap mBaiduMap, int distance, boolean isMoveTo,
@@ -202,7 +202,7 @@ public class BaiduMapUtil {
      * @return InfoWindow
      * @throws
      * @Title: showPopByView
-     * @Description: 通過view來顯示InfoWindow
+     * @Description:
      */
     public static InfoWindow showInfoWindowByView(double lat, double lon,
                                                   View mView, BaiduMap mBaiduMap, int distance, boolean isMoveTo,
@@ -223,7 +223,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: moveToTarget
-     * @Description:移動到該點
+     * @Description:移动到指定的经纬度
      */
     public static void moveToTarget(double lat, double lon, BaiduMap mBaiduMap) {
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLng(new LatLng(
@@ -235,7 +235,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: moveToTarget
-     * @Description:移動到該點
+     * @Description:移动到指定的点
      */
     public static void moveToTarget(LatLng mLatLng, BaiduMap mBaiduMap) {
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLng(mLatLng));
@@ -247,7 +247,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: setZoom
-     * @Description: 縮放地圖的
+     * @Description: 设置地图缩放级别
      */
     public static void setZoom(float zoomLevel, BaiduMap mBaiduMap) {
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.zoomTo(zoomLevel));
@@ -258,7 +258,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: zoomIn
-     * @Description: 放大地圖
+     * @Description: 放大地图
      */
     public static void zoomInMapView(MapView mMapView) {
         try {
@@ -274,7 +274,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: zoomOut
-     * @Description: 縮小地圖
+     * @Description: 缩小地图
      */
     public static void zoomOutMapView(MapView mMapView) {
         try {
@@ -292,7 +292,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: goneMapViewChild
-     * @Description: 隱藏百度logo亦或百度自帶的縮放鍵
+     * @Description: 隐藏百度logo和缩放按键
      */
     public static void goneMapViewChild(MapView mMapView, boolean goneLogo,
                                         boolean goneZoomControls) {
@@ -310,7 +310,7 @@ public class BaiduMapUtil {
 
     /**
      * @param mContext
-     * @param time     大於1000既會間隔定位
+     * @param time     大于1000会间隔定位
      * @param listener
      * @return void
      * @throws
@@ -319,11 +319,10 @@ public class BaiduMapUtil {
      */
     public static void locateByBaiduMap(Context mContext, int time,
                                         LocateListener listener) {
-        // if (mLocationClient == null) {
         mLocateListener = listener;
         locateTime = time;
         if (mLocationClient == null) {
-            mLocationClient = new LocationClient(mContext);
+            mLocationClient = new LocationClient(mContext.getApplicationContext());
         }
         if (mLocationClient.isStarted()) {
             mLocationClient.stop();
@@ -377,7 +376,7 @@ public class BaiduMapUtil {
      * @return String
      * @throws
      * @Title: getDistance
-     * @Description: 獲取距離 Stirng類型的
+     * @Description: 获取距离
      */
     public static String getDistanceWithUtil(double mLat1, double mLon1,
                                              double mLat2, double mLon2) {
@@ -402,7 +401,7 @@ public class BaiduMapUtil {
      * @return int
      * @throws
      * @Title: getDistanceForInteger
-     * @Description: 獲取距離 int類型的
+     * @Description: 获取int型距离
      */
     public static int getDistanceWithoutUtil(double mLat1, double mLon1,
                                              double mLat2, double mLon2) {
@@ -426,7 +425,7 @@ public class BaiduMapUtil {
      * @return String
      * @throws
      * @Title: getDistance
-     * @Description: 獲取距離 Stirng類型的
+     * @Description: 获取距离工具
      */
     public static String getDistanceWithUtil(String mLat1, String mLon1,
                                              String mLat2, String mLon2) {
@@ -450,7 +449,7 @@ public class BaiduMapUtil {
      * @return String
      * @throws
      * @Title: addUnit
-     * @Description: 為距離添加單位的
+     * @Description: 根据距离大小返回不同的单位
      */
     public static String addUnit(float distance) {
         if (distance == 0) {
@@ -474,7 +473,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: getSuggestion
-     * @Description: 通過關鍵字及城市名搜索對應地區 city城市名-district區名-locName熱點名
+     * @Description: 通过城市名和关键字获得 city城市名-district区-locName热点建议
      */
     public static void getSuggestion(String cityName, String keyName,
                                      SuggestionsGetListener listener) {
@@ -496,12 +495,6 @@ public class BaiduMapUtil {
                 .keyword(keyName.toString()).city(cityName));
     }
 
-    /**
-     * @return void
-     * @throws
-     * @Title: destroySuggestion
-     * @Description: 銷毀及置空搜索相關對象
-     */
     public static void destroySuggestion() {
         if (mSuggestionSearch != null) {
             mSuggestionSearch.destroy();
@@ -563,7 +556,7 @@ public class BaiduMapUtil {
      * @return void
      * @throws
      * @Title: destroyGeoCode
-     * @Description: 銷毀及置空geo搜索相關對象
+     * @Description: 释放资源
      */
     public static void destroyGeoCode() {
         if (mGeoCoder != null) {
@@ -693,16 +686,16 @@ public class BaiduMapUtil {
                 return;
             }
             // MyLocationData locData = new MyLocationData.Builder()
-            // .accuracy(location.getRadius())
+            // .accuracy(activity_hotcities_layout.getRadius())
             // // 此处设置开发者获取到的方向信息，顺时针0-360
-            // .direction(100).latitude(location.getLatitude())
-            // .longitude(location.getLongitude()).build();
+            // .direction(100).latitude(activity_hotcities_layout.getLatitude())
+            // .longitude(activity_hotcities_layout.getLongitude()).build();
             // if (mLocationBean == null) {
             LocationBean mLocationBean = new LocationBean();
             // }
             mLocationBean.setProvince(location.getProvince());
             mLocationBean.setCity(location.getCity());
-            // mLocationBean.setCityId(location.getCityCode());
+            // mLocationBean.setCityId(activity_hotcities_layout.getCityCode());
             mLocationBean.setDistrict(location.getDistrict());
             mLocationBean.setStreet(location.getStreet());
             mLocationBean.setLatitude(location.getLatitude());
@@ -733,7 +726,7 @@ public class BaiduMapUtil {
     /**
      * @author
      * @ClassName: MySuggestionListener
-     * @Description: 關鍵字搜索監聽回調
+     * @Description: 关键字搜索的回调
      */
     public static class MySuggestionListener implements
             OnGetSuggestionResultListener {
@@ -767,7 +760,7 @@ public class BaiduMapUtil {
     /**
      * @author
      * @ClassName: MyGeoCodeListener
-     * @Description: geo搜索的回調
+     * @Description: geo搜索的回调
      */
     public static class MyGeoCodeListener implements
             OnGetGeoCoderResultListener {
@@ -810,79 +803,6 @@ public class BaiduMapUtil {
             destroyGeoCode();
         }
     }
-
-//    /**
-//     * @author
-//     * @ClassName: MyPoiSearchListener
-//     * @Description: poisearch搜索的回调
-//     */
-//    public static class MyPoiSearchListener implements
-//            OnGetPoiSearchResultListener {
-//
-//        @Override
-//        public void onGetPoiDetailResult(PoiDetailResult result) {
-//            if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-//                if (mPoiDetailSearchListener != null) {
-//                    mPoiDetailSearchListener.onGetFailed();
-//                }
-//                destroyPoiSearch();
-//                return;
-//            }
-//            LocationBean mLocationBean = new LocationBean();
-//            mLocationBean.setLocName(result.getName());
-//            mLocationBean.setAddStr(result.getAddress());
-//            mLocationBean.setLatitude(result.getLocation().latitude);
-//            mLocationBean.setLongitude(result.getLocation().longitude);
-//            mLocationBean.setUid(result.getUid());
-//            if (mPoiDetailSearchListener != null) {
-//                mPoiDetailSearchListener.onGetSucceed(mLocationBean);
-//            }
-//            destroyPoiSearch();
-//        }
-//
-//        @Override
-//        public void onGetPoiResult(PoiResult res) {
-//            if (res == null
-//                    || res.error == SearchResult.ERRORNO.RESULT_NOT_FOUND
-//                    || res.getAllPoi() == null) {
-//                if (mPoiSearchListener != null) {
-//                    mPoiSearchListener.onGetFailed();
-//                }
-//                destroyPoiSearch();
-//                return;
-//            }
-//            List<LocationBean> searchPoiList = new ArrayList<LocationBean>();
-//            if (res.getAllPoi() != null) {
-//                for (PoiInfo info : res.getAllPoi()) {
-//
-//                    try {
-//                        Log.i("aaaa", "address:" + info.address + ",city:"
-//                                + info.city + ",Lat:" + info.location.latitude
-//                                + ",Long:" + info.location.longitude + ",uid:"
-//                                + info.uid + ",name" + info.name);
-//                        LocationBean cityPoi = new LocationBean();
-//                        cityPoi.setAddStr(info.address);
-//                        cityPoi.setCity(info.city);
-//                        cityPoi.setLatitude(info.location.latitude);
-//                        cityPoi.setLongitude(info.location.longitude);
-//                        cityPoi.setUid(info.uid);
-//                        cityPoi.setLocName(info.name);
-//                        searchPoiList.add(cityPoi);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    // Log.i("huan", "lat==" + info.location.latitude +
-//                    // "--lon=="
-//                    // + info.location.longitude + "--热点名==" + info.name);
-//                }
-//            }
-//            if (mPoiSearchListener != null) {
-//                mPoiSearchListener.onGetSucceed(searchPoiList, res);
-//            }
-//            destroyPoiSearch();
-//        }
-//    }
-
     /**
      * @author
      * @ClassName: MyPoiSearchListener
@@ -943,9 +863,9 @@ public class BaiduMapUtil {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    // Log.i("huan", "lat==" + info.location.latitude +
+                    // Log.i("huan", "lat==" + info.activity_hotcities_layout.latitude +
                     // "--lon=="
-                    // + info.location.longitude + "--热点名==" + info.name);
+                    // + info.activity_hotcities_layout.longitude + "--热点名==" + info.name);
                 }
             }
             if (mPoiSearchListener != null) {

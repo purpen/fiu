@@ -37,6 +37,6 @@
         android:paddingLeft="16dp"
         android:singleLine="true"
         android:text="全景图片"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="15sp"/>
 </RelativeLayout>

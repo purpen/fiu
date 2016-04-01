@@ -30,7 +30,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="继续"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="16sp"/>
 
     <ImageView
@@ -56,7 +56,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="标题"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="16sp"/>
 
         <ImageView

@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.scene.fragments;
+package com.taihuoniao.fineix.order.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,8 +12,8 @@ import com.taihuoniao.fineix.order.OrderListActivity;
 
 import butterknife.OnClick;
 
-public class IndexFragment extends BaseFragment {
-    public IndexFragment() {
+public class OrderFragment1 extends BaseFragment {
+    public OrderFragment1() {
         // Required empty public constructor
     }
     @Override

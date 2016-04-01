@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">fineix</string>
+    <string name="select_city">选择城市</string>
+    <string name="locating">定位中...</string>
+    <string name="startlocation">开始定位</string>
+    <string name="location_error">定位失败</string>
     <!-- 网络请求 -->
     <string name="host_failure">连接失败，请检查网络</string>
-    <string name="startlocation">定位</string>
-    <string name="stoplocation">停止</string>
 </resources>

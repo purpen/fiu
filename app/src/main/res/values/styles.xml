@@ -1,8 +1,11 @@
 <resources>
-
+    <style name="AppTheme" parent="@style/AppBaseTheme"></style>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
     <!-- MainActivity中最下面RadioGroup的五个Button的样式 -->

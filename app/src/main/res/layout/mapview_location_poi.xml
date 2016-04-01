@@ -4,7 +4,11 @@
     android:layout_height="match_parent"
     android:background="#eeeeee"
     android:orientation="vertical">
-
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_layout"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -118,17 +122,14 @@
                     android:id="@+id/lvPoiList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:cacheColorHint="#808080"
-                    android:dividerHeight="1dp"
-                    android:fastScrollEnabled="true"
-                    android:scrollbars="none"
-                    android:scrollingCache="false"
-                    android:visibility="gone"></ListView>
+                    android:visibility="gone">
+
+                </ListView>
             </FrameLayout>
         </LinearLayout>
 
         <EditText
-            android:id="@+id/etMLCityPoi"
+            android:id="@+id/et_search_box"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_margin="10dp"
@@ -141,16 +142,13 @@
             android:textSize="16sp" />
 
         <ListView
-            android:id="@+id/lvMLCityPoi"
+            android:id="@+id/lv_search_result"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/etMLCityPoi"
-            android:layout_margin="5dp"
-            android:dividerHeight="2dp"
-            android:fastScrollEnabled="true"
-            android:scrollbars="none"
-            android:scrollingCache="false"
-            android:visibility="gone"></ListView>
+            android:layout_below="@id/et_search_box"
+            android:visibility="gone">
+
+        </ListView>
     </RelativeLayout>
 
 </LinearLayout>

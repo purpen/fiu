@@ -40,15 +40,19 @@
         <activity
             android:name=".map.POIListActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".map.LocationActivity"
+            android:name=".map.BaiDuLBSActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".map.HotCitiesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".order.OrderListActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppTheme"/>
         <!--<activity-->
         <!--android:name=".scene.SelectPhotoOrCameraActivity"-->
         <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" />-->
@@ -58,11 +62,14 @@
         <!--<activity-->
         <!--android:name=".scene.EditPictureActivity"-->
         <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" />-->
-
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote">
+            android:process=":remote"
+            android:permission="android.permission.BAIDU_LOCATION_SERVICE">
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.6"></action>
+            </intent-filter>
         </service>
         <!--此处为测试value，线上版本务必更换-->
         <meta-data

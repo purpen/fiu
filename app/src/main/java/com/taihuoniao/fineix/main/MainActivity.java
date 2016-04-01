@@ -3,6 +3,8 @@ package com.taihuoniao.fineix.main;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,6 +15,7 @@ import com.taihuoniao.fineix.scene.fragments.FindFragment;
 import com.taihuoniao.fineix.scene.fragments.IndexFragment;
 import com.taihuoniao.fineix.scene.fragments.PersonalCenterFragment;
 import com.taihuoniao.fineix.scene.fragments.WellGoodsFragment;
+import com.taihuoniao.fineix.utils.LogUtil;
 
 import java.util.ArrayList;
 
@@ -96,7 +99,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                startActivity(new Intent(MainActivity.this, LocationActivity.class));
+//                startActivity(new Intent(MainActivity.this, HotCitiesActivity.class));
                 break;
             case R.id.activity_main_findbtn: //发现
                 try {
@@ -135,16 +138,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void switchFragment(Class clazz) throws Exception {
         to = fm.findFragmentByTag(clazz.getSimpleName());
         if (to == null) {
-            to = (Fragment) clazz.newInstance();
             if (from != null) {
                 fm.beginTransaction().hide(from).commit();
+            }else {
+                //to和from都为空,不会出现
             }
+            to = (Fragment) clazz.newInstance();
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
         } else {
+            if (to==from){
+                LogUtil.e("to==from",(to==from)+"");
+                return;
+            }
+
             if (from != null) {
                 fm.beginTransaction().hide(from).show(to).commit();
             } else {
-                //TODO
+                //首次进入主页才会出现
             }
         }
         from = to;

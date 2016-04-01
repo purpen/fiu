@@ -1,15 +1,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.taihuoniao.fineix.main.MainActivity">
+    <!--<include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_layout"
+        />-->
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:id="@+id/activity_main_fragment_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/activity_main_bottomlinear"
+        android:layout_below="@+id/custom_head"
+        />
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/grey_no_corner"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -40,10 +55,4 @@
             style="@style/MainButtonStyle"
             android:src="@mipmap/mine_grey" />
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/activity_main_fragment_group"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/activity_main_bottomlinear"></FrameLayout>
 </RelativeLayout>

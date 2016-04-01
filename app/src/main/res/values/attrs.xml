@@ -4,6 +4,7 @@
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
     </declare-styleable>
+
     <declare-styleable name="RoundProgressBar">
         <attr name="roundColor" format="color"/>
         <attr name="roundProgressColor" format="color"/>
@@ -22,6 +23,7 @@
         <attr name="pstsIndicatorColor" format="color" />
         <attr name="pstsUnderlineColor" format="color" />
         <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsCurIndicatorColor" format="color" />
         <attr name="pstsIndicatorHeight" format="dimension" />
         <attr name="pstsUnderlineHeight" format="dimension" />
         <attr name="pstsDividerPadding" format="dimension" />
