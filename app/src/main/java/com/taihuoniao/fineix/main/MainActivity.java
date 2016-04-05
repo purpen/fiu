@@ -66,14 +66,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
         initTabItem(mineImg, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_grey);
 
-        setCurTab(R.id.activity_main_homepagebtn);
-//        to = from = new IndexFragment();
-        try {
-            switchFragment(IndexFragment.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        fm.beginTransaction().add(R.id.activity_main_fragment_group, to, IndexFragment.class.getSimpleName()).commit();
+        switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
     }
 
     private void initTabItem(ImageView imageView, int resId, int selId, int unselId) {
@@ -92,39 +85,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.activity_main_homepagebtn://主页
-
-                try {
-                    setCurTab(R.id.activity_main_homepagebtn);
-                    switchFragment(IndexFragment.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-//                startActivity(new Intent(MainActivity.this, HotCitiesActivity.class));
+                switchFragmentandImg(R.id.activity_main_homepagebtn,IndexFragment.class);
                 break;
             case R.id.activity_main_findbtn: //发现
-                try {
-                    setCurTab(R.id.activity_main_findbtn);
-                    switchFragment(FindFragment.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                switchFragmentandImg(R.id.activity_main_findbtn,FindFragment.class);
                 break;
             case R.id.activity_main_shopbtn:  //好货
-                try {
-                    setCurTab(R.id.activity_main_shopbtn);
-                    switchFragment(WellGoodsFragment.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                switchFragmentandImg(R.id.activity_main_shopbtn,WellGoodsFragment.class);
                 break;
             case R.id.activity_main_minebtn: //个人中心
-                try {
-                    setCurTab(R.id.activity_main_minebtn);
-                    switchFragment(PersonalCenterFragment.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                switchFragmentandImg(R.id.activity_main_minebtn,PersonalCenterFragment.class);
                 break;
+        }
+    }
+
+    private void switchFragmentandImg(int id,Class clazz) {
+        try {
+            switchImg(id);
+            switchFragment(clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -161,7 +141,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    private void setCurTab(int imgId) {
+    private void switchImg(int imgId) {
         for (TabItem tabItem : tabList) {
             int id = tabItem.id;
             if (id == imgId) {
