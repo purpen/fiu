@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        />
 
     <TextView
         android:id="@+id/item_albumgrid_tv"

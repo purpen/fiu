@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -18,9 +17,14 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/3/14.
  */
 public abstract class BaseFragment extends Fragment {
-    protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
+//    protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
     protected final String TAG = getClass().getSimpleName();
     protected Activity activity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

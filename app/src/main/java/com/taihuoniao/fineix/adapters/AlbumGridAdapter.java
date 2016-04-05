@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PhotoItem;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
@@ -24,10 +24,22 @@ public class AlbumGridAdapter extends BaseAdapter {
     private Context context;
     private List<PhotoItem> photoList;
     private DisplayImageOptions options;
+//    private BitmapUtils bitmapUtils;
+
     public AlbumGridAdapter(Context context, List<PhotoItem> photoList) {
         this.context = context;
         this.photoList = photoList;
-
+//        bitmapUtils = new BitmapUtils(context);
+        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.default750_422)
+//                .showImageForEmptyUri(R.mipmap.default750_422)
+//                .showImageOnFail(R.mipmap.default750_422)
+//                .displayer(new FadeInBitmapDisplayer(300))
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+//                .displayer(new RoundedBitmapDisplayer(0))
+                .build();
     }
 
     @Override
@@ -47,21 +59,21 @@ public class AlbumGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder hold;
-        int width = DensityUtils.dp2px(context, 92);
-        int height = DensityUtils.dp2px(context, 88);
+         ViewHolder hold;
+        int width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 6)) / 4;
+        int height = width;
         if (convertView == null) {
             hold = new ViewHolder();
             convertView = View.inflate(context, R.layout.item_albumgrid, null);
             hold.img = (ImageView) convertView.findViewById(R.id.item_albumgrid_img);
             hold.tv = (TextView) convertView.findViewById(R.id.item_albumgrid_tv);
             hold.img.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-            hold.tv.setLayoutParams(new FrameLayout.LayoutParams(width - DensityUtils.dp2px(context, 4), height));
+            hold.tv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
             convertView.setTag(hold);
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), new ImageViewAware(hold.img));
+        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img,options);
         if (photoList.get(position).isChecked()) {
             hold.tv.setBackgroundResource(R.drawable.red_album_ground);
         } else {

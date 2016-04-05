@@ -1,20 +1,20 @@
 package com.taihuoniao.fineix.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
-import com.taihuoniao.fineix.scene.fragments.FindFragment;
-import com.taihuoniao.fineix.scene.fragments.IndexFragment;
-import com.taihuoniao.fineix.scene.fragments.PersonalCenterFragment;
-import com.taihuoniao.fineix.scene.fragments.WellGoodsFragment;
+import com.taihuoniao.fineix.main.fragment.FindFragment;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
+import com.taihuoniao.fineix.main.fragment.PersonalCenterFragment;
+import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main_scenebtn:
-//                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.activity_main_homepagebtn://主页
                 switchFragmentandImg(R.id.activity_main_homepagebtn,IndexFragment.class);

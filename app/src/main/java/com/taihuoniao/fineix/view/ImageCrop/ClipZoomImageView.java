@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -386,9 +385,7 @@ public class ClipZoomImageView extends ImageView implements
 
         int width = getWidth();
         int height = getHeight();
-        Log.e(TAG, "rect.width() =  " + rect.width()
-                + " , width - 2 * mHorizontalPadding ="
-                + (width - 2 * mHorizontalPadding));
+
 
         // 如果宽或高大于屏幕，则控制范围 ; 这里的0.001是因为精度丢失会产生问题，但是误差一般很小，所以我们直接加了一个0.01
         if (rect.width() + 0.01 >= width - 2 * mHorizontalPadding) {
