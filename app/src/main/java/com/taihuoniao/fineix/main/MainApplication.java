@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.service.LocationService;
+import com.taihuoniao.fineix.utils.JsonUtil;
 
 import java.io.File;
 import java.util.UUID;
@@ -49,6 +50,7 @@ public class MainApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
         instance = this;
         initImageLoader();
+        JsonUtil.init();
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/DCIM/Camera";

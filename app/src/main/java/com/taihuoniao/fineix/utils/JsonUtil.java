@@ -3,6 +3,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.taihuoniao.fineix.network.HttpResponse;
+
 import java.io.Reader;
 import java.util.List;
 
@@ -33,9 +36,9 @@ public class JsonUtil {
         return gson.fromJson(element, clazz);
     }
 
-//    public static <T> T fromJson(String json, TypeToken<HttpResponse<T>> token) {
-//        return (T) ((HttpResponse<T>) gson.fromJson(json, token.getType())).getResult();
-//    }
+    public static <T> T fromJson(String json, TypeToken<HttpResponse<T>> token) {
+        return (T) ((HttpResponse<T>) gson.fromJson(json, token.getType())).getData();
+    }
 
 
     public static String toJson(Object object) {

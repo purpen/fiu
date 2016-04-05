@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/3/14.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity<T> extends AppCompatActivity {
     protected final String TAG = getClass().getSimpleName();
     protected Activity activity;
     private int layoutResID;
@@ -46,6 +48,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initView();
 
     protected void refreshUI() {
+
+    }
+    protected void refreshUI(ArrayList<T> list) {
 
     }
 }
