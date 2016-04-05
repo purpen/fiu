@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.scene.fragments;
+package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
 import android.net.Uri;

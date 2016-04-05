@@ -9,15 +9,12 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
-/**
- * @author zhy
- *         http://blog.csdn.net/lmj623565791/article/details/39761281
- */
+
 public class ClipImageBorderView extends View {
     /**
      * 水平方向与View的边距
      */
-	private int mHorizontalPadding;
+    private int mHorizontalPadding;
     /**
      * 垂直方向与View的边距
      */
@@ -61,7 +58,7 @@ public class ClipImageBorderView extends View {
         // 计算矩形区域的宽度
         mWidth = getWidth();
         // 计算距离屏幕垂直边界 的边距
-        mVerticalPadding = (getHeight() - mWidth*4/3) / 2;
+        mVerticalPadding = (getHeight() - mWidth * 4 / 3) / 2;
         mPaint.setColor(Color.parseColor("#aa000000"));
         mPaint.setStyle(Style.FILL);
         // 绘制左边1

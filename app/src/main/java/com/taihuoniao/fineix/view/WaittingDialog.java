@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.utils;
+package com.taihuoniao.fineix.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,13 +21,11 @@ public class WaittingDialog extends Dialog{
         this.setContentView(R.layout.waitting_dialog);
         this.getWindow().getAttributes().gravity = Gravity.CENTER;
 //        this.setCancelable(true);
-
         this.setCanceledOnTouchOutside(false);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-
         if (!hasFocus) {
             dismiss();
         }

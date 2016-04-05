@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.scene.fragments;
+package com.taihuoniao.fineix.main.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 
-public class PersonalCenterFragment extends BaseFragment {
+public class WellGoodsFragment extends BaseFragment {
 
-    public PersonalCenterFragment() {
+    public WellGoodsFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +28,7 @@ public class PersonalCenterFragment extends BaseFragment {
 
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_personalcenter, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
 
         return view;
     }

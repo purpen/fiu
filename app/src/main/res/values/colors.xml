@@ -2,8 +2,11 @@
 <resources>
     <!-- mainactivity tab的背景颜色-->
     <color name="radiogroup_white">#fffdfdfd</color>
+    <!-- GlobleTitleLayout-->
+    <color name="title_black">#212121</color>
     <!-- selectactivity -->
     <color name="red">#ffff3366</color>
+    <color name="white">#ffffff</color>
     <color name="color_ff3366">#ff3366</color>
     <color name="backround_black">#ff010101</color>
     <color name="nothing">#00ffffff</color>

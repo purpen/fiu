@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.R;
  */
 public class GlobalTitleLayout extends RelativeLayout implements View.OnClickListener {
     private Context context;
+    private View view;
     private ImageView backImg;
     private ImageView cancelImg;//默认隐藏
     private LinearLayout titleLinear;
@@ -37,7 +38,8 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     }
 
     private void initView() {
-        View view = View.inflate(context, R.layout.title, GlobalTitleLayout.this);
+        view = View.inflate(context, R.layout.title, GlobalTitleLayout.this);
+        view.setBackgroundResource(R.color.title_black);
         backImg = (ImageView) view.findViewById(R.id.title_back);
         cancelImg = (ImageView) view.findViewById(R.id.title_cancel);
         titleLinear = (LinearLayout) view.findViewById(R.id.title_linear);
@@ -45,6 +47,11 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         arrowImg = (ImageView) view.findViewById(R.id.title_arrow);
         continueTv = (TextView) view.findViewById(R.id.title_continue);
         flashImg = (ImageView) view.findViewById(R.id.title_flash);
+    }
+
+    //设置背景颜色
+    public void setColor(int resid) {
+        view.setBackgroundResource(resid);
     }
 
     //控制取消按钮的显示隐藏
@@ -78,9 +85,22 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         titleLinear.setOnClickListener(onClickListener);
     }
 
+    //设置标题是否可见,默认可见
+    public void setTitleVisible(boolean visible) {
+        if (visible) {
+            titleLinear.setVisibility(VISIBLE);
+        } else {
+            titleLinear.setVisibility(GONE);
+        }
+    }
+
     //设置标题
     public void setTitle(String title) {
         titleName.setText(title);
+    }
+
+    public void setTitle(int resid) {
+        titleName.setText(resid);
     }
 
     //控制title箭头的显示隐藏
@@ -104,10 +124,18 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
             continueTv.setVisibility(GONE);
     }
 
+    //改变右侧按钮的名称、颜色，并设置监听
+    public void setRightTv(int resid, int color, OnClickListener onClickListener) {
+        continueTv.setText(resid);
+        continueTv.setTextColor(color);
+        continueTv.setOnClickListener(onClickListener);
+    }
+
     //设置继续监听
     public void setContinueListener(OnClickListener onClickListener) {
         continueTv.setOnClickListener(onClickListener);
     }
+
 
     //闪光灯显示并设置监听
     public void setFlashImgListtener(OnClickListener onClickListener) {
