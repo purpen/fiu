@@ -14,6 +14,7 @@ import com.taihuoniao.fineix.adapters.HotCitiesAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.service.LocationService;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
@@ -59,8 +60,11 @@ public class HotCitiesActivity extends BaseActivity {
     private AdapterView.OnItemClickListener itemClickListener=new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            //TODO
-            startActivity(new Intent(activity,BaiDuLBSActivity.class));
+            Intent intent=new Intent(activity,BaiDuLBSActivity.class);
+            if (view instanceof TextView){
+                intent.putExtra(TAG,((TextView) view).getText());
+            }
+            startActivity(intent);
         }
     };
     @Override
@@ -91,7 +95,7 @@ public class HotCitiesActivity extends BaseActivity {
 
     @Override
     protected void refreshUI() {
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("北京");
         list.add("上海");
         list.add("广州");

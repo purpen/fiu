@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/3/14.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    protected final String tag = getClass().getSimpleName();
+    protected final String TAG = getClass().getSimpleName();
     protected Activity activity;
     private int layoutResID;
     public BaseActivity(int layoutResID) {

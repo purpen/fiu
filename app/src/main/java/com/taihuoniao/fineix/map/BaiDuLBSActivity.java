@@ -62,6 +62,7 @@ public class BaiDuLBSActivity extends BaseActivity implements OnGetPoiSearchResu
     @Override
     protected void getIntentData() {
         super.getIntentData();
+
     }
 
     @Override
