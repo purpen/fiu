@@ -165,33 +165,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (TabItem tabItem : tabList) {
             int id = tabItem.id;
             if (id == imgId) {
-                setTabState(tabItem, id, tabItem.selId);
+                tabItem.imageView.setImageResource(tabItem.selId);
             } else {
-                setTabState(tabItem, id, tabItem.unselId);
+                tabItem.imageView.setImageResource(tabItem.unselId);
             }
-        }
-    }
-
-    /**
-     * 设置选中和未选中状态
-     * @param tabItem
-     * @param id
-     * @param imgId
-     */
-    private void setTabState(TabItem tabItem, int id, int imgId) {
-        switch (id) {
-            case R.id.activity_main_homepagebtn:
-                tabItem.imageView.setImageResource(imgId);
-                break;
-            case R.id.activity_main_findbtn:
-                tabItem.imageView.setImageResource(imgId);
-                break;
-            case R.id.activity_main_shopbtn:
-                tabItem.imageView.setImageResource(imgId);
-                break;
-            case R.id.activity_main_minebtn:
-                tabItem.imageView.setImageResource(imgId);
-                break;
         }
     }
 }
