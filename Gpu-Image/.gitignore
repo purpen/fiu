@@ -2,7 +2,8 @@
 bin
 gen
 obj
-
+/build
+/*.iml
 #Eclipse
 #.project
 #.classpath

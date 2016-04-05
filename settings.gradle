@@ -1,1 +1,1 @@
-include ':app', ':Gpu-Image'
+include ':Gpu-Image', ':app'
