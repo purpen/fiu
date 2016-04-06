@@ -35,7 +35,7 @@ public class HotCitiesAdapter extends CommonBaseAdapter<City> {
         textView.setTextSize(12);
         textView.setBackgroundResource(R.drawable.selector_hotcity);
         textView.setTextColor(resources.getColor(R.color.color_333));
-        LogUtil.e(TAG, list.size() + ";" + list.get(position));
+//        LogUtil.e(TAG, list.size() + ";" + list.get(position));
         return textView;
     }
 

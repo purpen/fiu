@@ -2,15 +2,12 @@
 bin
 gen
 obj
-build
 #Eclipse
 #.project
 #.classpath
 .settings
-
 #IntelliJ IDEA
 .idea
-*.iml
 *.ipr
 *.iws
 out

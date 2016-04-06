@@ -60,6 +60,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
 
     private boolean shouldExpand = false;
     private boolean textAllCaps = true;
+    private boolean isDivierShow = true;
 
     private int scrollOffset = 52;
     private int indicatorHeight = 8;
@@ -127,6 +128,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
         dividerColor = a.getColor(R.styleable.CustomSlidingTab_pstsDividerColor, dividerColor);
         indicatorHeight = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsIndicatorHeight, indicatorHeight);
         underlineHeight = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsUnderlineHeight, underlineHeight);
+        isDivierShow = a.getBoolean(R.styleable.CustomSlidingTab_pstsIsDivierShow,isDivierShow);
         dividerPadding = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsDividerPadding, dividerPadding);
         tabPadding = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsTabPaddingLeftRight, tabPadding);
         tabBackgroundResId = a.getResourceId(R.styleable.CustomSlidingTab_pstsTabBackground, tabBackgroundResId);
@@ -326,11 +328,12 @@ public class CustomSlidingTab extends HorizontalScrollView {
         canvas.drawRect(0, height - underlineHeight, tabsContainer.getWidth(), height, rectPaint);
 
         // draw divider
-
-        dividerPaint.setColor(dividerColor);
-        for (int i = 0; i < tabCount - 1; i++) {
-            View tab = tabsContainer.getChildAt(i);
-            canvas.drawLine(tab.getRight(), dividerPadding, tab.getRight(), height - dividerPadding, dividerPaint);
+        if (isDivierShow){
+            dividerPaint.setColor(dividerColor);
+            for (int i = 0; i < tabCount - 1; i++) {
+                View tab = tabsContainer.getChildAt(i);
+                canvas.drawLine(tab.getRight(), dividerPadding, tab.getRight(), height - dividerPadding, dividerPaint);
+            }
         }
     }
 

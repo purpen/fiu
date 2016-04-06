@@ -31,6 +31,7 @@
         <attr name="pstsScrollOffset" format="dimension" />
         <attr name="pstsTabBackground" format="reference" />
         <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsIsDivierShow" format="boolean" />
         <attr name="pstsTextAllCaps" format="boolean" />
     </declare-styleable>
 </resources>

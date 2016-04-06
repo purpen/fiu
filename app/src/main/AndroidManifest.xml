@@ -88,9 +88,6 @@
             android:theme="@style/NoTitleFullscreen"
             />
         <activity
-            android:name=".main.LocationActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity
             android:name=".order.OrderListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

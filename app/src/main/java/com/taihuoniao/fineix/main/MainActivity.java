@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
@@ -16,11 +15,7 @@ import com.taihuoniao.fineix.main.fragment.PersonalCenterFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
-
 import java.util.ArrayList;
-
-//import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView homepageImg, findImg, sceneImg, shopImg, mineImg;
     private FragmentManager fm;
