@@ -9,7 +9,7 @@ import android.widget.AbsListView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.Cities;
+import com.taihuoniao.fineix.beans.City;
 import com.taihuoniao.fineix.utils.LogUtil;
 
 import java.util.ArrayList;
@@ -18,17 +18,17 @@ import java.util.ArrayList;
  * @author lilin
  * created at 2016/3/30 16:31
  */
-public class HotCitiesAdapter extends CommonBaseAdapter<Cities> {
-    public HotCitiesAdapter(ArrayList<Cities> list, Activity activity){
+public class HotCitiesAdapter extends CommonBaseAdapter<City> {
+    public HotCitiesAdapter(ArrayList<City> list, Activity activity){
         super(list,activity);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Cities cities = list.get(position);
+        City city = list.get(position);
         TextView textView=new TextView(activity);
         Resources resources=activity.getResources();
         textView.setBackgroundDrawable(resources.getDrawable(R.drawable.border_radius5));
-        textView.setText(cities.name);
+        textView.setText(city.name);
         AbsListView.LayoutParams lp=new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,resources.getDimensionPixelSize(R.dimen.dp35));
         textView.setLayoutParams(lp);
         textView.setGravity(Gravity.CENTER);

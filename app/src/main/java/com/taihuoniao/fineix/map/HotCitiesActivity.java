@@ -19,7 +19,7 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.HotCitiesAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.Cities;
+import com.taihuoniao.fineix.beans.City;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
@@ -36,7 +36,7 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/3/30 15:12
  */
-public class HotCitiesActivity extends BaseActivity<Cities> {
+public class HotCitiesActivity extends BaseActivity<City> {
     private LocationService locationService;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -44,6 +44,7 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
     TextView tv_location;
     @Bind(R.id.gv_hotcity)
     GridView gv_hotcity;
+    private ArrayList<City> cities;
     private HotCitiesAdapter adapter = null;
     public HotCitiesActivity() {
         super(R.layout.activity_hotcities_layout);
@@ -73,9 +74,7 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent=new Intent(activity,BaiDuLBSActivity.class);
-            if (view instanceof TextView){
-                intent.putExtra(TAG,((TextView) view).getText());
-            }
+            intent.putExtra(TAG,cities.get(i));
             startActivity(intent);
         }
     };
@@ -111,7 +110,7 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 //TODO 关闭加载框
                 if (responseInfo!=null && responseInfo.result!=null){
-                    ArrayList<Cities> cities = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ArrayList<Cities>>>() {});
+                   cities = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ArrayList<City>>>() {});
                     refreshUI(cities);
                 }
             }
@@ -127,7 +126,7 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
 
 
     @Override
-    protected void refreshUI(ArrayList<Cities> list) {
+    protected void refreshUI(ArrayList<City> list) {
         if (adapter==null){
             adapter=new HotCitiesAdapter(list, activity);
             gv_hotcity.setAdapter(adapter);

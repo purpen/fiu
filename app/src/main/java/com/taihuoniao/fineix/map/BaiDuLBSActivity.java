@@ -28,6 +28,7 @@ import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.City;
 import com.taihuoniao.fineix.beans.LocationBean;
 import com.taihuoniao.fineix.utils.BaiduMapUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -61,7 +62,7 @@ public class BaiDuLBSActivity extends BaseActivity implements OnGetPoiSearchResu
     private BaiduMap mBaiduMap;
     private LocationClient mLocClient;
     boolean isFirstLoc = true; // 是否首次定位
-    private String title;
+    private City city;
     private BDLocation location;
     public BaiDuLBSActivity() {
         super(R.layout.activity_lbs_layout);
@@ -72,19 +73,24 @@ public class BaiDuLBSActivity extends BaseActivity implements OnGetPoiSearchResu
         Intent intent = getIntent();
         String key=HotCitiesActivity.class.getSimpleName();
         if (intent.hasExtra(key)){
-            title=intent.getStringExtra(key);
+            city=(City)intent.getSerializableExtra(key);
         }
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, title);
+        custom_head.setHeadCenterTxtShow(true,city.name);
         // 地图初始化
-        BaiduMapUtil.goneMapViewChild(mMapView,false,true);
+        mMapView.showZoomControls(false);
         mBaiduMap = mMapView.getMap();
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.getUiSettings().setZoomGesturesEnabled(true);// 缩放手势
+        if (city!=null){
+            LatLng ll = new LatLng(city.lat, city.lng);
+            MapStatus.Builder builder = new MapStatus.Builder().target(ll);
+            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        }
         // 定位初始化
         mLocClient = new LocationClient(this);
         mLocClient.registerLocationListener(locationListener);
