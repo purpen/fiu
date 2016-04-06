@@ -44,6 +44,7 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
     TextView tv_location;
     @Bind(R.id.gv_hotcity)
     GridView gv_hotcity;
+    private HotCitiesAdapter adapter = null;
     public HotCitiesActivity() {
         super(R.layout.activity_hotcities_layout);
     }
@@ -127,7 +128,6 @@ public class HotCitiesActivity extends BaseActivity<Cities> {
 
     @Override
     protected void refreshUI(ArrayList<Cities> list) {
-        HotCitiesAdapter adapter = null;
         if (adapter==null){
             adapter=new HotCitiesAdapter(list, activity);
             gv_hotcity.setAdapter(adapter);
