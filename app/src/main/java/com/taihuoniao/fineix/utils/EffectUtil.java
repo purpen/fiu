@@ -57,7 +57,7 @@ public class EffectUtil {
         drawable.setMinSize(30, 30);
 
         final MyHighlightView hv = new MyHighlightView(processImage, R.style.AppTheme, drawable);
-        hv.setPadding(80);
+        hv.setPadding(0);
         hv.setOnDeleteClickListener(new MyHighlightView.OnDeleteClickListener() {
 
             @Override
@@ -136,12 +136,12 @@ public class EffectUtil {
     //----添加标签-----
     public static void addLabelEditable(MyImageViewTouch overlay, ViewGroup container,
                                         LabelView label, int left, int top) {
-        addLabel(container, label, left, top);
+        addLabel(overlay, container, label, left, top);
         addLabel2Overlay(overlay, label);
     }
 
-    private static void addLabel(ViewGroup container, LabelView label, int left, int top) {
-        label.addTo(container, left, top);
+    private static void addLabel(MyImageViewTouch overlay, ViewGroup container, LabelView label, int left, int top) {
+        label.addTo(overlay, container, left, top);
     }
 
     public static void removeLabelEditable(MyImageViewTouch overlay, ViewGroup container,
@@ -152,8 +152,8 @@ public class EffectUtil {
 
     public static int getStandDis(float realDis, float baseWidth) {
         float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
-        //1242 按iphone6设置
-        float radio = 1242 / imageWidth;
+        //1280 按xhdpi设置
+        float radio = 1280 / imageWidth;
         return (int) (radio * realDis);
     }
 
@@ -188,7 +188,7 @@ public class EffectUtil {
     }
 
 
-    //添加水印
+    //添加商品
     public static void applyOnSave(Canvas mCanvas, ImageViewTouch processImage) {
         for (MyHighlightView view : hightlistViews) {
             applyOnSave(mCanvas, processImage, view);

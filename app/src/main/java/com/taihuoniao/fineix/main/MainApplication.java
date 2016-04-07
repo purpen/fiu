@@ -18,14 +18,17 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by taihuoniao on 2016/3/14.
+ * ¥
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
@@ -36,7 +39,10 @@ public class MainApplication extends Application {
     public static String systemPhotoPath = null;//系统相册路径
     //剪切好的图片存储路径
     public static String cropPicPath = null;
+    public static String editPicPath = null;//编辑好的图片存储路径
     public static String uuid = null;
+    //编辑好的图片标签的list
+    public static List<TagItem> tagInfoList;
 
     public static MainApplication getContext() {
         return instance;
@@ -52,10 +58,9 @@ public class MainApplication extends Application {
         initImageLoader();
         JsonUtil.init();
         uuid = getMyUUID();
-        systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/DCIM/Camera";
-        cropPicPath = MainApplication.getContext().getCacheDirPath()
-                + "/crop";
+        systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
+        cropPicPath = getCacheDirPath() + "/crop";
+        editPicPath = getCacheDirPath() + "/edit";
     }
 
     public int getScreenHeight() {

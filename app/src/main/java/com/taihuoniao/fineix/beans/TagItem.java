@@ -5,10 +5,30 @@ import java.io.Serializable;
 
 public class TagItem implements Serializable {
     private static final long serialVersionUID = 2685507991821634905L;
-    private long id;
-    private int type;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    //    private long id;
+    private String id;//商品id
+    private int type;//商品属于哪个商城
     private String name;
     private String price;
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     private double x = -1;
     private double y = -1;
 
@@ -44,18 +64,18 @@ public class TagItem implements Serializable {
 
     }
 
-    public TagItem(int type, String label) {
-        this.type = type;
-        this.name = label;
+    public TagItem(String name, String price) {
+        this.name = name;
+        this.price = price;
     }
 
-    public long getId() {
-        return id;
-    }
+//    public long getId() {
+//        return id;
+//    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     public int getType() {
         return type;

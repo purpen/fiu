@@ -323,11 +323,11 @@ public class MyImageViewTouch extends ImageViewTouch {
         MyHighlightView newSelection = checkSelection(e);
         MyHighlightView realNewSelection = newSelection;
 
-        if (newSelection == null && mOverlayViews.size() == 1 && mForceSingleSelection) {
-            // force a selection if none is selected, when force single selection is
-            // turned on
-            newSelection = mOverlayViews.get(0);
-        }
+//        if (newSelection == null && mOverlayViews.size() == 1 && mForceSingleSelection) {
+//            // force a selection if none is selected, when force single selection is
+//            // turned on
+//            newSelection = mOverlayViews.get(0);
+//        }
 
         setSelectedHighlightView(newSelection);
 
@@ -537,9 +537,9 @@ public class MyImageViewTouch extends ImageViewTouch {
         mOverlayViews.add(hv);
         postInvalidate();
 
-        if (mOverlayViews.size() == 1) {
-            setSelectedHighlightView(hv);
-        }
+//        if (mOverlayViews.size() == 1) {
+//            setSelectedHighlightView(hv);
+//        }
 
         return true;
     }

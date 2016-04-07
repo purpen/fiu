@@ -17,6 +17,12 @@
         <item name="android:layout_weight">1</item>
     </style>
 
+    <!-- popupWindow弹出弹入动画-->
+    <style name="popupwindow_style" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/bottom_to_up</item>
+        <item name="android:windowExitAnimation">@anim/up_to_bottom</item>
+    </style>
+
     <!-- 网络请求时的ProgressDialog -->
     <style name="CustomDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

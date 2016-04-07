@@ -2,18 +2,11 @@ package com.taihuoniao.fineix.order;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.TabPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.order.fragments.OrderFragment1;
-import com.taihuoniao.fineix.order.fragments.OrderFragment2;
-import com.taihuoniao.fineix.order.fragments.OrderFragment3;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.CustomViewPager;
 

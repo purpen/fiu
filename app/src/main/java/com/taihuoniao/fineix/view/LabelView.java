@@ -64,13 +64,14 @@ public class LabelView extends LinearLayout {
     }
 
     public void init(TagItem tagItem) {
-        tagInfo.setName(tagItem.getName());
-        tagInfo.setId(tagItem.getId());
-        tagInfo.setType(tagItem.getType());
+//        tagInfo.setName(tagItem.getName());
+//        tagInfo.setId(tagItem.getId());
+//        tagInfo.setType(tagItem.getType());
+        tagInfo = tagItem;
         labelTxtLeft.setText(tagItem.getName());
         labelTxtRight.setText(tagItem.getName());
-        priceTxtLeft.setText("¥" + tagItem.getPrice());
-        priceTxtRight.setText("¥" + tagItem.getPrice());
+        priceTxtLeft.setText(tagItem.getPrice());
+        priceTxtRight.setText(tagItem.getPrice());
         if (tagItem.getType() == 1) {
             labelIcon.setImageResource(R.mipmap.ic_launcher);
         }
@@ -111,16 +112,17 @@ public class LabelView extends LinearLayout {
      * @param left
      * @param top
      */
-    public void addTo(ViewGroup parent, final int left, final int top) {
+    public void addTo(MyImageViewTouch overlay, ViewGroup parent, final int left, final int top) {
         if (left > parent.getWidth() / 2) {
             tagInfo.setLeft(false);
         }
-        this.parentWidth = parent.getWidth();
+        this.parentWidth = overlay.getMeasuredWidth();
         if (parentWidth <= 0) {
             parentWidth = MainApplication.getContext().getScreenWidth();
         }
         setImageWidth((int) parentWidth);
-        this.parentHeight = parentWidth;
+        this.parentHeight = overlay.getMeasuredHeight();
+        setImageHeight((int) this.parentHeight);
         if (emptyItem) {
             relativeRight.setVisibility(View.GONE);
             relativeLeft.setVisibility(View.GONE);
@@ -136,7 +138,6 @@ public class LabelView extends LinearLayout {
             relativeLeft.setVisibility(View.INVISIBLE);
             setupLocation(20, 20);
             parent.addView(this);
-
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -159,8 +160,8 @@ public class LabelView extends LinearLayout {
         if (getImageWidth() - left - getWidth() < 0) {
             left = getImageWidth() - getWidth();
         }
-        if (getImageWidth() - top - getHeight() < 0) {
-            top = getImageWidth() - getHeight();
+        if (getImageHeight() - top - getHeight() < 0) {
+            top = getImageHeight() - getHeight();
         }
         if (left < 0 && top < 0) {
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -187,8 +188,17 @@ public class LabelView extends LinearLayout {
         return imageWidth <= 0 ? MainApplication.getContext().getScreenWidth() : imageWidth;
     }
 
+    private void setImageHeight(int height) {
+        this.imageHeight = height;
+    }
+
+    private int getImageHeight() {
+        return imageHeight <= 0 ? (int) this.parentHeight : imageHeight;
+    }
+
     private int left = -1, top = -1;
     private int imageWidth = 0;
+    private int imageHeight = 0;
 
     private static final int ANIMATIONEACHOFFSET = 600;
 
@@ -200,6 +210,7 @@ public class LabelView extends LinearLayout {
         relativeRight.setVisibility(View.GONE);
     }
 
+    //链接点的动画
     public void wave() {
         AnimationSet as = new AnimationSet(true);
         ScaleAnimation sa = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, ScaleAnimation.RELATIVE_TO_SELF,

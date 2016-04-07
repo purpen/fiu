@@ -16,8 +16,17 @@ public class DataConstants {
     public static final int TAOBAO = 96;
     public static final int TIANMAO = 95;
     public static final int YAMAXUN = 94;
+    //EditPictureActivity跳转到SearchStoreActivity界面的请求码和返回码
+    public static final int REQUESTCODE_EDIT_SEARCHSTORE = 93;
+    public static final int RESULTCODE_EDIT_SEARCHSTORE = 92;
+    public static final int REQUESTCODE_EDITEDIT_SEARCHSTORE = 88;//点击链接标签跳转请求码
+    //SearchStoreActivity跳转到SearchURLActivity界面的请求码和返回码
+    public static final int REQUESTCODE_SEARCHSTORE_SEARCHURL = 91;
+    public static final int RESULTCODE_SEARCHSTORE_SEARCHURL = 90;
     public static final String URL_JINGDONG = "https://www.jd.com/";
     public static final String URL_TAOBAO = "https://www.taobao.com/";
     public static final String URL_TIANMAO = "https://www.tmall.com/";
     public static final String URL_YAMAXUN = "http://www.amazon.cn/";
+    //添加产品界面产品列表
+    public static final int ADD_PRODUCT_LIST = 89;
 }

@@ -25,7 +25,9 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.activity = this;
         getIntentData();
-        setContentView(layoutResID);
+        if (layoutResID != 0) {
+            setContentView(layoutResID);
+        }
         ButterKnife.bind(this);
         initView();
         installListener();

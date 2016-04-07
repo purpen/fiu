@@ -18,11 +18,11 @@ import com.taihuoniao.fineix.utils.UIUtils;
 import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
 
 
-public class MyHighlightView  implements EditableDrawable.OnSizeChange {
+public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
     static final String LOG_TAG = "myhighlightview";
 
-    public  enum AlignModeV {
+    public enum AlignModeV {
         Top, Bottom, Center
     }
 
@@ -205,8 +205,7 @@ public class MyHighlightView  implements EditableDrawable.OnSizeChange {
                 final int bottom = (int) (mTempRect.bottom);
 
                 if (mAnchorRotate != null) {
-                    mAnchorRotate.setBounds(right - mAnchorRotateWidth, bottom
-                                    - mAnchorRotateHeight,
+                    mAnchorRotate.setBounds(right - mAnchorRotateWidth, bottom - mAnchorRotateHeight,
                             right + mAnchorRotateWidth, bottom + mAnchorRotateHeight);
                     mAnchorRotate.draw(canvas);
                 }
@@ -216,6 +215,17 @@ public class MyHighlightView  implements EditableDrawable.OnSizeChange {
                             left + mAnchorDeleteWidth, top + mAnchorDeleteHeight);
                     mAnchorDelete.draw(canvas);
                 }
+//                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//                paint.setStyle(Paint.Style.STROKE);
+//                paint.setColor(Color.rgb(66, 66, 66));
+//                paint.setStrokeWidth(2);
+//                Path path = new Path();
+//                path.moveTo(0, 10);
+//                path.lineTo(480, 10);
+//                PathEffect effects = new DashPathEffect(new float[]{3, 3}, 1);
+//                paint.setPathEffect(effects);
+//                canvas.drawPath(path, paint);
+
             }
         }
 

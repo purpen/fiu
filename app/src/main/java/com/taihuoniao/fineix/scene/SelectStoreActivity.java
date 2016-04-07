@@ -20,9 +20,12 @@ public class SelectStoreActivity extends BaseActivity implements View.OnClickLis
     private EditText editText;
     private LinearLayout jingdongLinear, taobaoLinear, tianmaoLinear, yamaxunLinear;
 
+    public static SelectStoreActivity instance;
+
     public SelectStoreActivity() {
         super(R.layout.activity_select_store);
     }
+
 
     @Override
     protected void requestNet() {
@@ -74,6 +77,18 @@ public class SelectStoreActivity extends BaseActivity implements View.OnClickLis
                 intent.putExtra("store", DataConstants.YAMAXUN);
                 break;
         }
-        startActivity(intent);
+        startActivityForResult(intent, DataConstants.REQUESTCODE_SEARCHSTORE_SEARCHURL);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            switch (resultCode) {
+                case DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL:
+                    setResult(DataConstants.RESULTCODE_EDIT_SEARCHSTORE, data);
+                    finish();
+                    break;
+            }
+        }
     }
 }

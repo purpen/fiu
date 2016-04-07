@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fafbfd"
+              android:orientation="vertical"
+              android:paddingBottom="17dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="编辑产品"
+            android:textColor="#999999"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/pop_edit_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="取消"
+            android:textColor="#999999"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/pop_edit_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="18dp"
+            android:paddingRight="21dp"
+            android:text="确定"
+            android:textColor="#999999"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e6e8ea"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:id="@+id/pop_edit_img"
+            android:layout_width="101dp"
+            android:layout_height="98dp"
+            android:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/pop_edit_img"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/pop_edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/black_corner_white"
+                android:gravity="center_vertical"
+                android:hint="@string/input_product_title"
+                android:paddingLeft="19dp"
+                android:singleLine="true"
+                android:textColor="@color/title_black"
+                android:textSize="15sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/black_corner_white"
+                android:orientation="horizontal"
+                android:paddingLeft="19dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="¥"
+                    android:textColor="@color/title_black"/>
+
+                <EditText
+                    android:id="@+id/pop_edit_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/pop_edit_edit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/red_corner_white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="修改产品链接"
+        android:textColor="@color/red"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/pop_edit_delete"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_corner_red"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="删除产品"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+</LinearLayout>

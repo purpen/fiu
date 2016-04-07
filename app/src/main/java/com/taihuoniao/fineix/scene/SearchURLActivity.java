@@ -1,19 +1,32 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.JDDetailsBean;
+import com.taihuoniao.fineix.beans.TBDetailsBean;
+import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -33,6 +46,13 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private int type;//搜索到的商品属于哪个商城
     private String id;//搜索到的商品id
     private WaittingDialog dialog;
+    //popupwindow下的控件
+    private PopupWindow popupWindow;
+    private ImageView productsImg;
+    private EditText nameTv;
+    private EditText priceTv;
+    private Button confirmBtn;
+    private String imagePath;//商品图片路径
 
     public SearchURLActivity() {
         super(R.layout.activity_search_url);
@@ -67,7 +87,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         store = getIntent().getIntExtra("store", DataConstants.JINGDONG);
         search = getIntent().getStringExtra("search");
         titleLayout.setTitleVisible(false);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.white));
+        titleLayout.setBackgroundResource(R.drawable.grey_no_corner);
+//        titleLayout.setBackgroundColor(getResources().getColor(R.color.white));
         titleLayout.setRightTv(R.string.close, R.color.white, this);
         titleLayout.setBackListener(this);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -96,7 +117,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 if (url.startsWith("http://item.m.jd.com/product/")) {
                     findRelative.setVisibility(View.VISIBLE);
                     if (url.contains("id")) {
-                        id = url.substring(url.indexOf("id") + 3, url.indexOf("&", url.indexOf("id")));
+                        id = url.substring(url.indexOf("id=") + 3, url.indexOf("&", url.indexOf("id")));
                     } else if (url.endsWith(".html")) {
                         id = url.substring(url.indexOf("product/") + 8, url.indexOf(".", url.indexOf("product/")));
                     }
@@ -129,6 +150,13 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         });
 
         findBtn.setOnClickListener(this);
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                webView.stopLoading();
+                cancelNet();
+            }
+        });
     }
 
     @Override
@@ -139,19 +167,78 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         findRelative = (RelativeLayout) findViewById(R.id.activity_search_url_findrelative);
         findBtn = (Button) findViewById(R.id.activity_search_url_find);
         dialog = new WaittingDialog(SearchURLActivity.this);
+        initPopupWindow();
+    }
+
+    private void initPopupWindow() {
+        WindowManager windowManager = SearchURLActivity.this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(SearchURLActivity.this, R.layout.pop_find, null);
+        productsImg = (ImageView) popup_view.findViewById(R.id.pop_find_img);
+        nameTv = (EditText) popup_view.findViewById(R.id.pop_find_name);
+        priceTv = (EditText) popup_view.findViewById(R.id.pop_find_price);
+        confirmBtn = (Button) popup_view.findViewById(R.id.pop_find_confirm);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), (int) (display.getHeight() * 0.4), true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        confirmBtn.setOnClickListener(this);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(SearchURLActivity.this,
+                R.color.white));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(webView, Gravity.BOTTOM, 0, 0);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.pop_find_confirm:
+                String name = nameTv.getText().toString();
+                String price = priceTv.getText().toString();
+                TagItem tagItem = new TagItem(name, price);
+                tagItem.setType(type);
+                tagItem.setId(id);
+                tagItem.setImagePath(imagePath);
+                Intent intent = new Intent();
+                intent.putExtra("tagItem", tagItem);
+                setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
+                popupWindow.dismiss();
+                finish();
+                break;
             case R.id.title_continue:
-                SearchURLActivity.this.finish();
+                finish();
                 break;
             case R.id.title_back:
                 if (webView.canGoBack()) {
                     webView.goBack();
                 } else {
-                    SearchURLActivity.this.finish();
+                    finish();
                 }
                 break;
             case R.id.activity_search_url_find:
@@ -161,10 +248,15 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         DataPaser.getJDProductData(handler, id);
                         break;
                     case DataConstants.TAOBAO:
+                        DataPaser.getTBProductData(handler, id);
                         break;
                     case DataConstants.TIANMAO:
+                        Toast.makeText(SearchURLActivity.this, "天猫搜索无接口", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                         break;
                     case DataConstants.YAMAXUN:
+                        Toast.makeText(SearchURLActivity.this, "亚马逊搜索无接口", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                         break;
                 }
                 Toast.makeText(SearchURLActivity.this, "商品id = " + id + ",类型 = " + type, Toast.LENGTH_SHORT).show();
@@ -183,21 +275,36 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            dialog.dismiss();
             switch (msg.what) {
                 case DataConstants.JINGDONG:
-                    dialog.dismiss();
                     JDDetailsBean netJD = (JDDetailsBean) msg.obj;
                     if (!netJD.isSuccess()) {
                         Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
                         return;
                     }
-
+                    imagePath = netJD.getImagePath();
+                    ImageLoader.getInstance().displayImage(imagePath, productsImg);
+                    nameTv.setText(netJD.getName());
+                    priceTv.setText(netJD.getSale_price());
+                    showPopup();
                     break;
                 case DataConstants.TAOBAO:
+                    TBDetailsBean netTB = (TBDetailsBean) msg.obj;
+                    if (!netTB.isSuccess()) {
+                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    ImageLoader.getInstance().displayImage(netTB.getPict_url(), productsImg);
+                    nameTv.setText(netTB.getTitle());
+                    priceTv.setText(netTB.getZk_final_price());
+                    showPopup();
                     break;
                 case DataConstants.TIANMAO:
                     break;
                 case DataConstants.YAMAXUN:
+                    break;
+                case DataConstants.NET_FAIL:
                     break;
             }
         }
@@ -206,10 +313,15 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
+//        cancelNet();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
         }
         super.onDestroy();
+    }
+
+    private void cancelNet() {
+        Toast.makeText(SearchURLActivity.this, "取消网络请求未做", Toast.LENGTH_SHORT).show();
     }
 }
