@@ -4,6 +4,12 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">fineix</string>
 
+    <string name="qing">情</string>
+    <string name="jing">景</string>
+    <string name="fiu">Fiu</string>
+    <string name="pin">品</string>
+    <string name="mine">我</string>
+
     <!-- 网络请求 -->
     <string name="host_failure" translatable="false">连接失败，请检查网络</string>
     <!-- PhotoFragment -->

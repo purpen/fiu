@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
@@ -16,8 +19,41 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import java.util.ArrayList;
+
+import butterknife.Bind;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    private ImageView homepageImg, findImg, sceneImg, shopImg, mineImg;
+    @Bind(R.id.ll_nav0)
+    LinearLayout ll_nav0;
+    @Bind(R.id.ll_nav1)
+    LinearLayout ll_nav1;
+    @Bind(R.id.ll_nav2)
+    LinearLayout ll_nav2;
+    @Bind(R.id.ll_nav3)
+    LinearLayout ll_nav3;
+    @Bind(R.id.ll_nav4)
+    LinearLayout ll_nav4;
+
+    @Bind(R.id.activity_main_homepagebtn)
+    ImageView homepageImg;
+
+    @Bind(R.id.activity_main_findbtn)
+    ImageView findImg;
+
+    @Bind(R.id.activity_main_shopbtn)
+    ImageView shopImg;
+
+    @Bind(R.id.activity_main_minebtn)
+    ImageView mineImg;
+
+    @Bind(R.id.tv_nav0)
+    TextView tv_nav0;
+    @Bind(R.id.tv_nav1)
+    TextView tv_nav1;
+    @Bind(R.id.tv_nav3)
+    TextView tv_nav3;
+    @Bind(R.id.tv_nav4)
+    TextView tv_nav4;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
@@ -33,11 +69,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void installListener() {
-        homepageImg.setOnClickListener(this);
-        findImg.setOnClickListener(this);
-        sceneImg.setOnClickListener(this);
-        shopImg.setOnClickListener(this);
-        mineImg.setOnClickListener(this);
+        ll_nav0.setOnClickListener(this);
+        ll_nav1.setOnClickListener(this);
+        ll_nav2.setOnClickListener(this);
+        ll_nav3.setOnClickListener(this);
+        ll_nav4.setOnClickListener(this);
     }
 
     @Override
@@ -47,26 +83,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             tabList = new ArrayList<TabItem>();
         }
-        homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
-        initTabItem(homepageImg, R.id.activity_main_homepagebtn, R.mipmap.homepage_red, R.mipmap.homepage_grey);
+//        homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
+        initTabItem(homepageImg,tv_nav0, R.id.activity_main_homepagebtn, R.mipmap.home_red, R.mipmap.home_gray);
 
-        findImg = (ImageView) findViewById(R.id.activity_main_findbtn);
-        initTabItem(findImg, R.id.activity_main_findbtn, R.mipmap.find_red, R.mipmap.find_grey);
+//        findImg = (ImageView) findViewById(R.id.activity_main_findbtn);
+        initTabItem(findImg,tv_nav1, R.id.activity_main_findbtn, R.mipmap.find_red, R.mipmap.find_gray);
 
-        sceneImg = (ImageView) findViewById(R.id.activity_main_scenebtn);
+//        sceneImg = (ImageView) findViewById(R.id.activity_main_scenebtn);
 
-        shopImg = (ImageView) findViewById(R.id.activity_main_shopbtn);
-        initTabItem(shopImg, R.id.activity_main_shopbtn, R.mipmap.shop_red, R.mipmap.shop_grey);
+//        shopImg = (ImageView) findViewById(R.id.activity_main_shopbtn);
+        initTabItem(shopImg,tv_nav3,R.id.activity_main_shopbtn, R.mipmap.shop_red, R.mipmap.shop_gray);
 
-        mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
-        initTabItem(mineImg, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_grey);
+//        mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
+        initTabItem(mineImg,tv_nav4,R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_gray);
 
         switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
     }
 
-    private void initTabItem(ImageView imageView, int resId, int selId, int unselId) {
+    private void initTabItem(ImageView imageView,TextView tv,int resId, int selId, int unselId) {
         TabItem tabItem = new TabItem();
         tabItem.imageView = imageView;
+        tabItem.tv=tv;
         tabItem.id = resId;
         tabItem.selId = selId;
         tabItem.unselId = unselId;
@@ -76,19 +113,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_main_scenebtn:
+            case R.id.ll_nav2:
                 startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
-            case R.id.activity_main_homepagebtn://主页
+            case R.id.ll_nav0://主页
                 switchFragmentandImg(R.id.activity_main_homepagebtn,IndexFragment.class);
                 break;
-            case R.id.activity_main_findbtn: //发现
+            case R.id.ll_nav1: //发现
                 switchFragmentandImg(R.id.activity_main_findbtn,FindFragment.class);
                 break;
-            case R.id.activity_main_shopbtn:  //好货
+            case R.id.ll_nav3:  //好货
                 switchFragmentandImg(R.id.activity_main_shopbtn,WellGoodsFragment.class);
                 break;
-            case R.id.activity_main_minebtn: //个人中心
+            case R.id.ll_nav4: //个人中心
                 switchFragmentandImg(R.id.activity_main_minebtn,PersonalCenterFragment.class);
                 break;
         }
@@ -96,7 +133,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void switchFragmentandImg(int id,Class clazz) {
         try {
-            switchImg(id);
+            switchImgAndTxtStyle(id);
             switchFragment(clazz);
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,13 +173,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    private void switchImg(int imgId) {
+    private void switchImgAndTxtStyle(int imgId) {
         for (TabItem tabItem : tabList) {
             int id = tabItem.id;
             if (id == imgId) {
                 tabItem.imageView.setImageResource(tabItem.selId);
+                tabItem.tv.setTextColor(getResources().getColor(R.color.color_af8323));
             } else {
                 tabItem.imageView.setImageResource(tabItem.unselId);
+                tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
             }
         }
     }

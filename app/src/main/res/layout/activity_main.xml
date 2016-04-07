@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.taihuoniao.fineix.main.MainActivity">
     <!--<include
         android:layout_width="match_parent"
@@ -11,48 +11,123 @@
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/activity_main_bottomlinear"
-        android:layout_below="@+id/custom_head"
-        />
+        android:layout_below="@+id/custom_head" />
+
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/grey_no_corner"
+        android:layout_height="@dimen/dp60"
         android:layout_alignParentBottom="true"
+        android:background="@mipmap/main_nav_bg"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/activity_main_homepagebtn"
+        <LinearLayout
+            android:id="@+id/ll_nav0"
             style="@style/MainButtonStyle"
-            android:src="@mipmap/homepage_grey" />
+            >
 
-        <ImageView
-            android:id="@+id/activity_main_findbtn"
-            style="@style/MainButtonStyle"
-            android:src="@mipmap/find_grey" />
+            <ImageView
+                android:id="@+id/activity_main_homepagebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/home_gray"
+                />
 
-        <ImageView
-            android:id="@+id/activity_main_scenebtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:src="@mipmap/scene" />
+            <TextView
+                android:id="@+id/tv_nav0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp2"
+                android:text="@string/qing"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/activity_main_shopbtn"
-            style="@style/MainButtonStyle"
-            android:src="@mipmap/shop_grey" />
+        <LinearLayout
+            android:id="@+id/ll_nav1"
+            style="@style/MainButtonStyle">
 
-        <ImageView
-            android:id="@+id/activity_main_minebtn"
-            style="@style/MainButtonStyle"
-            android:src="@mipmap/mine_grey" />
+            <ImageView
+                android:id="@+id/activity_main_findbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/find_gray" />
+
+            <TextView
+                android:id="@+id/tv_nav1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp2"
+                android:text="@string/jing"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_nav2"
+            style="@style/MainButtonStyle">
+
+            <ImageView
+                android:id="@+id/activity_main_scenebtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/create" />
+
+            <TextView
+                android:id="@+id/tv_nav2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/fiu"
+                android:layout_marginTop="@dimen/dp2"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_nav3"
+            style="@style/MainButtonStyle">
+
+            <ImageView
+                android:id="@+id/activity_main_shopbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/shop_gray" />
+
+            <TextView
+                android:id="@+id/tv_nav3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/pin"
+                android:layout_marginTop="@dimen/dp2"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_nav4"
+            style="@style/MainButtonStyle">
+
+            <ImageView
+                android:id="@+id/activity_main_minebtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/mine_gray" />
+
+            <TextView
+                android:id="@+id/tv_nav4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/mine"
+                android:layout_marginTop="@dimen/dp2"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

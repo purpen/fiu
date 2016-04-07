@@ -11,10 +11,12 @@
 
     <!-- MainActivity中最下面RadioGroup的五个Button的样式 -->
     <style name="MainButtonStyle">
-        <item name="android:padding">12dp</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:paddingBottom">@dimen/dp5</item>
     </style>
 
     <!-- popupWindow弹出弹入动画-->
@@ -44,4 +46,5 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
 </resources>
