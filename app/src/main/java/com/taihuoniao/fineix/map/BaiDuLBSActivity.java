@@ -26,11 +26,21 @@ import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.City;
 import com.taihuoniao.fineix.beans.LocationBean;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.BaiduMapUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
@@ -105,7 +115,29 @@ public class BaiDuLBSActivity extends BaseActivity implements OnGetPoiSearchResu
 
     @Override
     protected void requestNet() {
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.CHANG_JING, new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                //TODO 弹出加载框
+            }
 
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                //TODO 关闭加载框
+//                if (responseInfo!=null && responseInfo.result!=null){
+//                    cities = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ArrayList<City>>>() {
+//                    });
+//                    refreshUI(cities);
+//                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                //TODO 关闭加载框
+                LogUtil.e(TAG, s);
+            }
+        });
     }
 
     private BDLocationListener locationListener=new BDLocationListener() {
