@@ -38,8 +38,6 @@ dependencies {
     compile files('libs/baidumapapi_util_v3_7_1.jar')
     compile files('libs/locSDK_6.23.jar')
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    //    compile files('libs/PG_Edit_Base_SDK.jar')
-    //    compile project(':library')
     compile project(':Gpu-Image')
     compile files('libs/xUtils-2.6.14.jar')
 }

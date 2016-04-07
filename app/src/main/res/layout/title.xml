@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                >
+    >
     <!-- 左侧按钮和文字-->
     <ImageView
         android:id="@+id/title_back"
@@ -10,14 +10,14 @@
         android:layout_height="match_parent"
         android:contentDescription="@null"
         android:padding="16dp"
-        android:src="@mipmap/back_red" />
+        android:src="@mipmap/back_white"/>
 
     <ImageView
         android:id="@+id/title_cancel"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:src="@mipmap/cancel_red"
+        android:src="@mipmap/cancel_white"
         android:visibility="gone"
         />
     <!-- 右侧按钮和文字-->

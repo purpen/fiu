@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,6 +18,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.taihuoniao.fineix.beans.PhotoItem;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.CropPictureActivity;
 import com.taihuoniao.fineix.scene.EditPictureActivity;
 
@@ -42,8 +49,25 @@ public class ImageUtils {
                 mkdir(fileFolder);
             }
             jpgFile = new File(fileFolder, filename);
+//            new ExifInterface(jpgFile.getAbsolutePath())
+            //存储用户的当前位置信息
+//            try {
+//                exifInterface = new ExifInterface(imageUri.getPath());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            if (exifInterface != null) {
+//                exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, "100/1,0/1,0/1");
+//                exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE, "200/1,0/1,0/1");
+//                try {
+//                    exifInterface.saveAttributes();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         } else {
             jpgFile = new File(fileFolderStr);
+            Log.e("<<<", "jpgfile.path = " + jpgFile.getAbsolutePath());
             if (!jpgFile.getParentFile().exists()) { // 如果目录不存在，则创建一个名为"finger"的目录
                 mkdir(jpgFile.getParentFile());
             }
@@ -51,6 +75,7 @@ public class ImageUtils {
         FileOutputStream outputStream = new FileOutputStream(jpgFile); // 文件输出流
         croppedImage.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
         outputStream.close();
+        Log.e("<<<", "path = " + jpgFile.getPath());
         return jpgFile.getPath();
     }
 
@@ -62,16 +87,16 @@ public class ImageUtils {
         return file.mkdir();
     }
 
-    //判断图片是否需要裁剪
-    public static void processPhotoItem(Activity activity, PhotoItem photo) {
-        Log.e("<<<", photo.getImageUri());
+    //获取图片的位置信息
+    public static double[] picLocation(String fileName) {
         ExifInterface exifInterface = null;
         try {
-            Log.e("<<<", "chuangjian");
-            exifInterface = new ExifInterface(photo.getImageUri());
+            exifInterface = new ExifInterface(fileName);
         } catch (IOException e) {
-
             e.printStackTrace();
+        }
+        if (exifInterface == null) {
+            return null;
         }
         String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
 //        String latitude_pre = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF);
@@ -90,8 +115,16 @@ public class ImageUtils {
             fen = Integer.parseInt(longitudes[1].substring(0, longitudes[1].indexOf("/")));
             miao = Integer.parseInt(longitudes[2].substring(0, longitudes[2].indexOf("/")));
             double jingdu = du + fen / 60 + miao / 1000000 / 60 / 60;
-            Toast.makeText(activity, "经度 = " + jingdu + ",纬度 = " + weidu, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainApplication.getContext(), "经度 = " + jingdu + ",纬度 = " + weidu, Toast.LENGTH_SHORT).show();
+            double[] location = new double[]{jingdu, weidu};
+            return location;
         }
+        return null;
+    }
+
+    //判断图片是否需要裁剪
+    public static void processPhotoItem(Activity activity, PhotoItem photo) {
+        picLocation(photo.getImageUri());
         Uri uri = photo.getImageUri().startsWith("file:") ? Uri.parse(photo
                 .getImageUri()) : Uri.parse("file://" + photo.getImageUri());
         if (isFourToThree(photo.getImageUri())) {
@@ -146,6 +179,31 @@ public class ImageUtils {
         options.inJustDecodeBounds = false;
         Bitmap sourceBm = BitmapFactory.decodeFile(pathName, options);
         return sourceBm;
+    }
+
+    /**
+     * 获取圆角位图的方法
+     *
+     * @param bitmap 需要转化成圆角的位图
+     * @param pixels 圆角的度数，数值越大，圆角越大
+     * @return 处理后的圆角位图
+     */
+    public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = pixels;
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
     }
 
     //异步加载本地图片

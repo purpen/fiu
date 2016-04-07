@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,6 +8,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -378,6 +380,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             //出现异常存储的是未加滤镜效果的图片
             cv.drawBitmap(currentBitmap, null, dst, null);
         }
+        Log.e("<<<", "381");
         //加商品
         EffectUtil.applyOnSave(cv, mImageView);
         new SavePicToFileTask().execute(newBitmap);
@@ -398,7 +401,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             try {
                 bitmap = params[0];
                 picName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                fileName = ImageUtils.saveToFile(MainApplication.editPicPath + "/" + picName, false, bitmap);
+                fileName = ImageUtils.saveToFile(MainApplication.editPicPath, false, bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
 //                Toast.makeText(EditPictureActivity.this, "图片存储错误，请重试", Toast.LENGTH_SHORT).show();
@@ -411,9 +414,26 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             super.onPostExecute(fileName);
             dialog.dismiss();
             if (TextUtils.isEmpty(fileName)) {
+                //出现问题是因为缓存目录中产生了，与规定文件名称一样的文件夹，清理即可以使用
+               AlertDialog.Builder builder = new AlertDialog.Builder(EditPictureActivity.this);
+                builder.setMessage("图片处理错误，请清理缓存后重试");
+                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Toast.makeText(EditPictureActivity.this,"清理缓存",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+//                Toast.makeText(EditPictureActivity.this, "图片处理错误，请清理缓存后重试", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             //保存标签信息
             List<TagItem> tagInfoList = new ArrayList<TagItem>();
             for (LabelView label : labels) {
@@ -422,7 +442,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             MainApplication.tagInfoList = tagInfoList;
             //传递数据
             Intent intent = new Intent(EditPictureActivity.this, CreateSceneActivity.class);
-            intent.setData(Uri.parse("file://" + MainApplication.editPicPath + "/" + picName));
+            intent.setData(Uri.parse("file://" + fileName));
             startActivity(intent);
         }
     }

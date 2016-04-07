@@ -1,8 +1,10 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
@@ -66,8 +68,22 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
                 } catch (IOException e) {
                     e.printStackTrace();
                     dialog.dismiss();
-                    Toast.makeText(CropPictureActivity.this, "图片裁切异常，请稍后重试！", Toast.LENGTH_SHORT).show();
-                }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CropPictureActivity.this);
+                    builder.setMessage("图片处理错误，请清理缓存后重试");
+                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Toast.makeText(CropPictureActivity.this, "清理缓存", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();                }
                 break;
         }
     }

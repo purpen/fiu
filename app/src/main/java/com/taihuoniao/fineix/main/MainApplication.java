@@ -94,7 +94,7 @@ public class MainApplication extends Application {
                 .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCache(new UnlimitedDiskCache(StorageUtils.getOwnCacheDirectory(this, "/fiu/image")))
+                .diskCache(new UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
                 .diskCacheSize(100 * 1024 * 1024).tasksProcessingOrder(QueueProcessingType.LIFO)
                 .memoryCache(new LruMemoryCache(2 * 1024 * 1024)).memoryCacheSize(2 * 1024 * 1024)
                 .threadPoolSize(5)

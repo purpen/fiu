@@ -118,6 +118,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 //防止焦点放生在此区域
                 break;
             case R.id.fragment_camera_takepic:
+                Toast.makeText(getActivity(), "获得用户的当前经纬度", Toast.LENGTH_SHORT).show();
                 try {
                     cameraInst.takePicture(null, null, new Camera.PictureCallback() {
                         @Override
@@ -338,11 +339,11 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         Camera.Parameters cameraParameters = cameraInst.getParameters();
         List<Camera.Size> supportedPicResolutions = cameraParameters.getSupportedPictureSizes(); // 至少会返回一个值
 
-        StringBuilder picResolutionSb = new StringBuilder();
-        for (Camera.Size supportedPicResolution : supportedPicResolutions) {
-            picResolutionSb.append(supportedPicResolution.width).append('x')
-                    .append(supportedPicResolution.height).append(" ");
-        }
+//        StringBuilder picResolutionSb = new StringBuilder();
+//        for (Camera.Size supportedPicResolution : supportedPicResolutions) {
+//            picResolutionSb.append(supportedPicResolution.width).append('x')
+//                    .append(supportedPicResolution.height).append(" ");
+//        }
 
 
         Camera.Size defaultPictureResolution = cameraParameters.getPictureSize();
@@ -366,7 +367,6 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 return 0;
             }
         });
-        Log.e("<<<", "Supported picture resolutions: " + picResolutionSb);
         // 如果没有找到合适的，并且还有候选的像素，对于照片，则取其中最大比例的，而不是选择与屏幕分辨率相同的
         if (!sortedSupportedPicResolutions.isEmpty()) {
             return sortedSupportedPicResolutions.get(0);
@@ -414,7 +414,6 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private void addZoomIn(int delta) {
         try {
             Camera.Parameters params = cameraInst.getParameters();
-            Log.e("<<<", "Is support Zoom " + params.isZoomSupported());
             if (!params.isZoomSupported()) {
                 return;
             }

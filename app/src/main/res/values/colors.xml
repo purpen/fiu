@@ -6,7 +6,7 @@
     <color name="background_white">#fafbfd</color>
     <!-- GlobleTitleLayout-->
     <color name="title_black">#212121</color>
-    <color name="black333333">#333333</color>
+    <color name="black333333">#ff333333</color>
     <!-- selectactivity -->
     <color name="red">#ffff3366</color>
     <color name="white">#ffffff</color>

@@ -80,6 +80,11 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         backImg.setOnClickListener(onClickListener);
     }
 
+    //返回按钮的图标
+    public void setBackImg(int imgresid) {
+        backImg.setImageResource(imgresid);
+    }
+
     //标题的监听
     public void setTitleLinearListener(OnClickListener onClickListener) {
         titleLinear.setOnClickListener(onClickListener);
@@ -101,6 +106,11 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
 
     public void setTitle(int resid) {
         titleName.setText(resid);
+    }
+
+    public void setTitle(int resid, int color) {
+        titleName.setText(resid);
+        titleName.setTextColor(color);
     }
 
     //控制title箭头的显示隐藏
