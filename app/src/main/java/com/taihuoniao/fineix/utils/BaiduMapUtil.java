@@ -45,7 +45,7 @@ import com.taihuoniao.fineix.beans.LocationBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Deprecated
 public class BaiduMapUtil {
 
     public static LocationClient mLocationClient = null;
@@ -550,6 +550,36 @@ public class BaiduMapUtil {
         // 反Geo搜索
         mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(new LatLng(lat, lon)));
+    }
+
+
+    /**
+     * 根据经纬度获得POI列表
+     * @param lat
+     * @param lon
+     */
+    public static void getPoiByCoordinate(double lat, double lon){
+        GeoCoder mSearch = GeoCoder.newInstance();
+        OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
+            public void onGetGeoCodeResult(GeoCodeResult result) {
+                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //没有检索到结果
+                }
+                //获取地理编码结果
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //没有找到检索结果
+                }
+                //获取反向地理编码结果
+                LogUtil.e("onGetReverseGeoCodeResult",result.getAddress());
+            }
+        };
+        mSearch.setOnGetGeoCodeResultListener(listener);
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(new LatLng(lat,lon)));
+//        mSearch.destroy();
     }
 
     /**

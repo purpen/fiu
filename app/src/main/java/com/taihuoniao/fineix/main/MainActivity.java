@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
@@ -18,7 +20,11 @@ import com.taihuoniao.fineix.main.fragment.PersonalCenterFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.view.CustomHeadView;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -33,6 +39,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout ll_nav3;
     @Bind(R.id.ll_nav4)
     LinearLayout ll_nav4;
+
+    @Bind(R.id.custom_head)
+    CustomHeadView custom_head;
 
     @Bind(R.id.activity_main_homepagebtn)
     ImageView homepageImg;
@@ -65,6 +74,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
+        MapUtil.getAddressByCoordinate(40.216938, 116.234051, new MapUtil.OnGetReverseGeoCodeResultListener() {
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                List<PoiInfo> list = result.getPoiList();
+                for (PoiInfo info: list) {
+                    LogUtil.e("address",info.address);
+                }
+            }
+        });
     }
 
     @Override
@@ -117,15 +135,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.ll_nav0://主页
+                custom_head.setVisibility(View.VISIBLE);
                 switchFragmentandImg(R.id.activity_main_homepagebtn,IndexFragment.class);
                 break;
             case R.id.ll_nav1: //发现
+                custom_head.setVisibility(View.VISIBLE);
                 switchFragmentandImg(R.id.activity_main_findbtn,FindFragment.class);
                 break;
             case R.id.ll_nav3:  //好货
+                custom_head.setVisibility(View.VISIBLE);
                 switchFragmentandImg(R.id.activity_main_shopbtn,WellGoodsFragment.class);
                 break;
             case R.id.ll_nav4: //个人中心
+                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_minebtn,PersonalCenterFragment.class);
                 break;
         }
@@ -184,5 +206,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        MapUtil.destroyGeoCoder();
+        super.onDestroy();
     }
 }

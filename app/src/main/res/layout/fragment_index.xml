@@ -29,4 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/share_btn"
         android:text="滑动界面" />
+    <Button
+        android:id="@+id/geo"
+        android:layout_below="@+id/sliding_tab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GEO" />
 </RelativeLayout>

@@ -95,6 +95,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 
+        <activity
+            android:name=".map.GeoCoderDemo"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

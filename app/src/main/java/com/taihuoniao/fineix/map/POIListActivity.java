@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,17 +26,25 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.lidroid.xutils.BitmapUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AroundPoiAdapter;
 import com.taihuoniao.fineix.adapters.SearchPOIAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LocationBean;
 import com.taihuoniao.fineix.utils.BaiduMapUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,13 +126,18 @@ public class POIListActivity extends BaseActivity implements OnGetPoiSearchResul
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void getIntentData() {
         super.getIntentData();
     }
 
     @Override
     protected void initView() {
-        BaiduMapUtil.goneMapViewChild(mMapView, true, true);
+//        BaiduMapUtil.goneMapViewChild(mMapView, true, true);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(16));
         mBaiduMap.getUiSettings().setZoomGesturesEnabled(true);// 缩放手势

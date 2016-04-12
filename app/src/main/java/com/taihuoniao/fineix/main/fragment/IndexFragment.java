@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.map.GeoCoderDemo;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.map.POIListActivity;
 import com.taihuoniao.fineix.order.OrderListActivity;
@@ -22,7 +23,7 @@ public class IndexFragment extends BaseFragment {
         return view;
     }
 
-    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn})
+    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo})
     protected void onClick(View v) {
         switch (v.getId()) {
             case R.id.location_btn:
@@ -50,6 +51,9 @@ public class IndexFragment extends BaseFragment {
                 break;
             case R.id.sliding_tab_btn:
                 activity.startActivity(new Intent(activity, OrderListActivity.class));
+                break;
+            case R.id.geo:
+                activity.startActivity(new Intent(activity, GeoCoderDemo.class));
                 break;
         }
     }
