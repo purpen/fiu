@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Gpu-Image/Gpu-Image.iml" filepath="$PROJECT_DIR$/Gpu-Image/Gpu-Image.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fineix.iml" filepath="$PROJECT_DIR$/fineix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fiu.iml" filepath="$PROJECT_DIR$/fiu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pullrefreshlib/pullrefreshlib.iml" filepath="$PROJECT_DIR$/pullrefreshlib/pullrefreshlib.iml" />
     </modules>
   </component>
 </project>

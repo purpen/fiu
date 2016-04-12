@@ -2,6 +2,9 @@ package com.taihuoniao.fineix.map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -12,7 +15,6 @@ import com.baidu.location.BDLocationListener;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
@@ -37,13 +39,13 @@ import butterknife.Bind;
  *         created at 2016/3/30 15:12
  */
 public class HotCitiesActivity extends BaseActivity<City> {
+    @Bind(R.id.recycler_view)
+    RecyclerView recycler_view;
     private LocationService locationService;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.tv_location)
     TextView tv_location;
-    @Bind(R.id.gv_hotcity)
-    GridView gv_hotcity;
     private ArrayList<City> cities;
     private HotCitiesAdapter adapter = null;
     public HotCitiesActivity() {
@@ -52,6 +54,9 @@ public class HotCitiesActivity extends BaseActivity<City> {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, R.string.select_city);
+        recycler_view.setLayoutManager(new LinearLayoutManager(this));
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
     }
 
     public void setCurrentCity(BDLocation location) {
@@ -68,16 +73,16 @@ public class HotCitiesActivity extends BaseActivity<City> {
     @Override
     protected void installListener() {
         super.installListener();
-        gv_hotcity.setOnItemClickListener(itemClickListener);
     }
-    private AdapterView.OnItemClickListener itemClickListener=new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Intent intent=new Intent(activity,BaiDuLBSActivity.class);
-            intent.putExtra(TAG,cities.get(i));
-            startActivity(intent);
-        }
-    };
+
+//    private AdapterView.OnItemClickListener itemClickListener=new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//            Intent intent=new Intent(activity,BaiDuLBSActivity.class);
+//            intent.putExtra(TAG,cities.get(i));
+//            startActivity(intent);
+//        }
+//    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +116,7 @@ public class HotCitiesActivity extends BaseActivity<City> {
                 //TODO 关闭加载框
                 if (responseInfo!=null && responseInfo.result!=null){
                    cities = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ArrayList<City>>>() {});
-                    refreshUI(cities);
+                    refreshUI();
                 }
             }
 
@@ -126,12 +131,21 @@ public class HotCitiesActivity extends BaseActivity<City> {
 
 
     @Override
-    protected void refreshUI(ArrayList<City> list) {
+    protected void refreshUI() {
         if (adapter==null){
-            adapter=new HotCitiesAdapter(list, activity);
-            gv_hotcity.setAdapter(adapter);
-        }else {
-            adapter.notifyDataSetChanged();
+            adapter=new HotCitiesAdapter(activity,cities);
+            adapter.setmOnItemClickLitener(new HotCitiesAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    LogUtil.e("onItemClick",position+"");
+                }
+
+                @Override
+                public void onItemLongClick(View view, int position) {
+
+                }
+            });
+            recycler_view.setAdapter(adapter);
         }
     }
 

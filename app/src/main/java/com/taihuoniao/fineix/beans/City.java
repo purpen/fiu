@@ -9,6 +9,9 @@ import java.io.Serializable;
 public class City implements Serializable{
     public String id;
     public String name;
+    public String image_url;
     public float lng;
     public float lat;
+    public boolean is_estore;
+    public boolean is_scene;
 }

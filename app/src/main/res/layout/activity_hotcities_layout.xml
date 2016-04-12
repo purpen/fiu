@@ -9,6 +9,10 @@
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
@@ -18,8 +22,10 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:textColor="@color/color_333"
+        android:visibility="gone"
         />
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_location"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp50"
@@ -37,16 +43,6 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:textColor="@color/color_333"
-        />
-    <GridView
-        android:id="@+id/gv_hotcity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp16"
-        android:numColumns="3"
-        android:background="@null"
-        android:horizontalSpacing="@dimen/dp15"
-        android:verticalSpacing="@dimen/dp15"
-        android:scrollbars="none"
+        android:visibility="gone"
         />
 </LinearLayout>

@@ -17,9 +17,11 @@
     <!-- camerafragment -->
     <color name="blue">#2196F3</color>
     <color name="color_f7f7f7">#f7f7f7</color>
-    <color name="color_666">#666</color>
     <color name="color_333">#333</color>
+    <color name="color_666">#666</color>
+    <color name="color_999">#999</color>
     <color name="color_ccc">#ccc</color>
-    <color name="color_ddd">#dddd</color>
+    <color name="color_ddd">#ddd</color>
+    <color name="color_eee">#eee</color>
     <color name="background_tab_pressed">#6633B5E5</color>
 </resources>

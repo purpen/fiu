@@ -8,10 +8,10 @@
         android:layout_height="wrap_content"
         layout="@layout/toolbar_layout"
         />-->
-    <com.taihuoniao.fineix.view.CustomHeadView
+    <!--<com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
+                android:textColor="@color/color_333"
                 android:layout_marginTop="@dimen/dp2"
                 android:textSize="@dimen/sp12" />
         </LinearLayout>
