@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/view_alllabel_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="13dp"
+        android:paddingTop="14dp"
+        android:text="喜"
+        android:textColor="#212121"
+        android:textSize="14sp"/>
+
+    <com.taihuoniao.fineix.view.GridViewForScrollView
+        android:id="@+id/view_alllabel_item_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:horizontalSpacing="5dp"
+        android:numColumns="5"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:verticalSpacing="10dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp">
+
+        <TextView
+            android:id="@+id/view_alllabel_item_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="更多"
+            android:textColor="#999999"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/view_alllabel_item_more"
+            android:background="#d4d4d4"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/view_alllabel_item_more"
+            android:background="#d4d4d4"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/view_alllabel_item_moreimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:src="@mipmap/arrow_down_gray"/>
+</LinearLayout>

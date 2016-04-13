@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.TabPagerAdapter;
+import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
@@ -24,7 +24,9 @@ public class AddProductActivity extends BaseActivity {
     ImageView img;//测试使用
     private GlobalTitleLayout titleLayout;
     private CustomSlidingTab slidingTab;
+    private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
+
 
     public AddProductActivity() {
         super(0);
@@ -32,19 +34,23 @@ public class AddProductActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        //暂无数据
-        DataPaser.getProductList(handler);
+        //获取分类列表
+        DataPaser.categoryList(1 + "", 1 + "", handler);
     }
 
     @Override
     protected void initList() {
-        slidingTab.setIndicatorColor(getResources().getColor(R.color.red));
+        titleLayout.setTitle(R.string.add_product, getResources().getColor(R.color.black333333));
+        titleLayout.setBackgroundColor(getResources().getColor(R.color.white));
+        titleLayout.setContinueTvVisible(false);
+        titleLayout.setBackImgVisible(false);
+        titleLayout.setCancelImgVisible(true);
+//        titleLayout.setCancelImg(R.mipmap.cancel_black);
+        slidingTab.setIndicatorColor(getResources().getColor(R.color.yellow_bd8913));
         slidingTab.setTextColor(getResources().getColor(R.color.black333333));
-        slidingTab.setCurTabTextColor(getResources().getColor(R.color.red));
+        slidingTab.setCurTabTextColor(getResources().getColor(R.color.yellow_bd8913));
         slidingTab.setTypeface(null, Typeface.NORMAL);
         slidingTab.setTextSize(getResources().getDimensionPixelSize(R.dimen.sp14));
-        viewPager.setAdapter(new TabPagerAdapter(((FragmentActivity) activity).getSupportFragmentManager()));
-        slidingTab.setViewPager(viewPager);
     }
 
     @Override
@@ -71,7 +77,13 @@ public class AddProductActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DataConstants.ADD_PRODUCT_LIST:
+                case DataConstants.CATEGORY_LIST:
+                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
+                    if (netCategoryBean.isSuccess()) {
+                        addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
+                        viewPager.setAdapter(addProductViewPagerAdapter);
+                        slidingTab.setViewPager(viewPager);
+                    }
                     break;
                 case DataConstants.NET_FAIL:
                     break;

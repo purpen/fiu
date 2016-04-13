@@ -35,6 +35,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -103,11 +104,17 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private WaittingDialog dialog;
     //编辑好的图片存储名称
     private String picName;
+    public static EditPictureActivity instance = null;
 
     public EditPictureActivity() {
         super(0);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CropPictureActivity.instance.finish();
+    }
 
     @Override
     protected void requestNet() {
@@ -172,6 +179,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         activity_view = View.inflate(EditPictureActivity.this, R.layout.activity_edit_picture, null);
         setContentView(activity_view);
+        instance = EditPictureActivity.this;
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_edit_titlelayout);
         gpuRelative = (RelativeLayout) findViewById(R.id.activity_edit_main_area);
         gpuImageView = (GPUImageView) findViewById(R.id.activity_edit_gpuimage);
@@ -354,7 +362,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_edit_filter_relative:
                 if (recyclerLinear.getVisibility() == View.GONE) {
-                    filterTv.setTextColor(getResources().getColor(R.color.red));
+                    filterTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
                     filterRedline.setVisibility(View.VISIBLE);
                     recyclerLinear.setVisibility(View.VISIBLE);
                 } else {
@@ -368,6 +376,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
     //保存图片
     private void savePicture() {
+        if (mImageView.getWidth() <= 0 || mImageView.getHeight() <= 0) {
+            return;
+        }
         //加滤镜
         final Bitmap newBitmap = Bitmap.createBitmap(mImageView.getWidth(), mImageView.getHeight(),
                 Bitmap.Config.ARGB_8888);
@@ -380,7 +391,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             //出现异常存储的是未加滤镜效果的图片
             cv.drawBitmap(currentBitmap, null, dst, null);
         }
-        Log.e("<<<", "381");
         //加商品
         EffectUtil.applyOnSave(cv, mImageView);
         new SavePicToFileTask().execute(newBitmap);
@@ -414,14 +424,14 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             super.onPostExecute(fileName);
             dialog.dismiss();
             if (TextUtils.isEmpty(fileName)) {
-                //出现问题是因为缓存目录中产生了，与规定文件名称一样的文件夹，清理即可以使用
-               AlertDialog.Builder builder = new AlertDialog.Builder(EditPictureActivity.this);
+                //出现问题是因为缓存目录中产生了与规定文件名称一样的文件夹，清理即可以使用
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditPictureActivity.this);
                 builder.setMessage("图片处理错误，请清理缓存后重试");
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Toast.makeText(EditPictureActivity.this,"清理缓存",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditPictureActivity.this, "清理缓存", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -440,6 +450,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 tagInfoList.add(label.getTagInfo());
             }
             MainApplication.tagInfoList = tagInfoList;
+            //向图片中存储位置信息
+//            ImageUtils.writeLocation(ImageUtils.picLocation(imageUri.getPath()), fileName);
             //传递数据
             Intent intent = new Intent(EditPictureActivity.this, CreateSceneActivity.class);
             intent.setData(Uri.parse("file://" + fileName));
@@ -479,7 +491,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     }
                     break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
-                    String url = data.getStringExtra("url");
+                    ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
+                    String url = productListBean.getCover_url();
+                    //是自动添加标签还是后添加
+//                    addLabel(new TagItem(productListBean.getTitle(), productListBean.getSale_price()));
                     final ImageView proImg = new ImageView(EditPictureActivity.this);
                     proImg.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     ImageLoader.getInstance().displayImage(url, proImg, new ImageLoadingListener() {
@@ -503,6 +518,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void onLoadingCancelled(String imageUri, View view) {
                             dialog.dismiss();
+//                            Toast.makeText(EditPictureActivity.this,"加载取消",Toast.LENGTH_SHORT).show();
                             Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
                         }
                     });

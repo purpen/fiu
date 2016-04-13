@@ -63,4 +63,24 @@
             <enum name="mirror" value="2"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="ListViewForScrollView">
+        <attr name="isLabelView" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="PullToRefresh">
+        <attr name="adapterViewBackground" format="reference|color"/>
+        <attr name="headerBackground" format="reference|color"/>
+        <attr name="headerTextColor" format="color"/>
+        <attr name="mode">
+            <flag name="pullDownFromTop" value="0x1"/>
+            <flag name="pullUpFromBottom" value="0x2"/>
+            <flag name="both" value="0x3"/>
+        </attr>
+    </declare-styleable>
+
+    <!-- 下拉刷新孙2 -->
+    <declare-styleable name="pullrefresh">
+        <attr name="actionViewId" format="reference"/>
+        <attr name="toolViewId" format="reference"/>
+    </declare-styleable>
 </resources>

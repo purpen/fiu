@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#f7f7f7"
+              android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/activity_add_label_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e9e9e9"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/activity_add_label_cancel"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:src="@mipmap/cancel_gray"/>
+
+        <HorizontalScrollView
+            android:id="@+id/activity_add_label_horizontalscroll"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@id/activity_add_label_cancel"
+            android:scrollbars="none"
+            >
+
+            <LinearLayout
+                android:id="@+id/activity_add_label_horizontallinear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e2e2e2"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="5dp"
+                android:background="#e2e2e2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/activity_add_label_usedlabelrelative"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/activity_add_label_usedlabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="使用过的标签"
+                        android:textColor="@color/yellow_bd8913"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_add_label_usedlabelline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:layout_alignLeft="@id/activity_add_label_usedlabel"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignRight="@id/activity_add_label_usedlabel"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/yellow_bd8913"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/activity_add_label_hotlabelrelative"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/activity_add_label_hotlabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="热门标签"
+                        android:textColor="@color/black333333"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_add_label_hotlabelline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:layout_alignLeft="@id/activity_add_label_hotlabel"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignRight="@id/activity_add_label_hotlabel"
+                        android:background="@color/yellow_bd8913"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#ebebeb"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/activity_add_label_labelviewpager"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="@color/white"
+                android:paddingTop="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e0e0e0"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/activity_add_label_alllabeltv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="全部标签"
+                    android:textColor="@color/black333333"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/activity_add_label_alllabeltv"
+                    android:background="#cccccc"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/activity_add_label_alllabeltv"
+                    android:background="#cccccc"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="9dp"
+                android:gravity="center"
+                android:text="请在情绪、环境、时间、任务中各选一个"
+                android:textColor="#999999"
+                android:textSize="11sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e6e6e6"/>
+
+            <com.taihuoniao.fineix.view.CustomSlidingTab
+                android:id="@+id/activity_add_label_slidingtab"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                app:paddingEnd="25dp"
+                app:paddingStart="25dp"
+                app:pstsIndicatorHeight="4dp"
+                app:pstsTabPaddingLeftRight="30dp"
+                app:pstsUnderlineHeight="0dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#ebebeb"/>
+
+
+            <com.taihuoniao.fineix.view.WrapContentViewPager
+                android:id="@+id/activity_add_label_alllabelviewpager"
+                android:layout_width="match_parent"
+                android:layout_height="700dp"
+                android:background="@color/white"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

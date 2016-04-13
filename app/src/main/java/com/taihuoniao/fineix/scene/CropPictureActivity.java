@@ -13,9 +13,9 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.IOException;
 
@@ -23,12 +23,15 @@ import java.io.IOException;
  * Created by taihuoniao on 2016/3/16.
  */
 public class CropPictureActivity extends BaseActivity implements View.OnClickListener {
+    private Uri imageUri;//上个界面获取的图片位置uri
     private GlobalTitleLayout titleLayout;
     private ClipImageLayout clipImageLayout;
     private WaittingDialog dialog;
+    public static CropPictureActivity instance = null;
 
-    public CropPictureActivity(){
-        super(R.layout.activity_crop);
+
+    public CropPictureActivity() {
+        super(0);
     }
 
 
@@ -39,7 +42,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
-        Uri imageUri = getIntent().getData();
+        imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setContinueListener(this);
         clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(CropPictureActivity.this, 50), false));
@@ -47,7 +50,8 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-//        setContentView(R.layout.activity_crop);
+        setContentView(R.layout.activity_crop);
+        instance = CropPictureActivity.this;
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_crop_titlelayout);
         clipImageLayout = (ClipImageLayout) findViewById(R.id.activity_crop_cliplayout);
         dialog = new WaittingDialog(CropPictureActivity.this);
@@ -63,6 +67,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
                     ImageUtils.saveToFile(MainApplication.cropPicPath, false, bitmap);
                     Intent intent = new Intent(CropPictureActivity.this, EditPictureActivity.class);
                     intent.setData(Uri.parse("file://" + MainApplication.cropPicPath));
+//                    ImageUtils.writeLocation(ImageUtils.picLocation(imageUri.getPath()), MainApplication.cropPicPath);
                     dialog.dismiss();
                     startActivity(intent);
                 } catch (IOException e) {
@@ -83,7 +88,8 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
                             dialog.dismiss();
                         }
                     });
-                    builder.create().show();                }
+                    builder.create().show();
+                }
                 break;
         }
     }

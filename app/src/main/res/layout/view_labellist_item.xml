@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/view_labellist_item_tv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_corner_black"
+    android:gravity="center"
+    android:paddingBottom="7dp"
+    android:paddingTop="7dp"
+    android:text="清晨"
+    android:textColor="@color/black333333"
+    android:textSize="12sp">
+
+</TextView>

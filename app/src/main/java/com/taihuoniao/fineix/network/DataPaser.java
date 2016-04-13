@@ -7,13 +7,24 @@ import android.util.Log;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.beans.AllLabel;
+import com.taihuoniao.fineix.beans.AllLabelBean;
+import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.HotLabel;
+import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.JDDetailsBean;
+import com.taihuoniao.fineix.beans.ProductBean;
+import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.TBDetailsBean;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -22,14 +33,39 @@ import org.json.JSONObject;
 public class DataPaser {
     //产品
     //列表
-    public static void getProductList(final Handler handler) {
-        ClientDiscoverAPI.getProductList(new RequestCallBack<String>() {
+    public static void getProductList(String category, String page, final Handler handler) {
+        ClientDiscoverAPI.getProductList(category, page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT_LIST;
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                ProductBean productBean = new ProductBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    productBean.setSuccess(job.optBoolean("success"));
+                    productBean.setMessage(job.optString("message"));
+                    productBean.setStatus(job.optString("status"));
+                    if (productBean.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<ProductListBean> list = new ArrayList<ProductListBean>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject ob = rows.getJSONObject(i);
+                            ProductListBean productListBean = new ProductListBean();
+                            productListBean.set_id(ob.optString("_id"));
+                            productListBean.setTitle(ob.optString("title"));
+                            productListBean.setSale_price(ob.optString("sale_price"));
+                            productListBean.setMarket_price(ob.optString("market_price"));
+                            productListBean.setLove_count(ob.optString("love_count"));
+                            productListBean.setCover_url(ob.optString("cover_url"));
+                            list.add(productListBean);
+                        }
+                        productBean.setList(list);
+                    }
+                    msg.obj = productBean;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 handler.sendMessage(msg);
             }
 
@@ -54,6 +90,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     jdDetailsBean.setSuccess(job.optBoolean("success"));
                     jdDetailsBean.setMessage(job.optString("message"));
+                    jdDetailsBean.setStatus(job.optString("status"));
                     if (jdDetailsBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONArray listproductbase_result = data.getJSONArray("listproductbase_result");
@@ -93,6 +130,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     tbDetailsBean.setSuccess(job.optBoolean("success"));
                     tbDetailsBean.setMessage(job.optString("message"));
+                    tbDetailsBean.setStatus(job.optString("status"));
                     if (tbDetailsBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONObject results = data.getJSONObject("results");
@@ -117,5 +155,200 @@ public class DataPaser {
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
+    }
+
+    //标签
+    //最近使用的标签
+    public static void usedLabelList(final Handler handler) {
+        ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.USED_LABEL_LIST;
+//                Log.e("<<<", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                //需要登录
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //标签
+    //标签列表
+    public static void labelList(String parent_id, int page, String size, final Handler handler) {
+        ClientDiscoverAPI.labelList(parent_id, page, size, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.LABEL_LIST;
+                AllLabel allLabel = new AllLabel();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    allLabel.setSuccess(job.optBoolean("success"));
+                    allLabel.setMessage(job.optString("message"));
+                    allLabel.setStatus(job.optString("status"));
+                    if (allLabel.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        JSONObject object = data.getJSONObject("1");
+                        if (object.optInt("children_count") > 0) {
+                            JSONArray children = object.getJSONArray("children");
+                            List<AllLabelBean> childrenList = new ArrayList<AllLabelBean>();
+                            for (int i = 0; i < children.length(); i++) {
+                                JSONObject ob = children.getJSONObject(i);
+                                AllLabelBean allLabelBean = new AllLabelBean();
+                                allLabelBean.set_id(ob.optString("_id"));
+                                allLabelBean.setTitle_cn(ob.optString("title_cn"));
+                                allLabelBean.setChildren_count(ob.optInt("children_count"));
+                                if (allLabelBean.getChildren_count() > 0) {
+                                    JSONArray children2 = ob.getJSONArray("children");
+                                    List<AllLabelBean> children2List = new ArrayList<AllLabelBean>();
+                                    for (int j = 0; j < children2.length(); j++) {
+                                        JSONObject ob2 = children2.getJSONObject(j);
+                                        AllLabelBean allLabelBean2 = new AllLabelBean();
+                                        allLabelBean2.set_id(ob2.optString("_id"));
+                                        allLabelBean2.setTitle_cn(ob2.optString("title_cn"));
+                                        allLabelBean2.setChildren_count(ob2.optInt("children_count"));
+                                        if (allLabelBean2.getChildren_count() > 0) {
+                                            JSONArray children3 = ob2.getJSONArray("children");
+                                            List<AllLabelBean> children3List = new ArrayList<AllLabelBean>();
+                                            for (int k = 0; k < children3.length(); k++) {
+                                                JSONObject ob3 = children3.getJSONObject(k);
+                                                AllLabelBean allLabelBean3 = new AllLabelBean();
+                                                allLabelBean3.set_id(ob3.optString("_id"));
+                                                allLabelBean3.setTitle_cn(ob3.optString("title_cn"));
+                                                children3List.add(allLabelBean3);
+                                            }
+                                            allLabelBean2.setChildren(children3List);
+                                        }
+                                        children2List.add(allLabelBean2);
+                                    }
+                                    allLabelBean.setChildren(children2List);
+                                }
+                                childrenList.add(allLabelBean);
+                            }
+                            allLabel.setChildren(childrenList);
+                        }
+                    }
+                    msg.obj = allLabel;
+                } catch (JSONException e) {
+                    Log.e("<<<", "解析异常");
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //标签
+    //热门标签
+    public static void hotLabelList(String page, final Handler handler) {
+        ClientDiscoverAPI.hotLabelList(page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.HOT_LABEL_LIST;
+                HotLabel hotLabel = new HotLabel();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    hotLabel.setSuccess(job.optBoolean("success"));
+                    hotLabel.setStatus(job.optString("status"));
+                    hotLabel.setMessage(job.optString("message"));
+                    if (hotLabel.isSuccess()) {
+                        List<HotLabelBean> hotLabelBeanList = new ArrayList<HotLabelBean>();
+                        JSONObject data = job.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject ob = rows.getJSONObject(i);
+                            HotLabelBean hotLabelBean = new HotLabelBean();
+                            hotLabelBean.set_id(ob.optString("_id"));
+                            hotLabelBean.setUsed_count(ob.optString("used_count"));
+                            hotLabelBean.setType_str(ob.optString("type_str"));
+                            hotLabelBean.setTitle_en(ob.optString("title_en"));
+                            hotLabelBean.setTitle_cn(ob.optString("title_cn"));
+                            hotLabelBean.setStick(ob.optString("stick"));
+                            hotLabelBean.setRight_ref(ob.optString("right_ref"));
+                            hotLabelBean.setParent_id(ob.optString("parent_id"));
+                            hotLabelBean.setLevel(ob.optString("level"));
+                            hotLabelBean.setLeft_ref(ob.optString("left_ref"));
+                            hotLabelBean.setParent_id(ob.optString("parent_id"));
+                            hotLabelBean.setCover_id(ob.optString("cover_id"));
+                            hotLabelBean.setChildren_count(ob.optString("children_count"));
+                            hotLabelBean.setStatus(ob.optString("status"));
+                            hotLabelBeanList.add(hotLabelBean);
+                        }
+                        hotLabel.setHotLabelBeanList(hotLabelBeanList);
+                    }
+                    msg.obj = hotLabel;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //公共
+    //分类列表
+    public static void categoryList(String page, String domin, final Handler handler) {
+        ClientDiscoverAPI.categoryList(page, domin, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CATEGORY_LIST;
+                CategoryBean categoryBean = new CategoryBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    categoryBean.setSuccess(job.optBoolean("success"));
+                    categoryBean.setMessage(job.optString("message"));
+                    categoryBean.setStatus(job.optString("status"));
+                    if (categoryBean.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<CategoryListBean> list = new ArrayList<CategoryListBean>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject ob = rows.getJSONObject(i);
+                            CategoryListBean categoryListBean = new CategoryListBean();
+                            categoryListBean.set_id(ob.optString("_id"));
+                            categoryListBean.setTitle(ob.optString("title"));
+                            categoryListBean.setName(ob.optString("name"));
+                            categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
+                            list.add(categoryListBean);
+                        }
+                        categoryBean.setList(list);
+                    }
+                    msg.obj = categoryBean;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+
     }
 }

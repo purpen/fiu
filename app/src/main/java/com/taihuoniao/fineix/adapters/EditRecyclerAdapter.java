@@ -59,7 +59,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
         holder.textView.setText(filterList.getName(position));
         if (filterList.isSelected(position)) {
             holder.redTv.setVisibility(View.VISIBLE);
-            holder.textView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.textView.setTextColor(context.getResources().getColor(R.color.yellow_bd8913));
         } else {
             holder.redTv.setVisibility(View.GONE);
             holder.textView.setTextColor(context.getResources().getColor(R.color.white));

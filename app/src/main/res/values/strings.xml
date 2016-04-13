@@ -35,6 +35,12 @@
     <!-- CreateSceneActivity -->
     <string name="create_scene">创建场景</string>
     <string name="publish">发布</string>
+    <!-- AddLabelActivity -->
+    <string name="add_label">添加标签</string>
+    <string name="confirm">确定</string>
+    <!-- AddProductActivity -->
+    <string name="add_product">添加产品</string>
+    <!---->
     <!-- 定位 -->
     <string name="startlocation">定位</string>
     <string name="stoplocation">停止</string>

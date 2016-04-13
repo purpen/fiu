@@ -74,6 +74,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
+            android:name=".scene.AddLabelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
             android:name=".map.HotCitiesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

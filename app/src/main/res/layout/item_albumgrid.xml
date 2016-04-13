@@ -16,5 +16,5 @@
         android:id="@+id/item_albumgrid_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/red_album_ground"/>
+        android:background="@drawable/yellow_album_ground"/>
 </FrameLayout>

@@ -62,6 +62,12 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
             cancelImg.setVisibility(GONE);
     }
 
+    //设置取消按钮的图片
+    public void setCancelImg(int resid) {
+        cancelImg.setImageResource(resid);
+
+    }
+
     //取消按钮的监听
     public void setCancelListener(OnClickListener onClickListener) {
         cancelImg.setOnClickListener(onClickListener);

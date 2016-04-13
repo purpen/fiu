@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/view_horizontal_label_item_tv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="20dp"
+    android:background="@mipmap/tags"
+    android:gravity="center"
+    android:paddingLeft="10dp"
+    android:paddingRight="18dp"
+    android:singleLine="true"
+    android:text="哈哈"
+    android:textColor="#666666"
+    android:textSize="12sp">
+
+</TextView>

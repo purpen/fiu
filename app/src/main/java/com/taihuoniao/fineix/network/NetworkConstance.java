@@ -9,7 +9,7 @@ public class NetworkConstance {
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
-    public static final String BASE_URL_ESTORE="http://t.taihuoniao.com/app/api/estore/";
+    public static final String BASE_URL_ESTORE = "http://t.taihuoniao.com/app/api/estore/";
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
@@ -20,12 +20,23 @@ public class NetworkConstance {
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
     public static final String urlString_TB_productsData = BASE_URL + "/scene_product/tb_view";
+    //标签
+    //最近使用的标签
+    public static final String used_label_list = BASE_URL + "/my/my_recent_tags";
+    //标签列表
+    public static final String label_list = BASE_URL + "/scene_tags/getlist";
+    //热门标签
+    public static final String hot_label_list = BASE_URL + "/scene_tags/hotlist";
+    //公共
+    //分类列表
+    public static final String category_list = BASE_URL + "/category/getlist";
+
     //热门城市
     public static final String HOT_CITIES = BASE_URL_ESTORE + "/get_city_list";
     //场景列表
-    public static final String  CHANG_JING= BASE_URL + "/scene_scene/";
+    public static final String CHANG_JING = BASE_URL + "/scene_scene/";
     //情景列表
-    public static final String  QING_JING= BASE_URL + "/scene_scene/";
+    public static final String QING_JING = BASE_URL + "/scene_scene/";
 
 
 }

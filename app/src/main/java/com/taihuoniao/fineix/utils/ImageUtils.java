@@ -35,7 +35,7 @@ import java.util.Locale;
  * Created by taihuoniao on 2016/3/15.
  */
 public class ImageUtils {
-
+    public static double[] location = null;//图片经纬度
 
     //保存图片文件
     public static String saveToFile(String fileFolderStr, boolean isDir, Bitmap croppedImage) throws IOException {
@@ -87,8 +87,33 @@ public class ImageUtils {
         return file.mkdir();
     }
 
+    //向图片中存储位置信息
+//    public static void writeLocation(double[] location, String fileName) {
+//        Log.e("<<<", "setLocation.fileName = " + fileName);
+//        if (location == null) {
+//            return;
+//        }
+//        ExifInterface exifInterface = null;
+//        try {
+//            exifInterface = new ExifInterface(fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if (exifInterface == null) {
+//            return;
+//        }
+//        exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE, location[1] + "/1,0/1,0/1");
+//        exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, location[0] + "/1,0/1,0/1");
+//        try {
+//            exifInterface.saveAttributes();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     //获取图片的位置信息
     public static double[] picLocation(String fileName) {
+        Log.e("<<<", "getLocation.fileName = " + fileName);
         ExifInterface exifInterface = null;
         try {
             exifInterface = new ExifInterface(fileName);
@@ -116,15 +141,14 @@ public class ImageUtils {
             miao = Integer.parseInt(longitudes[2].substring(0, longitudes[2].indexOf("/")));
             double jingdu = du + fen / 60 + miao / 1000000 / 60 / 60;
             Toast.makeText(MainApplication.getContext(), "经度 = " + jingdu + ",纬度 = " + weidu, Toast.LENGTH_SHORT).show();
-            double[] location = new double[]{jingdu, weidu};
-            return location;
+            return new double[]{jingdu, weidu};
         }
         return null;
     }
 
     //判断图片是否需要裁剪
     public static void processPhotoItem(Activity activity, PhotoItem photo) {
-        picLocation(photo.getImageUri());
+        location = picLocation(photo.getImageUri());
         Uri uri = photo.getImageUri().startsWith("file:") ? Uri.parse(photo
                 .getImageUri()) : Uri.parse("file://" + photo.getImageUri());
         if (isFourToThree(photo.getImageUri())) {

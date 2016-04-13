@@ -34,10 +34,15 @@ public class SelectStoreActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setRightTv(R.string.close, getResources().getColor(R.color.black333333), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectStoreActivity.this.finish();
+            }
+        });
         titleLayout.setColor(R.color.white);
         titleLayout.setTitle(R.string.add_url);
-        titleLayout.setBackImgVisible(false);
-        titleLayout.setCancelImgVisible(true);
         jingdongLinear.setOnClickListener(this);
         taobaoLinear.setOnClickListener(this);
         tianmaoLinear.setOnClickListener(this);

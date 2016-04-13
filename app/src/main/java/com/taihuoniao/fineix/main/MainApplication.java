@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 
@@ -44,6 +45,8 @@ public class MainApplication extends Application {
     public static String uuid = null;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
+    //用户选择的标签列表
+    public static List<UsedLabelBean> selectList;
 
     public static MainApplication getContext() {
         return instance;

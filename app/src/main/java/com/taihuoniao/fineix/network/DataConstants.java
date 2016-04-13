@@ -29,4 +29,15 @@ public class DataConstants {
     public static final String URL_YAMAXUN = "http://www.amazon.cn/";
     //添加产品界面产品列表
     public static final int ADD_PRODUCT_LIST = 89;
+    //添加标签界面使用过的标签
+    public static final int USED_LABEL_LIST = 88;
+    //添加标签界面所有标签
+    public static final int LABEL_LIST = 87;
+    //添加标签页面热门标签列表
+    public static final int HOT_LABEL_LIST = 86;
+    //CreateSceneActivity跳转到AddLabelActivity界面的请求码和返回码
+    public static final int REQUESTCODE_CREATESCENE_ADDLABEL = 85;
+    public static final int RESULTCODE_CREATESCENE_ADDLABEL = 84;
+    //AddProductActivity分类列表
+    public static final int CATEGORY_LIST = 83;
 }

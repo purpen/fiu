@@ -24,6 +24,8 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private FragmentManager fm;
     private PhotoFragment photoFragment;
     private CameraFragment cameraFragment;
+    public static SelectPhotoOrCameraActivity instance = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
 
     protected void initView() {
         setContentView(R.layout.activity_select);
+        instance = SelectPhotoOrCameraActivity.this;
         photoRelative = (RelativeLayout) findViewById(R.id.activity_select_photorelative);
         cameraRelative = (RelativeLayout) findViewById(R.id.activity_select_camerarelative);
         photoTv = (TextView) findViewById(R.id.activity_select_phototv);
@@ -102,11 +105,11 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private void selectColor(View v) {
         switch (v.getId()) {
             case R.id.activity_select_photorelative:
-                photoTv.setTextColor(getResources().getColor(R.color.red));
+                photoTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
                 photoRedline.setVisibility(View.VISIBLE);
                 break;
             case R.id.activity_select_camerarelative:
-                cameraTv.setTextColor(getResources().getColor(R.color.red));
+                cameraTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
                 cameraRedline.setVisibility(View.VISIBLE);
                 break;
         }
