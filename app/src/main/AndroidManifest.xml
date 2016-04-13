@@ -96,7 +96,7 @@
             android:theme="@style/AppTheme"/>
 
         <activity
-            android:name=".map.GeoCoderDemo"
+            android:name=".map.BDSearchAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 

@@ -74,15 +74,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
-        MapUtil.getAddressByCoordinate(40.216938, 116.234051, new MapUtil.OnGetReverseGeoCodeResultListener() {
-            @Override
-            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-                List<PoiInfo> list = result.getPoiList();
-                for (PoiInfo info: list) {
-                    LogUtil.e("address",info.address);
-                }
-            }
-        });
     }
 
     @Override

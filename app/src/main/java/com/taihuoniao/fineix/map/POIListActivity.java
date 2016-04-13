@@ -332,6 +332,7 @@ public class POIListActivity extends BaseActivity implements OnGetPoiSearchResul
                                 locationBean.getLatitude(),
                                 locationBean.getLongitude(), R.mipmap.point,
                                 mBaiduMap, 0, true);
+                        LogUtil.e("location","Lat="+locationBean.getLatitude()+";lon="+locationBean.getLongitude());
                     }
 
                     @Override

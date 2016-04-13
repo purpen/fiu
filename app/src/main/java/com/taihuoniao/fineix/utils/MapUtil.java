@@ -1,12 +1,7 @@
 package com.taihuoniao.fineix.utils;
-import android.app.Activity;
-import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.CityInfo;
-import com.baidu.mapapi.search.core.PoiInfo;
-import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
@@ -14,18 +9,22 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.baidu.mapapi.search.poi.PoiSortType;
+
 /**
  * @author lilin
  *         created at 2016/4/12 14:52
  */
 public class MapUtil {
-    private static GeoCoder mSearch;
+    private static GeoCoder mGeoCoder;
     private static PoiSearch mPoiSearch;
-    private static OnGetReverseGeoCodeResultListener listener=null;
-    public interface OnGetReverseGeoCodeResultListener{
+    private static MyOnGetGeoCoderResultListener listener=null;
+    public interface MyOnGetGeoCoderResultListener{
         void onGetReverseGeoCodeResult(ReverseGeoCodeResult result);
+        void onGetGeoCodeResult(GeoCodeResult result);
     }
 
     /**
@@ -34,7 +33,7 @@ public class MapUtil {
      * @param lon
      * @param listener
      */
-    public static void getAddressByCoordinate(double lat, double lon,OnGetReverseGeoCodeResultListener listener) {
+    public static void getAddressByCoordinate(double lat, double lon,MyOnGetGeoCoderResultListener listener) {
         LatLng latLng = new LatLng(lat, lon);
         getAddressByCoordinate(latLng,listener);
     }
@@ -44,36 +43,38 @@ public class MapUtil {
      * @param latLng
      * @param listener
      */
-    public static void getAddressByCoordinate(LatLng latLng,final OnGetReverseGeoCodeResultListener listener) {
+    public static void getAddressByCoordinate(LatLng latLng,final MyOnGetGeoCoderResultListener listener) {
         MapUtil.listener=listener;
-        // 初始化搜索模块，注册事件监听
-        mSearch = GeoCoder.newInstance();
 
-        mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+        if (mGeoCoder==null){
+            mGeoCoder = GeoCoder.newInstance();
+        }
+
+        mGeoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
             public void onGetGeoCodeResult(GeoCodeResult result) {
-                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
-                    return;
-                }
+//                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+//                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
+//                    return;
+//                }
 //                String strInfo = String.format("纬度：%f 经度：%f",
 //                        result.getLocation().latitude, result.getLocation().longitude);
 ////                Toast.makeText(activity, strInfo, Toast.LENGTH_LONG).show();
 //                LogUtil.e("onGetReverseGeoCodeResult",strInfo+"strInfo");
+                if (listener!=null){
+                    listener.onGetGeoCodeResult(result);
+                }
             }
 
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-//                    Toast.makeText(activity, "抱歉，未能找到结果", Toast.LENGTH_LONG)
-//                            .show();
-                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
-                    return;
-                }
-
+//                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+//                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
+//                }
                 if (listener!=null){
                     listener.onGetReverseGeoCodeResult(result);
                 }
+
 //                LogUtil.e("onGetReverseGeoCodeResult",result.getAddress()+"getAddress");
 //                List<PoiInfo> list = result.getPoiList();
 //                for (PoiInfo info: list) {
@@ -81,65 +82,60 @@ public class MapUtil {
 //                }
             }
         });
-        // 反Geo搜索
-        mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+        mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(latLng));
     }
 
     public static void destroyGeoCoder() {
-        if (mSearch != null)
-            mSearch.destroy();
+        if (mGeoCoder != null){
+            mGeoCoder.destroy();
+            mGeoCoder=null;
+        }
+    }
+
+
+    public interface MyOnGetPoiSearchResultListener{
+        void onGetPoiResult(PoiResult result);
+        void onGetPoiDetailResult(PoiDetailResult result);
     }
 
     /**
-     *@param activity
-     * @param lat
-     * @param lon
+     * 根据关键字周边搜索Poi
+     * @param keyword
+     * @param listener
      */
-    public static void getPOIByCoordinate(final Activity activity,double lat, double lon){
-        // 初始化搜索模块，注册搜索事件监听
-        mPoiSearch = PoiSearch.newInstance();
-//        mPoiSearch.searchNearby(new PoiNearbySearchOption().location(new LatLng(lat,lon)));
+    public static void getPoiNearbyByKeyWord(String keyword, LatLng ll,int radius,int pageCapacity,PoiSortType sortType,final MyOnGetPoiSearchResultListener listener) {
+        if (mPoiSearch==null){
+            mPoiSearch = PoiSearch.newInstance();
+        }
+        mPoiSearch.searchNearby(new PoiNearbySearchOption().keyword(keyword).location(ll).radius(radius).pageCapacity(pageCapacity).sortType(sortType));
         mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
-                if (result == null
-                        || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
-                    Toast.makeText(activity, "未找到结果", Toast.LENGTH_LONG)
-                            .show();
-                    return;
-                }
-
-                if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
-
-                    // 当输入关键字在本市没有找到，但在其他城市找到时，返回包含该关键字信息的城市列表
-                    String strInfo = "在";
-                    for (CityInfo cityInfo : result.getSuggestCityList()) {
-                        strInfo += cityInfo.city;
-                        strInfo += ",";
-                    }
-                    strInfo += "找到结果";
-                    Toast.makeText(activity, strInfo, Toast.LENGTH_LONG)
-                            .show();
+//                if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
+//                    LogUtil.e("onGetPoiResult","未找到结果");
+//                }
+                if (listener!=null){
+                    listener.onGetPoiResult(result);
                 }
             }
-
             @Override
             public void onGetPoiDetailResult(PoiDetailResult result) {
-                if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-                    Toast.makeText(activity, "抱歉，未找到结果", Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    Toast.makeText(activity, result.getName() + ": " + result.getAddress(), Toast.LENGTH_SHORT)
-                            .show();
+//                if (result.error != SearchResult.ERRORNO.NO_ERROR) {
+//                    LogUtil.e("onGetPoiDetailResult", "抱歉，未找到结果");
+//                } else {
+//                    LogUtil.e("onGetPoiDetailResult",result.getName() + ": " + result.getAddress());
+//                }
+                if (listener!=null){
+                    listener.onGetPoiDetailResult(result);
                 }
             }
         });
     }
-
-
     public static void destroyPoiSearch() {
-        if (mPoiSearch != null)
+        if (mPoiSearch != null){
             mPoiSearch.destroy();
+            mPoiSearch=null;
+        }
     }
 }

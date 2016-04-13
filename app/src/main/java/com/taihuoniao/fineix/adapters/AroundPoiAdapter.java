@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.search.core.PoiInfo;
@@ -62,21 +60,17 @@ public class AroundPoiAdapter extends BaseAdapter {
             holder = new RecordHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(
-                    R.layout.mapview_location_poi_lv_item, null);
-            holder.ivMLISelected = (ImageView) convertView
-                    .findViewById(R.id.ivMLISelected);
-            holder.tvMLIPoiName = (TextView) convertView
-                    .findViewById(R.id.tvMLIPoiName);
-            holder.tvMLIPoiAddress = (TextView) convertView
-                    .findViewById(R.id.tvMLIPoiAddress);
-            holder.rlMLPIItem = (RelativeLayout) convertView
-                    .findViewById(R.id.rlMLPIItem);
+                    R.layout.item_poi_lv, null);
+            holder.tv_short_name = (TextView) convertView
+                    .findViewById(R.id.tv_short_name);
+            holder.tv_poi_detail = (TextView) convertView
+                    .findViewById(R.id.tv_poi_detail);
             convertView.setTag(holder);
         } else {
             holder = (RecordHolder) convertView.getTag();
         }
-        holder.tvMLIPoiName.setText(mkPoiInfoList.get(position).name);
-        holder.tvMLIPoiAddress.setText(mkPoiInfoList.get(position).address);
+        holder.tv_short_name.setText(mkPoiInfoList.get(position).name);
+        holder.tv_poi_detail.setText(mkPoiInfoList.get(position).address);
         // if (selected >= 0 && selected == position) {
         // holder.rlMLPIItem.setSelected(true);
         // } else {
@@ -86,8 +80,6 @@ public class AroundPoiAdapter extends BaseAdapter {
     }
 
     public class RecordHolder {
-        public RelativeLayout rlMLPIItem;
-        public ImageView ivMLISelected;
-        public TextView tvMLIPoiName, tvMLIPoiAddress;
+        public TextView tv_poi_detail, tv_short_name;
     }
 }

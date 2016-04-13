@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.map.GeoCoderDemo;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.map.POIListActivity;
@@ -53,7 +54,7 @@ public class IndexFragment extends BaseFragment {
                 activity.startActivity(new Intent(activity, OrderListActivity.class));
                 break;
             case R.id.geo:
-                activity.startActivity(new Intent(activity, GeoCoderDemo.class));
+                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
                 break;
         }
     }

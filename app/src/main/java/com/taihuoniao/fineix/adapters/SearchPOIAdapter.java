@@ -53,22 +53,22 @@ public class SearchPOIAdapter extends BaseAdapter {
             holder = new CityPoiHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(
-                    R.layout.mapview_location_poi_lv_item, null);
-            holder.tvMLIPoiName = (TextView) convertView
-                    .findViewById(R.id.tvMLIPoiName);
-            holder.tvMLIPoiAddress = (TextView) convertView
-                    .findViewById(R.id.tvMLIPoiAddress);
+                    R.layout.item_poi_lv, null);
+            holder.tv_short_name = (TextView) convertView
+                    .findViewById(R.id.tv_short_name);
+            holder.tv_poi_detail = (TextView) convertView
+                    .findViewById(R.id.tv_poi_detail);
             convertView.setTag(holder);
         } else {
             holder = (CityPoiHolder) convertView.getTag();
         }
         LocationBean cityPoi = cityPoiList.get(position);
-        holder.tvMLIPoiName.setText(cityPoi.getLocName());
-        holder.tvMLIPoiAddress.setText(cityPoi.getAddStr());
+        holder.tv_short_name.setText(cityPoi.getLocName());
+        holder.tv_poi_detail.setText(cityPoi.getAddStr());
         return convertView;
     }
 
     public class CityPoiHolder {
-        public TextView tvMLIPoiName, tvMLIPoiAddress;
+        public TextView tv_short_name, tv_poi_detail;
     }
 }

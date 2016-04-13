@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.utils.Util;
 public class CustomHeadView extends RelativeLayout {
     private Context context;
     private ImageView head_goback;
+    private ImageView iv_left;
     private TextView head_center_tv;
     private ImageView iv_center_logo;
     private ImageView iv_head_search;
@@ -45,6 +46,7 @@ public class CustomHeadView extends RelativeLayout {
 
     private void initViews(View view) {
         head_goback = (ImageView) view.findViewById(R.id.head_goback);
+        iv_left = (ImageView) view.findViewById(R.id.iv_left);
         head_center_tv = (TextView) view.findViewById(R.id.head_center_tv);
         iv_center_logo = (ImageView) view.findViewById(R.id.iv_center_logo);
         sv = (SearchView) view.findViewById(R.id.sv_head_view);
@@ -57,6 +59,7 @@ public class CustomHeadView extends RelativeLayout {
 //        head_view_shop.setOnClickListener(onClickListener);
         rl_head_shop.setOnClickListener(onClickListener);
         iv_head_search.setOnClickListener(onClickListener);
+        iv_left.setOnClickListener(onClickListener);
     }
 
 
@@ -66,6 +69,9 @@ public class CustomHeadView extends RelativeLayout {
             switch(v.getId()){
                 case R.id.head_goback:
                     ((Activity)context).onBackPressed();
+                    break;
+                case R.id.iv_left:
+                    //TODO
                     break;
 //                case R.id.head_view_shop:
 //                    if (LoginUtil.isLogin()){
@@ -105,6 +111,13 @@ public class CustomHeadView extends RelativeLayout {
         }
     }
 
+    public void setIvLeft(int imgId){
+            iv_left.setImageResource(imgId);
+    }
+
+    public ImageView getIvLeft(){
+       return iv_left;
+    }
     public void setHeadSearchShow(boolean isShow) {
         if (isShow) {
             iv_head_search.setVisibility(View.VISIBLE);

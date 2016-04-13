@@ -14,7 +14,17 @@
         android:background="@null"
         android:padding="@dimen/dp16"
         android:src="@mipmap/back_black" />
-
+    <ImageView
+        android:id="@+id/iv_left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:background="@null"
+        android:padding="@dimen/dp16"
+        android:src="@mipmap/ic_launcher"
+        />
     <TextView
         android:id="@+id/head_center_tv"
         android:layout_width="wrap_content"
@@ -103,7 +113,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
-        android:layout_marginRight="@dimen/dp16"
+        android:padding="@dimen/dp16"
         android:textSize="@dimen/sp16"
         android:textColor="@color/color_333"
         android:visibility="gone" />
