@@ -24,7 +24,6 @@ import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 
@@ -87,6 +86,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initView() {
+        custom_head.setHeadGoBackShow(false);
+        custom_head.setHeadLogoShow(true);
         if (tabList != null) {
             tabList.clear();
         } else {

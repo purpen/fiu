@@ -2,10 +2,10 @@ package com.taihuoniao.fineix.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,12 +15,12 @@ import com.taihuoniao.fineix.utils.Util;
 
 public class CustomHeadView extends RelativeLayout {
     private Context context;
-    private ImageView head_goback;
-    private ImageView iv_left;
+    private ImageButton head_goback;
+    private ImageButton iv_left;
     private TextView head_center_tv;
     private ImageView iv_center_logo;
-    private ImageView iv_head_search;
-    private ImageView head_view_shop;
+    private ImageButton iv_head_search;
+    private ImageButton head_view_shop;
     private RelativeLayout rl_head_shop;
     private TextView tv_head_right;
     private TextView tv_tip_num;
@@ -45,12 +45,12 @@ public class CustomHeadView extends RelativeLayout {
     }
 
     private void initViews(View view) {
-        head_goback = (ImageView) view.findViewById(R.id.head_goback);
-        iv_left = (ImageView) view.findViewById(R.id.iv_left);
+        head_goback = (ImageButton) view.findViewById(R.id.head_goback);
+        iv_left = (ImageButton) view.findViewById(R.id.iv_left);
         head_center_tv = (TextView) view.findViewById(R.id.head_center_tv);
         iv_center_logo = (ImageView) view.findViewById(R.id.iv_center_logo);
         sv = (SearchView) view.findViewById(R.id.sv_head_view);
-        iv_head_search = (ImageView) view.findViewById(R.id.iv_head_search);
+        iv_head_search = (ImageButton) view.findViewById(R.id.iv_head_search);
         rl_head_shop = (RelativeLayout) view.findViewById(R.id.rl_head_shop);
 //        head_view_shop = (ImageButton) view.findViewById(R.id.head_view_shop);
         tv_tip_num=(TextView)view.findViewById(R.id.tv_tip_num);
@@ -112,10 +112,11 @@ public class CustomHeadView extends RelativeLayout {
     }
 
     public void setIvLeft(int imgId){
-            iv_left.setImageResource(imgId);
+        iv_left.setVisibility(VISIBLE);
+        iv_left.setImageResource(imgId);
     }
 
-    public ImageView getIvLeft(){
+    public ImageButton getIvLeft(){
        return iv_left;
     }
     public void setHeadSearchShow(boolean isShow) {

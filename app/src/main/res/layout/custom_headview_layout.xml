@@ -4,26 +4,23 @@
     android:layout_height="50dp"
     android:background="@android:color/white">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/head_goback"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:background="@null"
+        android:background="@drawable/selector_fff_eee"
         android:padding="@dimen/dp16"
         android:src="@mipmap/back_black" />
-    <ImageView
+
+    <ImageButton
         android:id="@+id/iv_left"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:background="@null"
+        android:background="@drawable/selector_fff_eee"
         android:padding="@dimen/dp16"
-        android:src="@mipmap/ic_launcher"
+        android:visibility="gone"
         />
     <TextView
         android:id="@+id/head_center_tv"
@@ -48,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/head_logo"
         android:visibility="gone" />
 
     <RelativeLayout
@@ -64,12 +61,12 @@
         android:focusableInTouchMode="true"
         android:visibility="gone"
         >
-        <ImageView
+        <ImageButton
             android:id="@+id/head_view_shop"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher"
-            android:background="@null"
+            android:background="@drawable/selector_fff_eee"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -92,7 +89,7 @@
             />
     </RelativeLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_head_search"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -102,7 +99,7 @@
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
         android:src="@mipmap/ic_launcher"
-        android:background="@null"
+        android:background="@drawable/selector_fff_eee"
         android:visibility="gone"
         />
 
@@ -115,6 +112,7 @@
         android:gravity="center_vertical"
         android:padding="@dimen/dp16"
         android:textSize="@dimen/sp16"
+        android:background="@drawable/selector_fff_eee"
         android:textColor="@color/color_333"
         android:visibility="gone" />
 
