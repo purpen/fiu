@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.HotLabelBean;
+import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -49,7 +50,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private ViewPager labelViewPager;
     private HotLabelViewPagerAdapter hotLabelViewPagerAdapter;
     private CustomSlidingTab slidingTab;
-//    private ViewPager allLabelViewPager;
+    //    private ViewPager allLabelViewPager;
     private WrapContentViewPager allLabelViewPager;
     //    private AllLabelViewPagerAdapter allLabelViewPagerAdapter;
     private AllLabelViewPagerAdapter1 allLabelViewPagerAdapter;
@@ -102,11 +103,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         hotLabelRelative.setOnClickListener(this);
         usedLabelList = new ArrayList<>();
         hotLabelList = new ArrayList<>();
-        //用过的标签，用的是测试数据
-        for (int i = 0; i < 15; i++) {
-            usedLabelList.add(new UsedLabelBean(i + "", "测试" + i));
-        }
-        usedLabelRelative.setVisibility(View.VISIBLE);
         hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(AddLabelActivity.this, usedLabelList, hotLabelList, this);
         labelViewPager.setAdapter(hotLabelViewPagerAdapter);
         labelViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -151,6 +147,11 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         allLabelViewPagerAdapter = new AllLabelViewPagerAdapter1(getSupportFragmentManager(), AddLabelActivity.this, allLabelList, AddLabelActivity.this, AddLabelActivity.this);
         allLabelViewPager.setAdapter(allLabelViewPagerAdapter);
         selectList = new LinkedList<>();
+        if (MainApplication.selectList != null) {
+            for (UsedLabelBean usedLabelBean : MainApplication.selectList) {
+                addToLinear(usedLabelBean.getTitle_cn(), Integer.parseInt(usedLabelBean.get_id()));
+            }
+        }
     }
 
     @Override
@@ -273,6 +274,15 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                     break;
                 case DataConstants.USED_LABEL_LIST:
 //                    dialog.dismiss();
+                    UsedLabel netUsedLabel = (UsedLabel) msg.obj;
+                    if (netUsedLabel.isSuccess()) {
+                        if (netUsedLabel.getHas_tag() == 0) {
+                            return;
+                        }
+                        usedLabelList.addAll(netUsedLabel.getUsedLabelList());
+                        usedLabelRelative.setVisibility(View.VISIBLE);
+                        hotLabelViewPagerAdapter.notifyDataSetChanged();
+                    }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();

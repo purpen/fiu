@@ -4,30 +4,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
@@ -48,13 +57,21 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private TextView locationTv;
     private RecyclerView recyclerView;
     private AddressRecycleAdapter recyclerAdapter;
+    private TextView addressTv, areaTv;
+    private ImageView deleteAddressImg;
     private RelativeLayout labelRelative;
     private LinearLayout labelLinear;
     private RelativeLayout qingjingRelative;
+    private LinearLayout qingjingLinear;
+    //工具
+    private WaittingDialog dialog;
     //从选择标签界面返回的用户选择的标签
     private List<UsedLabelBean> selectList;
     //地址列表数据
     private List<PoiInfo> poiInfoList;
+    //位置信息
+    private String city, province, district;
+    private double lng, lat;
 
 
     public CreateSceneActivity() {
@@ -70,9 +87,18 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         titleEdt = (EditText) findViewById(R.id.activity_create_scene_titleedt);
         locationTv = (TextView) findViewById(R.id.activity_create_scene_location);
         recyclerView = (RecyclerView) findViewById(R.id.activity_create_scene_recycler);
+        addressTv = (TextView) findViewById(R.id.activity_create_scene_address);
+        areaTv = (TextView) findViewById(R.id.activity_create_scene_area);
+        deleteAddressImg = (ImageView) findViewById(R.id.activity_create_scene_deleteaddress);
         labelRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_labelrelative);
         labelLinear = (LinearLayout) findViewById(R.id.activity_create_scene_labellinear);
         qingjingRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_qingjing);
+        qingjingLinear = (LinearLayout) findViewById(R.id.activity_create_scene_qingjinglinear);
+        if (MainApplication.tag == 2) {
+            qingjingLinear.setVisibility(View.GONE);
+            qingjingRelative.setVisibility(View.GONE);
+        }
+        dialog = new WaittingDialog(CreateSceneActivity.this);
     }
 
     @Override
@@ -86,6 +112,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setBackListener(this);
         titleLayout.setTitle(R.string.create_scene, getResources().getColor(R.color.black333333));
         titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.yellow_bd8913), this);
+        if (MainApplication.tag == 2) {
+            titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.black333333), this);
+            titleLayout.setTitle(R.string.create_qingjing, getResources().getColor(R.color.black333333));
+        }
         ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
             @Override
             public void callback(Bitmap result) {
@@ -102,9 +132,14 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         if (location != null) {
             //图片上有位置信息
             Log.e("<<<", "不为空");
-            MapUtil.getAddressByCoordinate(location[1], location[0], new MapUtil.OnGetReverseGeoCodeResultListener() {
+            dialog.show();
+            MapUtil.getAddressByCoordinate(location[1], location[0], new MapUtil.MyOnGetGeoCoderResultListener() {
                 @Override
                 public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                    dialog.dismiss();
+                    city = result.getAddressDetail().city;
+                    province = result.getAddressDetail().province;
+                    district = result.getAddressDetail().district;
                     poiInfoList = result.getPoiList();
                     if (poiInfoList == null) {
                         Log.e("<<<", "list为空");
@@ -114,19 +149,23 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "address = " + each.address + ",经度 = " + each.location.longitude + ",纬度 = " + each.location.latitude
 //                        +",city = "+each.city+",name = "+each.name+",phoneNum = "+each.phoneNum+",postCode = "+each.postCode
 //                        +",uid="+each.uid+",describeContents = "+each.describeContents()+",tostring = "+each.toString());
-
 //                    }
                     ImageUtils.location = null;
                     recyclerAdapter = new AddressRecycleAdapter(CreateSceneActivity.this, poiInfoList, CreateSceneActivity.this);
                     recyclerView.setAdapter(recyclerAdapter);
                 }
+
+                @Override
+                public void onGetGeoCodeResult(GeoCodeResult result) {
+
+                }
             });
         } else {
             //图片上无位置信息
-            Log.e("<<<", "为空");
+            Toast.makeText(CreateSceneActivity.this, "图片无地址信息", Toast.LENGTH_SHORT).show();
 
         }
-
+        deleteAddressImg.setOnClickListener(this);
         labelRelative.setOnClickListener(this);
         qingjingRelative.setOnClickListener(this);
     }
@@ -134,6 +173,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_create_scene_deleteaddress:
+                addressTv.setText("");
+                areaTv.setText("");
+                break;
             case R.id.activity_create_scene_qingjing:
                 Toast.makeText(CreateSceneActivity.this, "情景未做", Toast.LENGTH_SHORT).show();
 
@@ -141,10 +184,67 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_create_scene_labelrelative:
                 //需要登录
                 Toast.makeText(CreateSceneActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
+                MainApplication.selectList = selectList;
                 startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
                 break;
             case R.id.title_continue:
-
+                Toast.makeText(CreateSceneActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(titleEdt.getText())) {
+                    Toast.makeText(CreateSceneActivity.this, "请填写场景标题", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(contentEdt.getText())) {
+                    Toast.makeText(CreateSceneActivity.this, "请填写场景描述", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectList == null) {
+                    Toast.makeText(CreateSceneActivity.this, "请添加标签", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(addressTv.getText()) || TextUtils.isEmpty(areaTv.getText())) {
+                    Toast.makeText(CreateSceneActivity.this, "请选择地址", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                StringBuilder tags = new StringBuilder();
+                for (UsedLabelBean each : selectList) {
+                    tags.append(",").append(each.getTitle_cn());
+                }
+                if (tags.length() > 0) {
+                    tags.deleteCharAt(0);
+                }
+                StringBuilder product_id = new StringBuilder();
+                StringBuilder product_title = new StringBuilder();
+                StringBuilder product_price = new StringBuilder();
+                StringBuilder product_x = new StringBuilder();
+                StringBuilder product_y = new StringBuilder();
+                for (TagItem each : MainApplication.tagInfoList) {
+                    product_id.append(",").append(each.getId());
+                    product_title.append(",").append(each.getName());
+                    product_price.append(",").append(each.getPrice());
+                    product_x.append(",").append(each.getX());
+                    product_y.append(",").append(each.getY());
+                }
+                if (product_id.length() > 0) {
+                    product_id.deleteCharAt(0);
+                }
+                if (product_title.length() > 0) {
+                    product_title.deleteCharAt(0);
+                }
+                if (product_price.length() > 0) {
+                    product_price.deleteCharAt(0);
+                }
+                if (product_x.length() > 0) {
+                    product_x.deleteCharAt(0);
+                }
+                if (product_y.length() > 0) {
+                    product_y.deleteCharAt(0);
+                }
+                dialog.show();
+                DataPaser.createScene(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
+                        18 + "", tags.toString(), product_id.toString(), product_title.toString(),
+                        product_price.toString(), product_x.toString(), product_y.toString(), province + city + district + addressTv.getText().toString(),
+                        lat + "", lng + "",
+                        handler);
                 break;
             case R.id.title_back:
                 showDialog();
@@ -185,6 +285,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             switch (resultCode) {
                 case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
                     if (MainApplication.selectList != null) {
+                        if (selectList != null) {
+                            selectList.clear();
+                            labelLinear.removeAllViews();
+                        }
                         selectList = MainApplication.selectList;
                         MainApplication.selectList = null;
                         for (int i = 0; i < selectList.size(); i++) {
@@ -213,6 +317,41 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void click(int postion) {
-        Log.e("<<<", "itemClick:" + postion);
+        addressTv.setText(poiInfoList.get(postion).name);
+        areaTv.setText(district + "，" + city + "，" + province);
+        lng = poiInfoList.get(postion).location.longitude;
+        lat = poiInfoList.get(postion).location.latitude;
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case DataConstants.CREATE_SCENE:
+                    dialog.dismiss();
+                    NetBean netBean = (NetBean) msg.obj;
+                    Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (netBean.isSuccess()) {
+                        SelectPhotoOrCameraActivity.instance.finish();
+                        CropPictureActivity.instance.finish();
+                        EditPictureActivity.instance.finish();
+                        CreateSceneActivity.this.finish();
+                    }
+                    break;
+                case DataConstants.NET_FAIL:
+                    dialog.dismiss();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        //        cancelNet();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
+        super.onDestroy();
     }
 }

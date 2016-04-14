@@ -47,6 +47,8 @@ public class MainApplication extends Application {
     public static List<TagItem> tagInfoList;
     //用户选择的标签列表
     public static List<UsedLabelBean> selectList;
+    //创建场景或情景的标识
+    public static int tag;//1,场景 2,情景
 
     public static MainApplication getContext() {
         return instance;

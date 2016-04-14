@@ -45,7 +45,7 @@ public class AddProductActivity extends BaseActivity {
         titleLayout.setContinueTvVisible(false);
         titleLayout.setBackImgVisible(false);
         titleLayout.setCancelImgVisible(true);
-//        titleLayout.setCancelImg(R.mipmap.cancel_black);
+        titleLayout.setCancelImg(R.mipmap.cancel_black);
         slidingTab.setIndicatorColor(getResources().getColor(R.color.yellow_bd8913));
         slidingTab.setTextColor(getResources().getColor(R.color.black333333));
         slidingTab.setCurTabTextColor(getResources().getColor(R.color.yellow_bd8913));

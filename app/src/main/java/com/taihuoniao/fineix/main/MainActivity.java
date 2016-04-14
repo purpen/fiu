@@ -1,16 +1,16 @@
 package com.taihuoniao.fineix.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.search.core.PoiInfo;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public MainActivity() {
         super(R.layout.activity_main);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
@@ -94,26 +95,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabList = new ArrayList<TabItem>();
         }
 //        homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
-        initTabItem(homepageImg,tv_nav0, R.id.activity_main_homepagebtn, R.mipmap.home_red, R.mipmap.home_gray);
+        initTabItem(homepageImg, tv_nav0, R.id.activity_main_homepagebtn, R.mipmap.home_red, R.mipmap.home_gray);
 
 //        findImg = (ImageView) findViewById(R.id.activity_main_findbtn);
-        initTabItem(findImg,tv_nav1, R.id.activity_main_findbtn, R.mipmap.find_red, R.mipmap.find_gray);
+        initTabItem(findImg, tv_nav1, R.id.activity_main_findbtn, R.mipmap.find_red, R.mipmap.find_gray);
 
 //        sceneImg = (ImageView) findViewById(R.id.activity_main_scenebtn);
 
 //        shopImg = (ImageView) findViewById(R.id.activity_main_shopbtn);
-        initTabItem(shopImg,tv_nav3,R.id.activity_main_shopbtn, R.mipmap.shop_red, R.mipmap.shop_gray);
+        initTabItem(shopImg, tv_nav3, R.id.activity_main_shopbtn, R.mipmap.shop_red, R.mipmap.shop_gray);
 
 //        mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
-        initTabItem(mineImg,tv_nav4,R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_gray);
+        initTabItem(mineImg, tv_nav4, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_gray);
 
         switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
     }
 
-    private void initTabItem(ImageView imageView,TextView tv,int resId, int selId, int unselId) {
+    private void initTabItem(ImageView imageView, TextView tv, int resId, int selId, int unselId) {
         TabItem tabItem = new TabItem();
         tabItem.imageView = imageView;
-        tabItem.tv=tv;
+        tabItem.tv = tv;
         tabItem.id = resId;
         tabItem.selId = selId;
         tabItem.unselId = unselId;
@@ -124,29 +125,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("创建场景或情景，确认场景，取消情景？");
+                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        MainApplication.tag = 1;
+                        startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        MainApplication.tag = 2;
+                        startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+                    }
+                });
+                builder.create().show();
 
-                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.ll_nav0://主页
                 custom_head.setVisibility(View.VISIBLE);
-                switchFragmentandImg(R.id.activity_main_homepagebtn,IndexFragment.class);
+                switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
                 break;
             case R.id.ll_nav1: //发现
                 custom_head.setVisibility(View.VISIBLE);
-                switchFragmentandImg(R.id.activity_main_findbtn,FindFragment.class);
+                switchFragmentandImg(R.id.activity_main_findbtn, FindFragment.class);
                 break;
             case R.id.ll_nav3:  //好货
                 custom_head.setVisibility(View.VISIBLE);
-                switchFragmentandImg(R.id.activity_main_shopbtn,WellGoodsFragment.class);
+                switchFragmentandImg(R.id.activity_main_shopbtn, WellGoodsFragment.class);
                 break;
             case R.id.ll_nav4: //个人中心
                 custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_minebtn,PersonalCenterFragment.class);
+                switchFragmentandImg(R.id.activity_main_minebtn, PersonalCenterFragment.class);
                 break;
         }
     }
 
-    private void switchFragmentandImg(int id,Class clazz) {
+    private void switchFragmentandImg(int id, Class clazz) {
         try {
             switchImgAndTxtStyle(id);
             switchFragment(clazz);
@@ -167,14 +186,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (to == null) {
             if (from != null) {
                 fm.beginTransaction().hide(from).commit();
-            }else {
+            } else {
                 //to和from都为空,不会出现
             }
             to = (Fragment) clazz.newInstance();
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
         } else {
-            if (to==from){
-                LogUtil.e("to==from",(to==from)+"");
+            if (to == from) {
+                LogUtil.e("to==from", (to == from) + "");
                 return;
             }
 

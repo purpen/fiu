@@ -150,11 +150,12 @@ public class EffectUtil {
         overlay.removeLabel(label);
     }
 
-    public static int getStandDis(float realDis, float baseWidth) {
-        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
-        //1280 按xhdpi设置
-        float radio = 1280 / imageWidth;
-        return (int) (radio * realDis);
+    public static double getStandDis(float realDis, float baseWidth) {
+//        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
+//        //1280 按xhdpi设置
+//        float radio = 1280 / imageWidth;
+//        return (int) (radio * realDis);
+        return realDis / baseWidth;
     }
 
     public static int getRealDis(float standardDis, float baseWidth) {

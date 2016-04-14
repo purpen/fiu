@@ -20,6 +20,9 @@ public class NetworkConstance {
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
     public static final String urlString_TB_productsData = BASE_URL + "/scene_product/tb_view";
+    //场景
+    //新增场景
+    public static final String create_scene = BASE_URL + "/scene_sight/save";
     //标签
     //最近使用的标签
     public static final String used_label_list = BASE_URL + "/my/my_recent_tags";

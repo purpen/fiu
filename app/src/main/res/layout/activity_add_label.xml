@@ -184,7 +184,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="9dp"
                 android:gravity="center"
-                android:text="请在情绪、环境、时间、任务中各选一个"
+                android:text="请在情绪、环境、时间、人物中各选一个"
                 android:textColor="#999999"
                 android:textSize="11sp"/>
 

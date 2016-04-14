@@ -133,16 +133,21 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 currentBitmap = result;
                 gpuImageView.setImage(result);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-                RelativeLayout.LayoutParams containerLp = (RelativeLayout.LayoutParams) gpuRelative.getLayoutParams();
-                if (gpuImageView.getWidth() / gpuImageView.getHeight() > 3 / 4) {
-                    lp.width = gpuImageView.getHeight() * 3 / 4;
-                    containerLp.width = gpuRelative.getHeight() * 3 / 4;
+//                RelativeLayout.LayoutParams containerLp = (RelativeLayout.LayoutParams) gpuRelative.getLayoutParams();
+                Log.e("<<<", "gpuImageView.getWidth = " + gpuImageView.getWidth() + ",getHeight = " + gpuImageView.getHeight());
+                if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
+//                    lp.width = gpuImageView.getHeight() * 3 / 4;
+                    lp.height = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
+                    lp.width = lp.height * 3 / 4;
+//                    containerLp.width = gpuRelative.getHeight() * 3 / 4;
                 } else {
-                    lp.height = gpuImageView.getWidth() * 4 / 3;
-                    containerLp.height = gpuRelative.getWidth() * 4 / 3;
+                    lp.width = MainApplication.getContext().getScreenWidth();
+                    lp.height = lp.width * 4 / 3;
+//                    containerLp.height = gpuRelative.getWidth() * 4 / 3;
                 }
+                Log.e("<<<", "lp.width = " + lp.width + ",height = " + lp.height);
                 gpuImageView.setLayoutParams(lp);
-                gpuRelative.setLayoutParams(containerLp);
+//                gpuRelative.setLayoutParams(containerLp);
                 initEditView();
 
             }
@@ -189,6 +194,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         backBtn = (Button) findViewById(R.id.activity_edit_back);
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
+        if (MainApplication.tag == 2) {
+            productsRelative.setVisibility(View.GONE);
+            chainingRelative.setVisibility(View.GONE);
+        }
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
         productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
         chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
@@ -362,9 +371,13 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_edit_filter_relative:
                 if (recyclerLinear.getVisibility() == View.GONE) {
+                    recyclerLinear.setVisibility(View.VISIBLE);
+                    if (MainApplication.tag == 2) {
+                        return;
+                    }
+                    recyclerLinear.setVisibility(View.VISIBLE);
                     filterTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
                     filterRedline.setVisibility(View.VISIBLE);
-                    recyclerLinear.setVisibility(View.VISIBLE);
                 } else {
                     filterTv.setTextColor(getResources().getColor(R.color.white));
                     filterRedline.setVisibility(View.GONE);
@@ -492,6 +505,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
                     ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
+
                     String url = productListBean.getCover_url();
                     //是自动添加标签还是后添加
 //                    addLabel(new TagItem(productListBean.getTitle(), productListBean.getSale_price()));

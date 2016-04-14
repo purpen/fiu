@@ -20,6 +20,9 @@ public class UsedLabelBean {
     private String created_on;
     private String updated_on;
 
+    public UsedLabelBean() {
+    }
+
     public UsedLabelBean(String _id, String title_cn) {
         this._id = _id;
         this.title_cn = title_cn;

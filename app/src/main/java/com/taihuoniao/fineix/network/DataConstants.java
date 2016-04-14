@@ -40,4 +40,6 @@ public class DataConstants {
     public static final int RESULTCODE_CREATESCENE_ADDLABEL = 84;
     //AddProductActivity分类列表
     public static final int CATEGORY_LIST = 83;
+    //创建场景
+    public static final int CREATE_SCENE = 82;
 }

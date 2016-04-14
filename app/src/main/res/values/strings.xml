@@ -34,6 +34,7 @@
     <string name="confirm_add">确认添加</string>
     <!-- CreateSceneActivity -->
     <string name="create_scene">创建场景</string>
+    <string name="create_qingjing">创建情境</string>
     <string name="publish">发布</string>
     <!-- AddLabelActivity -->
     <string name="add_label">添加标签</string>

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
@@ -17,6 +18,8 @@ import com.taihuoniao.fineix.beans.JDDetailsBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.TBDetailsBean;
+import com.taihuoniao.fineix.beans.UsedLabel;
+import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
@@ -157,6 +160,38 @@ public class DataPaser {
         });
     }
 
+    //场景
+    //新增场景
+    public static void createScene(String id, String title, String des, String scene_id, String tags, String product_id,
+                                   String product_title, String product_price, String product_x, String product_y,
+                                   String address, String lat, String lng, final Handler handler) {
+        ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, product_id, product_title, product_price, product_x, product_y, address,
+                lat, lng, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Message msg = handler.obtainMessage();
+                        msg.what = DataConstants.CREATE_SCENE;
+                        NetBean netBean = new NetBean();
+                        try {
+                            JSONObject job = new JSONObject(responseInfo.result);
+                            netBean.setSuccess(job.optBoolean("success"));
+                            netBean.setMessage(job.optString("message"));
+                            netBean.setStatus(job.optString("status"));
+                            msg.obj = netBean;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        handler.sendMessage(msg);
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                        handler.sendEmptyMessage(DataConstants.NET_FAIL);
+                    }
+                });
+    }
+
     //标签
     //最近使用的标签
     public static void usedLabelList(final Handler handler) {
@@ -165,8 +200,39 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.USED_LABEL_LIST;
-//                Log.e("<<<", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                UsedLabel usedLabel = new UsedLabel();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    usedLabel.setSuccess(job.optBoolean("success"));
+                    usedLabel.setMessage(job.optString("message"));
+                    usedLabel.setStatus(job.optString("status"));
+                    if (usedLabel.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        usedLabel.setHas_tag(data.optInt("has_tag"));
+                        if (usedLabel.getHas_tag() != 0) {
+                            List<UsedLabelBean> list = new ArrayList<UsedLabelBean>();
+                            JSONArray tags = data.getJSONArray("tags");
+                            for (int i = 0; i < tags.length(); i++) {
+                                JSONObject ob = tags.getJSONObject(i);
+                                UsedLabelBean usedLabelBean = new UsedLabelBean();
+                                usedLabelBean.set_id(ob.optString("_id"));
+                                usedLabelBean.setUser_id(ob.optString("user_id"));
+                                usedLabelBean.setUsed_count(ob.optString("used_count"));
+                                usedLabelBean.setUpdated_on(ob.optString("updated_on"));
+                                usedLabelBean.setType(ob.optString("type"));
+                                usedLabelBean.setTitle_en(ob.optString("title_en"));
+                                usedLabelBean.setTitle_cn(ob.optString("title_cn"));
+                                usedLabelBean.setStick(ob.optString("stick"));
+                                usedLabelBean.setStatus(ob.optString("status"));
+                                list.add(usedLabelBean);
+                            }
+                            usedLabel.setUsedLabelList(list);
+                        }
+                    }
+                    msg.obj = usedLabel;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 //需要登录
                 handler.sendMessage(msg);
             }
