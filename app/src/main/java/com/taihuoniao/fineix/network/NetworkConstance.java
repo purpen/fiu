@@ -23,6 +23,8 @@ public class NetworkConstance {
     //场景
     //新增场景
     public static final String create_scene = BASE_URL + "/scene_sight/save";
+    //列表数据
+    public static final String scene_list = BASE_URL + "/scene_sight";
     //标签
     //最近使用的标签
     public static final String used_label_list = BASE_URL + "/my/my_recent_tags";

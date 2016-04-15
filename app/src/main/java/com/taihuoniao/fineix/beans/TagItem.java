@@ -16,7 +16,7 @@ public class TagItem implements Serializable {
 
     //    private long id;
     private String id;//商品id
-    private int type;//商品属于哪个商城
+    private int type;//商品属于哪个商城,1 是官网
     private String name;
     private String price;
     private String imagePath;

@@ -83,7 +83,7 @@ public class AddProductGridAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+   static class ViewHolder {
         private ImageView item_nicegoods_image;
         private TextView item_nicegoods_title;
         private TextView item_nicegoods_oldprice;

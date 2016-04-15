@@ -40,12 +40,13 @@ public class ClientDiscoverAPI {
 
     //场景
     //新增场景
-    public static void createScene(String id, String title, String des, String scene_id, String tags, String product_id,
+    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String product_id,
                                    String product_title, String product_price, String product_x, String product_y,
                                    String address, String lat, String lng, RequestCallBack<String> callBack) {
         String url = NetworkConstance.create_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("tmp", tmp);
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("des", des);
         params.addQueryStringParameter("scene_id", scene_id);
@@ -58,6 +59,19 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("address", address);
         params.addQueryStringParameter("lat", lat);
         params.addQueryStringParameter("lng", lng);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
+    //列表数据
+    public static void getSceneList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.scene_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("stick", stick);
+        params.addQueryStringParameter("dis", dis);
+        params.addQueryStringParameter("lng", lng);
+        params.addQueryStringParameter("lat", lat);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

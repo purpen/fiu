@@ -90,20 +90,12 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_photo, null);
         titleLayout = (GlobalTitleLayout) view.findViewById(R.id.fragment_photo_titlelayout);
-//        cancelImg = (ImageView) view.findViewById(R.id.fragment_photo_back);
-//        titleLinear = (LinearLayout) view.findViewById(R.id.fragment_photo_titlelinear);
-//        titleTv = (TextView) view.findViewById(R.id.fragment_photo_titletv);
-//        titleImg = (ImageView) view.findViewById(R.id.fragment_photo_titleimg);
-//        continueTv = (TextView) view.findViewById(R.id.fragment_photo_continue);
-//        scrollView = (TopAndBottomScrollView) view.findViewById(R.id.fragment_photo_scrollview);
         linear = (TopAndBottomLinear) view.findViewById(R.id.fragment_photo_linear);
         listLinear = (LinearLayout) view.findViewById(R.id.fragment_photo_listlinear);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) listLinear.getLayoutParams();
         lp.topMargin = MainApplication.getContext().getScreenHeight();
-        lp.height = MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(getActivity(), 50);
+        lp.height = MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(getActivity(), 106);
         albumListView = (ListView) view.findViewById(R.id.fragment_photo_albmlist);
-//        photoImg = (ImageView) view.findViewById(R.id.fragment_photo_photoimg);
-//        gridView = (GridViewForScrollView) view.findViewById(R.id.fragment_photo_gridview);
         addViewToLinear();
         return view;
     }
@@ -111,7 +103,6 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     private void addViewToLinear() {
         photoImg = new ImageView(getActivity());
         photoImg.setLayoutParams(new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth()));
-//        photoImg.setImageResource(R.mipmap.ic_launcher);
         photoImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         linear.addToToplinear(photoImg);
         gridView = new GridView(getActivity());

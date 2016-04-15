@@ -119,7 +119,6 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
                 convertView = View.inflate(context, R.layout.view_labellist_item, null);
             }
             TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
-            //测试数据
             textView.setText(usedLabelList.get(position).getTitle_cn());
             return convertView;
         }

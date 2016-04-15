@@ -67,7 +67,7 @@ public class AlbumListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+   static class ViewHolder {
         private ImageView img;
         private TextView name;
         private TextView number;

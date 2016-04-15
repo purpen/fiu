@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -39,6 +40,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private GlobalTitleLayout titleLayout;
     //    private ImageView sceneImg;
     private RoundedImageView sceneImg;
+    private Bitmap sceneBitmap;//图片
     private EditText contentEdt;
     private EditText titleEdt;
     private TextView locationTv;
@@ -70,7 +73,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //地址列表数据
     private List<PoiInfo> poiInfoList;
     //位置信息
-    private String city, province, district;
+    private String city, district;
     private double lng, lat;
 
 
@@ -119,6 +122,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
             @Override
             public void callback(Bitmap result) {
+                sceneBitmap = result;
                 sceneImg.setImageBitmap(result);
                 sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
             }
@@ -138,7 +142,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
                     dialog.dismiss();
                     city = result.getAddressDetail().city;
-                    province = result.getAddressDetail().province;
+//                    province = result.getAddressDetail().province;
                     district = result.getAddressDetail().district;
                     poiInfoList = result.getPoiList();
                     if (poiInfoList == null) {
@@ -190,11 +194,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             case R.id.title_continue:
                 Toast.makeText(CreateSceneActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
                 if (TextUtils.isEmpty(titleEdt.getText())) {
-                    Toast.makeText(CreateSceneActivity.this, "请填写场景标题", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景标题", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(contentEdt.getText())) {
-                    Toast.makeText(CreateSceneActivity.this, "请填写场景描述", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (selectList == null) {
@@ -240,9 +244,16 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     product_y.deleteCharAt(0);
                 }
                 dialog.show();
-                DataPaser.createScene(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                String tmp = Base64Utils.encodeLines(stream.toByteArray());
+                if (MainApplication.tag == 2) {
+                    Toast.makeText(CreateSceneActivity.this, "上传情景，暂无接口", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                         18 + "", tags.toString(), product_id.toString(), product_title.toString(),
-                        product_price.toString(), product_x.toString(), product_y.toString(), province + city + district + addressTv.getText().toString(),
+                        product_price.toString(), product_x.toString(), product_y.toString(), city + district + addressTv.getText().toString(),
                         lat + "", lng + "",
                         handler);
                 break;
@@ -318,7 +329,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void click(int postion) {
         addressTv.setText(poiInfoList.get(postion).name);
-        areaTv.setText(district + "，" + city + "，" + province);
+        areaTv.setText(district + "，" + city);
         lng = poiInfoList.get(postion).location.longitude;
         lat = poiInfoList.get(postion).location.latitude;
     }

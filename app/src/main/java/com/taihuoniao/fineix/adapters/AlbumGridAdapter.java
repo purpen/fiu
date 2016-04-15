@@ -93,7 +93,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    class ViewHolder {
+   static class ViewHolder {
         private ImageView img;
         private TextView tv;
     }

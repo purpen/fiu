@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.taihuoniao.fineix.main.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context="com.taihuoniao.fineix.main.MainActivity">
     <!--<include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,14 +11,14 @@
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/activity_main_bottomlinear"
-        android:layout_below="@+id/custom_head" />
+        android:layout_below="@+id/custom_head"
+        android:layout_marginBottom="50dp"/>
 
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
@@ -44,10 +44,10 @@
                 android:id="@+id/tv_nav0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp2"
+                android:gravity="center_horizontal"
                 android:text="@string/qing"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
 
         <LinearLayout
@@ -58,16 +58,16 @@
                 android:id="@+id/activity_main_findbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/find_gray" />
+                android:src="@mipmap/find_gray"/>
 
             <TextView
                 android:id="@+id/tv_nav1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp2"
+                android:gravity="center_horizontal"
                 android:text="@string/jing"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
 
         <LinearLayout
@@ -78,17 +78,17 @@
                 android:id="@+id/activity_main_scenebtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/create" />
+                android:src="@mipmap/create"/>
 
             <TextView
                 android:id="@+id/tv_nav2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
                 android:textColor="@color/color_333"
-                android:layout_marginTop="@dimen/dp2"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
 
         <LinearLayout
@@ -99,16 +99,16 @@
                 android:id="@+id/activity_main_shopbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/shop_gray" />
+                android:src="@mipmap/shop_gray"/>
 
             <TextView
                 android:id="@+id/tv_nav3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
                 android:gravity="center_horizontal"
                 android:text="@string/pin"
-                android:layout_marginTop="@dimen/dp2"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
 
         <LinearLayout
@@ -119,16 +119,16 @@
                 android:id="@+id/activity_main_minebtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/mine_gray" />
+                android:src="@mipmap/mine_gray"/>
 
             <TextView
                 android:id="@+id/tv_nav4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
                 android:gravity="center_horizontal"
                 android:text="@string/mine"
-                android:layout_marginTop="@dimen/dp2"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp12"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

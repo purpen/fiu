@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
+//        WindowUtils.immerseStatusBar(MainActivity.this);
         super.onCreate(savedInstanceState);
     }
 
@@ -146,16 +147,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 builder.create().show();
 
                 break;
-            case R.id.ll_nav0://主页
+            case R.id.ll_nav0://情
                 custom_head.setVisibility(View.VISIBLE);
                 switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
                 break;
-            case R.id.ll_nav1: //发现
-                custom_head.setVisibility(View.VISIBLE);
+            case R.id.ll_nav1: //景
+                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_findbtn, FindFragment.class);
                 break;
-            case R.id.ll_nav3:  //好货
-                custom_head.setVisibility(View.VISIBLE);
+            case R.id.ll_nav3:  //品
+                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_shopbtn, WellGoodsFragment.class);
                 break;
             case R.id.ll_nav4: //个人中心

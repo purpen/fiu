@@ -144,7 +144,7 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
     }
 
 
-    class ViewHolder {
+  static   class ViewHolder {
         private TextView nameTv;
         private GridViewForScrollView gridView;
         private TextView moreTv;

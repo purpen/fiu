@@ -42,4 +42,6 @@ public class DataConstants {
     public static final int CATEGORY_LIST = 83;
     //创建场景
     public static final int CREATE_SCENE = 82;
+    //场景列表数据
+    public static final int SCENE_LIST = 81;
 }

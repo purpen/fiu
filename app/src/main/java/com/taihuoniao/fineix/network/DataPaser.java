@@ -162,10 +162,10 @@ public class DataPaser {
 
     //场景
     //新增场景
-    public static void createScene(String id, String title, String des, String scene_id, String tags, String product_id,
+    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String product_id,
                                    String product_title, String product_price, String product_x, String product_y,
                                    String address, String lat, String lng, final Handler handler) {
-        ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, product_id, product_title, product_price, product_x, product_y, address,
+        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, product_id, product_title, product_price, product_x, product_y, address,
                 lat, lng, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -190,6 +190,28 @@ public class DataPaser {
                         handler.sendEmptyMessage(DataConstants.NET_FAIL);
                     }
                 });
+    }
+
+    //场景
+    //列表数据
+    public static void getSceneList(String page, String stick, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.getSceneList(page, stick, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SCENE_LIST;
+
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
     }
 
     //标签

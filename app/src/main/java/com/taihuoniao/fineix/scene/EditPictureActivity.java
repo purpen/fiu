@@ -263,7 +263,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         View overView = View.inflate(EditPictureActivity.this,
                 R.layout.view_over, null);
         mImageView = (MyImageViewTouch) overView.findViewById(R.id.view_over_mimg);
-        ViewGroup.LayoutParams params = gpuImageView.getLayoutParams();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
+//        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(params.height * 9 / 16, params.height);
+//        p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        Log.e("<<<","p.height = "+p.height+",width = "+p.width);
         overView.setLayoutParams(params);
         mImageView.setLayoutParams(params);
         gpuRelative.addView(overView);
@@ -280,7 +283,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onMove(MyHighlightView view) {
-
+                RectF rectF = view.getDrawRect();
+//                mImageView.setCurrentLabel(label,rectF.centerX(), rectF.centerY());
             }
 
             @Override
@@ -292,6 +296,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             public void onClick(final LabelView label) {
                 labelView = label;
                 TagItem tagItem = label.getTagInfo();
+                if (tagItem.getType() == 1) {
+                    return;
+                }
                 ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg);
                 nameTv.setText(tagItem.getName());
                 priceTv.setText(tagItem.getPrice());
@@ -313,15 +320,19 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             return;
         }
         //链接的默认位置
-        int left = mImageView.getMeasuredWidth() / 2;
+        int left = MainApplication.getContext().getScreenWidth() / 2;
         int top = mImageView.getMeasuredHeight() / 2;
         if (labels.size() == 0 && left == 0 && top == 0) {
             left = mImageView.getWidth() / 2 - 10;
-            top = mImageView.getWidth() / 2;
+            top = mImageView.getHeight() / 2;
         }
         LabelView label = new LabelView(EditPictureActivity.this);
         label.init(tagItem);
         EffectUtil.addLabelEditable(mImageView, gpuRelative, label, left, top);
+//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) label.getLayoutParams();
+//        lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        label.setLayoutParams(lp);
+
         labels.add(label);
     }
 
@@ -331,6 +342,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.title_continue:
 //                Toast.makeText(EditPictureActivity.this, "把图片施加滤镜效果存到内存中，并传递标签数据到下个界面", Toast.LENGTH_SHORT).show();
+
                 dialog.show();
                 savePicture();
                 break;
@@ -504,11 +516,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     }
                     break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
-                    ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
-
+                    final ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
                     String url = productListBean.getCover_url();
-                    //是自动添加标签还是后添加
-//                    addLabel(new TagItem(productListBean.getTitle(), productListBean.getSale_price()));
+
                     final ImageView proImg = new ImageView(EditPictureActivity.this);
                     proImg.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     ImageLoader.getInstance().displayImage(url, proImg, new ImageLoadingListener() {
@@ -526,6 +536,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                             dialog.dismiss();
+                            //是自动添加标签还是后添加
+                            TagItem tag = new TagItem(productListBean.getTitle(), productListBean.getSale_price());
+                            tag.setType(1);
+                            addLabel(tag);
                             EffectUtil.addStickerImage(mImageView, EditPictureActivity.this, loadedImage);
                         }
 

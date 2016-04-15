@@ -80,7 +80,7 @@ public class AllLabelGridViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+   static class ViewHolder {
         private TextView textView;
     }
 }

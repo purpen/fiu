@@ -65,7 +65,6 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     //设置取消按钮的图片
     public void setCancelImg(int resid) {
         cancelImg.setImageResource(resid);
-
     }
 
     //取消按钮的监听
@@ -129,6 +128,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
 
     //设置箭头图片
     public void setArrowImgResource(int resid) {
+        arrowImg.setVisibility(VISIBLE);
         arrowImg.setImageResource(resid);
     }
 
@@ -139,6 +139,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         else
             continueTv.setVisibility(GONE);
     }
+
 
     //改变右侧按钮的名称、颜色，并设置监听
     public void setRightTv(int resid, int color, OnClickListener onClickListener) {

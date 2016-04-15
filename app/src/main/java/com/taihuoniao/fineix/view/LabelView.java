@@ -118,6 +118,7 @@ public class LabelView extends LinearLayout {
         }
         this.parentWidth = overlay.getMeasuredWidth();
         if (parentWidth <= 0) {
+            //宽度限制
             parentWidth = MainApplication.getContext().getScreenWidth();
         }
         setImageWidth((int) parentWidth);
@@ -158,9 +159,11 @@ public class LabelView extends LinearLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         if (getImageWidth() - left - getWidth() < 0) {
+            //右边缘
             left = getImageWidth() - getWidth();
         }
         if (getImageHeight() - top - getHeight() < 0) {
+            //下边缘
             top = getImageHeight() - getHeight();
         }
         if (left < 0 && top < 0) {
@@ -210,7 +213,6 @@ public class LabelView extends LinearLayout {
         relativeRight.setVisibility(View.GONE);
     }
 
-    //链接点的动画
     public void wave() {
         AnimationSet as = new AnimationSet(true);
         ScaleAnimation sa = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, ScaleAnimation.RELATIVE_TO_SELF,

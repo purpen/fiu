@@ -143,9 +143,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
         updateRatio();
 
-        if (minSize > 0) {
-            setMinSize(minSize);
-        }
     }
 
 //    public void setAlignModeV(AlignModeV mode) {

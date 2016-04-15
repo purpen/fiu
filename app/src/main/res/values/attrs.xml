@@ -83,4 +83,19 @@
         <attr name="actionViewId" format="reference"/>
         <attr name="toolViewId" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="horizontal_spacing" format="dimension"/>
+        <attr name="vertical_spacing" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="MyView">
+        <attr name="circleColor" format="color"/>
+        <attr name="circleWidth" format="dimension"/>
+        <attr name="size">
+            <enum name="BIG" value="3"/>
+            <enum name="NORMAL" value="2"/>
+            <enum name="SMALL" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

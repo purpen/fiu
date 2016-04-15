@@ -17,12 +17,12 @@ import java.util.List;
 public class AddressRecycleAdapter extends RecyclerView.Adapter<AddressRecycleAdapter.VH> {
     private Context context;
     private List<PoiInfo> poiInfoList;
-    private EditRecyclerAdapter.ItemClick itemClick;
+    private static EditRecyclerAdapter.ItemClick itemClick;
 
-    public AddressRecycleAdapter(Context context, List<PoiInfo> poiInfoList, EditRecyclerAdapter.ItemClick itemClick) {
+    public AddressRecycleAdapter(Context context, List<PoiInfo> poiInfoList, EditRecyclerAdapter.ItemClick itemClick1) {
         this.context = context;
         this.poiInfoList = poiInfoList;
-        this.itemClick = itemClick;
+        itemClick = itemClick1;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AddressRecycleAdapter extends RecyclerView.Adapter<AddressRecycleAd
         return poiInfoList.size();
     }
 
-    class VH extends RecyclerView.ViewHolder {
+   static class VH extends RecyclerView.ViewHolder {
         private TextView textView;
 
         public VH(View itemView) {
