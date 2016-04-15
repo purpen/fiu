@@ -16,14 +16,15 @@ public class QingJingItem implements Serializable {
     public ArrayList<Integer> tags;
     public QJLoation location;
     public String address;
-    public String cover_id;
     public int used_count;
     public int view_count;
     public int subscription_count;
     public int love_count;
     public int comment_count;
     public int is_check;
+    public int stick;
     public int status;
-    public User user;
-    public Boolean __extend__;
+    public long created_on;
+    public long updated_on;
+    public Cover covers;
 }

@@ -1,6 +1,16 @@
 package com.taihuoniao.fineix.utils;
+import android.app.Activity;
 import android.util.Log;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
@@ -21,7 +31,8 @@ import com.baidu.mapapi.search.poi.PoiSortType;
 public class MapUtil {
     private static GeoCoder mGeoCoder;
     private static PoiSearch mPoiSearch;
-    private static MyOnGetGeoCoderResultListener listener=null;
+    private static LocationClient mLocationClient;
+
     public interface MyOnGetGeoCoderResultListener{
         void onGetReverseGeoCodeResult(ReverseGeoCodeResult result);
         void onGetGeoCodeResult(GeoCodeResult result);
@@ -44,8 +55,6 @@ public class MapUtil {
      * @param listener
      */
     public static void getAddressByCoordinate(LatLng latLng,final MyOnGetGeoCoderResultListener listener) {
-        MapUtil.listener=listener;
-
         if (mGeoCoder==null){
             mGeoCoder = GeoCoder.newInstance();
         }
@@ -136,6 +145,35 @@ public class MapUtil {
         if (mPoiSearch != null){
             mPoiSearch.destroy();
             mPoiSearch=null;
+        }
+    }
+
+    public interface OnReceiveLocationListener{
+        void onReceiveLocation(BDLocation bdLocation);
+    }
+
+    public static void getCurrentLocation(Activity activity,final OnReceiveLocationListener locationListener){
+        mLocationClient = new LocationClient(activity);
+        mLocationClient.registerLocationListener(new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                if (locationListener!=null){
+                    locationListener.onReceiveLocation(bdLocation);
+                }
+            }
+        });
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); // 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setScanSpan(1000);
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();
+    }
+
+    public static void destroyLocationClient() {
+        if (mLocationClient != null){
+            mLocationClient.stop();
+            mLocationClient=null;
         }
     }
 }

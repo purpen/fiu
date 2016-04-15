@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.network.HttpResponse;
 
@@ -24,7 +25,7 @@ public class JsonUtil {
         return element.getAsJsonArray();
     }
 
-    public static String list2Json(List list) {
+    public static String list2Json(List list) throws JsonSyntaxException{
         return gson.toJson(list);
     }
 
@@ -36,7 +37,7 @@ public class JsonUtil {
         return gson.fromJson(element, clazz);
     }
 
-    public static <T> T fromJson(String json, TypeToken<HttpResponse<T>> token) {
+    public static <T> T fromJson(String json, TypeToken<HttpResponse<T>> token) throws JsonSyntaxException {
         return (T) ((HttpResponse<T>) gson.fromJson(json, token.getType())).getData();
     }
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp100"
+    android:layout_height="@dimen/dp50"
+    android:background="@android:color/white"
+    >
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="@dimen/dp50"
+        android:layout_height="@dimen/dp50"
+        android:scaleType="centerCrop"
+         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/dp10"
+        >
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:text="我的描述"
+            />
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp12"
+            android:text="我是地理位置"
+           />
+    </LinearLayout>
+</RelativeLayout>

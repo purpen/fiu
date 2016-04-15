@@ -38,10 +38,8 @@ public class NetworkConstance {
 
     //热门城市
     public static final String HOT_CITIES = BASE_URL_ESTORE + "/get_city_list";
-    //场景列表
-    public static final String CHANG_JING = BASE_URL + "/scene_scene/";
     //情景列表
     public static final String QING_JING = BASE_URL + "/scene_scene/";
-
-
+    //场景列表
+    public static final String  CHANG_JING= BASE_URL + "/scene_sight";
 }

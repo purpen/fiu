@@ -35,4 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GEO" />
+    <Button
+        android:id="@+id/select_search_qj"
+        android:layout_below="@+id/geo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择和搜索情景" />
 </RelativeLayout>

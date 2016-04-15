@@ -1,8 +1,11 @@
 package com.taihuoniao.fineix.network;
 
+import com.baidu.mapapi.model.LatLng;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
 /**
@@ -115,4 +118,21 @@ public class ClientDiscoverAPI {
     }
 
 
+    public static void getNearByQJData(LatLng ll,int radius,int page,int pageSize,int stick,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",String.valueOf(page));
+        params.addQueryStringParameter("size",String.valueOf(pageSize));
+        params.addQueryStringParameter("sort","0");
+        params.addQueryStringParameter("stick",String.valueOf(stick));
+        if (radius>0){
+            params.addQueryStringParameter("dis",String.valueOf(radius));
+        }
+        if (ll!=null){
+            params.addQueryStringParameter("lat",String.valueOf(ll.latitude));
+            params.addQueryStringParameter("lng",String.valueOf(ll.longitude));
+        }
+        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
+        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
+//        MD5Utils.sign(params,NetworkConstance.QING_JING, callBack);
+    }
 }

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,12 @@ import java.util.List;
 
 
 public class SearchPOIAdapter extends BaseAdapter {
-    private Context mContext;
+    private Activity activity;
     private List<LocationBean> cityPoiList;
     private CityPoiHolder holder;
 
-    public SearchPOIAdapter(Context context, List<LocationBean> list) {
-        this.mContext = context;
+    public SearchPOIAdapter(Activity activity, List<LocationBean> list) {
+        this.activity = activity;
         this.cityPoiList = list;
     }
 
@@ -51,7 +52,7 @@ public class SearchPOIAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             holder = new CityPoiHolder();
-            LayoutInflater inflater = LayoutInflater.from(mContext);
+            LayoutInflater inflater = LayoutInflater.from(activity);
             convertView = inflater.inflate(
                     R.layout.item_poi_lv, null);
             holder.tv_short_name = (TextView) convertView
@@ -68,7 +69,7 @@ public class SearchPOIAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public class CityPoiHolder {
+    static class CityPoiHolder {
         public TextView tv_short_name, tv_poi_detail;
     }
 }

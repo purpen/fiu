@@ -1,15 +1,13 @@
 package com.taihuoniao.fineix.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author lilin
- * created at 2016/4/7 19:52
+ *         created at 2016/4/7 19:52
  */
 public class QJLoation implements Serializable {
-    public QJCoordinate coordinates;
-    public class QJCoordinate{
-        public String lat;
-        public String lng;
-    }
+    public String type;
+    public ArrayList<Double> coordinates;
 }
