@@ -17,7 +17,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,6 +104,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //编辑好的图片存储名称
     private String picName;
     public static EditPictureActivity instance = null;
+    private ImageLoader imageLoader;
 
     public EditPictureActivity() {
         super(0);
@@ -113,7 +113,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        CropPictureActivity.instance.finish();
+        if (CropPictureActivity.instance != null) {
+            CropPictureActivity.instance.finish();
+        }
     }
 
     @Override
@@ -206,6 +208,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
         dialog = new WaittingDialog(EditPictureActivity.this);
+        imageLoader = ImageLoader.getInstance();
         initPopupWindow();
     }
 
@@ -519,9 +522,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     final ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
                     String url = productListBean.getCover_url();
 
-                    final ImageView proImg = new ImageView(EditPictureActivity.this);
-                    proImg.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ImageLoader.getInstance().displayImage(url, proImg, new ImageLoadingListener() {
+                    imageLoader.loadImage(url, new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
                             dialog.show();

@@ -83,6 +83,7 @@
                 android:background="#e2e2e2"/>
 
             <LinearLayout
+                android:id="@+id/activity_create_scene_add_addresslinear"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
@@ -150,6 +151,7 @@
                     android:src="@mipmap/cancel_gray"/>
 
                 <RelativeLayout
+                    android:id="@+id/activity_create_scene_addressrelative"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toLeftOf="@id/activity_create_scene_deleteaddress"

@@ -19,7 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.taihuoniao.fineix.R;
@@ -30,6 +33,7 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.Base64Utils;
@@ -58,6 +62,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private EditText contentEdt;
     private EditText titleEdt;
     private TextView locationTv;
+    private LinearLayout addAddressLinear;
+    private ImageView locationImg;
+    private RelativeLayout addressRelative;
     private RecyclerView recyclerView;
     private AddressRecycleAdapter recyclerAdapter;
     private TextView addressTv, areaTv;
@@ -66,6 +73,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout labelLinear;
     private RelativeLayout qingjingRelative;
     private LinearLayout qingjingLinear;
+    //图片上存储的地址信息
+    private double[] location;
     //工具
     private WaittingDialog dialog;
     //从选择标签界面返回的用户选择的标签
@@ -89,6 +98,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         contentEdt = (EditText) findViewById(R.id.activity_create_scene_contentedt);
         titleEdt = (EditText) findViewById(R.id.activity_create_scene_titleedt);
         locationTv = (TextView) findViewById(R.id.activity_create_scene_location);
+        addAddressLinear = (LinearLayout) findViewById(R.id.activity_create_scene_add_addresslinear);
+        addressRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_addressrelative);
+        locationImg = (ImageView) findViewById(R.id.location);
         recyclerView = (RecyclerView) findViewById(R.id.activity_create_scene_recycler);
         addressTv = (TextView) findViewById(R.id.activity_create_scene_address);
         areaTv = (TextView) findViewById(R.id.activity_create_scene_area);
@@ -127,56 +139,92 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
             }
         });
+        addAddressLinear.setOnClickListener(this);
+        addressRelative.setOnClickListener(this);
+        locationImg.setOnClickListener(this);
         poiInfoList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
-        double[] location = ImageUtils.location;
+        location = ImageUtils.location;
         if (location != null) {
             //图片上有位置信息
             Log.e("<<<", "不为空");
-            dialog.show();
-            MapUtil.getAddressByCoordinate(location[1], location[0], new MapUtil.MyOnGetGeoCoderResultListener() {
-                @Override
-                public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-                    dialog.dismiss();
-                    city = result.getAddressDetail().city;
-//                    province = result.getAddressDetail().province;
-                    district = result.getAddressDetail().district;
-                    poiInfoList = result.getPoiList();
-                    if (poiInfoList == null) {
-                        Log.e("<<<", "list为空");
-                        return;
-                    }
-//                    for (PoiInfo each : poiInfoList) {
-//                        Log.e("<<<", "address = " + each.address + ",经度 = " + each.location.longitude + ",纬度 = " + each.location.latitude
-//                        +",city = "+each.city+",name = "+each.name+",phoneNum = "+each.phoneNum+",postCode = "+each.postCode
-//                        +",uid="+each.uid+",describeContents = "+each.describeContents()+",tostring = "+each.toString());
-//                    }
-                    ImageUtils.location = null;
-                    recyclerAdapter = new AddressRecycleAdapter(CreateSceneActivity.this, poiInfoList, CreateSceneActivity.this);
-                    recyclerView.setAdapter(recyclerAdapter);
-                }
-
-                @Override
-                public void onGetGeoCodeResult(GeoCodeResult result) {
-
-                }
-            });
+            getAddressByCoordinate();
         } else {
             //图片上无位置信息
-            Toast.makeText(CreateSceneActivity.this, "图片无地址信息", Toast.LENGTH_SHORT).show();
-
+            getCurrentLocation();
         }
         deleteAddressImg.setOnClickListener(this);
         labelRelative.setOnClickListener(this);
         qingjingRelative.setOnClickListener(this);
     }
 
+    //获得当前位置信息
+    private void getCurrentLocation() {
+        dialog.show();
+        MapUtil.getCurrentLocation(CreateSceneActivity.this, new MapUtil.OnReceiveLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                if (location == null && bdLocation != null) {
+                    location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
+                    getAddressByCoordinate();
+                }
+            }
+        });
+    }
+
+    //根据经纬度获得周边位置信息
+    private void getAddressByCoordinate() {
+        dialog.show();
+        MapUtil.getAddressByCoordinate(location[1], location[0], new MapUtil.MyOnGetGeoCoderResultListener() {
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                dialog.dismiss();
+                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    return;
+                }
+                city = result.getAddressDetail().city;
+//                    province = result.getAddressDetail().province;
+                district = result.getAddressDetail().district;
+                poiInfoList = result.getPoiList();
+                if (poiInfoList == null) {
+                    Log.e("<<<", "list为空");
+                    return;
+                }
+//                    for (PoiInfo each : poiInfoList) {
+//                        Log.e("<<<", "address = " + each.address + ",经度 = " + each.location.longitude + ",纬度 = " + each.location.latitude
+//                        +",city = "+each.city+",name = "+each.name+",phoneNum = "+each.phoneNum+",postCode = "+each.postCode
+//                        +",uid="+each.uid+",describeContents = "+each.describeContents()+",tostring = "+each.toString());
+//                    }
+                ImageUtils.location = null;
+                MapUtil.destroyLocationClient();
+                recyclerAdapter = new AddressRecycleAdapter(CreateSceneActivity.this, poiInfoList, CreateSceneActivity.this);
+                recyclerView.setAdapter(recyclerAdapter);
+            }
+
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult result) {
+
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_create_scene_add_addresslinear:
+            case R.id.activity_create_scene_addressrelative:
+            case R.id.location:
+                if (location == null) {
+                    getCurrentLocation();
+                    return;
+                }
+                Intent intent = new Intent(CreateSceneActivity.this, BDSearchAddressActivity.class);
+                intent.putExtra("latLng", new LatLng(location[1], location[0]));
+                startActivityForResult(intent, DataConstants.REQUESTCODE_CREATESCENE_BDSEARCH);
+                break;
             case R.id.activity_create_scene_deleteaddress:
                 addressTv.setText("");
                 areaTv.setText("");
@@ -252,7 +300,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                        18 + "", tags.toString(), product_id.toString(), product_title.toString(),
+                        5 + "", tags.toString(), product_id.toString(), product_title.toString(),
                         product_price.toString(), product_x.toString(), product_y.toString(), city + district + addressTv.getText().toString(),
                         lat + "", lng + "",
                         handler);
@@ -270,9 +318,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                SelectPhotoOrCameraActivity.instance.finish();
-                CropPictureActivity.instance.finish();
-                EditPictureActivity.instance.finish();
+                if (SelectPhotoOrCameraActivity.instance != null) {
+                    SelectPhotoOrCameraActivity.instance.finish();
+                }
+                if (CropPictureActivity.instance != null) {
+                    CropPictureActivity.instance.finish();
+                }
+                if (EditPictureActivity.instance != null) {
+                    EditPictureActivity.instance.finish();
+                }
                 CreateSceneActivity.this.finish();
             }
         });
@@ -294,6 +348,17 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
+                    PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
+                    String city = data.getStringExtra("city");
+                    String district = data.getStringExtra("district");
+                    if (poiInfo != null) {
+                        addressTv.setText(poiInfo.name);
+                        areaTv.setText(district + "，" + city);
+                        lng = poiInfo.location.longitude;
+                        lat = poiInfo.location.latitude;
+                    }
+                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
                     if (MainApplication.selectList != null) {
                         if (selectList != null) {

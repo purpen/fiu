@@ -251,7 +251,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         DataPaser.getTBProductData(handler, id);
                         break;
                     case DataConstants.TIANMAO:
-                        Toast.makeText(SearchURLActivity.this, "天猫搜索无接口", Toast.LENGTH_SHORT).show();
+                        DataPaser.getTBProductData(handler, id);
                         dialog.dismiss();
                         break;
                     case DataConstants.YAMAXUN:
@@ -299,8 +299,6 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                     nameTv.setText(netTB.getTitle());
                     priceTv.setText(netTB.getZk_final_price());
                     showPopup();
-                    break;
-                case DataConstants.TIANMAO:
                     break;
                 case DataConstants.YAMAXUN:
                     break;

@@ -15,7 +15,6 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
@@ -33,6 +32,7 @@ import java.util.UUID;
 /**
  * Created by taihuoniao on 2016/3/14.
  * ¥
+ * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
@@ -105,18 +105,18 @@ public class MainApplication extends Application {
                 .showImageOnFail(R.mipmap.ic_launcher)
                 .showImageOnLoading(R.mipmap.ic_launcher)
                 .cacheInMemory(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
+//                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)
                 .build();
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.NORM_PRIORITY - 2)
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+                .defaultDisplayImageOptions(defaultOptions)
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
                 .diskCacheSize(100 * 1024 * 1024).tasksProcessingOrder(QueueProcessingType.LIFO)
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024)).memoryCacheSize(2 * 1024 * 1024)
+                .memoryCache(new LruMemoryCache(4 * 1024 * 1024)).memoryCacheSize(4 * 1024 * 1024)
                 .threadPoolSize(5)
                 .build();
 //        ImageLoaderConfiguration config2 = new ImageLoaderConfiguration.Builder(

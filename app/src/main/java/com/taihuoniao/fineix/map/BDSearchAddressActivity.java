@@ -1,4 +1,5 @@
 package com.taihuoniao.fineix.map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,19 +22,20 @@ import com.baidu.mapapi.search.poi.PoiSortType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BDAddressListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
 
 /**
  * @author lilin
- * created at 2016/4/12 18:15
+ *         created at 2016/4/12 18:15
  */
-public class BDSearchAddressActivity extends BaseActivity implements View.OnClickListener{
+public class BDSearchAddressActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.et)
@@ -44,11 +46,14 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     ImageButton ibtn;
     private ArrayList<PoiInfo> list;
     private BDAddressListAdapter adapter;
-    private int radius=1000;    //默认半径
-    private int pageCapacity=10; //默认分页大小
-    private PoiSortType sortType=PoiSortType.distance_from_near_to_far; //默认排序类型
+    private int radius = 1000;    //默认半径
+    private int pageCapacity = 10; //默认分页大小
+    private PoiSortType sortType = PoiSortType.distance_from_near_to_far; //默认排序类型
     private LatLng latLng;
-    public BDSearchAddressActivity(){
+    //当前位置的市和区
+    private String city, district;
+
+    public BDSearchAddressActivity() {
         super(R.layout.activity_bdsearch_address_layout);
     }
 
@@ -56,43 +61,46 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     protected void getIntentData() {
         super.getIntentData();
         //TODO 获取上个界面LatLng
-        latLng=new LatLng(39.990605, 116.505045);
+//        latLng=new LatLng(39.990605, 116.505045);
+        latLng = getIntent().getParcelableExtra("latLng");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (latLng==null){
+        if (latLng == null) {
             //TODO 获取当前位置
-            latLng=new LatLng(39.990605, 116.505045);
+            latLng = new LatLng(39.990605, 116.505045);
         }
         loadAndshowGeoCoderResult(latLng);
     }
 
     private void loadAndshowGeoCoderResult(LatLng latLng) {
-        if (latLng==null)
+        if (latLng == null)
             return;
-        MapUtil.getAddressByCoordinate(latLng,new MapUtil.MyOnGetGeoCoderResultListener() {
+        MapUtil.getAddressByCoordinate(latLng, new MapUtil.MyOnGetGeoCoderResultListener() {
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
                 if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                     return;
                 }
-                if (list==null){
-                    list=new ArrayList<PoiInfo>();
-                }else {
+                city = result.getAddressDetail().city;
+                district = result.getAddressDetail().district;
+                if (list == null) {
+                    list = new ArrayList<PoiInfo>();
+                } else {
                     list.clear();
                 }
                 list.addAll(result.getPoiList());
-                if (list.size()>0){
-                    if (adapter==null){
-                        adapter=new BDAddressListAdapter(activity,list);
+                if (list.size() > 0) {
+                    if (adapter == null) {
+                        adapter = new BDAddressListAdapter(activity, list);
                         ll.setAdapter(adapter);
-                    }else {
+                    } else {
                         adapter.notifyDataSetChanged();
                     }
-                }else {
-                    Util.makeToast(activity,"抱歉,没有检索到结果！");
+                } else {
+                    Util.makeToast(activity, "抱歉,没有检索到结果！");
                 }
             }
 
@@ -105,10 +113,10 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"位置");
+        custom_head.setHeadCenterTxtShow(true, "位置");
         custom_head.setHeadGoBackShow(false);
         custom_head.setIvLeft(R.mipmap.current_location);
-        custom_head.setHeadRightTxtShow(true,R.string.cancel);
+        custom_head.setHeadRightTxtShow(true, R.string.cancel);
     }
 
     @Override
@@ -117,9 +125,15 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
         ll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (city == null || district == null) {
+                    return;
+                }
                 Intent intent = new Intent();
-                intent.putExtra(PoiInfo.class.getSimpleName(),list.get(i));
-                setResult(RESULT_OK,intent);
+                intent.putExtra(PoiInfo.class.getSimpleName(), list.get(i));
+                intent.putExtra("city", city);
+                intent.putExtra("district", district);
+//                setResult(RESULT_OK, intent);
+                setResult(DataConstants.RESULTCODE_CREATESCENE_BDSEARCH, intent);
                 finish();
             }
         });
@@ -130,7 +144,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ibtn:
                 et.getText().clear();
                 break;
@@ -142,12 +156,12 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
         }
     }
 
-    private TextWatcher tw=new TextWatcher() {
+    private TextWatcher tw = new TextWatcher() {
         @Override
-        public void onTextChanged(CharSequence cs, int start, int before,int count) {
-            String keyWord=cs.toString().trim();
+        public void onTextChanged(CharSequence cs, int start, int before, int count) {
+            String keyWord = cs.toString().trim();
             if (!TextUtils.isEmpty(keyWord)) {
-                loadAndshowPoiResult(keyWord,latLng);
+                loadAndshowPoiResult(keyWord, latLng);
             } else {
 //                if (searchPoiList != null) {
 //                    searchPoiList.clear();
@@ -155,36 +169,38 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
 //                hideSoftinput();
             }
         }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         public void afterTextChanged(Editable s) {
         }
     };
 
-    private void loadAndshowPoiResult(String keyWord,LatLng latLng) {
-        MapUtil.getPoiNearbyByKeyWord(keyWord,latLng,radius,pageCapacity,sortType,new MapUtil.MyOnGetPoiSearchResultListener() {
+    private void loadAndshowPoiResult(String keyWord, LatLng latLng) {
+        MapUtil.getPoiNearbyByKeyWord(keyWord, latLng, radius, pageCapacity, sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
                 if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                     return;
                 }
-                if (list==null){
-                    list=new ArrayList<PoiInfo>();
-                }else {
+                if (list == null) {
+                    list = new ArrayList<PoiInfo>();
+                } else {
                     list.clear();
                 }
                 list.addAll(result.getAllPoi());
-                if (list.size()>0){
-                    if (adapter==null){
-                        adapter=new BDAddressListAdapter(activity,list);
+                if (list.size() > 0) {
+                    if (adapter == null) {
+                        adapter = new BDAddressListAdapter(activity, list);
                         ll.setAdapter(adapter);
-                    }else {
+                    } else {
                         adapter.notifyDataSetChanged();
                     }
-                }else {
-                    Util.makeToast(activity,"抱歉,没有检索到结果！");
+                } else {
+                    Util.makeToast(activity, "抱歉,没有检索到结果！");
                 }
             }
 

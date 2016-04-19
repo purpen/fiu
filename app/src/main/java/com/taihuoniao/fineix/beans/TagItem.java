@@ -30,8 +30,8 @@ public class TagItem implements Serializable {
     }
 
     //考虑适配的问题，纪录的是百分比坐标
-    private double x = -1;
-    private double y = -1;
+    private double x = 0.5;
+    private double y = 0.5;
 
     private int recordCount;
     private boolean left = true;

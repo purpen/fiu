@@ -17,6 +17,23 @@ import com.taihuoniao.fineix.R;
  * @author liangfeizc {@see http://www.liangfeizc.com}
  */
 public class FlowLayout extends ViewGroup {
+    /**
+     * private void addChildTo(FlowLayout flowLayout) {
+     * for (int i = 'A'; i < 'Z'; i++) {
+     * Button btn = new CheckableButton(this);
+     * btn.setHeight(dp2px(32));
+     * btn.setTextSize(16);
+     * btn.setTextColor(getResources().getColorStateList(R.color.checkable_text_color));
+     * btn.setBackgroundResource(R.drawable.checkable_background);
+     * StringBuilder sb = new StringBuilder();
+     * for (int j = 0; j < i - 'A' + 4; j++) {
+     * sb.append((char) i);
+     * }
+     * btn.setText(sb.toString());
+     * flowLayout.addView(btn);
+     * }
+     * }
+     */
 
     private static final int DEFAULT_HORIZONTAL_SPACING = 5;
     private static final int DEFAULT_VERTICAL_SPACING = 5;

@@ -60,7 +60,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView>
         if (null != onLastItemVisibleListener) {
             // detect if last item is visible
             if (visibleItemCount > 0
-                    && (firstVisibleItem + visibleItemCount == totalItemCount)) {
+                    && (firstVisibleItem + visibleItemCount >= totalItemCount)) {
                 // only process first event
                 //  total！=lasttotal
                 if (firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount) {

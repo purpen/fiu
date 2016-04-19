@@ -67,10 +67,11 @@ public class ClientDiscoverAPI {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page,String size, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size",size);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("dis", dis);
         params.addQueryStringParameter("lng", lng);

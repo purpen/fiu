@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
-            android:src="@mipmap/location_39"/>
+            android:src="@mipmap/cart"/>
     </RelativeLayout>
 
     <ScrollView
@@ -75,25 +75,26 @@
                     android:textColor="#999999"
                     android:textSize="11sp"/>
             </LinearLayout>
-
-            <RelativeLayout
+            <!-- 初步思路可以用绝对布局 -->
+            <AbsoluteLayout
+                android:id="@+id/fragment_wellgoods_absolute"
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
-                android:background="#f0f0f0"></RelativeLayout>
+                android:layout_height="157dp"
+                android:background="#f0f0f0">
+
+            </AbsoluteLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#e4e4e4"/>
 
-            <HorizontalScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_wellgoods_label_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
-
-                <com.taihuoniao.fineix.view.FlowLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-            </HorizontalScrollView>
+                android:layout_height="80dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="5dp"/>
 
 
             <TextView
