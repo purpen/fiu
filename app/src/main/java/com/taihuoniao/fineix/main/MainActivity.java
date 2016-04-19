@@ -16,7 +16,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
-import com.taihuoniao.fineix.main.fragment.PersonalCenterFragment;
+import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_nav4: //个人中心
                 custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_minebtn, PersonalCenterFragment.class);
+                switchFragmentandImg(R.id.activity_main_minebtn, MineFragment.class);
                 break;
         }
     }

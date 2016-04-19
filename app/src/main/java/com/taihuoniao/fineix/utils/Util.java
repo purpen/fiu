@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainApplication;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,6 +75,17 @@ public class Util {
 		return metaValue;// xxx
 
 	}
+	public static void makeToast(String content) {
+		Toast result = new Toast(MainApplication.getContext());
+		result.setGravity(Gravity.CENTER,0,0);
+		result.setDuration(Toast.LENGTH_SHORT);
+		View v = inflateView(MainApplication.getContext(),R.layout.transient_notification, null);
+		TextView tv = (TextView)v.findViewById(R.id.message);
+		tv.setText(content);
+		result.setView(v);
+		result.show();
+	}
+
 	public static void makeToast(Context context,String content) {
 		Toast result = new Toast(context);
 		result.setGravity(Gravity.CENTER,0,0);
@@ -90,14 +102,15 @@ public class Util {
 
 
 
-	public static int getScreenWidth(Activity activity) {
-			WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+	public static int getScreenWidth() {
+			WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
 			DisplayMetrics displayMetrics = new DisplayMetrics();
 			wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.widthPixels;
 	}
-	public static int getScreenHeight(Activity activity) {
-		WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+
+	public static int getScreenHeight() {
+		WindowManager wm = (WindowManager)MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.heightPixels;
@@ -110,7 +123,7 @@ public class Util {
 
 	public static int getScaleHeight(Activity activity,int w,int h){
 
-		return getScreenWidth(activity)*h/w;
+		return getScreenWidth()*h/w;
 	}
 
 	public static void traverseFolder(String path) {

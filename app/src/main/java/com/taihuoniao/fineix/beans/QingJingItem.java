@@ -26,5 +26,5 @@ public class QingJingItem implements Serializable {
     public int status;
     public long created_on;
     public long updated_on;
-    public Cover covers;
+    public String cover_url;
 }

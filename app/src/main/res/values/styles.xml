@@ -9,6 +9,11 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
+    <style name="transparent">
+        <item name="android:windowBackground">@color/color_transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <!-- MainActivity中最下面RadioGroup的五个Button的样式 -->
     <style name="MainButtonStyle">
         <item name="android:layout_height">match_parent</item>
@@ -34,10 +39,15 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
-
     <style name="custom_progress_dialog" parent="@style/CustomDialog">
         <item name="android:windowBackground">@drawable/corner_black</item>
         <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textColor">@color/color_af8323</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
     <!-- 全屏 -->
     <style name="NoTitleFullscreen" parent="AppTheme">
@@ -46,5 +56,26 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <!--注册中手机号，密码，验证码，注册-->
+    <style name="RegisterAndLogin">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
+    <!--登录注册中微信、新浪微博、腾讯QQ的textview按钮-->
+    <style name="ToRegisterAndLogin">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 </resources>

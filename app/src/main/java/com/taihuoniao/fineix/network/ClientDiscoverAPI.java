@@ -116,8 +116,82 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("domin", domin);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+    //点击注册按钮
+    public static void clickRegisterNet(RequestCallBack<String> callBack, String password, String phone, String code) {
+        String url = NetworkConstance.BASE_URL + "/auth/register";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("mobile", phone);
+        params.addQueryStringParameter("verify_code", code);
+        params.addQueryStringParameter("password", password);
+        params.addQueryStringParameter("from_to", "2");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
 
+    //点击登录按钮
+    public static void clickLoginNet(String uuid, String phone, String password, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/login";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+//        params.addQueryStringParameter();("mobile", phone);
+//        params.addQueryStringParameter();("from_to", "2");
+//        params.addQueryStringParameter();("password", password);
+//        params.addQueryStringParameter();("uuid", uuid);
+//        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
+//        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, url, params, callBack);
+        params.addQueryStringParameter("mobile", phone);
+        params.addQueryStringParameter("from_to", "2");
+        params.addQueryStringParameter("password", password);
+////        params.addQueryStringParameter("uuid", uuid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
 
+    //第三方登录
+    public static void thirdLoginNet(String oid, String access_token, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/third_sign";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("oid", oid);
+        params.addQueryStringParameter("access_token", access_token);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("from_to", "2");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
+
+    //注册及找回密码中的获取验证码
+    public static void getVerifyCodeNet(RequestCallBack<String> callBack, String phone) {
+        String url = NetworkConstance.BASE_URL + "/auth/verify_code";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("mobile", phone);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
+
+    //第三方登录之快捷注册(绑定手机号)
+    public static void bindPhoneNet(String oid, String union_id, String access_token, String account, String password, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/third_register_with_phone";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+////        params.addQueryStringParameter("uuid", uuid);
+        params.addQueryStringParameter("account", account);
+        params.addQueryStringParameter("password", password);
+        params.addQueryStringParameter("oid", oid);
+        params.addQueryStringParameter("union_id", union_id);
+        params.addQueryStringParameter("access_token", access_token);
+        params.addQueryStringParameter("third_source", type);
+        params.addQueryStringParameter("from_to", "2");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,url, callBack, false);
+    }
+    //第三方登录之快捷注册(不绑定手机号)
+    public static void skipBindNet(String uuid, String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/third_register_without_phone";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+////        params.addQueryStringParameter("uuid", uuid);
+        params.addQueryStringParameter("nickname", nickname);
+        params.addQueryStringParameter("sex", sex);
+        params.addQueryStringParameter("oid", oid);
+        params.addQueryStringParameter("union_id", union_id);
+        params.addQueryStringParameter("avatar_url", avatar_url);
+        params.addQueryStringParameter("access_token", access_token);
+        params.addQueryStringParameter("third_source", type);
+        params.addQueryStringParameter("from_to", "2");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
     public static void getNearByQJData(LatLng ll,int radius,int page,int pageSize,int stick,RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page",String.valueOf(page));
@@ -135,4 +209,22 @@ public class ClientDiscoverAPI {
         HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
 //        MD5Utils.sign(params,NetworkConstance.QING_JING, callBack);
     }
+
+    //找回忘记的密码
+    public static void findPasswordNet(String phone, String newpassword, String code, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/find_pwd";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("mobile", phone);
+        params.addQueryStringParameter("password", newpassword);
+        params.addQueryStringParameter("verify_code", code);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
+    }
+
+
+    //账户处的用户个人信息
+    public static void getMineInfo(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.MINE_INFO, callBack, false);
+    }
+
 }

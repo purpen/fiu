@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,7 +39,7 @@ public class QJRecommonedAdapter extends CommonBaseAdapter<QingJingItem> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.covers.huge,holder.iv);
+        ImageLoader.getInstance().displayImage(item.cover_url,holder.iv);
         holder.tv_desc.setText(item.title);
         holder.tv_location.setText(item.address);
         return convertView;

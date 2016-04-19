@@ -44,4 +44,47 @@ public class DataConstants {
     public static final int CREATE_SCENE = 82;
     //场景列表数据
     public static final int SCENE_LIST = 81;
+
+    //SharedPreferences 存储文件名
+    public static final String USERDATA_SHAREDPREFERENCES_NAME = "thn_settings";
+
+    public static final String LOGIN_INFO="LOGIN_INFO";
+
+    //登录
+    public static final int PARSER_LOGIN = 9;
+    //网络数据请求失败
+    public static final int NETWORK_FAILURE = 999;
+
+    //判断从哪个activity跳转到登录界面
+    public static final int ACTIVITY_COMMENTLISTS = 75;
+    public static final int ACTIVITY_SPECIAL_DETAILS = 74;
+    public static final int ACTIVITY_TRY_DETAILS = 73;
+    public static final int ACTIVITY_TRY_DETAILS_COMMENTS = 72;
+    public static final int ACTIVITY_GOODS_DETAILS = 79;
+    public static final int ACTIVITY_WEB = 70;
+    public static final int ACTIVITY_TOPIC_COMMENTS = 68;
+    public static final int ACTIVITY_NICEGOODDETAILS = 58;
+
+    //第三方登录绑定手机号
+    public static final int PARSER_THIRD_LOGIN_BIND_PHONE = 37;
+    //第三方登录回调时error
+    public static final int PARSER_THIRD_LOGIN_ERROR = 38;
+    //第三方登录回调时cancel
+    public static final int PARSER_THIRD_LOGIN_CANCEL = 39;
+    //第三方登录回调时complete
+    public static final int PARSER_THIRD_LOGIN = 35;
+    //第三方登录不绑定手机号
+    public static final int PARSER_THIRD_LOGIN_SKIP_PHONE = 36;
+    //商品详情跳转到注册界面的广播ACTION
+    public static final String BROAD_GOODS_DETAILS = "com.taihuoniao.app.goodsdetails";
+    //试用详情跳转到注册界面的广播ACTION
+    public static final String BROAD_TRY_DETAILS = "com.taihuoniao.app.trydetails";
+    //话题详情跳转到注册界面的广播ACTION
+    public static final String BROAD_TOPIC_DETAILS = "com.taihuoniao.app.topicdetails";
+    //找回密码
+    public static final int PARSER_FIND_PASSWORD = 10;
+
+    public static final String GUIDE_TAG = "guide";
+    public static final int GUIDE_INTERVAL = 3000;
+    public static final String APP_ID="";
 }

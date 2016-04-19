@@ -42,4 +42,7 @@ public class NetworkConstance {
     public static final String QING_JING = BASE_URL + "/scene_scene/";
     //场景列表
     public static final String  CHANG_JING= BASE_URL + "/scene_sight";
+
+    //获得用户信息
+    public static final String  MINE_INFO= BASE_URL + "/auth/user";
 }

@@ -72,6 +72,10 @@ public abstract class MyBaseFragment<T> extends Fragment {
 
     }
 
+    protected void refreshUIAfterNet(){
+
+    }
+
     protected void refreshUIAfterNet(ArrayList<T> list){
 
     }

@@ -19,6 +19,8 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.IsLogin;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
@@ -36,7 +38,7 @@ public class MainApplication extends Application {
     private static MainApplication instance;
     public LocationService locationService;
     public Vibrator mVibrator;
-
+    public static int which_activity;//0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
     //剪切好的图片存储路径
@@ -49,6 +51,11 @@ public class MainApplication extends Application {
     public static List<UsedLabelBean> selectList;
     //创建场景或情景的标识
     public static int tag;//1,场景 2,情景
+
+    // SharedPreference 中保存的手机号
+    public static final String THN_MOBILE = "mobile";
+    // SharedPreference 中保存的密码
+    public static final String THN_PASSWORD = "password";
 
     public static MainApplication getContext() {
         return instance;
@@ -69,6 +76,10 @@ public class MainApplication extends Application {
         editPicPath = getCacheDirPath() + "/edit";
     }
 
+    // 这里是获取IsLogin这个对象的实例
+    public static IsLogin getIsLoginInfo() {
+        return IsLogin.getInstance();
+    }
     public int getScreenHeight() {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());

@@ -1,7 +1,10 @@
 package com.taihuoniao.fineix.network;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -10,16 +13,23 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
+import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.JDDetailsBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.SkipBind;
 import com.taihuoniao.fineix.beans.TBDetailsBean;
+import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
@@ -438,5 +448,184 @@ public class DataPaser {
             }
         });
 
+    }
+
+    //登录的解析
+    public static void loginParser(String uuid, final Handler handler, final String phone, final String password) {
+        ClientDiscoverAPI.clickLoginNet(uuid, phone, password, new RequestCallBack<String>() {
+            Context context = MainApplication.getContext();
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                if (responseInfo==null){
+                    return;
+                }
+
+                if (TextUtils.isEmpty(responseInfo.result)){
+                    return;
+                }
+
+                SPUtil.write(MainApplication.getContext(),DataConstants.LOGIN_INFO,responseInfo.result);
+
+
+                //TODO 后期改造
+                LoginInfo loginInfo = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_LOGIN;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject loginObj = obj.getJSONObject("data");
+
+                    loginInfo = LoginInfo.getInstance();
+                    loginInfo.setSuccess(obj.optString("success"));
+                    loginInfo.setMessage(obj.optString("message"));
+                    loginInfo.setAccount(loginObj.optString("account"));
+                    loginInfo.setPhone(loginObj.optString("phone"));
+                    loginInfo.setNickname(loginObj.optString("nickname"));
+                    loginInfo.setTrue_nickname(loginObj.optString("true_nickname"));
+                    loginInfo.setAddress(loginObj.optString("address"));
+                    loginInfo.setBirthday(loginObj.optString("birthday"));
+                    loginInfo.setCompany(loginObj.optString("company"));
+                    loginInfo.setIm_qq(loginObj.optString("im_qq"));
+                    loginInfo.setSex(loginObj.optString("sex"));
+                    loginInfo.setRealname(loginObj.optString("realname"));
+                    loginInfo.setZip(loginObj.optString("zip"));
+                    loginInfo.setWeixin(loginObj.optString("weixin"));
+                    loginInfo.setMedium_avatar_url(loginObj.optString("medium_avatar_url"));
+//                    loginInfo.setFirst_login(Integer.parseInt(loginObj.optString("first_login")));奇怪，一加这句就会崩，可我怎么看也没解析错啊？待查……
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = loginInfo;
+
+                SharedPreferences sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                // TODO 向本地保存信息
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString(MainApplication.THN_MOBILE, phone);
+                edit.putString(MainApplication.THN_PASSWORD, password);
+                edit.commit();
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //第三方登录
+    public static void thirdLoginParser(final String oid, String access_token, String type, final Handler handler) {
+        ClientDiscoverAPI.thirdLoginNet(oid, access_token, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ThirdLogin thirdLogin = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_THIRD_LOGIN;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject thirdObj = obj.getJSONObject("data");
+                    thirdLogin = new ThirdLogin();
+                    thirdLogin.setSuccess(obj.optString("success"));
+                    thirdLogin.setHas_user(thirdObj.optString("has_user"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = thirdLogin;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //第三方登录之快捷注册(绑定手机号)
+    public static void bindPhoneParser(String oid, String union_id, String access_token, String account, String password, String type, final Handler handler) {
+        ClientDiscoverAPI.bindPhoneNet(oid, union_id, access_token, account, password, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                BindPhone bindPhone = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_THIRD_LOGIN_BIND_PHONE;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    bindPhone = new BindPhone();
+                    bindPhone.setSuccess(obj.optString("success"));
+                    bindPhone.setMessage(obj.optString("message"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = bindPhone;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //第三方登录之快捷注册(不绑定手机号)
+    public static void skipBindParser(String uuid, String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, final Handler handler) {
+        ClientDiscoverAPI.skipBindNet(uuid, oid, union_id, access_token, nickname, sex, avatar_url, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SkipBind skipBind = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_THIRD_LOGIN_SKIP_PHONE;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    skipBind = new SkipBind();
+                    skipBind.setSuccess(obj.optString("success"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = skipBind;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+
+    //找回密码的解析
+    public static void findPasswordParser(final Handler handler, String phone, String password, String code) {
+        ClientDiscoverAPI.findPasswordNet(phone, password, code, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                FindPasswordInfo findPasswordInfo = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_FIND_PASSWORD;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject findPasswordObj = obj.getJSONObject("data");
+
+                    findPasswordInfo = new FindPasswordInfo();
+                    findPasswordInfo.setSuccess(Boolean.parseBoolean(obj.optString("success")));
+                    findPasswordInfo.setMessage(obj.optString("message"));
+                    findPasswordInfo.setAccount(findPasswordObj.optString("account"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = findPasswordInfo;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
     }
 }

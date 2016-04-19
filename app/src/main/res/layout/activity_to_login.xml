@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_blur"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_back_tologin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp16"
+            android:src="@mipmap/back_white" />
+
+        <ImageView
+            android:id="@+id/image_close_tologin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp16"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/close" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_introduce_tologin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:text="通过以下方式快速登录"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_weixin_tologin"
+        style="@style/ToRegisterAndLogin"
+        android:background="@drawable/shap_weixin"
+        android:text="微信" />
+
+    <TextView
+        android:id="@+id/tv_weibo_tologin"
+        style="@style/ToRegisterAndLogin"
+        android:background="@drawable/shap_xinlang_weibo"
+        android:text="新浪微博" />
+
+    <TextView
+        android:id="@+id/tv_qq_tologin"
+        style="@style/ToRegisterAndLogin"
+        android:background="@drawable/shap_qq"
+        android:text="腾讯QQ" />
+
+    <TextView
+        android:id="@+id/tv_prompt_tologin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:text="用手机号登录"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_phone_number_tologin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/shap_home_gridview"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="手机号" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" />
+</LinearLayout>

@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_blur"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp50"
+        >
+        <ImageView
+            android:id="@+id/image_back_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp16"
+            android:src="@mipmap/back_white" />
+
+        <ImageView
+            android:id="@+id/image_close_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp16"
+            android:src="@mipmap/close" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_phone"
+        style="@style/RegisterAndLogin"
+        android:background="@drawable/shap_home_gridview"
+        android:hint="手机号"
+        android:maxLength="11"
+        android:ems="8"
+        android:paddingLeft="5dp"
+        android:phoneNumber="true"
+        android:inputType="number"
+        android:singleLine="true"
+
+        >
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_password"
+        style="@style/RegisterAndLogin"
+        android:background="@drawable/shap_home_gridview"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:paddingLeft="5dip"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/bt_login"
+        style="@style/RegisterAndLogin"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shap_redbutton_commit"
+        android:onClick="onLogin"
+        android:text="登录"
+        android:textColor="@android:color/white" />
+
+
+    <TextView
+        android:id="@+id/tv_findpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp20"
+        android:text="忘记密码?"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+</LinearLayout>
