@@ -20,9 +20,14 @@ public class NetworkConstance {
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
     public static final String urlString_TB_productsData = BASE_URL + "/scene_product/tb_view";
+    //情景
+    //点赞，订阅，关注，收藏通用列表
+    public static final String common_lists = BASE_URL + "/favorite";
     //场景
     //新增场景
     public static final String create_scene = BASE_URL + "/scene_sight/save";
+    //场景详情
+    public static final String scene_details = BASE_URL + "/scene_sight/view";
     //列表数据
     public static final String scene_list = BASE_URL + "/scene_sight";
     //标签
@@ -35,14 +40,17 @@ public class NetworkConstance {
     //公共
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
+    //评论
+    //列表
+    public static final String comments_list = BASE_URL + "/comment/getlist";
 
     //热门城市
     public static final String HOT_CITIES = BASE_URL_ESTORE + "/get_city_list";
     //情景列表
     public static final String QING_JING = BASE_URL + "/scene_scene/";
     //场景列表
-    public static final String  CHANG_JING= BASE_URL + "/scene_sight";
+    public static final String CHANG_JING = BASE_URL + "/scene_sight";
 
     //获得用户信息
-    public static final String  MINE_INFO= BASE_URL + "/auth/user";
+    public static final String MINE_INFO = BASE_URL + "/auth/user";
 }

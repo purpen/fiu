@@ -40,6 +40,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("ids", ids);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+    //情景
+    //点赞，订阅，收藏，关注列表
+    public static void commonList(String page,String size,String id,String type,String event,RequestCallBack<String>callBack){
+        String url = NetworkConstance.common_lists;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("id",id);
+        params.addQueryStringParameter("type",type);
+        params.addQueryStringParameter("event",event);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 
     //场景
     //新增场景
@@ -66,18 +78,28 @@ public class ClientDiscoverAPI {
     }
 
     //场景
+    //场景详情
+    public static void sceneDetails(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.scene_details;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
     //列表数据
-    public static void getSceneList(String page,String size, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
-        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("dis", dis);
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
 
     //标签
     //使用过的标签
@@ -117,6 +139,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("domin", domin);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
+    //评论
+    //列表
+    public static void commentsList(String page, String target_id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.comments_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //点击注册按钮
     public static void clickRegisterNet(RequestCallBack<String> callBack, String password, String phone, String code) {
         String url = NetworkConstance.BASE_URL + "/auth/register";
@@ -176,8 +210,9 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("access_token", access_token);
         params.addQueryStringParameter("third_source", type);
         params.addQueryStringParameter("from_to", "2");
-        HttpHandler<String> httpHandler = MD5Utils.sign(params,url, callBack, false);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
+
     //第三方登录之快捷注册(不绑定手机号)
     public static void skipBindNet(String uuid, String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/third_register_without_phone";
@@ -193,18 +228,19 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("from_to", "2");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
-    public static void getNearByQJData(LatLng ll,int radius,int page,int pageSize,int stick,RequestCallBack<String> callBack){
+
+    public static void getNearByQJData(LatLng ll, int radius, int page, int pageSize, int stick, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("page",String.valueOf(page));
-        params.addQueryStringParameter("size",String.valueOf(pageSize));
-        params.addQueryStringParameter("sort","0");
-        params.addQueryStringParameter("stick",String.valueOf(stick));
-        if (radius>0){
-            params.addQueryStringParameter("dis",String.valueOf(radius));
+        params.addQueryStringParameter("page", String.valueOf(page));
+        params.addQueryStringParameter("size", String.valueOf(pageSize));
+        params.addQueryStringParameter("sort", "0");
+        params.addQueryStringParameter("stick", String.valueOf(stick));
+        if (radius > 0) {
+            params.addQueryStringParameter("dis", String.valueOf(radius));
         }
-        if (ll!=null){
-            params.addQueryStringParameter("lat",String.valueOf(ll.latitude));
-            params.addQueryStringParameter("lng",String.valueOf(ll.longitude));
+        if (ll != null) {
+            params.addQueryStringParameter("lat", String.valueOf(ll.latitude));
+            params.addQueryStringParameter("lng", String.valueOf(ll.longitude));
         }
         HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
         HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
@@ -225,7 +261,7 @@ public class ClientDiscoverAPI {
     //账户处的用户个人信息
     public static void getMineInfo(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.MINE_INFO, callBack, false);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MINE_INFO, callBack, false);
     }
 
 }

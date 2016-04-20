@@ -7,7 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -21,10 +23,18 @@ import java.util.List;
 public class SceneListViewAdapter extends BaseAdapter {
     private Context context;
     private List<SceneListBean> list;
+    private DisplayImageOptions options;
 
     public SceneListViewAdapter(Context context, List<SceneListBean> list) {
         this.context = context;
         this.list = list;
+        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.default_backround)
+//                .showImageForEmptyUri(R.mipmap.default_backround)
+//                .showImageOnFail(R.mipmap.default_backround)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .displayer(new RoundedBitmapDisplayer(360)).build();
     }
 
     @Override
@@ -67,7 +77,8 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
-        ImageLoader.getInstance().displayImage(list.get(position).getUser().getAvatar_url(), holder.userHeadImg);
+        //数据为空
+        ImageLoader.getInstance().displayImage(list.get(position).getUser().getAvatar_url(), holder.userHeadImg, options);
         holder.userName.setText(list.get(position).getUser().getNickname());
         holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser().getUser_rank(), list.get(position).getUser().getSummary()));
         holder.viewCount.setText(list.get(position).getView_count());

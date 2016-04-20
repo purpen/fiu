@@ -30,7 +30,7 @@
             android:src="@mipmap/location_39"/>
     </RelativeLayout>
 
-    <ScrollView
+    <com.taihuoniao.fineix.view.MyScrollView
         android:id="@+id/fragment_find_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -156,6 +156,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-    </ScrollView>
+    </com.taihuoniao.fineix.view.MyScrollView>
 
 </LinearLayout>

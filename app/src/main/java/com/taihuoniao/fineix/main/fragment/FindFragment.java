@@ -35,14 +35,16 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class FindFragment extends BaseFragment implements View.OnTouchListener, AdapterView.OnItemClickListener {
-    private ScrollView scrollView;
+public class FindFragment extends BaseFragment implements View.OnTouchListener, AdapterView.OnItemClickListener, MyScrollView.OnScrollListener {
+    //    private ScrollView scrollView;
+    private MyScrollView scrollView;
     private int lastScrollY = -1;
     private int lastScrollViewMesureHeight = -1;
     private RelativeLayout bannerRelative;
@@ -72,7 +74,7 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
-        scrollView = (ScrollView) view.findViewById(R.id.fragment_find_scrollview);
+        scrollView = (MyScrollView) view.findViewById(R.id.fragment_find_scrollview);
         bannerRelative = (RelativeLayout) view.findViewById(R.id.fragment_find_banner_relative);
         labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_find_labelrecycler);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_find_absolute);
@@ -87,7 +89,8 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
 
     @Override
     protected void initList() {
-        scrollView.setOnTouchListener(this);
+//        scrollView.setOnTouchListener(this);
+        scrollView.setOnScrollListener(this);
         bannerRelative.setFocusable(true);
         bannerRelative.setFocusableInTouchMode(true);
         bannerRelative.requestFocus();
@@ -134,12 +137,18 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
     protected void requestNet() {
         dialog.show();
         DataPaser.hotLabelList(labelPage + "", handler);
+        //虚拟数据
+        handler.sendEmptyMessage(-2);
     }
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case -2:
+                    //添加大小不一的头像
+                    addImgToAbsolute();
+                    break;
                 case DataConstants.HOT_LABEL_LIST:
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
@@ -165,8 +174,6 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
 //                        lp.height = MainApplication.getContext().getScreenWidth() * 16 / 9 * sceneList.size();
 //                        pullToRefreshView.setLayoutParams(lp);
                     }
-                    //添加大小不一的头像
-//                    addImgToAbsolute();
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
@@ -250,6 +257,28 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+//        if (scrollView.getHeight() > 0 && sceneListView.getMeasuredHeight() > 0
+//                && (scrollView.getScrollY() + scrollView.getHeight() + MainApplication.getContext().getScreenWidth() * 16 / 9 >= scrollView.getChildAt(0).getMeasuredHeight())) {
+//            if (scrollView.getScrollY() != lastScrollY && lastScrollViewMesureHeight != scrollView.getChildAt(0).getMeasuredHeight()) {
+//                lastScrollY = scrollView.getScrollY();
+//                lastScrollViewMesureHeight = scrollView.getChildAt(0).getMeasuredHeight();
+//                //网络请求
+//                currentPage++;
+//                DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+//            }
+//        }
+        return false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+        intent.putExtra("id", sceneList.get(position).get_id());
+        startActivity(intent);
+    }
+
+    @Override
+    public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
         if (scrollView.getHeight() > 0 && sceneListView.getMeasuredHeight() > 0
                 && (scrollView.getScrollY() + scrollView.getHeight() + MainApplication.getContext().getScreenWidth() * 16 / 9 >= scrollView.getChildAt(0).getMeasuredHeight())) {
             if (scrollView.getScrollY() != lastScrollY && lastScrollViewMesureHeight != scrollView.getChildAt(0).getMeasuredHeight()) {
@@ -260,13 +289,5 @@ public class FindFragment extends BaseFragment implements View.OnTouchListener, 
                 DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         }
-        return false;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
-        intent.putExtra("id", sceneList.get(position).get_id());
-        startActivity(intent);
     }
 }
