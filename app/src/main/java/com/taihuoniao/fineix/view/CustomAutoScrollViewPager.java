@@ -72,8 +72,7 @@ public class CustomAutoScrollViewPager extends ViewPager {
     public static final int SCROLL_WHAT = 0;
 
     public CustomAutoScrollViewPager(Context paramContext) {
-        super(paramContext);
-        init();
+        this(paramContext,null);
     }
 
     public CustomAutoScrollViewPager(Context paramContext, AttributeSet paramAttributeSet) {

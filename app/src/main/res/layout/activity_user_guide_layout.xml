@@ -9,12 +9,9 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         />
-   <!-- <ViewStub
-        android:id="@+id/vs"
+    <com.taihuoniao.fineix.view.ScrollableView
+        android:id="@+id/scrollableView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/a"
-        />-->
-    <include android:layout_width="match_parent" android:layout_height="match_parent" layout="@layout/viewpager_auto_scroll_layout"/>
-
+        />
 </LinearLayout>

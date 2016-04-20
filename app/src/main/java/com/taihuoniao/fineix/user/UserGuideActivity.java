@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.view.CustomAutoScrollViewPager;
+import com.taihuoniao.fineix.view.ScrollableView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,8 @@ import butterknife.ButterKnife;
  * created at 2016/4/18 16:10
  */
 public class UserGuideActivity extends BaseActivity {
-    @Bind(R.id.custom_atuo_scroll_viewpager)
-    CustomAutoScrollViewPager viewPager;
+    @Bind(R.id.scrollableView)
+    ScrollableView scrollableView;
     @Bind(R.id.iv_welcome)
     ImageView iv_welcome;
     private Intent intent;
@@ -61,7 +62,6 @@ public class UserGuideActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        ButterKnife.bind(this);
         iv_welcome.setImageResource(R.mipmap.login_or_regist);
         handler.postDelayed(new Runnable() {
             @Override
@@ -84,26 +84,9 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
-        viewPager.setAdapter(new ViewPagerAdapter<Integer>(activity, list));
-        viewPager.addOnPageChangeListener(new CustomOnPageChangeListener());
-    }
-
-    private class CustomOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        private int size=list.size();
-        @Override
-        public void onPageSelected(int position) {
-            position = position % size;//mPagerList.size()
-            LogUtil.e("onPageSelected", position % size + "");
-        }
-
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
+        scrollableView.setAdapter(new ViewPagerAdapter<Integer>(activity, list));
+        scrollableView.setSwipeScrollDurationFactor(8);
+        scrollableView.showIndicators();
     }
 
     private void goMainPage(){
