@@ -340,6 +340,7 @@ public class FindFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void click(int postion) {
+
         Toast.makeText(getActivity(), "点击了情景" + postion, Toast.LENGTH_SHORT).show();
     }
 }
