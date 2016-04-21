@@ -137,7 +137,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     CommonBean netCommonBean = (CommonBean) msg.obj;
                     if (netCommonBean.isSuccess()) {
-
+//
                     }
                     break;
                 case DataConstants.COMMENTS_LIST:
