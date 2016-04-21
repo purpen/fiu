@@ -17,9 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.IsLogin;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
@@ -101,9 +99,9 @@ public class MainApplication extends Application {
 
     private void initImageLoader() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
-                .showImageOnLoading(R.mipmap.ic_launcher)
+//                .showImageForEmptyUri(R.mipmap.ic_launcher)
+//                .showImageOnFail(R.mipmap.ic_launcher)
+//                .showImageOnLoading(R.mipmap.ic_launcher)
                 .cacheInMemory(true)
 //                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)

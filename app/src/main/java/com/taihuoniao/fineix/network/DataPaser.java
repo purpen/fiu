@@ -7,6 +7,8 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -16,6 +18,7 @@ import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.HotLabelBean;
@@ -23,6 +26,7 @@ import com.taihuoniao.fineix.beans.JDDetailsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -39,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,10 +185,35 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
+                Gson gson = new Gson();
+                Type type = new TypeToken<CommonBean>() {
+                }.getType();
+                msg.obj = gson.fromJson(responseInfo.result, type);
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //情景
+    //列表数据
+    public static void qingjingList(String page, String stick, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.qingjingList(page, stick, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.QINGJING_LIST;
+                Gson gson = new Gson();
+                Type type = new TypeToken<QingJingListBean>() {
+                }.getType();
+                msg.obj = gson.fromJson(responseInfo.result, type);
                 handler.sendMessage(msg);
             }
 
@@ -308,6 +338,8 @@ public class DataPaser {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SCENE_DETAILS;
                 SceneDetails sceneDetails = new SceneDetails();
@@ -604,8 +636,8 @@ public class DataPaser {
         ClientDiscoverAPI.commentsList(page, target_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
                 handler.sendMessage(msg);

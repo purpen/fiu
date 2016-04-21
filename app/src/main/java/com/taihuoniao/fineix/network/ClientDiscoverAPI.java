@@ -40,16 +40,30 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("ids", ids);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //情景
     //点赞，订阅，收藏，关注列表
-    public static void commonList(String page,String size,String id,String type,String event,RequestCallBack<String>callBack){
+    public static void commonList(String page, String size, String id, String type, String event, RequestCallBack<String> callBack) {
         String url = NetworkConstance.common_lists;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("event", event);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
+    //列表数据
+    public static void qingjingList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.qingjing_lists;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page",page);
-        params.addQueryStringParameter("size",size);
-        params.addQueryStringParameter("id",id);
-        params.addQueryStringParameter("type",type);
-        params.addQueryStringParameter("event",event);
+        params.addQueryStringParameter("stick",stick);
+        params.addQueryStringParameter("dis",dis);
+        params.addQueryStringParameter("lng",lng);
+        params.addQueryStringParameter("lat",lat);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

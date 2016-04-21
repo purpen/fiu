@@ -293,7 +293,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 }
                 dialog.show();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 String tmp = Base64Utils.encodeLines(stream.toByteArray());
                 if (MainApplication.tag == 2) {
                     Toast.makeText(CreateSceneActivity.this, "上传情景，暂无接口", Toast.LENGTH_SHORT).show();

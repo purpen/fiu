@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -124,13 +125,21 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         dialog.show();
         DataPaser.sceneDetails(id + "", handler);
         DataPaser.commentsList(1 + "", id, 12 + "", handler);
-//        DataPaser.commonList(1+"",14+"",id,"sight",);
+//        服务器返回数据参数不能为空
+        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
     }
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.COMMON_LIST:
+                    dialog.dismiss();
+                    CommonBean netCommonBean = (CommonBean) msg.obj;
+                    if (netCommonBean.isSuccess()) {
+
+                    }
+                    break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
                     break;
@@ -195,4 +204,5 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
 }
