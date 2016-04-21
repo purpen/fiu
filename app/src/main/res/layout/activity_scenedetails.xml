@@ -210,7 +210,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:background="@color/material_blue_grey_800">
+                    >
 
                     <LinearLayout
                         android:id="@+id/activity_scenedetails_labellinear"
@@ -306,15 +306,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f0f0f0"
-                android:paddingBottom="16dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp">
+                >
 
                 <com.taihuoniao.fineix.view.GridViewForScrollView
                     android:id="@+id/activity_scenedetails_grid"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"/>
 
                 <TextView
                     android:id="@+id/activity_scenedetails_moreuser"
@@ -322,11 +323,14 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginRight="16dp"
                     android:background="@mipmap/comment_numbers"
+                    android:gravity="center"
                     android:text="300+"
                     android:textColor="@color/white"
                     android:textSize="11sp"
+                    android:visibility="gone"
                     />
             </RelativeLayout>
 
@@ -340,6 +344,8 @@
                     android:id="@+id/activity_scenedetails_commentlistview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="18dp"
+                    android:paddingTop="18dp"
                     />
 
                 <TextView
@@ -348,14 +354,16 @@
                     android:layout_height="wrap_content"
                     android:text="全部123条评论"
                     android:textColor="#999999"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/activity_scenedetails_morecomment"
                     android:layout_width="14dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
-                    android:src="@mipmap/arrow_down_gray"/>
+                    android:src="@mipmap/arrow_down_gray"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout

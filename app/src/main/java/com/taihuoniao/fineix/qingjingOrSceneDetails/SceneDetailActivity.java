@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,16 +16,23 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
+import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.TimestampToTimeUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/19.
@@ -46,11 +54,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout labelLinear;
     private TextView viewCount;
     private TextView loveCountTv;
+    private ImageView commentImg;
     private TextView commentNum;
     private ImageView moreImg;
     private GridViewForScrollView userHeadGrid;
+    private List<CommonBean.CommonItem> headList;
+    private SceneDetailUserHeadAdapter sceneDetailUserHeadAdapter;
     private TextView moreUser;
     private ListViewForScrollView commentsListView;
+    private List<CommentsBean.CommentItem> commentList;
+    private SceneDetailCommentAdapter sceneDetailCommentAdapter;
     private TextView allComment;
     private ImageView moreComment;
     private ImageView love;
@@ -81,10 +94,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         labelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_labellinear);
         viewCount = (TextView) findViewById(R.id.activity_scenedetails_viewcount);
         loveCountTv = (TextView) findViewById(R.id.activity_scenedetails_love_count);
+        commentImg = (ImageView) findViewById(R.id.activity_scenedetails_commentimg);
         commentNum = (TextView) findViewById(R.id.activity_scenedetails_commentcount);
         moreImg = (ImageView) findViewById(R.id.activity_scenedetails_more);
         userHeadGrid = (GridViewForScrollView) findViewById(R.id.activity_scenedetails_grid);
         moreUser = (TextView) findViewById(R.id.activity_scenedetails_moreuser);
+        commentsListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_commentlistview);
         allComment = (TextView) findViewById(R.id.activity_scenedetails_allcomment);
         moreComment = (ImageView) findViewById(R.id.activity_scenedetails_morecomment);
         love = (ImageView) findViewById(R.id.activity_scenedetails_love);
@@ -104,9 +119,20 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
         backgroundImg.setLayoutParams(lp);
+        backgroundImg.setFocusable(true);
+        backgroundImg.setFocusableInTouchMode(true);
+        backgroundImg.requestFocus();
+        commentImg.setOnClickListener(this);
+        commentNum.setOnClickListener(this);
         moreImg.setOnClickListener(this);
+        headList = new ArrayList<>();
+        sceneDetailUserHeadAdapter = new SceneDetailUserHeadAdapter(SceneDetailActivity.this, headList);
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
+        commentsListView.setDividerHeight(0);
+        commentList = new ArrayList<>();
+        sceneDetailCommentAdapter = new SceneDetailCommentAdapter(SceneDetailActivity.this, commentList);
+        commentsListView.setAdapter(sceneDetailCommentAdapter);
         allComment.setOnClickListener(this);
         moreComment.setOnClickListener(this);
         love.setOnClickListener(this);
@@ -125,7 +151,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         dialog.show();
         DataPaser.sceneDetails(id + "", handler);
         DataPaser.commentsList(1 + "", id, 12 + "", handler);
-//        服务器返回数据参数不能为空
         DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
     }
 
@@ -137,11 +162,26 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     CommonBean netCommonBean = (CommonBean) msg.obj;
                     if (netCommonBean.isSuccess()) {
-//
+                        headList.addAll(netCommonBean.getData().getRows());
+                        if (headList.size() > 12) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
+                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
                     }
                     break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
+                    CommentsBean netCommentBean = (CommentsBean) msg.obj;
+                    if (netCommentBean.isSuccess()) {
+                        commentList.addAll(netCommentBean.getData().getRows());
+                        if (netCommentBean.getData().getRows().size() > 3) {
+                            allComment.setVisibility(View.VISIBLE);
+                            moreComment.setVisibility(View.VISIBLE);
+                        }
+                        sceneDetailCommentAdapter.notifyDataSetChanged();
+                    }
                     break;
                 case DataConstants.SCENE_DETAILS:
                     dialog.dismiss();
@@ -158,7 +198,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         loveCount.setText(netSceneDetails.getLove_count() + "人赞过");
                         desTv.setText(netSceneDetails.getDes());
                         //添加标签
-                        //木有名称
+                        addLabelToLinear(netSceneDetails.getTag_titles(), netSceneDetails.getTags());
                         viewCount.setText(netSceneDetails.getView_count());
                         loveCountTv.setText(netSceneDetails.getLove_count());
                         commentNum.setText(netSceneDetails.getComment_count());
@@ -176,6 +216,20 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     };
 
+    private void addLabelToLinear(List<String> tagsTitleList, List<Integer> tagsList) {
+        for (int i = 0; i < tagsTitleList.size(); i++) {
+            View view = View.inflate(SceneDetailActivity.this, R.layout.view_horizontal_label_item, null);
+            TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
+            textView.setText(tagsTitleList.get(i));
+            view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+            lp.rightMargin = DensityUtils.dp2px(SceneDetailActivity.this, 10);
+            view.setLayoutParams(lp);
+            view.setTag(tagsList.get(i));
+            labelLinear.addView(view);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -183,9 +237,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_lovetv:
                 Toast.makeText(SceneDetailActivity.this, "点赞或取消点赞", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.activity_scenedetails_commentimg:
+            case R.id.activity_scenedetails_commentcount:
             case R.id.activity_scenedetails_allcomment:
             case R.id.activity_scenedetails_morecomment:
-                Toast.makeText(SceneDetailActivity.this, "查看更多评论", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SceneDetailActivity.this, CommentListActivity.class);
+                intent.putExtra("target_id", id);
+                intent.putExtra("type", 12 + "");
+                startActivity(intent);
                 break;
             case R.id.activity_scenedetails_moreuser:
                 Toast.makeText(SceneDetailActivity.this, "查看更多用户", Toast.LENGTH_SHORT).show();
@@ -203,6 +262,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(SceneDetailActivity.this, "跳转到个人中心", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        //        cancelNet();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
+        super.onDestroy();
     }
 
 }

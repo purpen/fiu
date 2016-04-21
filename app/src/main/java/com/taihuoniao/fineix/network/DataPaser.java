@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.HotLabel;
@@ -208,6 +209,8 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingList(page, stick, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_LIST;
                 Gson gson = new Gson();
@@ -342,6 +345,10 @@ public class DataPaser {
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SCENE_DETAILS;
+//                Gson gson = new Gson();
+//                Type type = new TypeToken<SceneDetails>() {
+//                }.getType();
+//                SceneDetails sceneDetails = gson.fromJson(responseInfo.result, type);
                 SceneDetails sceneDetails = new SceneDetails();
                 try {
                     JSONObject jsonObject = new JSONObject(responseInfo.result);
@@ -353,12 +360,19 @@ public class DataPaser {
                         sceneDetails.set_id(data.optString("_id"));
                         sceneDetails.setTitle(data.optString("title"));
                         sceneDetails.setDes(data.optString("des"));
-                        List<String> tagsList = new ArrayList<String>();
+                        List<Integer> tagsList = new ArrayList<Integer>();
                         JSONArray tags = data.getJSONArray("tags");
                         for (int i = 0; i < tags.length(); i++) {
-                            String str = tags.getString(i);
-                            tagsList.add(str);
+                            int in = tags.optInt(i);
+                            tagsList.add(in);
                         }
+                        List<String> tagsTitleList = new ArrayList<String>();
+//                        JSONArray tagsTitle = data.getJSONArray("tags_title");
+//                        for (int i = 0; i < tagsTitle.length(); i++) {
+//                            String str = tagsTitle.optString(i, null);
+//                            tagsTitleList.add(str);
+//                        }
+                        sceneDetails.setTag_titles(tagsTitleList);
                         sceneDetails.setTags(tagsList);
                         List<SceneDetails.Product> products = new ArrayList<SceneDetails.Product>();
                         JSONArray product = data.getJSONArray("product");
@@ -389,20 +403,29 @@ public class DataPaser {
                         userInfo.setUser_rank(user_info.optString("user_rank"));
                         sceneDetails.setUser_info(userInfo);
                     }
-                } catch (JSONException e) {
-                    Log.e("<<<", "解析异常");
-                }
-                msg.obj = sceneDetails;
-                handler.sendMessage(msg);
             }
 
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            catch(
+            JSONException e
+            )
+
+            {
+                Log.e("<<<", "解析异常");
             }
-        });
+
+            msg.obj=sceneDetails;
+            handler.sendMessage(msg);
+        }
+
+        @Override
+        public void onFailure (HttpException error, String msg){
+            Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+            handler.sendEmptyMessage(DataConstants.NET_FAIL);
+        }
     }
+
+    );
+}
 
     //标签
     //最近使用的标签
@@ -631,15 +654,41 @@ public class DataPaser {
     }
 
     //评论
+    //提交评论
+    public static void sendComment(String target_id, String content, String type, final Handler handler) {
+        ClientDiscoverAPI.sendComment(target_id, content, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SEND_COMMENT;
+                Gson gson = new Gson();
+                Type type = new TypeToken<NetBean>() {
+                }.getType();
+                NetBean netBean = gson.fromJson(responseInfo.result, type);
+                msg.obj = netBean;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Log.e("<<<failure>>>", "error = " + e.toString() + ",msg = " + s);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //评论
     //列表
     public static void commentsList(String page, String target_id, String type, final Handler handler) {
         ClientDiscoverAPI.commentsList(page, target_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
+                Gson gson = new Gson();
+                Type type = new TypeToken<CommentsBean>() {
+                }.getType();
+                msg.obj = gson.<CommentsBean>fromJson(responseInfo.result, type);
                 handler.sendMessage(msg);
             }
 

@@ -43,7 +43,8 @@
     <string name="confirm">确定</string>
     <!-- AddProductActivity -->
     <string name="add_product">添加产品</string>
-    <!---->
+    <!-- CommentListActivity -->
+    <string name="comment">评论</string>
     <!-- 定位 -->
     <string name="startlocation">定位</string>
     <string name="stoplocation">停止</string>

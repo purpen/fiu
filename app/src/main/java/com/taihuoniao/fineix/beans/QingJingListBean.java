@@ -34,7 +34,7 @@ public class QingJingListBean extends NetBean {
         private String _id;
         private String title;
         private String des;
-        private List<SceneListBean> sight;
+        private List<Integer> sight;
         private List<String> tags;
         private String address;
         private String used_count;
