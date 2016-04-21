@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
+import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         if (view == null) {
             holder = new ViewHolder();
             view = holder.imageView =new ImageView(activity);
-            holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -65,7 +67,11 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
 
         if (content instanceof String){
-            ImageLoader.getInstance().displayImage((String) content,holder.imageView);
+            if (TextUtils.isEmpty((String)content)){
+                Util.makeToast("图片链接为空");
+            }else {
+                ImageLoader.getInstance().displayImage((String) content,holder.imageView);
+            }
         }
 
         if (activity instanceof UserGuideActivity){

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -16,7 +17,7 @@ import butterknife.ButterKnife;
 /**
  * Created by taihuoniao on 2016/3/14.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment<T> extends Fragment {
 //    protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
     protected final String TAG = getClass().getSimpleName();
     protected static Activity activity;
@@ -110,6 +111,9 @@ public abstract class BaseFragment extends Fragment {
     protected abstract View initView();
 
     protected void refreshUI(){
+
+    }
+    protected void refreshUI(ArrayList<T> list){
 
     }
 }
