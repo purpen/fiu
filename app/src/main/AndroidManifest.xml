@@ -44,9 +44,9 @@
 
         <activity
             android:name=".main.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:launchMode="singleTask"
             />
         <activity
             android:name=".zxing.activity.CaptureActivity"
@@ -165,6 +165,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
+            android:name=".qingjingOrSceneDetails.CommentListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".scene.AddLabelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
@@ -253,10 +257,10 @@
         <!-- 微信支付 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/transparent"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent"/>
         <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

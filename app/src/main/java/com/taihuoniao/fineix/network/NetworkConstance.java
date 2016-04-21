@@ -23,7 +23,7 @@ public class NetworkConstance {
     //点赞，订阅，关注，收藏通用列表
     public static final String common_lists = BASE_URL + "/favorite";
     //情景列表
-    public static final String qingjing_lists = BASE_URL+"/scene_scene/";
+    public static final String qingjing_lists = BASE_URL + "/scene_scene/";
     //场景
     //新增场景
     public static final String create_scene = BASE_URL + "/scene_sight/save";
@@ -42,6 +42,8 @@ public class NetworkConstance {
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
     //评论
+    //提交评论
+    public static final String send_comment = BASE_URL + "/comment/ajax_comment";
     //列表
     public static final String comments_list = BASE_URL + "/comment/getlist";
 

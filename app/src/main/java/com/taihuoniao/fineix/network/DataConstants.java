@@ -55,6 +55,8 @@ public class DataConstants {
     public static final int COMMON_LIST = 76;
     //情景列表
     public static final int QINGJING_LIST = 75;
+    //提交评论
+    public static final int SEND_COMMENT = 74;
 
 
 

@@ -62,11 +62,11 @@ public class ClientDiscoverAPI {
     public static void qingjingList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.qingjing_lists;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("page",page);
-        params.addQueryStringParameter("stick",stick);
-        params.addQueryStringParameter("dis",dis);
-        params.addQueryStringParameter("lng",lng);
-        params.addQueryStringParameter("lat",lat);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("stick", stick);
+        params.addQueryStringParameter("dis", dis);
+        params.addQueryStringParameter("lng", lng);
+        params.addQueryStringParameter("lat", lat);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -154,6 +154,18 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("domin", domin);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //评论
+    //提交评论
+    public static void sendComment(String target_id, String content, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.send_comment;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("content", content);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("from_site", 4 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

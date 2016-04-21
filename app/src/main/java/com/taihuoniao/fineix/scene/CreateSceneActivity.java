@@ -257,6 +257,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(CreateSceneActivity.this, "请选择地址", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                dialog.show();
                 StringBuilder tags = new StringBuilder();
                 for (UsedLabelBean each : selectList) {
                     tags.append(",").append(each.getTitle_cn());
@@ -291,9 +292,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 if (product_y.length() > 0) {
                     product_y.deleteCharAt(0);
                 }
-                dialog.show();
+
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
                 String tmp = Base64Utils.encodeLines(stream.toByteArray());
                 if (MainApplication.tag == 2) {
                     Toast.makeText(CreateSceneActivity.this, "上传情景，暂无接口", Toast.LENGTH_SHORT).show();

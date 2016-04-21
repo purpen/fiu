@@ -13,7 +13,8 @@ public class SceneDetails extends NetBean {
     private String user_id;
     private String des;
     private String scene_id;
-    private List<String> tags;
+    private List<Integer> tags;
+    private List<String> tag_titles;
     private List<Product> product;
     private String address;
     private String used_count;
@@ -28,6 +29,14 @@ public class SceneDetails extends NetBean {
     private String cover_url;
     private String scene_title;
     private UserInfo user_info;
+
+    public List<String> getTag_titles() {
+        return tag_titles;
+    }
+
+    public void setTag_titles(List<String> tag_titles) {
+        this.tag_titles = tag_titles;
+    }
 
     public String get_id() {
         return _id;
@@ -101,11 +110,11 @@ public class SceneDetails extends NetBean {
         this.scene_title = scene_title;
     }
 
-    public List<String> getTags() {
+    public List<Integer> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Integer> tags) {
         this.tags = tags;
     }
 

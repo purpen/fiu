@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="15dp"
+                android:paddingTop="11dp">
+
+    <ImageView
+        android:id="@+id/item_comment_head"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/item_comment_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:singleLine="true"
+        android:text="3 天前"
+        android:textColor="#999999"
+        android:textSize="12sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_toLeftOf="@id/item_comment_time"
+        android:layout_toRightOf="@id/item_comment_head"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_comment_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="狗蛋"
+            android:textColor="#212121"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/item_comment_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="哈哈哈哈哈哈啊；手里的客服解决了；阿斯达克警方阿三；懒得看风景阿里山扩大飞机阿拉山口大家放假了；ask地方"
+            android:textColor="#666666"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

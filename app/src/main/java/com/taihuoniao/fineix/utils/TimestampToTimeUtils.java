@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.utils;
 
+import android.util.Log;
+
 /**
  * Created by taihuoniao on 2016/4/19.
  */
@@ -13,7 +15,7 @@ public class TimestampToTimeUtils {
     public static String getStandardDate(String timeStr) {
 
         StringBuffer sb = new StringBuffer();
-
+        Log.e("<<<", "timeStr=" + timeStr);
         long t = Long.parseLong(timeStr);
         long time = System.currentTimeMillis() - (t * 1000);
         long mill = (long) Math.ceil(time / 1000);//秒前
