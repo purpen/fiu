@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.user.UserGuideActivity;
 
 import java.util.List;
 
@@ -18,6 +21,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     private int size;
     private boolean isInfiniteLoop;
 
+    public int getSize(){
+        return size;
+    }
     public ViewPagerAdapter(Activity activity, List<T> imageList) {
         this.activity = activity;
         this.imageList = imageList;
@@ -28,7 +34,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     @Override
     public int getCount() {
         // Infinite loop
-        return isInfiniteLoop ? Integer.MAX_VALUE : imageList.size();
+        return isInfiniteLoop ? Integer.MAX_VALUE : size;
     }
 
     /**
@@ -54,26 +60,33 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         }
         final T content = imageList.get(getPosition(position));
 
-
         if (content instanceof Integer){
-            holder.imageView.setImageResource((Integer) content);
+            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView);
         }
-//        if (content instanceof Goods) {
-////            Imageloader.loadImg(activity, Util.replaceChinese2UTF8(String.format("%s%s", Constants.PIC_URI,((Goods) content).goods_img)), holder.imageView, R.mipmap.placeholder180);
-//        } else if(content instanceof Integer){
-//            holder.imageView.setImageResource((Integer) content);
-//            LogUtil.e("content",content+"");
-//        }else if(content instanceof String){
-////            Imageloader.loadImg(activity, Util.replaceChinese2UTF8(String.format("%s%s", Constants.PIC_URI,content.toString())), holder.imageView, R.mipmap.placeholder180);
-//        }else {
-//            new IllegalArgumentException("please put right image resources into ViewPagerAdapter!");
-//        }
 
+        if (content instanceof String){
+            ImageLoader.getInstance().displayImage((String) content,holder.imageView);
+        }
+
+        if (activity instanceof UserGuideActivity){
+            if (position==size-1){
+                if (activity instanceof UserGuideActivity){
+                    if (position==size-1){
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.startActivity(new Intent(activity,MainActivity.class));
+                                activity.finish();
+                            }
+                        });
+                    }
+                }
+            }
+        }
         return view;
     }
 
     private static class ViewHolder {
-
         ImageView imageView;
     }
 

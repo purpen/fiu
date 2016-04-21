@@ -23,7 +23,6 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -87,7 +86,7 @@ public class MineFragment extends MyBaseFragment {
         imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<ImgTxtItem>();
-            ImgTxtItem item;
+            ImgTxtItem item=null;
             for (int i = 0; i < imgIds.length; i++) {
                 item = new ImgTxtItem();
                 item.imgId = imgIds[i];
@@ -98,7 +97,7 @@ public class MineFragment extends MyBaseFragment {
 
         if (partnerLogos.length == partnerName.length) {
             horizentalList = new ArrayList<ImgTxtItem>();
-            ImgTxtItem item;
+            ImgTxtItem item=null;
             for (int i = 0; i < partnerLogos.length; i++) {
                 item = new ImgTxtItem();
                 item.imgId = partnerLogos[i];
@@ -242,6 +241,7 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.item_partner:
                 Util.makeToast(activity, "合作伙伴");
+                break;
             case R.id.bt_register:
                 Intent intent = new Intent(getActivity(),
                         OptRegisterLoginActivity.class);

@@ -6,10 +6,12 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.JingQingjingRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
+import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.HotLabelBean;
@@ -38,8 +41,12 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.view.PullToRefreshListViewForScrollView;
+import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +72,14 @@ public class FindFragment extends BaseFragment implements AdapterView.OnItemClic
     private int labelPage = 1;
     //图片加载
     private DisplayImageOptions options;
+
+
+
+    private PullToRefreshListViewForScrollView pullToRefreshLayout;
+    private WaittingDialog dialog;
+    private ScrollableView scrollableView;
+
+    private ViewPagerAdapter viewPagerAdapter;
     //场景列表
     private int currentPage = 1;//页码
     private double distance = 5000;//距离
@@ -186,6 +201,9 @@ public class FindFragment extends BaseFragment implements AdapterView.OnItemClic
 //                            isNotify = true;
 //                        }
                     }
+                    //添加大小不一的头像
+//                    addImgToAbsolute();
+                    refreshUI();
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
@@ -193,6 +211,41 @@ public class FindFragment extends BaseFragment implements AdapterView.OnItemClic
             }
         }
     };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (scrollableView != null) {
+            scrollableView.stop();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (scrollableView != null) {
+            scrollableView.start();
+        }
+    }
+
+    @Override
+    protected void refreshUI() {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(R.mipmap.login_or_regist);
+        list.add(R.mipmap.login_or_regist);
+        list.add(R.mipmap.login_or_regist);
+        if (viewPagerAdapter == null) {
+            viewPagerAdapter = new ViewPagerAdapter(activity, list);
+            scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
+            scrollableView.setAutoScrollDurationFactor(8);
+            scrollableView.setInterval(4000);
+            scrollableView.showIndicators();
+            scrollableView.start();
+        } else {
+            viewPagerAdapter.notifyDataSetChanged();
+        }
+
+    }
 
     @Override
     public void onDestroy() {
