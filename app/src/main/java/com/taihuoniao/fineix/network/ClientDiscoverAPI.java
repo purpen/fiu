@@ -54,6 +54,19 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    //情景
+    //列表数据
+    public static void qingjingList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.qingjing_lists;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("stick",stick);
+        params.addQueryStringParameter("dis",dis);
+        params.addQueryStringParameter("lng",lng);
+        params.addQueryStringParameter("lat",lat);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //场景
     //新增场景
     public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String product_id,

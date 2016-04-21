@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
-import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
 
@@ -39,8 +38,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.ll_nav4)
     LinearLayout ll_nav4;
 
-    @Bind(R.id.custom_head)
-    CustomHeadView custom_head;
+//    @Bind(R.id.custom_head)
+//    CustomHeadView custom_head;
 
     @Bind(R.id.activity_main_homepagebtn)
     ImageView homepageImg;
@@ -88,8 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initView() {
-        custom_head.setHeadGoBackShow(false);
-        custom_head.setHeadLogoShow(true);
+//        custom_head.setHeadGoBackShow(false);
+//        custom_head.setHeadLogoShow(true);
         if (tabList != null) {
             tabList.clear();
         } else {
@@ -148,19 +147,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.ll_nav0://情
-                custom_head.setVisibility(View.VISIBLE);
+//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
                 break;
             case R.id.ll_nav1: //景
-                custom_head.setVisibility(View.GONE);
+//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_findbtn, FindFragment.class);
                 break;
             case R.id.ll_nav3:  //品
-                custom_head.setVisibility(View.GONE);
+//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_shopbtn, WellGoodsFragment.class);
                 break;
             case R.id.ll_nav4: //个人中心
-                custom_head.setVisibility(View.GONE);
+//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(R.id.activity_main_minebtn, MineFragment.class);
                 break;
         }

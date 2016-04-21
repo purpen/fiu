@@ -47,6 +47,26 @@ public class DataConstants {
     //CreateSceneActivity跳转到BDSearchAddressActivity界面的请求码和返回码
     public static final int REQUESTCODE_CREATESCENE_BDSEARCH = 80;
     public static final int RESULTCODE_CREATESCENE_BDSEARCH = 79;
+    //场景详情
+    public static final int SCENE_DETAILS = 78;
+    //评论列表
+    public static final int COMMENTS_LIST = 77;
+    //点赞，订阅，关注，收藏通用列表
+    public static final int COMMON_LIST = 76;
+    //情景列表
+    public static final int QINGJING_LIST = 75;
+
+
+
+
+
+
+
+
+
+
+
+
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "thn_settings";
