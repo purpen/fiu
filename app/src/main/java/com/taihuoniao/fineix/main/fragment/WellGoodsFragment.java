@@ -81,8 +81,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.hotLabelList(labelPage + "", handler);
-        DataPaser.categoryList(1 + "", 1 + "", handler);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -119,6 +117,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Util.makeToast(s);
             }
         });
+        DataPaser.hotLabelList(labelPage + "", handler);
+        DataPaser.categoryList(1 + "", 1 + "", handler);
     }
 
     @Override
@@ -197,6 +197,22 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             scrollableView.start();
         } else {
             viewPagerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (scrollableView != null) {
+            scrollableView.stop();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (scrollableView != null) {
+            scrollableView.start();
         }
     }
 

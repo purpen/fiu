@@ -61,6 +61,22 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (scrollableView != null) {
+            scrollableView.stop();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (scrollableView != null) {
+            scrollableView.start();
+        }
+    }
+
+    @Override
     protected void initView() {
         iv_welcome.setImageResource(R.mipmap.login_or_regist);
         handler.postDelayed(new Runnable() {
