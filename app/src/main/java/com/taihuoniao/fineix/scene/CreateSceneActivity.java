@@ -302,7 +302,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 }
                 DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                         5 + "", tags.toString(), product_id.toString(), product_title.toString(),
-                        product_price.toString(), product_x.toString(), product_y.toString(), city + district + addressTv.getText().toString(),
+                        product_price.toString(), product_x.toString(), product_y.toString(), city  + district
+                                + addressTv.getText().toString()
+                        ,
                         lat + "", lng + "",
                         handler);
                 break;
@@ -409,9 +411,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean = (NetBean) msg.obj;
                     Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean.isSuccess()) {
-                        SelectPhotoOrCameraActivity.instance.finish();
-                        CropPictureActivity.instance.finish();
-                        EditPictureActivity.instance.finish();
+                        if (SelectPhotoOrCameraActivity.instance != null) {
+                            SelectPhotoOrCameraActivity.instance.finish();
+                        }
+                        if (CropPictureActivity.instance != null) {
+                            CropPictureActivity.instance.finish();
+                        }
+                        if (EditPictureActivity.instance != null) {
+                            EditPictureActivity.instance.finish();
+                        }
                         CreateSceneActivity.this.finish();
                     }
                     break;
