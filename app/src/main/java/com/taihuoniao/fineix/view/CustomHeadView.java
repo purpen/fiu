@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,6 +26,8 @@ public class CustomHeadView extends RelativeLayout {
     private TextView tv_head_right;
     private TextView tv_tip_num;
     private SearchView sv;
+    private EditText et_search;
+    private ImageButton ib_search;
     public CustomHeadView(Context context) {
         this(context, null);
     }
@@ -47,6 +50,8 @@ public class CustomHeadView extends RelativeLayout {
     private void initViews(View view) {
         head_goback = (ImageButton) view.findViewById(R.id.head_goback);
         iv_left = (ImageButton) view.findViewById(R.id.iv_left);
+        et_search = (EditText) view.findViewById(R.id.et_search);
+        ib_search = (ImageButton) view.findViewById(R.id.ib_search);
         head_center_tv = (TextView) view.findViewById(R.id.head_center_tv);
         iv_center_logo = (ImageView) view.findViewById(R.id.iv_center_logo);
         sv = (SearchView) view.findViewById(R.id.sv_head_view);
@@ -62,7 +67,13 @@ public class CustomHeadView extends RelativeLayout {
         iv_left.setOnClickListener(onClickListener);
     }
 
+    public ImageButton getClearSearchBtn(){
+        return ib_search;
+    }
 
+    public EditText getSearchET(){
+        return et_search;
+    }
     private OnClickListener onClickListener=new OnClickListener() {
         @Override
         public void onClick(View v) {

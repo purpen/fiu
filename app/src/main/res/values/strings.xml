@@ -71,4 +71,16 @@
         <item>亚马逊</item>
     </string-array>
     <string name="please_input">请输入</string>
+
+    <string name="btn_done">OK</string>
+    <string name="btn_reset">Reset</string>
+
+    <string name="gallery_space_text">Space[-60, 60]</string>
+    <string name="gallery_space_text_hint">space value[-60, 60]</string>
+
+    <string name="gallery_max_zoom_text">GMax Zoom [-120, 120]</string>
+    <string name="gallery_max_zoom_text_hint">zoom value[-120, 120].</string>
+
+    <string name="gallery_max_rotate_angle_text">Rotation Angle[-60, 60]</string>
+    <string name="gallery_max_rotate_angle_text_hint">rotation angle[-60, 60].</string>
 </resources>

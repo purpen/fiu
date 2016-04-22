@@ -193,7 +193,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
         } else {
             if (to == from) {
-                LogUtil.e("to==from", (to == from) + "");
+//                LogUtil.e("to==from", (to == from) + "");
                 return;
             }
 

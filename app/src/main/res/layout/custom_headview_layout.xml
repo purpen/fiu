@@ -22,6 +22,38 @@
         android:padding="@dimen/dp16"
         android:visibility="gone"
         />
+
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/head_goback"
+        android:layout_centerInParent="true"
+        android:background="@drawable/search_radius_border"
+        >
+        <EditText
+            android:id="@+id/et_search"
+            android:hint="搜索"
+            android:textColorHint="@color/color_999"
+            android:textSize="@dimen/sp14"
+            android:drawableLeft="@mipmap/search"
+            android:background="@null"
+            android:drawablePadding="@dimen/dp5"
+            android:paddingLeft="@dimen/dp10"
+            android:layout_height="@dimen/dp35"
+            android:layout_width="match_parent"
+            />
+        <ImageButton
+            android:id="@+id/ib_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@mipmap/clear"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
     <TextView
         android:id="@+id/head_center_tv"
         android:layout_width="wrap_content"

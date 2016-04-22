@@ -1,13 +1,24 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,6 +35,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.SlidingFocusAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
@@ -32,6 +44,8 @@ import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.HotLabelBean;
+import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProductListData;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -40,11 +54,14 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
+import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -63,19 +80,65 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private PinRecyclerAdapter pinRecyclerAdapter;
     private DisplayImageOptions options;
     private ScrollableView scrollableView;
-
+    private SlidingFocusImageView sfiv;
     private ViewPagerAdapter viewPagerAdapter;
+    private SlidingFocusAdapter sfAdapter = null;
+    private int page = 1;
+    private static final String PRODUCT_STATE = "1"; //表示正常在线
+    ArrayList<Integer> mBitmaps = new ArrayList<Integer>();
+    int[] ids =
+            {
+                    R.mipmap.a,
+                    R.mipmap.b,
+                    R.mipmap.c,
+                    R.mipmap.d,
+                    R.mipmap.e,
+                    R.mipmap.f,
+                    R.mipmap.g,
+                    R.mipmap.h,
+            };
+
     @Override
     protected View initView() {
+        generateBitmaps();
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
+        sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
+        sfiv.setMaxRotationAngle(0);
+        sfiv.setGravity(Gravity.CENTER_VERTICAL);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
         absoluteLayout.setLayoutParams(lp);
-        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
+//        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
+//        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
         dialog = new WaittingDialog(getActivity());
+//        sfiv.setMaxRotationAngle(0);
+//        sfiv.setGravity(Gravity.CENTER_VERTICAL);
+//        sfiv.setAdapter(new SlidingFocusAdapter(sfiv,mBitmaps,activity));
         return view;
+    }
+
+    private void generateBitmaps() {
+
+        for (int id : ids) {
+            mBitmaps.add(id);
+        }
+    }
+
+    @Override
+    protected void installListener() {
+        sfiv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("onItemSelected", "" + position);
+//                ((SlidingFocusAdapter) sfiv.getAdapter()).notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -119,28 +182,72 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         });
         DataPaser.hotLabelList(labelPage + "", handler);
         DataPaser.categoryList(1 + "", 1 + "", handler);
+        ClientDiscoverAPI.getProductList(String.valueOf(page), new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) {
+                    return;
+                }
+
+                if (TextUtils.isEmpty(responseInfo.result)) {
+                    return;
+                }
+
+                ProductListData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ProductListData>>() {
+                });
+                if (data.rows == null) {
+                    return;
+                }
+
+                if (data.rows.size() == 0) {
+                    return;
+                }
+                setSlidingFocusImageViewData(data.rows);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
+    }
+
+    private void setSlidingFocusImageViewData(ArrayList<ProductListBean> list) {
+        if (list == null) {
+            return;
+        }
+        if (list.size()==0){
+            return;
+        }
+
+        if (sfAdapter == null) {//获得产品列表的一项  list.get(0)
+            sfAdapter = new SlidingFocusAdapter(sfiv, list.get(0).banner_asset, activity);
+            sfiv.setAdapter(sfAdapter);
+        } else {
+            sfAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     protected void initList() {
         hotLabelList = new ArrayList<>();
-        labelRecycler.setHasFixedSize(true);
-        labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
-        pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
-            @Override
-            public void click(int postion) {
-                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
-            }
-        });
-        labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
-        labelRecycler.setAdapter(pinLabelRecyclerAdapter);
-        list = new ArrayList<>();
-        recyclerView.setHasFixedSize(true);
+//        labelRecycler.setHasFixedSize(true);
+//        labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+//        pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
+//            @Override
+//            public void click(int postion) {
+//                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
+//        labelRecycler.setAdapter(pinLabelRecyclerAdapter);
+//        list = new ArrayList<>();
+//        recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
-        pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
-        recyclerView.setAdapter(pinRecyclerAdapter);
+//        recyclerView.setLayoutManager(layoutManager);
+//        pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
+//        recyclerView.setAdapter(pinRecyclerAdapter);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
 //                .showImageForEmptyUri(R.mipmap.default_backround)
@@ -158,16 +265,16 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
                     if (netHotLabel.isSuccess()) {
-                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
-                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+//                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
+//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
                 case DataConstants.CATEGORY_LIST:
                     dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
-                        list.addAll(netCategoryBean.getList());
-                        pinRecyclerAdapter.notifyDataSetChanged();
+//                        list.addAll(netCategoryBean.getList());
+//                        pinRecyclerAdapter.notifyDataSetChanged();
                     }
                     addImgToAbsolute();
                     break;
@@ -184,12 +291,12 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         for (Banner banner : list) {
             urlList.add(banner.cover_url);
         }
-        if (urlList.size()==0){
+        if (urlList.size() == 0) {
             return;
         }
 
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter(activity,urlList);
+            viewPagerAdapter = new ViewPagerAdapter(activity, urlList);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             scrollableView.setAutoScrollDurationFactor(8);
             scrollableView.setInterval(4000);

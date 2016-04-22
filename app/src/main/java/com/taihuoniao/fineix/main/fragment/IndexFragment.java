@@ -7,11 +7,10 @@ import android.view.View;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
-import com.taihuoniao.fineix.map.GeoCoderDemo;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.map.POIListActivity;
 import com.taihuoniao.fineix.map.SelectOrSearchQJActivity;
-import com.taihuoniao.fineix.order.OrderListActivity;
+import com.taihuoniao.fineix.scene.SearchResultActivity;
 
 import butterknife.OnClick;
 
@@ -52,7 +51,8 @@ public class IndexFragment extends BaseFragment {
                 startActivity(sendIntent);
                 break;
             case R.id.sliding_tab_btn:
-                activity.startActivity(new Intent(activity, OrderListActivity.class));
+//                activity.startActivity(new Intent(activity, OrderListActivity.class));
+                activity.startActivity(new Intent(activity, SearchResultActivity.class));
                 break;
             case R.id.geo:
                 activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));

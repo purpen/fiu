@@ -58,4 +58,7 @@ public class NetworkConstance {
 
     //获得Banners
     public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
+
+    //获得产品列表
+    public static final String PRODUCTS_URL = BASE_URL + "/scene_product/getlist";
 }

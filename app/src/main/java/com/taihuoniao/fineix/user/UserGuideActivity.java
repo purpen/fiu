@@ -101,7 +101,6 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
         scrollableView.setAdapter(new ViewPagerAdapter<Integer>(activity, list));
-        scrollableView.setSwipeScrollDurationFactor(8);
         scrollableView.showIndicators();
     }
 

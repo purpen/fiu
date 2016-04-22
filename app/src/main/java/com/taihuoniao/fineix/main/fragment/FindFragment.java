@@ -262,6 +262,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         }
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();

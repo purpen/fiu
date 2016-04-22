@@ -291,4 +291,17 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
+    /**
+     * 获取产品列表
+     * @param page
+     * @param callBack
+     */
+    public static void getProductList(String page,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("page",String.valueOf(page));
+        params.addBodyParameter("size",String.valueOf(10));
+//        params.addBodyParameter("state",String.valueOf(1));
+        MD5Utils.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
+    }
+
 }

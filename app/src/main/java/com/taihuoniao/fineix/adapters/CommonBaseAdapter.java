@@ -6,12 +6,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 	protected final String TAG=getClass().getSimpleName();
-	protected ArrayList<T> list;
+	protected List<T> list;
 	protected Activity activity;
-	public CommonBaseAdapter(ArrayList<T> list,Activity activity){
+	public CommonBaseAdapter(List<T> list,Activity activity){
 		this.list=list;
 		this.activity=activity;
 	}
