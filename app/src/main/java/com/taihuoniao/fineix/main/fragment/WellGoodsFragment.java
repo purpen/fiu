@@ -115,6 +115,12 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
             }
         });
+        sfiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO 处理点击事件
+            }
+        });
     }
 
     @Override
