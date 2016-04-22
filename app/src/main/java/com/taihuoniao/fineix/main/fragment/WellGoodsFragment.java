@@ -85,22 +85,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private SlidingFocusAdapter sfAdapter = null;
     private int page = 1;
     private static final String PRODUCT_STATE = "1"; //表示正常在线
-    ArrayList<Integer> mBitmaps = new ArrayList<Integer>();
-    int[] ids =
-            {
-                    R.mipmap.a,
-                    R.mipmap.b,
-                    R.mipmap.c,
-                    R.mipmap.d,
-                    R.mipmap.e,
-                    R.mipmap.f,
-                    R.mipmap.g,
-                    R.mipmap.h,
-            };
-
     @Override
     protected View initView() {
-        generateBitmaps();
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
         sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
@@ -112,17 +98,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
 //        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
         dialog = new WaittingDialog(getActivity());
-//        sfiv.setMaxRotationAngle(0);
-//        sfiv.setGravity(Gravity.CENTER_VERTICAL);
-//        sfiv.setAdapter(new SlidingFocusAdapter(sfiv,mBitmaps,activity));
         return view;
-    }
-
-    private void generateBitmaps() {
-
-        for (int id : ids) {
-            mBitmaps.add(id);
-        }
     }
 
     @Override

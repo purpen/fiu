@@ -40,7 +40,6 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
         if (item instanceof String){
             ImageLoader.getInstance().displayImage((String)item,holder.iv);
         }
-        LogUtil.e("ImgSRC",item+"");
         if (item instanceof Integer){
             ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv);
         }
