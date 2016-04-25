@@ -78,6 +78,25 @@
             android:theme="@style/AppTheme"/>
 
         <activity
+            android:name=".user.FocusFansActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".user.SystemSettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.AboutUsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".user.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
+        <activity
             android:name=".scene.SelectPhotoOrCameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>

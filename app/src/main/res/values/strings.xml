@@ -8,6 +8,7 @@
     <string name="about_us">关于我们</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
+    <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
     <!-- 网络请求 -->
     <string name="host_failure" translatable="false">连接失败，请检查网络</string>
     <!-- PhotoFragment -->

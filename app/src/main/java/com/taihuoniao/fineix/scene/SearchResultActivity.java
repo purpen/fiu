@@ -19,6 +19,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
+ * 站内搜索界面
  * @author lilin
  *         created at 2016/4/21 17:56
  */
@@ -37,6 +38,7 @@ public class SearchResultActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        custom_head.setSearchShow(true);
         custom_head.setHeadRightTxtShow(true, R.string.cancel);
         custom_sliding_tab.setTextColor(getResources().getColor(R.color.color_333));
         custom_sliding_tab.setTypeface(null, Typeface.NORMAL);

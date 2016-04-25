@@ -164,9 +164,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         login.setOnClickListener(this);
         et_password = (EditText) findViewById(R.id.et_password);
         et_password.setOnClickListener(this);
-        et_password.setText("123456");
+//        et_password.setText("123456");
         phoneNum = (EditText) findViewById(R.id.et_phone);
-        phoneNum.setText("18310080981");
+//        phoneNum.setText("18310080981");
         phoneNum.setOnClickListener(this);
 
 //        phoneNum.addTextChangedListener(textWatcher);

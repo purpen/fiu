@@ -28,6 +28,7 @@ public class CustomHeadView extends RelativeLayout {
     private SearchView sv;
     private EditText et_search;
     private ImageButton ib_search;
+    private RelativeLayout rl_search;
     public CustomHeadView(Context context) {
         this(context, null);
     }
@@ -48,6 +49,7 @@ public class CustomHeadView extends RelativeLayout {
     }
 
     private void initViews(View view) {
+        rl_search = (RelativeLayout) view.findViewById(R.id.rl_search);
         head_goback = (ImageButton) view.findViewById(R.id.head_goback);
         iv_left = (ImageButton) view.findViewById(R.id.iv_left);
         et_search = (EditText) view.findViewById(R.id.et_search);
@@ -69,6 +71,14 @@ public class CustomHeadView extends RelativeLayout {
 
     public ImageButton getClearSearchBtn(){
         return ib_search;
+    }
+
+    public void setSearchShow(boolean isShow){
+        if (isShow){
+            rl_search.setVisibility(VISIBLE);
+        }else {
+            rl_search.setVisibility(GONE);
+        }
     }
 
     public EditText getSearchET(){

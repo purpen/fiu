@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f7f7f7"
+    android:orientation="vertical">
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_push_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_666"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16"
+        android:paddingTop="@dimen/dp10"
+        android:paddingBottom="@dimen/dp10"
+        android:textSize="@dimen/sp12"
+        android:text="@string/push_tip"
+        />
+
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_clear_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_to_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_welcome_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/RegisterAndLogin"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shap_redbutton_commit"
+        android:onClick="onLogin"
+        android:text="退出当前账户"
+        android:textColor="@android:color/white" />
+</LinearLayout>
