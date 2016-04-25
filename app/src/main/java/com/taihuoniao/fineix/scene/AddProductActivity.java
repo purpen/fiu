@@ -1,9 +1,12 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
@@ -17,12 +20,12 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 /**
  * Created by taihuoniao on 2016/3/22.
  */
-public class AddProductActivity extends BaseActivity {
+public class AddProductActivity extends BaseActivity implements View.OnClickListener{
     private GlobalTitleLayout titleLayout;
     private CustomSlidingTab slidingTab;
     private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
-
+    private RelativeLayout search;
 
     public AddProductActivity() {
         super(0);
@@ -55,8 +58,22 @@ public class AddProductActivity extends BaseActivity {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_product_title);
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
+        search = (RelativeLayout) findViewById(R.id.rl);
     }
 
+    @Override
+    protected void installListener() {
+        search.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.rl:
+                startActivity(new Intent(activity,SearchResultActivity.class));
+                return;
+        }
+    }
 
     private Handler handler = new Handler() {
         @Override

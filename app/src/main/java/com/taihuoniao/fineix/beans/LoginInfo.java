@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class LoginInfo implements Serializable {
     private static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
+    private long _id;
     private String success;
     private String message;
     private String account;
@@ -47,10 +48,20 @@ public class LoginInfo implements Serializable {
         sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         editor = sp.edit();
 
-
-
     }
 
+//    public static int getUserId(){
+//        String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+//
+//    }
+
+    public long getId(){
+        return _id;
+    }
+
+    public void setId(long id){
+        this._id=id;
+    }
     public static boolean isUserLogin(){
         String login_info = SPUtil.read(MainApplication.getContext(),DataConstants.LOGIN_INFO);
         if (TextUtils.isEmpty(login_info)){

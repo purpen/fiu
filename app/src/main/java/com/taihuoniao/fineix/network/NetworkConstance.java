@@ -5,7 +5,6 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class NetworkConstance {
-
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
@@ -60,4 +59,19 @@ public class NetworkConstance {
 
     //获得Banners
     public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
+
+    //获得产品列表
+    public static final String PRODUCTS_URL = BASE_URL + "/scene_product/getlist";
+
+    //获得关注列表和粉丝列表
+    public static final String FOCUS_FAVORITE_URL = BASE_URL + "/follow";
+
+    //关注操作
+    public static final String FOCUS_OPRATE_URL = BASE_URL + "/follow/ajax_follow";
+
+    //取消关注
+    public static final String CANCEL_FOCUS_URL = BASE_URL + "/follow/ajax_cancel_follow";
+
+    //意见反馈
+    public static final String SUGGESTION_URL = BASE_URL + "/gateway/feedback";
 }

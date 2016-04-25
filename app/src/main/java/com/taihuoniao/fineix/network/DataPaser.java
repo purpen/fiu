@@ -37,6 +37,7 @@ import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
@@ -716,8 +717,10 @@ public class DataPaser {
                     return;
                 }
 
+                //TODO 保存登录信息
                 SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
 
+                LogUtil.e("ResponseInfo",responseInfo.result);
 
                 //TODO 后期改造
                 LoginInfo loginInfo = null;
@@ -728,6 +731,7 @@ public class DataPaser {
                     JSONObject loginObj = obj.getJSONObject("data");
 
                     loginInfo = LoginInfo.getInstance();
+                    loginInfo.setId(obj.optLong("_id"));
                     loginInfo.setSuccess(obj.optString("success"));
                     loginInfo.setMessage(obj.optString("message"));
                     loginInfo.setAccount(loginObj.optString("account"));

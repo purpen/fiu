@@ -7,11 +7,11 @@ import android.view.View;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
-import com.taihuoniao.fineix.map.GeoCoderDemo;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.map.POIListActivity;
 import com.taihuoniao.fineix.map.SelectOrSearchQJActivity;
-import com.taihuoniao.fineix.order.OrderListActivity;
+import com.taihuoniao.fineix.scene.SearchResultActivity;
+import com.taihuoniao.fineix.user.FocusFansActivity;
 
 import butterknife.OnClick;
 
@@ -25,7 +25,7 @@ public class IndexFragment extends BaseFragment {
         return view;
     }
 
-    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj})
+    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
     protected void onClick(View v) {
         switch (v.getId()) {
             case R.id.location_btn:
@@ -52,13 +52,17 @@ public class IndexFragment extends BaseFragment {
                 startActivity(sendIntent);
                 break;
             case R.id.sliding_tab_btn:
-                activity.startActivity(new Intent(activity, OrderListActivity.class));
+//                activity.startActivity(new Intent(activity, OrderListActivity.class));
+                activity.startActivity(new Intent(activity, SearchResultActivity.class));
                 break;
             case R.id.geo:
                 activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
                 break;
             case R.id.select_search_qj:
                 activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
+                break;
+            case R.id.focus:
+                activity.startActivity(new Intent(activity, FocusFansActivity.class));
                 break;
         }
     }

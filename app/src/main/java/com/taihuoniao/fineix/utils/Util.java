@@ -100,7 +100,19 @@ public class Util {
 		makeToast(context, context.getString(resId));
 	}
 
+	public static float getScreenHeightDPI() {
+		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(displayMetrics);
+		return displayMetrics.ydpi;
+	}
 
+	public static float getScreenWidthDPI() {
+		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(displayMetrics);
+		return displayMetrics.xdpi;
+	}
 
 	public static int getScreenWidth() {
 			WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -108,6 +120,7 @@ public class Util {
 			wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.widthPixels;
 	}
+
 
 	public static int getScreenHeight() {
 		WindowManager wm = (WindowManager)MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);

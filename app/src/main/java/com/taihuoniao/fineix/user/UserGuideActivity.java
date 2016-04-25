@@ -35,7 +35,8 @@ public class UserGuideActivity extends BaseActivity {
     ImageView iv_welcome;
     private Intent intent;
     private boolean isGuide=false;
-    List<Integer> list;
+    private List<Integer> list;
+    public static String fromPage;
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -58,40 +59,31 @@ public class UserGuideActivity extends BaseActivity {
     protected void getIntentData() {
         super.getIntentData();
         intent = getIntent();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (scrollableView != null) {
-            scrollableView.stop();
+        if (intent.hasExtra(SystemSettingsActivity.class.getSimpleName())){
+            fromPage=intent.getStringExtra(SystemSettingsActivity.class.getSimpleName());
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (scrollableView != null) {
-            scrollableView.start();
-        }
-    }
-
     @Override
     protected void initView() {
-        iv_welcome.setImageResource(R.mipmap.login_or_regist);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                iv_welcome.setVisibility(View.GONE);
-                iv_welcome.setImageResource(0);
-                if (TextUtils.isEmpty(SPUtil.read(activity,DataConstants.GUIDE_TAG))) {
-                    SPUtil.write(activity,DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
-                    initGuide();
-                } else if(isTaskRoot()){
-                    goMainPage();
+        if (TextUtils.isEmpty(fromPage)){
+            iv_welcome.setVisibility(View.VISIBLE);
+            iv_welcome.setImageResource(R.mipmap.login_or_regist);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iv_welcome.setVisibility(View.GONE);
+                    iv_welcome.setImageResource(0);
+                    if (TextUtils.isEmpty(SPUtil.read(activity,DataConstants.GUIDE_TAG))) {
+                        SPUtil.write(activity,DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
+                        initGuide();
+                    } else if(isTaskRoot()){
+                        goMainPage();
+                    }
                 }
-            }
-        }, DataConstants.GUIDE_INTERVAL);
+            }, DataConstants.GUIDE_INTERVAL);
+        }else {
+            initGuide();
+        }
     }
 
     private void initGuide() {
@@ -101,7 +93,6 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
         scrollableView.setAdapter(new ViewPagerAdapter<Integer>(activity, list));
-        scrollableView.setSwipeScrollDurationFactor(8);
         scrollableView.showIndicators();
     }
 

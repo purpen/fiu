@@ -6,6 +6,9 @@ import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
 /**
@@ -303,4 +306,71 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
+    /**
+     * 获取产品列表
+     * @param page
+     * @param callBack
+     */
+    public static void getProductList(String page,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("page",String.valueOf(page));
+        params.addBodyParameter("size",String.valueOf(10));
+//        params.addBodyParameter("state",String.valueOf(1));
+        MD5Utils.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
+    }
+
+    /**
+     * 获取粉丝和可关注列表
+     * @param page
+     * @param size
+     * @param find_type
+     * @param callBack
+     */
+    public static void getFocusFansList(String page,String size,String find_type,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("page",page);
+        params.addBodyParameter("size",size);
+//        params.addBodyParameter("user_id", LoginInfo.getInstance().getId()+"");
+        params.addBodyParameter("user_id", 924808+"");
+//        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
+        params.addBodyParameter("find_type",find_type);
+        MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
+    }
+
+    /**
+     * 关注操作
+     * @param follow_id
+     * @param callBack
+     */
+    public static void focusOperate(String follow_id,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("follow_id",follow_id);
+        MD5Utils.sign(params, NetworkConstance.FOCUS_OPRATE_URL, callBack, false);
+    }
+
+    /**
+     * 取消关注
+     * @param follow_id
+     * @param callBack
+     */
+    public static void cancelFocusOperate(String follow_id,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("follow_id",follow_id);
+        MD5Utils.sign(params, NetworkConstance.CANCEL_FOCUS_URL, callBack, false);
+    }
+
+    /**
+     * 意见反馈
+     * @param content
+     * @param contact
+     * @param callBack
+     */
+    public static void commitSuggestion(String content,String contact,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("content", content);
+        params.addQueryStringParameter("contact", contact);
+        params.addQueryStringParameter("from_to","android");
+        params.addQueryStringParameter("kind","Fiu");
+        MD5Utils.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
+    }
 }

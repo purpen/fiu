@@ -25,7 +25,9 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -63,6 +65,15 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_nick;
     @Bind(R.id.tv_rank)
     TextView tv_rank;
+    @Bind(R.id.ll_qj)
+    LinearLayout ll_qj;
+    @Bind(R.id.ll_cj)
+    LinearLayout ll_cj;
+    @Bind(R.id.ll_focus)
+    LinearLayout ll_focus;
+    @Bind(R.id.ll_fans)
+    LinearLayout ll_fans;
+
     private User user;
     private ArrayList<ImgTxtItem> gvList;
     private ArrayList<ImgTxtItem> horizentalList;
@@ -80,6 +91,7 @@ public class MineFragment extends MyBaseFragment {
         super.onCreate(savedInstanceState);
         initData();
     }
+
 
     private void initData() {
         partnerName = activity.getResources().getStringArray(R.array.partner_name);
@@ -224,9 +236,27 @@ public class MineFragment extends MyBaseFragment {
         });
     }
 
-    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register})
+    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
     protected void onClick(View v) {
+        Intent intent=null;
         switch (v.getId()) {
+            case R.id.ll_qj:
+                Util.makeToast("我创建的情景");
+                //
+                break;
+            case R.id.ll_cj:
+                Util.makeToast("我创建的场景");
+                break;
+            case R.id.ll_focus:
+                intent= new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FOCUS_TYPE);
+                startActivity(intent);
+                break;
+            case R.id.ll_fans:
+                intent= new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
+                startActivity(intent);
+                break;
             case R.id.iv_detail:
                 Util.makeToast(activity, "个人详情");
                 break;
@@ -243,7 +273,7 @@ public class MineFragment extends MyBaseFragment {
                 Util.makeToast(activity, "合作伙伴");
                 break;
             case R.id.bt_register:
-                Intent intent = new Intent(getActivity(),
+                intent = new Intent(getActivity(),
                         OptRegisterLoginActivity.class);
 
                 startActivity(intent);
@@ -257,7 +287,14 @@ public class MineFragment extends MyBaseFragment {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Util.makeToast(activity, i + "");
+                switch (i){
+                    case 0:
+                        Util.makeToast("订单");
+                        break;
+                    case 9:
+                        startActivity(new Intent(activity, SystemSettingsActivity.class));
+                        break;
+                }
             }
         });
     }

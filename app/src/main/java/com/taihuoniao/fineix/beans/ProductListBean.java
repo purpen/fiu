@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by taihuoniao on 2016/4/13.
@@ -12,7 +13,7 @@ public class ProductListBean implements Serializable{
     private String market_price;
     private String love_count;
     private String cover_url;
-
+    public ArrayList<String> banner_asset;
 
     public String get_id() {
         return _id;

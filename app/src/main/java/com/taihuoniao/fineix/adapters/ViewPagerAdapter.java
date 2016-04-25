@@ -76,7 +76,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
         if (activity instanceof UserGuideActivity){
             if (position==size-1){
-                if (activity instanceof UserGuideActivity){
+                if (activity instanceof UserGuideActivity && TextUtils.isEmpty(UserGuideActivity.fromPage)){
                     if (position==size-1){
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override

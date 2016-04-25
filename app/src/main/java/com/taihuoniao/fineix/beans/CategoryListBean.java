@@ -1,9 +1,11 @@
 package com.taihuoniao.fineix.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by taihuoniao on 2016/4/13.
  */
-public class CategoryListBean {
+public class CategoryListBean implements Serializable{
     private String _id;
     private String title;
     private String name;
