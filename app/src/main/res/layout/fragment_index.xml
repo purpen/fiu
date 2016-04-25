@@ -1,51 +1,75 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
 
-    <Button
-        android:id="@+id/location_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="定位" />
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/fragment_index_pullrefreshview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/poi_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/location_btn"
-        android:text="POI" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
 
-    <Button
-        android:id="@+id/share_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/poi_btn"
-        android:text="分享" />
-    <Button
-        android:id="@+id/sliding_tab_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/share_btn"
-        android:text="滑动界面" />
-    <Button
-        android:id="@+id/geo"
-        android:layout_below="@+id/sliding_tab_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GEO" />
-    <Button
-        android:id="@+id/select_search_qj"
-        android:layout_below="@+id/geo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="选择和搜索情景" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/logo"/>
 
-    <Button
-        android:id="@+id/focus"
-        android:layout_below="@+id/select_search_qj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="关注" />
-</RelativeLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@mipmap/head_search"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:src="@mipmap/location_39"/>
+    </RelativeLayout>
+
+    <!--<Button-->
+    <!--android:id="@+id/location_btn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="定位" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/poi_btn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/location_btn"-->
+    <!--android:text="POI" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/share_btn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/poi_btn"-->
+    <!--android:text="分享" />-->
+    <!--<Button-->
+    <!--android:id="@+id/sliding_tab_btn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/share_btn"-->
+    <!--android:text="滑动界面" />-->
+    <!--<Button-->
+    <!--android:id="@+id/geo"-->
+    <!--android:layout_below="@+id/sliding_tab_btn"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="GEO" />-->
+    <!--<Button-->
+    <!--android:id="@+id/select_search_qj"-->
+    <!--android:layout_below="@+id/geo"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="选择和搜索情景" />-->
+</FrameLayout>

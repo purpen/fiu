@@ -249,7 +249,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (selectList == null) {
+                if (selectList == null || selectList.size() == 0) {
                     Toast.makeText(CreateSceneActivity.this, "请添加标签", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -260,53 +260,55 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 dialog.show();
                 StringBuilder tags = new StringBuilder();
                 for (UsedLabelBean each : selectList) {
-                    tags.append(",").append(each.getTitle_cn());
+                    tags.append(",").append(each.get_id());
                 }
                 if (tags.length() > 0) {
                     tags.deleteCharAt(0);
                 }
-                StringBuilder product_id = new StringBuilder();
-                StringBuilder product_title = new StringBuilder();
-                StringBuilder product_price = new StringBuilder();
-                StringBuilder product_x = new StringBuilder();
-                StringBuilder product_y = new StringBuilder();
-                for (TagItem each : MainApplication.tagInfoList) {
-                    product_id.append(",").append(each.getId());
-                    product_title.append(",").append(each.getName());
-                    product_price.append(",").append(each.getPrice());
-                    product_x.append(",").append(each.getX());
-                    product_y.append(",").append(each.getY());
+                if (MainApplication.tag == 1) {
+                    StringBuilder product_id = new StringBuilder();
+                    StringBuilder product_title = new StringBuilder();
+                    StringBuilder product_price = new StringBuilder();
+                    StringBuilder product_x = new StringBuilder();
+                    StringBuilder product_y = new StringBuilder();
+                    for (TagItem each : MainApplication.tagInfoList) {
+                        product_id.append(",").append(each.getId());
+                        product_title.append(",").append(each.getName());
+                        product_price.append(",").append(each.getPrice());
+                        product_x.append(",").append(each.getX());
+                        product_y.append(",").append(each.getY());
+                    }
+                    if (product_id.length() > 0) {
+                        product_id.deleteCharAt(0);
+                    }
+                    if (product_title.length() > 0) {
+                        product_title.deleteCharAt(0);
+                    }
+                    if (product_price.length() > 0) {
+                        product_price.deleteCharAt(0);
+                    }
+                    if (product_x.length() > 0) {
+                        product_x.deleteCharAt(0);
+                    }
+                    if (product_y.length() > 0) {
+                        product_y.deleteCharAt(0);
+                    }
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                    String tmp = Base64Utils.encodeLines(stream.toByteArray());
+                    DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
+                            5 + "", tags.toString(), product_id.toString(), product_title.toString(),
+                            product_price.toString(), product_x.toString(), product_y.toString(), city + district
+                                    + addressTv.getText().toString(),
+                            lat + "", lng + "",
+                            handler);
+                } else if (MainApplication.tag == 2) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                    String tmp = Base64Utils.encodeLines(stream.toByteArray());
+                    DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
+                            tags.toString(), city + district + addressTv.getText().toString(), tmp, lat + "", lng + "", handler);
                 }
-                if (product_id.length() > 0) {
-                    product_id.deleteCharAt(0);
-                }
-                if (product_title.length() > 0) {
-                    product_title.deleteCharAt(0);
-                }
-                if (product_price.length() > 0) {
-                    product_price.deleteCharAt(0);
-                }
-                if (product_x.length() > 0) {
-                    product_x.deleteCharAt(0);
-                }
-                if (product_y.length() > 0) {
-                    product_y.deleteCharAt(0);
-                }
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-                String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                if (MainApplication.tag == 2) {
-                    Toast.makeText(CreateSceneActivity.this, "上传情景，暂无接口", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                        5 + "", tags.toString(), product_id.toString(), product_title.toString(),
-                        product_price.toString(), product_x.toString(), product_y.toString(), city  + district
-                                + addressTv.getText().toString()
-                        ,
-                        lat + "", lng + "",
-                        handler);
                 break;
             case R.id.title_back:
                 showDialog();
@@ -357,7 +359,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String district = data.getStringExtra("district");
                     if (poiInfo != null) {
                         addressTv.setText(poiInfo.name);
-                        areaTv.setText(district + "，" + city);
+                        areaTv.setText(String.format("%s，%s", district, city));
                         lng = poiInfo.location.longitude;
                         lat = poiInfo.location.latitude;
                     }
@@ -397,7 +399,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void click(int postion) {
         addressTv.setText(poiInfoList.get(postion).name);
-        areaTv.setText(district + "，" + city);
+        areaTv.setText(String.format("%s，%s", district, city));
         lng = poiInfoList.get(postion).location.longitude;
         lat = poiInfoList.get(postion).location.latitude;
     }
@@ -406,6 +408,23 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.CREATE_QINGJING:
+                    dialog.dismiss();
+                    NetBean netBean1 = (NetBean) msg.obj;
+                    Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (netBean1.isSuccess()) {
+                        if (SelectPhotoOrCameraActivity.instance != null) {
+                            SelectPhotoOrCameraActivity.instance.finish();
+                        }
+                        if (CropPictureActivity.instance != null) {
+                            CropPictureActivity.instance.finish();
+                        }
+                        if (EditPictureActivity.instance != null) {
+                            EditPictureActivity.instance.finish();
+                        }
+                        CreateSceneActivity.this.finish();
+                    }
+                    break;
                 case DataConstants.CREATE_SCENE:
                     dialog.dismiss();
                     NetBean netBean = (NetBean) msg.obj;

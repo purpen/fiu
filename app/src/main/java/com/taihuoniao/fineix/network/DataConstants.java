@@ -57,6 +57,10 @@ public class DataConstants {
     public static final int QINGJING_LIST = 75;
     //提交评论
     public static final int SEND_COMMENT = 74;
+    //创建情景
+    public static final int CREATE_QINGJING = 73;
+    //情景详情
+    public static final int QINGJING_DETAILS = 72;
 
 
 

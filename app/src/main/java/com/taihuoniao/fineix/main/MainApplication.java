@@ -78,6 +78,7 @@ public class MainApplication extends Application {
     public static IsLogin getIsLoginInfo() {
         return IsLogin.getInstance();
     }
+
     public int getScreenHeight() {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
@@ -106,7 +107,6 @@ public class MainApplication extends Application {
 //                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)
                 .build();
-
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.NORM_PRIORITY - 2)
                 .defaultDisplayImageOptions(defaultOptions)

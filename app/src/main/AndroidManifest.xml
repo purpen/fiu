@@ -130,6 +130,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
+            android:name=".qingjingOrSceneDetails.QingjingDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".qingjingOrSceneDetails.AllQingjingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".qingjingOrSceneDetails.CommentListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

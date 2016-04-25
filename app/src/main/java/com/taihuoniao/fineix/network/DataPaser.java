@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -28,6 +30,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -67,7 +70,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     productBean.setSuccess(job.optBoolean("success"));
                     productBean.setMessage(job.optString("message"));
-                    productBean.setStatus(job.optString("status"));
+//                    productBean.setStatus(job.optString("status"));
                     if (productBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");
@@ -113,7 +116,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     jdDetailsBean.setSuccess(job.optBoolean("success"));
                     jdDetailsBean.setMessage(job.optString("message"));
-                    jdDetailsBean.setStatus(job.optString("status"));
+//                    jdDetailsBean.setStatus(job.optString("status"));
                     if (jdDetailsBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONArray listproductbase_result = data.getJSONArray("listproductbase_result");
@@ -153,7 +156,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     tbDetailsBean.setSuccess(job.optBoolean("success"));
                     tbDetailsBean.setMessage(job.optString("message"));
-                    tbDetailsBean.setStatus(job.optString("status"));
+//                    tbDetailsBean.setStatus(job.optString("status"));
                     if (tbDetailsBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONObject results = data.getJSONObject("results");
@@ -182,17 +185,80 @@ public class DataPaser {
 
     //情景
     //点赞，订阅，收藏，关注通用列表
-    public static void commonList(String page, String size, String id, String type, String event, final Handler handler) {
+    public static void commonList(String page, String size, String id, final String type, String event, final Handler handler) {
         ClientDiscoverAPI.commonList(page, size, id, type, event, new RequestCallBack<String>() {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
-                Gson gson = new Gson();
-                Type type = new TypeToken<CommonBean>() {
-                }.getType();
-                msg.obj = gson.fromJson(responseInfo.result, type);
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommonBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "数据异常", Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //情景
+    //情景新增
+    public static void createQingjing(String id, String title, String des, String tags, String address, String tmp, String lat, String lng, final Handler handler) {
+        ClientDiscoverAPI.createQingjing(id, title, des, tags, address, tmp, lat, lng, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CREATE_QINGJING;
+                NetBean netBean = new NetBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    netBean.setSuccess(job.optBoolean("success"));
+                    netBean.setMessage(job.optString("message"));
+//                    netBean.setStatus(job.optString("status"));
+                    msg.obj = netBean;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //情景
+    //情景详情
+    public static void qingjingDetails(String id, final Handler handler) {
+        ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.QINGJING_DETAILS;
+                msg.obj = new QingjingDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingDetailBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
                 handler.sendMessage(msg);
             }
 
@@ -210,14 +276,17 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingList(page, stick, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_LIST;
-                Gson gson = new Gson();
-                Type type = new TypeToken<QingJingListBean>() {
-                }.getType();
-                msg.obj = gson.fromJson(responseInfo.result, type);
+                msg.obj = new QingJingListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingJingListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
                 handler.sendMessage(msg);
             }
 
@@ -245,7 +314,7 @@ public class DataPaser {
                             JSONObject job = new JSONObject(responseInfo.result);
                             netBean.setSuccess(job.optBoolean("success"));
                             netBean.setMessage(job.optString("message"));
-                            netBean.setStatus(job.optString("status"));
+//                            netBean.setStatus(job.optString("status"));
                             msg.obj = netBean;
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -274,7 +343,7 @@ public class DataPaser {
                     JSONObject jsonObject = new JSONObject(responseInfo.result);
                     sceneList.setSuccess(jsonObject.optBoolean("success"));
                     sceneList.setMessage(jsonObject.optString("message"));
-                    sceneList.setStatus(jsonObject.optString("status"));
+//                    sceneList.setStatus(jsonObject.optString("status"));
                     if (sceneList.isSuccess()) {
                         JSONObject data = jsonObject.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");
@@ -340,93 +409,91 @@ public class DataPaser {
     //场景详情
     public static void sceneDetails(String id, final Handler handler) {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.SCENE_DETAILS;
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Log.e("<<<", responseInfo.result);
+                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+                        Message msg = handler.obtainMessage();
+                        msg.what = DataConstants.SCENE_DETAILS;
 //                Gson gson = new Gson();
 //                Type type = new TypeToken<SceneDetails>() {
 //                }.getType();
 //                SceneDetails sceneDetails = gson.fromJson(responseInfo.result, type);
-                SceneDetails sceneDetails = new SceneDetails();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseInfo.result);
-                    sceneDetails.setSuccess(jsonObject.optBoolean("success"));
-                    sceneDetails.setMessage(jsonObject.optString("message"));
-                    sceneDetails.setStatus(jsonObject.optString("status"));
-                    if (sceneDetails.isSuccess()) {
-                        JSONObject data = jsonObject.getJSONObject("data");
-                        sceneDetails.set_id(data.optString("_id"));
-                        sceneDetails.setTitle(data.optString("title"));
-                        sceneDetails.setDes(data.optString("des"));
-                        List<Integer> tagsList = new ArrayList<Integer>();
-                        JSONArray tags = data.getJSONArray("tags");
-                        for (int i = 0; i < tags.length(); i++) {
-                            int in = tags.optInt(i);
-                            tagsList.add(in);
+                        SceneDetails sceneDetails = new SceneDetails();
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseInfo.result);
+                            sceneDetails.setSuccess(jsonObject.optBoolean("success"));
+                            sceneDetails.setMessage(jsonObject.optString("message"));
+//                            sceneDetails.setStatus(jsonObject.optString("status"));
+                            if (sceneDetails.isSuccess()) {
+                                JSONObject data = jsonObject.getJSONObject("data");
+                                sceneDetails.set_id(data.optString("_id"));
+                                sceneDetails.setTitle(data.optString("title"));
+                                sceneDetails.setDes(data.optString("des"));
+                                List<Integer> tagsList = new ArrayList<Integer>();
+                                JSONArray tags = data.getJSONArray("tags");
+                                for (int i = 0; i < tags.length(); i++) {
+                                    int in = tags.optInt(i);
+                                    tagsList.add(in);
+                                }
+                                List<String> tagsTitleList = new ArrayList<String>();
+                                JSONArray tagsTitle = data.getJSONArray("tag_titles");
+                                for (int i = 0; i < tagsTitle.length(); i++) {
+                                    String str = tagsTitle.optString(i, null);
+                                    tagsTitleList.add(str);
+                                }
+                                sceneDetails.setTag_titles(tagsTitleList);
+                                sceneDetails.setTags(tagsList);
+                                List<SceneDetails.Product> products = new ArrayList<SceneDetails.Product>();
+                                JSONArray product = data.getJSONArray("product");
+                                for (int i = 0; i < product.length(); i++) {
+                                    JSONObject job = product.getJSONObject(i);
+                                    SceneDetails.Product pro = new SceneDetails.Product();
+                                    pro.setId(job.optString("id"));
+                                    pro.setTitle(job.optString("title"));
+                                    pro.setPrice(job.optString("price"));
+                                    pro.setX(job.optDouble("x"));
+                                    pro.setY(job.optDouble("y"));
+                                    products.add(pro);
+                                }
+                                sceneDetails.setProduct(products);
+                                sceneDetails.setAddress(data.optString("address"));
+                                sceneDetails.setView_count(data.optString("view_count"));
+                                sceneDetails.setLove_count(data.optString("love_count"));
+                                sceneDetails.setComment_count(data.optString("comment_count"));
+                                sceneDetails.setCreated_on(data.optString("created_on"));
+                                sceneDetails.setCover_url(data.optString("cover_url"));
+                                sceneDetails.setScene_title(data.optString("scene_title"));
+                                SceneDetails.UserInfo userInfo = new SceneDetails.UserInfo();
+                                JSONObject user_info = data.getJSONObject("user_info");
+                                userInfo.setUser_id(user_info.optString("user_id"));
+                                userInfo.setNickname(user_info.optString("nickname"));
+                                userInfo.setAvatar_url(user_info.optString("avatar_url"));
+                                userInfo.setSummary(user_info.optString("summary"));
+                                userInfo.setUser_rank(user_info.optString("user_rank"));
+                                sceneDetails.setUser_info(userInfo);
+                            }
+                        } catch (
+                                JSONException e
+                                )
+
+                        {
+                            Log.e("<<<", "解析异常");
                         }
-                        List<String> tagsTitleList = new ArrayList<String>();
-//                        JSONArray tagsTitle = data.getJSONArray("tags_title");
-//                        for (int i = 0; i < tagsTitle.length(); i++) {
-//                            String str = tagsTitle.optString(i, null);
-//                            tagsTitleList.add(str);
-//                        }
-                        sceneDetails.setTag_titles(tagsTitleList);
-                        sceneDetails.setTags(tagsList);
-                        List<SceneDetails.Product> products = new ArrayList<SceneDetails.Product>();
-                        JSONArray product = data.getJSONArray("product");
-                        for (int i = 0; i < product.length(); i++) {
-                            JSONObject job = product.getJSONObject(i);
-                            SceneDetails.Product pro = new SceneDetails.Product();
-                            pro.setId(job.optString("id"));
-                            pro.setTitle(job.optString("title"));
-                            pro.setPrice(job.optString("price"));
-                            pro.setX(job.optString("x"));
-                            pro.setY(job.optString("y"));
-                            products.add(pro);
-                        }
-                        sceneDetails.setProduct(products);
-                        sceneDetails.setAddress(data.optString("address"));
-                        sceneDetails.setView_count(data.optString("view_count"));
-                        sceneDetails.setLove_count(data.optString("love_count"));
-                        sceneDetails.setComment_count(data.optString("comment_count"));
-                        sceneDetails.setCreated_on(data.optString("created_on"));
-                        sceneDetails.setCover_url(data.optString("cover_url"));
-                        sceneDetails.setScene_title(data.optString("scene_title"));
-                        SceneDetails.UserInfo userInfo = new SceneDetails.UserInfo();
-                        JSONObject user_info = data.getJSONObject("user_info");
-                        userInfo.setUser_id(user_info.optString("user_id"));
-                        userInfo.setNickname(user_info.optString("nickname"));
-                        userInfo.setAvatar_url(user_info.optString("avatar_url"));
-                        userInfo.setSummary(user_info.optString("summary"));
-                        userInfo.setUser_rank(user_info.optString("user_rank"));
-                        sceneDetails.setUser_info(userInfo);
+
+                        msg.obj = sceneDetails;
+                        handler.sendMessage(msg);
                     }
-            }
 
-            catch(
-            JSONException e
-            )
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                        handler.sendEmptyMessage(DataConstants.NET_FAIL);
+                    }
+                }
 
-            {
-                Log.e("<<<", "解析异常");
-            }
-
-            msg.obj=sceneDetails;
-            handler.sendMessage(msg);
-        }
-
-        @Override
-        public void onFailure (HttpException error, String msg){
-            Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-            handler.sendEmptyMessage(DataConstants.NET_FAIL);
-        }
+        );
     }
-
-    );
-}
 
     //标签
     //最近使用的标签
@@ -441,7 +508,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     usedLabel.setSuccess(job.optBoolean("success"));
                     usedLabel.setMessage(job.optString("message"));
-                    usedLabel.setStatus(job.optString("status"));
+//                    usedLabel.setStatus(job.optString("status"));
                     if (usedLabel.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         usedLabel.setHas_tag(data.optInt("has_tag"));
@@ -496,7 +563,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     allLabel.setSuccess(job.optBoolean("success"));
                     allLabel.setMessage(job.optString("message"));
-                    allLabel.setStatus(job.optString("status"));
+//                    allLabel.setStatus(job.optString("status"));
                     if (allLabel.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONObject object = data.getJSONObject("1");
@@ -567,7 +634,7 @@ public class DataPaser {
                 try {
                     JSONObject job = new JSONObject(responseInfo.result);
                     hotLabel.setSuccess(job.optBoolean("success"));
-                    hotLabel.setStatus(job.optString("status"));
+//                    hotLabel.setStatus(job.optString("status"));
                     hotLabel.setMessage(job.optString("message"));
                     if (hotLabel.isSuccess()) {
                         List<HotLabelBean> hotLabelBeanList = new ArrayList<HotLabelBean>();
@@ -622,7 +689,7 @@ public class DataPaser {
                     JSONObject job = new JSONObject(responseInfo.result);
                     categoryBean.setSuccess(job.optBoolean("success"));
                     categoryBean.setMessage(job.optString("message"));
-                    categoryBean.setStatus(job.optString("status"));
+//                    categoryBean.setStatus(job.optString("status"));
                     if (categoryBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");

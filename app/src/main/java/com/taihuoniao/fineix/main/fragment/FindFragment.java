@@ -8,11 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,13 +46,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.ListViewForScrollView;
-import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -59,50 +59,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, MyScrollView.OnScrollListener, View.OnClickListener, EditRecyclerAdapter.ItemClick {
-    //    private ScrollView scrollView;
-    private MyScrollView scrollView;
+public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
     private static final String PAGE_NAME = "app_index_slide"; //TODO 换成场景banner
-    private int lastScrollY = -1;
-    private int lastScrollViewMesureHeight = -1;
-    private RelativeLayout bannerRelative;
-    private TextView allQingjingTv;
-    private RecyclerView qingjingRecycler;
-    private List<QingJingListBean.QingJingItem> qingjingList;
-    private JingQingjingRecyclerAdapter jingQingjingRecyclerAdapter;
-    private AbsoluteLayout absoluteLayout;
-    private RecyclerView labelRecycler;
-    private ListViewForScrollView sceneListView;
-    private WaittingDialog dialog;
     //标签列表
     private List<HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //图片加载
     private DisplayImageOptions options;
-
-    private ScrollableView scrollableView;
     private ViewPagerAdapter viewPagerAdapter;
     //场景列表
     private int currentPage = 1;//页码
     private double distance = 5000;//距离
     private double[] location = null;
+    //界面下的控件
+    private ListView sceneListView;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
-    //是否刷新适配器
-    private boolean isNotify = false;
+    private ProgressBar progressBar;
+    //HeaderView中的控件
+    private ScrollableView scrollableView;
+    private TextView allQingjingTv;
+    private RecyclerView qingjingRecycler;
+    private List<QingJingListBean.QingJingItem> qingjingList;
+    private JingQingjingRecyclerAdapter jingQingjingRecyclerAdapter;
+    private RecyclerView labelRecycler;
+    private AbsoluteLayout absoluteLayout;
+    //网络请求对话框
+    private WaittingDialog dialog;
+    //listview分页加载
+    private int lastSavedFirstVisibleItem = -1;
+    private int lastTotalItem = -1;
 
 
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
-        scrollView = (MyScrollView) view.findViewById(R.id.fragment_find_scrollview);
-        scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
-        allQingjingTv = (TextView) view.findViewById(R.id.fragment_find_allqingjing);
-        qingjingRecycler = (RecyclerView) view.findViewById(R.id.fragment_find_qingjing_recycler);
-        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_find_labelrecycler);
-        absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_find_absolute);
-        sceneListView = (ListViewForScrollView) view.findViewById(R.id.fragment_find_scenelistview);
+        sceneListView = (ListView) view.findViewById(R.id.fragment_find_scenelistview);
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_find_progress);
+        View headerView = View.inflate(getActivity(), R.layout.header_fragment_find, null);
+        scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
+        allQingjingTv = (TextView) headerView.findViewById(R.id.fragment_find_allqingjing);
+        qingjingRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_qingjing_recycler);
+        labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
+        absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
+        sceneListView.addHeaderView(headerView);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -112,7 +113,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
-        scrollView.setOnScrollListener(this);
         allQingjingTv.setOnClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -134,6 +134,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         sceneList = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList);
         sceneListView.setAdapter(sceneListViewAdapter);
+        sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
         MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
             @Override
@@ -233,25 +234,21 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.SCENE_LIST:
                     dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     SceneList netSceneList = (SceneList) msg.obj;
                     if (netSceneList.isSuccess()) {
                         if (currentPage == 1) {
                             sceneList.clear();
-//                            sceneList.addAll(netSceneList.getSceneListBeanList());
-//                            sceneListViewAdapter.notifyDataSetChanged();
+                            lastSavedFirstVisibleItem = -1;
+                            lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
                         sceneListViewAdapter.notifyDataSetChanged();
-//                        else if (currentPage > 1) {
-//                            sceneList.addAll(netSceneList.getSceneListBeanList());
-//                            isNotify = true;
-//                        }
                     }
-                    //添加大小不一的头像
-//                    addImgToAbsolute();
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     break;
             }
         }
@@ -379,20 +376,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
     @Override
-    public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
-        if (scrollView.getHeight() > 0 && sceneListView.getMeasuredHeight() > 0
-                && (scrollView.getScrollY() + scrollView.getHeight() + MainApplication.getContext().getScreenWidth() * 16 / 9 >= scrollView.getChildAt(0).getMeasuredHeight())) {
-            if (scrollView.getScrollY() != lastScrollY && lastScrollViewMesureHeight != scrollView.getChildAt(0).getMeasuredHeight()) {
-                lastScrollY = scrollView.getScrollY();
-                lastScrollViewMesureHeight = scrollView.getChildAt(0).getMeasuredHeight();
-                //网络请求
-                currentPage++;
-                DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-            }
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_find_allqingjing:
@@ -403,7 +386,26 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     public void click(int postion) {
+        Intent intent = new Intent(getActivity(), QingjingDetailActivity.class);
+        intent.putExtra("id", qingjingList.get(postion).get_id());
+        startActivity(intent);
+    }
 
-        Toast.makeText(getActivity(), "点击了情景" + postion, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (visibleItemCount > 0 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+                && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
+                && location != null) {
+            lastSavedFirstVisibleItem = firstVisibleItem;
+            lastTotalItem = totalItemCount;
+            currentPage++;
+            progressBar.setVisibility(View.VISIBLE);
+            DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+        }
     }
 }
