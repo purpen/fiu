@@ -153,6 +153,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 if (TextUtils.isEmpty(editText.getText())) {
                     return;
                 }
+                Toast.makeText(CommentListActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
                 dialog.show();
                 DataPaser.sendComment(target_id, editText.getText().toString(), type, handler);
                 break;

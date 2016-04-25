@@ -105,6 +105,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private String picName;
     public static EditPictureActivity instance = null;
     private ImageLoader imageLoader;
+    //图片加载完毕之后的宽高
+    private int picWidth, picHeight;
 
     public EditPictureActivity() {
         super(0);
@@ -135,21 +137,20 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 currentBitmap = result;
                 gpuImageView.setImage(result);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-//                RelativeLayout.LayoutParams containerLp = (RelativeLayout.LayoutParams) gpuRelative.getLayoutParams();
-                Log.e("<<<", "gpuImageView.getWidth = " + gpuImageView.getWidth() + ",getHeight = " + gpuImageView.getHeight());
                 if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
-//                    lp.width = gpuImageView.getHeight() * 3 / 4;
-                    lp.height = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
+                    int containerHeight = gpuRelative.getHeight();
+                    int systemHeight = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
+                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
                     lp.width = lp.height * 3 / 4;
-//                    containerLp.width = gpuRelative.getHeight() * 3 / 4;
                 } else {
-                    lp.width = MainApplication.getContext().getScreenWidth();
+                    int containerWidth = gpuRelative.getWidth();
+                    int systemWidth = MainApplication.getContext().getScreenWidth();
+                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
                     lp.height = lp.width * 4 / 3;
-//                    containerLp.height = gpuRelative.getWidth() * 4 / 3;
                 }
-                Log.e("<<<", "lp.width = " + lp.width + ",height = " + lp.height);
+                picWidth = lp.width;
+                picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
-//                gpuRelative.setLayoutParams(containerLp);
                 initEditView();
 
             }
@@ -266,12 +267,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         View overView = View.inflate(EditPictureActivity.this,
                 R.layout.view_over, null);
         mImageView = (MyImageViewTouch) overView.findViewById(R.id.view_over_mimg);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-//        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(params.height * 9 / 16, params.height);
-//        p.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//        Log.e("<<<","p.height = "+p.height+",width = "+p.width);
-        overView.setLayoutParams(params);
-        mImageView.setLayoutParams(params);
+        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(picHeight * 9 / 16, picHeight);
+        p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        overView.setLayoutParams(p);
+        mImageView.setLayoutParams(p);
         gpuRelative.addView(overView);
         mImageView.setOnDrawableEventListener(new MyImageViewTouch.OnDrawableEventListener() {
             @Override
@@ -324,18 +323,14 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         }
         //链接的默认位置
         int left = MainApplication.getContext().getScreenWidth() / 2;
-        int top = mImageView.getMeasuredHeight() / 2;
+        int top = mImageView.getHeight() / 2;
         if (labels.size() == 0 && left == 0 && top == 0) {
-            left = mImageView.getWidth() / 2 - 10;
+            left = gpuRelative.getWidth() / 2 - 10;
             top = mImageView.getHeight() / 2;
         }
         LabelView label = new LabelView(EditPictureActivity.this);
         label.init(tagItem);
         EffectUtil.addLabelEditable(mImageView, gpuRelative, label, left, top);
-//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) label.getLayoutParams();
-//        lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//        label.setLayoutParams(lp);
-
         labels.add(label);
     }
 
@@ -344,15 +339,12 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
-//                Toast.makeText(EditPictureActivity.this, "把图片施加滤镜效果存到内存中，并传递标签数据到下个界面", Toast.LENGTH_SHORT).show();
-
                 dialog.show();
                 savePicture();
                 break;
             case R.id.pop_edit_delete:
                 EffectUtil.removeLabelEditable(mImageView, gpuRelative, labelView);
                 labels.remove(labelView);
-                Log.e("<<<", "labels.size = " + labels.size());
                 popupWindow.dismiss();
                 break;
             case R.id.pop_edit_edit:
@@ -476,6 +468,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             List<TagItem> tagInfoList = new ArrayList<TagItem>();
             for (LabelView label : labels) {
                 tagInfoList.add(label.getTagInfo());
+                Log.e("<<<", label.getTagInfo().getX() + "," + label.getTagInfo().getY());
             }
             MainApplication.tagInfoList = tagInfoList;
             //向图片中存储位置信息
@@ -539,6 +532,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                             dialog.dismiss();
                             //是自动添加标签还是后添加
                             TagItem tag = new TagItem(productListBean.getTitle(), productListBean.getSale_price());
+                            tag.setId(productListBean.get_id());
                             tag.setType(1);
                             addLabel(tag);
                             EffectUtil.addStickerImage(mImageView, EditPictureActivity.this, loadedImage);

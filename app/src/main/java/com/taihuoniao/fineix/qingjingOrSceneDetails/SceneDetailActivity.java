@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +23,14 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.TimestampToTimeUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
+import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -41,6 +44,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //上个界面传递过来的场景id
     private String id;
     //界面下的控件
+    private RelativeLayout imgRelative;
     private ImageView backgroundImg;
     private TextView changjingTitle;
     private TextView suoshuqingjingTv;
@@ -72,6 +76,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private WaittingDialog dialog;
     //图片加载
     private DisplayImageOptions options;
+    //图片上的商品
+    private List<SceneDetails.Product> productList;
+    //是否显示标签和价格的标识
+    private boolean isShowAll = false;
 
 
     public SceneDetailActivity() {
@@ -81,6 +89,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initView() {
         setContentView(R.layout.activity_scenedetails);
+        imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
         changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
         suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
@@ -122,6 +131,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
+        backgroundImg.setOnClickListener(this);
         commentImg.setOnClickListener(this);
         commentNum.setOnClickListener(this);
         moreImg.setOnClickListener(this);
@@ -188,6 +198,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     SceneDetails netSceneDetails = (SceneDetails) msg.obj;
                     if (netSceneDetails.isSuccess()) {
                         ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg);
+                        //场景上的商品
+                        productList = netSceneDetails.getProduct();
+                        //添加商品
+                        addProductToImg();
                         changjingTitle.setText(netSceneDetails.getTitle());
                         suoshuqingjingTv.setText(netSceneDetails.getScene_title());
                         locationTv.setText(netSceneDetails.getAddress());
@@ -216,6 +230,47 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     };
 
+    private void addProductToImg() {
+        if (productList == null || productList.size() == 0) {
+            return;
+        }
+        isShowAll = false;
+        for (final SceneDetails.Product product : productList) {
+            Log.e("<<<", productList.toString());
+            final LabelView labelView = new LabelView(SceneDetailActivity.this);
+            TagItem tagItem = new TagItem();
+            tagItem.setId(product.getId());
+            tagItem.setName(product.getTitle());
+            tagItem.setPrice(product.getPrice());
+            labelView.init(tagItem);
+            final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            labelView.pointOrAll(product.getX() <= 0.5, isShowAll);
+            if (product.getX() > 0.5) {
+                labelView.post(new Runnable() {
+                    @Override
+                    public void run() {
+//                        Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
+                        labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
+                        labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
+                    }
+                });
+            } else {
+//                Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
+                labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
+                labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
+            }
+            labelView.setLayoutParams(labelLp);
+            imgRelative.addView(labelView);
+            labelView.wave();
+            labelView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(SceneDetailActivity.this, "跳转到商品详情", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     private void addLabelToLinear(List<String> tagsTitleList, List<Integer> tagsList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(SceneDetailActivity.this, R.layout.view_horizontal_label_item, null);
@@ -233,9 +288,24 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_scenedetails_background:
+                if (isShowAll) {
+                    isShowAll = false;
+                } else {
+                    isShowAll = true;
+                }
+                for (int i = 0; i < imgRelative.getChildCount(); i++) {
+                    View view = imgRelative.getChildAt(i);
+                    if (view instanceof LabelView) {
+                        LabelView labelView = (LabelView) view;
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        labelView.pointOrAll(lp.leftMargin <= backgroundImg.getWidth() / 2, isShowAll);
+                    }
+                }
+                break;
             case R.id.activity_scenedetails_love:
             case R.id.activity_scenedetails_lovetv:
-                Toast.makeText(SceneDetailActivity.this, "点赞或取消点赞", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SceneDetailActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_commentimg:
             case R.id.activity_scenedetails_commentcount:
@@ -267,6 +337,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         //        cancelNet();
+        for (int i = 0; i < imgRelative.getChildCount(); i++) {
+            View view = imgRelative.getChildAt(i);
+            if (view instanceof LabelView) {
+                LabelView labelView = (LabelView) view;
+                labelView.stopAnim();
+            }
+        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;

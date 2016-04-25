@@ -238,8 +238,19 @@ public class SceneDetails extends NetBean {
         private String id;
         private String title;
         private String price;
-        private String x;
-        private String y;
+        private double x;
+        private double y;
+
+        @Override
+        public String toString() {
+            return "Product{" +
+                    "id='" + id + '\'' +
+                    ", title='" + title + '\'' +
+                    ", price='" + price + '\'' +
+                    ", x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
 
         public String getId() {
             return id;
@@ -265,19 +276,19 @@ public class SceneDetails extends NetBean {
             this.title = title;
         }
 
-        public String getX() {
+        public double getX() {
             return x;
         }
 
-        public void setX(String x) {
+        public void setX(double x) {
             this.x = x;
         }
 
-        public String getY() {
+        public double getY() {
             return y;
         }
 
-        public void setY(String y) {
+        public void setY(double y) {
             this.y = y;
         }
     }

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.Addon;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
@@ -159,11 +158,11 @@ public class EffectUtil {
         return realDis / baseWidth;
     }
 
-    public static int getRealDis(float standardDis, float baseWidth) {
-        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
-        float radio = imageWidth / 1242;
-        return (int) (radio * standardDis);
-    }
+//    public static int getRealDis(float standardDis, float baseWidth) {
+//        float imageWidth = baseWidth <= 0 ? MainApplication.getContext().getScreenWidth() : baseWidth;
+//        float radio = imageWidth / 1242;
+//        return (int) (radio * standardDis);
+//    }
 
     /**
      * 使标签在Overlay上可以移动

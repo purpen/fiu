@@ -105,6 +105,7 @@
 
         <jp.co.cyberagent.android.gpuimage.GPUImageView
             android:id="@+id/activity_edit_gpuimage"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />

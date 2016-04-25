@@ -17,13 +17,13 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/activity_scenedetails_imgrelative"
+                android:id="@+id/activity_qingjingdetail_imgrelative"
                 android:layout_width="match_parent"
                 android:layout_height="640dp"
                 >
 
                 <ImageView
-                    android:id="@+id/activity_scenedetails_background"
+                    android:id="@+id/activity_qingjingdetail_background"
                     android:layout_width="match_parent"
                     android:layout_height="640dp"
                     android:scaleType="centerCrop"
@@ -38,45 +38,29 @@
                     >
 
                     <TextView
-                        android:id="@+id/activity_scenedetails_changjing_title"
+                        android:id="@+id/activity_qingjingdetail_qingjing_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:background="@mipmap/scene_title_background"
+                        android:background="#000000"
                         android:gravity="center_vertical"
                         android:lineSpacingExtra="8dp"
                         android:maxLines="2"
-                        android:maxWidth="265dp"
+                        android:maxWidth="188dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="5dp"
-                        android:text="最美的不过下雨天，是曾与你躲过雨的屋檐"
+                        android:text="长城脚下的手工匠人"
                         android:textColor="@color/white"
-                        android:textSize="20sp"/>
+                        android:textSize="23sp"/>
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="26dp"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="11dp"
-                            android:src="@mipmap/star_height_22px"/>
-
-                        <TextView
-                            android:id="@+id/activity_scenedetails_suoshuqingjing"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
-                            android:gravity="center_vertical"
-                            android:text="232"
-                            android:textColor="#000000"
-                            android:textSize="9sp"/>
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -85,7 +69,7 @@
                             android:src="@mipmap/location_height_22px"/>
 
                         <TextView
-                            android:id="@+id/activity_scenedetails_location"
+                            android:id="@+id/activity_qingjingdetail_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
@@ -104,7 +88,7 @@
                             android:textSize="9sp"/>
 
                         <TextView
-                            android:id="@+id/activity_scenedetails_time"
+                            android:id="@+id/activity_qingjingdetail_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -131,7 +115,7 @@
                             android:paddingLeft="20dp">
 
                             <ImageView
-                                android:id="@+id/activity_scenedetails_userhead"
+                                android:id="@+id/activity_qingjingdetail_userhead"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:src="@mipmap/ic_launcher"
@@ -144,7 +128,7 @@
                                 android:gravity="center_vertical">
 
                                 <TextView
-                                    android:id="@+id/activity_scenedetails_username"
+                                    android:id="@+id/activity_qingjingdetail_username"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
@@ -153,10 +137,10 @@
                                     android:textSize="11sp"/>
 
                                 <TextView
-                                    android:id="@+id/activity_scenedetails_userinfo"
+                                    android:id="@+id/activity_qingjingdetail_userinfo"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/activity_scenedetails_username"
+                                    android:layout_below="@id/activity_qingjingdetail_username"
                                     android:singleLine="true"
                                     android:text="这是人"
                                     android:textColor="#212121"
@@ -165,14 +149,14 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/activity_scenedetails_lovecount"
+                            android:id="@+id/activity_qingjingdetail_subsnum"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="269"
-                            android:background="@mipmap/love_scene"
+                            android:background="@mipmap/subs_qingjing"
                             android:gravity="bottom|center_horizontal"
                             android:paddingBottom="10dp"
-                            android:text="300人赞过"
+                            android:text="300人订阅"
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             />
@@ -199,7 +183,7 @@
                 android:paddingTop="18dp">
 
                 <TextView
-                    android:id="@+id/activity_scenedetails_changjing_des"
+                    android:id="@+id/activity_qingjingdetail_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="8dp"
@@ -214,7 +198,7 @@
                     >
 
                     <LinearLayout
-                        android:id="@+id/activity_scenedetails_labellinear"
+                        android:id="@+id/activity_qingjingdetail_labellinear"
                         android:layout_width="wrap_content"
                         android:layout_height="21dp"
                         android:orientation="horizontal"
@@ -224,84 +208,6 @@
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e4e4e4"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp">
-
-                <ImageView
-                    android:id="@+id/activity_scenedetails_more"
-                    android:layout_width="61dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:paddingLeft="19dp"
-                    android:paddingRight="19dp"
-                    android:src="@mipmap/more_height_10px"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/activity_scenedetails_more"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp">
-
-                    <ImageView
-                        android:layout_width="23dp"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/eye_height_31px"/>
-
-                    <TextView
-                        android:id="@+id/activity_scenedetails_viewcount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:text="234"
-                        android:textColor="#999999"
-                        android:textSize="10sp"/>
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:src="@mipmap/like_height_31px"/>
-
-                    <TextView
-                        android:id="@+id/activity_scenedetails_love_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:text="234"
-                        android:textColor="#999999"
-                        android:textSize="10sp"/>
-
-                    <ImageView
-                        android:id="@+id/activity_scenedetails_commentimg"
-                        android:layout_width="18dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:src="@mipmap/comment_height_33px"/>
-
-                    <TextView
-                        android:id="@+id/activity_scenedetails_commentcount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:text="234"
-                        android:textColor="#999999"
-                        android:textSize="10sp"/>
-
-                </LinearLayout>
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dedede"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -310,7 +216,7 @@
                 >
 
                 <com.taihuoniao.fineix.view.GridViewForScrollView
-                    android:id="@+id/activity_scenedetails_grid"
+                    android:id="@+id/activity_qingjingdetail_grid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -319,7 +225,7 @@
                     android:layout_marginTop="16dp"/>
 
                 <TextView
-                    android:id="@+id/activity_scenedetails_moreuser"
+                    android:id="@+id/activity_qingjingdetail_more_user"
                     android:layout_width="72dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -335,41 +241,15 @@
                     />
             </RelativeLayout>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <com.taihuoniao.fineix.view.ListViewForScrollView
-                    android:id="@+id/activity_scenedetails_commentlistview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="18dp"
-                    android:paddingTop="18dp"
-                    />
-
-                <TextView
-                    android:id="@+id/activity_scenedetails_allcomment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="全部123条评论"
-                    android:textColor="#999999"
-                    android:textSize="11sp"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:id="@+id/activity_scenedetails_morecomment"
-                    android:layout_width="14dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:src="@mipmap/arrow_down_gray"
-                    android:visibility="gone"/>
-            </LinearLayout>
+                android:layout_height="1px"
+                android:background="#e4e4e4"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_marginTop="11dp"
                 android:background="#f0f0f0"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -384,37 +264,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="此场景下的产品"
+                    android:text="此情景下的场景"
                     android:textColor="#666666"
                     android:textSize="13sp"/>
             </LinearLayout>
 
-            <RelativeLayout
+            <com.taihuoniao.fineix.view.ListViewForScrollView
+                android:id="@+id/activity_qingjingdetail_listview"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="-10dp"
-                android:background="@mipmap/main_nav_bg"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e4e4e4"/>
+
+            <LinearLayout
+                android:id="@+id/activity_qingjingdetail_sublinear"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:gravity="center_horizontal"
+                android:orientation="horizontal"
                 >
 
+
                 <ImageView
-                    android:id="@+id/activity_scenedetails_love"
-                    android:layout_width="25dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:src="@mipmap/like_height_43px"/>
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/subscribe_height_49px"/>
 
                 <TextView
-                    android:id="@+id/activity_scenedetails_lovetv"
-                    android:layout_width="25dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/activity_scenedetails_love"
-                    android:layout_marginTop="6dp"
-                    android:gravity="center"
-                    android:text="点赞"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="13dp"
+                    android:text="+订阅此情景"
                     android:textColor="@color/yellow_bd8913"
-                    android:textSize="12sp"/>
-            </RelativeLayout>
+                    android:textSize="15sp"/>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -444,6 +332,6 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
-            android:src="@mipmap/share"/>
+            android:src="@mipmap/add"/>
     </RelativeLayout>
 </FrameLayout>

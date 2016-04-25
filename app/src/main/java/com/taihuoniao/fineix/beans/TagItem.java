@@ -110,4 +110,15 @@ public class TagItem implements Serializable {
         this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return "TagItem{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", type=" + type +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

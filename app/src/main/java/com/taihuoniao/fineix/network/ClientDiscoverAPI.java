@@ -58,6 +58,32 @@ public class ClientDiscoverAPI {
     }
 
     //情景
+    //情景新增
+    public static void createQingjing(String id, String title, String des, String tags, String address, String tmp, String lat, String lng, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.create_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("title", title);
+        params.addQueryStringParameter("des", des);
+        params.addQueryStringParameter("tags", tags);
+        params.addQueryStringParameter("address", address);
+        params.addQueryStringParameter("tmp", tmp);
+        params.addQueryStringParameter("lat", lat);
+        params.addQueryStringParameter("lng", lng);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
+    //情景详情
+    public static void qingjingDetails(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.qingjing_details;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+
+    //情景
     //列表数据
     public static void qingjingList(String page, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.qingjing_lists;
@@ -295,14 +321,15 @@ public class ClientDiscoverAPI {
 
     /**
      * 获取Banner
+     *
      * @param page_name
      * @param callBack
      */
     public static void getBanners(String page_name, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page",String.valueOf(1));
-        params.addBodyParameter("size",String.valueOf(10));
-        params.addBodyParameter("name",page_name);
+        params.addBodyParameter("page", String.valueOf(1));
+        params.addBodyParameter("size", String.valueOf(10));
+        params.addBodyParameter("name", page_name);
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
