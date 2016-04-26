@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
+import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
@@ -353,7 +354,7 @@ public class DataPaser {
                             SceneListBean sceneListBean = new SceneListBean();
                             sceneListBean.set_id(job.optString("_id"));
                             sceneListBean.setAddress(job.optString("address"));
-                            sceneListBean.setScene(job.optString("scene"));
+                            sceneListBean.setScene_title(job.optString("scene_title"));
                             sceneListBean.setView_count(job.optString("view_count"));
                             sceneListBean.setCreated_on(job.optString("created_on"));
                             sceneListBean.setLove_count(job.optString("love_count"));
@@ -415,10 +416,6 @@ public class DataPaser {
                         WriteJsonToSD.writeToSD("json", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.SCENE_DETAILS;
-//                Gson gson = new Gson();
-//                Type type = new TypeToken<SceneDetails>() {
-//                }.getType();
-//                SceneDetails sceneDetails = gson.fromJson(responseInfo.result, type);
                         SceneDetails sceneDetails = new SceneDetails();
                         try {
                             JSONObject jsonObject = new JSONObject(responseInfo.result);
@@ -430,6 +427,7 @@ public class DataPaser {
                                 sceneDetails.set_id(data.optString("_id"));
                                 sceneDetails.setTitle(data.optString("title"));
                                 sceneDetails.setDes(data.optString("des"));
+                                sceneDetails.setIs_love(data.optInt("is_love"));
                                 List<Integer> tagsList = new ArrayList<Integer>();
                                 JSONArray tags = data.getJSONArray("tags");
                                 for (int i = 0; i < tags.length(); i++) {
@@ -721,6 +719,34 @@ public class DataPaser {
 
     }
 
+    //购物车
+    //购物车商品数量
+    public static void cartNum(final Handler handler) {
+        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CART_NUM;
+                msg.obj = new CartBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CartBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
     //评论
     //提交评论
     public static void sendComment(String target_id, String content, String type, final Handler handler) {
@@ -729,11 +755,16 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEND_COMMENT;
-                Gson gson = new Gson();
-                Type type = new TypeToken<NetBean>() {
-                }.getType();
-                NetBean netBean = gson.fromJson(responseInfo.result, type);
-                msg.obj = netBean;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    NetBean netBean = gson.fromJson(responseInfo.result, type);
+                    msg.obj = netBean;
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
                 handler.sendMessage(msg);
             }
 
@@ -787,7 +818,7 @@ public class DataPaser {
                 //TODO 保存登录信息
                 SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
 
-                LogUtil.e("ResponseInfo",responseInfo.result);
+                LogUtil.e("ResponseInfo", responseInfo.result);
 
                 //TODO 后期改造
                 LoginInfo loginInfo = null;

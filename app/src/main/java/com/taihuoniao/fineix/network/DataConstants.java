@@ -61,6 +61,8 @@ public class DataConstants {
     public static final int CREATE_QINGJING = 73;
     //情景详情
     public static final int QINGJING_DETAILS = 72;
+    //购物车商品数量
+    public static final int CART_NUM = 71;
 
 
 

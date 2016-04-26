@@ -294,7 +294,22 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         product_y.deleteCharAt(0);
                     }
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                    int sapleSize = 100;
+                    do {
+                        stream.reset();
+                        if (sapleSize > 10) {
+                            sapleSize -= 10;
+                        } else {
+                            sapleSize--;
+                        }
+                        if (sapleSize > 100 || sapleSize <= 0) {
+                            dialog.dismiss();
+                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
+                        Log.e("<<<", "图片大小=" + stream.size());
+                    } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             5 + "", tags.toString(), product_id.toString(), product_title.toString(),
@@ -304,7 +319,22 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                             handler);
                 } else if (MainApplication.tag == 2) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    sceneBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+                    int sapleSize = 100;
+                    do {
+                        stream.reset();
+                        if (sapleSize > 10) {
+                            sapleSize -= 10;
+                        } else {
+                            sapleSize--;
+                        }
+                        if (sapleSize > 100 || sapleSize <= 0) {
+                            dialog.dismiss();
+                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
+                        Log.e("<<<", "图片大小=" + stream.size());
+                    } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             tags.toString(), city + district + addressTv.getText().toString(), tmp, lat + "", lng + "", handler);

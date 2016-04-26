@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -37,6 +39,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     //上个界面传递过来的情景id
     private String id;
     //界面下的控件
+    private ImageView createImg;
     private RelativeLayout imgRelative;
     private ImageView backgroundImg;
     private TextView qingjingTitle;
@@ -78,6 +81,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void initView() {
         setContentView(R.layout.activity_qingjingdetail);
+        createImg = (ImageView) findViewById(R.id.activity_qingjingdetail_create);
         backgroundImg = (ImageView) findViewById(R.id.activity_qingjingdetail_background);
         qingjingTitle = (TextView) findViewById(R.id.activity_qingjingdetail_qingjing_title);
         locationTv = (TextView) findViewById(R.id.activity_qingjingdetail_location);
@@ -109,6 +113,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();
         }
+        createImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
@@ -169,6 +174,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_qingjingdetail_create:
+                MainApplication.tag = 1;
+                startActivity(new Intent(QingjingDetailActivity.this, SelectPhotoOrCameraActivity.class));
+                break;
             case R.id.activity_qingjingdetail_sublinear:
                 Toast.makeText(QingjingDetailActivity.this, "点赞或取消点赞", Toast.LENGTH_SHORT).show();
                 break;

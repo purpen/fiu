@@ -45,6 +45,9 @@ public class NetworkConstance {
     //公共
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
+    //购物车
+    //购物车数量
+    public static final String cart_number = BASE_URL + "/shopping/fetch_cart_count";
     //评论
     //提交评论
     public static final String send_comment = BASE_URL + "/comment/ajax_comment";

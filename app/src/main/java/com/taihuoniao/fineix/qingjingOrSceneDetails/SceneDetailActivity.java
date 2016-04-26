@@ -170,6 +170,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case DataConstants.COMMON_LIST:
                     dialog.dismiss();
+                    Log.e("<<<", "通用列表");
                     CommonBean netCommonBean = (CommonBean) msg.obj;
                     if (netCommonBean.isSuccess()) {
                         headList.addAll(netCommonBean.getData().getRows());
@@ -183,6 +184,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
+                    Log.e("<<<", "评论列表");
                     CommentsBean netCommentBean = (CommentsBean) msg.obj;
                     if (netCommentBean.isSuccess()) {
                         commentList.addAll(netCommentBean.getData().getRows());
@@ -195,9 +197,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.SCENE_DETAILS:
                     dialog.dismiss();
+                    Log.e("<<<", "场景详情");
                     SceneDetails netSceneDetails = (SceneDetails) msg.obj;
                     if (netSceneDetails.isSuccess()) {
+                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
                         ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg);
+                        //用户是否已经点赞
+
                         //场景上的商品
                         productList = netSceneDetails.getProduct();
                         //添加商品
@@ -216,8 +222,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         viewCount.setText(netSceneDetails.getView_count());
                         loveCountTv.setText(netSceneDetails.getLove_count());
                         commentNum.setText(netSceneDetails.getComment_count());
-                        //用户头像
-                        //木有数据
                         allComment.setText("全部" + netSceneDetails.getComment_count() + "条评论");
                     } else {
                         Toast.makeText(SceneDetailActivity.this, netSceneDetails.getMessage(), Toast.LENGTH_SHORT).show();
@@ -225,6 +229,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    Log.e("<<<", "请求失败 ");
                     break;
             }
         }
@@ -335,17 +340,37 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onDestroy() {
-        //        cancelNet();
+    protected void onStart() {
+        super.onStart();
+        for (int i = 0; i < imgRelative.getChildCount(); i++) {
+            View view = imgRelative.getChildAt(i);
+            if (view instanceof LabelView) {
+                LabelView labelView = (LabelView) view;
+                labelView.wave();
+                Log.e("<<<", "开始动画");
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
         for (int i = 0; i < imgRelative.getChildCount(); i++) {
             View view = imgRelative.getChildAt(i);
             if (view instanceof LabelView) {
                 LabelView labelView = (LabelView) view;
                 labelView.stopAnim();
+                Log.e("<<<", "动画结束");
             }
         }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //cancelNet();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
+            Log.e("<<<", "销毁handler中还未接收到的数据");
             handler = null;
         }
         super.onDestroy();

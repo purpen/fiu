@@ -46,6 +46,8 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -73,6 +75,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private double distance = 5000;//距离
     private double[] location = null;
     //界面下的控件
+    private ImageView locationImg;
     private ListView sceneListView;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
@@ -95,6 +98,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
+        locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         sceneListView = (ListView) view.findViewById(R.id.fragment_find_scenelistview);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_find_progress);
         View headerView = View.inflate(getActivity(), R.layout.header_fragment_find, null);
@@ -110,6 +114,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void initList() {
+        locationImg.setOnClickListener(this);
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
@@ -263,7 +268,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -324,6 +328,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         }
         int top = absoluteLayout.getTop();
         int bottom = absoluteLayout.getBottom();
+        if (bottom - top <= 0) {
+            return;
+        }
         for (int i = 0; i < randomImgs.size(); i++) {
             RandomImg randomImg = randomImgs.get(i);
             whi:
@@ -371,15 +378,19 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
-        intent.putExtra("id", sceneList.get(position).get_id());
+        SceneListBean sceneListBean = (SceneListBean) parent.getAdapter().getItem(position);
+        intent.putExtra("id", sceneListBean.get_id());
         startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fragment_find_location:
+                startActivity(new Intent(getActivity(), GoodsDetailActivity.class));
+                break;
             case R.id.fragment_find_allqingjing:
-                Toast.makeText(getActivity(), "查看全部情景", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AllQingjingActivity.class));
                 break;
         }
     }

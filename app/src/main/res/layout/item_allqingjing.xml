@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:id="@+id/item_allqingjing_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_alignParentBottom="true"
+        android:background="#000000">
+
+        <LinearLayout
+            android:id="@+id/item_allqingjing_bottom_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="17dp">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/location_white_width_16px"/>
+
+            <TextView
+                android:id="@+id/item_allqingjing_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:singleLine="true"
+                android:text="北京市 朝阳区"
+                android:textColor="@color/white"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_allqingjing_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/item_allqingjing_bottom_linear"
+            android:layout_marginBottom="11dp"
+            android:layout_marginLeft="19dp"
+            android:maxLines="2"
+            android:maxWidth="104dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="3dp"
+            android:paddingTop="4dp"
+            android:text="哈哈哈哈哈哈哈噶"
+            android:textColor="@color/white"
+            android:textSize="13sp"/>
+    </RelativeLayout>
+</RelativeLayout>

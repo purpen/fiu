@@ -130,6 +130,10 @@
             android:name=".user.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".product.GoodsDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".scene.SelectPhotoOrCameraActivity"

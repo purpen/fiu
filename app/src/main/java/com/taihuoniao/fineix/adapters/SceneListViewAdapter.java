@@ -84,7 +84,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         holder.viewCount.setText(list.get(position).getView_count());
         holder.loveCount.setText(list.get(position).getLove_count());
         holder.sceneTitle.setText(list.get(position).getTitle());
-        holder.suoshuQingjing.setText(list.get(position).getScene());
+        holder.suoshuQingjing.setText(list.get(position).getScene_title());
         holder.location.setText(list.get(position).getAddress());
         holder.time.setText(TimestampToTimeUtils.getStandardDate(list.get(position).getCreated_on()));
         return convertView;

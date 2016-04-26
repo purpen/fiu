@@ -76,7 +76,7 @@
                     android:textColor="#999999"
                     android:textSize="11sp"/>
             </LinearLayout>
-            <!-- 初步思路可以用绝对布局 -->
+
             <AbsoluteLayout
                 android:id="@+id/fragment_wellgoods_absolute"
                 android:layout_width="match_parent"

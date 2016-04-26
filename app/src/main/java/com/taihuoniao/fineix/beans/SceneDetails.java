@@ -29,6 +29,15 @@ public class SceneDetails extends NetBean {
     private String cover_url;
     private String scene_title;
     private UserInfo user_info;
+    private int is_love;
+
+    public int getIs_love() {
+        return is_love;
+    }
+
+    public void setIs_love(int is_love) {
+        this.is_love = is_love;
+    }
 
     public List<String> getTag_titles() {
         return tag_titles;

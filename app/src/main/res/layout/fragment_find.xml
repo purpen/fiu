@@ -24,6 +24,7 @@
             android:src="@mipmap/head_search"/>
 
         <ImageView
+            android:id="@+id/fragment_find_location"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

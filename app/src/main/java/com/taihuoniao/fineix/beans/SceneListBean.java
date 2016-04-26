@@ -11,7 +11,7 @@ public class SceneListBean {
     private String user_id;
     private String des;
     private String scene_id;
-    private String scene;
+    private String scene_title;
     private List<Products> productsList;
     private String address;
     private String used_count;
@@ -26,13 +26,14 @@ public class SceneListBean {
     private User user;
     private String cover_url;
 
-    public String getScene() {
-        return scene;
+    public String getScene_title() {
+        return scene_title;
     }
 
-    public void setScene(String scene) {
-        this.scene = scene;
+    public void setScene_title(String scene_title) {
+        this.scene_title = scene_title;
     }
+
 
     public String getCreated_on() {
         return created_on;

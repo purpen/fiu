@@ -1,26 +1,16 @@
 package com.taihuoniao.fineix.main.fragment;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
@@ -54,14 +44,12 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -75,7 +63,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private List<HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
-    //品牌列表
+    //分类列表
     private List<CategoryListBean> list;
     private PinRecyclerAdapter pinRecyclerAdapter;
     private DisplayImageOptions options;
@@ -85,6 +73,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private SlidingFocusAdapter sfAdapter = null;
     private int page = 1;
     private static final String PRODUCT_STATE = "1"; //表示正常在线
+
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
@@ -93,8 +82,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         sfiv.setMaxRotationAngle(0);
         sfiv.setGravity(Gravity.CENTER_VERTICAL);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
-        absoluteLayout.setLayoutParams(lp);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
+//        absoluteLayout.setLayoutParams(lp);
 //        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
 //        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
         dialog = new WaittingDialog(getActivity());
@@ -198,7 +187,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         if (list == null) {
             return;
         }
-        if (list.size()==0){
+        if (list.size() == 0) {
             return;
         }
 
