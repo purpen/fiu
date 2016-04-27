@@ -39,7 +39,7 @@ public class QJRecommonedAdapter extends CommonBaseAdapter<QingJingItem> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(item.cover_url,holder.iv);
+        ImageLoader.getInstance().displayImage(item.cover_url,holder.iv,options);
         holder.tv_desc.setText(item.title);
         holder.tv_location.setText(item.address);
         return convertView;

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
 import java.io.Serializable;
@@ -50,10 +51,14 @@ public class LoginInfo implements Serializable {
 
     }
 
-//    public static int getUserId(){
-//        String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-//
-//    }
+    public static long getUserId(){
+        if (isUserLogin()){
+            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+            LoginInfo loginInfo = JsonUtil.fromJson(login_info, LoginInfo.class);
+            return  loginInfo._id;
+        }
+        return -1;
+    }
 
     public long getId(){
         return _id;
@@ -62,6 +67,7 @@ public class LoginInfo implements Serializable {
     public void setId(long id){
         this._id=id;
     }
+
     public static boolean isUserLogin(){
         String login_info = SPUtil.read(MainApplication.getContext(),DataConstants.LOGIN_INFO);
         if (TextUtils.isEmpty(login_info)){

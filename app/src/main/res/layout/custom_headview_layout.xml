@@ -87,8 +87,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:paddingRight="@dimen/dp16"
-        android:paddingLeft="@dimen/dp16"
         android:focusable="true"
         android:clickable="true"
         android:focusableInTouchMode="true"
@@ -102,6 +100,7 @@
             android:background="@drawable/selector_fff_eee"
             android:clickable="false"
             android:focusable="false"
+            android:padding="@dimen/dp16"
             android:focusableInTouchMode="false"
             />
         <TextView

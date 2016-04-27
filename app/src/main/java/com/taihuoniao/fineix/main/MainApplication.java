@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.ProvinceUtil;
 
 import java.io.File;
 import java.util.List;
@@ -68,6 +69,7 @@ public class MainApplication extends Application {
         instance = this;
         initImageLoader();
         JsonUtil.init();
+        ProvinceUtil.init(this);
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
         cropPicPath = getCacheDirPath() + "/crop";

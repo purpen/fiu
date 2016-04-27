@@ -1,9 +1,13 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.taihuoniao.fineix.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +16,19 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
 	protected final String TAG=getClass().getSimpleName();
 	protected List<T> list;
 	protected Activity activity;
+	protected DisplayImageOptions options;
 	public CommonBaseAdapter(List<T> list,Activity activity){
 		this.list=list;
 		this.activity=activity;
+		options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.mipmap.ic_launcher)
+				.showImageForEmptyUri(R.mipmap.ic_launcher)
+				.showImageOnFail(R.mipmap.ic_launcher)
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.considerExifParams(true)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.build();
 	}
 	@Override
 	public int getCount() {

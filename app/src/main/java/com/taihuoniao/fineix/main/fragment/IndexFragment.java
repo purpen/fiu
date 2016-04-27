@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.map.POIListActivity;
 import com.taihuoniao.fineix.map.SelectOrSearchQJActivity;
 import com.taihuoniao.fineix.scene.SearchResultActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import butterknife.OnClick;
 
@@ -62,7 +63,7 @@ public class IndexFragment extends BaseFragment {
                 activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
                 break;
             case R.id.focus:
-                activity.startActivity(new Intent(activity, FocusFansActivity.class));
+                activity.startActivity(new Intent(activity, CaptureActivity.class));
                 break;
         }
     }

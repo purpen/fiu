@@ -35,7 +35,7 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
         }else {
             holder = (ViewHolder)convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage("drawable://" + item.imgId,holder.iv);
+        ImageLoader.getInstance().displayImage("drawable://" + item.imgId,holder.iv,options);
         holder.tv.setText(item.txt);
         return convertView;
     }

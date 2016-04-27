@@ -49,6 +49,41 @@
             android:launchMode="singleTask"
             />
         <activity
+            android:name=".zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask"
+            />
+
+        <activity
+            android:name=".user.MyBarCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".user.FindFriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".user.UserCenterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".user.EditUserInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".user.UserEditNameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
             android:name=".user.OptRegisterLoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

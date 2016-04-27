@@ -25,9 +25,11 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -236,10 +238,13 @@ public class MineFragment extends MyBaseFragment {
         });
     }
 
-    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
+    @OnClick({R.id.riv,R.id.iv_detail,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent=null;
         switch (v.getId()) {
+            case R.id.riv:
+                startActivity(new Intent(activity,UserCenterActivity.class));
+                break;
             case R.id.ll_qj:
                 Util.makeToast("我创建的情景");
                 //
@@ -258,7 +263,7 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(intent);
                 break;
             case R.id.iv_detail:
-                Util.makeToast(activity, "个人详情");
+                startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
             case R.id.iv_calendar:
                 Util.makeToast(activity, "日历");

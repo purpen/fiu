@@ -72,4 +72,7 @@ public class NetworkConstance {
 
     //意见反馈
     public static final String SUGGESTION_URL = BASE_URL + "/gateway/feedback";
+
+    //修改用户信息
+    public static final String UPDATE_USERINFO_URL = BASE_URL + "/my/update_profile";
 }

@@ -38,7 +38,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> {
             holder=(ViewHolder)convertView.getTag();
         }
 
-        imageLoader.displayImage(item.follows.avatar_url,holder.riv);
+        imageLoader.displayImage(item.follows.avatar_url,holder.riv,options);
         holder.tv_name.setText(item.follows.nickname);
         holder.tv_desc.setText(item.follows.nickname);
         return convertView;

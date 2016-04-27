@@ -361,4 +361,17 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("kind","Fiu");
         MD5Utils.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
     }
+
+    /**
+     * 更新用户信息
+     * @param key
+     * @param value
+     * @param callBack
+     */
+    public static void updateUserInfo(String key,String value,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter(key,value);
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
+
 }

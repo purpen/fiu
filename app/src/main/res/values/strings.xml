@@ -72,16 +72,29 @@
         <item>亚马逊</item>
     </string-array>
     <string name="please_input">请输入</string>
-
+    <string name="loading">加载中…</string>
     <string name="btn_done">OK</string>
     <string name="btn_reset">Reset</string>
-
-    <string name="gallery_space_text">Space[-60, 60]</string>
-    <string name="gallery_space_text_hint">space value[-60, 60]</string>
-
-    <string name="gallery_max_zoom_text">GMax Zoom [-120, 120]</string>
-    <string name="gallery_max_zoom_text_hint">zoom value[-120, 120].</string>
-
-    <string name="gallery_max_rotate_angle_text">Rotation Angle[-60, 60]</string>
-    <string name="gallery_max_rotate_angle_text_hint">rotation angle[-60, 60].</string>
+    <string name="qr_scan_tips">将二维码/条码放入框内，即可自动扫描</string>
+    <string name="actionbar_title_qr_scan">二维码/条码</string>
+    <string name="title_user_data">个人信息</string>
+    <string name="user_avatar">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="nick_name">昵称</string>
+    <string name="user_signature">个性签名</string>
+    <string name="user_sex">性别</string>
+    <string name="user_birthday">生日</string>
+    <string name="user_auth">申请认证</string>
+    <string name="user_code">我的二维码</string>
+    <string name="user_area">地区</string>
+    <string name="title_modify_nickname">修改昵称</string>
+    <string name="save">保存</string>
+    <string name="select_birth">请选择出生日期</string>
+    <string name="select_gender">请选择性别</string>
+    <string name="select_address">请选择地址</string>
+    <string name="input_signature">您还没有个性签名</string>
+    <string-array name="user_gender">
+        <item>女</item>
+        <item>男</item>
+    </string-array>
 </resources>
