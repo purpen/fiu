@@ -35,6 +35,7 @@ import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.SkipBind;
 import com.taihuoniao.fineix.beans.TBDetailsBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
@@ -191,6 +192,8 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
                 try {
@@ -332,81 +335,6 @@ public class DataPaser {
     }
 
     //场景
-    //列表数据
-    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.getSceneList(page, size, stick, dis, lng, lat, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.SCENE_LIST;
-                SceneList sceneList = new SceneList();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseInfo.result);
-                    sceneList.setSuccess(jsonObject.optBoolean("success"));
-                    sceneList.setMessage(jsonObject.optString("message"));
-//                    sceneList.setStatus(jsonObject.optString("status"));
-                    if (sceneList.isSuccess()) {
-                        JSONObject data = jsonObject.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        List<SceneListBean> list = new ArrayList<SceneListBean>();
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject job = rows.getJSONObject(i);
-                            SceneListBean sceneListBean = new SceneListBean();
-                            sceneListBean.set_id(job.optString("_id"));
-                            sceneListBean.setAddress(job.optString("address"));
-                            sceneListBean.setScene_title(job.optString("scene_title"));
-                            sceneListBean.setView_count(job.optString("view_count"));
-                            sceneListBean.setCreated_on(job.optString("created_on"));
-                            sceneListBean.setLove_count(job.optString("love_count"));
-                            sceneListBean.setCover_url(job.optString("cover_url"));
-                            sceneListBean.setTitle(job.optString("title"));
-                            sceneListBean.setDes(job.optString("des"));
-                            JSONObject us = job.getJSONObject("user");
-                            SceneListBean.User user = new SceneListBean.User();
-                            user.setAccount(us.optString("account"));
-                            user.setUser_rank(us.optString("user_rank"));
-                            user.setUser_id(us.optString("user_id"));
-                            user.setSummary(us.optString("summary"));
-                            user.setNickname(us.optString("nickname"));
-                            user.setLove_count(us.optString("love_count"));
-                            user.setFollow_count(us.optString("follow_count"));
-                            user.setFans_count(us.optString("fans_count"));
-                            user.setCounter(us.optString("counter"));
-                            user.setAvatar_url(us.optString("avatar_url"));
-                            sceneListBean.setUser(user);
-                            JSONArray product = job.getJSONArray("product");
-                            List<SceneListBean.Products> productsList = new ArrayList<SceneListBean.Products>();
-                            for (int j = 0; j < product.length(); j++) {
-                                JSONObject ob = product.getJSONObject(j);
-                                SceneListBean.Products products = new SceneListBean.Products();
-                                products.setId(ob.optString("id"));
-                                products.setTitle(ob.optString("title"));
-                                products.setPrice(ob.optString("price"));
-                                products.setX(ob.optString("x"));
-                                products.setY(ob.optString("y"));
-                                productsList.add(products);
-                            }
-                            sceneListBean.setProductsList(productsList);
-                            list.add(sceneListBean);
-                        }
-                        sceneList.setSceneListBeanList(list);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                msg.obj = sceneList;
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-    }
-
-    //场景
     //场景详情
     public static void sceneDetails(String id, final Handler handler) {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
@@ -452,6 +380,9 @@ public class DataPaser {
                                     pro.setPrice(job.optString("price"));
                                     pro.setX(job.optDouble("x"));
                                     pro.setY(job.optDouble("y"));
+                                    if (pro.getId().equals("0")) {
+                                        break;
+                                    }
                                     products.add(pro);
                                 }
                                 sceneDetails.setProduct(products);
@@ -492,6 +423,143 @@ public class DataPaser {
 
         );
     }
+
+    //场景
+    //场景点赞
+    public static void loveScene(String id, final Handler handler) {
+        ClientDiscoverAPI.loveScene(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.LOVE_SCENE;
+                msg.obj = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //场景
+    //取消场景点赞
+    public static void cancelLoveScene(String id, final Handler handler) {
+        ClientDiscoverAPI.cancelLoveScene(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CANCEL_LOVE_SCENE;
+                msg.obj = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+
+    }
+
+    //场景
+    //列表数据
+    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.getSceneList(page, size, stick, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SCENE_LIST;
+                SceneList sceneList = new SceneList();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                    sceneList.setSuccess(jsonObject.optBoolean("success"));
+                    sceneList.setMessage(jsonObject.optString("message"));
+//                    sceneList.setStatus(jsonObject.optString("status"));
+                    if (sceneList.isSuccess()) {
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<SceneListBean> list = new ArrayList<SceneListBean>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject job = rows.getJSONObject(i);
+                            SceneListBean sceneListBean = new SceneListBean();
+                            sceneListBean.set_id(job.optString("_id"));
+                            sceneListBean.setAddress(job.optString("address"));
+                            sceneListBean.setScene_title(job.optString("scene_title"));
+                            sceneListBean.setView_count(job.optString("view_count"));
+                            sceneListBean.setCreated_on(job.optString("created_on"));
+                            sceneListBean.setLove_count(job.optString("love_count"));
+                            sceneListBean.setCover_url(job.optString("cover_url"));
+                            sceneListBean.setTitle(job.optString("title"));
+                            sceneListBean.setDes(job.optString("des"));
+                            JSONObject us = job.getJSONObject("user_info");
+                            SceneListBean.User user = new SceneListBean.User();
+                            user.setAccount(us.optString("account"));
+                            user.setUser_rank(us.optString("user_rank"));
+                            user.setUser_id(us.optString("user_id"));
+                            user.setSummary(us.optString("summary"));
+                            user.setNickname(us.optString("nickname"));
+                            user.setLove_count(us.optString("love_count"));
+                            user.setFollow_count(us.optString("follow_count"));
+                            user.setFans_count(us.optString("fans_count"));
+                            user.setCounter(us.optString("counter"));
+                            user.setAvatar_url(us.optString("avatar_url"));
+                            sceneListBean.setUser_info(user);
+                            JSONArray product = job.getJSONArray("product");
+                            List<SceneListBean.Products> productsList = new ArrayList<SceneListBean.Products>();
+                            for (int j = 0; j < product.length(); j++) {
+                                JSONObject ob = product.getJSONObject(j);
+                                SceneListBean.Products products = new SceneListBean.Products();
+                                products.setId(ob.optString("id"));
+                                products.setTitle(ob.optString("title"));
+                                products.setPrice(ob.optString("price"));
+                                products.setX(ob.optString("x"));
+                                products.setY(ob.optString("y"));
+                                productsList.add(products);
+                            }
+                            sceneListBean.setProductsList(productsList);
+                            list.add(sceneListBean);
+                        }
+                        sceneList.setSceneListBeanList(list);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = sceneList;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
 
     //标签
     //最近使用的标签
@@ -548,8 +616,8 @@ public class DataPaser {
 
     //标签
     //标签列表
-    public static void labelList(String parent_id, int page, String size, final Handler handler) {
-        ClientDiscoverAPI.labelList(parent_id, page, size, new RequestCallBack<String>() {
+    public static void labelList(String parent_id, int page, String size, int is_hot, final Handler handler) {
+        ClientDiscoverAPI.labelList(parent_id, page, size, is_hot, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);

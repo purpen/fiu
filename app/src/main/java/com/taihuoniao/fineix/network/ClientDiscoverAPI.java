@@ -118,6 +118,24 @@ public class ClientDiscoverAPI {
     }
 
     //场景
+    //场景点赞
+    public static void loveScene(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.love_scene;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
+    //取消场景点赞
+    public static void cancelLoveScene(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cancel_love_scene;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
     //场景详情
     public static void sceneDetails(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_details;
@@ -152,12 +170,13 @@ public class ClientDiscoverAPI {
 
     //标签
     //标签列表
-    public static void labelList(String parent_id, int page, String size, RequestCallBack<String> callBack) {
+    public static void labelList(String parent_id, int page, String size, int is_hot, RequestCallBack<String> callBack) {
         String url = NetworkConstance.label_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("parent_id", parent_id);
         params.addQueryStringParameter("page", page + "");
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("is_hot", is_hot + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

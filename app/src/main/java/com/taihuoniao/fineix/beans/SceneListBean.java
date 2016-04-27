@@ -23,7 +23,7 @@ public class SceneListBean {
     private String status;
     private String created_on;
     private String updated_on;
-    private User user;
+    private User user_info;
     private String cover_url;
 
     public String getScene_title() {
@@ -91,12 +91,12 @@ public class SceneListBean {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public User getUser_info() {
+        return user_info;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser_info(User user_info) {
+        this.user_info = user_info;
     }
 
     public String get_id() {

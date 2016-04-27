@@ -271,6 +271,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     StringBuilder product_price = new StringBuilder();
                     StringBuilder product_x = new StringBuilder();
                     StringBuilder product_y = new StringBuilder();
+
                     for (TagItem each : MainApplication.tagInfoList) {
                         product_id.append(",").append(each.getId());
                         product_title.append(",").append(each.getName());
@@ -313,7 +314,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             5 + "", tags.toString(), product_id.toString(), product_title.toString(),
-                            product_price.toString(), product_x.toString(), product_y.toString(), city + district
+                            product_price.toString(), product_x.toString(), product_y.toString(), city
+//                                    + district
                                     + addressTv.getText().toString(),
                             lat + "", lng + "",
                             handler);
@@ -337,7 +339,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                            tags.toString(), city + district + addressTv.getText().toString(), tmp, lat + "", lng + "", handler);
+                            tags.toString(), city
+//                                    + district
+                                    + addressTv.getText().toString(), tmp, lat + "", lng + "", handler);
                 }
                 break;
             case R.id.title_back:
@@ -443,6 +447,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean1 = (NetBean) msg.obj;
                     Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean1.isSuccess()) {
+                        MainApplication.tagInfoList = null;
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();
                         }

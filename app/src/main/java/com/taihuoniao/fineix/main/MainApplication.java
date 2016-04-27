@@ -32,6 +32,7 @@ import java.util.UUID;
  * Created by taihuoniao on 2016/3/14.
  * ¥
  * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
+ * 在客户端scene是场景，qingjing是情景，而在服务器端sight是场景，scene是情景
  */
 public class MainApplication extends Application {
     private static MainApplication instance;

@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -47,9 +46,9 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToRegisterActivity instance = null;
     private WaittingDialog mDialog = null;
-    private boolean mDialogAppear=false;//判断对话框要不要出现
+    private boolean mDialogAppear = false;//判断对话框要不要出现
 
-    public ToRegisterActivity(){
+    public ToRegisterActivity() {
         super(R.layout.activity_to_register);
     }
 
@@ -91,29 +90,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                                     startActivity(intent);
                                 } else {
                                     switch (MainApplication.which_activity) {
-                                        case DataConstants.ACTIVITY_TOPIC_COMMENTS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_WEB:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_TOPIC_DETAILS));
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_TRY_DETAILS_COMMENTS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_COMMENTLISTS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_SPECIAL_DETAILS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_TRY_DETAILS:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_TRY_DETAILS));
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_GOODS_DETAILS:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_GOODS_DETAILS));
-                                            finish();
+                                        case DataConstants.SceneDetailActivity:
+                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                                             break;
                                         default:
 //                                            THNMainActivity.instance.finish();
@@ -195,7 +173,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 startActivity(new Intent(activity, RegisterActivity.class));
                 break;
             case R.id.tv_qq_register:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -205,7 +183,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(qq);
                 break;
             case R.id.tv_weibo_register:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -215,7 +193,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(sina);
                 break;
             case R.id.tv_weixin_register:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -294,7 +272,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        mDialogAppear=false;
+        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
@@ -303,7 +281,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onCancel(Platform platform, int i) {
-        mDialogAppear=false;
+        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }

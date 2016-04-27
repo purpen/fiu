@@ -8,7 +8,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/8.
  */
 public class HotLabel extends NetBean {
-        private List<HotLabelBean> hotLabelBeanList;
+    private List<HotLabelBean> hotLabelBeanList;
 
     public List<HotLabelBean> getHotLabelBeanList() {
         return hotLabelBeanList;

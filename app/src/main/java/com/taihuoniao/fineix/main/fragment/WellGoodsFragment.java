@@ -151,7 +151,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Util.makeToast(s);
             }
         });
-        DataPaser.hotLabelList(labelPage + "", handler);
+//        DataPaser.hotLabelList(labelPage + "", handler);
         DataPaser.categoryList(1 + "", 1 + "", handler);
         ClientDiscoverAPI.getProductList(String.valueOf(page), new RequestCallBack<String>() {
             @Override

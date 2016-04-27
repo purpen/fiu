@@ -78,9 +78,9 @@ public class SceneListViewAdapter extends BaseAdapter {
         }
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         //数据为空
-        ImageLoader.getInstance().displayImage(list.get(position).getUser().getAvatar_url(), holder.userHeadImg, options);
-        holder.userName.setText(list.get(position).getUser().getNickname());
-        holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser().getUser_rank(), list.get(position).getUser().getSummary()));
+        ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
+        holder.userName.setText(list.get(position).getUser_info().getNickname());
+        holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser_info().getUser_rank(), list.get(position).getUser_info().getSummary()));
         holder.viewCount.setText(list.get(position).getView_count());
         holder.loveCount.setText(list.get(position).getLove_count());
         holder.sceneTitle.setText(list.get(position).getTitle());

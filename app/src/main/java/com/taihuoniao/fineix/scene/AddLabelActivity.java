@@ -5,12 +5,16 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllLabelListViewAdapter;
 import com.taihuoniao.fineix.adapters.AllLabelViewPagerAdapter1;
@@ -23,9 +27,11 @@ import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -159,9 +165,19 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         dialog.show();
         //需要登录
         DataPaser.usedLabelList(handler);
+        DataPaser.labelList(null, allLabelCurrentPage, null, 0, handler);
+        ClientDiscoverAPI.labelList(null, 1, 15 + "", 1, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<>>>>", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+            }
 
-        DataPaser.hotLabelList(hotLabelCurrentPage + "", handler);
-        DataPaser.labelList(null, allLabelCurrentPage, null, handler);
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+            }
+        });
     }
 
     @Override

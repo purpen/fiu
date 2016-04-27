@@ -28,6 +28,13 @@ public class CommonBean extends NetBean {
         public void setRows(List<CommonItem> rows) {
             this.rows = rows;
         }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "rows=" + rows +
+                    '}';
+        }
     }
 
     public static class CommonItem {
@@ -48,6 +55,14 @@ public class CommonBean extends NetBean {
 
         public void setUser(User user) {
             this.user = user;
+        }
+
+        @Override
+        public String toString() {
+            return "CommonItem{" +
+                    "_id='" + _id + '\'' +
+                    ", user=" + user +
+                    '}';
         }
     }
 
@@ -70,5 +85,20 @@ public class CommonBean extends NetBean {
         public void setAvatar_url(String avatar_url) {
             this.avatar_url = avatar_url;
         }
+
+        @Override
+        public String toString() {
+            return "User{" +
+                    "avatar_url='" + avatar_url + '\'' +
+                    ", user_id='" + user_id + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CommonBean{" +
+                "data=" + data +
+                '}';
     }
 }

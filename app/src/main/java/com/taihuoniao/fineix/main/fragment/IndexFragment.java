@@ -47,12 +47,21 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected void requestNet() {
-
     }
 
     @Override
     protected void initList() {
-        pullToRefreshLayout.setPullToRefreshEnabled(false);
+        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                currentPage = 1;
+                if (location == null) {
+                    getCurrentLocation();
+                    return;
+                }
+                DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+            }
+        });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -64,6 +73,10 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
+        getCurrentLocation();
+    }
+
+    private void getCurrentLocation() {
         MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
@@ -71,7 +84,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
-                    DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -130,9 +143,11 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SCENE_LIST:
+                    pullToRefreshLayout.onRefreshComplete();
                     dialog.dismiss();
                     SceneList netSceneList = (SceneList) msg.obj;
                     if (netSceneList.isSuccess()) {
+                        pullToRefreshLayout.setLoadingTime();
                         if (currentPage == 1) {
                             sceneList.clear();
                             pullToRefreshLayout.lastTotalItem = -1;
@@ -143,6 +158,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     }
                     break;
                 case DataConstants.NET_FAIL:
+                    dialog.dismiss();
+                    pullToRefreshLayout.onRefreshComplete();
                     break;
             }
         }

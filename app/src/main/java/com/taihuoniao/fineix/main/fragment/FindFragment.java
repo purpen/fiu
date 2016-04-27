@@ -208,7 +208,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-        DataPaser.hotLabelList(labelPage + "", handler);
+//        DataPaser.hotLabelList(labelPage + "", handler);
+//        DataPaser.labelList(null, 1, null, 3 + "", handler);
         //虚拟数据
         handler.sendEmptyMessage(-2);
     }
@@ -409,7 +410,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount > 0 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+        //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
+        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
                 && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
                 && location != null) {
             lastSavedFirstVisibleItem = firstVisibleItem;
