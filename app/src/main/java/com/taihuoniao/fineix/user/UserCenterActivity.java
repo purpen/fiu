@@ -26,9 +26,12 @@ public class UserCenterActivity extends BaseActivity{
         
     }
 
-    @OnClick({R.id.iv_right})
+    @OnClick({R.id.iv_right,R.id.iv_detail})
     void onClick(View v){
         switch (v.getId()){
+            case R.id.iv_detail:
+                finish();
+                break;
             case R.id.iv_right:
                 startActivity(new Intent(activity,EditUserInfoActivity.class));
                 break;
