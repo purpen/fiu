@@ -62,7 +62,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
     private ArrayList<Fragment> fragments;
-
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -176,7 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             fragments.add(to);
         } else {
             if (to == from) {
-//                LogUtil.e("to==from", (to == from)  "");
+//                LogUtil.e("to==from", (to == from) + "");
                 return;
             }
 
