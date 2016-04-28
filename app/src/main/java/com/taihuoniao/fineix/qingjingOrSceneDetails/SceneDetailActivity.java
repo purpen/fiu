@@ -4,15 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,14 +49,19 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/19.
  */
-public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnTouchListener {
     //上个界面传递过来的场景id
     private String id;
     //界面下的控件
+    private ScrollView scrollView;
+    private RelativeLayout loveRelative;
+    private ImageView backImg;
+    private ImageView shareImg;
     private RelativeLayout imgRelative;
     private ImageView backgroundImg;
     private TextView changjingTitle;
     private TextView suoshuqingjingTv;
+    private ImageView locationImg;
     private TextView locationTv;
     private TextView timeTv;
     private ImageView userHead;
@@ -97,10 +105,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initView() {
         setContentView(R.layout.activity_scenedetails);
+        scrollView = (ScrollView) findViewById(R.id.activity_scenedetails_scrollview);
+        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
+        backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
+        shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
         changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
         suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
+        locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
         locationTv = (TextView) findViewById(R.id.activity_scenedetails_location);
         timeTv = (TextView) findViewById(R.id.activity_scenedetails_time);
         userHead = (ImageView) findViewById(R.id.activity_scenedetails_userhead);
@@ -131,6 +144,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
         }
+        scrollView.setOnTouchListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
@@ -138,7 +152,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
+        backImg.setOnClickListener(this);
+        shareImg.setOnClickListener(this);
         backgroundImg.setOnClickListener(this);
+        locationImg.setOnClickListener(this);
+        locationTv.setOnClickListener(this);
         commentImg.setOnClickListener(this);
         commentNum.setOnClickListener(this);
         moreImg.setOnClickListener(this);
@@ -187,12 +205,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         love.setImageResource(R.mipmap.like_height_43px);
                         loveCount.setText(netSceneLoveBean1.getData().getLove_count() + "人赞过");
                         loveCountTv.setText(netSceneLoveBean1.getData().getLove_count() + "");
+                        moreUser.setText(netSceneLoveBean1.getData().getLove_count() + "+");
                         if (netSceneLoveBean1.getData().getLove_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
+                        dialog.dismiss();
                         Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -204,12 +224,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         love.setImageResource(R.mipmap.love_yes);
                         loveCount.setText(netSceneLoveBean.getData().getLove_count() + "人赞过");
                         loveCountTv.setText(netSceneLoveBean.getData().getLove_count() + "");
+                        moreUser.setText(netSceneLoveBean.getData().getLove_count() + "+");
                         if (netSceneLoveBean.getData().getLove_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
+                        dialog.dismiss();
                         Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -270,9 +292,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         //添加标签
                         addLabelToLinear(netSceneDetails.getTag_titles(), netSceneDetails.getTags());
                         viewCount.setText(netSceneDetails.getView_count());
-                        loveCountTv.setText(netSceneDetails.getLove_count());
+                        loveCountTv.setText(netSceneDetails.getLove_count() + "");
                         commentNum.setText(netSceneDetails.getComment_count());
                         allComment.setText("全部" + netSceneDetails.getComment_count() + "条评论");
+                        if (netSceneDetails.getLove_count() > 14) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
                     } else {
                         Toast.makeText(SceneDetailActivity.this, netSceneDetails.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -327,7 +354,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addLabelToLinear(List<String> tagsTitleList, List<Integer> tagsList) {
+    private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(SceneDetailActivity.this, R.layout.view_horizontal_label_item, null);
             TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
@@ -337,6 +364,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             lp.rightMargin = DensityUtils.dp2px(SceneDetailActivity.this, 10);
             view.setLayoutParams(lp);
             view.setTag(tagsList.get(i));
+            final int finalI = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(SceneDetailActivity.this, "跳转到搜索场景界面" + tagsTitleList.get(finalI), Toast.LENGTH_SHORT).show();
+                }
+            });
             labelLinear.addView(view);
         }
     }
@@ -344,6 +378,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_scenedetails_share:
+                Toast.makeText(SceneDetailActivity.this, "分享场景", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.activity_scenedetails_back:
+                onBackPressed();
+                break;
+            case R.id.activity_scenedetails_locationimg:
+            case R.id.activity_scenedetails_location:
+                Toast.makeText(SceneDetailActivity.this, "跳转到地图界面", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.activity_scenedetails_background:
                 if (isShowAll) {
                     isShowAll = false;
@@ -387,7 +431,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.activity_scenedetails_moreuser:
-                Toast.makeText(SceneDetailActivity.this, "查看更多用户", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_more:
                 Toast.makeText(SceneDetailActivity.this, "更多被点击了", Toast.LENGTH_SHORT).show();
@@ -412,7 +455,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             if (view instanceof LabelView) {
                 LabelView labelView = (LabelView) view;
                 labelView.wave();
-                Log.e("<<<", "开始动画");
             }
         }
     }
@@ -424,7 +466,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             if (view instanceof LabelView) {
                 LabelView labelView = (LabelView) view;
                 labelView.stopAnim();
-                Log.e("<<<", "动画结束");
             }
         }
         super.onStop();
@@ -433,9 +474,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         //cancelNet();
+        unregisterReceiver(sceneDetailReceiver);
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
-            Log.e("<<<", "销毁handler中还未接收到的数据");
             handler = null;
         }
         super.onDestroy();
@@ -451,4 +492,41 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     };
 
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startP.x = event.getX();
+                startP.y = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                nowP.x = event.getX();
+                nowP.y = event.getY();
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
+                if (nowP.y > startP.y) {
+                    if (lp.bottomMargin > -loveRelative.getMeasuredHeight() && lp.bottomMargin <= 0) {
+                        lp.bottomMargin = (int) (startP.y - nowP.y);
+                    }
+                    backImg.setVisibility(View.VISIBLE);
+                    shareImg.setVisibility(View.VISIBLE);
+                } else if (nowP.y < startP.y) {
+                    if (lp.bottomMargin >= -loveRelative.getMeasuredHeight() && lp.bottomMargin < 0) {
+                        lp.bottomMargin = (int) (startP.y - nowP.y - loveRelative.getMeasuredHeight());
+                    }
+                    backImg.setVisibility(View.GONE);
+                    shareImg.setVisibility(View.GONE);
+                }
+                if (lp.bottomMargin > 0) {
+                    lp.bottomMargin = 0;
+                } else if (lp.bottomMargin < -loveRelative.getMeasuredHeight()) {
+                    lp.bottomMargin = -loveRelative.getMeasuredHeight();
+                }
+                loveRelative.setLayoutParams(lp);
+                break;
+        }
+        return false;
+    }
+
+    private PointF startP = new PointF();
+    private PointF nowP = new PointF();
 }

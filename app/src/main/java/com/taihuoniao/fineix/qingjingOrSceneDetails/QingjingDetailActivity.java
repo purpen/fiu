@@ -4,9 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -49,11 +50,12 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/25.
  */
-public class QingjingDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class QingjingDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, View.OnTouchListener {
     //上个界面传递过来的情景id
     private String id;
     //界面下的控件
     private ProgressBar progressBar;
+    private ImageView backImg;
     private ImageView createImg;
     private RelativeLayout imgRelative;
     private ImageView backgroundImg;
@@ -106,6 +108,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void initView() {
         setContentView(R.layout.activity_qingjingdetail);
+        backImg = (ImageView) findViewById(R.id.activity_qingjingdetail_back);
         createImg = (ImageView) findViewById(R.id.activity_qingjingdetail_create);
         changjingListView = (ListView) findViewById(R.id.activity_qingjingdetail_listview);
         progressBar = (ProgressBar) findViewById(R.id.activity_qingjingdetail_progress);
@@ -144,6 +147,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();
         }
+        backImg.setOnClickListener(this);
         createImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
@@ -161,6 +165,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
+        changjingListView.setOnTouchListener(this);
         changjingListView.setOnItemClickListener(this);
         subLinear.setOnClickListener(this);
         IntentFilter filter = new IntentFilter();
@@ -194,6 +199,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
+                        dialog.dismiss();
                         Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -202,7 +208,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, "scene", "subscription", handler);
                         is_subscript = 1;
-
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(netQingjingSubsBean.getData().getSubscription_count() + "人订阅");
                         moreUser.setText(netQingjingSubsBean.getData().getSubscription_count() + "+");
@@ -212,6 +217,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
+                        dialog.dismiss();
                         Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -265,6 +271,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                                 subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                                 break;
                         }
+                        if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
                     } else {
                         Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -277,7 +288,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
     };
 
-    private void addLabelToLinear(List<String> tagsTitleList, List<Integer> tagsList) {
+    private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(QingjingDetailActivity.this, R.layout.view_horizontal_label_item, null);
             TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
@@ -287,6 +298,13 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             lp.rightMargin = DensityUtils.dp2px(QingjingDetailActivity.this, 10);
             view.setLayoutParams(lp);
             view.setTag(tagsList.get(i));
+            final int finalI = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(QingjingDetailActivity.this, "跳转到搜索情景界面" + tagsTitleList.get(finalI), Toast.LENGTH_SHORT).show();
+                }
+            });
             labelLinear.addView(view);
         }
     }
@@ -295,6 +313,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         //cancelNet();
+        unregisterReceiver(qingjingReceiver);
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
@@ -305,8 +324,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_qingjingdetail_back:
+                onBackPressed();
+                break;
             case R.id.activity_qingjingdetail_more_user:
-                Toast.makeText(QingjingDetailActivity.this, "更多订阅用户", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_qingjingdetail_create:
                 MainApplication.tag = 1;
@@ -320,7 +341,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 dialog.show();
-                Log.e("<<<", is_subscript + "");
                 switch (is_subscript) {
                     case 1:
                         DataPaser.cancelSubsQingjing(id, handler);
@@ -350,7 +370,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+            isFinger = true;
+        } else {
+            isFinger = false;
+        }
     }
 
     @Override
@@ -374,4 +398,43 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             DataPaser.qingjingDetails(id, handler);
         }
     };
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startP.x = event.getX();
+                startP.y = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                nowP.x = event.getX();
+                nowP.y = event.getY();
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
+                if (nowP.y > startP.y) {
+                    if (lp.bottomMargin > -subLinear.getMeasuredHeight() && lp.bottomMargin <= 0) {
+                        lp.bottomMargin = (int) (startP.y - nowP.y);
+                    }
+                    backImg.setVisibility(View.VISIBLE);
+                    createImg.setVisibility(View.VISIBLE);
+                } else if (nowP.y < startP.y) {
+                    if (lp.bottomMargin >= -subLinear.getMeasuredHeight() && lp.bottomMargin < 0) {
+                        lp.bottomMargin = (int) (startP.y - nowP.y - subLinear.getMeasuredHeight());
+                    }
+                    backImg.setVisibility(View.GONE);
+                    createImg.setVisibility(View.GONE);
+                }
+                if (lp.bottomMargin > 0) {
+                    lp.bottomMargin = 0;
+                } else if (lp.bottomMargin < -subLinear.getMeasuredHeight()) {
+                    lp.bottomMargin = -subLinear.getMeasuredHeight();
+                }
+                subLinear.setLayoutParams(lp);
+                break;
+        }
+        return false;
+    }
+
+    private boolean isFinger = false;
+    private PointF startP = new PointF();
+    private PointF nowP = new PointF();
 }

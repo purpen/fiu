@@ -50,11 +50,18 @@
             />
         <activity
             android:name=".zxing.activity.CaptureActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:launchMode="singleTask"
             />
-
+        <activity
+            android:name=".qingjingOrSceneDetails.ReportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".scene.SelectQingjingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.MyBarCodeActivity"
             android:screenOrientation="portrait"

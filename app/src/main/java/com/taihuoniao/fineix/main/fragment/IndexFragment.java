@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
@@ -24,7 +26,9 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+    private ImageView searchImg;
+    private ImageView subsImg;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
     private List<SceneListBean> sceneList;
@@ -44,6 +48,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected void initList() {
+        searchImg.setOnClickListener(this);
+        subsImg.setOnClickListener(this);
         pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -86,13 +92,15 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_index, null);
+        searchImg = (ImageView) view.findViewById(R.id.fragment_index_search);
+        subsImg = (ImageView) view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
         dialog = new WaittingDialog(getActivity());
         return view;
     }
 
-//    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
+    //    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
 //    protected void onClick(View v) {
 //        switch (v.getId()) {
 //            case R.id.location_btn:
@@ -176,5 +184,15 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
 
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fragment_index_subs:
+                Toast.makeText(getActivity(), "订阅", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fragment_index_search:
+                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }

@@ -19,7 +19,7 @@ public class SceneDetails extends NetBean {
     private String address;
     private String used_count;
     private String view_count;
-    private String love_count;
+    private int love_count;
     private String comment_count;
     private String fine;
     private String is_check;
@@ -30,6 +30,14 @@ public class SceneDetails extends NetBean {
     private String scene_title;
     private UserInfo user_info;
     private int is_love;
+
+    public int getLove_count() {
+        return love_count;
+    }
+
+    public void setLove_count(int love_count) {
+        this.love_count = love_count;
+    }
 
     public int getIs_love() {
         return is_love;
@@ -95,13 +103,7 @@ public class SceneDetails extends NetBean {
         this.des = des;
     }
 
-    public String getLove_count() {
-        return love_count;
-    }
 
-    public void setLove_count(String love_count) {
-        this.love_count = love_count;
-    }
 
     public List<Product> getProduct() {
         return product;

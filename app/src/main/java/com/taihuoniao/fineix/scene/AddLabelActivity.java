@@ -168,8 +168,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         dialog.show();
         //需要登录
         DataPaser.usedLabelList(handler);
-        DataPaser.labelList(null, allLabelCurrentPage, null, 0, handler);
-        ClientDiscoverAPI.labelList(null, 1, 18 + "", 1, new RequestCallBack<String>() {
+        DataPaser.labelList(null, allLabelCurrentPage, null, 0, 0, handler);
+        ClientDiscoverAPI.labelList(null, 1, 18 + "", 3, 1, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();

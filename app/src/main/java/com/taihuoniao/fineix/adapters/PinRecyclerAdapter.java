@@ -21,7 +21,7 @@ import java.util.List;
 public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.VH> {
     private Context context;
     private List<CategoryListBean> list;
-    private static EditRecyclerAdapter.ItemClick itemClick;
+    private  EditRecyclerAdapter.ItemClick itemClick;
     private DisplayImageOptions options;
 
     public PinRecyclerAdapter(Context context, List<CategoryListBean> list, EditRecyclerAdapter.ItemClick itemClick1) {
@@ -45,8 +45,14 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PinRecyclerAdapter.VH holder, int position) {
+    public void onBindViewHolder(PinRecyclerAdapter.VH holder, final int position) {
         ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_s_url(), holder.img);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClick.click(position);
+            }
+        });
         holder.tv.setText(list.get(position).getTitle());
     }
 
@@ -55,7 +61,7 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
         return list.size();
     }
 
-   static class VH extends RecyclerView.ViewHolder {
+    static class VH extends RecyclerView.ViewHolder {
         ImageView img;
         TextView tv;
 
@@ -63,12 +69,6 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
             super(itemView);
             img = (ImageView) itemView.findViewById(R.id.item_fragment_pin_recycler_img);
             tv = (TextView) itemView.findViewById(R.id.item_fragment_pin_recycler_tv);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemClick.click(getPosition());
-                }
-            });
         }
     }
 }

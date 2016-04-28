@@ -5,6 +5,49 @@
     >
 
 
+
+    <ListView
+        android:id="@+id/activity_qingjingdetail_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/logo"/>
+
+        <ImageView
+            android:id="@+id/activity_qingjingdetail_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@mipmap/back_black"/>
+
+        <ImageView
+            android:id="@+id/activity_qingjingdetail_create"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:src="@mipmap/add"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/activity_qingjingdetail_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/activity_qingjingdetail_sublinear"
         android:layout_width="match_parent"
@@ -12,6 +55,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
+        android:background="@color/white"
         >
 
         <ImageView
@@ -39,45 +83,4 @@
         android:layout_above="@id/activity_qingjingdetail_sublinear"
         android:background="#e4e4e4"/>
 
-    <ListView
-        android:id="@+id/activity_qingjingdetail_listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_line1"/>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="25dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/logo"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:src="@mipmap/back_black"/>
-
-        <ImageView
-            android:id="@+id/activity_qingjingdetail_create"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="17dp"
-            android:paddingRight="17dp"
-            android:src="@mipmap/add"/>
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/activity_qingjingdetail_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
 </RelativeLayout>

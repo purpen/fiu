@@ -189,11 +189,12 @@ public class ClientDiscoverAPI {
 
     //标签
     //标签列表
-    public static void labelList(String parent_id, int page, String size, int is_hot, RequestCallBack<String> callBack) {
+    public static void labelList(String parent_id, int page, String size, int sort, int is_hot, RequestCallBack<String> callBack) {
         String url = NetworkConstance.label_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("parent_id", parent_id);
         params.addQueryStringParameter("page", page + "");
+        params.addQueryStringParameter("sort", sort + "");
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("is_hot", is_hot + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -206,6 +207,17 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //公共
+    //品牌列表
+    public static void brandList(int page, int size, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.brand_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page + "");
+        params.addQueryStringParameter("size", size + "");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+
     }
 
     //公共

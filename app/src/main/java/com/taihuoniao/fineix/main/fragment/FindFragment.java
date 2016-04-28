@@ -47,7 +47,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
@@ -77,6 +76,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private double distance = 5000;//距离
     private double[] location = null;
     //界面下的控件
+    private ImageView searchImg;
     private ImageView locationImg;
     private ListView sceneListView;
     private List<SceneListBean> sceneList;
@@ -100,6 +100,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
+        searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
         locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         sceneListView = (ListView) view.findViewById(R.id.fragment_find_scenelistview);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_find_progress);
@@ -116,6 +117,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void initList() {
+        searchImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
@@ -213,7 +215,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         //虚拟数据
         handler.sendEmptyMessage(-2);
         //热门标签
-        ClientDiscoverAPI.labelList(null, 1, 18 + "", 1, new RequestCallBack<String>() {
+        ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -410,8 +412,11 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fragment_find_search:
+                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.fragment_find_location:
-                startActivity(new Intent(getActivity(), GoodsDetailActivity.class));
+                Toast.makeText(getActivity(), "定位", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fragment_find_allqingjing:
                 startActivity(new Intent(getActivity(), AllQingjingActivity.class));
