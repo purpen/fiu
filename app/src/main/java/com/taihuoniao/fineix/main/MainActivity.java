@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
+    private ArrayList<Fragment> fragments;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -161,6 +162,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
+        fragments=new ArrayList<>();
+        resetUI();
         to = fm.findFragmentByTag(clazz.getSimpleName());
         if (to == null) {
             if (from != null) {
@@ -172,7 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
         } else {
             if (to == from) {
-//                LogUtil.e("to==from", (to == from) + "");
+//                LogUtil.e("to==from", (to == from)  "");
                 return;
             }
 
@@ -185,6 +188,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         from = to;
     }
 
+    private void resetUI() {
+        if (fragments == null) {
+            return;
+        }
+        if (fragments.size() == 0) {
+            return;
+        }
+
+        for (Fragment fragment : fragments) {
+            fm.beginTransaction().hide(fragment).commit();
+        }
+    }
 
     private void switchImgAndTxtStyle(int imgId) {
         for (TabItem tabItem : tabList) {
