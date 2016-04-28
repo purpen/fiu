@@ -162,8 +162,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
-        fragments=new ArrayList<>();
         resetUI();
+        fragments=new ArrayList<>();
         to = fm.findFragmentByTag(clazz.getSimpleName());
         if (to == null) {
             if (from != null) {
@@ -173,6 +173,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             to = (Fragment) clazz.newInstance();
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
+            fragments.add(to);
         } else {
             if (to == from) {
 //                LogUtil.e("to==from", (to == from)  "");
