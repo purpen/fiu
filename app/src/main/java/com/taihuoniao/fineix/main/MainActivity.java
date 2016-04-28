@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.MapUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
-
+    private ArrayList<Fragment> fragments;
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -161,6 +162,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
+        resetUI();
+        fragments=new ArrayList<>();
         to = fm.findFragmentByTag(clazz.getSimpleName());
         if (to == null) {
             if (from != null) {
@@ -170,6 +173,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             to = (Fragment) clazz.newInstance();
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
+            fragments.add(to);
         } else {
             if (to == from) {
 //                LogUtil.e("to==from", (to == from) + "");
@@ -196,6 +200,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tabItem.imageView.setImageResource(tabItem.unselId);
                 tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
             }
+        }
+    }
+
+    private void resetUI(){
+        if (fragments==null){
+            return;
+        }
+        if (fragments.size()==0){
+            return;
+        }
+
+        for (Fragment fragment:fragments){
+            fm.beginTransaction().hide(fragment).commit();
         }
     }
 
