@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -36,7 +38,6 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.HotLabel;
-import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -57,6 +58,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -64,7 +66,7 @@ import java.util.Random;
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
     private static final String PAGE_NAME = "app_index_slide"; //TODO 换成场景banner
     //标签列表
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //图片加载
@@ -149,7 +151,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                    DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -208,10 +210,31 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-//        DataPaser.hotLabelList(labelPage + "", handler);
-//        DataPaser.labelList(null, 1, null, 3 + "", handler);
         //虚拟数据
         handler.sendEmptyMessage(-2);
+        //热门标签
+        ClientDiscoverAPI.labelList(null, 1, 18 + "", 1, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.HOT_LABEL_LIST;
+                msg.obj = new HotLabel();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<HotLabel>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+            }
+        });
     }
 
     private Handler handler = new Handler() {
@@ -234,7 +257,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
                     if (netHotLabel.isSuccess()) {
-                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
+                        hotLabelList.addAll(netHotLabel.getData().getRows());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -418,7 +441,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+            DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
         }
     }
 }

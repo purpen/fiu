@@ -55,6 +55,24 @@ public class ClientDiscoverAPI {
     }
 
     //情景
+    //情景订阅
+    public static void subsQingjing(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.subs_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
+    //取消情景订阅
+    public static void cancelSubsQingjing(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cancel_subs_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
     //情景新增
     public static void createQingjing(String id, String title, String des, String tags, String address, String tmp, String lat, String lng, RequestCallBack<String> callBack) {
         String url = NetworkConstance.create_qingjing;
@@ -146,11 +164,12 @@ public class ClientDiscoverAPI {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String scene_id, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("scene_id", scene_id);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("dis", dis);
         params.addQueryStringParameter("lng", lng);

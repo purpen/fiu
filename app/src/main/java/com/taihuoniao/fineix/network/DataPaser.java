@@ -24,14 +24,13 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
-import com.taihuoniao.fineix.beans.HotLabel;
-import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.JDDetailsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
+import com.taihuoniao.fineix.beans.QingjingSubsBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -216,6 +215,63 @@ public class DataPaser {
     }
 
     //情景
+    //情景订阅
+    public static void subsQingjing(String id, final Handler handler) {
+        ClientDiscoverAPI.subsQingjing(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SUBS_QINGJING;
+                msg.obj = new QingjingSubsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingSubsBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+    //情景
+    //取消订阅情景
+    public static void cancelSubsQingjing(String id,final Handler handler){
+        ClientDiscoverAPI.cancelSubsQingjing(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CANCEL_SUBS_QINGJING;
+                msg.obj = new QingjingSubsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingSubsBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //情景
     //情景新增
     public static void createQingjing(String id, String title, String des, String tags, String address, String tmp, String lat, String lng, final Handler handler) {
         ClientDiscoverAPI.createQingjing(id, title, des, tags, address, tmp, lat, lng, new RequestCallBack<String>() {
@@ -250,7 +306,7 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+                Log.e("<<<>>>", responseInfo.result);
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_DETAILS;
@@ -485,8 +541,8 @@ public class DataPaser {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.getSceneList(page, size, stick, dis, lng, lat, new RequestCallBack<String>() {
+    public static void getSceneList(String page, String size, String scene_id, String stick, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.getSceneList(page, size, scene_id, stick, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);
@@ -688,59 +744,6 @@ public class DataPaser {
         });
     }
 
-    //标签
-    //热门标签
-    public static void hotLabelList(String page, final Handler handler) {
-        ClientDiscoverAPI.hotLabelList(page, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.HOT_LABEL_LIST;
-                HotLabel hotLabel = new HotLabel();
-                try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    hotLabel.setSuccess(job.optBoolean("success"));
-//                    hotLabel.setStatus(job.optString("status"));
-                    hotLabel.setMessage(job.optString("message"));
-                    if (hotLabel.isSuccess()) {
-                        List<HotLabelBean> hotLabelBeanList = new ArrayList<HotLabelBean>();
-                        JSONObject data = job.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject ob = rows.getJSONObject(i);
-                            HotLabelBean hotLabelBean = new HotLabelBean();
-                            hotLabelBean.set_id(ob.optString("_id"));
-                            hotLabelBean.setUsed_count(ob.optString("used_count"));
-                            hotLabelBean.setType_str(ob.optString("type_str"));
-                            hotLabelBean.setTitle_en(ob.optString("title_en"));
-                            hotLabelBean.setTitle_cn(ob.optString("title_cn"));
-                            hotLabelBean.setStick(ob.optString("stick"));
-                            hotLabelBean.setRight_ref(ob.optString("right_ref"));
-                            hotLabelBean.setParent_id(ob.optString("parent_id"));
-                            hotLabelBean.setLevel(ob.optString("level"));
-                            hotLabelBean.setLeft_ref(ob.optString("left_ref"));
-                            hotLabelBean.setParent_id(ob.optString("parent_id"));
-                            hotLabelBean.setCover_id(ob.optString("cover_id"));
-                            hotLabelBean.setChildren_count(ob.optString("children_count"));
-                            hotLabelBean.setStatus(ob.optString("status"));
-                            hotLabelBeanList.add(hotLabelBean);
-                        }
-                        hotLabel.setHotLabelBeanList(hotLabelBeanList);
-                    }
-                    msg.obj = hotLabel;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-    }
 
     //公共
     //分类列表

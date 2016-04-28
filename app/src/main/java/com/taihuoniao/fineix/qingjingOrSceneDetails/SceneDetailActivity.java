@@ -180,25 +180,35 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.CANCEL_LOVE_SCENE:
-                    dialog.dismiss();
                     SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean1.isSuccess()) {
+                        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
                         loveCount.setText(netSceneLoveBean1.getData().getLove_count() + "人赞过");
                         loveCountTv.setText(netSceneLoveBean1.getData().getLove_count() + "");
+                        if (netSceneLoveBean1.getData().getLove_count() > 14) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
                     } else {
                         Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.LOVE_SCENE:
-                    dialog.dismiss();
                     SceneLoveBean netSceneLoveBean = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean.isSuccess()) {
+                        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
                         isLove = 1;
                         love.setImageResource(R.mipmap.love_yes);
                         loveCount.setText(netSceneLoveBean.getData().getLove_count() + "人赞过");
                         loveCountTv.setText(netSceneLoveBean.getData().getLove_count() + "");
+                        if (netSceneLoveBean.getData().getLove_count() > 14) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
                     } else {
                         Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -209,12 +219,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     if (netCommonBean.isSuccess()) {
                         headList.clear();
                         headList.addAll(netCommonBean.getData().getRows());
-                        if (headList.size() > 12) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-//                        Log.e("<<<",headList.toString());
                         sceneDetailUserHeadAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -287,7 +291,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         isShowAll = false;
         for (final SceneDetails.Product product : productList) {
-            Log.e("<<<", productList.toString());
+//            Log.e("<<<", productList.toString());
             final LabelView labelView = new LabelView(SceneDetailActivity.this);
             TagItem tagItem = new TagItem();
             tagItem.setId(product.getId());

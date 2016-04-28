@@ -22,6 +22,10 @@ public class NetworkConstance {
     //情景
     //点赞，订阅，关注，收藏通用列表
     public static final String common_lists = BASE_URL + "/favorite";
+    //订阅情景
+    public static final String subs_qingjing = BASE_URL + "/favorite/ajax_subscription";
+    //取消订阅情景
+    public static final String cancel_subs_qingjing = BASE_URL + "/favorite/ajax_cancel_subscription";
     //情景新增
     public static final String create_qingjing = BASE_URL + "/scene_scene/save";
     //情景详情

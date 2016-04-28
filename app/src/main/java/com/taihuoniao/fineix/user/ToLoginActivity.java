@@ -96,6 +96,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                                         case DataConstants.SceneDetailActivity:
                                             sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                                             break;
+                                        case DataConstants.ElseActivity:
+                                            break;
                                         default:
 //                                            THNMainActivity.instance.finish();
                                             Intent intent = new Intent(ToLoginActivity.this,

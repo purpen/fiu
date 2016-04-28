@@ -93,6 +93,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                                         case DataConstants.SceneDetailActivity:
                                             sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                                             break;
+                                        case DataConstants.ElseActivity:
+                                            break;
                                         default:
 //                                            THNMainActivity.instance.finish();
                                             Intent intent = new Intent(ToRegisterActivity.this,

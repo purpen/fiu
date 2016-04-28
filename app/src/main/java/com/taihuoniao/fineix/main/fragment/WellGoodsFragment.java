@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,8 +12,10 @@ import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -33,7 +36,6 @@ import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
-import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.ProductListData;
 import com.taihuoniao.fineix.beans.RandomImg;
@@ -49,6 +51,7 @@ import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -60,7 +63,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private WaittingDialog dialog;
     private static final String PAGE_NAME = "app_index_slide";
     //标签列表
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //分类列表
@@ -82,10 +85,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         sfiv.setMaxRotationAngle(0);
         sfiv.setGravity(Gravity.CENTER_VERTICAL);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
-//        absoluteLayout.setLayoutParams(lp);
-//        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
-//        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
+        absoluteLayout.setLayoutParams(lp);
+        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -181,6 +184,29 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
             }
         });
+        //热门标签
+        ClientDiscoverAPI.labelList(null, 1, 18 + "", 1, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.HOT_LABEL_LIST;
+                msg.obj = new HotLabel();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<HotLabel>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+            }
+        });
     }
 
     private void setSlidingFocusImageViewData(ArrayList<ProductListBean> list) {
@@ -202,23 +228,23 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected void initList() {
         hotLabelList = new ArrayList<>();
-//        labelRecycler.setHasFixedSize(true);
-//        labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
-//        pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
-//            @Override
-//            public void click(int postion) {
-//                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
-//        labelRecycler.setAdapter(pinLabelRecyclerAdapter);
-//        list = new ArrayList<>();
-//        recyclerView.setHasFixedSize(true);
+        labelRecycler.setHasFixedSize(true);
+        labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+        pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
+            @Override
+            public void click(int postion) {
+                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
+            }
+        });
+        labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
+        labelRecycler.setAdapter(pinLabelRecyclerAdapter);
+        list = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//        recyclerView.setLayoutManager(layoutManager);
-//        pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
-//        recyclerView.setAdapter(pinRecyclerAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
+        recyclerView.setAdapter(pinRecyclerAdapter);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
 //                .showImageForEmptyUri(R.mipmap.default_backround)
@@ -236,16 +262,16 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
                     if (netHotLabel.isSuccess()) {
-//                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
-//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+                        hotLabelList.addAll(netHotLabel.getData().getRows());
+                        pinLabelRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
                 case DataConstants.CATEGORY_LIST:
                     dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
-//                        list.addAll(netCategoryBean.getList());
-//                        pinRecyclerAdapter.notifyDataSetChanged();
+                        list.addAll(netCategoryBean.getList());
+                        pinRecyclerAdapter.notifyDataSetChanged();
                     }
                     addImgToAbsolute();
                     break;

@@ -85,17 +85,17 @@
 
             </AbsoluteLayout>
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1px"-->
-                <!--android:background="#e4e4e4"/>-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e4e4e4"/>
 
-           <!-- <android.support.v7.widget.RecyclerView
+           <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_wellgoods_label_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:paddingBottom="15dp"
-                android:paddingTop="5dp"/>-->
+                android:paddingTop="5dp"/>
             <com.taihuoniao.fineix.view.SlidingFocusImageView
                 android:id="@+id/sfiv"
                 android:layout_height="@dimen/dp150"
@@ -104,21 +104,21 @@
                 android:spacing="@dimen/dp70"
                />
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1px"-->
-                <!--android:background="#e4e4e4"/>-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e4e4e4"/>
 
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/fragment_wellgoods_recycler"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="104dp"-->
-                <!--android:paddingTop="15dp"/>-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_wellgoods_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:paddingTop="15dp"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1px"-->
-                <!--android:background="#e4e4e4"/>-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e4e4e4"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

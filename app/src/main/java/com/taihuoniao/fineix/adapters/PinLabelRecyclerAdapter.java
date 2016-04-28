@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.HotLabelBean;
+import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class PinLabelRecyclerAdapter extends RecyclerView.Adapter<PinLabelRecyclerAdapter.VH> {
     private Context context;
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public PinLabelRecyclerAdapter(Context context1, List<HotLabelBean> hotLabelList, EditRecyclerAdapter.ItemClick itemClick1) {
+    public PinLabelRecyclerAdapter(Context context1, List<HotLabel.HotLabelBean> hotLabelList, EditRecyclerAdapter.ItemClick itemClick1) {
         context = context1;
         this.hotLabelList = hotLabelList;
         itemClick = itemClick1;

@@ -7,8 +7,12 @@ package com.taihuoniao.fineix.network;
 public class DataConstants {
     //判断从哪个activity跳转到登录界面
     public static final int SceneDetailActivity = 101;
+    public static final int ElseActivity = 102;//其他不需要刷新界面的activity
+    public static final int QingjingDetailActivity = 103;
     //场景详情界面跳转到注册界面广播Action
     public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";
+    //情景详情界面跳转到注册界面广播action
+    public static final String BroadQingjingDetail = "com.taihuonioa.fiu.qingjingdetail";
     public static final int NET_FAIL = 404;//网络请求失败
     //activity跳转的请求码和返回码
     public static final int REQUESTCODE_PHOTO_TO_CROP = 100;
@@ -71,6 +75,10 @@ public class DataConstants {
     public static final int LOVE_SCENE = 70;
     //取消场景点赞
     public static final int CANCEL_LOVE_SCENE = 69;
+    //情景订阅
+    public static final int SUBS_QINGJING = 68;
+    //取消情景订阅
+    public static final int CANCEL_SUBS_QINGJING = 67;
 
 
     //SharedPreferences 存储文件名

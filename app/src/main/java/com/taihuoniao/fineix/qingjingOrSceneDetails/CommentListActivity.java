@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -16,8 +17,11 @@ import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -153,7 +157,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 if (TextUtils.isEmpty(editText.getText())) {
                     return;
                 }
-                Toast.makeText(CommentListActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
+                if (!LoginInfo.isUserLogin()) {
+                    Toast.makeText(CommentListActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
+                }
                 dialog.show();
                 DataPaser.sendComment(target_id, editText.getText().toString(), type, handler);
                 break;

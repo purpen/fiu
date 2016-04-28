@@ -72,8 +72,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                            Log.e(">>>", ">>>>>which_activityllll>>>" + MainApplication.which_activity);
 //                            Log.e(">>>", ">>>>>forPaywayToMainlllll>>>" + THNApplication.forPaywayToMain);
                             switch (MainApplication.which_activity) {
+                                case DataConstants.QingjingDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                                    break;
                                 case DataConstants.SceneDetailActivity:
                                     sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
+                                    break;
+                                case DataConstants.ElseActivity:
+                                    //其他不需要刷新界面的activity
                                     break;
                                 default:
 //                                    THNMainActivity.instance.finish();

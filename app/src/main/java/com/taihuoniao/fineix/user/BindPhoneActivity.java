@@ -167,6 +167,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             case DataConstants.SceneDetailActivity:
                 sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                 break;
+            case DataConstants.ElseActivity:
+                break;
             default:
 //                THNMainActivity.instance.finish();
                 Intent intent = new Intent(BindPhoneActivity.this,

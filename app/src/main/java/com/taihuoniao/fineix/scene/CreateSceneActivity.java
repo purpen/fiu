@@ -30,12 +30,14 @@ import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
@@ -150,7 +152,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         location = ImageUtils.location;
         if (location != null) {
             //图片上有位置信息
-            Log.e("<<<", "不为空");
             getAddressByCoordinate();
         } else {
             //图片上无位置信息
@@ -190,14 +191,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 district = result.getAddressDetail().district;
                 poiInfoList = result.getPoiList();
                 if (poiInfoList == null) {
-                    Log.e("<<<", "list为空");
                     return;
                 }
-//                    for (PoiInfo each : poiInfoList) {
-//                        Log.e("<<<", "address = " + each.address + ",经度 = " + each.location.longitude + ",纬度 = " + each.location.latitude
-//                        +",city = "+each.city+",name = "+each.name+",phoneNum = "+each.phoneNum+",postCode = "+each.postCode
-//                        +",uid="+each.uid+",describeContents = "+each.describeContents()+",tostring = "+each.toString());
-//                    }
                 ImageUtils.location = null;
                 MapUtil.destroyLocationClient();
                 recyclerAdapter = new AddressRecycleAdapter(CreateSceneActivity.this, poiInfoList, CreateSceneActivity.this);
@@ -234,13 +229,22 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
                 break;
             case R.id.activity_create_scene_labelrelative:
-                //需要登录
-                Toast.makeText(CreateSceneActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
+                if (!LoginInfo.isUserLogin()) {
+                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
+                    return;
+                }
                 MainApplication.selectList = selectList;
                 startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
                 break;
             case R.id.title_continue:
-                Toast.makeText(CreateSceneActivity.this, "需要登录", Toast.LENGTH_SHORT).show();
+                if (!LoginInfo.isUserLogin()) {
+                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
+                    return;
+                }
                 if (TextUtils.isEmpty(titleEdt.getText())) {
                     Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景标题", Toast.LENGTH_SHORT).show();
                     return;
