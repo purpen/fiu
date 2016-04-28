@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.taihuoniao.fineix.beans.ProvinceCityDistrict;
+import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.main.MainApplication;
 
 import java.io.BufferedReader;
@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 public class ProvinceUtil {
     private static final String TAG = "ProvinceUtil";
-    private static ArrayList<ProvinceCityDistrict> provinceList = null;
+    private static ArrayList<ProvinceCityData> provinceList = null;
     private static HashMap<String, ArrayList<String>> provinceCityMap = null;
     private static HashMap<String, ArrayList<String>> cityCountiesMap = null;
     public static void init(Context context) {
@@ -29,10 +29,10 @@ public class ProvinceUtil {
             InputStream open = context.getResources().getAssets().open("address.json");
             if (open != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(open, Constants.CHARSET));
-                provinceList = new ArrayList<ProvinceCityDistrict>();
+                provinceList = new ArrayList<ProvinceCityData>();
                 JsonArray jsonArray = JsonUtil.getJsonArray(reader);
                 for (JsonElement element : jsonArray) {
-                    provinceList.add(JsonUtil.fromJson(element, ProvinceCityDistrict.class));
+                    provinceList.add(JsonUtil.fromJson(element, ProvinceCityData.class));
                 }
                 initProviceCityMap();
             }
@@ -49,11 +49,11 @@ public class ProvinceUtil {
         cityCountiesMap=new HashMap<String,ArrayList<String>>();
         ArrayList<String> cities = null;
         ArrayList<String> counties = null;
-        for (ProvinceCityDistrict provinceCityDistrict : provinceList) {
+        for (ProvinceCityData provinceCityDistrict : provinceList) {
             cities = new ArrayList<String>();
-            for (ProvinceCityDistrict.City city : provinceCityDistrict.cities) {
+            for (ProvinceCityData.City city : provinceCityDistrict.cities) {
                 cities.add(city.areaName);
-                for (ProvinceCityDistrict.City.County county:city.counties){
+                for (ProvinceCityData.City.County county:city.counties){
                     counties=new ArrayList<String>();
                     counties.add(county.areaName);
                 }
@@ -68,7 +68,7 @@ public class ProvinceUtil {
             init(MainApplication.getContext());
         }
         ArrayList<String> provinces = new ArrayList<String>();
-        for (ProvinceCityDistrict provinceCityDistrict : provinceList) {
+        for (ProvinceCityData provinceCityDistrict : provinceList) {
             provinces.add(provinceCityDistrict.areaName);
         }
         return provinces;

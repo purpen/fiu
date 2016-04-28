@@ -20,13 +20,6 @@ import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.map.BDSearchAddressActivity;
-import com.taihuoniao.fineix.map.HotCitiesActivity;
-import com.taihuoniao.fineix.map.POIListActivity;
-import com.taihuoniao.fineix.map.SelectOrSearchQJActivity;
-import com.taihuoniao.fineix.scene.SearchResultActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
-import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,45 +92,45 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return view;
     }
 
-    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
-    protected void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.location_btn:
-                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
-                break;
-            case R.id.poi_btn:
-                activity.startActivity(new Intent(activity, POIListActivity.class));
-                break;
-            case R.id.share_btn:
-                //TODO 调用所有分享
-//                Intent intent = new Intent();
-//                intent.setAction(Intent.ACTION_SEND);
-//                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
-//                intent.setType("*/*");
-//                startActivity(Intent.createChooser(intent, "分享到"));
-
-                //TODO 通过短信分享
-                String content="我是分享内容....";
-                Uri sms = Uri.parse("smsto:");
-                Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
-                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
-                sendIntent.putExtra( "sms_body",content);
-                sendIntent.setType("vnd.android-dir/mms-sms" );
-                startActivity(sendIntent);
-                break;
-            case R.id.sliding_tab_btn:
-//                activity.startActivity(new Intent(activity, OrderListActivity.class));
-                activity.startActivity(new Intent(activity, SearchResultActivity.class));
-                break;
-            case R.id.geo:
-                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
-                break;
-            case R.id.select_search_qj:
-                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
-                break;
-            case R.id.focus:
-                activity.startActivity(new Intent(activity, CaptureActivity.class));
-                break;
+//    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
+//    protected void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.location_btn:
+//                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
+//                break;
+//            case R.id.poi_btn:
+//                activity.startActivity(new Intent(activity, POIListActivity.class));
+//                break;
+//            case R.id.share_btn:
+//                //TODO 调用所有分享
+////                Intent intent = new Intent();
+////                intent.setAction(Intent.ACTION_SEND);
+////                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
+////                intent.setType("*/*");
+////                startActivity(Intent.createChooser(intent, "分享到"));
+//
+//                //TODO 通过短信分享
+//                String content="我是分享内容....";
+//                Uri sms = Uri.parse("smsto:");
+//                Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
+//                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
+//                sendIntent.putExtra( "sms_body",content);
+//                sendIntent.setType("vnd.android-dir/mms-sms" );
+//                startActivity(sendIntent);
+//                break;
+//            case R.id.sliding_tab_btn:
+////                activity.startActivity(new Intent(activity, OrderListActivity.class));
+//                activity.startActivity(new Intent(activity, SearchResultActivity.class));
+//                break;
+//            case R.id.geo:
+//                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
+//                break;
+//            case R.id.select_search_qj:
+//                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
+//                break;
+//            case R.id.focus:
+//                activity.startActivity(new Intent(activity, CaptureActivity.class));
+//                break;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -182,43 +175,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         startActivity(intent);
     }
 
-    //    @OnClick({R.id.location_btn, R.id.poi_btn, R.id.share_btn, R.id.sliding_tab_btn, R.id.geo, R.id.select_search_qj})
-//    protected void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.location_btn:
-//                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
-//                break;
-//            case R.id.poi_btn:
-//                activity.startActivity(new Intent(activity, POIListActivity.class));
-//                break;
-//            case R.id.share_btn:
-//                //TODO 调用所有分享
-////                Intent intent = new Intent();
-////                intent.setAction(Intent.ACTION_SEND);
-////                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
-////                intent.setType("*/*");
-////                startActivity(Intent.createChooser(intent, "分享到"));
-//
-//                //TODO 通过短信分享
-//                String content = "我是分享内容....";
-//                Uri sms = Uri.parse("smsto:");
-//                Intent sendIntent = new Intent(Intent.ACTION_VIEW, sms);
-//                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
-//                sendIntent.putExtra("sms_body", content);
-//                sendIntent.setType("vnd.android-dir/mms-sms");
-//                startActivity(sendIntent);
-//                break;
-//            case R.id.sliding_tab_btn:
-//                activity.startActivity(new Intent(activity, OrderListActivity.class));
-//                break;
-//            case R.id.geo:
-//                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
-//                break;
-//            case R.id.select_search_qj:
-//                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
-//                break;
-//        }
-//    }
 
 
 }
