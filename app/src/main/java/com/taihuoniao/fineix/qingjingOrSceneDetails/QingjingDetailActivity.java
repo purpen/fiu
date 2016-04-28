@@ -202,6 +202,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, "scene", "subscription", handler);
                         is_subscript = 1;
+
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(netQingjingSubsBean.getData().getSubscription_count() + "人订阅");
                         moreUser.setText(netQingjingSubsBean.getData().getSubscription_count() + "+");
