@@ -92,4 +92,7 @@ public class NetworkConstance {
 
     //修改用户信息
     public static final String UPDATE_USERINFO_URL = BASE_URL + "/my/update_profile";
+
+    //获取全部城市
+    public static final String ALL_CITY_URL = BASE_URL + "/shopping/fetch_areas";
 }

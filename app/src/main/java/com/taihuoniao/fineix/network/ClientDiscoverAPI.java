@@ -1,11 +1,11 @@
 package com.taihuoniao.fineix.network;
-
 import com.baidu.mapapi.model.LatLng;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
 /**
@@ -457,8 +457,24 @@ public class ClientDiscoverAPI {
      */
     public static void updateUserInfo(String key,String value,RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter(key,value);
+        if (EditUserInfoActivity.isSubmitAddress){
+            params.addBodyParameter("province_id", key);
+            params.addBodyParameter("district_id", value);
+        }else {
+            params.addQueryStringParameter(key,value);
+        }
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
+
+    /**
+     * 获取所有城市
+     * @param callBack
+     */
+    public static void getAllCities(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        MD5Utils.sign(params, NetworkConstance.ALL_CITY_URL, callBack, false);
+    }
+
+
 
 }

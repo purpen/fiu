@@ -4,21 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
-
-//import com.zcjcn.beans.HttpResponse;
-//import com.zcjcn.beans.UserLogin;
-//import com.zcjcn.http.HttpRequestData;
-//import com.zcjcn.interfaces.ICallback4Http;
-//import com.zcjcn.utils.LoginUtil;
-
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-
 import java.util.HashMap;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,28 +67,37 @@ public class UserEditNameActivity extends BaseActivity {
 
     protected void submitData() {
         final String nickName=et_nickname.getText().toString();
-//        hashMap.clear();
-//        hashMap.put("Action", "EditUserInfo");
-//        hashMap.put("uid", LoginUtil.getUserId());
-//        hashMap.put("key","nickname");
-//        hashMap.put("data",nickName);
-//        HttpRequestData.sendPostRequest(Constants.APP_URI, hashMap, new ICallback4Http() {
-//            @Override
-//            public void onResponse(String response) {
-//                LogUtil.e(tag, response);
-//                HttpResponse httpResponse = JsonUtil.fromJson(response, HttpResponse.class);
-//                Util.makeToast(activity, httpResponse.getMessage());
-//                Intent intent=new Intent();
-//                userLogin.nickname=nickName;
-//                intent.putExtra(UserLogin.class.getSimpleName(),userLogin);
-//                setResult(RESULT_OK,intent);
-//                finish();
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//
-//            }
-//        });
+        EditUserInfoActivity.isSubmitAddress=false;
+        ClientDiscoverAPI.updateUserInfo("nickname", nickName, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null){
+                    return;
+                }
+
+                if (TextUtils.isEmpty(responseInfo.result)){
+                    return;
+                }
+
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+
+                if (response.isSuccess()){
+                    Util.makeToast(response.getMessage());
+                    Intent intent = new Intent();
+                    user.nickname=nickName;
+                    intent.putExtra(User.class.getSimpleName(),user);
+                    setResult(RESULT_OK,intent);
+                    finish();
+                    return;
+                }
+
+                Util.makeToast(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Util.makeToast(s);
+            }
+        });
     }
 }

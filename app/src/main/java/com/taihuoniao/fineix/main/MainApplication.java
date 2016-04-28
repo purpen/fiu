@@ -70,7 +70,6 @@ public class MainApplication extends Application {
         instance = this;
         initImageLoader();
         JsonUtil.init();
-        ProvinceUtil.init(this);
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
         cropPicPath = getCacheDirPath() + "/crop";

@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
+import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -99,7 +100,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private static final int WOMAN = 2;
     private String key;
     private String value;
-
+    public static boolean isSubmitAddress=false;
     public EditUserInfoActivity() {
         super(R.layout.activity_user_info_layout);
     }
@@ -228,9 +229,9 @@ public class EditUserInfoActivity extends BaseActivity {
             }
         }
     };
-
     @Override
     protected void requestNet() {
+        ProvinceUtil.init();
         ClientDiscoverAPI.getMineInfo(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -301,7 +302,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     /**
-     * 选择地址
+     * 确认选择地址
      * @param view
      * @param casv
      */
@@ -311,10 +312,14 @@ public class EditUserInfoActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tv_confirm_select:
-                        key = "address";
-                        value = casv.getAddress();
+                        isSubmitAddress=true;
+                        String addr=casv.getAddress();
+//                        LogUtil.e(TAG,addr.split("\\s")[0]);
+//                        LogUtil.e(TAG,addr.split("\\s")[1]);
+                        key=ProvinceUtil.getProvinceIdByName(addr.split("\\s")[0])+"";
+                        value=ProvinceUtil.getCityIdByName(addr.split("\\s")[1])+"";
                         submitData();
-                        custom_area.setTvArrowLeftStyle(true, value, R.color.color_333);
+                        custom_area.setTvArrowLeftStyle(true,addr, R.color.color_333);
                     case R.id.tv_cancel_select:
                     default:
                         PopupWindowUtil.dismiss();
@@ -331,6 +336,7 @@ public class EditUserInfoActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tv_confirm_select:
+                        isSubmitAddress=false;
                         key = "birthday";
                         value = cbsv.getBithday();
                         submitData();
@@ -370,6 +376,7 @@ public class EditUserInfoActivity extends BaseActivity {
                     case R.id.tv_confirm_select:
                         switch (id) {
                             case R.string.select_gender:
+                                isSubmitAddress=false;
                                 String sex = list.get(wheelView.getCurrentItem());
                                 key = "sex";
                                 if (TextUtils.equals("保密",sex)) {
@@ -408,11 +415,11 @@ public class EditUserInfoActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()){
-                    Util.makeToast("修改成功");
+                    Util.makeToast(response.getMessage());
                     return;
                 }
 
-                Util.makeToast("对不起,修改失败");
+                Util.makeToast(response.getMessage());
 
             }
 
@@ -492,9 +499,9 @@ public class EditUserInfoActivity extends BaseActivity {
             File file = null;
             switch (requestCode) {
                 case REQUEST_NICK_NAME:
-                    loadActivityData();
-//                    userLogin=(UserLogin)data.getSerializableExtra(UserLogin.class.getSimpleName());
-//                    custom_nick_name.setTvArrowLeftStyle(true,userLogin.nickname,R.color.color_333);
+//                    loadActivityData();
+                    user=(User)data.getSerializableExtra(User.class.getSimpleName());
+                    custom_nick_name.setTvArrowLeftStyle(true,user.nickname,R.color.color_333);
                     break;
                 case PICK_FROM_CAMERA:
                     doCrop();

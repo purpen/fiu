@@ -1,16 +1,13 @@
 package com.taihuoniao.fineix.utils;
-
-import android.content.Context;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import android.text.TextUtils;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
-import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,73 +16,77 @@ import java.util.HashMap;
  *         created at 2016/4/27 13:30
  */
 public class ProvinceUtil {
+    private static ProvinceCityData data;
     private static final String TAG = "ProvinceUtil";
-    private static ArrayList<ProvinceCityData> provinceList = null;
     private static HashMap<String, ArrayList<String>> provinceCityMap = null;
-    private static HashMap<String, ArrayList<String>> cityCountiesMap = null;
-    public static void init(Context context) {
-        try {
-            StringBuffer buffer = new StringBuffer();
-            InputStream open = context.getResources().getAssets().open("address.json");
-            if (open != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(open, Constants.CHARSET));
-                provinceList = new ArrayList<ProvinceCityData>();
-                JsonArray jsonArray = JsonUtil.getJsonArray(reader);
-                for (JsonElement element : jsonArray) {
-                    provinceList.add(JsonUtil.fromJson(element, ProvinceCityData.class));
+    private static HashMap<String,Integer> idProvinceMap=null;
+    private static HashMap<String,Integer> idCitiesMap=null;
+    public static void init() {
+        ClientDiscoverAPI.getAllCities(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null){
+                    return;
                 }
-                initProviceCityMap();
+                if (TextUtils.isEmpty(responseInfo.result)){
+                    return;
+                }
+                data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ProvinceCityData>>() {
+                });
+                dealData();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Util.makeToast(s);
+            }
+        });
+    }
+
+    private static void dealData(){
+        if (data==null){
+            LogUtil.e(TAG,"dealData---->data==null");
+            return;
+        }
+
+        if (data.rows==null ||data.rows.size()==0){
+            LogUtil.e(TAG,"dealData---->data.rows==null || data.rows.size()==0");
+            return;
+        }
+        provinceCityMap = new HashMap<>();
+        idProvinceMap=new HashMap<>();
+        idCitiesMap=new HashMap<>();
+        ArrayList<String> cities = null;
+        for (ProvinceCityData.Province province:data.rows){
+            idProvinceMap.put(province.city,province._id);
+            cities = new ArrayList<>();
+            for (ProvinceCityData.City city :province.cities){
+                cities.add(city.city);
+                idCitiesMap.put(city.city,city._id);
+            }
+            provinceCityMap.put(province.city,cities);
         }
     }
 
-    public static void initProviceCityMap() {
-        if (provinceList == null) {
-            init(MainApplication.getContext());
-        }
-        provinceCityMap = new HashMap<String, ArrayList<String>>();
-        cityCountiesMap=new HashMap<String,ArrayList<String>>();
-        ArrayList<String> cities = null;
-        ArrayList<String> counties = null;
-        for (ProvinceCityData provinceCityDistrict : provinceList) {
-            cities = new ArrayList<String>();
-            for (ProvinceCityData.City city : provinceCityDistrict.cities) {
-                cities.add(city.areaName);
-                for (ProvinceCityData.City.County county:city.counties){
-                    counties=new ArrayList<String>();
-                    counties.add(county.areaName);
-                }
-                cityCountiesMap.put(city.areaName,counties);
-            }
-            provinceCityMap.put(provinceCityDistrict.areaName, cities);
-        }
+    public static int getProvinceIdByName(String name){
+        return idProvinceMap.get(name);
+    }
+
+    public static int getCityIdByName(String name){
+        return idCitiesMap.get(name);
     }
 
     public static ArrayList<String> getProvinces() {
-        if (provinceList == null) {
-            init(MainApplication.getContext());
-        }
         ArrayList<String> provinces = new ArrayList<String>();
-        for (ProvinceCityData provinceCityDistrict : provinceList) {
-            provinces.add(provinceCityDistrict.areaName);
+        for (ProvinceCityData.Province province : data.rows) {
+            provinces.add(province.city);
         }
         return provinces;
     }
 
 
     public static ArrayList<String> getCitiesByProvince(String province) {
-        if (provinceCityMap == null) {
-            init(MainApplication.getContext());
-        }
         return provinceCityMap.get(province);
     }
 
-    public static ArrayList<String> getCountiesByCity(String city) {
-        if (cityCountiesMap==null){
-            init(MainApplication.getContext());
-        }
-        return  cityCountiesMap.get(city);
-    }
 }

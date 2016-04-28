@@ -15,9 +15,8 @@ import java.util.List;
 public class CustomAddressSelectView extends LinearLayout {
     private boolean isCyclic = false;
     private int visibleItems = 5;
-    public List<String> provinces;
-    public List<String> cities;
-    public List<String> counties;
+    private List<String> provinces;
+    private List<String> cities;
     private WheelView wv_left;
     private WheelView wv_center;
 //    private WheelView wv_right;
@@ -32,13 +31,12 @@ public class CustomAddressSelectView extends LinearLayout {
 
     public CustomAddressSelectView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-//        initData();
+        initProvinces();
         initViews(context);
         installListeners();
     }
 
     private void initViews(Context context) {
-        initProvinces();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_address_select_view, this);
         wv_left = (WheelView) view.findViewById(R.id.wv_left);
@@ -95,13 +93,13 @@ public class CustomAddressSelectView extends LinearLayout {
 //                wv_right.setAdapter(new StringWheelAdapter(counties));
             }
         });
-        wv_center.addChangingListener(new OnWheelChangedListener() {
-            @Override
-            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+//        wv_center.addChangingListener(new OnWheelChangedListener() {
+//            @Override
+//            public void onChanged(WheelView wheel, int oldValue, int newValue) {
 //                initCountiesByCity();
 //                wv_right.setAdapter(new StringWheelAdapter(counties));
-            }
-        });
+//            }
+//        });
     }
 
     public String getAddress() {//|| counties == null || counties.size() == 0
