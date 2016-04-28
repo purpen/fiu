@@ -78,7 +78,7 @@ public class UserCenterActivity extends BaseActivity{
             @Override
             public void onFailure(HttpException e, String s) {
                 LogUtil.e(TAG,s);
-                Util.makeToast("对不起,网络请求失败");
+                Util.makeToast(s);
             }
         });
     }
@@ -108,7 +108,6 @@ public class UserCenterActivity extends BaseActivity{
             tv_rank.setText(user.rank_title);
         }
     }
-
     @OnClick({R.id.iv_right,R.id.iv_detail})
     void onClick(View v){
         switch (v.getId()){
