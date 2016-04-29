@@ -59,7 +59,11 @@ public class FindFriendsActivity extends BaseActivity{
                 Util.makeToast("微博分享");
                 break;
             case R.id.item_contacts:
-                Util.makeToast("通讯录");
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容....");
+                intent.setType("*/*");
+                startActivity(Intent.createChooser(intent, "分享到"));
                 break;
         }
     }

@@ -9,10 +9,12 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.CustomShareView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -87,6 +89,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 startActivity(new Intent(activity,FeedbackActivity.class));
                 break;
             case R.id.item_share:
+                PopupWindowUtil.show(activity,new CustomShareView(activity));
                 //TODO 分享
                 break;
         }

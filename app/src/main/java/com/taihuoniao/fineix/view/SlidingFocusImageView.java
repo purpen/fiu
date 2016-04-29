@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Transformation;
 import android.widget.Gallery;
@@ -59,7 +60,7 @@ public class SlidingFocusImageView extends Gallery
     {
         mMaxRotationAngle = maxRotationAngle;
     }
-    
+
     public int getMaxZoom()
     {
         return mMaxZoom;

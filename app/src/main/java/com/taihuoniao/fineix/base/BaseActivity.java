@@ -13,6 +13,7 @@ import com.taihuoniao.fineix.R;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -39,6 +40,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ShareSDK.initSDK(this);
         super.onCreate(savedInstanceState);
         this.activity = this;
         getIntentData();
