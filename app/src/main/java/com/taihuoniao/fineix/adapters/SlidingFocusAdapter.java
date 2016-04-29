@@ -24,9 +24,24 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
         this.sfiv=sfiv;
     }
 
+    public int getCount()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    public Object getItem(int position)
+    {
+        return position;
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        T item=list.get(position);
+        T item=list.get(position%list.size());
         ViewHolder holder =null;
         if (convertView==null) {
             holder=new ViewHolder();
@@ -44,6 +59,8 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
             ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv);
         }
 
+        LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
+        LogUtil.e(TAG,"Position=====>>"+position);
         if (sfiv.getSelectedItemPosition() == position) {
             convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-activity.getResources().getDimensionPixelSize(R.dimen.dp150),activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
         } else {

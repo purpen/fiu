@@ -13,6 +13,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -79,7 +80,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private SlidingFocusAdapter sfAdapter = null;
     private int page = 1;
     private static final String PRODUCT_STATE = "1"; //表示正常在线
-
+    private TextView tv_name;
+    private TextView tv_price;
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
@@ -87,7 +89,11 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
         scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
         sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
+        tv_name = (TextView) view.findViewById(R.id.tv_name);
+        tv_price = (TextView) view.findViewById(R.id.tv_price);
+
         sfiv.setMaxRotationAngle(0);
+        sfiv.setAnimationDuration(0);
         sfiv.setGravity(Gravity.CENTER_VERTICAL);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
@@ -226,7 +232,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
         if (sfAdapter == null) {//获得产品列表的一项  list.get(0)
             sfAdapter = new SlidingFocusAdapter(sfiv, list.get(0).banner_asset, activity);
+            tv_name.setText(list.get(0).getTitle());
+            tv_price.setText("￥"+list.get(0).getSale_price());
             sfiv.setAdapter(sfAdapter);
+            sfiv.setSelection(Integer.MAX_VALUE/2);
         } else {
             sfAdapter.notifyDataSetChanged();
         }

@@ -106,11 +106,41 @@
                 android:background="@color/color_f7f7f7"
                 android:spacing="@dimen/dp70"
                 />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e4e4e4"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10">
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/tags"
+                    android:paddingLeft="@dimen/dp10"
+                    android:textSize="@dimen/sp12"
+                    android:singleLine="true"
+                    android:maxLength="20"
+                    android:ellipsize="end"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="@dimen/dp10"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/head_logo"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    />
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/tags"
+                    android:gravity="center"
+                    android:layout_weight="4"
+                    android:textSize="@dimen/sp12"
+                    android:layout_marginRight="@dimen/dp10"
+                    />
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_wellgoods_recycler"
