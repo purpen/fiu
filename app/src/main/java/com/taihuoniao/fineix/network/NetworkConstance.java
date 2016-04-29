@@ -51,6 +51,8 @@ public class NetworkConstance {
     //热门标签
     public static final String hot_label_list = BASE_URL + "/scene_tags/hotlist";
     //公共
+    //举报
+    public static final String report = BASE_URL + "/report_tip/save";
     //品牌列表
     public static final String brand_list = BASE_URL + "/scene_brands/getlist";
     //分类列表

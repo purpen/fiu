@@ -3,8 +3,11 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,7 +36,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/21.
  */
-public class CommentListActivity extends BaseActivity implements View.OnClickListener {
+public class CommentListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     //上个界面传递过来的评论关联id
     private String target_id;
     private String type;//类型  12 场景评论
@@ -95,6 +98,27 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             }
         });
         sendBtn.setOnClickListener(this);
+        listView.setOnItemClickListener(this);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    sendBtn.setText("取消");
+                } else if (s.length() > 0) {
+                    sendBtn.setText("发送");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -111,6 +135,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean = (NetBean) msg.obj;
                     Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean.isSuccess()) {
+                        editText.setHint("评论一下");
+                        is_reply = 0 + "";
+                        reply_id = null;
+                        reply_user_id = null;
                         editText.setText("");
                         currentPage = 1;
                         DataPaser.commentsList(currentPage + "", target_id, type, handler);
@@ -154,6 +182,13 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_commentlist_send:
+                if (sendBtn.getText().toString().equals("取消") && editText.getHint().toString().startsWith("回复")) {
+                    editText.setHint("评论一下");
+                    is_reply = 0 + "";
+                    reply_id = null;
+                    reply_user_id = null;
+                    return;
+                }
                 if (TextUtils.isEmpty(editText.getText())) {
                     return;
                 }
@@ -163,8 +198,32 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
                 }
                 dialog.show();
-                DataPaser.sendComment(target_id, editText.getText().toString(), type, handler);
+                switch (is_reply) {
+                    case "1":
+                        if (reply_id == null || reply_user_id == null) {
+                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        DataPaser.sendComment(target_id, editText.getText().toString(), type, is_reply, reply_id, reply_user_id, handler);
+                        break;
+                    default:
+                        DataPaser.sendComment(target_id, editText.getText().toString(), type, is_reply, null, null, handler);
+                        break;
+                }
                 break;
         }
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String name = commentList.get(position).getUser().getNickname();
+        editText.setHint("回复  " + name + ":");
+        is_reply = 1 + "";
+        reply_id = commentList.get(position).get_id();
+        reply_user_id = commentList.get(position).getUser().get_id();
+    }
+
+    private String is_reply = 0 + "";//是回复还是评论 0评论 1回复
+    private String reply_id;//被回复评论id
+    private String reply_user_id;//被回复人id
 }

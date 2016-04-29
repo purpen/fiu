@@ -34,7 +34,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginLeft="11dp"
             android:background="@drawable/corner_yellow"
-            android:text="发送"
+            android:text="取消"
             android:textColor="@color/white"
             android:textSize="11sp"
             />

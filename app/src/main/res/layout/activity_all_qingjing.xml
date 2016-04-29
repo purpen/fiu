@@ -9,11 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="45dp">
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/logo"/>
+            android:gravity="center"
+            android:text="全部情景"
+            android:textColor="@color/black333333"
+            android:textSize="16sp"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,9 +40,9 @@
         android:id="@+id/activity_all_qingjing_pullrefreshview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:layout_below="@id/activity_all_qingjing_titlelayout"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:scrollbars="none"/>
 
     <ProgressBar
         android:id="@+id/activity_all_qingjing_progress"

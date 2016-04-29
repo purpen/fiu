@@ -48,6 +48,8 @@
     <string name="comment">评论</string>
     <!-- SelectQingjingActivity -->
     <string name="select_qingjing">选择情景</string>
+    <!-- ReportActivity -->
+    <string name="report">举报</string>
     <!-- 定位 -->
     <string name="startlocation">定位</string>
     <string name="stoplocation">停止</string>

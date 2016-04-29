@@ -87,6 +87,8 @@ public class DataConstants {
     //SelectQingjingActivity到AllQingjingActivity界面的请求码和返回码
     public static final int REQUESTCODE_SELECTQJ_ALLQJ = 63;
     public static final int RESULTCODE_SELECTQJ_ALLQJ = 62;
+    //举报
+    public static final int REPORT = 61;
 
 
 

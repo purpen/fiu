@@ -250,6 +250,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     QingjingDetailBean netQingjingDetailBean = (QingjingDetailBean) msg.obj;
                     if (netQingjingDetailBean.isSuccess()) {
 //                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
+                        QingjingDetailBean = netQingjingDetailBean;
                         ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg);
                         qingjingTitle.setText(netQingjingDetailBean.getData().getTitle());
                         locationTv.setText(netQingjingDetailBean.getData().getAddress());
@@ -287,6 +288,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+    private QingjingDetailBean QingjingDetailBean;//网络请求返回数据
 
     private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
@@ -330,6 +332,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case R.id.activity_qingjingdetail_more_user:
                 break;
             case R.id.activity_qingjingdetail_create:
+                MainApplication.whichQingjing = QingjingDetailBean;
                 MainApplication.tag = 1;
                 startActivity(new Intent(QingjingDetailActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
@@ -370,11 +373,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
-            isFinger = true;
-        } else {
-            isFinger = false;
-        }
     }
 
     @Override
@@ -405,28 +403,27 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case MotionEvent.ACTION_DOWN:
                 startP.x = event.getX();
                 startP.y = event.getY();
+                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
+                cha = startP.y + lpd.bottomMargin;
                 break;
             case MotionEvent.ACTION_MOVE:
                 nowP.x = event.getX();
                 nowP.y = event.getY();
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
+                lp.bottomMargin = (int) (cha - nowP.y);
                 if (nowP.y > startP.y) {
-                    if (lp.bottomMargin > -subLinear.getMeasuredHeight() && lp.bottomMargin <= 0) {
-                        lp.bottomMargin = (int) (startP.y - nowP.y);
-                    }
                     backImg.setVisibility(View.VISIBLE);
                     createImg.setVisibility(View.VISIBLE);
                 } else if (nowP.y < startP.y) {
-                    if (lp.bottomMargin >= -subLinear.getMeasuredHeight() && lp.bottomMargin < 0) {
-                        lp.bottomMargin = (int) (startP.y - nowP.y - subLinear.getMeasuredHeight());
-                    }
                     backImg.setVisibility(View.GONE);
                     createImg.setVisibility(View.GONE);
                 }
                 if (lp.bottomMargin > 0) {
                     lp.bottomMargin = 0;
+                    cha = nowP.y + lp.bottomMargin;
                 } else if (lp.bottomMargin < -subLinear.getMeasuredHeight()) {
                     lp.bottomMargin = -subLinear.getMeasuredHeight();
+                    cha = nowP.y + lp.bottomMargin;
                 }
                 subLinear.setLayoutParams(lp);
                 break;
@@ -434,7 +431,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         return false;
     }
 
-    private boolean isFinger = false;
+    private double cha;//手指按下的时候，y与bottomMargin的差值
     private PointF startP = new PointF();
     private PointF nowP = new PointF();
 }

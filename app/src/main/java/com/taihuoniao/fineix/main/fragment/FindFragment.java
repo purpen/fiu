@@ -43,6 +43,7 @@ import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -416,7 +417,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fragment_find_location:
-                Toast.makeText(getActivity(), "定位", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), HotCitiesActivity.class);
+                startActivity(intent);
                 break;
             case R.id.fragment_find_allqingjing:
                 startActivity(new Intent(getActivity(), AllQingjingActivity.class));

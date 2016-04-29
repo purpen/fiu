@@ -747,6 +747,37 @@ public class DataPaser {
     }
 
     //公共
+    //举报
+    public static void report(String target_id, String type, String evt, final Handler handler) {
+        ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.REPORT;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+//                Gson gson = new Gson();
+//                gson.fromJson()
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //公共
     //品牌列表
     public static void brandList(int page, int size, final Handler handler) {
         ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
@@ -849,8 +880,8 @@ public class DataPaser {
 
     //评论
     //提交评论
-    public static void sendComment(String target_id, String content, String type, final Handler handler) {
-        ClientDiscoverAPI.sendComment(target_id, content, type, new RequestCallBack<String>() {
+    public static void sendComment(String target_id, String content, String type, String is_reply, String reply_id, String reply_user_id, final Handler handler) {
+        ClientDiscoverAPI.sendComment(target_id, content, type, is_reply, reply_id, reply_user_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -882,6 +913,8 @@ public class DataPaser {
         ClientDiscoverAPI.commentsList(page, target_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
                 Gson gson = new Gson();

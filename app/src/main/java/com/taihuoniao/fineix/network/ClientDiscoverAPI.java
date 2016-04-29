@@ -1,4 +1,5 @@
 package com.taihuoniao.fineix.network;
+
 import com.baidu.mapapi.model.LatLng;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
@@ -210,6 +211,17 @@ public class ClientDiscoverAPI {
     }
 
     //公共
+    //举报
+    public static void report(String target_id, String type, String evt, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.report;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("evt", evt);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //公共
     //品牌列表
     public static void brandList(int page, int size, RequestCallBack<String> callBack) {
         String url = NetworkConstance.brand_list;
@@ -240,11 +252,14 @@ public class ClientDiscoverAPI {
 
     //评论
     //提交评论
-    public static void sendComment(String target_id, String content, String type, RequestCallBack<String> callBack) {
+    public static void sendComment(String target_id, String content, String type, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.send_comment;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("content", content);
+        params.addQueryStringParameter("is_reply", is_reply);
+        params.addQueryStringParameter("reply_id", reply_id);
+        params.addQueryStringParameter("reply_user_id", reply_user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("from_site", 4 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -463,23 +478,25 @@ public class ClientDiscoverAPI {
 
     /**
      * 更新用户信息
+     *
      * @param key
      * @param value
      * @param callBack
      */
-    public static void updateUserInfo(String key,String value,RequestCallBack<String> callBack) {
+    public static void updateUserInfo(String key, String value, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        if (EditUserInfoActivity.isSubmitAddress){
+        if (EditUserInfoActivity.isSubmitAddress) {
             params.addBodyParameter("province_id", key);
             params.addBodyParameter("district_id", value);
-        }else {
-            params.addQueryStringParameter(key,value);
+        } else {
+            params.addQueryStringParameter(key, value);
         }
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
     /**
      * 获取所有城市
+     *
      * @param callBack
      */
     public static void getAllCities(RequestCallBack<String> callBack) {
@@ -497,4 +514,6 @@ public class ClientDiscoverAPI {
         params.addBodyParameter("type", type);
         MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
     }
+
+
 }

@@ -5,12 +5,12 @@
     >
 
 
-
     <ListView
         android:id="@+id/activity_qingjingdetail_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-       />
+        android:scrollbars="none"
+        />
 
 
     <RelativeLayout
@@ -48,14 +48,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/activity_qingjingdetail_sublinear"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:background="@color/white"
         >
 
         <ImageView

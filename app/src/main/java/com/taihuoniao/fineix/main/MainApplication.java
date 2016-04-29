@@ -18,11 +18,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.beans.IsLogin;
+import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.ProvinceUtil;
 
 import java.io.File;
 import java.util.List;
@@ -51,6 +51,8 @@ public class MainApplication extends Application {
     public static List<UsedLabelBean> selectList;
     //创建场景或情景的标识
     public static int tag;//1,场景 2,情景
+    //在哪个情景下创建场景
+    public static QingjingDetailBean whichQingjing = null;
 
     // SharedPreference 中保存的手机号
     public static final String THN_MOBILE = "mobile";

@@ -31,9 +31,27 @@ public class CommentsBean extends NetBean {
     }
 
     public static class CommentItem {
+        private String _id;
         private String content;
         private String created_at;
         private User user;
+        private String reply_user_nickname;
+
+        public String getReply_user_nickname() {
+            return reply_user_nickname;
+        }
+
+        public void setReply_user_nickname(String reply_user_nickname) {
+            this.reply_user_nickname = reply_user_nickname;
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
 
         public String getContent() {
             return content;
@@ -61,8 +79,17 @@ public class CommentsBean extends NetBean {
     }
 
     public static class User {
+        private String _id;
         private String nickname;
         private String small_avatar_url;
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
 
         public String getSmall_avatar_url() {
             return small_avatar_url;

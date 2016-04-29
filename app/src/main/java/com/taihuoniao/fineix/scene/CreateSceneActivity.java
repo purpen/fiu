@@ -163,6 +163,12 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         deleteAddressImg.setOnClickListener(this);
         labelRelative.setOnClickListener(this);
         qingjingRelative.setOnClickListener(this);
+        //在情景下创建场景
+        if (MainApplication.whichQingjing != null) {
+            scene_id = MainApplication.whichQingjing.getData().get_id();
+            qingjingLinear.removeAllViews();
+            addQingjingToLinear(MainApplication.whichQingjing.getData().getTitle());
+        }
     }
 
     //获得当前位置信息
@@ -235,6 +241,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 Intent intent1 = new Intent(CreateSceneActivity.this, SelectQingjingActivity.class);
                 intent1.putExtra("latLng", new LatLng(location[1], location[0]));
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
+//                Intent intent1 = new Intent(CreateSceneActivity.this, SelectOrSearchQJActivity.class);
+//                startActivity(intent1);
                 break;
             case R.id.activity_create_scene_labelrelative:
                 if (!LoginInfo.isUserLogin()) {
@@ -409,7 +417,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     if (qingJingItem != null) {
                         scene_id = qingJingItem.get_id();
                         qingjingLinear.removeAllViews();
-                        addQingjingToLinear(qingJingItem);
+                        addQingjingToLinear(qingJingItem.getTitle());
                     }
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
@@ -441,10 +449,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addQingjingToLinear(QingJingListBean.QingJingItem qingJingItem) {
+    private void addQingjingToLinear(String title) {
         View view = View.inflate(CreateSceneActivity.this, R.layout.item_horizontal_address, null);
         TextView textView = (TextView) view.findViewById(R.id.item_horizontal_tv);
-        textView.setText(qingJingItem.getTitle());
+        textView.setText(title);
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         qingjingLinear.addView(view);
     }
@@ -480,6 +488,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean1 = (NetBean) msg.obj;
                     Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean1.isSuccess()) {
+                        MainApplication.whichQingjing = null;
                         MainApplication.tagInfoList = null;
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();

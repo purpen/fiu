@@ -200,6 +200,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.CANCEL_LOVE_SCENE:
                     SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean1.isSuccess()) {
+                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
                         DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
@@ -218,6 +219,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.LOVE_SCENE:
                     SceneLoveBean netSceneLoveBean = (SceneLoveBean) msg.obj;
+                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
                     if (netSceneLoveBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
                         isLove = 1;
@@ -433,7 +435,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_moreuser:
                 break;
             case R.id.activity_scenedetails_more:
-                Toast.makeText(SceneDetailActivity.this, "更多被点击了", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
+                intent1.putExtra("target_id", id);
+                intent1.putExtra("type", 4 + "");
+                startActivity(intent1);
                 break;
         }
     }
@@ -494,36 +499,36 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startP.x = event.getX();
-                startP.y = event.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                nowP.x = event.getX();
-                nowP.y = event.getY();
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
-                if (nowP.y > startP.y) {
-                    if (lp.bottomMargin > -loveRelative.getMeasuredHeight() && lp.bottomMargin <= 0) {
-                        lp.bottomMargin = (int) (startP.y - nowP.y);
-                    }
-                    backImg.setVisibility(View.VISIBLE);
-                    shareImg.setVisibility(View.VISIBLE);
-                } else if (nowP.y < startP.y) {
-                    if (lp.bottomMargin >= -loveRelative.getMeasuredHeight() && lp.bottomMargin < 0) {
-                        lp.bottomMargin = (int) (startP.y - nowP.y - loveRelative.getMeasuredHeight());
-                    }
-                    backImg.setVisibility(View.GONE);
-                    shareImg.setVisibility(View.GONE);
-                }
-                if (lp.bottomMargin > 0) {
-                    lp.bottomMargin = 0;
-                } else if (lp.bottomMargin < -loveRelative.getMeasuredHeight()) {
-                    lp.bottomMargin = -loveRelative.getMeasuredHeight();
-                }
-                loveRelative.setLayoutParams(lp);
-                break;
-        }
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                startP.x = event.getX();
+//                startP.y = event.getY();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                nowP.x = event.getX();
+//                nowP.y = event.getY();
+//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
+//                if (nowP.y > startP.y) {
+//                    if (lp.bottomMargin > -loveRelative.getMeasuredHeight() && lp.bottomMargin <= 0) {
+//                        lp.bottomMargin = (int) (startP.y - nowP.y);
+//                    }
+//                    backImg.setVisibility(View.VISIBLE);
+//                    shareImg.setVisibility(View.VISIBLE);
+//                } else if (nowP.y < startP.y) {
+//                    if (lp.bottomMargin >= -loveRelative.getMeasuredHeight() && lp.bottomMargin < 0) {
+//                        lp.bottomMargin = (int) (startP.y - nowP.y - loveRelative.getMeasuredHeight());
+//                    }
+//                    backImg.setVisibility(View.GONE);
+//                    shareImg.setVisibility(View.GONE);
+//                }
+//                if (lp.bottomMargin > 0) {
+//                    lp.bottomMargin = 0;
+//                } else if (lp.bottomMargin < -loveRelative.getMeasuredHeight()) {
+//                    lp.bottomMargin = -loveRelative.getMeasuredHeight();
+//                }
+//                loveRelative.setLayoutParams(lp);
+//                break;
+//        }
         return false;
     }
 

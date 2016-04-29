@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -33,7 +32,7 @@ import java.util.List;
  */
 public class AllQingjingActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
     //上个界面传递过来用来判断是选择情景还是查看情景的标识
-    private int isSelect = 0;//0 是从情景列表中跳转过来的 1是从选择情景界面跳转
+//    private int isSelect = 0;//0 是从情景列表中跳转过来的 1是从选择情景界面跳转
     //界面下的控件
     private ImageView createQingjingImg;
     private PullToRefreshGridView pullToRefreshView;
@@ -65,7 +64,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     protected void initList() {
-        isSelect = getIntent().getIntExtra("isSelect", 0);
+//        isSelect = getIntent().getIntExtra("isSelect", 0);
         createQingjingImg.setOnClickListener(this);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
@@ -157,17 +156,17 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (isSelect == 1) {
-            Intent intent = new Intent();
-            intent.putExtra("qingjing", qingjingList.get(position));
-            Log.e("<<<>>>", qingjingList.get(position).getTitle());
-            setResult(DataConstants.RESULTCODE_SELECTQJ_ALLQJ, intent);
-            finish();
-        } else {
+//        if (isSelect == 1) {
+//            Intent intent = new Intent();
+//            intent.putExtra("qingjing", qingjingList.get(position));
+//            Log.e("<<<>>>", qingjingList.get(position).getTitle());
+//            setResult(DataConstants.RESULTCODE_SELECTQJ_ALLQJ, intent);
+//            finish();
+//        } else {
             Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
             intent.putExtra("id", qingjingList.get(position).get_id());
             startActivity(intent);
-        }
+//        }
     }
 
     @Override
