@@ -65,7 +65,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
     private WaittingDialog dialog;
-    private static final String PAGE_NAME = "app_index_slide";
+    private static final String PAGE_NAME = "app_fiu_product_index_slide";
     //标签列表
     private List<HotLabel.HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;

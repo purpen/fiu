@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.Random;
 
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
-    private static final String PAGE_NAME = "app_index_slide"; //TODO 换成场景banner
+    private static final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
     private List<HotLabel.HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
