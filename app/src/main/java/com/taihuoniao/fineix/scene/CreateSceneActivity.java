@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -86,6 +87,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //位置信息
     private String city, district;
     private double lng, lat;
+    //创建场景时所属情景
+    private String scene_id;
 
 
     public CreateSceneActivity() {
@@ -225,8 +228,13 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 areaTv.setText("");
                 break;
             case R.id.activity_create_scene_qingjing:
-                Toast.makeText(CreateSceneActivity.this, "情景未做", Toast.LENGTH_SHORT).show();
-
+                if (location == null) {
+                    getCurrentLocation();
+                    return;
+                }
+                Intent intent1 = new Intent(CreateSceneActivity.this, SelectQingjingActivity.class);
+                intent1.putExtra("latLng", new LatLng(location[1], location[0]));
+                startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
                 break;
             case R.id.activity_create_scene_labelrelative:
                 if (!LoginInfo.isUserLogin()) {
@@ -270,6 +278,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     tags.deleteCharAt(0);
                 }
                 if (MainApplication.tag == 1) {
+                    if (scene_id == null) {
+                        Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     StringBuilder product_id = new StringBuilder();
                     StringBuilder product_title = new StringBuilder();
                     StringBuilder product_price = new StringBuilder();
@@ -317,7 +329,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                            5 + "", tags.toString(), product_id.toString(), product_title.toString(),
+                            scene_id, tags.toString(), product_id.toString(), product_title.toString(),
                             product_price.toString(), product_x.toString(), product_y.toString(), city
 //                                    + district
                                     + addressTv.getText().toString(),
@@ -387,10 +399,19 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         showDialog();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case DataConstants.RESULTCODE_CREATESCENE_SELECTQJ:
+                    QingJingListBean.QingJingItem qingJingItem = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
+                    if (qingJingItem != null) {
+                        scene_id = qingJingItem.get_id();
+                        qingjingLinear.removeAllViews();
+                        addQingjingToLinear(qingJingItem);
+                    }
+                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
                     PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
                     String city = data.getStringExtra("city");
@@ -418,6 +439,14 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
             }
         }
+    }
+
+    private void addQingjingToLinear(QingJingListBean.QingJingItem qingJingItem) {
+        View view = View.inflate(CreateSceneActivity.this, R.layout.item_horizontal_address, null);
+        TextView textView = (TextView) view.findViewById(R.id.item_horizontal_tv);
+        textView.setText(qingJingItem.getTitle());
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        qingjingLinear.addView(view);
     }
 
 

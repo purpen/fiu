@@ -20,6 +20,7 @@
             android:src="@mipmap/logo"/>
 
         <ImageView
+            android:id="@+id/fragment_index_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
@@ -27,12 +28,13 @@
             android:src="@mipmap/head_search"/>
 
         <ImageView
+            android:id="@+id/fragment_index_subs"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
-            android:src="@mipmap/location_39"/>
+            android:src="@mipmap/subscribe_height_40px"/>
     </RelativeLayout>
 
     <!--<Button-->

@@ -27,7 +27,7 @@ public class QingjingDetailBean extends NetBean {
         private String address;
         private String used_count;
         private String view_count;
-        private String subscription_count;
+        private int subscription_count;
         private String love_count;
         private String comment_count;
         private String is_check;
@@ -105,11 +105,11 @@ public class QingjingDetailBean extends NetBean {
             this.des = des;
         }
 
-        public String getSubscription_count() {
+        public int getSubscription_count() {
             return subscription_count;
         }
 
-        public void setSubscription_count(String subscription_count) {
+        public void setSubscription_count(int subscription_count) {
             this.subscription_count = subscription_count;
         }
 

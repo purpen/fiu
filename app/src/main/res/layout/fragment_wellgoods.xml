@@ -16,6 +16,7 @@
             android:src="@mipmap/logo"/>
 
         <ImageView
+            android:id="@+id/fragment_wellgoods_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
@@ -23,6 +24,7 @@
             android:src="@mipmap/head_search"/>
 
         <ImageView
+            android:id="@+id/fragment_wellgoods_cart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -90,19 +92,20 @@
                 android:layout_height="1px"
                 android:background="#e4e4e4"/>
 
-           <android.support.v7.widget.RecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_wellgoods_label_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="5dp"/>
+
             <com.taihuoniao.fineix.view.SlidingFocusImageView
                 android:id="@+id/sfiv"
-                android:layout_height="@dimen/dp150"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/dp150"
                 android:background="@color/color_f7f7f7"
                 android:spacing="@dimen/dp70"
-               />
+                />
 
             <TextView
                 android:layout_width="match_parent"

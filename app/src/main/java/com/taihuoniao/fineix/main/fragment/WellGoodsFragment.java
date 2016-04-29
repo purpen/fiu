@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
+import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
@@ -56,7 +57,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick {
+public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener {
+    private ImageView searchImg;
+    private ImageView cartImg;
     private AbsoluteLayout absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
@@ -80,6 +83,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
+        searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
+        cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
         scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
         sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
         sfiv.setMaxRotationAngle(0);
@@ -185,7 +190,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
         //热门标签
-        ClientDiscoverAPI.labelList(null, 1, 18 + "", 1, new RequestCallBack<String>() {
+        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -207,6 +212,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
             }
         });
+        //品牌列表
+        DataPaser.brandList(1, 40, handler);
     }
 
     private void setSlidingFocusImageViewData(ArrayList<ProductListBean> list) {
@@ -227,6 +234,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     protected void initList() {
+        searchImg.setOnClickListener(this);
+        cartImg.setOnClickListener(this);
         hotLabelList = new ArrayList<>();
         labelRecycler.setHasFixedSize(true);
         labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
@@ -258,6 +267,12 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.BRAND_LIST:
+                    BrandListBean netBrandListBean = (BrandListBean) msg.obj;
+                    if(netBrandListBean.isSuccess()){
+                        addImgToAbsolute();
+                    }
+                    break;
                 case DataConstants.HOT_LABEL_LIST:
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
@@ -273,7 +288,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                         list.addAll(netCategoryBean.getList());
                         pinRecyclerAdapter.notifyDataSetChanged();
                     }
-                    addImgToAbsolute();
+
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
@@ -424,6 +439,18 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 }
             });
             absoluteLayout.addView(img);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fragment_wellgoods_search:
+                Toast.makeText(getActivity(), "跳转到搜索界面", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fragment_wellgoods_cart:
+                Toast.makeText(getActivity(), "跳转到购物车", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }

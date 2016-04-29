@@ -36,7 +36,7 @@ public class SceneDetailUserHeadAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size() > 12 ? 12 : list.size();
+        return list.size() > 14 ? 14 : list.size();
     }
 
     @Override

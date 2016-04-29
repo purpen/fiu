@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
+import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
@@ -242,9 +243,10 @@ public class DataPaser {
             }
         });
     }
+
     //情景
     //取消订阅情景
-    public static void cancelSubsQingjing(String id,final Handler handler){
+    public static void cancelSubsQingjing(String id, final Handler handler) {
         ClientDiscoverAPI.cancelSubsQingjing(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -444,7 +446,7 @@ public class DataPaser {
                                 sceneDetails.setProduct(products);
                                 sceneDetails.setAddress(data.optString("address"));
                                 sceneDetails.setView_count(data.optString("view_count"));
-                                sceneDetails.setLove_count(data.optString("love_count"));
+                                sceneDetails.setLove_count(data.optInt("love_count"));
                                 sceneDetails.setComment_count(data.optString("comment_count"));
                                 sceneDetails.setCreated_on(data.optString("created_on"));
                                 sceneDetails.setCover_url(data.optString("cover_url"));
@@ -672,8 +674,8 @@ public class DataPaser {
 
     //标签
     //标签列表
-    public static void labelList(String parent_id, int page, String size, int is_hot, final Handler handler) {
-        ClientDiscoverAPI.labelList(parent_id, page, size, is_hot, new RequestCallBack<String>() {
+    public static void labelList(String parent_id, int page, String size, int sort, int is_hot, final Handler handler) {
+        ClientDiscoverAPI.labelList(parent_id, page, size, sort, is_hot, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);
@@ -744,6 +746,33 @@ public class DataPaser {
         });
     }
 
+    //公共
+    //品牌列表
+    public static void brandList(int page, int size, final Handler handler) {
+        ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.BRAND_LIST;
+                msg.obj = new BrandListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BrandListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
 
     //公共
     //分类列表

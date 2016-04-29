@@ -79,6 +79,15 @@ public class DataConstants {
     public static final int SUBS_QINGJING = 68;
     //取消情景订阅
     public static final int CANCEL_SUBS_QINGJING = 67;
+    //品牌列表
+    public static final int BRAND_LIST = 66;
+    //CreateSceneActivity到SelectQingjingActivity界面的请求码和返回码
+    public static final int REQUESTCODE_CREATESCENE_SELECTQJ = 65;
+    public static final int RESULTCODE_CREATESCENE_SELECTQJ = 64;
+    //SelectQingjingActivity到AllQingjingActivity界面的请求码和返回码
+    public static final int REQUESTCODE_SELECTQJ_ALLQJ = 63;
+    public static final int RESULTCODE_SELECTQJ_ALLQJ = 62;
+
 
 
     //SharedPreferences 存储文件名
