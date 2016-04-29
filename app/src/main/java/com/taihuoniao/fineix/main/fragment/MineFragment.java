@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -27,6 +26,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -99,7 +99,7 @@ public class MineFragment extends MyBaseFragment {
         partnerName = activity.getResources().getStringArray(R.array.partner_name);
         imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
-            gvList = new ArrayList<ImgTxtItem>();
+            gvList = new ArrayList<>();
             ImgTxtItem item=null;
             for (int i = 0; i < imgIds.length; i++) {
                 item = new ImgTxtItem();
@@ -295,6 +295,9 @@ public class MineFragment extends MyBaseFragment {
                 switch (i){
                     case 0:
                         Util.makeToast("订单");
+                        break;
+                    case 1:
+                        startActivity(new Intent(activity, MessageActivity.class));
                         break;
                     case 9:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));

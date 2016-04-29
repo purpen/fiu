@@ -95,4 +95,7 @@ public class NetworkConstance {
 
     //获取全部城市
     public static final String ALL_CITY_URL = BASE_URL + "/shopping/fetch_areas";
+
+    //上传头像
+    public static final String UPLOAD_IMG_URL = BASE_URL + "/my/upload_token";
 }

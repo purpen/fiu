@@ -475,6 +475,14 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.ALL_CITY_URL, callBack, false);
     }
 
-
-
+    /**
+     * 上传头像
+     * @param callBack
+     */
+    public static void uploadImg(String tmp,String type,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("tmp", tmp);
+        params.addBodyParameter("type", type);
+        MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
+    }
 }

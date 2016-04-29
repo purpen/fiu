@@ -1,5 +1,12 @@
 package com.taihuoniao.fineix.utils;
 
+import android.util.Base64;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Created by android on 2016/2/2.
  */
@@ -142,4 +149,13 @@ public class Base64Utils {
     }
     // Dummy constructor.
     private Base64Utils() {}
+
+
+    public static String encodeFile2Base64Str(File file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        byte[] bytes = new byte[in.available()];
+        in.read(bytes);
+        in.close();
+        return Base64.encodeToString(bytes,Base64.DEFAULT);
+    }
 }

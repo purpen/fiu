@@ -25,10 +25,12 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
+import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -53,6 +55,7 @@ import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,6 +97,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
     private static final int REQUEST_NICK_NAME = 3;
+    private static final int REQUEST_SIGNATURE = 4;
     private Uri mImageUri;
     private static final int SECRET = 0;
     private static final int MAN = 1;
@@ -107,7 +111,6 @@ public class EditUserInfoActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        ButterKnife.bind(this);
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
         custom_user_avatar.setHeight(R.dimen.dp80);
         custom_user_avatar.setUserAvatar(null);
@@ -127,17 +130,20 @@ public class EditUserInfoActivity extends BaseActivity {
 
     @OnClick({R.id.custom_nick_name, R.id.custom_user_avatar,R.id.custom_area,R.id.custom_signature, R.id.custom_auth, R.id.custom_user_sex, R.id.custom_user_birthday, R.id.custom_code})
     void onClick(View view) {
+        Intent intent=null;
         switch (view.getId()) {
             case R.id.custom_user_avatar:
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar));
                 break;
             case R.id.custom_nick_name:
-                Intent intent = new Intent(activity, UserEditNameActivity.class);
+                intent = new Intent(activity, UserEditNameActivity.class);
                 intent.putExtra(User.class.getSimpleName(),user);
                 startActivityForResult(intent, REQUEST_NICK_NAME);
                 break;
             case R.id.custom_signature:
-                //TODO 编辑个性签名
+                intent = new Intent(activity, UserEditSignatureActivity.class);
+                intent.putExtra(User.class.getSimpleName(),user);
+                startActivityForResult(intent, REQUEST_SIGNATURE);
                 break;
             case R.id.custom_area:
                 PopupWindowUtil.show(activity, initAddressPopView(R.layout.popup_address_layout, R.string.select_address,ProvinceUtil.getProvinces()));
@@ -261,34 +267,6 @@ public class EditUserInfoActivity extends BaseActivity {
         });
     }
 
-    protected void loadActivityData() {
-//        hashMap.clear();
-//        hashMap.put("Action", "GetUserInfo");
-//        hashMap.put("uid", LoginUtil.getUserId());
-//        HttpRequestData.sendPostRequest(Constants.APP_URI, hashMap, new ICallback4Http() {
-//            @Override
-//            public void onResponse(String response) {
-//                LogUtil.e(tag, response);
-//                userLogin = JsonUtil.fromJson(response, new TypeToken<HttpResponse<UserLogin>>() {});
-//                String locaStr=SPUtil.read(activity,Constants.LOGIN_INFO);
-//                if (!TextUtils.isEmpty(locaStr)){
-//                    UserLogin localInfo = JsonUtil.fromJson(locaStr,UserLogin.class);
-//                    localInfo.user_name=userLogin.user_name;
-//                    localInfo.nickname=userLogin.nickname;
-//                    localInfo.header=userLogin.header;
-//                    SPUtil.write(activity,Constants.LOGIN_INFO,JsonUtil.toJson(localInfo));
-//                }
-//                refreshUIAfterNet();
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//                Util.makeToast(activity, errorMessage);
-//            }
-//        });
-    }
-
-
     private View initPopView(int layout, int resId) {
         View view = Util.inflateView(this, layout, null);
         View tv_cancel_select = view.findViewById(R.id.tv_cancel_select);
@@ -316,6 +294,9 @@ public class EditUserInfoActivity extends BaseActivity {
                         String addr=casv.getAddress();
 //                        LogUtil.e(TAG,addr.split("\\s")[0]);
 //                        LogUtil.e(TAG,addr.split("\\s")[1]);
+                        if (TextUtils.isEmpty(addr)){
+                            return;
+                        }
                         key=ProvinceUtil.getProvinceIdByName(addr.split("\\s")[0])+"";
                         value=ProvinceUtil.getCityIdByName(addr.split("\\s")[1])+"";
                         submitData();
@@ -349,21 +330,6 @@ public class EditUserInfoActivity extends BaseActivity {
             }
         });
     }
-
-
-//    private View initPopView(int layout, int resId, List<String> list) {
-//        View view = Util.inflateView(this, layout, null);
-//        View tv_cancel_select = view.findViewById(R.id.tv_cancel_select);
-//        View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
-//        TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
-//        WheelView custom_wv = (WheelView) view.findViewById(R.id.custom_wv);
-//        custom_wv.setAdapter(new StringWheelAdapter(list));
-//        custom_wv.setVisibleItems(5);
-//        tv_title.setText(resId);
-//        setClickListener(tv_cancel_select, resId, custom_wv, list);
-//        setClickListener(tv_confirm_select, resId, custom_wv, list);
-//        return view;
-//    }
 
     private void setClickListener(View view, final int id, final WheelView wheelView, final List<String> list) {
         view.setOnClickListener(new View.OnClickListener() {
@@ -428,25 +394,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 Util.makeToast(s);
             }
         });
-//        hashMap.clear();
-//        hashMap.put("Action", "EditUserInfo");
-//        hashMap.put("uid", LoginUtil.getUserId());
-//        hashMap.put("key", key);
-//        hashMap.put("data", data);
-//        HttpRequestData.sendPostRequest(Constants.APP_URI, hashMap, new ICallback4Http() {
-//            @Override
-//            public void onResponse(String response) {
-//                loadActivityData();
-//                LogUtil.e(tag, response);
-//                HttpResponse httpResponse = JsonUtil.fromJson(response, HttpResponse.class);
-//                Util.makeToast(activity, httpResponse.getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//                Util.makeToast(activity, errorMessage);
-//            }
-//        });
+
     }
 
     @Override
@@ -456,8 +404,8 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void refreshUI() {
         if (user != null) {
-            if (!TextUtils.isEmpty(user.avatar)) {
-                ImageLoader.getInstance().displayImage(user.avatar, custom_user_avatar.getAvatarIV(), options);
+            if (!TextUtils.isEmpty(user.medium_avatar_url)) {
+                ImageLoader.getInstance().displayImage(user.medium_avatar_url,custom_user_avatar.getAvatarIV(), options);
             }
 //            custom_user_name.setTvArrowLeftStyle(true, userLogin.user_name, R.color.color_333);
 //            custom_user_name.sertTVRightTxt(userLogin.user_name);
@@ -499,9 +447,12 @@ public class EditUserInfoActivity extends BaseActivity {
             File file = null;
             switch (requestCode) {
                 case REQUEST_NICK_NAME:
-//                    loadActivityData();
                     user=(User)data.getSerializableExtra(User.class.getSimpleName());
                     custom_nick_name.setTvArrowLeftStyle(true,user.nickname,R.color.color_333);
+                    break;
+                case REQUEST_SIGNATURE:
+                    user=(User)data.getSerializableExtra(User.class.getSimpleName());
+                    custom_signature.setTvArrowLeftStyle(true,user.summary,R.color.color_333);
                     break;
                 case PICK_FROM_CAMERA:
                     doCrop();
@@ -516,8 +467,7 @@ public class EditUserInfoActivity extends BaseActivity {
                         Bitmap photo = extras.getParcelable("data");
                         if (photo != null) {
                             file = Util.saveBitmapToFile(photo);
-//                           String path=file.getAbsolutePath();
-                            uploadFile(file, photo);
+                            uploadFile(file);
                         } else {
                             Util.makeToast(activity, "截取头像失败");
                             return;
@@ -528,25 +478,49 @@ public class EditUserInfoActivity extends BaseActivity {
         }
     }
 
-    private void uploadFile(final File file, final Bitmap bitmap) {
-        RequestParams params = new RequestParams();
-        params.addBodyParameter("Action", "UploadHeader");
-//        params.addBodyParameter("uid",LoginUtil.getUserId());
-//        params.addBodyParameter("photos",file);
-//        HttpRequestData.uploadFileWithParams(Constants.APP_URI, params, new ICallback4Http() {
-//            @Override
-//            public void onResponse(String response) {
-//                if (file.exists()) file.delete();
-//                loadActivityData();
-//                HttpResponse httpResponse = JsonUtil.fromJson(response, HttpResponse.class);
-//                Util.makeToast(activity,httpResponse.getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//                Util.makeToast(activity,errorMessage);
-//            }
-//        });
+    private void uploadFile(final File file) {
+        if (file==null){
+            return;
+        }
+        if (file.length()==0){
+            return;
+        }
+        String type="3";
+        try {
+            ClientDiscoverAPI.uploadImg(Base64Utils.encodeFile2Base64Str(file), type, new RequestCallBack<String>() {
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    if (responseInfo==null){
+                        return;
+                    }
+                    if (TextUtils.isEmpty(responseInfo.result)){
+                        return;
+                    }
+
+                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    if (response.isSuccess()){
+                        ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
+                        });
+                        if (!TextUtils.isEmpty(imgUploadBean.file_url)) {
+                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, custom_user_avatar.getAvatarIV(), options);
+                        }
+                        Util.makeToast(response.getMessage());
+                        return;
+                    }
+                    Util.makeToast(response.getMessage());
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    Util.makeToast(s);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (file.exists())  file.delete();
+        }
+
     }
 
     private void doCrop() {

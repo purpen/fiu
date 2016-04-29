@@ -77,6 +77,10 @@ public class ProvinceUtil {
     }
 
     public static ArrayList<String> getProvinces() {
+        if (data==null){
+            Util.makeToast("抱歉无法获得地址数据,请先开启网络");
+            return null;
+        }
         ArrayList<String> provinces = new ArrayList<String>();
         for (ProvinceCityData.Province province : data.rows) {
             provinces.add(province.city);
@@ -86,6 +90,10 @@ public class ProvinceUtil {
 
 
     public static ArrayList<String> getCitiesByProvince(String province) {
+        if (data==null){
+            Util.makeToast("抱歉无法获得地址数据,请先开启网络");
+            return null;
+        }
         return provinceCityMap.get(province);
     }
 
