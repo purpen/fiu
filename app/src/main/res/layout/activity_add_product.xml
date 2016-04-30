@@ -20,28 +20,31 @@
         android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
         android:layout_marginTop="@dimen/dp8"
-        android:layout_marginBottom="@dimen/dp8"
-        android:gravity="center"
         android:background="@drawable/search_radius_border"
+        android:gravity="center"
+        android:padding="@dimen/dp8"
         >
+
         <ImageView
             android:id="@+id/iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/search"
+            android:layout_height="13dp"
+            android:src="@mipmap/search_height_26px"
             />
+
         <TextView
-            android:layout_toRightOf="@+id/iv"
-            android:layout_marginLeft="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_qj"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_toRightOf="@+id/iv"
+            android:text="搜索产品"
             />
     </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -59,6 +59,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
+            android:name=".user.HasLoveActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.HasSubsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".scene.SelectQingjingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>

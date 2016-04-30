@@ -187,8 +187,8 @@ public class DataPaser {
 
     //情景
     //点赞，订阅，收藏，关注通用列表
-    public static void commonList(String page, String size, String id, final String type, String event, final Handler handler) {
-        ClientDiscoverAPI.commonList(page, size, id, type, event, new RequestCallBack<String>() {
+    public static void commonList(String page, String size, String id, String user_id, String type, String event, final Handler handler) {
+        ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -568,7 +568,7 @@ public class DataPaser {
                             sceneListBean.setAddress(job.optString("address"));
                             sceneListBean.setScene_title(job.optString("scene_title"));
                             sceneListBean.setView_count(job.optString("view_count"));
-                            sceneListBean.setCreated_on(job.optString("created_on"));
+                            sceneListBean.setCreated_at(job.optString("created_at"));
                             sceneListBean.setLove_count(job.optString("love_count"));
                             sceneListBean.setCover_url(job.optString("cover_url"));
                             sceneListBean.setTitle(job.optString("title"));

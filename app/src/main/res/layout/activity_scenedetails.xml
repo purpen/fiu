@@ -397,33 +397,31 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/activity_scenedetails_loverelative"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@mipmap/main_nav_bg"
-        android:gravity="center_horizontal"
+        android:background="@color/white"
+        android:gravity="center"
         >
 
         <ImageView
             android:id="@+id/activity_scenedetails_love"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:src="@mipmap/like_height_43px"/>
 
         <TextView
             android:id="@+id/activity_scenedetails_lovetv"
-            android:layout_width="25dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/activity_scenedetails_love"
-            android:layout_marginTop="6dp"
+            android:layout_marginLeft="7dp"
             android:gravity="center"
-            android:text="点赞"
+            android:text="赞"
             android:textColor="@color/yellow_bd8913"
-            android:textSize="12sp"/>
-    </RelativeLayout>
+            android:textSize="14sp"/>
+    </LinearLayout>
 
 
     <RelativeLayout

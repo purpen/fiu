@@ -54,7 +54,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private String id;
     //界面下的控件
     private ScrollView scrollView;
-    private RelativeLayout loveRelative;
+    private LinearLayout loveRelative;
     private ImageView backImg;
     private ImageView shareImg;
     private RelativeLayout imgRelative;
@@ -106,7 +106,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         setContentView(R.layout.activity_scenedetails);
         scrollView = (ScrollView) findViewById(R.id.activity_scenedetails_scrollview);
-        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
+        loveRelative = (LinearLayout) findViewById(R.id.activity_scenedetails_loverelative);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
@@ -190,7 +190,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         dialog.show();
         DataPaser.sceneDetails(id + "", handler);
         DataPaser.commentsList(1 + "", id, 12 + "", handler);
-        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
+        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
     }
 
     private Handler handler = new Handler() {
@@ -201,7 +201,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean1.isSuccess()) {
                         Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
+                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
                         loveCount.setText(netSceneLoveBean1.getData().getLove_count() + "人赞过");
@@ -221,7 +221,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     SceneLoveBean netSceneLoveBean = (SceneLoveBean) msg.obj;
                     Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
                     if (netSceneLoveBean.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, "sight", "love", handler);
+                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 1;
                         love.setImageResource(R.mipmap.love_yes);
                         loveCount.setText(netSceneLoveBean.getData().getLove_count() + "人赞过");

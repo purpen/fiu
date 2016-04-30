@@ -177,7 +177,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     protected void requestNet() {
         dialog.show();
         DataPaser.qingjingDetails(id, handler);
-        DataPaser.commonList(1 + "", 14 + "", id, "scene", "subscription", handler);
+        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
         DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
     }
 
@@ -188,7 +188,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 case DataConstants.CANCEL_SUBS_QINGJING:
                     QingjingSubsBean netQingjingSubs = (QingjingSubsBean) msg.obj;
                     if (netQingjingSubs.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, "scene", "subscription", handler);
+                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 0;
                         subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                         subscriptionCount.setText(netQingjingSubs.getData().getSubscription_count() + "人订阅");
@@ -206,7 +206,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 case DataConstants.SUBS_QINGJING:
                     QingjingSubsBean netQingjingSubsBean = (QingjingSubsBean) msg.obj;
                     if (netQingjingSubsBean.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, "scene", "subscription", handler);
+                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 1;
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(netQingjingSubsBean.getData().getSubscription_count() + "人订阅");

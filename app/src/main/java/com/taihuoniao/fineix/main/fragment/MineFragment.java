@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -26,6 +27,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
@@ -100,7 +102,7 @@ public class MineFragment extends MyBaseFragment {
         imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<>();
-            ImgTxtItem item=null;
+            ImgTxtItem item = null;
             for (int i = 0; i < imgIds.length; i++) {
                 item = new ImgTxtItem();
                 item.imgId = imgIds[i];
@@ -111,7 +113,7 @@ public class MineFragment extends MyBaseFragment {
 
         if (partnerLogos.length == partnerName.length) {
             horizentalList = new ArrayList<ImgTxtItem>();
-            ImgTxtItem item=null;
+            ImgTxtItem item = null;
             for (int i = 0; i < partnerLogos.length; i++) {
                 item = new ImgTxtItem();
                 item.imgId = partnerLogos[i];
@@ -141,11 +143,11 @@ public class MineFragment extends MyBaseFragment {
                     return;
                 }
 
-                try{
+                try {
                     user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                     });
-                }catch (JsonSyntaxException e){
-                    LogUtil.e(TAG,e.getLocalizedMessage());
+                } catch (JsonSyntaxException e) {
+                    LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
                 }
                 refreshUIAfterNet();
@@ -153,7 +155,7 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG,s);
+                LogUtil.e(TAG, s);
                 Util.makeToast("对不起,网络请求失败");
             }
         });
@@ -163,7 +165,7 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.e(TAG,LoginInfo.isUserLogin()+"");
+        LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
         } else {
@@ -193,25 +195,25 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void refreshUIAfterNet() {
-        if (user==null){
+        if (user == null) {
             return;
         }
-        ImageLoader.getInstance().displayImage(user.medium_avatar_url,riv);
-        if (TextUtils.isEmpty(user.realname)){
+        ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+        if (TextUtils.isEmpty(user.realname)) {
             tv_real.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_real.setText(user.realname);
         }
 
-        if (TextUtils.isEmpty(user.nickname)){
+        if (TextUtils.isEmpty(user.nickname)) {
             tv_nick.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_nick.setText(user.nickname);
         }
 
-        if (TextUtils.isEmpty(user.rank_title)){
+        if (TextUtils.isEmpty(user.rank_title)) {
             tv_rank.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_rank.setText(user.rank_title);
         }
     }
@@ -238,12 +240,12 @@ public class MineFragment extends MyBaseFragment {
         });
     }
 
-    @OnClick({R.id.riv,R.id.iv_detail,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
+    @OnClick({R.id.riv, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
-        Intent intent=null;
+        Intent intent = null;
         switch (v.getId()) {
             case R.id.riv:
-                startActivity(new Intent(activity,UserCenterActivity.class));
+                startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
             case R.id.ll_qj:
                 Util.makeToast("我创建的情景");
@@ -253,13 +255,13 @@ public class MineFragment extends MyBaseFragment {
                 Util.makeToast("我创建的场景");
                 break;
             case R.id.ll_focus:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FOCUS_TYPE);
+                intent = new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FOCUS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
+                intent = new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.iv_detail:
@@ -292,12 +294,17 @@ public class MineFragment extends MyBaseFragment {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
+                switch (i) {
                     case 0:
                         Util.makeToast("订单");
                         break;
                     case 1:
                         startActivity(new Intent(activity, MessageActivity.class));
+                        break;
+                    case 4:
+                        Intent intent = new Intent(getActivity(), HasLoveActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
                         break;
                     case 9:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));

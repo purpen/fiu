@@ -44,12 +44,13 @@ public class ClientDiscoverAPI {
 
     //情景
     //点赞，订阅，收藏，关注列表
-    public static void commonList(String page, String size, String id, String type, String event, RequestCallBack<String> callBack) {
+    public static void commonList(String page, String size, String id, String user_id, String type, String event, RequestCallBack<String> callBack) {
         String url = NetworkConstance.common_lists;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("user_id", user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -506,9 +507,10 @@ public class ClientDiscoverAPI {
 
     /**
      * 上传头像
+     *
      * @param callBack
      */
-    public static void uploadImg(String tmp,String type,RequestCallBack<String> callBack) {
+    public static void uploadImg(String tmp, String type, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("tmp", tmp);
         params.addBodyParameter("type", type);

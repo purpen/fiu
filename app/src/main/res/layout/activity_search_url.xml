@@ -28,7 +28,7 @@
             android:background="@drawable/background_corner_red"
             android:gravity="center"
             android:text="@string/find"
-            android:textColor="@color/white"
+            android:textColor="@color/yellow_bd8913"
             android:textSize="15sp"/>
     </RelativeLayout>
 

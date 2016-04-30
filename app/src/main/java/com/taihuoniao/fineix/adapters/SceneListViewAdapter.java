@@ -13,7 +13,6 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.TimestampToTimeUtils;
 
 import java.util.List;
 
@@ -80,13 +79,17 @@ public class SceneListViewAdapter extends BaseAdapter {
         //数据为空
         ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
         holder.userName.setText(list.get(position).getUser_info().getNickname());
-        holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser_info().getUser_rank(), list.get(position).getUser_info().getSummary()));
+        if (list.get(position).getUser_info().getSummary().equals("null")) {
+            holder.userInfo.setText(list.get(position).getUser_info().getUser_rank());
+        } else {
+            holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser_info().getUser_rank(), list.get(position).getUser_info().getSummary()));
+        }
         holder.viewCount.setText(list.get(position).getView_count());
         holder.loveCount.setText(list.get(position).getLove_count());
         holder.sceneTitle.setText(list.get(position).getTitle());
         holder.suoshuQingjing.setText(list.get(position).getScene_title());
         holder.location.setText(list.get(position).getAddress());
-        holder.time.setText(TimestampToTimeUtils.getStandardDate(list.get(position).getCreated_on()));
+        holder.time.setText(list.get(position).getCreated_at());
         return convertView;
     }
 

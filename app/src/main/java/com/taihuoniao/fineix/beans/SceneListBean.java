@@ -21,7 +21,7 @@ public class SceneListBean {
     private String fine;
     private String is_check;
     private String status;
-    private String created_on;
+    private String created_at;
     private String updated_on;
     private User user_info;
     private String cover_url;
@@ -35,12 +35,12 @@ public class SceneListBean {
     }
 
 
-    public String getCreated_on() {
-        return created_on;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setCreated_on(String created_on) {
-        this.created_on = created_on;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public String getView_count() {
