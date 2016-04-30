@@ -69,6 +69,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
+        if (savedInstanceState!=null){
+            to=fm.findFragmentByTag(savedInstanceState.getString("to"));
+            from=fm.findFragmentByTag(savedInstanceState.getString("from"));
+        }
 //        WindowUtils.immerseStatusBar(MainActivity.this);
         super.onCreate(savedInstanceState);
     }
@@ -212,6 +216,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (to!=null){
+            outState.putSerializable("to",to.getClass().getSimpleName());
+        }
+
+        if (from!=null){
+            outState.putSerializable("from",from.getClass().getSimpleName());
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
