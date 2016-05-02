@@ -14,6 +14,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -108,14 +109,39 @@ public class UserCenterActivity extends BaseActivity{
             tv_rank.setText(user.rank_title);
         }
     }
-    @OnClick({R.id.iv_right,R.id.iv_detail})
+    @OnClick({R.id.iv_right,R.id.iv_detail,R.id.bt_focus,R.id.bt_msg})
     void onClick(View v){
         switch (v.getId()){
             case R.id.iv_detail:
                 finish();
                 break;
             case R.id.iv_right:
-                startActivity(new Intent(activity,EditUserInfoActivity.class));
+                startActivity(new Intent(activity, EditUserInfoActivity.class));
+                break;
+            case R.id.bt_focus://TODO 换成对应用户的Id
+                ClientDiscoverAPI.focusOperate(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (responseInfo == null) return;
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+
+                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (response.isSuccess()) {
+                            Util.makeToast(response.getMessage());
+                            return;
+                        }
+
+                        Util.makeToast(response.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        Util.makeToast(s);
+                    }
+                });
+                break;
+            case R.id.bt_msg:
+                Util.makeToast("私信操作");
                 break;
         }
     }

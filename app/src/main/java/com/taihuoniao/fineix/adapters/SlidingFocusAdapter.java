@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
+
 import java.util.List;
 
 /**
@@ -61,11 +62,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
 
         LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
         LogUtil.e(TAG,"Position=====>>"+position);
-        if (sfiv.getSelectedItemPosition() == position) {
-            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-activity.getResources().getDimensionPixelSize(R.dimen.dp150),activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-        } else {
-            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-activity.getResources().getDimensionPixelSize(R.dimen.dp150),activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-        }
+        convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-200,activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
         return convertView;
     }
 

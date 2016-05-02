@@ -10,12 +10,6 @@ import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
-//import com.zcjcn.R;
-//import com.zcjcn.beans.GoodsDetail;
-//import com.zcjcn.utils.Constants;
-//import com.zcjcn.utils.PopupWindowUtil;
-//import com.zcjcn.utils.Util;
-
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -34,27 +28,26 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
- * @author lilin
- * created at 2016/4/29 16:58
+ * Created by Administrator on 2016/1/15.
  */
-public class CustomShareView extends RelativeLayout implements PlatformActionListener{
+public class CustomShareView extends RelativeLayout implements PlatformActionListener {
     private GridView gv_share;
     private View tv_cancel;
 //    private GoodsDetail detail;
     private Context context;
-    public CustomShareView(Context context){//GoodsDetail detail
-        this(context,null);
+    public CustomShareView(Context context){
+        super(context);
         this.context=context;
 //        this.detail=detail;
         initView(context);
     }
-    public CustomShareView(Context context,AttributeSet attrs){//,GoodsDetail detail
-        this(context,attrs,0);
+    public CustomShareView(Context context, AttributeSet attrs){
+        super(context,attrs);
         this.context=context;
 //        this.detail=detail;
         initView(context);
     }
-    public CustomShareView(Context context, AttributeSet attrs, int defStyleAttr) {//,GoodsDetail detail
+    public CustomShareView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context=context;
 //        this.detail=detail;
@@ -93,10 +86,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 0:
                     //qq
                     params=new Platform.ShareParams();
-                    params.setTitle("标题");
-                    params.setText("内容");
-                    params.setTitleUrl("http://www.baidu.com/");
-                    params.setImageUrl("http://www.baidu.com/");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setTitleUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     Platform qq = ShareSDK.getPlatform(QQ.NAME);
                     qq.setPlatformActionListener(CustomShareView.this);
                     qq.share(params);
@@ -104,10 +97,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 1:
                     //qqzong
                     params= new Platform.ShareParams();
-                    params.setTitle("标题");
-                    params.setText("内容");
-                    params.setTitleUrl("http://www.baidu.com/"); // 标题的超链接
-                    params.setImageUrl("http://www.baidu.com/");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setTitleUrl("Constants.SHARE_URI + detail.goods_id"); // 标题的超链接
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     params.setSite(context.getString(R.string.app_name));
                     params.setSiteUrl("http://www.dmore.com.cn/");
                     Platform qzone = ShareSDK.getPlatform (QZone.NAME);
@@ -117,9 +110,9 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 2:
                     //sina
                     params = new Platform.ShareParams();
-                    params.setTitle("http://www.baidu.com/");
-                    params.setText("http://www.baidu.com/");
-                    params.setImageUrl("http://www.baidu.com/");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     weibo.share(params);
@@ -128,10 +121,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     //wechat
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("http://www.baidu.com/");
-                    params.setTitle("http://www.baidu.com/");
-                    params.setText("http://www.baidu.com/");
-                    params.setImageUrl("http://www.baidu.com/");
+                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(CustomShareView.this);
                     wechat.share(params);
@@ -140,26 +133,26 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     //wechatmoment
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("http://www.baidu.com/");
-                    params.setTitle("http://www.baidu.com/");
-                    params.setText("http://www.baidu.com/");
-                    params.setImageUrl("http://www.baidu.com/");
+                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(CustomShareView.this);
                     wechatMoments.share(params);
                     break;
-//                case 5:
-//                    //wefa
-//                    params = new Platform.ShareParams();
-//                    params.setShareType(Platform.SHARE_WEBPAGE);
-//                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
-//                    params.setTitle("detail.goods_name");
-//                    params.setText("detail.goods_name");
-//                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                case 5:
+                    //wefa
+                    params = new Platform.ShareParams();
+                    params.setShareType(Platform.SHARE_WEBPAGE);
+                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setTitle("detail.goods_name");
+                    params.setText("detail.goods_name");
+                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
 //                    Platform wechatFavorite = ShareSDK.getPlatform(WechatFavorite.NAME);
 //                    wechatFavorite.setPlatformActionListener(CustomShareView.this);
 //                    wechatFavorite.share(params);
-//                    break;
+                    break;
             }
         }
     };

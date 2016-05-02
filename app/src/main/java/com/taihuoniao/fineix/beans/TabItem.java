@@ -8,7 +8,6 @@ import android.widget.TextView;
  *         created at 2016/3/23 17:57
  */
 public class TabItem {
-    public int id;
     public ImageView imageView;
     public int selId;
     public int unselId;

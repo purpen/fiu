@@ -91,9 +91,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
         tv_name = (TextView) view.findViewById(R.id.tv_name);
         tv_price = (TextView) view.findViewById(R.id.tv_price);
-
-        sfiv.setMaxRotationAngle(0);
-        sfiv.setAnimationDuration(0);
+        sfiv.setAnimationDuration(500);
+        sfiv.setFadingEdgeLength(200);
+        sfiv.setSpacing(10);
         sfiv.setGravity(Gravity.CENTER_VERTICAL);
         absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
