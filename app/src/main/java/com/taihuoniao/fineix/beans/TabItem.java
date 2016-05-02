@@ -13,4 +13,5 @@ public class TabItem {
     public int selId;
     public int unselId;
     public TextView tv;
+    public Class clazz;
 }

@@ -51,13 +51,6 @@ public class SceneDetails extends NetBean {
         return tag_titles;
     }
 
-    public void setTag_titles(List<String> tag_titles) {
-        this.tag_titles = tag_titles;
-    }
-
-    public List<String> getTag_titles() {
-        return tag_titles;
-    }
 
     public void setTag_titles(List<String> tag_titles) {
         this.tag_titles = tag_titles;

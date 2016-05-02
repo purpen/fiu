@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 
 import java.util.ArrayList;
@@ -60,21 +61,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView tv_nav4;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
-    private Fragment from, to;
+    //  private Fragment from, to;
     private ArrayList<Fragment> fragments;
+    private Fragment showFragment;
+
     public MainActivity() {
         super(R.layout.activity_main);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        fm = getSupportFragmentManager();
-        if (savedInstanceState!=null){
-            to=fm.findFragmentByTag(savedInstanceState.getString("to"));
-            from=fm.findFragmentByTag(savedInstanceState.getString("from"));
-        }
-//        WindowUtils.immerseStatusBar(MainActivity.this);
         super.onCreate(savedInstanceState);
+        if (fragments==null){
+            fragments = new ArrayList<>();
+        }
+        fm = getSupportFragmentManager();
+        if (savedInstanceState != null) {
+            recoverAllState(savedInstanceState);
+        } else {
+            switchFragmentandImg(IndexFragment.class);
+        }
+
+//        WindowUtils.immerseStatusBar(MainActivity.this);
+    }
+
+    private void recoverAllState(Bundle savedInstanceState) {
+        Fragment indexFragment = fm.getFragment(savedInstanceState,IndexFragment.class.getSimpleName());
+        addFragment2List(indexFragment);
+        Fragment findFragment = fm.getFragment(savedInstanceState, FindFragment.class.getSimpleName());
+        addFragment2List(findFragment);
+        Fragment wellGoodsFragment = fm.getFragment(savedInstanceState, WellGoodsFragment.class.getSimpleName());
+        addFragment2List(wellGoodsFragment);
+        Fragment mineFragment = fm.getFragment(savedInstanceState, MineFragment.class.getSimpleName());
+        addFragment2List(mineFragment);
+        Class clazz = (Class) savedInstanceState.getSerializable(MainActivity.class.getSimpleName());
+        if (clazz == null) return;
+        LogUtil.e(TAG, clazz.getSimpleName() + "///////////");
+        switchFragmentandImg(clazz);
+    }
+
+    private void addFragment2List(Fragment fragment) {
+        if (fragment == null) {
+            LogUtil.e(TAG,"addedFragment==null");
+            return;
+        }
+
+        if (fragments.contains(fragment)) {
+            LogUtil.e(TAG,"addedFragment  contains");
+            return;
+        }
+
+        fragments.add(fragment);
     }
 
     @Override
@@ -96,27 +133,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabList = new ArrayList<TabItem>();
         }
 //        homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
-        initTabItem(homepageImg, tv_nav0, R.id.activity_main_homepagebtn, R.mipmap.home_red, R.mipmap.home_gray);
+        initTabItem(homepageImg, tv_nav0, IndexFragment.class, R.mipmap.home_red, R.mipmap.home_gray);
 
 //        findImg = (ImageView) findViewById(R.id.activity_main_findbtn);
-        initTabItem(findImg, tv_nav1, R.id.activity_main_findbtn, R.mipmap.find_red, R.mipmap.find_gray);
+        initTabItem(findImg, tv_nav1, FindFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
 
 //        sceneImg = (ImageView) findViewById(R.id.activity_main_scenebtn);
 
 //        shopImg = (ImageView) findViewById(R.id.activity_main_shopbtn);
-        initTabItem(shopImg, tv_nav3, R.id.activity_main_shopbtn, R.mipmap.shop_red, R.mipmap.shop_gray);
+        initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.shop_red, R.mipmap.shop_gray);
 
 //        mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
-        initTabItem(mineImg, tv_nav4, R.id.activity_main_minebtn, R.mipmap.mine_red, R.mipmap.mine_gray);
+        initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.mine_red, R.mipmap.mine_gray);
 
-        switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
+
     }
 
-    private void initTabItem(ImageView imageView, TextView tv, int resId, int selId, int unselId) {
+
+    private void initTabItem(ImageView imageView, TextView tv, Class clazz, int selId, int unselId) {
         TabItem tabItem = new TabItem();
         tabItem.imageView = imageView;
         tabItem.tv = tv;
-        tabItem.id = resId;
+        tabItem.clazz = clazz;
         tabItem.selId = selId;
         tabItem.unselId = unselId;
         tabList.add(tabItem);
@@ -131,26 +169,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_nav0://情
 //                custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_homepagebtn, IndexFragment.class);
+                switchFragmentandImg(IndexFragment.class);
                 break;
             case R.id.ll_nav1: //景
 //                custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_findbtn, FindFragment.class);
+                switchFragmentandImg(FindFragment.class);
                 break;
             case R.id.ll_nav3:  //品
 //                custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_shopbtn, WellGoodsFragment.class);
+                switchFragmentandImg(WellGoodsFragment.class);
                 break;
             case R.id.ll_nav4: //个人中心
 //                custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(R.id.activity_main_minebtn, MineFragment.class);
+                switchFragmentandImg(MineFragment.class);
                 break;
         }
     }
 
-    private void switchFragmentandImg(int id, Class clazz) {
+    private void switchFragmentandImg(Class clazz) {
+        resetUI();
         try {
-            switchImgAndTxtStyle(id);
+            switchImgAndTxtStyle(clazz);
             switchFragment(clazz);
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,31 +204,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
-        resetUI();
-        fragments=new ArrayList<>();
-        to = fm.findFragmentByTag(clazz.getSimpleName());
-        if (to == null) {
-            if (from != null) {
-                fm.beginTransaction().hide(from).commit();
-            } else {
-                //to和from都为空,不会出现
-            }
-            to = (Fragment) clazz.newInstance();
-            fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
-            fragments.add(to);
+        LogUtil.e(TAG, "<<<<<<<<"+clazz.getSimpleName());
+        Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
+        if (fragment == null) {
+            fragment = (Fragment) clazz.newInstance();
+            fm.beginTransaction().add(R.id.activity_main_fragment_group, fragment, clazz.getSimpleName()).commit();
         } else {
-            if (to == from) {
-//                LogUtil.e("to==from", (to == from) + "");
-                return;
-            }
-
-            if (from != null) {
-                fm.beginTransaction().hide(from).show(to).commit();
-            } else {
-                //首次进入主页才会出现
-            }
+            fm.beginTransaction().show(fragment).commit();
         }
-        from = to;
+        addFragment2List(fragment);
+        showFragment = fragment;
+        LogUtil.e(TAG, fragments.size()+"<<<<<<");
     }
 
     private void resetUI() {
@@ -205,10 +230,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void switchImgAndTxtStyle(int imgId) {
+    private void switchImgAndTxtStyle(Class clazz) {
         for (TabItem tabItem : tabList) {
-            int id = tabItem.id;
-            if (id == imgId) {
+            if (tabItem.clazz.equals(clazz)) {
                 tabItem.imageView.setImageResource(tabItem.selId);
                 tabItem.tv.setTextColor(getResources().getColor(R.color.color_af8323));
             } else {
@@ -220,16 +244,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (to!=null){
-            outState.putSerializable("to",to.getClass().getSimpleName());
+        LogUtil.e(TAG,"onSaveInstanceState");
+        int size=fragments.size();
+        if (fragments!=null && size>0){
+            for (int i=0;i<size;i++){
+                fm.putFragment(outState,fragments.get(i).getTag(),fragments.get(i));
+            }
         }
+//        if (indexFragment != null) {
+//            fm.putFragment(outState, IndexFragment.class.getSimpleName(), indexFragment);
+////            outState.putSerializable(IndexFragment.class.getSimpleName(), IndexFragment.class.getSimpleName());
+//        }
+//
+//        if (findFragment != null) {
+//            fm.putFragment(outState,FindFragment.class.getSimpleName(),findFragment);
+////            outState.putString(FindFragment.class.getSimpleName(), FindFragment.class.getSimpleName());
+//        }
+//
+//        if (wellGoodsFragment != null) {
+//            fm.putFragment(outState, WellGoodsFragment.class.getSimpleName(), wellGoodsFragment);
+////            outState.putString(WellGoodsFragment.class.getSimpleName(), WellGoodsFragment.class.getSimpleName());
+//        }
+//
+//        if (mineFragment != null) {
+//            fm.putFragment(outState, MineFragment.class.getSimpleName(), mineFragment);
+////            outState.putString(MineFragment.class.getSimpleName(), MineFragment.class.getSimpleName());
+//        }
 
-        if (from!=null){
-            outState.putSerializable("from",from.getClass().getSimpleName());
+        if (showFragment != null) {
+            outState.putSerializable(MainActivity.class.getSimpleName(), showFragment.getClass());
         }
-
         super.onSaveInstanceState(outState);
     }
+
 
     @Override
     protected void onDestroy() {
