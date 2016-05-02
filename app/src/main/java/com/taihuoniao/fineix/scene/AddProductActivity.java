@@ -16,16 +16,18 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 /**
  * Created by taihuoniao on 2016/3/22.
  */
-public class AddProductActivity extends BaseActivity implements View.OnClickListener{
+public class AddProductActivity extends BaseActivity implements View.OnClickListener {
     private GlobalTitleLayout titleLayout;
     private CustomSlidingTab slidingTab;
     private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
     private RelativeLayout search;
+    private WaittingDialog dialog;
 
     public AddProductActivity() {
         super(0);
@@ -34,6 +36,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void requestNet() {
         //获取分类列表
+        dialog.show();
         DataPaser.categoryList(1 + "", 1 + "", handler);
     }
 
@@ -59,6 +62,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
         search = (RelativeLayout) findViewById(R.id.rl);
+        dialog = new WaittingDialog(this);
     }
 
     @Override
@@ -68,9 +72,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.rl:
-                startActivity(new Intent(activity,SearchResultActivity.class));
+                startActivity(new Intent(activity, SearchResultActivity.class));
                 return;
         }
     }
@@ -80,6 +84,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.CATEGORY_LIST:
+                    dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
                         addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
@@ -88,6 +93,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     }
                     break;
                 case DataConstants.NET_FAIL:
+                    dialog.dismiss();
                     break;
             }
         }

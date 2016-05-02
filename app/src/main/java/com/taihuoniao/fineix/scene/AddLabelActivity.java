@@ -5,12 +5,20 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllLabelListViewAdapter;
 import com.taihuoniao.fineix.adapters.AllLabelViewPagerAdapter1;
@@ -19,10 +27,10 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.HotLabel;
-import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -31,6 +39,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.WrapContentViewPager;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +68,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     //热门标签页码
     private int hotLabelCurrentPage = 1;
     //热门标签的列表
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     //使用过的标签列表
     private List<UsedLabelBean> usedLabelList;
     //全部标签列表
@@ -159,9 +168,29 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         dialog.show();
         //需要登录
         DataPaser.usedLabelList(handler);
+        DataPaser.labelList(null, allLabelCurrentPage, null, 0, 0, handler);
+        ClientDiscoverAPI.labelList(null, 1, 18 + "", 3, 1, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.HOT_LABEL_LIST;
+                msg.obj = new HotLabel();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<HotLabel>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(AddLabelActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
 
-        DataPaser.hotLabelList(hotLabelCurrentPage + "", handler);
-        DataPaser.labelList(null, allLabelCurrentPage, null, handler);
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+            }
+        });
     }
 
     @Override
@@ -172,8 +201,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
             UsedLabelBean usedLabelBean = (UsedLabelBean) object;
             str = usedLabelBean.getTitle_cn();
             _id = Integer.parseInt(usedLabelBean.get_id());
-        } else if (object instanceof HotLabelBean) {
-            HotLabelBean hotLabelBean = (HotLabelBean) object;
+        } else if (object instanceof HotLabel.HotLabelBean) {
+            HotLabel.HotLabelBean hotLabelBean = (HotLabel.HotLabelBean) object;
             str = hotLabelBean.getTitle_cn();
             _id = Integer.parseInt(hotLabelBean.get_id());
         } else if (object instanceof AllLabelBean) {
@@ -255,7 +284,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                         if (hotLabelCurrentPage == 1) {
                             hotLabelList.clear();
                         }
-                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
+                        hotLabelList.addAll(netHotLabel.getData().getRows());
                         hotLabelViewPagerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -277,6 +306,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                     UsedLabel netUsedLabel = (UsedLabel) msg.obj;
                     if (netUsedLabel.isSuccess()) {
                         if (netUsedLabel.getHas_tag() == 0) {
+                            Log.e("<<<", "没有用过的标签");
                             return;
                         }
                         usedLabelList.addAll(netUsedLabel.getUsedLabelList());

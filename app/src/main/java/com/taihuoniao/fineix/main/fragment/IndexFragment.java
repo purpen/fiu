@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
@@ -24,7 +26,9 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+    private ImageView searchImg;
+    private ImageView subsImg;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
     private List<SceneListBean> sceneList;
@@ -40,23 +44,38 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected void requestNet() {
-
     }
 
     @Override
     protected void initList() {
-        pullToRefreshLayout.setPullToRefreshEnabled(false);
+        searchImg.setOnClickListener(this);
+        subsImg.setOnClickListener(this);
+        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                currentPage = 1;
+                if (location == null) {
+                    getCurrentLocation();
+                    return;
+                }
+                DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+            }
+        });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 currentPage++;
-                DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         });
         sceneList = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
+        getCurrentLocation();
+    }
+
+    private void getCurrentLocation() {
         MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
@@ -64,7 +83,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
-                    DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -73,20 +92,63 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_index, null);
+        searchImg = (ImageView) view.findViewById(R.id.fragment_index_search);
+        subsImg = (ImageView) view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
         dialog = new WaittingDialog(getActivity());
         return view;
     }
 
+    //    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
+//    protected void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.location_btn:
+//                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
+//                break;
+//            case R.id.poi_btn:
+//                activity.startActivity(new Intent(activity, POIListActivity.class));
+//                break;
+//            case R.id.share_btn:
+//                //TODO 调用所有分享
+////                Intent intent = new Intent();
+////                intent.setAction(Intent.ACTION_SEND);
+////                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
+////                intent.setType("*/*");
+////                startActivity(Intent.createChooser(intent, "分享到"));
+//
+//                //TODO 通过短信分享
+//                String content="我是分享内容....";
+//                Uri sms = Uri.parse("smsto:");
+//                Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
+//                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
+//                sendIntent.putExtra( "sms_body",content);
+//                sendIntent.setType("vnd.android-dir/mms-sms" );
+//                startActivity(sendIntent);
+//                break;
+//            case R.id.sliding_tab_btn:
+////                activity.startActivity(new Intent(activity, OrderListActivity.class));
+//                activity.startActivity(new Intent(activity, SearchResultActivity.class));
+//                break;
+//            case R.id.geo:
+//                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
+//                break;
+//            case R.id.select_search_qj:
+//                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
+//                break;
+//            case R.id.focus:
+//                activity.startActivity(new Intent(activity, CaptureActivity.class));
+//                break;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SCENE_LIST:
+                    pullToRefreshLayout.onRefreshComplete();
                     dialog.dismiss();
                     SceneList netSceneList = (SceneList) msg.obj;
                     if (netSceneList.isSuccess()) {
+                        pullToRefreshLayout.setLoadingTime();
                         if (currentPage == 1) {
                             sceneList.clear();
                             pullToRefreshLayout.lastTotalItem = -1;
@@ -97,6 +159,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     }
                     break;
                 case DataConstants.NET_FAIL:
+                    dialog.dismiss();
+                    pullToRefreshLayout.onRefreshComplete();
                     break;
             }
         }
@@ -119,43 +183,16 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         startActivity(intent);
     }
 
-    //    @OnClick({R.id.location_btn, R.id.poi_btn, R.id.share_btn, R.id.sliding_tab_btn, R.id.geo, R.id.select_search_qj})
-//    protected void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.location_btn:
-//                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
-//                break;
-//            case R.id.poi_btn:
-//                activity.startActivity(new Intent(activity, POIListActivity.class));
-//                break;
-//            case R.id.share_btn:
-//                //TODO 调用所有分享
-////                Intent intent = new Intent();
-////                intent.setAction(Intent.ACTION_SEND);
-////                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
-////                intent.setType("*/*");
-////                startActivity(Intent.createChooser(intent, "分享到"));
-//
-//                //TODO 通过短信分享
-//                String content = "我是分享内容....";
-//                Uri sms = Uri.parse("smsto:");
-//                Intent sendIntent = new Intent(Intent.ACTION_VIEW, sms);
-//                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
-//                sendIntent.putExtra("sms_body", content);
-//                sendIntent.setType("vnd.android-dir/mms-sms");
-//                startActivity(sendIntent);
-//                break;
-//            case R.id.sliding_tab_btn:
-//                activity.startActivity(new Intent(activity, OrderListActivity.class));
-//                break;
-//            case R.id.geo:
-//                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
-//                break;
-//            case R.id.select_search_qj:
-//                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
-//                break;
-//        }
-//    }
 
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fragment_index_subs:
+                Toast.makeText(getActivity(), "订阅", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fragment_index_search:
+                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }

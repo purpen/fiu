@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
@@ -35,6 +36,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //控件
     private PullToRefreshGridView pullToRefreshView;
     private TextView nothingTv;
+    private ProgressBar progressBar;
     //当前页码
     private int currentPage = 1;
     //网络请求返回数据商品列表
@@ -60,6 +62,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     protected void requestNet() {
+        progressBar.setVisibility(View.VISIBLE);
         DataPaser.getProductList(categoryBean.getList().get(position).get_id(), currentPage + "", handler);
     }
 
@@ -99,6 +102,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         View view = View.inflate(getActivity(), R.layout.view_addproduct_fragment, null);
         pullToRefreshView = (PullToRefreshGridView) view.findViewById(R.id.view_addproduct_fragment_refresh);
         nothingTv = (TextView) view.findViewById(R.id.view_addproduct_fragment_nothingtv);
+        progressBar = (ProgressBar) view.findViewById(R.id.view_addproduct_fragment_progress);
         return view;
     }
 
@@ -108,6 +112,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             switch (msg.what) {
                 case DataConstants.ADD_PRODUCT_LIST:
                     pullToRefreshView.onRefreshComplete();
+                    progressBar.setVisibility(View.GONE);
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess()) {
                         if (currentPage == 1) {
@@ -123,6 +128,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     break;
                 case DataConstants.NET_FAIL:
                     pullToRefreshView.onRefreshComplete();
+                    progressBar.setVisibility(View.GONE);
                     break;
             }
         }

@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -74,8 +73,6 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
         hold.gridView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.e("<<<", "top = " + top + ",bottom = " + bottom +
-                        ",oldTop = " + oldTop + ",oldBottom = " + oldBottom);
                 if (bottom - top > oldBottom - oldTop && oldBottom != 0) {
                     moreClick.moreClick(pos, position, bottom - top - oldBottom + oldTop);
                 }

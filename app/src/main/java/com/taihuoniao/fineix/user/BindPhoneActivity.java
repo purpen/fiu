@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,23 +23,25 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-public class BindPhoneActivity extends BaseActivity implements View.OnClickListener{
+public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
     private EditText mPhone;
     private EditText mPassWord;
     private Button mBind;
     private TextView mLoginNow;
     public static BindPhoneActivity instance = null;
-    private WaittingDialog mDialog=null;
-    private String avatarUrl,nickName,sex,token;
+    private WaittingDialog mDialog = null;
+    private String avatarUrl, nickName, sex, token;
     private String type;//来源: 1.微信；2.微博；3.ＱＱ
-    private String mPhoneNumber,mPassWordNumber;
+    private String mPhoneNumber, mPassWordNumber;
     private String unionId;//微信的联合id
     private String openIdWeChat;//微信专用的openId
     private String openId;
-    public BindPhoneActivity(){
+
+    public BindPhoneActivity() {
         super(R.layout.activity_bind_phone);
     }
-    private Handler mHandler=new Handler(){
+
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -51,7 +52,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                             SkipBind skipBind = (SkipBind) msg.obj;
                             if ("true".equals(skipBind.getSuccess())) {
                                 loginSuccess();
-                            }else {
+                            } else {
                                 Toast.makeText(BindPhoneActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -60,10 +61,10 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 case DataConstants.PARSER_THIRD_LOGIN_BIND_PHONE:
                     if (msg.obj != null) {
                         if (msg.obj instanceof BindPhone) {
-                            BindPhone bindPhone= (BindPhone) msg.obj;
+                            BindPhone bindPhone = (BindPhone) msg.obj;
                             if ("true".equals(bindPhone.getSuccess())) {
                                 loginSuccess();
-                            }else {
+                            } else {
                                 Toast.makeText(BindPhoneActivity.this, "绑定失败，请核查手机号和密码是否正确", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -84,10 +85,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 //        setContentView(R.layout.activity_bind_phone);
         overridePendingTransition(R.anim.up_register, 0);
         ActivityUtil.getInstance().addActivity(this);
-        instance=this;
+        instance = this;
 //        iniView();
         initData();
-
 
 
     }
@@ -106,6 +106,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         findViewById(R.id.image_back_bindPhone).setOnClickListener(this);
         findViewById(R.id.image_close_bindPhone).setOnClickListener(this);
     }
+
     private void initData() {
         token = getIntent().getStringExtra("token");
         type = getIntent().getStringExtra("type");
@@ -116,23 +117,24 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         // 针对微信不用传openid，要传unionid，换言之，单独对微信是把unionid当作openid传了，但在这个Activity的接口却要求openid和unionid都要传，而除了微信，QQ和微
         // 博都没有unionid的，只有openid，所以要像这样，单独把微信的unionid提出来
         unionId = getIntent().getStringExtra("oid");//微信的联合id
-        openIdWeChat=getIntent().getStringExtra("oidForWeChat");//微信的openid
+        openIdWeChat = getIntent().getStringExtra("oidForWeChat");//微信的openid
         openId = getIntent().getStringExtra("oid");
         //1.微信；2.微博；3.ＱＱ
         if ("1".equals(type)) {
-            openId=openIdWeChat;
+            openId = openIdWeChat;
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_bindPhone:
-                mPhoneNumber= mPhone.getText()+"";
-                mPassWordNumber=mPassWord.getText()+"";
-                DataPaser.bindPhoneParser(openId,unionId,token,mPhoneNumber,mPassWordNumber,type,mHandler);
+                mPhoneNumber = mPhone.getText() + "";
+                mPassWordNumber = mPassWord.getText() + "";
+                DataPaser.bindPhoneParser(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, mHandler);
                 break;
             case R.id.tv_click_login_bindPhone:
-                DataPaser.skipBindParser(MainApplication.uuid,openId,unionId,token,nickName,sex,avatarUrl,type,mHandler);
+                DataPaser.skipBindParser(MainApplication.uuid, openId, unionId, token, nickName, sex, avatarUrl, type, mHandler);
                 break;
             case R.id.image_close_bindPhone:
                 if (OptRegisterLoginActivity.instance != null) {
@@ -151,6 +153,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
         }
     }
+
     @Override
     public void finish() {
         super.finish();
@@ -159,31 +162,12 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
 
     //选择绑定成功，或跳过绑定之后完成登录，跳入相应界面
-    private  void loginSuccess(){
+    private void loginSuccess() {
         switch (MainApplication.which_activity) {
-            case DataConstants.ACTIVITY_TOPIC_COMMENTS:
-                finish();
+            case DataConstants.SceneDetailActivity:
+                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                 break;
-            case DataConstants.ACTIVITY_WEB:
-                sendBroadcast(new Intent(DataConstants.BROAD_TOPIC_DETAILS));
-                finish();
-                break;
-            case DataConstants.ACTIVITY_TRY_DETAILS_COMMENTS:
-                finish();
-                break;
-            case DataConstants.ACTIVITY_COMMENTLISTS:
-                finish();
-                break;
-            case DataConstants.ACTIVITY_SPECIAL_DETAILS:
-                finish();
-                break;
-            case DataConstants.ACTIVITY_TRY_DETAILS:
-                sendBroadcast(new Intent(DataConstants.BROAD_TRY_DETAILS));
-                finish();
-                break;
-            case DataConstants.ACTIVITY_GOODS_DETAILS:
-                sendBroadcast(new Intent(DataConstants.BROAD_GOODS_DETAILS));
-                finish();
+            case DataConstants.ElseActivity:
                 break;
             default:
 //                THNMainActivity.instance.finish();

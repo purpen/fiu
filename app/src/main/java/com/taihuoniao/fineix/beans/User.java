@@ -18,6 +18,7 @@ public class User implements Serializable {
     public long created_on;
     public String birthday;
     public String medium_avatar_url;
+    public String avatar;
     public Identify identify;
     public String realname;
     public String phone;
@@ -42,8 +43,9 @@ public class User implements Serializable {
     public String rank_title;
     public int bird_coin;
     public long current_user_id;
-
-    public class Identify {
+    public String summary;
+    public String city;
+    public class Identify implements Serializable{
         public int d3in_volunteer;
         public int d3in_vip;
         public int d3in_tag;

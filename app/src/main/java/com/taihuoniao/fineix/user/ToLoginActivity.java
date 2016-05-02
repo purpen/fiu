@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -48,11 +47,12 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToLoginActivity instance = null;
     private WaittingDialog mDialog;
-    private boolean mDialogAppear=false;//判断对话框要不要出现
+    private boolean mDialogAppear = false;//判断对话框要不要出现
 
-    public ToLoginActivity(){
+    public ToLoginActivity() {
         super(R.layout.activity_to_login);
     }
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -78,8 +78,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                                 mDialog.dismiss();
                             }
                             if ("true".equals(thirdLogin.getSuccess())) {
-                                Log.e(">>>", ">>>>>userId>>>"+userId);
-                                Log.e(">>>", ">>>>>openidForWeChat>>>"+openidForWeChat);
+                                Log.e(">>>", ">>>>>userId>>>" + userId);
+                                Log.e(">>>", ">>>>>openidForWeChat>>>" + openidForWeChat);
                                 //为0不存在，1是存在，不存在表示第一次用这个三方号登录本APP，那就去绑定界面，存在则直接进入APP
                                 if ("0".equals(thirdLogin.getHas_user())) {
                                     Intent intent = new Intent(ToLoginActivity.this, BindPhoneActivity.class);
@@ -93,29 +93,10 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                                     startActivity(intent);
                                 } else {
                                     switch (MainApplication.which_activity) {
-                                        case DataConstants.ACTIVITY_TOPIC_COMMENTS:
-                                            finish();
+                                        case DataConstants.SceneDetailActivity:
+                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                                             break;
-                                        case DataConstants.ACTIVITY_WEB:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_TOPIC_DETAILS));
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_TRY_DETAILS_COMMENTS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_COMMENTLISTS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_SPECIAL_DETAILS:
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_TRY_DETAILS:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_TRY_DETAILS));
-                                            finish();
-                                            break;
-                                        case DataConstants.ACTIVITY_GOODS_DETAILS:
-                                            sendBroadcast(new Intent(DataConstants.BROAD_GOODS_DETAILS));
-                                            finish();
+                                        case DataConstants.ElseActivity:
                                             break;
                                         default:
 //                                            THNMainActivity.instance.finish();
@@ -139,7 +120,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                                         }
                                     }, 600);
                                 }
-                            }else {
+                            } else {
                                 Toast.makeText(ToLoginActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -194,7 +175,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_qq_tologin:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -204,7 +185,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(qq);
                 break;
             case R.id.tv_weixin_tologin:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -216,7 +197,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(wechat);
                 break;
             case R.id.tv_weibo_tologin:
-                mDialogAppear=true;
+                mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
@@ -246,7 +227,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         if (plat == null) {
             return;
         }
-        if (plat.isValid ()) {
+        if (plat.isValid()) {
             plat.removeAccount();
         }
         plat.setPlatformActionListener(this);
@@ -293,7 +274,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        mDialogAppear=false;
+        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
@@ -302,7 +283,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onCancel(Platform platform, int i) {
-        mDialogAppear=false;
+        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }

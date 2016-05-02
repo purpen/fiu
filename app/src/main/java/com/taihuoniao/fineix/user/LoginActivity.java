@@ -20,7 +20,6 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ActivityUtil;
-import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -31,9 +30,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ImageView mClose;
     private ImageView mBack;
     public static LoginActivity instance = null;
-    private WaittingDialog mDialog=null;
+    private WaittingDialog mDialog = null;
 
-    public LoginActivity(){
+    public LoginActivity() {
         super(R.layout.activity_login);
     }
 //    private TextWatcher textWatcher = new TextWatcher() {
@@ -73,33 +72,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                            Log.e(">>>", ">>>>>which_activityllll>>>" + MainApplication.which_activity);
 //                            Log.e(">>>", ">>>>>forPaywayToMainlllll>>>" + THNApplication.forPaywayToMain);
                             switch (MainApplication.which_activity) {
-                                case DataConstants.ACTIVITY_TOPIC_COMMENTS:
-                                    finish();
+                                case DataConstants.QingjingDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
                                     break;
-                                case DataConstants.ACTIVITY_WEB:
-                                    sendBroadcast(new Intent(DataConstants.BROAD_TOPIC_DETAILS));
-                                    finish();
+                                case DataConstants.SceneDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                                     break;
-                                case DataConstants.ACTIVITY_TRY_DETAILS_COMMENTS:
-                                    finish();
-                                    break;
-                                case DataConstants.ACTIVITY_COMMENTLISTS:
-                                    finish();
-                                    break;
-                                case DataConstants.ACTIVITY_SPECIAL_DETAILS:
-                                    finish();
-                                    break;
-                                case DataConstants.ACTIVITY_TRY_DETAILS:
-                                    sendBroadcast(new Intent(DataConstants.BROAD_TRY_DETAILS));
-                                    finish();
-                                    break;
-                                case DataConstants.ACTIVITY_GOODS_DETAILS:
-                                    sendBroadcast(new Intent(DataConstants.BROAD_GOODS_DETAILS));
-                                    finish();
+                                case DataConstants.ElseActivity:
+                                    //其他不需要刷新界面的activity
                                     break;
                                 default:
 //                                    THNMainActivity.instance.finish();
-                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     break;
                             }
@@ -111,7 +95,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             if (RegisterActivity.instance != null) {
                                 RegisterActivity.instance.finish();
                             }
-                            if (OptRegisterLoginActivity.instance!=null) {
+                            if (OptRegisterLoginActivity.instance != null) {
                                 OptRegisterLoginActivity.instance.finish();
                             }
                             if (ToLoginActivity.instance != null) {
@@ -199,7 +183,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (!TextUtils.isEmpty(phone)) {
                     if (!TextUtils.isEmpty(password)) {
                         mDialog.show();
-                        DataPaser.loginParser(MainApplication.uuid,mHandler, phone, password);
+                        DataPaser.loginParser(MainApplication.uuid, mHandler, phone, password);
                     } else {
                         Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                     }

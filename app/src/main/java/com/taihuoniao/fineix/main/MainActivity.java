@@ -1,11 +1,9 @@
 package com.taihuoniao.fineix.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +17,6 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private Fragment from, to;
-
+    private ArrayList<Fragment> fragments;
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -72,6 +69,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fm = getSupportFragmentManager();
+        if (savedInstanceState!=null){
+            to=fm.findFragmentByTag(savedInstanceState.getString("to"));
+            from=fm.findFragmentByTag(savedInstanceState.getString("from"));
+        }
 //        WindowUtils.immerseStatusBar(MainActivity.this);
         super.onCreate(savedInstanceState);
     }
@@ -125,26 +126,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("创建场景或情景，确认场景，取消情景？");
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        MainApplication.tag = 1;
-                        startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        MainApplication.tag = 2;
-                        startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
-                    }
-                });
-                builder.create().show();
-
+                MainApplication.tag = 1;
+                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
             case R.id.ll_nav0://情
 //                custom_head.setVisibility(View.GONE);
@@ -182,6 +165,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
+        resetUI();
+        fragments=new ArrayList<>();
         to = fm.findFragmentByTag(clazz.getSimpleName());
         if (to == null) {
             if (from != null) {
@@ -191,6 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             to = (Fragment) clazz.newInstance();
             fm.beginTransaction().add(R.id.activity_main_fragment_group, to, clazz.getSimpleName()).commit();
+            fragments.add(to);
         } else {
             if (to == from) {
 //                LogUtil.e("to==from", (to == from) + "");
@@ -206,6 +192,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         from = to;
     }
 
+    private void resetUI() {
+        if (fragments == null) {
+            return;
+        }
+        if (fragments.size() == 0) {
+            return;
+        }
+
+        for (Fragment fragment : fragments) {
+            fm.beginTransaction().hide(fragment).commit();
+        }
+    }
 
     private void switchImgAndTxtStyle(int imgId) {
         for (TabItem tabItem : tabList) {
@@ -218,6 +216,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (to!=null){
+            outState.putSerializable("to",to.getClass().getSimpleName());
+        }
+
+        if (from!=null){
+            outState.putSerializable("from",from.getClass().getSimpleName());
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

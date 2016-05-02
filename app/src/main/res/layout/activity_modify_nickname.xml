@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f7f7f7"
+    >
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/head_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_below="@+id/head_view"
+        android:layout_marginTop="@dimen/dp10"
+        android:paddingLeft="@dimen/dp10"
+        android:hint="请输入昵称"
+        android:textColorHint="@color/color_999"
+        android:textSize="@dimen/sp14"
+        android:textColor="@color/color_333"
+        android:singleLine="true"
+        android:maxLength="20"
+        android:background="@android:color/white"
+        />
+</RelativeLayout>

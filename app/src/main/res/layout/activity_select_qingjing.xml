@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/activity_select_qingjing_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/top_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/activity_select_qingjing_titlelayout"
+        android:background="#e9e9e9"/>
+
+    <com.taihuoniao.fineix.view.HeaderGridView
+        android:id="@+id/activity_select_qingjing_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_line1"
+        android:background="#f7f7f7"
+        android:numColumns="2"
+        android:padding="5dp"/>
+
+    <ProgressBar
+        android:id="@+id/activity_select_qingjing_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+
+
+</RelativeLayout>

@@ -49,6 +49,56 @@
             android:theme="@style/AppTheme"
             />
         <activity
+            android:name=".zxing.activity.CaptureActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".qingjingOrSceneDetails.ReportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.HasLoveActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.HasSubsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".scene.SelectQingjingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".user.MyBarCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".user.FindFriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".user.UserCenterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
+            android:name=".user.EditUserInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".user.UserEditNameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
             android:name=".user.OptRegisterLoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
@@ -90,9 +140,21 @@
             android:name=".user.AboutUsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.MessageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".user.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.UserEditSignatureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".product.GoodsDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 

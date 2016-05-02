@@ -1,16 +1,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -19,14 +21,16 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dp50"
                     android:gravity="center_vertical">
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/iv_detail"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
                         android:paddingBottom="@dimen/dp10"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
@@ -35,9 +39,10 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:src="@mipmap/head_logo" />
+                        android:src="@mipmap/head_logo"
+                        />
 
                     <ImageView
                         android:id="@+id/iv_calendar"
@@ -48,16 +53,15 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp10"
-                        android:visibility="gone"
-                        android:src="@mipmap/calendar" />
+                        android:src="@mipmap/calendar"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                     android:id="@+id/riv"
-                    android:layout_width="@dimen/dp80"
-                    android:layout_height="@dimen/dp80"
+                    android:layout_width="@dimen/dp70"
+                    android:layout_height="@dimen/dp70"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp2"
                     android:src="@mipmap/ic_launcher"
                     app:riv_corner_radius="@dimen/dp100" />
 
@@ -92,9 +96,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@null"
                     android:layout_marginBottom="@dimen/dp20"
                     android:layout_marginTop="@dimen/dp10"
+                    android:background="@null"
                     android:src="@mipmap/authentication" />
             </LinearLayout>
 
@@ -102,6 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp5"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -225,26 +230,22 @@
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_about_us"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_feedback"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/ll"
@@ -264,6 +265,7 @@
         android:background="#79000000"
         android:clickable="true"
         android:visibility="gone">
+
         <Button
             android:id="@+id/bt_register"
             android:layout_width="300dp"

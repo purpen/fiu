@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.City;
@@ -40,10 +42,21 @@ public class HotCitiesAdapter extends RecyclerView.Adapter<HotCitiesAdapter.View
     }
     private Activity activity;
     private ArrayList<City> list;
+    private DisplayImageOptions options;
+
 
     public HotCitiesAdapter(Activity activity, ArrayList<City> list) {
         this.activity = activity;
         this.list = list;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.ic_launcher)
+                .showImageForEmptyUri(R.mipmap.ic_launcher)
+                .showImageOnFail(R.mipmap.ic_launcher)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -77,7 +90,7 @@ public class HotCitiesAdapter extends RecyclerView.Adapter<HotCitiesAdapter.View
 //        }else {
             holder.sv.setVisibility(View.GONE);
             holder.tv.setText(city.name);
-            ImageLoader.getInstance().displayImage(city.image_url,holder.iv);
+            ImageLoader.getInstance().displayImage(city.image_url,holder.iv,options);
 //        }
     }
 

@@ -6,9 +6,7 @@ import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
-import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
 /**
@@ -46,14 +44,33 @@ public class ClientDiscoverAPI {
 
     //情景
     //点赞，订阅，收藏，关注列表
-    public static void commonList(String page, String size, String id, String type, String event, RequestCallBack<String> callBack) {
+    public static void commonList(String page, String size, String id, String user_id, String type, String event, RequestCallBack<String> callBack) {
         String url = NetworkConstance.common_lists;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("user_id", user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
+    //情景订阅
+    public static void subsQingjing(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.subs_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //情景
+    //取消情景订阅
+    public static void cancelSubsQingjing(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cancel_subs_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -121,6 +138,24 @@ public class ClientDiscoverAPI {
     }
 
     //场景
+    //场景点赞
+    public static void loveScene(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.love_scene;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
+    //取消场景点赞
+    public static void cancelLoveScene(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cancel_love_scene;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //场景
     //场景详情
     public static void sceneDetails(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_details;
@@ -131,11 +166,12 @@ public class ClientDiscoverAPI {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String scene_id, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("scene_id", scene_id);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("dis", dis);
         params.addQueryStringParameter("lng", lng);
@@ -155,12 +191,14 @@ public class ClientDiscoverAPI {
 
     //标签
     //标签列表
-    public static void labelList(String parent_id, int page, String size, RequestCallBack<String> callBack) {
+    public static void labelList(String parent_id, int page, String size, int sort, int is_hot, RequestCallBack<String> callBack) {
         String url = NetworkConstance.label_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("parent_id", parent_id);
         params.addQueryStringParameter("page", page + "");
+        params.addQueryStringParameter("sort", sort + "");
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("is_hot", is_hot + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -174,6 +212,28 @@ public class ClientDiscoverAPI {
     }
 
     //公共
+    //举报
+    public static void report(String target_id, String type, String evt, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.report;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("evt", evt);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //公共
+    //品牌列表
+    public static void brandList(int page, int size, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.brand_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page + "");
+        params.addQueryStringParameter("size", size + "");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+
+    }
+
+    //公共
     //分类列表
     public static void categoryList(String page, String domin, RequestCallBack<String> callBack) {
         String url = NetworkConstance.category_list;
@@ -183,13 +243,24 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    //购物车
+    //商品数量
+    public static void cartNum(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cart_number;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //评论
     //提交评论
-    public static void sendComment(String target_id, String content, String type, RequestCallBack<String> callBack) {
+    public static void sendComment(String target_id, String content, String type, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.send_comment;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("content", content);
+        params.addQueryStringParameter("is_reply", is_reply);
+        params.addQueryStringParameter("reply_id", reply_id);
+        params.addQueryStringParameter("reply_user_id", reply_user_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("from_site", 4 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -335,69 +406,116 @@ public class ClientDiscoverAPI {
 
     /**
      * 获取产品列表
+     *
      * @param page
      * @param callBack
      */
-    public static void getProductList(String page,RequestCallBack<String> callBack) {
+    public static void getProductList(String page, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page",String.valueOf(page));
-        params.addBodyParameter("size",String.valueOf(10));
+        params.addBodyParameter("page", String.valueOf(page));
+        params.addBodyParameter("size", String.valueOf(10));
 //        params.addBodyParameter("state",String.valueOf(1));
         MD5Utils.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
     }
 
     /**
      * 获取粉丝和可关注列表
+     *
      * @param page
      * @param size
      * @param find_type
      * @param callBack
      */
-    public static void getFocusFansList(String page,String size,String find_type,RequestCallBack<String> callBack) {
+    public static void getFocusFansList(String page, String size, String find_type, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page",page);
-        params.addBodyParameter("size",size);
+        params.addBodyParameter("page", page);
+        params.addBodyParameter("size", size);
 //        params.addBodyParameter("user_id", LoginInfo.getInstance().getId()+"");
-        params.addBodyParameter("user_id", 924808+"");
+        params.addBodyParameter("user_id", 924808 + "");
 //        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
-        params.addBodyParameter("find_type",find_type);
+        params.addBodyParameter("find_type", find_type);
         MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
     }
 
     /**
      * 关注操作
+     *
      * @param follow_id
      * @param callBack
      */
-    public static void focusOperate(String follow_id,RequestCallBack<String> callBack){
+    public static void focusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("follow_id",follow_id);
+        params.addBodyParameter("follow_id", follow_id);
         MD5Utils.sign(params, NetworkConstance.FOCUS_OPRATE_URL, callBack, false);
     }
 
     /**
      * 取消关注
+     *
      * @param follow_id
      * @param callBack
      */
-    public static void cancelFocusOperate(String follow_id,RequestCallBack<String> callBack){
+    public static void cancelFocusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("follow_id",follow_id);
+        params.addBodyParameter("follow_id", follow_id);
         MD5Utils.sign(params, NetworkConstance.CANCEL_FOCUS_URL, callBack, false);
     }
 
     /**
      * 意见反馈
+     *
      * @param content
      * @param contact
      * @param callBack
      */
-    public static void commitSuggestion(String content,String contact,RequestCallBack<String> callBack) {
+    public static void commitSuggestion(String content, String contact, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("content", content);
         params.addQueryStringParameter("contact", contact);
-        params.addQueryStringParameter("from_to","android");
-        params.addQueryStringParameter("kind","Fiu");
+        params.addQueryStringParameter("from_to", "android");
+        params.addQueryStringParameter("kind", "Fiu");
         MD5Utils.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
     }
+
+    /**
+     * 更新用户信息
+     *
+     * @param key
+     * @param value
+     * @param callBack
+     */
+    public static void updateUserInfo(String key, String value, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        if (EditUserInfoActivity.isSubmitAddress) {
+            params.addBodyParameter("province_id", key);
+            params.addBodyParameter("district_id", value);
+        } else {
+            params.addQueryStringParameter(key, value);
+        }
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
+
+    /**
+     * 获取所有城市
+     *
+     * @param callBack
+     */
+    public static void getAllCities(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        MD5Utils.sign(params, NetworkConstance.ALL_CITY_URL, callBack, false);
+    }
+
+    /**
+     * 上传头像
+     *
+     * @param callBack
+     */
+    public static void uploadImg(String tmp, String type, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("tmp", tmp);
+        params.addBodyParameter("type", type);
+        MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
+    }
+
+
 }

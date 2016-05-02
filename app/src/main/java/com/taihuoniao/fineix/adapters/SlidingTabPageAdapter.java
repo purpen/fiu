@@ -1,41 +1,26 @@
 package com.taihuoniao.fineix.adapters;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.taihuoniao.fineix.order.fragments.OrderFragment1;
-
 import java.util.List;
-
 /**
  * @author lilin
- * created at 2016/3/29 11:58
+ *         created at 2016/3/29 11:58
  */
-public class SlidingTabPageAdapter extends FragmentPagerAdapter{
-    OrderFragment1 indexFragment=null;
+public class SlidingTabPageAdapter extends FragmentPagerAdapter {
     private List<String> list;
-    public SlidingTabPageAdapter(FragmentManager fm, List<String> list) {
+    private FragmentManager fm;
+    private Class<Fragment>[] clazzes;
+    public SlidingTabPageAdapter(FragmentManager fm,Class[] clazzes,List<String> list) {
         super(fm);
-        this.list=list;
+        this.list = list;
+        this.fm = fm;
+        this.clazzes=clazzes;
     }
+
     @Override
     public Fragment getItem(int position) {
-        indexFragment = new OrderFragment1();
-        return indexFragment;
-//            switch (position) {
-//                case 0:
-//                    indexFragment = new OrderFragment1();
-//                    return indexFragment;
-//                case 1:
-//                    findFragment = new OrderFragment2();
-//                    return findFragment;
-//                case 2:
-//                    personalCenterFragment = new OrderFragment3();
-//                    return personalCenterFragment;
-//                default:
-//                    return null;
-//            }
+        return initFragments(position);
     }
 
     @Override
@@ -48,4 +33,15 @@ public class SlidingTabPageAdapter extends FragmentPagerAdapter{
         return list.get(position);
     }
 
+
+    public Fragment initFragments(int position){
+        try {
+            return clazzes[position].newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

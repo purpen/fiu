@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/activity_select_qingjing_searchlinear"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_corner_gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="8dp"
+            android:src="@mipmap/search_height_26px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索情景"
+            android:textColor="#666666"
+            android:textSize="14sp"/>
+
+        <!--<EditText-->
+        <!--android:id="@+id/activity_select_qingjing_search"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@null"-->
+        <!--android:gravity="fill_vertical"-->
+        <!--android:hint="搜索情景"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColorHint="#666666"-->
+        <!--android:textSize="14sp"/>-->
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="8dp"
+        android:background="#e2e2e2"/>
+
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#f7f7f7">
+
+        <TextView
+            android:id="@+id/activity_select_qingjing_qingjingtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:text="推荐情景"
+            android:textColor="#212121"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/activity_select_qingjing_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:text="查看全部"
+            android:textColor="#999999"
+            android:textSize="12sp"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

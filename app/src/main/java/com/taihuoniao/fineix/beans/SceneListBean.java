@@ -11,7 +11,7 @@ public class SceneListBean {
     private String user_id;
     private String des;
     private String scene_id;
-    private String scene;
+    private String scene_title;
     private List<Products> productsList;
     private String address;
     private String used_count;
@@ -21,25 +21,26 @@ public class SceneListBean {
     private String fine;
     private String is_check;
     private String status;
-    private String created_on;
+    private String created_at;
     private String updated_on;
-    private User user;
+    private User user_info;
     private String cover_url;
 
-    public String getScene() {
-        return scene;
+    public String getScene_title() {
+        return scene_title;
     }
 
-    public void setScene(String scene) {
-        this.scene = scene;
+    public void setScene_title(String scene_title) {
+        this.scene_title = scene_title;
     }
 
-    public String getCreated_on() {
-        return created_on;
+
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setCreated_on(String created_on) {
-        this.created_on = created_on;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public String getView_count() {
@@ -90,12 +91,12 @@ public class SceneListBean {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public User getUser_info() {
+        return user_info;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser_info(User user_info) {
+        this.user_info = user_info;
     }
 
     public String get_id() {

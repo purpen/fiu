@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#f7f7f7"
+              android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/activity_report_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e9e9e9"/>
+
+    <LinearLayout
+        android:id="@+id/activity_report_reportlinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="举报图片原因"
+            android:textColor="#333333"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+
+        <TextView
+            android:id="@+id/activity_report_sexual_violence"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="色情暴力"
+            android:textColor="#333333"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+
+        <TextView
+            android:id="@+id/activity_report_steal_picture"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="盗图"
+            android:textColor="#333333"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+
+        <TextView
+            android:id="@+id/activity_report_advertising_cheat"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="广告/欺诈信息"
+            android:textColor="#333333"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_report_success"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:paddingLeft="19dp"
+        android:paddingRight="81dp"
+        android:paddingTop="19dp"
+        android:text="感谢你的举报，如果此照片违反了我们的规定，我们会将其移除。"
+        android:textColor="#333333"
+        android:textSize="13sp"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -36,16 +38,17 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.HotLabel;
-import com.taihuoniao.fineix.beans.HotLabelBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -55,14 +58,15 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
-    private static final String PAGE_NAME = "app_index_slide"; //TODO 换成场景banner
+    private static final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //图片加载
@@ -73,6 +77,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private double distance = 5000;//距离
     private double[] location = null;
     //界面下的控件
+    private ImageView searchImg;
+    private ImageView locationImg;
     private ListView sceneListView;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
@@ -95,6 +101,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
+        searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
+        locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         sceneListView = (ListView) view.findViewById(R.id.fragment_find_scenelistview);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_find_progress);
         View headerView = View.inflate(getActivity(), R.layout.header_fragment_find, null);
@@ -110,6 +118,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void initList() {
+        searchImg.setOnClickListener(this);
+        locationImg.setOnClickListener(this);
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
@@ -144,7 +154,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                    DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -203,9 +213,31 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-        DataPaser.hotLabelList(labelPage + "", handler);
         //虚拟数据
         handler.sendEmptyMessage(-2);
+        //热门标签
+        ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.HOT_LABEL_LIST;
+                msg.obj = new HotLabel();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<HotLabel>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+            }
+        });
     }
 
     private Handler handler = new Handler() {
@@ -228,7 +260,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
                     if (netHotLabel.isSuccess()) {
-                        hotLabelList.addAll(netHotLabel.getHotLabelBeanList());
+                        hotLabelList.addAll(netHotLabel.getData().getRows());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -261,7 +293,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             scrollableView.stop();
         }
     }
-
 
 
     @Override
@@ -324,6 +355,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         }
         int top = absoluteLayout.getTop();
         int bottom = absoluteLayout.getBottom();
+        if (bottom - top <= 0) {
+            return;
+        }
         for (int i = 0; i < randomImgs.size(); i++) {
             RandomImg randomImg = randomImgs.get(i);
             whi:
@@ -371,15 +405,23 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
-        intent.putExtra("id", sceneList.get(position).get_id());
+        SceneListBean sceneListBean = (SceneListBean) parent.getAdapter().getItem(position);
+        intent.putExtra("id", sceneListBean.get_id());
         startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fragment_find_search:
+                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fragment_find_location:
+                Intent intent = new Intent(getActivity(), HotCitiesActivity.class);
+                startActivity(intent);
+                break;
             case R.id.fragment_find_allqingjing:
-                Toast.makeText(getActivity(), "查看全部情景", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AllQingjingActivity.class));
                 break;
         }
     }
@@ -398,14 +440,15 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount > 0 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+        //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
+        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
                 && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
                 && location != null) {
             lastSavedFirstVisibleItem = firstVisibleItem;
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+            DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
         }
     }
 }

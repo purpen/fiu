@@ -17,6 +17,7 @@
             android:src="@mipmap/logo"/>
 
         <ImageView
+            android:id="@+id/fragment_find_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
@@ -24,6 +25,7 @@
             android:src="@mipmap/head_search"/>
 
         <ImageView
+            android:id="@+id/fragment_find_location"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

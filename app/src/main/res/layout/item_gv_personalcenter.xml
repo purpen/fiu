@@ -5,9 +5,10 @@
     >
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp50"
+        android:layout_height="@dimen/dp50"
         android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"
         />
     <TextView

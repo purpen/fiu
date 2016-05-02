@@ -212,6 +212,8 @@ public class Util {
 			fops.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			bitmap.recycle();
 		}
 		return file;
 	}

@@ -2,13 +2,16 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.Util;
@@ -19,7 +22,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     private final String TAG=getClass().getSimpleName();
     private Activity activity;
     private List<T> imageList;
-
+    protected DisplayImageOptions options;
     private int size;
     private boolean isInfiniteLoop;
 
@@ -31,6 +34,15 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         this.imageList = imageList;
         this.size = imageList.size();
         isInfiniteLoop = false;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.ic_launcher)
+                .showImageForEmptyUri(R.mipmap.ic_launcher)
+                .showImageOnFail(R.mipmap.ic_launcher)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -63,7 +75,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         final T content = imageList.get(getPosition(position));
 
         if (content instanceof Integer){
-            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView);
+            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView,options);
         }
 
         if (content instanceof String){

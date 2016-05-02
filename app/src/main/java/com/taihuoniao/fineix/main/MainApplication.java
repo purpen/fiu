@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.beans.IsLogin;
+import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.service.LocationService;
@@ -31,6 +32,7 @@ import java.util.UUID;
  * Created by taihuoniao on 2016/3/14.
  * ¥
  * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
+ * 在客户端scene是场景，qingjing是情景，而在服务器端sight是场景，scene是情景
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
@@ -49,6 +51,8 @@ public class MainApplication extends Application {
     public static List<UsedLabelBean> selectList;
     //创建场景或情景的标识
     public static int tag;//1,场景 2,情景
+    //在哪个情景下创建场景
+    public static QingjingDetailBean whichQingjing = null;
 
     // SharedPreference 中保存的手机号
     public static final String THN_MOBILE = "mobile";

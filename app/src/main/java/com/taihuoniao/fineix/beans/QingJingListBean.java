@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class QingJingListBean extends NetBean {
         }
     }
 
-    public static class QingJingItem{
+    public static class QingJingItem implements Serializable{
         private String _id;
         private String title;
         private String des;

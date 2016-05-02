@@ -5,6 +5,14 @@ package com.taihuoniao.fineix.network;
  * 常量
  */
 public class DataConstants {
+    //判断从哪个activity跳转到登录界面
+    public static final int SceneDetailActivity = 101;
+    public static final int ElseActivity = 102;//其他不需要刷新界面的activity
+    public static final int QingjingDetailActivity = 103;
+    //场景详情界面跳转到注册界面广播Action
+    public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";
+    //情景详情界面跳转到注册界面广播action
+    public static final String BroadQingjingDetail = "com.taihuonioa.fiu.qingjingdetail";
     public static final int NET_FAIL = 404;//网络请求失败
     //activity跳转的请求码和返回码
     public static final int REQUESTCODE_PHOTO_TO_CROP = 100;
@@ -61,38 +69,39 @@ public class DataConstants {
     public static final int CREATE_QINGJING = 73;
     //情景详情
     public static final int QINGJING_DETAILS = 72;
-
-
-
-
-
-
-
-
-
-
+    //购物车商品数量
+    public static final int CART_NUM = 71;
+    //场景点赞
+    public static final int LOVE_SCENE = 70;
+    //取消场景点赞
+    public static final int CANCEL_LOVE_SCENE = 69;
+    //情景订阅
+    public static final int SUBS_QINGJING = 68;
+    //取消情景订阅
+    public static final int CANCEL_SUBS_QINGJING = 67;
+    //品牌列表
+    public static final int BRAND_LIST = 66;
+    //CreateSceneActivity到SelectQingjingActivity界面的请求码和返回码
+    public static final int REQUESTCODE_CREATESCENE_SELECTQJ = 65;
+    public static final int RESULTCODE_CREATESCENE_SELECTQJ = 64;
+    //SelectQingjingActivity到AllQingjingActivity界面的请求码和返回码
+    public static final int REQUESTCODE_SELECTQJ_ALLQJ = 63;
+    public static final int RESULTCODE_SELECTQJ_ALLQJ = 62;
+    //举报
+    public static final int REPORT = 61;
 
 
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "thn_settings";
 
-    public static final String LOGIN_INFO="LOGIN_INFO";
+    public static final String LOGIN_INFO = "LOGIN_INFO";
 
     //登录
     public static final int PARSER_LOGIN = 9;
     //网络数据请求失败
     public static final int NETWORK_FAILURE = 999;
 
-    //判断从哪个activity跳转到登录界面
-    public static final int ACTIVITY_COMMENTLISTS = 75;
-    public static final int ACTIVITY_SPECIAL_DETAILS = 74;
-    public static final int ACTIVITY_TRY_DETAILS = 73;
-    public static final int ACTIVITY_TRY_DETAILS_COMMENTS = 72;
-    public static final int ACTIVITY_GOODS_DETAILS = 79;
-    public static final int ACTIVITY_WEB = 70;
-    public static final int ACTIVITY_TOPIC_COMMENTS = 68;
-    public static final int ACTIVITY_NICEGOODDETAILS = 58;
 
     //第三方登录绑定手机号
     public static final int PARSER_THIRD_LOGIN_BIND_PHONE = 37;
@@ -104,16 +113,10 @@ public class DataConstants {
     public static final int PARSER_THIRD_LOGIN = 35;
     //第三方登录不绑定手机号
     public static final int PARSER_THIRD_LOGIN_SKIP_PHONE = 36;
-    //商品详情跳转到注册界面的广播ACTION
-    public static final String BROAD_GOODS_DETAILS = "com.taihuoniao.app.goodsdetails";
-    //试用详情跳转到注册界面的广播ACTION
-    public static final String BROAD_TRY_DETAILS = "com.taihuoniao.app.trydetails";
-    //话题详情跳转到注册界面的广播ACTION
-    public static final String BROAD_TOPIC_DETAILS = "com.taihuoniao.app.topicdetails";
     //找回密码
     public static final int PARSER_FIND_PASSWORD = 10;
 
     public static final String GUIDE_TAG = "guide";
     public static final int GUIDE_INTERVAL = 3000;
-    public static final String APP_ID="";
+    public static final String APP_ID = "";
 }

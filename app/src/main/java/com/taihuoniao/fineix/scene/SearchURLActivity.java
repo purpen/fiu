@@ -11,6 +11,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -87,9 +88,10 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         store = getIntent().getIntExtra("store", DataConstants.JINGDONG);
         search = getIntent().getStringExtra("search");
         titleLayout.setTitleVisible(false);
-        titleLayout.setBackgroundResource(R.drawable.grey_no_corner);
+        titleLayout.setBackgroundResource(R.color.white);
 //        titleLayout.setBackgroundColor(getResources().getColor(R.color.white));
-        titleLayout.setRightTv(R.string.close, R.color.white, this);
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setRightTv(R.string.close, getResources().getColor(R.color.black333333), this);
         titleLayout.setBackListener(this);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
@@ -178,7 +180,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         nameTv = (EditText) popup_view.findViewById(R.id.pop_find_name);
         priceTv = (EditText) popup_view.findViewById(R.id.pop_find_price);
         confirmBtn = (Button) popup_view.findViewById(R.id.pop_find_confirm);
-        popupWindow = new PopupWindow(popup_view, display.getWidth(), (int) (display.getHeight() * 0.4), true);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);

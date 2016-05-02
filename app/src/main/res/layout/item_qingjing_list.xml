@@ -17,10 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="15dp"
         android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="15dp">
 
         <ImageView
             android:layout_width="8dp"
@@ -32,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
+            android:singleLine="true"
             android:text="北京市 朝阳区"
             android:textColor="@color/white"
             android:textSize="10sp"/>
@@ -45,10 +46,11 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="10dp"
         android:background="#000000"
+        android:maxLines="2"
         android:maxWidth="104dp"
-        android:paddingRight="3dp"
         android:paddingBottom="3dp"
         android:paddingLeft="4dp"
+        android:paddingRight="3dp"
         android:paddingTop="4dp"
         android:text="哈哈哈哈哈哈哈噶"
         android:textColor="@color/white"

@@ -29,6 +29,7 @@ public class CustomHeadView extends RelativeLayout {
     private EditText et_search;
     private ImageButton ib_search;
     private RelativeLayout rl_search;
+
     public CustomHeadView(Context context) {
         this(context, null);
     }
@@ -59,7 +60,7 @@ public class CustomHeadView extends RelativeLayout {
         sv = (SearchView) view.findViewById(R.id.sv_head_view);
         iv_head_search = (ImageButton) view.findViewById(R.id.iv_head_search);
         rl_head_shop = (RelativeLayout) view.findViewById(R.id.rl_head_shop);
-//        head_view_shop = (ImageButton) view.findViewById(R.id.head_view_shop);
+        head_view_shop = (ImageButton) view.findViewById(R.id.head_view_shop);
         tv_tip_num=(TextView)view.findViewById(R.id.tv_tip_num);
         tv_head_right = (TextView) view.findViewById(R.id.tv_head_right);
         head_goback.setOnClickListener(onClickListener);
@@ -79,6 +80,10 @@ public class CustomHeadView extends RelativeLayout {
         }else {
             rl_search.setVisibility(GONE);
         }
+    }
+
+    public ImageButton getShopImg(){
+        return head_view_shop;
     }
 
     public EditText getSearchET(){
@@ -159,6 +164,8 @@ public class CustomHeadView extends RelativeLayout {
         }
 
     }
+
+
 
     public void setHeadLogoShow(boolean isShow) {
         if (isShow) {

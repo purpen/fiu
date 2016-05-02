@@ -4,7 +4,7 @@
     <color name="radiogroup_white">#fffdfdfd</color>
 
     <color name="color_transparent">#00000000</color>
-
+    <color name="white40">#40FFFFFF</color>
     <!-- SearchURLActivity -->
     <color name="background_white">#fafbfd</color>
     <!-- GlobleTitleLayout-->

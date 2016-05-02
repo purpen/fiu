@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.HotLabelBean;
+import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 
@@ -21,12 +21,12 @@ import java.util.List;
 public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterView.OnItemClickListener {
     private Context context;
     private List<UsedLabelBean> usedLabelList;
-    private List<HotLabelBean> hotLabelList;
+    private List<HotLabel.HotLabelBean> hotLabelList;
     private HotLaelAdapter hotLabelAdapter;
     private UsedLabelAdapter usedLabelAdapter;
     private LabelClick labelClick;
 
-    public HotLabelViewPagerAdapter(Context context, List<UsedLabelBean> usedLabelList, List<HotLabelBean> hotLabelList, LabelClick labelClick) {
+    public HotLabelViewPagerAdapter(Context context, List<UsedLabelBean> usedLabelList, List<HotLabel.HotLabelBean> hotLabelList, LabelClick labelClick) {
         this.context = context;
         this.usedLabelList = usedLabelList;
         this.hotLabelList = hotLabelList;
