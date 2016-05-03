@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -41,10 +42,10 @@ import butterknife.OnClick;
 
 /**
  * @author lilin
- * created at 2016/4/26 17:43
+ *         created at 2016/4/26 17:43
  */
-public class UserCenterActivity extends BaseActivity{
-//    @Bind(R.id.fl_box)
+public class UserCenterActivity extends BaseActivity {
+    //    @Bind(R.id.fl_box)
 //    FrameLayout fl_box;
     @Bind(R.id.tv_title)
     TextView tv_title;
@@ -57,39 +58,53 @@ public class UserCenterActivity extends BaseActivity{
     @Bind(R.id.tv_rank)
     TextView tv_rank;
     private User user;
-//    @Bind(R.id.ll_qj)
-//    LinearLayout ll_qj;
-//
-//    @Bind(R.id.ll_cj)
-//    LinearLayout ll_cj;
-//
-//    @Bind(R.id.ll_focus)
-//    LinearLayout ll_focus;
-//
-//    @Bind(R.id.ll_fans)
-//    LinearLayout ll_fans;
+
     private FragmentManager fm;
     private ArrayList<Fragment> fragments;
     private Fragment showFragment;
-    public UserCenterActivity(){
+    private int which;
+
+    public UserCenterActivity() {
         super(R.layout.activity_user_center);
+    }
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(MineFragment.class.getSimpleName())) {
+            which = intent.getIntExtra(MineFragment.class.getSimpleName(), 0);
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (fragments==null){
+        if (fragments == null) {
             fragments = new ArrayList<>();
         }
         fm = getSupportFragmentManager();
         if (savedInstanceState != null) {
             recoverAllState(savedInstanceState);
         } else {
-            switchFragmentandImg(UserQJFragment.class);
+            switch (which) {
+                case MineFragment.REQUEST_QJ:
+                    switchFragmentandImg(UserQJFragment.class);
+                    break;
+                case MineFragment.REQUEST_CJ:
+                    switchFragmentandImg(UserCJFragment.class);
+                    break;
+                case MineFragment.REQUEST_FOCUS:
+                    switchFragmentandImg(UserFocusFragment.class);
+                    break;
+                case MineFragment.REQUEST_FANS:
+                    switchFragmentandImg(UserFansFragment.class);
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
-
 
 
     @Override
@@ -98,7 +113,7 @@ public class UserCenterActivity extends BaseActivity{
     }
 
     private void recoverAllState(Bundle savedInstanceState) {
-        Fragment userQJFragment = fm.getFragment(savedInstanceState,UserQJFragment.class.getSimpleName());
+        Fragment userQJFragment = fm.getFragment(savedInstanceState, UserQJFragment.class.getSimpleName());
         addFragment2List(userQJFragment);
         Fragment userCJFragment = fm.getFragment(savedInstanceState, UserCJFragment.class.getSimpleName());
         addFragment2List(userCJFragment);
@@ -115,12 +130,12 @@ public class UserCenterActivity extends BaseActivity{
 
     private void addFragment2List(Fragment fragment) {
         if (fragment == null) {
-            LogUtil.e(TAG,"addedFragment==null");
+            LogUtil.e(TAG, "addedFragment==null");
             return;
         }
 
         if (fragments.contains(fragment)) {
-            LogUtil.e(TAG,"addedFragment  contains");
+            LogUtil.e(TAG, "addedFragment  contains");
             return;
         }
 
@@ -143,7 +158,7 @@ public class UserCenterActivity extends BaseActivity{
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
-        LogUtil.e(TAG, "<<<<<<<<"+clazz.getSimpleName());
+        LogUtil.e(TAG, "<<<<<<<<" + clazz.getSimpleName());
         Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
         if (fragment == null) {
             fragment = (Fragment) clazz.newInstance();
@@ -153,7 +168,7 @@ public class UserCenterActivity extends BaseActivity{
         }
         addFragment2List(fragment);
         showFragment = fragment;
-        LogUtil.e(TAG, fragments.size()+"<<<<<<");
+        LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
     private void resetUI() {
@@ -171,11 +186,11 @@ public class UserCenterActivity extends BaseActivity{
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        LogUtil.e(TAG,"onSaveInstanceState");
-        int size=fragments.size();
-        if (fragments!=null && size>0){
-            for (int i=0;i<size;i++){
-                fm.putFragment(outState,fragments.get(i).getTag(),fragments.get(i));
+        LogUtil.e(TAG, "onSaveInstanceState");
+        int size = fragments.size();
+        if (fragments != null && size > 0) {
+            for (int i = 0; i < size; i++) {
+                fm.putFragment(outState, fragments.get(i).getTag(), fragments.get(i));
             }
         }
         if (showFragment != null) {
@@ -197,11 +212,11 @@ public class UserCenterActivity extends BaseActivity{
                     return;
                 }
 
-                try{
+                try {
                     user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                     });
-                }catch (JsonSyntaxException e){
-                    LogUtil.e(TAG,e.getLocalizedMessage());
+                } catch (JsonSyntaxException e) {
+                    LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
                 }
                 refreshUI();
@@ -209,7 +224,7 @@ public class UserCenterActivity extends BaseActivity{
 
             @Override
             public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG,s);
+                LogUtil.e(TAG, s);
                 Util.makeToast(s);
             }
         });
@@ -217,32 +232,33 @@ public class UserCenterActivity extends BaseActivity{
 
     @Override
     protected void refreshUI() {
-        if (user==null){
+        if (user == null) {
             return;
         }
         tv_title.setText(user.nickname);
-        ImageLoader.getInstance().displayImage(user.medium_avatar_url,riv);
-        if (TextUtils.isEmpty(user.realname)){
+        ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+        if (TextUtils.isEmpty(user.realname)) {
             tv_real.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_real.setText(user.realname);
         }
 
-        if (TextUtils.isEmpty(user.nickname)){
+        if (TextUtils.isEmpty(user.nickname)) {
             tv_nick.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_nick.setText(user.nickname);
         }
 
-        if (TextUtils.isEmpty(user.rank_title)){
+        if (TextUtils.isEmpty(user.rank_title)) {
             tv_rank.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_rank.setText(user.rank_title);
         }
     }
-    @OnClick({R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans,R.id.iv_right,R.id.iv_detail,R.id.bt_focus,R.id.bt_msg})
-    void onClick(View v){
-        switch (v.getId()){
+
+    @OnClick({R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans, R.id.iv_right, R.id.iv_detail, R.id.bt_focus, R.id.bt_msg})
+    void onClick(View v) {
+        switch (v.getId()) {
             case R.id.iv_detail:
                 finish();
                 break;

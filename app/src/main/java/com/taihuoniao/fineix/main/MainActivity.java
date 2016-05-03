@@ -243,7 +243,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        LogUtil.e(TAG,"onSaveInstanceState");
         int size=fragments.size();
         if (fragments!=null && size>0){
             for (int i=0;i<size;i++){

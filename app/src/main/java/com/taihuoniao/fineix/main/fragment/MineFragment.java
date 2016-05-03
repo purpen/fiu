@@ -77,7 +77,10 @@ public class MineFragment extends MyBaseFragment {
     LinearLayout ll_focus;
     @Bind(R.id.ll_fans)
     LinearLayout ll_fans;
-
+    public static final int  REQUEST_QJ=0;
+    public static final int  REQUEST_CJ=1;
+    public static final int  REQUEST_FOCUS=2;
+    public static final int  REQUEST_FANS=3;
     private User user;
     private ArrayList<ImgTxtItem> gvList;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
@@ -248,11 +251,15 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
             case R.id.ll_qj:
-                Util.makeToast("我创建的情景");
+                intent = new Intent(activity, UserCenterActivity.class);
+                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_QJ);
+                startActivity(intent);
                 //
                 break;
             case R.id.ll_cj:
-                Util.makeToast("我创建的场景");
+                intent = new Intent(activity, UserCenterActivity.class);
+                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
+                startActivity(intent);
                 break;
             case R.id.ll_focus:
                 intent = new Intent(activity, FocusFansActivity.class);
