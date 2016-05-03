@@ -61,7 +61,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView tv_nav4;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
-    //  private Fragment from, to;
     private ArrayList<Fragment> fragments;
     private Fragment showFragment;
 
@@ -251,26 +250,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 fm.putFragment(outState,fragments.get(i).getTag(),fragments.get(i));
             }
         }
-//        if (indexFragment != null) {
-//            fm.putFragment(outState, IndexFragment.class.getSimpleName(), indexFragment);
-////            outState.putSerializable(IndexFragment.class.getSimpleName(), IndexFragment.class.getSimpleName());
-//        }
-//
-//        if (findFragment != null) {
-//            fm.putFragment(outState,FindFragment.class.getSimpleName(),findFragment);
-////            outState.putString(FindFragment.class.getSimpleName(), FindFragment.class.getSimpleName());
-//        }
-//
-//        if (wellGoodsFragment != null) {
-//            fm.putFragment(outState, WellGoodsFragment.class.getSimpleName(), wellGoodsFragment);
-////            outState.putString(WellGoodsFragment.class.getSimpleName(), WellGoodsFragment.class.getSimpleName());
-//        }
-//
-//        if (mineFragment != null) {
-//            fm.putFragment(outState, MineFragment.class.getSimpleName(), mineFragment);
-////            outState.putString(MineFragment.class.getSimpleName(), MineFragment.class.getSimpleName());
-//        }
-
         if (showFragment != null) {
             outState.putSerializable(MainActivity.class.getSimpleName(), showFragment.getClass());
         }

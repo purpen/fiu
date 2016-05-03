@@ -4,14 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
+
+import butterknife.Bind;
 
 /**
  * Created by Administrator on 2016/5/2.
  */
 public class UserQJFragment extends MyBaseFragment{
+    @Bind(R.id.tv)
+    TextView tv;
     public UserQJFragment() {
     }
 
@@ -29,6 +34,6 @@ public class UserQJFragment extends MyBaseFragment{
 
     @Override
     protected void initViews() {
-
+        tv.setText("用户情景");
     }
 }

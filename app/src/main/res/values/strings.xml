@@ -63,13 +63,13 @@
         <item>订单</item>
         <item>消息</item>
         <item>订阅</item>
-        <item>收藏</item>
+       <!-- <item>收藏</item>-->
+        <item>账户管理</item>
         <item>赞过</item>
         <item>积分</item>
         <item>礼券</item>
         <item>收货地址</item>
         <item>服务条款</item>
-        <item>账户管理</item>
     </string-array>
 
     <string-array name="partner_name">

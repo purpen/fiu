@@ -80,11 +80,11 @@ public class MineFragment extends MyBaseFragment {
 
     private User user;
     private ArrayList<ImgTxtItem> gvList;
-    private ArrayList<ImgTxtItem> horizentalList;
-    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collection, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
+    private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
+    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe,  R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
     public String[] imgTxt = null;
-    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
-    public String[] partnerName = null;
+//    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
+//    public String[] partnerName = null;
 
     public MineFragment() {
         // Required empty public constructor
@@ -98,7 +98,7 @@ public class MineFragment extends MyBaseFragment {
 
 
     private void initData() {
-        partnerName = activity.getResources().getStringArray(R.array.partner_name);
+//        partnerName = activity.getResources().getStringArray(R.array.partner_name);
         imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<>();
@@ -111,16 +111,16 @@ public class MineFragment extends MyBaseFragment {
             }
         }
 
-        if (partnerLogos.length == partnerName.length) {
-            horizentalList = new ArrayList<ImgTxtItem>();
-            ImgTxtItem item = null;
-            for (int i = 0; i < partnerLogos.length; i++) {
-                item = new ImgTxtItem();
-                item.imgId = partnerLogos[i];
-                item.txt = partnerName[i];
-                horizentalList.add(item);
-            }
-        }
+//        if (partnerLogos.length == partnerName.length) {
+//            horizentalList = new ArrayList<ImgTxtItem>();
+//            ImgTxtItem item = null;
+//            for (int i = 0; i < partnerLogos.length; i++) {
+//                item = new ImgTxtItem();
+//                item.imgId = partnerLogos[i];
+//                item.txt = partnerName[i];
+//                horizentalList.add(item);
+//            }
+//        }
     }
 
     @Override
@@ -181,16 +181,16 @@ public class MineFragment extends MyBaseFragment {
         }
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333, false);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333, false);
-        item_partner.setTVStyle(0, R.string.partners, R.color.color_333, false);
-        for (ImgTxtItem item : horizentalList) {
-            View view = Util.inflateView(activity, R.layout.horizontal_scroll_view_layout, null);
-            ImageView iv = (ImageView) view.findViewById(R.id.iv);
-            TextView tv = (TextView) view.findViewById(R.id.tv);
-            ImageLoader.getInstance().displayImage("drawable://" + item.imgId, iv);
-            tv.setText(item.txt);
-            ll.addView(view);
-            setOnClickListener(view, item);
-        }
+//        item_partner.setTVStyle(0, R.string.partners, R.color.color_333, false);
+//        for (ImgTxtItem item : horizentalList) {
+//            View view = Util.inflateView(activity, R.layout.horizontal_scroll_view_layout, null);
+//            ImageView iv = (ImageView) view.findViewById(R.id.iv);
+//            TextView tv = (TextView) view.findViewById(R.id.tv);
+//            ImageLoader.getInstance().displayImage("drawable://" + item.imgId, iv);
+//            tv.setText(item.txt);
+//            ll.addView(view);
+//            setOnClickListener(view, item);
+//        }
     }
 
     @Override
@@ -218,27 +218,27 @@ public class MineFragment extends MyBaseFragment {
         }
     }
 
-    private void setOnClickListener(View view, final ImgTxtItem item) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (item.imgId) {
-                    case R.mipmap.taobao:
-                        Util.makeToast(activity, "taobao");
-                        break;
-                    case R.mipmap.tmall:
-                        Util.makeToast(activity, "tmall");
-                        break;
-                    case R.mipmap.jd:
-                        Util.makeToast(activity, "jd");
-                        break;
-                    case R.mipmap.amzon:
-                        Util.makeToast(activity, "amzon");
-                        break;
-                }
-            }
-        });
-    }
+//    private void setOnClickListener(View view, final ImgTxtItem item) {
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switch (item.imgId) {
+//                    case R.mipmap.taobao:
+//                        Util.makeToast(activity, "taobao");
+//                        break;
+//                    case R.mipmap.tmall:
+//                        Util.makeToast(activity, "tmall");
+//                        break;
+//                    case R.mipmap.jd:
+//                        Util.makeToast(activity, "jd");
+//                        break;
+//                    case R.mipmap.amzon:
+//                        Util.makeToast(activity, "amzon");
+//                        break;
+//                }
+//            }
+//        });
+//    }
 
     @OnClick({R.id.riv, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
@@ -276,9 +276,9 @@ public class MineFragment extends MyBaseFragment {
             case R.id.item_feedback:
                 Util.makeToast(activity, "反馈");
                 break;
-            case R.id.item_partner:
-                Util.makeToast(activity, "合作伙伴");
-                break;
+//            case R.id.item_partner:
+//                Util.makeToast(activity, "合作伙伴");
+//                break;
             case R.id.bt_register:
                 intent = new Intent(getActivity(),
                         OptRegisterLoginActivity.class);
@@ -306,7 +306,7 @@ public class MineFragment extends MyBaseFragment {
                         intent.putExtra("user", user);
                         startActivity(intent);
                         break;
-                    case 9:
+                    case 3:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
                         break;
                 }
