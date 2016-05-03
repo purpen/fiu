@@ -6,8 +6,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
@@ -59,7 +61,7 @@ public class LoginInfo implements Serializable {
     public static long getUserId() {
         if (isUserLogin()) {
             String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-            LoginInfo loginInfo = JsonUtil.fromJson(login_info, LoginInfo.class);
+            LoginInfo loginInfo = JsonUtil.fromJson(login_info,new TypeToken<HttpResponse<LoginInfo>>(){});
             Log.e("<<<", "LoginInfo._id=" + loginInfo._id);
             return loginInfo._id;
         }
