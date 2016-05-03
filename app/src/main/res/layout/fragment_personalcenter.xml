@@ -240,12 +240,16 @@
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
 
                 <LinearLayout
                     android:id="@+id/ll"

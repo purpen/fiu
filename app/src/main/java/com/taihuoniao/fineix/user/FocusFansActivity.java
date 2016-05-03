@@ -13,9 +13,11 @@ import com.taihuoniao.fineix.adapters.FocusFansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FocusFansData;
 import com.taihuoniao.fineix.beans.FocusFansItem;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
@@ -33,11 +35,13 @@ public class FocusFansActivity extends BaseActivity {
     ListView lv;
     private int curPage = 1;
     private static final String PAGE_SIZE = "100";  //分页大小
-    public static final String FOCUS_TYPE = "1";  //可关注列表
+    public static final String FOCUS_TYPE = "1";  //关注列表
     public static final String FANS_TYPE = "2";  //粉丝列表
     private ArrayList<FocusFansItem> list;
     private FocusFansAdapter adapter;
     private String pageType=FOCUS_TYPE;
+    private static final String USER_ID_EXTRA="USER_ID_EXTRA";
+    private String userId= LoginInfo.getUserId()+"";
     public FocusFansActivity() {
         super(R.layout.activity_focus_fans);
     }
@@ -48,6 +52,11 @@ public class FocusFansActivity extends BaseActivity {
         if (intent.hasExtra(getClass().getSimpleName())){
             pageType=intent.getStringExtra(getClass().getSimpleName());
         }
+
+        if (intent.hasExtra(USER_ID_EXTRA)){
+            userId=intent.getStringExtra(USER_ID_EXTRA);
+        }
+
     }
 
     @Override
@@ -61,7 +70,9 @@ public class FocusFansActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.getFocusFansList(String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
+//        userId="10";
+        LogUtil.e(TAG,userId);
+        ClientDiscoverAPI.getFocusFansList(userId,String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) {
@@ -112,7 +123,7 @@ public class FocusFansActivity extends BaseActivity {
         }
 
         if (adapter==null){
-            adapter=new FocusFansAdapter(list,activity);
+            adapter=new FocusFansAdapter(list,activity,pageType);
             lv.setAdapter(adapter);
         }else {
             adapter.notifyDataSetChanged();

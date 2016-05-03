@@ -258,6 +258,7 @@ public class UserCenterActivity extends BaseActivity {
 
     @OnClick({R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans, R.id.iv_right, R.id.iv_detail, R.id.bt_focus, R.id.bt_msg})
     void onClick(View v) {
+        Intent intent=null;
         switch (v.getId()) {
             case R.id.iv_detail:
                 finish();
@@ -297,10 +298,16 @@ public class UserCenterActivity extends BaseActivity {
                 switchFragmentandImg(UserCJFragment.class);
                 break;
             case R.id.ll_focus:
-                switchFragmentandImg(UserFocusFragment.class);
+//                switchFragmentandImg(UserFocusFragment.class);
+                intent = new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FOCUS_TYPE);
+                startActivity(intent);
                 break;
             case R.id.ll_fans:
-                switchFragmentandImg(UserFansFragment.class);
+//                switchFragmentandImg(UserFansFragment.class);
+                intent = new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
+                startActivity(intent);
                 break;
         }
     }

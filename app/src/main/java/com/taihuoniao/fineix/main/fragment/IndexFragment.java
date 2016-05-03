@@ -173,6 +173,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             handler.removeCallbacksAndMessages(null);
             handler = null;
         }
+        MapUtil.destroyLocationClient();
         super.onDestroy();
     }
 
