@@ -1,28 +1,41 @@
 package com.taihuoniao.fineix.user;
 
-import android.os.Handler;
-import android.os.Message;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.User;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.LoveSceneBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by taihuoniao on 2016/4/30.
  * 已经点赞的场景
+ * 未完成，接口返回数据有问题
  */
-public class HasLoveActivity extends BaseActivity {
+public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     GlobalTitleLayout titleLayout;
 
@@ -32,16 +45,18 @@ public class HasLoveActivity extends BaseActivity {
     private ListView listView;
     private WaittingDialog dialog;
     //当前用户的user_id
-    private User user;
+    private long user_id;
     //场景列表
     private int page = 1;
+    private List<LoveSceneBean.LoveSceneItem> list;
+    private SceneListViewAdapter sceneListViewAdapter;
 
 
     @Override
     protected void getIntentData() {
-        user = (User) getIntent().getSerializableExtra("user");
-        Log.e("<<<", "user_id=" + user._id);
-        if (user == null) {
+        user_id = LoginInfo.getUserId();//用户id
+//        Log.e("<<<", "logininfo.userid=" + user_id);
+        if (user_id == -1 || user_id == 0) {
             Toast.makeText(HasLoveActivity.this, "用户信息为空", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -67,54 +82,76 @@ public class HasLoveActivity extends BaseActivity {
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setContinueTvVisible(false);
         titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
-        pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                DataPaser.commonList(page + "", 8 + "", null, user._id + "", "sight", "love", handler);
-            }
-        });
+        list = new ArrayList<>();
+        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list);
+        listView.setAdapter(sceneListViewAdapter);
+        listView.setOnItemClickListener(this);
+        pullToRefreshView.setPullToRefreshEnabled(false);
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                DataPaser.commonList(page + "", 8 + "", null, user._id + "", "sight", "love", handler);
+                requestLoveSceneList();
             }
         });
+
     }
 
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.commonList(page + "", 8 + "", null, user._id + "", "sight", "love", handler);
+        requestLoveSceneList();
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.COMMON_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    pullToRefreshView.onRefreshComplete();
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    pullToRefreshView.onRefreshComplete();
-                    break;
+    private void requestLoveSceneList() {
+        ClientDiscoverAPI.commonList(page + "", 8 + "", null, user_id + "", "sight", "love", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<LoveSceneBean>() {
+                    }.getType();
+                    LoveSceneBean loveSceneBean = gson.fromJson(responseInfo.result, type);
+                    if (loveSceneBean.isSuccess()) {
+                        if (page == 1) {
+                            list.clear();
+                        }
+                        list.addAll(loveSceneBean.getData().getRows());
+                        sceneListViewAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(HasLoveActivity.this, loveSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
             }
-        }
-    };
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                Log.e("<<<", "请求失败" + error.toString());
+            }
+        });
+    }
+
 
     @Override
     protected void onDestroy() {
         //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        LoveSceneBean.LoveSceneItem loveSceneItem = (LoveSceneBean.LoveSceneItem) listView.getAdapter().getItem(position);
+        Intent intent = new Intent(HasLoveActivity.this, SceneDetailActivity.class);
+        intent.putExtra("id", loveSceneItem.get_id());
+        startActivity(intent);
     }
 }

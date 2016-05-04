@@ -6,68 +6,71 @@
               android:background="#f7f7f7"
               android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="产品详情"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            />
+
+        <ImageView
+            android:id="@+id/activity_goods_detail_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:src="@mipmap/back_black"/>
+
+        <RelativeLayout
+            android:id="@+id/activity_goods_detail_cart_relative"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:src="@mipmap/cart"/>
+
+            <TextView
+                android:id="@+id/activity_goods_detail_cart_num"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/cart_num_bg"
+                android:gravity="center"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <com.taihuoniao.fineix.view.ScrollableView
+                android:id="@+id/activity_goods_detail_scrollableView"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="产品详情"
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-                    />
-
-                <ImageView
-                    android:id="@+id/activity_goods_detail_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:src="@mipmap/back_black"/>
-
-                <RelativeLayout
-                    android:id="@+id/activity_goods_detail_cart_relative"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingLeft="17dp"
-                        android:paddingRight="17dp"
-                        android:src="@mipmap/cart"/>
-
-                    <TextView
-                        android:id="@+id/activity_goods_detail_cart_num"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/cart_num_bg"
-                        android:visibility="gone"/>
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:background="@android:color/darker_gray"
-                ></RelativeLayout>
+                android:layout_height="211dp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -162,7 +165,6 @@
                         android:id="@+id/activity_goods_detail_brand_des"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/activity_goods_detail_brand_img"
                         android:layout_below="@id/activity_goods_detail_brand_title"
                         android:layout_marginLeft="26dp"
                         android:layout_marginTop="12dp"
@@ -172,47 +174,6 @@
                         android:textColor="#333333"
                         android:textSize="10sp"/>
                 </RelativeLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e0e0e0"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="19dp"
-                    android:text="产品亮点"
-                    android:textColor="#212121"
-                    android:textSize="13sp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#fcfcfc"/>
-
-                <TextView
-                    android:id="@+id/activity_goods_detail_product_lightdot"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4dp"
-                    android:maxLines="3"
-                    android:paddingBottom="25dp"
-                    android:paddingLeft="17dp"
-                    android:paddingRight="118dp"
-                    android:paddingTop="16dp"
-                    android:text="啊；是镂空雕刻技法卢卡斯京东方；绿卡技术的；浪费卡死了；打开附件；阿拉山口大家发了时刻记得发；啊看似简单方法；看见撒旦的；发了卡死了的看法奖励空间；卢卡斯京东方；卡死了的；饭卡；螺丝扣搭街坊；了拉开松井大辅发"
-                    android:textColor="#333333"
-                    android:textSize="10sp"/>
             </LinearLayout>
 
             <TextView
@@ -301,26 +262,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="255dp"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="17dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="20dp"
                 android:paddingTop="15dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
                     android:text="相关推荐"
                     android:textColor="#212121"
                     android:textSize="13sp"/>
 
-                <GridView
-                    android:id="@+id/activity_goods_detail_recommend_grid"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/activity_goods_detail_recommend_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="2"/>
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    />
 
             </LinearLayout>
 
@@ -329,31 +290,17 @@
                 android:layout_height="1px"
                 android:background="#e5e5e5"/>
 
-            <LinearLayout
+
+            <Button
+                android:id="@+id/activity_goods_detail_buy_now"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:background="#bd8913"
+                android:text="去购买"
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
 
-                <Button
-                    android:id="@+id/activity_goods_detail_add_to_cart"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#da9d17"
-                    android:text="加入购物车"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"/>
-
-                <Button
-                    android:id="@+id/activity_goods_detail_buy_now"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#bd8913"
-                    android:text="立即购买"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"/>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -365,70 +312,6 @@
                 android:layout_height="1px"
                 android:layout_marginTop="5dp"
                 android:background="#e2e2e2"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:id="@+id/activity_goods_detail_goodsdetail_relative"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/activity_goods_detail_goodsdetail_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="产品详情"
-                        android:textColor="@color/yellow_bd8913"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:id="@+id/activity_goods_detail_goodsdetail_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/yellow_bd8913"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/activity_goods_detail_comment_relative"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/activity_goods_detail_comment_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="商品评价"
-                        android:textColor="#212121"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:id="@+id/activity_goods_detail_comment_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="3dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/yellow_bd8913"
-                        android:visibility="gone"/>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e2e2e2"/>
-
-            <com.taihuoniao.fineix.view.WrapContentViewPager
-                android:id="@+id/activity_goods_detail_viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 

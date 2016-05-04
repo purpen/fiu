@@ -35,6 +35,15 @@ public class BrandListBean extends NetBean {
         private String title;
         private String des;
         private String cover_url;
+        private String brands_size_type;
+
+        public String getBrands_size_type() {
+            return brands_size_type;
+        }
+
+        public void setBrands_size_type(String brands_size_type) {
+            this.brands_size_type = brands_size_type;
+        }
 
         public Id get_id() {
             return _id;

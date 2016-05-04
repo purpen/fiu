@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -60,7 +61,11 @@ public class SceneDetailUserHeadAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getUser().getAvatar_url(), holder.headImg, options);
+        try {
+            ImageLoader.getInstance().displayImage(list.get(position).getUser().getAvatar_url(), holder.headImg, options);
+        } catch (Exception e) {
+            Log.e("<<<>>>>>>", e.toString());
+        }
         return convertView;
     }
 

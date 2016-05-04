@@ -35,6 +35,7 @@ import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.TimestampToTimeUtils;
@@ -189,7 +190,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     protected void requestNet() {
         dialog.show();
         DataPaser.sceneDetails(id + "", handler);
-        DataPaser.commentsList(1 + "", id, 12 + "", handler);
+        DataPaser.commentsList(1 + "", 3 + "", id, 12 + "", handler);
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
     }
 
@@ -248,7 +249,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
-                    Log.e("<<<", "评论列表");
+//                    Log.e("<<<", "评论列表");
                     CommentsBean netCommentBean = (CommentsBean) msg.obj;
                     if (netCommentBean.isSuccess()) {
 //                        commentList.clear();
@@ -262,10 +263,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.SCENE_DETAILS:
                     dialog.dismiss();
-                    Log.e("<<<", "场景详情");
+//                    Log.e("<<<", "场景详情");
                     SceneDetails netSceneDetails = (SceneDetails) msg.obj;
                     if (netSceneDetails.isSuccess()) {
-                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
+//                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
                         ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg);
                         //用户是否已经点赞
                         isLove = netSceneDetails.getIs_love();
@@ -349,8 +350,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(SceneDetailActivity.this, "跳转到商品详情", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SceneDetailActivity.this, GoodsDetailActivity.class);
                     String id = labelView.getTagInfo().getId();//商品id
+                    intent.putExtra("id", id);
+                    startActivity(intent);
                 }
             });
         }

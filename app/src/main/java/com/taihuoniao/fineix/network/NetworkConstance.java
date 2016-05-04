@@ -15,6 +15,8 @@ public class NetworkConstance {
     //产品
     //列表
     public static final String urlString_productsList = BASE_URL + "/scene_product/getlist";
+    //产品详情
+    public static final String good_details = BASE_URL + "/scene_product/view";
     //获取京东商品信息
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
@@ -43,6 +45,9 @@ public class NetworkConstance {
     public static final String scene_details = BASE_URL + "/scene_sight/view";
     //列表数据
     public static final String scene_list = BASE_URL + "/scene_sight";
+    //个人中心
+    //用户列表
+    public static final String user_list = BASE_URL + "/user/";
     //标签
     //最近使用的标签
     public static final String used_label_list = BASE_URL + "/my/my_recent_tags";
@@ -57,6 +62,8 @@ public class NetworkConstance {
     public static final String brand_list = BASE_URL + "/scene_brands/getlist";
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
+    //商品和场景关联列表
+    public static final String product_and_scenelist = BASE_URL + "/sight_and_product";
     //购物车
     //购物车数量
     public static final String cart_number = BASE_URL + "/shopping/fetch_cart_count";
@@ -65,6 +72,9 @@ public class NetworkConstance {
     public static final String send_comment = BASE_URL + "/comment/ajax_comment";
     //列表
     public static final String comments_list = BASE_URL + "/comment/getlist";
+    //分类
+    //分类标签
+    public static final String category_label = BASE_URL + "/category/fetch_child_tags";
 
     //热门城市
     public static final String HOT_CITIES = BASE_URL_ESTORE + "/get_city_list";

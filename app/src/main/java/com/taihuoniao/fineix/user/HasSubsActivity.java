@@ -12,6 +12,7 @@ import butterknife.Bind;
 /**
  * Created by taihuoniao on 2016/4/30.
  * 已经订阅的情景
+ * 未完成，接口返回数据有问题
  */
 public class HasSubsActivity extends BaseActivity {
     @Bind(R.id.activity_has_subs_titlelayout)

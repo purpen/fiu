@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -46,6 +48,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -82,6 +85,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private static final String PRODUCT_STATE = "1"; //表示正常在线
     private TextView tv_name;
     private TextView tv_price;
+
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
@@ -166,7 +170,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
 //        DataPaser.hotLabelList(labelPage + "", handler);
-        DataPaser.categoryList(1 + "", 1 + "", handler);
+        DataPaser.categoryList(1 + "", 10 + "", handler);
         ClientDiscoverAPI.getProductList(String.valueOf(page), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -219,7 +223,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
         //品牌列表
-        DataPaser.brandList(1, 40, handler);
+        DataPaser.brandList(1, 50, handler);
     }
 
     private void setSlidingFocusImageViewData(ArrayList<ProductListBean> list) {
@@ -233,9 +237,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         if (sfAdapter == null) {//获得产品列表的一项  list.get(0)
             sfAdapter = new SlidingFocusAdapter(sfiv, list.get(0).banner_asset, activity);
             tv_name.setText(list.get(0).getTitle());
-            tv_price.setText("￥"+list.get(0).getSale_price());
+            tv_price.setText("￥" + list.get(0).getSale_price());
             sfiv.setAdapter(sfAdapter);
-            sfiv.setSelection(Integer.MAX_VALUE/2);
+            sfiv.setSelection(Integer.MAX_VALUE / 2);
         } else {
             sfAdapter.notifyDataSetChanged();
         }
@@ -245,6 +249,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     protected void initList() {
         searchImg.setOnClickListener(this);
         cartImg.setOnClickListener(this);
+        ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
+        lp.width = MainApplication.getContext().getScreenWidth();
+        lp.height = lp.width * 422 / 750;
+        scrollableView.setLayoutParams(lp);
         hotLabelList = new ArrayList<>();
         labelRecycler.setHasFixedSize(true);
         labelRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
@@ -278,8 +286,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             switch (msg.what) {
                 case DataConstants.BRAND_LIST:
                     BrandListBean netBrandListBean = (BrandListBean) msg.obj;
-                    if(netBrandListBean.isSuccess()){
-                        addImgToAbsolute();
+                    if (netBrandListBean.isSuccess()) {
+                        addImgToAbsolute(netBrandListBean.getData().getRows());
                     }
                     break;
                 case DataConstants.HOT_LABEL_LIST:
@@ -297,7 +305,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                         list.addAll(netCategoryBean.getList());
                         pinRecyclerAdapter.notifyDataSetChanged();
                     }
-
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
@@ -356,32 +363,24 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     public void click(int postion) {
-        Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(getActivity(), GoodsListActivity.class));
     }
 
     /**
      * 数据里应有图片地址，类型，id，
-     * http://frbird.qiniudn.com/scene_product/160413/570de6b63ffca2e3108bc4b3-1-p500x500.jpg
-     * http://frbird.qiniudn.com/scene_product/160412/570cbbb93ffca27d078bb969-1-p500x500.jpg
-     * http://frbird.qiniudn.com/scene_product/160412/570cb2593ffca268098c293a-1-p500x500.jpg
      * 大 51dp 中 33dp 小 21dp
      */
-    private void addImgToAbsolute() {
+    private void addImgToAbsolute(List<BrandListBean.BrandItem> list) {
         Random random = new Random();
         List<RandomImg> randomImgs = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < list.size(); i++) {
             RandomImg randomImg = new RandomImg();
-//            if (i % 3 == 0) {
-            randomImg.url = "http://frbird.qiniudn.com/scene_product/160413/570de6b63ffca2e3108bc4b3-1-p500x500.jpg";
-//            } else if (i % 3 == 1) {
-//                randomImg.url = "http://frbird.qiniudn.com/scene_product/160412/570cbbb93ffca27d078bb969-1-p500x500.jpg";
-//            } else {
-//                randomImg.url = "http://frbird.qiniudn.com/scene_product/160412/570cb2593ffca268098c293a-1-p500x500.jpg";
-//            }
-            randomImg.type = random.nextInt(3) + 1;
-            if (randomImg.type == 1) {
+            randomImg.id = list.get(i).get_id().get$id();
+            randomImg.url = list.get(i).getCover_url();
+            randomImg.type = list.get(i).getBrands_size_type();
+            if ("1".equals(randomImg.type)) {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-            } else if (randomImg.type == 2) {
+            } else if ("2".equals(randomImg.type)) {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
             } else {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
@@ -427,6 +426,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 randomImg.y = y;
 //                Log.e("<<<", "img.x=" + randomImg.x);
 //                Log.e("<<<", "img.y=" + randomImg.y);
+
                 break;
             }
 //            }
@@ -444,7 +444,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 @Override
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Toast.makeText(getActivity(), "又点击了", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "又点击了" + randomImg1.id, Toast.LENGTH_SHORT).show();
                 }
             });
             absoluteLayout.addView(img);

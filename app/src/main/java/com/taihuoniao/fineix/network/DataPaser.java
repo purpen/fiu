@@ -25,8 +25,10 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
+import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.JDDetailsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -41,6 +43,7 @@ import com.taihuoniao.fineix.beans.TBDetailsBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
+import com.taihuoniao.fineix.beans.UserListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -61,10 +64,12 @@ import java.util.List;
 public class DataPaser {
     //产品
     //列表
-    public static void getProductList(String category, String page, final Handler handler) {
-        ClientDiscoverAPI.getProductList(category, page, new RequestCallBack<String>() {
+    public static void getProductList(String category, String page, String size, String ids, String ignore_ids, final Handler handler) {
+        ClientDiscoverAPI.getProductList(category, page, size, ids, ignore_ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<>>>", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT_LIST;
                 ProductBean productBean = new ProductBean();
@@ -86,6 +91,12 @@ public class DataPaser {
                             productListBean.setMarket_price(ob.optString("market_price"));
                             productListBean.setLove_count(ob.optString("love_count"));
                             productListBean.setCover_url(ob.optString("cover_url"));
+                            List<String> category_tags = new ArrayList<String>();
+                            JSONArray jsonArray = ob.getJSONArray("category_tags");
+                            for (int j = 0; j < jsonArray.length(); j++) {
+                                category_tags.add(jsonArray.optString(j));
+                            }
+                            productListBean.setCategory_tags(category_tags);
                             list.add(productListBean);
                         }
                         productBean.setList(list);
@@ -103,6 +114,38 @@ public class DataPaser {
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
+    }
+
+    //产品
+    //产品详情
+    public static void goodsDetail(String id, final Handler handler) {
+        ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<>>>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.GOODS_DETAIL;
+                msg.obj = new GoodsDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<GoodsDetailBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+
     }
 
     //产品
@@ -192,8 +235,8 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<>>>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
                 try {
@@ -618,6 +661,33 @@ public class DataPaser {
         });
     }
 
+    //个人中心
+    //用户列表
+    public static void userList(String page, String size, String sort, String has_scene, final Handler handler) {
+        ClientDiscoverAPI.userList(page, size, sort, has_scene, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.USER_LIST;
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<UserListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
 
     //标签
     //最近使用的标签
@@ -783,6 +853,8 @@ public class DataPaser {
         ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<>>", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.BRAND_LIST;
                 msg.obj = new BrandListBean();
@@ -829,6 +901,7 @@ public class DataPaser {
                             categoryListBean.set_id(ob.optString("_id"));
                             categoryListBean.setTitle(ob.optString("title"));
                             categoryListBean.setName(ob.optString("name"));
+                            categoryListBean.setTag_id(ob.optString("tag_id"));
                             categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
                             list.add(categoryListBean);
                         }
@@ -850,6 +923,36 @@ public class DataPaser {
 
     }
 
+    //公共
+    //场景商品关联列表
+    public static void productAndScene(String page, String size, String sight_id, String product_id, final Handler handler) {
+        ClientDiscoverAPI.productAndScene(page, size, sight_id, product_id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<>>>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.PRODUCT_AND_SCENE;
+                msg.obj = new ProductAndSceneListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductAndSceneListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
     //购物车
     //购物车商品数量
     public static void cartNum(final Handler handler) {
@@ -865,7 +968,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                    Log.e("<<<>>>", "数据异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -909,8 +1012,8 @@ public class DataPaser {
 
     //评论
     //列表
-    public static void commentsList(String page, String target_id, String type, final Handler handler) {
-        ClientDiscoverAPI.commentsList(page, target_id, type, new RequestCallBack<String>() {
+    public static void commentsList(String page, String size, String target_id, String type, final Handler handler) {
+        ClientDiscoverAPI.commentsList(page, size, target_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);
@@ -922,6 +1025,24 @@ public class DataPaser {
                 }.getType();
                 msg.obj = gson.<CommentsBean>fromJson(responseInfo.result, type);
                 handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //分类
+    //分类标签
+    public static void categoryLabel(String tag_id, final Handler handler) {
+        ClientDiscoverAPI.categoryLabel(tag_id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<..", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
             }
 
             @Override

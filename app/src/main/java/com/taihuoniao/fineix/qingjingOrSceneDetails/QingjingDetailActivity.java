@@ -162,7 +162,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList);
+        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList,null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
         changjingListView.setOnTouchListener(this);

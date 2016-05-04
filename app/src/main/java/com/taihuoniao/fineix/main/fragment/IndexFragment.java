@@ -50,17 +50,18 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     protected void initList() {
         searchImg.setOnClickListener(this);
         subsImg.setOnClickListener(this);
-        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                currentPage = 1;
-                if (location == null) {
-                    getCurrentLocation();
-                    return;
-                }
-                DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
-            }
-        });
+        pullToRefreshLayout.setPullToRefreshEnabled(false);
+//        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                currentPage = 1;
+//                if (location == null) {
+//                    getCurrentLocation();
+//                    return;
+//                }
+//                DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+//            }
+//        });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -69,7 +70,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             }
         });
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList,null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
         getCurrentLocation();

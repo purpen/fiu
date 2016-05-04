@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingLeft="15dp"
+              android:paddingRight="15dp">
+
+    <ImageView
+        android:id="@+id/item_goodsdetail_recommend_img"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/item_goodsdetail_recommend_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:lineSpacingExtra="5dp"
+        android:maxLines="2"
+        android:minLines="2"
+        android:text="阿斯兰的快捷方法；拉萨扩大解放；啦空间啊收到了疯狂降价啊速度"
+        android:textColor="#666666"
+        android:textSize="10sp"/>
+
+    <TextView
+        android:layout_width="153dp"
+        android:layout_height="1px"
+        android:background="#ededed"/>
+
+    <TextView
+        android:id="@+id/item_goodsdetail_recommend_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:text="¥ 69.00"
+        android:textColor="@color/red"
+        android:textSize="11sp"/>
+</LinearLayout>

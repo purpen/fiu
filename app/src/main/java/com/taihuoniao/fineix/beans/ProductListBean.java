@@ -2,18 +2,28 @@ package com.taihuoniao.fineix.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/13.
  */
-public class ProductListBean implements Serializable{
+public class ProductListBean implements Serializable {
     private String _id;
     private String title;
     private String sale_price;
     private String market_price;
     private String love_count;
     private String cover_url;
+    private List<String> category_tags;
     public ArrayList<String> banner_asset;
+
+    public List<String> getCategory_tags() {
+        return category_tags;
+    }
+
+    public void setCategory_tags(List<String> category_tags) {
+        this.category_tags = category_tags;
+    }
 
     public String get_id() {
         return _id;

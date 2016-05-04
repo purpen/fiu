@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.UserListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -120,6 +122,10 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     protected void initList() {
         searchImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
+        ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
+        lp.width = MainApplication.getContext().getScreenWidth();
+        lp.height = lp.width * 422 / 750;
+        scrollableView.setLayoutParams(lp);
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
@@ -142,7 +148,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null);
         sceneListView.setAdapter(sceneListViewAdapter);
         sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
@@ -213,8 +219,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-        //虚拟数据
-        handler.sendEmptyMessage(-2);
+        //用户大小不一的头像
+        DataPaser.userList(1 + "", 50 + "", null, null, handler);
         //热门标签
         ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
             @Override
@@ -244,9 +250,12 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case -2:
-                    //添加大小不一的头像
-                    addImgToAbsolute();
+                case DataConstants.USER_LIST:
+                    dialog.dismiss();
+                    UserListBean netUserListBean = (UserListBean) msg.obj;
+                    if (netUserListBean.isSuccess()) {
+                        addImgToAbsolute(netUserListBean.getData().getRows());
+                    }
                     break;
                 case DataConstants.QINGJING_LIST:
                     dialog.dismiss();
@@ -337,16 +346,17 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
 
-    private void addImgToAbsolute() {
+    private void addImgToAbsolute(List<UserListBean.UserListItem> list) {
         Random random = new Random();
         List<RandomImg> randomImgs = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < list.size(); i++) {
             RandomImg randomImg = new RandomImg();
-            randomImg.url = "http://frbird.qiniudn.com/scene_product/160413/570de6b63ffca2e3108bc4b3-1-p500x500.jpg";
-            randomImg.type = random.nextInt(3) + 1;
-            if (randomImg.type == 1) {
+            randomImg.id = list.get(i).get_id();
+            randomImg.url = list.get(i).getMedium_avatar_url();
+            randomImg.type = list.get(i).getAvatar_size_type();
+            if (randomImg.type.equals("1")) {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-            } else if (randomImg.type == 2) {
+            } else if (randomImg.type.equals("2")) {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
             } else {
                 randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
@@ -394,7 +404,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 @Override
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Toast.makeText(getActivity(), "又点击了", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "又点击了" + randomImg1.id, Toast.LENGTH_SHORT).show();
                 }
             });
             absoluteLayout.addView(img);
