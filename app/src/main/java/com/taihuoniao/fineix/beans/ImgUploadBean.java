@@ -8,4 +8,5 @@ import java.io.Serializable;
  */
 public class ImgUploadBean implements Serializable{
     public String file_url;
+    public String head_pic_url;
 }

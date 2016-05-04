@@ -37,6 +37,14 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
         }
         ImageLoader.getInstance().displayImage("drawable://" + item.imgId,holder.iv,options);
         holder.tv.setText(item.txt);
+        if (item.count>0){
+            holder.tv_num.setVisibility(View.VISIBLE);
+            if (item.count<=99)
+                holder.tv_num.setText(String.valueOf(item.count));
+            else {
+                holder.tv_num.setText("+99");
+            }
+        }
         return convertView;
     }
 
@@ -45,6 +53,8 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
         ImageView iv;
         @Bind(R.id.tv)
         TextView tv;
+        @Bind(R.id.tv_num)
+        TextView tv_num;
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }

@@ -2,6 +2,8 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -34,14 +36,14 @@ public class FocusFansActivity extends BaseActivity {
     @Bind(R.id.lv)
     ListView lv;
     private int curPage = 1;
-    private static final String PAGE_SIZE = "100";  //分页大小
+    private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FOCUS_TYPE = "1";  //关注列表
     public static final String FANS_TYPE = "2";  //粉丝列表
     private ArrayList<FocusFansItem> list;
     private FocusFansAdapter adapter;
     private String pageType=FOCUS_TYPE;
-    private static final String USER_ID_EXTRA="USER_ID_EXTRA";
-    private String userId= LoginInfo.getUserId()+"";
+    public static final String USER_ID_EXTRA="USER_ID_EXTRA";
+    private long userId= LoginInfo.getUserId();
     public FocusFansActivity() {
         super(R.layout.activity_focus_fans);
     }
@@ -54,7 +56,7 @@ public class FocusFansActivity extends BaseActivity {
         }
 
         if (intent.hasExtra(USER_ID_EXTRA)){
-            userId=intent.getStringExtra(USER_ID_EXTRA);
+            userId=intent.getLongExtra(USER_ID_EXTRA,-1);
         }
 
     }
@@ -69,10 +71,23 @@ public class FocusFansActivity extends BaseActivity {
     }
 
     @Override
+    protected void installListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LogUtil.e(TAG,"i=="+i+";;;;l=="+l);
+                FocusFansItem focusFansItem = list.get(i);
+                Intent intent = new Intent(activity,UserCenterActivity.class);
+                intent.putExtra(USER_ID_EXTRA,focusFansItem.follows.user_id);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
     protected void requestNet() {
-//        userId="10";
-        LogUtil.e(TAG,userId);
-        ClientDiscoverAPI.getFocusFansList(userId,String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
+        LogUtil.e(TAG,"requestNet=="+userId);
+        ClientDiscoverAPI.getFocusFansList(userId+"",String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) {

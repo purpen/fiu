@@ -133,7 +133,7 @@ public class ProductResultFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.getMineInfo(new RequestCallBack<String>() {
+        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 LogUtil.e("result", responseInfo.result);

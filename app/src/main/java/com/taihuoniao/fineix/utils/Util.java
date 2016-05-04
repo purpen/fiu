@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,9 +17,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mob.tools.network.BufferedByteArrayOutputStream;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -201,7 +205,7 @@ public class Util {
 
 	public static File saveBitmapToFile(Bitmap bitmap) {
 		File file = new File(Environment.getExternalStorageDirectory(),
-				"tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".png");
+				"tmp_avatar"  + ".png");
 		if (file.exists()) {
 			file.delete();
 		}
@@ -216,6 +220,25 @@ public class Util {
 			bitmap.recycle();
 		}
 		return file;
+	}
+	public static String saveBitmap2Base64Str(Bitmap bitmap) {
+		String imgStr=null;
+		try {
+			ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
+
+			bitmap.compress(Bitmap.CompressFormat.PNG,100, bao);
+
+			byte[] ba = bao.toByteArray();
+
+			imgStr =Base64.encodeToString(ba,Base64.DEFAULT);
+			bao.flush();
+			bao.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			bitmap.recycle();
+		}
+		return imgStr;
 	}
 
 	public static String formatDouble(String price) throws NumberFormatException{

@@ -7,6 +7,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
 /**
@@ -385,8 +386,10 @@ public class ClientDiscoverAPI {
 
 
     //账户处的用户个人信息
-    public static void getMineInfo(RequestCallBack<String> callBack) {
+    public static void getMineInfo(String userId,RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("user_id",userId);
+        LogUtil.e("getMineInfo",userId);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MINE_INFO, callBack, false);
     }
 
@@ -515,6 +518,16 @@ public class ClientDiscoverAPI {
         params.addBodyParameter("tmp", tmp);
         params.addBodyParameter("type", type);
         MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
+    }
+    /**
+     * 上传个人中心背景
+     *
+     * @param callBack
+     */
+    public static void uploadBgImg(String tmp,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("tmp", tmp);
+        MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
     }
 
 

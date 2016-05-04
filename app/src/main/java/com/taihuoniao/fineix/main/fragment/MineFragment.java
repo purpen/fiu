@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,6 +28,8 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.user.AboutUsActivity;
+import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
@@ -32,6 +37,7 @@ import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -59,6 +65,8 @@ public class MineFragment extends MyBaseFragment {
     CustomItemLayout item_partner;
     @Bind(R.id.ll)
     LinearLayout ll;
+    @Bind(R.id.ll_box)
+    LinearLayout ll_box;
     @Bind(R.id.rl)
     RelativeLayout rl;
     @Bind(R.id.riv)
@@ -69,14 +77,14 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_nick;
     @Bind(R.id.tv_rank)
     TextView tv_rank;
-    @Bind(R.id.ll_qj)
-    LinearLayout ll_qj;
-    @Bind(R.id.ll_cj)
-    LinearLayout ll_cj;
-    @Bind(R.id.ll_focus)
-    LinearLayout ll_focus;
-    @Bind(R.id.ll_fans)
-    LinearLayout ll_fans;
+    @Bind(R.id.tv_qj)
+    TextView tv_qj;
+    @Bind(R.id.tv_cj)
+    TextView tv_cj;
+    @Bind(R.id.tv_focus)
+    TextView tv_focus;
+    @Bind(R.id.tv_fans)
+    TextView tv_fans;
     public static final int  REQUEST_QJ=0;
     public static final int  REQUEST_CJ=1;
     public static final int  REQUEST_FOCUS=2;
@@ -84,6 +92,7 @@ public class MineFragment extends MyBaseFragment {
     private User user;
     private ArrayList<ImgTxtItem> gvList;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
+    private PersonalCenterGVAdapter adapter;
     public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe,  R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
     public String[] imgTxt = null;
 //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
@@ -135,7 +144,11 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.getMineInfo(new RequestCallBack<String>() {
+        if (!LoginInfo.isUserLogin()){
+            LogUtil.e(TAG,"isUserLogin()==false");
+            return;
+        }
+        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 LogUtil.e("result", responseInfo.result);
@@ -171,6 +184,7 @@ public class MineFragment extends MyBaseFragment {
         LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
+            loadData();
         } else {
             rl.setVisibility(View.VISIBLE);
         }
@@ -179,7 +193,7 @@ public class MineFragment extends MyBaseFragment {
     @Override
     protected void initViews() {
         if (gvList != null && gvList.size() >= 0) {
-            PersonalCenterGVAdapter adapter = new PersonalCenterGVAdapter(gvList, activity);
+            adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);
         }
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333, false);
@@ -198,10 +212,30 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void refreshUIAfterNet() {
-        if (user == null) {
-            return;
+        if (user == null) return;
+
+        if (adapter!=null && gvList!=null){
+            for (int i=0;i<gvList.size();i++){//TODO 注意顺序和GridView位置
+                switch (i){
+                    case 0:
+                        gvList.get(i).count=user.counter.order_total_count;
+                        break;
+                    case 1:
+                        gvList.get(i).count=user.counter.message_count;
+                        break;
+                }
+
+            }
+            adapter.notifyDataSetChanged();
         }
-        ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+        if (!TextUtils.isEmpty(user.medium_avatar_url)){
+            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
+        }
+        if (!TextUtils.isEmpty(user.head_pic_url)){
+            ImageUtils.loadBgImg(user.head_pic_url,ll_box);
+//            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
+//            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
+        }
         if (TextUtils.isEmpty(user.realname)) {
             tv_real.setVisibility(View.GONE);
         } else {
@@ -219,6 +253,10 @@ public class MineFragment extends MyBaseFragment {
         } else {
             tv_rank.setText(user.rank_title);
         }
+        tv_qj.setText(String.valueOf(user.scene_count));
+        tv_cj.setText(String.valueOf(user.sight_count));
+        tv_focus.setText(String.valueOf(user.follow_count));
+        tv_fans.setText(String.valueOf(user.fans_count));
     }
 
 //    private void setOnClickListener(View view, final ImgTxtItem item) {
@@ -243,11 +281,11 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.riv, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
-            case R.id.riv:
+            case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
             case R.id.ll_qj:
@@ -274,14 +312,14 @@ public class MineFragment extends MyBaseFragment {
             case R.id.iv_detail:
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
-            case R.id.iv_calendar:
-                Util.makeToast(activity, "日历");
-                break;
+//            case R.id.iv_calendar:
+//                Util.makeToast(activity, "日历");
+//                break;
             case R.id.item_about_us:
-                Util.makeToast(activity, "关于我们");
+                startActivity(new Intent(activity,AboutUsActivity.class));
                 break;
             case R.id.item_feedback:
-                Util.makeToast(activity, "反馈");
+                startActivity(new Intent(activity,FeedbackActivity.class));
                 break;
 //            case R.id.item_partner:
 //                Util.makeToast(activity, "合作伙伴");

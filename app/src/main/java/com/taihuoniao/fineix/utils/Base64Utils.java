@@ -2,6 +2,8 @@ package com.taihuoniao.fineix.utils;
 
 import android.util.Base64;
 
+import com.mob.tools.network.BufferedByteArrayOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

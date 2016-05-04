@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
 import com.taihuoniao.fineix.beans.ImgUploadBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -212,7 +213,7 @@ public class EditUserInfoActivity extends BaseActivity {
                     PopupWindowUtil.dismiss();
                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     mImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                            "tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".jpg"));
+                            "tmp_avatar"+ ".jpg"));
 
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
                     try {
@@ -238,7 +239,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         ProvinceUtil.init();
-        ClientDiscoverAPI.getMineInfo(new RequestCallBack<String>() {
+        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 LogUtil.e("result", responseInfo.result);
@@ -541,6 +542,7 @@ public class EditUserInfoActivity extends BaseActivity {
             intent.putExtra("aspectY", 1);
             intent.putExtra("scale", true);
             intent.putExtra("return-data", true);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             if (size == 1) {
                 Intent i = new Intent(intent);
                 ResolveInfo res = list.get(0);

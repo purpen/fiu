@@ -14,9 +14,11 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/cover"
+                android:background="@mipmap/person_center_bg"
+                android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -151,6 +153,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_qj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -175,6 +178,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_cj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -201,6 +205,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_focus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -208,6 +213,7 @@
                         android:textSize="@dimen/sp12" />
 
                     <TextView
+                        android:id="@+id/tv_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="关注"

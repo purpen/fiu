@@ -45,6 +45,25 @@ public class User implements Serializable {
     public long current_user_id;
     public String summary;
     public String city;
+    public int follow_count;
+    public int fans_count;
+    public int scene_count; //情境
+    public int sight_count; //场景
+    public Counter counter;
+    public String head_pic_url;
+    public class Counter implements Serializable{
+        public int message_count;
+        public int fans_count;
+        public int fiu_comment_count;
+        public int fiu_notice_count;
+        public int sight_love_count;
+        public int message_total_count;
+        public int order_wait_payment;
+        public int order_ready_goods;
+        public int order_sended_goods;
+        public int order_evaluate;
+        public int order_total_count;
+    }
     public class Identify implements Serializable{
         public int d3in_volunteer;
         public int d3in_vip;

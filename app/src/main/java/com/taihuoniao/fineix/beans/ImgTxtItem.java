@@ -9,4 +9,5 @@ import java.io.Serializable;
 public class ImgTxtItem implements Serializable{
     public int imgId;
     public String txt;
+    public int count;
 }

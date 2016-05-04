@@ -16,7 +16,7 @@ public class FocusFansItem implements Serializable {
     public Follow follows;
 
     public class Follow implements Serializable {
-        public int user_id;
+        public long user_id;
         public String account;
         public String nickname;
         public String avatar_url;

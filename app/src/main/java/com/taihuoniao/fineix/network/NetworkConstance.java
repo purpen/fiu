@@ -73,8 +73,8 @@ public class NetworkConstance {
     //场景列表
     public static final String CHANG_JING = BASE_URL + "/scene_sight";
 
-    //获得用户信息
-    public static final String MINE_INFO = BASE_URL + "/auth/user";
+    //获得个人中心用户信息
+    public static final String MINE_INFO = BASE_URL + "/user/user_info";
 
     //获得Banners
     public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
@@ -102,4 +102,7 @@ public class NetworkConstance {
 
     //上传头像
     public static final String UPLOAD_IMG_URL = BASE_URL + "/my/upload_token";
+
+    //上传个人中心背景
+    public static final String UPLOAD_BG_URL = BASE_URL + "/my/add_head_pic";
 }

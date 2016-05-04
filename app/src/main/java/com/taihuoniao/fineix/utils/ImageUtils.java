@@ -11,18 +11,22 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.CropPictureActivity;
 import com.taihuoniao.fineix.scene.EditPictureActivity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -276,4 +280,45 @@ public class ImageUtils {
     }
 
 
+    public static void loadBgImg(String url,View view){
+        new MyAsyncTask(url,view).execute();
+    }
+
+    private static class MyAsyncTask extends AsyncTask<String,Void,Bitmap>{
+        private View view;
+        private String url;
+        public MyAsyncTask(String url,View view) {
+            super();
+            this.view=view;
+            this.url=url;
+        }
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return ImageLoader.getInstance().loadImageSync(url);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            view.setBackgroundDrawable(new BitmapDrawable(bitmap));
+        }
+    }
+
+    public static Bitmap decodeUriAsBitmap(Uri uri){
+
+        Bitmap bitmap = null;
+        try {
+
+            bitmap = BitmapFactory.decodeStream(MainApplication.getContext().getContentResolver().openInputStream(uri));
+
+        } catch (FileNotFoundException e) {
+
+            e.printStackTrace();
+
+            return null;
+
+        }
+
+        return bitmap;
+
+    }
 }

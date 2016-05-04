@@ -14,6 +14,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/person_center_bg"
@@ -96,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/dp20"
+                    android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:background="@null"
                     android:src="@mipmap/authentication" />
@@ -120,6 +121,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_qj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -139,11 +141,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@mipmap/scene"
+                    android:background="@mipmap/favorites"
                     android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_cj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -170,6 +173,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_focus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -195,6 +199,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
