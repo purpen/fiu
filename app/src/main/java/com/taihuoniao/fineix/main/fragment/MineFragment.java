@@ -43,6 +43,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
@@ -85,21 +86,22 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_focus;
     @Bind(R.id.tv_fans)
     TextView tv_fans;
-    public static final int  REQUEST_QJ=0;
-    public static final int  REQUEST_CJ=1;
-    public static final int  REQUEST_FOCUS=2;
-    public static final int  REQUEST_FANS=3;
+    public static final int REQUEST_QJ = 0;
+    public static final int REQUEST_CJ = 1;
+    public static final int REQUEST_FOCUS = 2;
+    public static final int REQUEST_FANS = 3;
     private User user;
     private ArrayList<ImgTxtItem> gvList;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
-    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe,  R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
+    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
     public String[] imgTxt = null;
-//    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
+    //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
+    private WaittingDialog dialog;
 
     public MineFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -107,7 +109,6 @@ public class MineFragment extends MyBaseFragment {
         super.onCreate(savedInstanceState);
         initData();
     }
-
 
     private void initData() {
 //        partnerName = activity.getResources().getStringArray(R.array.partner_name);
@@ -143,14 +144,21 @@ public class MineFragment extends MyBaseFragment {
     }
 
     @Override
+    protected void initParams() {
+        dialog=new WaittingDialog(activity);
+    }
+
+    @Override
     protected void loadData() {
-        if (!LoginInfo.isUserLogin()){
-            LogUtil.e(TAG,"isUserLogin()==false");
+        if (!LoginInfo.isUserLogin()) {
+            LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
-        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
+        dialog.show();
+        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -171,6 +179,8 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
                 Util.makeToast("对不起,网络请求失败");
             }
@@ -214,25 +224,25 @@ public class MineFragment extends MyBaseFragment {
     protected void refreshUIAfterNet() {
         if (user == null) return;
 
-        if (adapter!=null && gvList!=null){
-            for (int i=0;i<gvList.size();i++){//TODO 注意顺序和GridView位置
-                switch (i){
+        if (adapter != null && gvList != null) {
+            for (int i = 0; i < gvList.size(); i++) {//TODO 注意顺序和GridView位置
+                switch (i) {
                     case 0:
-                        gvList.get(i).count=user.counter.order_total_count;
+                        gvList.get(i).count = user.counter.order_total_count;
                         break;
                     case 1:
-                        gvList.get(i).count=user.counter.message_total_count;
+                        gvList.get(i).count = user.counter.message_total_count;
                         break;
                 }
 
             }
             adapter.notifyDataSetChanged();
         }
-        if (!TextUtils.isEmpty(user.medium_avatar_url)){
+        if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
-        if (!TextUtils.isEmpty(user.head_pic_url)){
-            ImageUtils.loadBgImg(user.head_pic_url,ll_box);
+        if (!TextUtils.isEmpty(user.head_pic_url)) {
+            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
 //            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
@@ -251,7 +261,7 @@ public class MineFragment extends MyBaseFragment {
         if (TextUtils.isEmpty(user.rank_title)) {
             tv_rank.setVisibility(View.GONE);
         } else {
-            tv_rank.setText(user.rank_title);
+            tv_rank.setText(String.format("%s | V%s",user.rank_title,user.rank_id));
         }
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
@@ -316,10 +326,10 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "日历");
 //                break;
             case R.id.item_about_us:
-                startActivity(new Intent(activity,AboutUsActivity.class));
+                startActivity(new Intent(activity, AboutUsActivity.class));
                 break;
             case R.id.item_feedback:
-                startActivity(new Intent(activity,FeedbackActivity.class));
+                startActivity(new Intent(activity, FeedbackActivity.class));
                 break;
 //            case R.id.item_partner:
 //                Util.makeToast(activity, "合作伙伴");

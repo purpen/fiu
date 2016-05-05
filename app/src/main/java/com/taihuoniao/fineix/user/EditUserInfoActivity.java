@@ -52,6 +52,7 @@ import com.taihuoniao.fineix.view.CustomItemLayout;
 //import com.zcjcn.utils.LoginUtil;
 //import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.http.RequestParams;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
@@ -106,6 +107,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private String key;
     private String value;
     public static boolean isSubmitAddress=false;
+    private WaittingDialog dialog;
     public EditUserInfoActivity() {
         super(R.layout.activity_user_info_layout);
     }
@@ -113,7 +115,8 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
-        custom_user_avatar.setHeight(R.dimen.dp80);
+        dialog=new WaittingDialog(this);
+        custom_user_avatar.setHeight(R.dimen.dp60);
         custom_user_avatar.setUserAvatar(null);
         custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333);
         custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333);
@@ -238,10 +241,12 @@ public class EditUserInfoActivity extends BaseActivity {
     };
     @Override
     protected void requestNet() {
+        dialog.show();
         ProvinceUtil.init();
         ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -262,6 +267,8 @@ public class EditUserInfoActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
                 Util.makeToast("对不起,网络请求失败");
             }

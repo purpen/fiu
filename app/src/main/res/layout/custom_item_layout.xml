@@ -60,8 +60,8 @@
 
     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
         android:id="@+id/iv_user_avatar"
-        android:layout_width="@dimen/dp70"
-        android:layout_height="@dimen/dp70"
+        android:layout_width="@dimen/dp50"
+        android:layout_height="@dimen/dp50"
         android:layout_centerInParent="true"
         android:layout_marginRight="@dimen/dp5"
         app:riv_corner_radius="@dimen/dp100"

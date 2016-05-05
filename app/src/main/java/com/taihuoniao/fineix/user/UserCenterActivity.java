@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.imageViewTouch.easing.Linear;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -70,6 +72,8 @@ import butterknife.OnClick;
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.ll_box)
     LinearLayout ll_box;
+    @Bind(R.id.ll_btn_box)
+    LinearLayout ll_btn_box;
     @Bind(R.id.tv_title)
     TextView tv_title;
     @Bind(R.id.riv)
@@ -88,6 +92,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_focus;
     @Bind(R.id.tv_fans)
     TextView tv_fans;
+    @Bind(R.id.bt_focus)
+    Button bt_focus;
     private User user;
     private Uri mImageUri;
     private FragmentManager fm;
@@ -98,7 +104,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private static final int PICK_FROM_FILE = 0;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
-
+    private WaittingDialog dialog;
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -111,7 +117,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         if (intent.hasExtra(FocusFansActivity.USER_ID_EXTRA)) {
-            userId = intent.getLongExtra(FocusFansActivity.USER_ID_EXTRA, -1);
+            userId = intent.getLongExtra(FocusFansActivity.USER_ID_EXTRA,LoginInfo.getUserId());
         }
     }
 
@@ -148,7 +154,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
+        dialog=new WaittingDialog(this);
 
+        if (userId==LoginInfo.getUserId()){
+            ll_btn_box.setVisibility(View.GONE);
+        }else {
+            ll_btn_box.setVisibility(View.VISIBLE);
+        }
     }
 
     private void recoverAllState(Bundle savedInstanceState) {
@@ -245,9 +257,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "requestNet==" + userId);
+        dialog.show();
         ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -268,6 +282,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                if (TextUtils.isEmpty(s))
                 LogUtil.e(TAG, s);
                 Util.makeToast(s);
             }
@@ -280,14 +296,19 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "refreshUI===" + user._id);
-        tv_title.setText(user.nickname);
+        if (user.is_love==0){
+            bt_focus.setText("关注");
+        }else {
+            bt_focus.setText("已关注");
+        }
+        if (TextUtils.isEmpty(user.nickname)){
+            tv_title.setText(user.nickname);
+        }
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv, options);
         }
         if (!TextUtils.isEmpty(user.head_pic_url)) {
             ImageUtils.loadBgImg(user.head_pic_url, ll_box);
-//            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url,options);
-//            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
         if (TextUtils.isEmpty(user.realname)) {
             tv_real.setVisibility(View.GONE);
@@ -304,7 +325,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (TextUtils.isEmpty(user.rank_title)) {
             tv_rank.setVisibility(View.GONE);
         } else {
-            tv_rank.setText(user.rank_title);
+            tv_rank.setText(String.format("%s | V%s",user.rank_title,user.rank_id));
         }
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));

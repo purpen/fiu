@@ -522,8 +522,8 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("content", content);
         params.addQueryStringParameter("contact", contact);
-        params.addQueryStringParameter("from_to", "android");
-        params.addQueryStringParameter("kind", "Fiu");
+        params.addQueryStringParameter("from_to", "2"); //1.ios;2.android;3.ipad;4.win;5.web;6.wap
+        params.addQueryStringParameter("kind", "3");   //1.网页版; 2.商城app; 3.Fiu
         MD5Utils.sign(params, NetworkConstance.SUGGESTION_URL, callBack, false);
     }
 

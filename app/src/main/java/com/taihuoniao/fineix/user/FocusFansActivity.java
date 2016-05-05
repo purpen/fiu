@@ -20,7 +20,9 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 
@@ -44,6 +46,7 @@ public class FocusFansActivity extends BaseActivity {
     private String pageType=FOCUS_TYPE;
     public static final String USER_ID_EXTRA="USER_ID_EXTRA";
     private long userId= LoginInfo.getUserId();
+    private WaittingDialog dialog;
     public FocusFansActivity() {
         super(R.layout.activity_focus_fans);
     }
@@ -62,12 +65,21 @@ public class FocusFansActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        if(LoginInfo.getUserId()==userId){
+            requestNet();
+        }
+        super.onResume();
+    }
+
+    @Override
     protected void initView() {
         if (TextUtils.equals(FOCUS_TYPE,pageType)){
             custom_head.setHeadCenterTxtShow(true, "关注");
         }else {
             custom_head.setHeadCenterTxtShow(true, "粉丝");
         }
+        dialog=new WaittingDialog(this);
     }
 
     @Override
@@ -75,7 +87,6 @@ public class FocusFansActivity extends BaseActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LogUtil.e(TAG,"i=="+i+";;;;l=="+l);
                 FocusFansItem focusFansItem = list.get(i);
                 Intent intent = new Intent(activity,UserCenterActivity.class);
                 intent.putExtra(USER_ID_EXTRA,focusFansItem.follows.user_id);
@@ -87,9 +98,11 @@ public class FocusFansActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         LogUtil.e(TAG,"requestNet=="+userId);
+        dialog.show();
         ClientDiscoverAPI.getFocusFansList(userId+"",String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
@@ -97,7 +110,6 @@ public class FocusFansActivity extends BaseActivity {
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }
-
                 FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
                 });
 
@@ -111,21 +123,11 @@ public class FocusFansActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException e, String s) {
-
+                dialog.dismiss();
+                if (TextUtils.isEmpty(s)) return;
+                Util.makeToast(s);
             }
         });
-
-//        ClientDiscoverAPI.focusOperate("924810",new RequestCallBack<String>() {
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                LogUtil.e("onSuccess",responseInfo.result);
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException e, String s) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -138,7 +140,7 @@ public class FocusFansActivity extends BaseActivity {
         }
 
         if (adapter==null){
-            adapter=new FocusFansAdapter(list,activity,pageType);
+            adapter=new FocusFansAdapter(list,activity,pageType,userId);
             lv.setAdapter(adapter);
         }else {
             adapter.notifyDataSetChanged();

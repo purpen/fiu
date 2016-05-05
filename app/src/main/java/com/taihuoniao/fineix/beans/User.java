@@ -51,6 +51,7 @@ public class User implements Serializable {
     public int sight_count; //场景
     public Counter counter;
     public String head_pic_url;
+    public int is_love;
     public class Counter implements Serializable{
         public int notice_count;
         public int message_count;

@@ -110,13 +110,14 @@
                     android:orientation="horizontal"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/dp10"
+                    android:visibility="gone"
                     >
                     <Button
                         android:id="@+id/bt_focus"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp30"
                         android:layout_gravity="center_horizontal"
-                        android:text="关注"
+                        android:text=""
                         android:background="@drawable/shap_redbutton_commit"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp12"
@@ -213,7 +214,6 @@
                         android:textSize="@dimen/sp12" />
 
                     <TextView
-                        android:id="@+id/tv_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="关注"
@@ -232,6 +232,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
