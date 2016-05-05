@@ -110,6 +110,8 @@ public class FocusFansActivity extends BaseActivity {
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }
+
+                LogUtil.e(TAG,responseInfo.result);
                 FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
                 });
 

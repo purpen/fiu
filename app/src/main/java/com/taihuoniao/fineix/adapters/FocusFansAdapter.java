@@ -269,8 +269,8 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
      * @param holder
      */
     private void dealOthersFoucsFansStyle(final FocusFansItem item,final ViewHolder holder){
-        LogUtil.e("dealOthersFoucsFansStyle","is_love==="+item.is_love);
-        if (item.is_love==NOT_LOVE){
+        LogUtil.e("dealOthersFoucsFansStyle","is_love==="+item.follows.is_love);
+        if (item.follows.is_love==NOT_LOVE){
             holder.btn.setText("关注");
             holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
             holder.btn.setBackgroundResource(R.drawable.border_radius5);
@@ -280,7 +280,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     showFocusFansConfirmView(item,"开始关注");
                 }
             });
-        }else if (item.is_love==LOVE){
+        }else if (item.follows.is_love==LOVE){
             holder.btn.setText("已关注");
             holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
             holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
@@ -294,8 +294,8 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
     }
 
     private void dealOthersFocusFans(final FocusFansItem item,final View view){
-        LogUtil.e("dealOthersFocusFans","is_love==="+item.is_love);
-        if (item.is_love==NOT_LOVE){ //别人的关注列表做关注操作
+        LogUtil.e("dealOthersFocusFans","is_love==="+item.follows.is_love);
+        if (item.follows.is_love==NOT_LOVE){ //别人的关注列表做关注操作
             ClientDiscoverAPI.focusOperate(item.follows.user_id+"", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -305,7 +305,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()){
-                        item.is_love=LOVE;
+                        item.follows.is_love=LOVE;
                         notifyDataSetChanged();
                         Util.makeToast(response.getMessage());
                         return;
@@ -321,7 +321,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     Util.makeToast(s);
                 }
             });
-        }else if(item.is_love==LOVE){
+        }else if(item.follows.is_love==LOVE){
             ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id+"", new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -331,7 +331,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()){
-                        item.is_love=NOT_LOVE;
+                        item.follows.is_love=NOT_LOVE;
                         notifyDataSetChanged();
                         Util.makeToast(response.getMessage());
                         return;

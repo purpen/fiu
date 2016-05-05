@@ -14,13 +14,13 @@ public class FocusFansItem implements Serializable {
     public int type;
     public int is_read;
     public Follow follows;
-    public int is_love;
     public class Follow implements Serializable {
         public long user_id;
         public String account;
         public String nickname;
         public String avatar_url;
         public String summary;
+        public int is_love;
         //ans_ext
     }
 }
