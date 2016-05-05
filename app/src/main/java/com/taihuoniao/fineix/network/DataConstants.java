@@ -89,6 +89,12 @@ public class DataConstants {
     public static final int RESULTCODE_SELECTQJ_ALLQJ = 62;
     //举报
     public static final int REPORT = 61;
+    //产品详情
+    public static final int GOODS_DETAIL = 60;
+    //产品场景关联列表
+    public static final int PRODUCT_AND_SCENE = 59;
+    //用户列表
+    public static final int USER_LIST = 58;
 
 
 

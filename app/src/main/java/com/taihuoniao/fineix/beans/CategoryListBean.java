@@ -5,11 +5,20 @@ import java.io.Serializable;
 /**
  * Created by taihuoniao on 2016/4/13.
  */
-public class CategoryListBean implements Serializable{
+public class CategoryListBean implements Serializable {
     private String _id;
     private String title;
     private String name;
     private String app_cover_s_url;
+    private String tag_id;
+
+    public String getTag_id() {
+        return tag_id;
+    }
+
+    public void setTag_id(String tag_id) {
+        this.tag_id = tag_id;
+    }
 
     public String get_id() {
         return _id;

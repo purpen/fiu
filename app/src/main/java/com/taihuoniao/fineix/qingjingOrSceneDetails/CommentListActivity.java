@@ -99,7 +99,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.commentsList(currentPage + "", target_id, type, handler);
+                DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
             }
         });
         sendBtn.setOnClickListener(this);
@@ -129,7 +129,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.commentsList(currentPage + "", target_id, type, handler);
+        DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
     }
 
     private Handler handler = new Handler() {
@@ -146,7 +146,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         reply_user_id = null;
                         editText.setText("");
                         currentPage = 1;
-                        DataPaser.commentsList(currentPage + "", target_id, type, handler);
+                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
                     } else {
                         dialog.dismiss();
                     }

@@ -10,6 +10,6 @@ public class RandomImg {
     public int x;//坐标
     public int y;
     public int radius;//半径
-    public int type;//类型  1.小 2.中 3.大
+    public String type;//类型  1.小 2.中 3.大
 
 }
