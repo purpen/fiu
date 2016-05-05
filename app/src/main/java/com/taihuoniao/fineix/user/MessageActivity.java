@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -42,6 +43,7 @@ public class MessageActivity extends BaseActivity{
     CustomItemLayout item_to_comment;
     @Bind(R.id.item_notice)
     CustomItemLayout item_notice;
+    private WaittingDialog dialog;
     private User user;
     public MessageActivity(){
         super(R.layout.activity_message);
@@ -50,6 +52,7 @@ public class MessageActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"消息");
+        dialog=new WaittingDialog(this);
         item_push_setting.setTVStyle(R.mipmap.sys_msg,"系统通知", R.color.color_333);
         item_clear_cache.setTVStyle(R.mipmap.icon_comment,"评论", R.color.color_333);
         item_to_comment.setTVStyle(R.mipmap.private_msg,"私信",R.color.color_333);
@@ -79,9 +82,11 @@ public class MessageActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
+        dialog.show();
         ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -102,6 +107,8 @@ public class MessageActivity extends BaseActivity{
 
             @Override
             public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
                 Util.makeToast(s);
             }

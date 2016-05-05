@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
  * @author lilin
  * created at 2016/5/4 19:24
  */
-public class UserCommentsAdapter extends CommonBaseAdapter{
+public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentItem>{
     private ImageLoader imageLoader;
     public UserCommentsAdapter(List list, Activity activity){
         super(list,activity);
@@ -29,7 +30,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        final FocusFansItem item = list.get(position);
+        final CommentsBean.CommentItem item = list.get(position);
         ViewHolder holder=null;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_user_comments,null);
@@ -39,11 +40,12 @@ public class UserCommentsAdapter extends CommonBaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
 
-//        imageLoader.displayImage(item.follows.avatar_url,holder.riv,options);
-//        holder.tv_name.setText(item.follows.nickname);
-//        holder.tv_desc.setText(item.follows.summary);
+        imageLoader.displayImage(item.getUser().getSmall_avatar_url(),holder.riv,options);
+        holder.tv_name.setText(item.getUser().getNickname());
+        holder.tv_desc.setText(item.getContent());
+        holder.tv_time.setText(item.getCreated_at());
 //         imageLoader.displayImage(item.follows.avatar_url,holder.riv,options);
-        return null;
+        return convertView;
     }
 
     static class ViewHolder {
@@ -53,6 +55,8 @@ public class UserCommentsAdapter extends CommonBaseAdapter{
         TextView tv_name;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
+        @Bind(R.id.tv_time)
+        TextView tv_time;
         @Bind(R.id.btn)
         Button btn;
         public ViewHolder(View view) {

@@ -1013,7 +1013,7 @@ public class DataPaser {
     //评论
     //列表
     public static void commentsList(String page, String size, String target_id, String type, final Handler handler) {
-        ClientDiscoverAPI.commentsList(page, size, target_id, type, new RequestCallBack<String>() {
+        ClientDiscoverAPI.commentsList(page, size, target_id, type,null,new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);

@@ -305,12 +305,13 @@ public class ClientDiscoverAPI {
 
     //评论
     //列表
-    public static void commentsList(String page, String size, String target_id, String type, RequestCallBack<String> callBack) {
+    public static void commentsList(String page, String size, String target_id,String target_user_id,String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.comments_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("target_user_id",target_user_id);
         params.addQueryStringParameter("type", type);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
