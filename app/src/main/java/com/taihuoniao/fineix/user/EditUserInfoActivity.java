@@ -115,18 +115,18 @@ public class EditUserInfoActivity extends BaseActivity {
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
         custom_user_avatar.setHeight(R.dimen.dp80);
         custom_user_avatar.setUserAvatar(null);
-        custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333, false);
-        custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333, false);
-        custom_signature.setTVStyle(0, R.string.user_signature, R.color.color_333, false);
+        custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333);
+        custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333);
+        custom_signature.setTVStyle(0, R.string.user_signature, R.color.color_333);
         custom_signature.setTvArrowLeftStyle(true, R.string.input_signature);
-        custom_user_sex.setTVStyle(0, R.string.user_sex, R.color.color_333, false);
+        custom_user_sex.setTVStyle(0, R.string.user_sex, R.color.color_333);
         custom_user_sex.setTvArrowLeftStyle(true, R.string.select_gender);
-        custom_user_birthday.setTVStyle(0, R.string.user_birthday, R.color.color_333, false);
+        custom_user_birthday.setTVStyle(0, R.string.user_birthday, R.color.color_333);
         custom_user_birthday.setTvArrowLeftStyle(true, R.string.select_birth);
-        custom_area.setTVStyle(0, R.string.user_area, R.color.color_333, false);
+        custom_area.setTVStyle(0, R.string.user_area, R.color.color_333);
         custom_area.setTvArrowLeftStyle(true, R.string.select_city);
-        custom_code.setTVStyle(0, R.string.user_code, R.color.color_333, false);
-        custom_auth.setTVStyle(0, R.string.user_auth, R.color.color_333, false);
+        custom_code.setTVStyle(0, R.string.user_code, R.color.color_333);
+        custom_auth.setTVStyle(0, R.string.user_auth, R.color.color_333);
     }
 
     @OnClick({R.id.custom_nick_name, R.id.custom_user_avatar,R.id.custom_area,R.id.custom_signature, R.id.custom_auth, R.id.custom_user_sex, R.id.custom_user_birthday, R.id.custom_code})

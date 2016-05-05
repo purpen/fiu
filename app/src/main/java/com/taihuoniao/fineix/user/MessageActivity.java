@@ -1,11 +1,25 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
@@ -26,12 +40,9 @@ public class MessageActivity extends BaseActivity{
     CustomItemLayout item_clear_cache;
     @Bind(R.id.item_to_comment)
     CustomItemLayout item_to_comment;
-//    @Bind(R.id.item_welcome_page)
-//    CustomItemLayout item_welcome_page;
-    @Bind(R.id.item_feedback)
-    CustomItemLayout item_feedback;
-    @Bind(R.id.item_about_us)
-    CustomItemLayout item_about_us;
+    @Bind(R.id.item_notice)
+    CustomItemLayout item_notice;
+    private User user;
     public MessageActivity(){
         super(R.layout.activity_message);
     }
@@ -39,15 +50,13 @@ public class MessageActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"消息");
-        item_push_setting.setTVStyle(R.mipmap.sys_msg,"系统通知", R.color.color_333, false);
-        item_clear_cache.setTVStyle(R.mipmap.icon_comment,"评论", R.color.color_333, false);
-        item_to_comment.setTVStyle(R.mipmap.private_msg,"私信",R.color.color_333, false);
-//        item_welcome_page.setTVStyle(R.mipmap.icon_mention,"提到我的",R.color.color_333, false);
-        item_feedback.setTVStyle(R.mipmap.icon_follow,"关注我的", R.color.color_333, false);
-        item_about_us.setTVStyle(R.mipmap.icon_good,"收到的赞", R.color.color_333, false);
+        item_push_setting.setTVStyle(R.mipmap.sys_msg,"系统通知", R.color.color_333);
+        item_clear_cache.setTVStyle(R.mipmap.icon_comment,"评论", R.color.color_333);
+        item_to_comment.setTVStyle(R.mipmap.private_msg,"私信",R.color.color_333);
+        item_notice.setTVStyle(R.mipmap.notice,"提醒", R.color.color_333);
     }
 
-    @OnClick({R.id.item_push_setting,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_about_us,R.id.item_feedback})
+    @OnClick({R.id.item_push_setting,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_notice})
     void onClick(View v){
         Intent intent=null;
         switch (v.getId()){
@@ -55,19 +64,79 @@ public class MessageActivity extends BaseActivity{
                 Util.makeToast("系统通知");
                 break;
             case R.id.item_clear_cache: //评论列表
-                startActivity(new Intent(activity, CommentListActivity.class));
+                startActivity(new Intent(activity, UserCommentsActivity.class));
                 break;
             case R.id.item_to_comment:
                 Util.makeToast("私信");
                 break;
-            case R.id.item_about_us: //收到的赞
-                Util.makeToast("收到的赞");
-                break;
-            case R.id.item_feedback: //关注我的
+            case R.id.item_notice: //关注我的
                 intent= new Intent(activity, FocusFansActivity.class);
                 intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void requestNet() {
+        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                LogUtil.e("result", responseInfo.result);
+                if (responseInfo == null) {
+                    return;
+                }
+                if (TextUtils.isEmpty(responseInfo.result)) {
+                    return;
+                }
+
+                try {
+                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    });
+                } catch (JsonSyntaxException e) {
+                    LogUtil.e(TAG, e.getLocalizedMessage());
+                    Util.makeToast("对不起,数据异常");
+                }
+                refreshUI();
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                LogUtil.e(TAG, s);
+                Util.makeToast(s);
+            }
+        });
+    }
+
+    @Override
+    protected void refreshUI() {
+        if (user == null) {
+            return;
+        }
+        item_push_setting.setTipsNum(user.counter.fiu_notice_count); //系统通知
+        item_clear_cache.setTipsNum(user.counter.fiu_comment_count); //评论
+        item_to_comment.setTipsNum(user.counter.message_count);   //私信
+//        item_notice.setTipsNum();
+//        if (TextUtils.isEmpty(user.realname)) {
+//            tv_real.setVisibility(View.GONE);
+//        } else {
+//            tv_real.setText(user.realname);
+//        }
+//
+//        if (TextUtils.isEmpty(user.nickname)) {
+//            tv_nick.setVisibility(View.GONE);
+//        } else {
+//            tv_nick.setText(user.nickname);
+//        }
+//
+//        if (TextUtils.isEmpty(user.rank_title)) {
+//            tv_rank.setVisibility(View.GONE);
+//        } else {
+//            tv_rank.setText(user.rank_title);
+//        }
+//        tv_qj.setText(String.valueOf(user.scene_count));
+//        tv_cj.setText(String.valueOf(user.sight_count));
+//        tv_focus.setText(String.valueOf(user.follow_count));
+//        tv_fans.setText(String.valueOf(user.fans_count));
     }
 }

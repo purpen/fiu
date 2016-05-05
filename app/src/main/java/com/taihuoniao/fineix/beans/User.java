@@ -52,7 +52,9 @@ public class User implements Serializable {
     public Counter counter;
     public String head_pic_url;
     public class Counter implements Serializable{
+        public int notice_count;
         public int message_count;
+        public int comment_count;
         public int fans_count;
         public int fiu_comment_count;
         public int fiu_notice_count;

@@ -69,7 +69,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         listView = pullToRefreshLayout.getRefreshableView();
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
-        dialog = new WaittingDialog(CommentListActivity.this);
+        dialog = new WaittingDialog(this);
     }
 
     @Override
@@ -78,6 +78,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         if (target_id == null || type == null) {
             Toast.makeText(CommentListActivity.this, "数据错误", Toast.LENGTH_SHORT).show();
+            if (dialog!=null){
+                if (dialog.isShowing()){
+                    dialog.dismiss();
+                }
+            }
             finish();
         }
         titleLayout.setBackgroundResource(R.color.white);

@@ -25,18 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <!--<com.taihuoniao.fineix.view.CustomItemLayout-->
-        <!--android:id="@+id/item_welcome_page"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--/>-->
     <com.taihuoniao.fineix.view.CustomItemLayout
-        android:id="@+id/item_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <com.taihuoniao.fineix.view.CustomItemLayout
-        android:id="@+id/item_about_us"
+        android:id="@+id/item_notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

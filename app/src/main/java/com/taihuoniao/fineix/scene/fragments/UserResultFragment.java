@@ -180,9 +180,9 @@ public class UserResultFragment extends MyBaseFragment {
             PersonalCenterGVAdapter adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);
         }
-        item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333, false);
-        item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333, false);
-        item_partner.setTVStyle(0, R.string.partners, R.color.color_333, false);
+        item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
+        item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
+        item_partner.setTVStyle(0, R.string.partners, R.color.color_333);
         for (ImgTxtItem item : horizentalList) {
             View view = Util.inflateView(activity, R.layout.horizontal_scroll_view_layout, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv);

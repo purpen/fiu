@@ -48,13 +48,13 @@ public class SystemSettingsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"系统设置");
-        item_push_setting.setTVStyle(0,"推送设置", R.color.color_333, false);
-        item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333, false);
-        item_to_comment.setTVStyle(0,"去评价", R.color.color_333, false);
-        item_welcome_page.setTVStyle(0,"欢迎界面", R.color.color_333, false);
-        item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333, false);
-        item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333, false);
-        item_share.setTVStyle(0,"分享给好友", R.color.color_333, false);
+        item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
+        item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
+        item_to_comment.setTVStyle(0,"去评价", R.color.color_333);
+        item_welcome_page.setTVStyle(0,"欢迎界面", R.color.color_333);
+        item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
+        item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
+        item_share.setTVStyle(0,"分享给好友", R.color.color_333);
         setCacheSize();
     }
 

@@ -151,29 +151,32 @@ public class CustomItemLayout extends RelativeLayout {
         return et_right.getText().toString();
     }
 
-    public void setTVStyle(int drawableLeft,int strId,int txtColor,boolean isNumShow){
+    public void setTVStyle(int drawableLeft,int strId,int txtColor){
         tv_content.setText(strId);
         tv_content.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0);
         tv_content.setTextColor(getResources().getColor(txtColor));
-        if (isNumShow){
-            tv_tip_num.setVisibility(VISIBLE);
-        }else {
-            tv_tip_num.setVisibility(GONE);
-        }
     }
-    public void setTVStyle(int drawableRight,String str,int txtColor){
-        tv_content.setText(str);
-        tv_content.setCompoundDrawablesWithIntrinsicBounds(0, 0,drawableRight, 0);
-        tv_content.setTextColor(getResources().getColor(txtColor));
-    }
-    public void setTVStyle(int drawableLeft,String str,int txtColor,boolean isNumShow){
+//    public void setTVStyle(int drawableRight,String str,int txtColor){
+//        tv_content.setText(str);
+//        tv_content.setCompoundDrawablesWithIntrinsicBounds(0, 0,drawableRight, 0);
+//        tv_content.setTextColor(getResources().getColor(txtColor));
+//    }
+
+
+    public void setTVStyle(int drawableLeft,String str,int txtColor){
         tv_content.setText(str);
         tv_content.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0);
         tv_content.setTextColor(getResources().getColor(txtColor));
-        if (isNumShow){
+    }
+
+    public void setTipsNum(int num){
+        if (num>0){
             tv_tip_num.setVisibility(VISIBLE);
-        }else {
-            tv_tip_num.setVisibility(GONE);
+            if (num<=99){
+                tv_tip_num.setText(String.valueOf(num));
+            }else {
+                tv_tip_num.setText("+99");
+            }
         }
     }
 
