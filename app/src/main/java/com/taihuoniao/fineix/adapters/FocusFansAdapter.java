@@ -38,8 +38,8 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
     private String pageType;
     private static final int TYPE1=1; //单向关注
     private static final int TYPE2=2; //互向关注
-    private static final int NOT_LOVE=0; //别人的粉丝列表和LoginInfo.getUserId()的关系
-    private static final int LOVE=1;
+    public static final int NOT_LOVE=0; //别人的粉丝列表和LoginInfo.getUserId()的关系
+    public static final int LOVE=1;
     private long userId;
     public FocusFansAdapter(List<FocusFansItem> list, Activity activity,String pageType,long userId) {
         super(list, activity);

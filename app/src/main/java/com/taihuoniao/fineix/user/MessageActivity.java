@@ -64,7 +64,7 @@ public class MessageActivity extends BaseActivity{
         Intent intent=null;
         switch (v.getId()){
             case R.id.item_push_setting:
-                Util.makeToast("系统通知");
+                startActivity(new Intent(activity, SystemNoticeActivity.class));
                 break;
             case R.id.item_clear_cache: //评论列表
                 startActivity(new Intent(activity, UserCommentsActivity.class));
@@ -98,11 +98,11 @@ public class MessageActivity extends BaseActivity{
                 try {
                     user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                     });
+                    refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
                 }
-                refreshUI();
             }
 
             @Override

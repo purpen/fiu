@@ -115,4 +115,7 @@ public class NetworkConstance {
 
     //上传个人中心背景
     public static final String UPLOAD_BG_URL = BASE_URL + "/my/add_head_pic";
+
+    //获取系统通知
+    public static final String SYSTEM_NOTICE = BASE_URL + "/notice";
 }

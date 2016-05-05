@@ -35,6 +35,7 @@ import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.ImageUtils;
@@ -355,6 +356,9 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 1:
                         startActivity(new Intent(activity, MessageActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(activity, OrderQJActivity.class));
                         break;
                     case 4:
                         Intent intent = new Intent(getActivity(), HasLoveActivity.class);

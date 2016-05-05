@@ -256,7 +256,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     };
 
     @Override
-    protected void refreshUI(ArrayList<String> list) {
+    protected void refreshUI(List<String> list) {
         if (list == null || list.size() == 0) {
             return;
         }

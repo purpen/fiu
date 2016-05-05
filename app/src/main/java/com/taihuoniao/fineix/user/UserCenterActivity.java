@@ -32,6 +32,7 @@ import com.mob.tools.network.BufferedByteArrayOutputStream;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CropOptionAdapter;
+import com.taihuoniao.fineix.adapters.FocusFansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
 import com.taihuoniao.fineix.beans.ImgUploadBean;
@@ -174,19 +175,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         addFragment2List(userFansFragment);
         Class clazz = (Class) savedInstanceState.getSerializable(getClass().getSimpleName());
         if (clazz == null) return;
-        LogUtil.e(TAG, clazz.getSimpleName() + "///////////");
         switchFragmentandImg(clazz);
     }
 
 
     private void addFragment2List(Fragment fragment) {
         if (fragment == null) {
-            LogUtil.e(TAG, "addedFragment==null");
             return;
         }
 
         if (fragments.contains(fragment)) {
-            LogUtil.e(TAG, "addedFragment  contains");
             return;
         }
 
@@ -209,7 +207,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * @throws Exception
      */
     private void switchFragment(Class clazz) throws Exception {
-        LogUtil.e(TAG, "<<<<<<<<" + clazz.getSimpleName());
         Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
         if (fragment == null) {
             fragment = (Fragment) clazz.newInstance();
@@ -219,7 +216,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
         addFragment2List(fragment);
         showFragment = fragment;
-        LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
     private void resetUI() {
@@ -237,7 +233,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        LogUtil.e(TAG, "onSaveInstanceState");
         int size = fragments.size();
         if (fragments != null && size > 0) {
             for (int i = 0; i < size; i++) {
@@ -296,9 +291,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "refreshUI===" + user._id);
-        if (user.is_love==0){
+        if (user.is_love==FocusFansAdapter.NOT_LOVE){
             bt_focus.setText("关注");
-        }else {
+        }else{
             bt_focus.setText("已关注");
         }
         if (TextUtils.isEmpty(user.nickname)){
@@ -343,27 +338,61 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.iv_right:
                 startActivity(new Intent(activity, EditUserInfoActivity.class));
                 break;
-            case R.id.bt_focus://TODO 换成对应用户的Id
-                ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (responseInfo == null) return;
-                        if (TextUtils.isEmpty(responseInfo.result)) return;
+            case R.id.bt_focus:
+                bt_focus.setEnabled(false);
+                if (user.is_love == FocusFansAdapter.NOT_LOVE){
+                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            bt_focus.setEnabled(true);
+                            if (responseInfo == null) return;
+                            if (TextUtils.isEmpty(responseInfo.result)) return;
+                            LogUtil.e("focusOperate",responseInfo.result);
+                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                user.is_love=FocusFansAdapter.LOVE;
+                                bt_focus.setText("已关注");
+                                Util.makeToast(response.getMessage());
+                                return;
+                            }
 
-                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                        if (response.isSuccess()) {
                             Util.makeToast(response.getMessage());
-                            return;
                         }
 
-                        Util.makeToast(response.getMessage());
-                    }
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            bt_focus.setEnabled(true);
+                            Util.makeToast(s);
+                        }
+                    });
+                }else {
+                    ClientDiscoverAPI.cancelFocusOperate(userId+"", new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            bt_focus.setEnabled(true);
+                            PopupWindowUtil.dismiss();
+                            if (responseInfo==null) return;
+                            if (TextUtils.isEmpty(responseInfo.result)) return;
+                            LogUtil.e("cancelFocusOperate",responseInfo.result);
+                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (response.isSuccess()){
+                                user.is_love=FocusFansAdapter.NOT_LOVE;
+                                bt_focus.setText("关注");
+                                Util.makeToast(response.getMessage());
+                                return;
+                            }
 
-                    @Override
-                    public void onFailure(HttpException e, String s) {
-                        Util.makeToast(s);
-                    }
-                });
+                            Util.makeToast(response.getMessage());
+                        }
+
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            bt_focus.setEnabled(true);
+                            PopupWindowUtil.dismiss();
+                            Util.makeToast(s);
+                        }
+                    });
+                }
                 break;
             case R.id.bt_msg:
                 Util.makeToast("私信操作");

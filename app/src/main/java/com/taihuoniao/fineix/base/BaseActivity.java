@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.taihuoniao.fineix.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
@@ -71,7 +72,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     protected void refreshUI() {
 
     }
-    protected void refreshUI(ArrayList<T> list) {
+    protected void refreshUI(List<T> list) {
 
     }
 }

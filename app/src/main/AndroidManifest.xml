@@ -106,6 +106,17 @@
             />
 
         <activity
+            android:name=".user.OrderQJActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+        <activity
+            android:name=".user.SystemNoticeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
+
+        <activity
             android:name=".user.OptRegisterLoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

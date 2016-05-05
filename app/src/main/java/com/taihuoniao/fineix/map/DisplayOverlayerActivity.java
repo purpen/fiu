@@ -37,6 +37,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -170,7 +171,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         });
     }
 
-    private void addOverlayers(final ArrayList<QingJingItem> list) {
+    private void addOverlayers(final List<QingJingItem> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
         LatLng ll = null;
         MarkerOptions option = null;
@@ -219,7 +220,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     }
 
     @Override
-    protected void refreshUI(ArrayList<QingJingItem> list) {
+    protected void refreshUI(List<QingJingItem> list) {
         if (list == null) {
 //            Util.makeToast(activity, "数据异常");
             return;

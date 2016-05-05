@@ -425,8 +425,8 @@ public class EditUserInfoActivity extends BaseActivity {
             if (!TextUtils.isEmpty(user.summary)) {
                 custom_signature.setTvArrowLeftStyle(true, user.summary, R.color.color_333);
             }
-            if (!TextUtils.isEmpty(user.address)) {
-                custom_area.setTvArrowLeftStyle(true, user.address, R.color.color_333);
+            if (user.areas.size()>0) {
+                custom_area.setTvArrowLeftStyle(true,String.format("%s %s",user.areas.get(0),user.areas.get(1)), R.color.color_333);
             }
 
             switch (user.sex) {

@@ -577,5 +577,11 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
     }
 
+    public static void getSystemNotice(String page,String pageSize,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("page",page);
+        params.addBodyParameter("size",pageSize);
+        MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
+    }
 
 }

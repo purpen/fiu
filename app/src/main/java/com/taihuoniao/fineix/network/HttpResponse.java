@@ -1,9 +1,11 @@
 package com.taihuoniao.fineix.network;
 
+import java.io.Serializable;
+
 /**
  * Created by Amy on 2016/4/5.
  */
-public class HttpResponse<T> {
+public class HttpResponse<T> implements Serializable{
     private boolean success;
     private boolean is_error;
     private String status;

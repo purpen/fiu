@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
  * created at 2016/4/14 15:04
  */
 public class NearByQJAdapter extends CommonBaseAdapter<QingJingItem>{
-    public NearByQJAdapter(Activity activity, ArrayList<QingJingItem> list) {
+    public NearByQJAdapter(Activity activity, List<QingJingItem> list) {
         super(list,activity);
     }
 
