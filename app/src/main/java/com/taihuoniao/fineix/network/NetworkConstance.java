@@ -122,4 +122,13 @@ public class NetworkConstance {
 
     //获取系统通知
     public static final String SYSTEM_NOTICE = BASE_URL + "/notice";
+
+    //获取消息记录
+    public static final String MESSAGE_RECORD = BASE_URL + "/message";
+
+    //发送消息
+    public static final String SEND_MESSAGE = BASE_URL + "/message/ajax_message";
+
+    //消息详情
+    public static final String MESSAGE_DETAIL = BASE_URL + "/message/ajax_message";
 }

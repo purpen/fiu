@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +17,7 @@ import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -47,6 +51,18 @@ public class UserCommentsActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"评论");
         dialog=new WaittingDialog(this);
+    }
+
+    @Override
+    protected void installListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(activity, SceneDetailActivity.class);
+                intent.putExtra("id",list.get(i).target_id);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -42,6 +42,7 @@
                 android:singleLine="true"
                 android:text="boc747"
                 android:textColor="@android:color/white"
+                android:visibility="gone"
                 android:textSize="@dimen/sp14" />
 
             <ImageButton

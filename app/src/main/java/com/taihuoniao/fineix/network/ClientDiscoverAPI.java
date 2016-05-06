@@ -638,11 +638,57 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
     }
 
+    /**
+     * 获取系统通知
+     * @param page
+     * @param pageSize
+     * @param callBack
+     */
     public static void getSystemNotice(String page,String pageSize,RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("page",page);
         params.addBodyParameter("size",pageSize);
         MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
+    }
+
+
+    /**
+     * 获取聊天记录
+     * @param page
+     * @param pageSize
+     * @param type
+     * @param callBack
+     */
+    public static void getPrivateMessageList(String page,String pageSize,String type,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("page",page);
+        params.addBodyParameter("size",pageSize);
+        params.addBodyParameter("type",type);
+        MD5Utils.sign(params, NetworkConstance.MESSAGE_RECORD, callBack, false);
+    }
+
+    /**
+     * 发送消息
+     * @param to_user_id
+     * @param content
+     * @param callBack
+     */
+    public static void sendMessage(String to_user_id,String content,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("to_user_id",to_user_id);
+        params.addBodyParameter("content",content);
+        MD5Utils.sign(params, NetworkConstance.SEND_MESSAGE, callBack, false);
+    }
+
+    /**
+     * 私信详情
+     * @param to_user_id
+     * @param callBack
+     */
+    public static void messageDetail(String to_user_id,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("to_user_id",to_user_id);
+        MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
     }
 
 }

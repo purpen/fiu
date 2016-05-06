@@ -10,7 +10,5 @@
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerHeight="@dimen/dp05"
-        />
+        android:layout_height="wrap_content" />
 </LinearLayout>

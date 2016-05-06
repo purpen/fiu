@@ -33,10 +33,12 @@ public class CommentsBean extends NetBean {
     public static class CommentItem {
         private String _id;
         private String content;
+        public long user_id;
+        public String target_id;
         private String created_at;
         private User user;
         private String reply_user_nickname;
-
+        public String target_small_cover_url;
         public String getReply_user_nickname() {
             return reply_user_nickname;
         }

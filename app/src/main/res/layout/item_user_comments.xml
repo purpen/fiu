@@ -69,7 +69,5 @@
         android:textSize="@dimen/sp12"
         android:textColor="@color/color_333"
         android:src="@mipmap/ic_launcher"
-        android:text="关注"
-        android:visibility="gone"
         />
 </RelativeLayout>

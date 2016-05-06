@@ -299,8 +299,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }else{
             bt_focus.setText("已关注");
         }
-        if (TextUtils.isEmpty(user.nickname)){
-            tv_title.setText(user.nickname);
+        if (!TextUtils.isEmpty(user.nickname)){
+            if (LoginInfo.getUserId()!=userId){
+                tv_title.setVisibility(View.VISIBLE);
+                tv_title.setText(user.nickname);
+            }else {
+                tv_title.setVisibility(View.GONE);
+            }
         }
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv, options);
@@ -398,7 +403,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.bt_msg:
-                Util.makeToast("私信操作");
+                intent=new Intent(activity,PrivateMessageActivity.class);
+                intent.putExtra(UserCenterActivity.class.getSimpleName(),user);
+                startActivity(intent);
                 break;
             case R.id.ll_qj:
                 switchFragmentandImg(UserQJFragment.class);
@@ -422,6 +429,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
 
             case R.id.ll_box:
+                if (LoginInfo.getUserId()!=userId) return;
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar));
                 break;
         }

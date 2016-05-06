@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
+import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -44,7 +47,15 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         holder.tv_name.setText(item.getUser().getNickname());
         holder.tv_desc.setText(item.getContent());
         holder.tv_time.setText(item.getCreated_at());
-//         imageLoader.displayImage(item.follows.avatar_url,holder.riv,options);
+        imageLoader.displayImage(item.target_small_cover_url,holder.iv,options);
+        holder.riv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(activity, UserCenterActivity.class);
+                intent.putExtra(FocusFansActivity.USER_ID_EXTRA,item.user_id);
+                activity.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
@@ -57,8 +68,8 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         TextView tv_desc;
         @Bind(R.id.tv_time)
         TextView tv_time;
-        @Bind(R.id.btn)
-        Button btn;
+        @Bind(R.id.iv)
+        ImageView iv;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
