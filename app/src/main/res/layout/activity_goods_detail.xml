@@ -51,6 +51,8 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/cart_num_bg"
                 android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 android:visibility="gone"/>
         </RelativeLayout>
 
@@ -136,6 +138,7 @@
                     android:background="#e4e4e4"/>
 
                 <RelativeLayout
+                    android:id="@+id/activity_goods_detail_brand_relative"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="12dp"
@@ -150,29 +153,40 @@
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_launcher"/>
 
+                    <ImageView
+                        android:id="@+id/arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/arrow_right_gray"/>
+
                     <TextView
                         android:id="@+id/activity_goods_detail_brand_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="26dp"
+                        android:layout_toLeftOf="@id/arrow"
                         android:layout_toRightOf="@id/activity_goods_detail_brand_img"
                         android:singleLine="true"
                         android:text="colorstar"
                         android:textColor="#666666"
                         android:textSize="12sp"/>
 
-                    <TextView
-                        android:id="@+id/activity_goods_detail_brand_des"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/activity_goods_detail_brand_title"
-                        android:layout_marginLeft="26dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_toRightOf="@id/activity_goods_detail_brand_img"
-                        android:lineSpacingExtra="4dp"
-                        android:text="啊收到了饭卡上露脸的看飞机阿拉山口大家的方法两款手机的方法理论考试的代理费卡死了打开房间啊；啦开始觉得阿三；了打开附件；啊势力对抗肌肤；拉萨扩大解放；拉开松井大辅；卢卡斯京东方；卢卡斯吉多；了饭卡；谁的离开房间啊势力对抗肌肤；阿里山可见度发；拉开松井大辅；绿卡技术的；了饭卡；势力对抗肌肤；啦空手道解放；垃圾是的；分厘卡是；灯笼裤飞机阿拉山口低价房；拉开松井大辅；卢卡斯的；了饭卡；顺利打开就发；了深刻的飞机啊；螺丝扣搭街坊；两节课；"
-                        android:textColor="#333333"
-                        android:textSize="10sp"/>
+                    <!--<TextView-->
+                    <!--android:id="@+id/activity_goods_detail_brand_des"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/activity_goods_detail_brand_title"-->
+                    <!--android:layout_marginLeft="26dp"-->
+                    <!--android:layout_marginTop="12dp"-->
+                    <!--android:layout_toRightOf="@id/activity_goods_detail_brand_img"-->
+                    <!--android:lineSpacingExtra="4dp"-->
+                    <!--android:text="啊收到了饭卡上露脸的看飞机阿拉山口大家的方法两款手机的方法理论考试的代理费卡死了打开房间啊；啦开始觉得阿三；了打开附件；啊势力对抗肌肤；拉萨扩大解放；拉开松井大辅；卢卡斯京东方；卢卡斯吉多；了饭卡；谁的离开房间啊势力对抗肌肤；阿里山可见度发；拉开松井大辅；绿卡技术的；了饭卡；势力对抗肌肤；啦空手道解放；垃圾是的；分厘卡是；灯笼裤飞机阿拉山口低价房；拉开松井大辅；卢卡斯的；了饭卡；顺利打开就发；了深刻的飞机啊；螺丝扣搭街坊；两节课；"-->
+                    <!--android:textColor="#333333"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:visibility="gone"/>-->
                 </RelativeLayout>
             </LinearLayout>
 

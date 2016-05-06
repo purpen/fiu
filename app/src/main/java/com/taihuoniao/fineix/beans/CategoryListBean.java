@@ -11,6 +11,15 @@ public class CategoryListBean implements Serializable {
     private String name;
     private String app_cover_s_url;
     private String tag_id;
+    private String app_cover_url;
+
+    public String getApp_cover_url() {
+        return app_cover_url;
+    }
+
+    public void setApp_cover_url(String app_cover_url) {
+        this.app_cover_url = app_cover_url;
+    }
 
     public String getTag_id() {
         return tag_id;

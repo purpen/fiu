@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_white"
-                android:paddingBottom="24dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="26dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/background_white"
+              android:orientation="vertical"
+              android:paddingBottom="24dp"
+              android:paddingLeft="20dp"
+              android:paddingRight="20dp"
+              android:paddingTop="26dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +28,9 @@
             android:layout_below="@id/pop_find_img"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="29dp"
+            android:paddingRight="29dp">
 
             <EditText
                 android:id="@+id/pop_find_name"
@@ -74,9 +77,9 @@
         android:id="@+id/pop_find_confirm"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="29dp"
         android:background="@drawable/yellow_corner_white"
         android:text="@string/confirm_add"
         android:textColor="@color/yellow_bd8913"
         android:textSize="16sp"/>
-</RelativeLayout>
+</LinearLayout>

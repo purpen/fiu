@@ -117,7 +117,7 @@ public class LoveSceneBean extends NetBean {
     public static class User {
         private String nickname;
         private String avatar_url;
-        private String user_rank;
+        private String is_expert;
         private String summary;
 
         public String getAvatar_ur() {
@@ -144,12 +144,16 @@ public class LoveSceneBean extends NetBean {
             this.summary = summary;
         }
 
-        public String getUser_rank() {
-            return user_rank;
+        public String getIs_expert() {
+            return is_expert;
         }
 
-        public void setUser_rank(String user_rank) {
-            this.user_rank = user_rank;
+        public String getAvatar_url() {
+            return avatar_url;
+        }
+
+        public void setIs_expert(String is_expert) {
+            this.is_expert = is_expert;
         }
     }
 }

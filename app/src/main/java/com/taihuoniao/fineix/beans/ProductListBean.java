@@ -14,8 +14,17 @@ public class ProductListBean implements Serializable {
     private String market_price;
     private String love_count;
     private String cover_url;
+    private String attrbute;
     private List<String> category_tags;
-    public ArrayList<String> banner_asset;
+    public ArrayList<String> banner_asset = new ArrayList<>();
+
+    public String getAttrbute() {
+        return attrbute;
+    }
+
+    public void setAttrbute(String attrbute) {
+        this.attrbute = attrbute;
+    }
 
     public List<String> getCategory_tags() {
         return category_tags;

@@ -93,11 +93,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
-            if (list.get(position).getUser_info().getSummary().equals("null")) {
-                holder.userInfo.setText(list.get(position).getUser_info().getUser_rank());
-            } else {
-                holder.userInfo.setText(String.format("%s | %s", list.get(position).getUser_info().getUser_rank(), list.get(position).getUser_info().getSummary()));
-            }
+            isSpertAndSummary(holder.userInfo, list.get(position).getUser_info().getIs_expert(), list.get(position).getUser_info().getSummary());
             holder.viewCount.setText(list.get(position).getView_count());
             holder.loveCount.setText(list.get(position).getLove_count());
             holder.sceneTitle.setText(list.get(position).getTitle());
@@ -109,11 +105,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
-            if (loveList.get(position).getUser_info().getSummary() == null || loveList.get(position).getUser_info().getSummary().equals("null")) {
-                holder.userInfo.setText(loveList.get(position).getUser_info().getUser_rank());
-            } else {
-                holder.userInfo.setText(String.format("%s | %s", loveList.get(position).getUser_info().getUser_rank(), loveList.get(position).getUser_info().getSummary()));
-            }
+            isSpertAndSummary(holder.userInfo, loveList.get(position).getUser_info().getIs_expert(), loveList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(loveList.get(position).getView_count());
             holder.loveCount.setText(loveList.get(position).getLove_count());
             holder.sceneTitle.setText(loveList.get(position).getTitle());
@@ -122,6 +114,18 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.time.setText(loveList.get(position).getCreated_at());
         }
         return convertView;
+    }
+
+    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
+        if ("1".equals(isSpert) && (summary == null || "null".equals(summary))) {
+            userInfo.setText("达人");
+        } else if ("1".equals(isSpert)) {
+            userInfo.setText(String.format("%s | %s", "达人", summary));
+        } else if (summary == null || "null".equals(summary)) {
+            userInfo.setText("");
+        } else {
+            userInfo.setText(summary);
+        }
     }
 
     static class ViewHolder {

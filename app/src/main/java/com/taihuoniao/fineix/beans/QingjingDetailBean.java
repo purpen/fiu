@@ -135,14 +135,14 @@ public class QingjingDetailBean extends NetBean {
         private String nickname;
         private String avatar_url;
         private String summary;
-        private String user_rank;
+        private String is_expert;
 
-        public String getUser_rank() {
-            return user_rank;
+        public String getIs_expert() {
+            return is_expert;
         }
 
-        public void setUser_rank(String user_rank) {
-            this.user_rank = user_rank;
+        public void setIs_expert(String is_expert) {
+            this.is_expert = is_expert;
         }
 
         public String getAvatar_url() {

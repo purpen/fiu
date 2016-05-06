@@ -25,8 +25,9 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.JDDetailsBean;
-import com.taihuoniao.fineix.beans.TBDetailsBean;
+import com.taihuoniao.fineix.beans.AddProductBean;
+import com.taihuoniao.fineix.beans.JDProductBean;
+import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -46,6 +47,11 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private Button findBtn;
     private int type;//搜索到的商品属于哪个商城
     private String id;//搜索到的商品id
+    private String name;
+    private String sku_id;
+    private String market_price;
+    private String sale_price;
+    private String link;
     private WaittingDialog dialog;
     //popupwindow下的控件
     private PopupWindow popupWindow;
@@ -221,17 +227,21 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pop_find_confirm:
-                String name = nameTv.getText().toString();
-                String price = priceTv.getText().toString();
-                TagItem tagItem = new TagItem(name, price);
-                tagItem.setType(type);
-                tagItem.setId(id);
-                tagItem.setImagePath(imagePath);
-                Intent intent = new Intent();
-                intent.putExtra("tagItem", tagItem);
-                setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
-                popupWindow.dismiss();
-                finish();
+                dialog.show();
+                String attrbute = null;
+                switch (type) {
+                    case DataConstants.JINGDONG:
+                        attrbute = "4";
+                        break;
+                    case DataConstants.TAOBAO:
+                        attrbute = "2";
+                        break;
+                    case DataConstants.TIANMAO:
+                        attrbute = "3";
+                        break;
+                }
+                DataPaser.addProduct(attrbute, id, sku_id, name, market_price, sale_price, link, imagePath, handler);
+
                 break;
             case R.id.title_continue:
                 finish();
@@ -250,11 +260,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         DataPaser.getJDProductData(handler, id);
                         break;
                     case DataConstants.TAOBAO:
-                        DataPaser.getTBProductData(handler, id);
-                        break;
                     case DataConstants.TIANMAO:
                         DataPaser.getTBProductData(handler, id);
-                        dialog.dismiss();
                         break;
                     case DataConstants.YAMAXUN:
                         Toast.makeText(SearchURLActivity.this, "亚马逊搜索无接口", Toast.LENGTH_SHORT).show();
@@ -279,28 +286,60 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         public void handleMessage(Message msg) {
             dialog.dismiss();
             switch (msg.what) {
-                case DataConstants.JINGDONG:
-                    JDDetailsBean netJD = (JDDetailsBean) msg.obj;
-                    if (!netJD.isSuccess()) {
-                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
-                        return;
+                case DataConstants.ADD_PRODUCT:
+                    AddProductBean netAdd = (AddProductBean) msg.obj;
+                    if (netAdd.isSuccess()) {
+                        String name = nameTv.getText().toString();
+                        String price = priceTv.getText().toString();
+                        TagItem tagItem = new TagItem(name, price);
+                        tagItem.setType(type);
+                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
+                        tagItem.setId(netAdd.getData().getId());
+                        tagItem.setImagePath(imagePath);
+                        Intent intent = new Intent();
+                        intent.putExtra("tagItem", tagItem);
+                        setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
+                        popupWindow.dismiss();
+                        finish();
+                    } else {
+                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    imagePath = netJD.getImagePath();
-                    ImageLoader.getInstance().displayImage(imagePath, productsImg);
-                    nameTv.setText(netJD.getName());
-                    priceTv.setText(netJD.getSale_price());
-                    showPopup();
+                    break;
+                case DataConstants.JINGDONG:
+//                    dialog.dismiss();
+                    JDProductBean netJD = (JDProductBean) msg.obj;
+                    if (netJD.isSuccess()) {
+                        imagePath = netJD.getData().getListproductbase_result().get(0).getImagePath();
+                        ImageLoader.getInstance().displayImage(imagePath, productsImg);
+                        nameTv.setText(netJD.getData().getListproductbase_result().get(0).getName());
+                        priceTv.setText(netJD.getData().getListproductbase_result().get(0).getSale_price());
+                        market_price = netJD.getData().getListproductbase_result().get(0).getMarket_price();
+                        sale_price = netJD.getData().getListproductbase_result().get(0).getSale_price();
+                        link = netJD.getData().getListproductbase_result().get(0).getUrl();
+                        name = netJD.getData().getListproductbase_result().get(0).getName();
+                        sku_id = netJD.getData().getListproductbase_result().get(0).getSkuId();
+                        showPopup();
+                    } else {
+                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case DataConstants.TAOBAO:
-                    TBDetailsBean netTB = (TBDetailsBean) msg.obj;
-                    if (!netTB.isSuccess()) {
+                    TBProductBean netTB = (TBProductBean) msg.obj;
+                    if (netTB.isSuccess()) {
+                        TBProductBean.TBProductItem item = netTB.getData().getResults().getN_tbk_item().get(0);
+                        imagePath = item.getPict_url();
+                        ImageLoader.getInstance().displayImage(imagePath, productsImg);
+                        nameTv.setText(item.getTitle());
+                        priceTv.setText(item.getZk_final_price());
+                        market_price = item.getReserve_price();
+                        sale_price = item.getZk_final_price();
+                        link = item.getItem_url();
+                        name = item.getTitle();
+                        sku_id = null;
+                        showPopup();
+                    } else {
                         Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
-                        return;
                     }
-                    ImageLoader.getInstance().displayImage(netTB.getPict_url(), productsImg);
-                    nameTv.setText(netTB.getTitle());
-                    priceTv.setText(netTB.getZk_final_price());
-                    showPopup();
                     break;
                 case DataConstants.YAMAXUN:
                     break;

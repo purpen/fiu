@@ -17,14 +17,33 @@ import com.taihuoniao.fineix.utils.MD5Utils;
 public class ClientDiscoverAPI {
     //产品
     //列表
-    public static void getProductList(String category, String page, String size, String ids, String ignore_ids, RequestCallBack<String> callBack) {
+    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_productsList;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("category", category);
+        params.addQueryStringParameter("category_id", category_id);
+        params.addQueryStringParameter("brand_id", brand_id);
+        params.addQueryStringParameter("category_tag_ids", category_tag_ids);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("ids", ids);
         params.addQueryStringParameter("ignore_ids", ignore_ids);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //产品
+    //添加产品
+    public static void addProduct(String attrbute, String oid, String sku_id, String title, String market_price, String sale_price,
+                                  String link, String cover_url, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.add_product;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("attrbute", attrbute);
+        params.addQueryStringParameter("oid", oid);
+        params.addQueryStringParameter("sku_id", sku_id);
+        params.addQueryStringParameter("title", title);
+        params.addQueryStringParameter("market_price", market_price);
+        params.addQueryStringParameter("sale_price", sale_price);
+        params.addQueryStringParameter("link", link);
+        params.addQueryStringParameter("cover_url", cover_url);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -270,17 +289,25 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page + "");
         params.addQueryStringParameter("size", size + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 
+    //公共
+    //品牌详情
+    public static void brandDetail(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.brand_detail;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
     //公共
     //分类列表
-    public static void categoryList(String page, String domin, RequestCallBack<String> callBack) {
+    public static void categoryList(String page, String domain, RequestCallBack<String> callBack) {
         String url = NetworkConstance.category_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", 30 + "");
-        params.addQueryStringParameter("domin", domin);
+        params.addQueryStringParameter("domain", domain);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -466,10 +493,10 @@ public class ClientDiscoverAPI {
 
 
     //账户处的用户个人信息
-    public static void getMineInfo(String userId,RequestCallBack<String> callBack) {
+    public static void getMineInfo(String userId, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("user_id",userId);
-        LogUtil.e("getMineInfo",userId);
+        params.addQueryStringParameter("user_id", userId);
+        LogUtil.e("getMineInfo", userId);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MINE_INFO, callBack, false);
     }
 
@@ -599,12 +626,13 @@ public class ClientDiscoverAPI {
         params.addBodyParameter("type", type);
         MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
     }
+
     /**
      * 上传个人中心背景
      *
      * @param callBack
      */
-    public static void uploadBgImg(String tmp,RequestCallBack<String> callBack) {
+    public static void uploadBgImg(String tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("tmp", tmp);
         MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);

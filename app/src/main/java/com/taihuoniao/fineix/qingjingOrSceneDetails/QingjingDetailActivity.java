@@ -162,7 +162,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList,null);
+        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
         changjingListView.setOnTouchListener(this);
@@ -257,9 +257,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
                         ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
-                        userInfo.setText(netQingjingDetailBean.getData().getUser_info().getUser_rank() + " | " + netQingjingDetailBean.getData().getUser_info().getSummary());
-                        subscriptionCount.setText(netQingjingDetailBean.getData().getSubscription_count() + "人订阅");
-                        moreUser.setText(netQingjingDetailBean.getData().getSubscription_count() + "+");
+                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
+                        subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
+                        moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());
                         //添加标签
                         addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
@@ -311,6 +311,17 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
+        if ("1".equals(isSpert) && (summary == null || "null".equals(summary))) {
+            userInfo.setText("达人");
+        } else if ("1".equals(isSpert)) {
+            userInfo.setText(String.format("%s | %s", "达人", summary));
+        } else if (summary == null || "null".equals(summary)) {
+            userInfo.setText("");
+        } else {
+            userInfo.setText(summary);
+        }
+    }
 
     @Override
     protected void onDestroy() {
