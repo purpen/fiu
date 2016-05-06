@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -36,6 +33,7 @@ import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
+import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.ImageUtils;
@@ -150,7 +148,7 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initParams() {
-        dialog=new WaittingDialog(activity);
+        dialog = new WaittingDialog(activity);
     }
 
     @Override
@@ -271,7 +269,7 @@ public class MineFragment extends MyBaseFragment {
         if (TextUtils.isEmpty(user.rank_title)) {
             tv_rank.setVisibility(View.GONE);
         } else {
-            tv_rank.setText(String.format("%s | V%s",user.rank_title,user.rank_id));
+            tv_rank.setText(String.format("%s | V%s", user.rank_title, user.rank_id));
         }
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
@@ -376,6 +374,9 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 3:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
+                        break;
+                    case 7:
+                        startActivity(new Intent(activity, SelectAddressActivity.class));
                         break;
                 }
             }

@@ -57,6 +57,15 @@ public class NetworkConstance {
     public static final String label_list = BASE_URL + "/scene_tags/getlist";
     //热门标签
     public static final String hot_label_list = BASE_URL + "/scene_tags/hotlist";
+    //收货地址
+    //省市列表
+    public static final String urlString_province_cities = BASE_URL + "/shopping/fetch_areas";
+    //  获取用户收货地址列表
+    public static final String urlString_address_lists = BASE_URL + "/shopping/address";
+    //  新增收货地址(编辑)
+    public static final String urlString_new_address = BASE_URL + "/shopping/ajax_address";
+    //  删除某个收货地址
+    public static final String urlString_delete_address = BASE_URL + "/shopping/remove_address";
     //公共
     //举报
     public static final String report = BASE_URL + "/report_tip/save";

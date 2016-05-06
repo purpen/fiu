@@ -101,6 +101,22 @@ public class DataConstants {
     public static final int BRAND_DETAIL = 56;
     //用户添加商品
     public static final int ADD_PRODUCT = 55;
+    //省市列表
+    public static final int PROVINCE_LIST = 54;
+    //提交编辑的地址
+    public static final int COMMIT_NEW_ADDRESS = 53;
+    //删除收货地址
+    public static final int DELETE_ADDRESS = 52;
+    //添加新地址的resultcode
+    public static final int RESULTCODE_ADDNEWADDRESS = 51;
+    //编辑地址requestcode
+    public static final int REQUESTCODE_EDITADDRESS = 50;
+    //选择收货地址resultcode
+    public static final int RESULTCODE_ADDRESS = 49;
+    //添加新地址的requestcode
+    public static final int REQUESTCODE_ADDNEWADDRESS = 48;
+    //获取收货地址
+    public static final int GET_ADDRESS_LIST = 47;
 
 
     //SharedPreferences 存储文件名

@@ -52,6 +52,8 @@
     <string name="report">举报</string>
     <!-- 个人中心 -->
     <string name="has_love">赞过的</string>
+    <!-- 编辑地址 -->
+    <string name="delete">删除</string>
     <!-- 定位 -->
     <string name="startlocation">定位</string>
     <string name="stoplocation">停止</string>

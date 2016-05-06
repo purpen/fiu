@@ -156,7 +156,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         dialog.show();
         DataPaser.goodsDetail(id, handler);
         DataPaser.productAndScene(page + "", 8 + "", null, id, handler);
-        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null, handler);
+        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null,null,null, handler);
     }
 
 
@@ -167,6 +167,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 if (netGood == null) {
                     dialog.show();
                     DataPaser.goodsDetail(id, handler);
+                    return;
+                }
+                if (netGood.getData().getBrand() == null) {
                     return;
                 }
                 Intent intent1 = new Intent(GoodsDetailActivity.this, BrandDetailActivity.class);
@@ -213,18 +216,20 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         if (netProductBean.getList().size() <= 0) {
                             return;
                         }
-                        List<String> categoryList = netProductBean.getList().get(0).getCategory_tags();
-                        if (categoryList != null && categoryList.size() > 0) {
-                            StringBuilder tags = new StringBuilder();
-                            for (int i = 0; i < categoryList.size(); i++) {
-                                tags.append(",").append(netProductBean.getList().get(0).getCategory_tags().get(i));
+                        StringBuilder tags = new StringBuilder();
+                        for (int i = 0; i < netProductBean.getList().size(); i++) {
+                            List<String> categoryList = netProductBean.getList().get(i).getCategory_tags();
+                            if (categoryList != null && categoryList.size() > 0) {
+                                for (int j = 0; j < categoryList.size(); j++) {
+                                    tags.append(",").append(netProductBean.getList().get(i).getCategory_tags().get(j));
+                                }
+                                if (tags.length() > 0) {
+                                    tags.deleteCharAt(0);
+                                }
                             }
-                            if (tags.length() > 0) {
-                                tags.deleteCharAt(0);
-                            }
-                            currentTime++;
-                            DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(), handler);
                         }
+                        currentTime++;
+                        DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(),null,null, handler);
                     } else if (netProductBean.isSuccess() && currentTime == 2) {
                         dialog.dismiss();
                         if (recommendPage == 1) {
@@ -258,8 +263,10 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
                         name.setText(netGoodsDetailBean.getData().getTitle());
                         price.setText(String.format("¥ %s", netGoodsDetailBean.getData().getSale_price()));
-                        ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
-                        brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
+                        if (netGoodsDetailBean.getData().getBrand() != null) {
+                            ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
+                            brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
+                        }
                         productDes.setText(netGoodsDetailBean.getData().getSummary());
                         attrbute = netGoodsDetailBean.getData().getAttrbute();
                         url = netGoodsDetailBean.getData().getLink();

@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="60dp">
 
             <RelativeLayout
                 android:id="@+id/activity_scenedetails_imgrelative"
@@ -393,7 +394,37 @@
                     android:textSize="13sp"/>
             </LinearLayout>
 
+            <com.taihuoniao.fineix.view.ListViewForScrollView
+                android:id="@+id/activity_scenedetails_productlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#f0f0f0"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginLeft="16dp"
+                    android:src="@mipmap/jing_scene"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="相近的产品"
+                    android:textColor="#666666"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+            <com.taihuoniao.fineix.view.ListViewForScrollView
+                android:id="@+id/activity_scenedetails_nearproductlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
@@ -418,7 +449,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
             android:gravity="center"
-            android:text="赞"
+            android:text="点赞"
             android:textColor="@color/yellow_bd8913"
             android:textSize="14sp"/>
     </LinearLayout>

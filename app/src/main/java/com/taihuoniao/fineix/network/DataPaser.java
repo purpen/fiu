@@ -16,6 +16,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddProductBean;
+import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
@@ -25,6 +26,7 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
@@ -34,6 +36,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.QingjingSubsBean;
@@ -67,8 +70,9 @@ import java.util.List;
 public class DataPaser {
     //产品
     //列表
-    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, final Handler handler) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, new RequestCallBack<String>() {
+    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                                      String stick, String fine, final Handler handler) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<>>>", responseInfo.result);
@@ -256,10 +260,11 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<>>>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<tongyong", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
+                msg.obj = new CommonBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CommonBean>() {
@@ -462,7 +467,7 @@ public class DataPaser {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<", responseInfo.result);
+                        Log.e("<<<changjing", responseInfo.result);
                         WriteJsonToSD.writeToSD("json", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.SCENE_DETAILS;
@@ -607,8 +612,8 @@ public class DataPaser {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String scene_id, String stick, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.getSceneList(page, size, scene_id, stick, dis, lng, lat, new RequestCallBack<String>() {
+    public static void getSceneList(String page, String size, String scene_id, String sort, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<", responseInfo.result);
@@ -837,6 +842,146 @@ public class DataPaser {
         });
     }
 
+    //收货地址
+    //获取省市列表
+    public static void getProvinceList(final Handler handler) {
+        ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.PROVINCE_LIST;
+                List<ProvinceBean> list = new ArrayList<ProvinceBean>();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    JSONObject data = job.getJSONObject("data");
+                    JSONArray rows = data.getJSONArray("rows");
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject pro = rows.getJSONObject(i);
+                        ProvinceBean provinceBean = new ProvinceBean();
+                        provinceBean.set_id(pro.optString("_id"));
+                        provinceBean.setName(pro.optString("city"));
+                        JSONArray cities = pro.getJSONArray("cities");
+                        List<CityBean> cityBeanList = new ArrayList<CityBean>();
+                        for (int j = 0; j < cities.length(); j++) {
+                            JSONObject city = cities.getJSONObject(j);
+                            CityBean cityBean = new CityBean();
+                            cityBean.set_id(city.optString("_id"));
+                            cityBean.setName(city.optString("city"));
+                            cityBean.setParent_id(city.optString("parent_id"));
+                            cityBeanList.add(cityBean);
+                        }
+                        provinceBean.setCityList(cityBeanList);
+                        list.add(provinceBean);
+                    }
+                    msg.obj = list;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+
+        });
+    }
+
+    //收货地址
+    //  获取用户的收货地址列表
+    public static void getAddressList(String page, final Handler handler) {
+        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.GET_ADDRESS_LIST;
+                List<AddressBean> list = new ArrayList<AddressBean>();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    JSONObject data = job.getJSONObject("data");
+                    JSONArray rows = data.getJSONArray("rows");
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject ob = rows.getJSONObject(i);
+                        AddressBean addressBean = new AddressBean();
+                        addressBean.set_id(ob.optString("_id"));
+                        addressBean.setName(ob.optString("name"));
+                        addressBean.setPhone(ob.optString("phone"));
+                        addressBean.setProvince(ob.optString("province"));
+                        addressBean.setCity(ob.optString("city"));
+                        addressBean.setAddress(ob.optString("address"));
+                        addressBean.setZip(ob.optString("zip"));
+                        addressBean.setIs_default(ob.optString("is_default"));
+                        addressBean.setProvince(ob.optString("province"));
+                        addressBean.setCity(ob.optString("city"));
+                        addressBean.setProvince_name(ob.optString("province_name"));
+                        addressBean.setCity_name(ob.optString("city_name"));
+                        list.add(addressBean);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = list;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+
+    //收货地址
+//提交编辑的收货地址返回值解析
+    public static void commitAddressParser(String id, String name, String phone, String province, String city, String address, String zip, String is_default, final Handler handler) {
+        ClientDiscoverAPI.commitAddressNet(id, name, phone, province, city, address, zip, is_default, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.COMMIT_NEW_ADDRESS;
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    msg.obj = job.optString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //收货地址
+    //  删除收货地址返回值解析
+    public static void deleteAddress(String id, final Handler handler) {
+        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DELETE_ADDRESS;
+                try {
+                    JSONObject ojb = new JSONObject(responseInfo.result);
+                    msg.obj = ojb.optBoolean("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
     //公共
     //举报
     public static void report(String target_id, String type, String evt, final Handler handler) {
@@ -981,8 +1126,8 @@ public class DataPaser {
         ClientDiscoverAPI.productAndScene(page, size, sight_id, product_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<>>>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<proScene", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.PRODUCT_AND_SCENE;
                 msg.obj = new ProductAndSceneListBean();
@@ -1035,8 +1180,8 @@ public class DataPaser {
 
     //评论
     //提交评论
-    public static void sendComment(String target_id, String content, String type, String is_reply, String reply_id, String reply_user_id, final Handler handler) {
-        ClientDiscoverAPI.sendComment(target_id, content, type, is_reply, reply_id, reply_user_id, new RequestCallBack<String>() {
+    public static void sendComment(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id, final Handler handler) {
+        ClientDiscoverAPI.sendComment(target_id, content, type, target_user_id, is_reply, reply_id, reply_user_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -1064,11 +1209,11 @@ public class DataPaser {
 
     //评论
     //列表
-    public static void commentsList(String page, String size, String target_id, String type, final Handler handler) {
-        ClientDiscoverAPI.commentsList(page, size, target_id, type,null,new RequestCallBack<String>() {
+    public static void commentsList(String page, String size, String target_id, String target_user_id, String type, final Handler handler) {
+        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+                Log.e("<<<pinglun", responseInfo.result);
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;

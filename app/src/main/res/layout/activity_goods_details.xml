@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f4f4f4"
+                android:fitsSystemWindows="true">
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/activity_goodsdetails_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/activity_goodsdetails_bottomlinear"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/activity_goodsdetails_loverelative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <TextView
+                android:id="@+id/activity_goodsdetails_lovetv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="赞"
+                android:textColor="#ff999999"
+                android:textSize="10sp"/>
+
+            <ImageView
+                android:id="@+id/activity_goodsdetails_loveimg"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_above="@id/activity_goodsdetails_lovetv"
+                android:layout_marginBottom="3dp"
+                android:src="@mipmap/heart_red_3x"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/activity_goodsdetails_sharerelative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/activity_goodsdetails_shareimg"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:src="@mipmap/share_grey"/>
+
+            <TextView
+                android:id="@+id/activity_goodsdetails_sharetv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_goodsdetails_shareimg"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="分享"
+                android:textColor="#ff999999"
+                android:textSize="10sp"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/activity_goodsdetails_cart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#ff6666"
+            android:gravity="center"
+            android:text="加入购物车"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/activity_goodsdetails_buy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#ff3366"
+            android:gravity="center"
+            android:text="立即购买"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_goodsdetails_greyline"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/activity_goodsdetails_bottomlinear"
+        android:background="#f4f4f4"/>
+
+    <com.taihuoniao.fineix.view.CustomScrollView
+        android:id="@+id/activity_goodsdetails_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/activity_goodsdetails_greyline"
+        android:layout_below="@id/activity_goodsdetails_titlelayout"/>
+
+
+</RelativeLayout>

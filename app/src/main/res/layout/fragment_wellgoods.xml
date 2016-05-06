@@ -1,11 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
 
     <RelativeLayout
+        android:id="@+id/title_relative1"
         android:layout_width="match_parent"
         android:layout_height="45dp">
 
@@ -33,166 +33,18 @@
             android:src="@mipmap/cart"/>
     </RelativeLayout>
 
-    <ScrollView
+    <ListView
+        android:id="@+id/fragment_wellgoods_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:layout_below="@id/title_relative1"
+        android:background="#f7f7f7"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f7f7f7"
-            android:orientation="vertical"
-            android:paddingBottom="50dp">
+    <ProgressBar
+        android:id="@+id/fragment_wellgoods_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
-            <com.taihuoniao.fineix.view.ScrollableView
-                android:id="@+id/scrollableView"
-                android:layout_width="match_parent"
-                android:layout_height="211dp"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingLeft="13dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/pin_brand"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center_vertical"
-                    android:text="最Fiu品牌"
-                    android:textColor="#666666"
-                    android:textSize="13sp"/>
-                <!-- 999999 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center_vertical"
-                    android:text="[越喜欢头像越大]"
-                    android:textColor="#999999"
-                    android:textSize="11sp"/>
-            </LinearLayout>
-
-            <AbsoluteLayout
-                android:id="@+id/fragment_wellgoods_absolute"
-                android:layout_width="match_parent"
-                android:layout_height="157dp"
-                android:background="#f0f0f0">
-
-            </AbsoluteLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e4e4e4"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_wellgoods_label_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@color/white"
-                android:paddingBottom="15dp"
-                android:paddingTop="5dp"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_wellgoods_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:background="@color/white"
-                android:paddingTop="15dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e4e4e4"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="#f7f7f7"
-                android:orientation="horizontal"
-                android:paddingLeft="13dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/jing_scene"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center_vertical"
-                    android:text="最Fiu商品"
-                    android:textColor="#666666"
-                    android:textSize="13sp"/>
-                <!-- 999999 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center_vertical"
-                    android:text="[生活有你才购美]"
-                    android:textColor="#999999"
-                    android:textSize="11sp"/>
-            </LinearLayout>
-
-            <com.taihuoniao.fineix.view.SlidingFocusImageView
-                android:id="@+id/sfiv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp150"
-                android:background="@color/color_f7f7f7"
-                android:spacing="@dimen/dp70"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10">
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_weight="2"
-                    android:background="@drawable/tags_gray"
-                    android:ellipsize="end"
-                    android:maxLength="22"
-                    android:paddingLeft="@dimen/dp10"
-                    android:singleLine="true"
-                    android:textSize="@dimen/sp12"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"
-                    android:src="@mipmap/head_logo"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp10"
-                    android:layout_weight="4"
-                    android:background="@mipmap/tags"
-                    android:gravity="center"
-                    android:textSize="@dimen/sp12"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+</RelativeLayout>

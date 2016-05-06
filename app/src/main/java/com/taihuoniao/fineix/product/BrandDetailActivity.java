@@ -111,7 +111,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     protected void requestNet() {
         dialog.show();
         DataPaser.brandDetail(id, handler);
-        DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, handler);
+        DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, null,null,handler);
     }
 
     private Handler handler = new Handler() {
@@ -200,7 +200,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             lastTotalItem = totalItemCount;
             page++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, handler);
+            DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null,null,null, handler);
         }
     }
 
