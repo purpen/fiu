@@ -21,7 +21,7 @@ import java.util.List;
 public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.VH> {
     private Context context;
     private List<CategoryListBean> list;
-    private  EditRecyclerAdapter.ItemClick itemClick;
+    private EditRecyclerAdapter.ItemClick itemClick;
     private DisplayImageOptions options;
 
     public PinRecyclerAdapter(Context context, List<CategoryListBean> list, EditRecyclerAdapter.ItemClick itemClick1) {
@@ -46,7 +46,7 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(PinRecyclerAdapter.VH holder, final int position) {
-        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_s_url(), holder.img);
+        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.img, options);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

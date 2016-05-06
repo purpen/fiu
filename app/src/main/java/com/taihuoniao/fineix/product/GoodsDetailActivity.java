@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailRecommendRecyclerAdapter;
@@ -57,12 +59,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     TextView name;
     @Bind(R.id.activity_goods_detail_goods_price)
     TextView price;
+    @Bind(R.id.activity_goods_detail_brand_relative)
+    RelativeLayout brandRelative;
     @Bind(R.id.activity_goods_detail_brand_img)
     ImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
-    @Bind(R.id.activity_goods_detail_brand_des)
-    TextView brandDes;
     @Bind(R.id.activity_goods_detail_product_des)
     TextView productDes;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
@@ -76,6 +78,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private String url = null;
     //网络请求对话框
     private WaittingDialog dialog;
+    private GoodsDetailBean netGood;//网络请求返回值
     //所属场景列表
     private int page = 1;
     private List<ProductAndSceneListBean.SceneItem> changjingList;
@@ -86,6 +89,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private GoodsDetailRecommendRecyclerAdapter recommendRecyclerAdapter;
     //由于需要请求两次数据，所以做个标记
     private int currentTime = 1;
+    //圆图
+    private DisplayImageOptions option;
 
 
     public GoodsDetailActivity() {
@@ -133,6 +138,17 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         });
         recommendRecycler.setAdapter(recommendRecyclerAdapter);
         buyNowBtn.setOnClickListener(this);
+        brandRelative.setOnClickListener(this);
+        option = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.default750_422)
+//                .showImageForEmptyUri(R.mipmap.default750_422)
+//                .showImageOnFail(R.mipmap.default750_422)
+//                .displayer(new FadeInBitmapDisplayer(300))
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .displayer(new RoundedBitmapDisplayer(360))
+                .build();
     }
 
     @Override
@@ -140,13 +156,23 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         dialog.show();
         DataPaser.goodsDetail(id, handler);
         DataPaser.productAndScene(page + "", 8 + "", null, id, handler);
-        DataPaser.getProductList(null, recommendPage + "", 4 + "", id, null, handler);
+        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null, handler);
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_goods_detail_brand_relative:
+                if (netGood == null) {
+                    dialog.show();
+                    DataPaser.goodsDetail(id, handler);
+                    return;
+                }
+                Intent intent1 = new Intent(GoodsDetailActivity.this, BrandDetailActivity.class);
+                intent1.putExtra("id", netGood.getData().getBrand().get_id());
+                startActivity(intent1);
+                break;
             case R.id.activity_goods_detail_buy_now:
                 switch (attrbute) {
                     case "0":
@@ -184,6 +210,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 case DataConstants.ADD_PRODUCT_LIST:
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess() && currentTime == 1) {
+                        if (netProductBean.getList().size() <= 0) {
+                            return;
+                        }
                         List<String> categoryList = netProductBean.getList().get(0).getCategory_tags();
                         if (categoryList != null && categoryList.size() > 0) {
                             StringBuilder tags = new StringBuilder();
@@ -194,7 +223,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                                 tags.deleteCharAt(0);
                             }
                             currentTime++;
-                            DataPaser.getProductList(null, recommendPage + "", 8 + "", null, tags.toString(), handler);
+                            DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(), handler);
                         }
                     } else if (netProductBean.isSuccess() && currentTime == 2) {
                         dialog.dismiss();
@@ -225,12 +254,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     dialog.dismiss();
                     GoodsDetailBean netGoodsDetailBean = (GoodsDetailBean) msg.obj;
                     if (netGoodsDetailBean.isSuccess()) {
+                        netGood = netGoodsDetailBean;
                         ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
                         name.setText(netGoodsDetailBean.getData().getTitle());
-                        price.setText("¥ " + netGoodsDetailBean.getData().getSale_price());
-                        ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg);
+                        price.setText(String.format("¥ %s", netGoodsDetailBean.getData().getSale_price()));
+                        ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
                         brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
-                        brandDes.setText(netGoodsDetailBean.getData().getBrand().getDes());
                         productDes.setText(netGoodsDetailBean.getData().getSummary());
                         attrbute = netGoodsDetailBean.getData().getAttrbute();
                         url = netGoodsDetailBean.getData().getLink();
@@ -243,7 +272,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     CartBean netCartBean = (CartBean) msg.obj;
                     if (netCartBean.isSuccess()) {
                         cartNum.setVisibility(View.VISIBLE);
-                        cartNum.setText(netCartBean.getData().getCount() + "");
+                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
                     } else {
                         cartNum.setVisibility(View.GONE);
                     }

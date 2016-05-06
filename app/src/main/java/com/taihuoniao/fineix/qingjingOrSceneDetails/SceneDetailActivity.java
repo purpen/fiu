@@ -205,9 +205,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
-                        loveCount.setText(netSceneLoveBean1.getData().getLove_count() + "人赞过");
-                        loveCountTv.setText(netSceneLoveBean1.getData().getLove_count() + "");
-                        moreUser.setText(netSceneLoveBean1.getData().getLove_count() + "+");
+                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
+                        loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
+                        moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
                         if (netSceneLoveBean1.getData().getLove_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
@@ -288,16 +288,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         timeTv.setText(TimestampToTimeUtils.getStandardDate(netSceneDetails.getCreated_on()));
                         ImageLoader.getInstance().displayImage(netSceneDetails.getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netSceneDetails.getUser_info().getNickname());
-                        userInfo.setText(netSceneDetails.getUser_info().getUser_rank() + " | " + netSceneDetails.getUser_info().getSummary());
-                        loveCount.setText(netSceneDetails.getLove_count() + "人赞过");
-                        moreUser.setText(netSceneDetails.getLove_count() + "+");
+                        isSpertAndSummary(userInfo, netSceneDetails.getUser_info().getIs_expert(), netSceneDetails.getUser_info().getSummary());
+                        loveCount.setText(String.format("%d人赞过", netSceneDetails.getLove_count()));
+                        moreUser.setText(String.format("%d+", netSceneDetails.getLove_count()));
                         desTv.setText(netSceneDetails.getDes());
                         //添加标签
                         addLabelToLinear(netSceneDetails.getTag_titles(), netSceneDetails.getTags());
                         viewCount.setText(netSceneDetails.getView_count());
-                        loveCountTv.setText(netSceneDetails.getLove_count() + "");
+                        loveCountTv.setText(String.format("%d", netSceneDetails.getLove_count()));
                         commentNum.setText(netSceneDetails.getComment_count());
-                        allComment.setText("全部" + netSceneDetails.getComment_count() + "条评论");
+                        allComment.setText(String.format("全部%s条评论", netSceneDetails.getComment_count()));
                         if (netSceneDetails.getLove_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
@@ -380,6 +380,18 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
+        if ("1".equals(isSpert) && (summary == null || "null".equals(summary))) {
+            userInfo.setText("达人");
+        } else if ("1".equals(isSpert)) {
+            userInfo.setText(String.format("%s | %s", "达人", summary));
+        } else if (summary == null || "null".equals(summary)) {
+            userInfo.setText("");
+        } else {
+            userInfo.setText(summary);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -394,11 +406,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(SceneDetailActivity.this, "跳转到地图界面", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_background:
-                if (isShowAll) {
-                    isShowAll = false;
-                } else {
-                    isShowAll = true;
-                }
+                isShowAll = !isShowAll;
                 for (int i = 0; i < imgRelative.getChildCount(); i++) {
                     View view = imgRelative.getChildAt(i);
                     if (view instanceof LabelView) {

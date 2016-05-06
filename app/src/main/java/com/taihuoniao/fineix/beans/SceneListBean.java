@@ -173,7 +173,7 @@ public class SceneListBean {
         private String follow_count;
         private String fans_count;
         private String love_count;
-        private String user_rank;
+        private String is_expert;
 
         public String getAccount() {
             return account;
@@ -247,12 +247,12 @@ public class SceneListBean {
             this.user_id = user_id;
         }
 
-        public String getUser_rank() {
-            return user_rank;
+        public String getIs_expert() {
+            return is_expert;
         }
 
-        public void setUser_rank(String user_rank) {
-            this.user_rank = user_rank;
+        public void setIs_expert(String is_expert) {
+            this.is_expert = is_expert;
         }
     }
 }

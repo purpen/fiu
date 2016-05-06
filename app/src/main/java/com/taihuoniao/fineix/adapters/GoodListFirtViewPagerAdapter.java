@@ -32,4 +32,6 @@ public class GoodListFirtViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return categoryBean.getList().size();
     }
+
+
 }

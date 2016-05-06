@@ -15,6 +15,8 @@ public class NetworkConstance {
     //产品
     //列表
     public static final String urlString_productsList = BASE_URL + "/scene_product/getlist";
+    //添加产品
+    public static final String add_product = BASE_URL + "/scene_product/add";
     //产品详情
     public static final String good_details = BASE_URL + "/scene_product/view";
     //获取京东商品信息
@@ -60,6 +62,8 @@ public class NetworkConstance {
     public static final String report = BASE_URL + "/report_tip/save";
     //品牌列表
     public static final String brand_list = BASE_URL + "/scene_brands/getlist";
+    //品牌详情
+    public static final String brand_detail = BASE_URL + "/scene_brands/view";
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
     //商品和场景关联列表

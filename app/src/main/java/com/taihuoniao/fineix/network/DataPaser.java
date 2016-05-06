@@ -15,18 +15,21 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.BindPhone;
+import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
-import com.taihuoniao.fineix.beans.JDDetailsBean;
+import com.taihuoniao.fineix.beans.JDProductBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
@@ -39,7 +42,7 @@ import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.SkipBind;
-import com.taihuoniao.fineix.beans.TBDetailsBean;
+import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
@@ -64,12 +67,12 @@ import java.util.List;
 public class DataPaser {
     //产品
     //列表
-    public static void getProductList(String category, String page, String size, String ids, String ignore_ids, final Handler handler) {
-        ClientDiscoverAPI.getProductList(category, page, size, ids, ignore_ids, new RequestCallBack<String>() {
+    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, final Handler handler) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<>>>", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<>>>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT_LIST;
                 ProductBean productBean = new ProductBean();
@@ -96,7 +99,14 @@ public class DataPaser {
                             for (int j = 0; j < jsonArray.length(); j++) {
                                 category_tags.add(jsonArray.optString(j));
                             }
+                            productListBean.setAttrbute(ob.optString("attrbute"));
                             productListBean.setCategory_tags(category_tags);
+                            List<String> banner = new ArrayList<String>();
+                            JSONArray banner_asset = ob.optJSONArray("banner_asset");
+                            for (int j = 0; j < banner_asset.length(); j++) {
+                                banner.add(banner_asset.optString(j));
+                            }
+                            productListBean.banner_asset = (ArrayList<String>) banner;
                             list.add(productListBean);
                         }
                         productBean.setList(list);
@@ -117,13 +127,44 @@ public class DataPaser {
     }
 
     //产品
+    //用户添加产品
+    public static void addProduct(String attrbute, String oid, String sku_id, String title, String market_price, String sale_price,
+                                  String link, String cover_url, final Handler handler) {
+        ClientDiscoverAPI.addProduct(attrbute, oid, sku_id, title, market_price, sale_price, link, cover_url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<addproduct", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.ADD_PRODUCT;
+                msg.obj = new AddProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddProductBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //产品
     //产品详情
     public static void goodsDetail(String id, final Handler handler) {
         ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<>>>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<>>>", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GOODS_DETAIL;
                 msg.obj = new GoodsDetailBean();
@@ -154,28 +195,18 @@ public class DataPaser {
         ClientDiscoverAPI.getJDProductsData(ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<jingdong", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.JINGDONG;
-                JDDetailsBean jdDetailsBean = new JDDetailsBean();
+                msg.obj = new JDProductBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    jdDetailsBean.setSuccess(job.optBoolean("success"));
-                    jdDetailsBean.setMessage(job.optString("message"));
-//                    jdDetailsBean.setStatus(job.optString("status"));
-                    if (jdDetailsBean.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        JSONArray listproductbase_result = data.getJSONArray("listproductbase_result");
-//                        for (int i = 0; i < listproductbase_result.length(); i++) {
-                        JSONObject ob = listproductbase_result.getJSONObject(0);
-                        jdDetailsBean.setUrl(ob.optString("url"));
-                        jdDetailsBean.setImagePath(ob.optString("imagePath"));
-                        jdDetailsBean.setName(ob.optString("name"));
-                        jdDetailsBean.setSale_price(ob.optString("sale_price"));
-//                        }
-                    }
-                    msg.obj = jdDetailsBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<JDProductBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -194,28 +225,18 @@ public class DataPaser {
         ClientDiscoverAPI.getTBProductsData(ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<taobao", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.TAOBAO;
-                TBDetailsBean tbDetailsBean = new TBDetailsBean();
+                msg.obj = new TBProductBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    tbDetailsBean.setSuccess(job.optBoolean("success"));
-                    tbDetailsBean.setMessage(job.optString("message"));
-//                    tbDetailsBean.setStatus(job.optString("status"));
-                    if (tbDetailsBean.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        JSONObject results = data.getJSONObject("results");
-                        JSONArray n_tbk_item = results.getJSONArray("n_tbk_item");
-                        JSONObject ob = n_tbk_item.getJSONObject(0);
-                        tbDetailsBean.setZk_final_price(ob.optString("zk_final_price"));
-                        tbDetailsBean.setTitle(ob.optString("title"));
-                        tbDetailsBean.setReserve_price(ob.optString("reserve_price"));
-                        tbDetailsBean.setPict_url(ob.optString("pict_url"));
-                        tbDetailsBean.setItem_url(ob.optString("item_url"));
-                    }
-                    msg.obj = tbDetailsBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<TBProductBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -500,7 +521,7 @@ public class DataPaser {
                                 userInfo.setNickname(user_info.optString("nickname"));
                                 userInfo.setAvatar_url(user_info.optString("avatar_url"));
                                 userInfo.setSummary(user_info.optString("summary"));
-                                userInfo.setUser_rank(user_info.optString("user_rank"));
+                                userInfo.setIs_expert(user_info.optString("is_expert"));
                                 sceneDetails.setUser_info(userInfo);
                             }
                         } catch (
@@ -619,7 +640,7 @@ public class DataPaser {
                             JSONObject us = job.getJSONObject("user_info");
                             SceneListBean.User user = new SceneListBean.User();
                             user.setAccount(us.optString("account"));
-                            user.setUser_rank(us.optString("user_rank"));
+                            user.setIs_expert(us.optString("is_expert"));
                             user.setUser_id(us.optString("user_id"));
                             user.setSummary(us.optString("summary"));
                             user.setNickname(us.optString("nickname"));
@@ -878,11 +899,41 @@ public class DataPaser {
     }
 
     //公共
-    //分类列表
-    public static void categoryList(String page, String domin, final Handler handler) {
-        ClientDiscoverAPI.categoryList(page, domin, new RequestCallBack<String>() {
+    //品牌详情
+    public static void brandDetail(String id, final Handler handler) {
+        ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.BRAND_DETAIL;
+                msg.obj = new BrandDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BrandDetailBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //公共
+    //分类列表
+    public static void categoryList(String page, String domain, final Handler handler) {
+        ClientDiscoverAPI.categoryList(page, domain, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<>", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.CATEGORY_LIST;
                 CategoryBean categoryBean = new CategoryBean();
@@ -903,6 +954,7 @@ public class DataPaser {
                             categoryListBean.setName(ob.optString("name"));
                             categoryListBean.setTag_id(ob.optString("tag_id"));
                             categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
+                            categoryListBean.setApp_cover_url(ob.optString("app_cover_url"));
                             list.add(categoryListBean);
                         }
                         categoryBean.setList(list);
@@ -1041,8 +1093,20 @@ public class DataPaser {
         ClientDiscoverAPI.categoryLabel(tag_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<..", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<..", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CATEGORY_LABEL;
+                msg.obj = new CategoryLabelListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryLabelListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
             }
 
             @Override

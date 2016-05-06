@@ -95,7 +95,12 @@ public class DataConstants {
     public static final int PRODUCT_AND_SCENE = 59;
     //用户列表
     public static final int USER_LIST = 58;
-
+    //商品分类的子分类列表
+    public static final int CATEGORY_LABEL = 57;
+    //品牌详情
+    public static final int BRAND_DETAIL = 56;
+    //用户添加商品
+    public static final int ADD_PRODUCT = 55;
 
 
     //SharedPreferences 存储文件名

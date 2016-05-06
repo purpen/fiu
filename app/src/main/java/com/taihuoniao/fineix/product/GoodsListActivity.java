@@ -25,7 +25,10 @@ import butterknife.Bind;
 /**
  * Created by taihuoniao on 2016/5/3.
  */
-public class GoodsListActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class GoodsListActivity extends BaseActivity implements View.OnClickListener {
+    //上个界面传递过来的点击哪个跳转
+    private int position = 0;
+
     @Bind(R.id.activity_good_list_search)
     ImageView searchImg;
     @Bind(R.id.activity_good_list_cart_relative)
@@ -41,6 +44,12 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     //第一层分类列表适配器
     private GoodListFirtViewPagerAdapter goodListFirtViewPagerAdapter;
 
+
+    @Override
+    protected void getIntentData() {
+        position = getIntent().getIntExtra("position", 0);
+    }
+
     public GoodsListActivity() {
         super(R.layout.activity_good_list);
     }
@@ -55,7 +64,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         firstSliding.setCurTabTextColor(getResources().getColor(R.color.yellow_bd8913));
         firstSliding.setTypeface(null, Typeface.NORMAL);
         firstSliding.setTextSize(getResources().getDimensionPixelSize(R.dimen.sp14));
-        firstSliding.setOnPageChangeListener(this);
     }
 
     @Override
@@ -103,9 +111,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                         goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         firstViewPager.setAdapter(goodListFirtViewPagerAdapter);
                         firstSliding.setViewPager(firstViewPager);
-//                        addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
-//                        viewPager.setAdapter(addProductViewPagerAdapter);
-//                        slidingTab.setViewPager(viewPager);
+                        firstViewPager.setCurrentItem(position,true);
                     }
                     break;
                 case DataConstants.CART_NUM:
@@ -124,18 +130,4 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         }
     };
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
 }

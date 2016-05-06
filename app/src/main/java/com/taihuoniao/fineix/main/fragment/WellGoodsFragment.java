@@ -48,6 +48,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -363,7 +364,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     public void click(int postion) {
-        startActivity(new Intent(getActivity(), GoodsListActivity.class));
+        Intent intent = new Intent(getActivity(), GoodsListActivity.class);
+        intent.putExtra("position", postion);
+        startActivity(intent);
     }
 
     /**
@@ -388,27 +391,18 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             randomImgs.add(randomImg);
         }
         int top = absoluteLayout.getTop();
-//        Log.e("<<<", "top = " + top);
         int bottom = absoluteLayout.getBottom();
-//        Log.e("<<<", "bottom = " + bottom);
         for (int i = 0; i < randomImgs.size(); i++) {
-//            boolean isStop = false;
             RandomImg randomImg = randomImgs.get(i);
 
             whi:
-//            while (!isStop) {
             for (int k = 0; k < 200; k++) {
                 int x = random.nextInt(MainApplication.getContext().getScreenWidth());
-//                Log.e("<<<", "x = " + x);
                 int y = random.nextInt(bottom - top) + top;
-//                Log.e("<<<", "y = " + y);
                 if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
                         bottom - y < randomImg.radius || y - top < randomImg.radius) {
                     continue;
                 }
-//                Log.e("<<<", "radius = " + randomImg.radius);
-//                Log.e("<<<", "右边距 = " + (MainApplication.getContext().getScreenWidth() - x) + ",下边距 = "
-//                        + (bottom - y) + ",上边距 = " + (y - top));
                 for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
                     ImageView img1 = (ImageView) absoluteLayout.getChildAt(j);
                     RandomImg randomImg1 = (RandomImg) img1.getTag();
@@ -418,33 +412,26 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
                         continue whi;
                     }
-//                    Log.e("<<<", "点距离=" + Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg.y - y) * (randomImg.y - y))
-//                            + ",半径和=" + (randomImg1.radius + randomImg.radius));
                 }
-//                Log.e("<<<", "x = " + x + ",y = " + y);
                 randomImg.x = x;
                 randomImg.y = y;
-//                Log.e("<<<", "img.x=" + randomImg.x);
-//                Log.e("<<<", "img.y=" + randomImg.y);
-
                 break;
             }
-//            }
             if (randomImg.x == 0 && randomImg.y == 0) {
                 continue;
             }
-//            Log.e("<<<", "url =" + randomImgs.get(i).url + ",radius=" + randomImg.radius + ",imgx=" + randomImg.x + ",imgy=" + randomImg.y);
             ImageView img = new ImageView(getActivity());
             ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
             img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
                     randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
-//            Log.e("<<<", "图片参数=宽高：" + (randomImg.radius * 2) + ",x:" + randomImg.x + ",y:" + (randomImg.y - top));
             img.setTag(randomImg);
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Toast.makeText(getActivity(), "又点击了" + randomImg1.id, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
+                    intent.putExtra("id", randomImg1.id);
+                    startActivity(intent);
                 }
             });
             absoluteLayout.addView(img);
