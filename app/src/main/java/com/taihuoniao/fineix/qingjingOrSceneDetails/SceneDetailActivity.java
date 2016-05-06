@@ -7,13 +7,18 @@ import android.content.IntentFilter;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,7 +48,6 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.TimestampToTimeUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -59,6 +63,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //上个界面传递过来的场景id
     private String id;
     //界面下的控件
+    private View activity_view;
     private ScrollView scrollView;
     private LinearLayout loveRelative;
     private ImageView backImg;
@@ -94,6 +99,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView loveTv;
     private ListViewForScrollView productListView;
     private ListViewForScrollView nearProductListView;
+    private PopupWindow popupWindow;
+    //popupwindow下的控件
+    private TextView shareTv;
+    private TextView jubaoTv;
+    private TextView cancelTv;
     //网络请求对话框
     private WaittingDialog dialog;
     //图片加载
@@ -119,7 +129,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_scenedetails);
+        activity_view = View.inflate(SceneDetailActivity.this, R.layout.activity_scenedetails, null);
+        setContentView(activity_view);
         scrollView = (ScrollView) findViewById(R.id.activity_scenedetails_scrollview);
         loveRelative = (LinearLayout) findViewById(R.id.activity_scenedetails_loverelative);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
@@ -152,6 +163,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
         dialog = new WaittingDialog(SceneDetailActivity.this);
+        initPopupWindow();
     }
 
     @Override
@@ -217,6 +229,53 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
         DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
     }
+
+    private void initPopupWindow() {
+        WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
+        shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
+        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        shareTv.setOnClickListener(this);
+        jubaoTv.setOnClickListener(this);
+        cancelTv.setOnClickListener(this);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(SceneDetailActivity.this,
+                R.color.white));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
+    }
+
 
     private Handler handler = new Handler() {
         @Override
@@ -353,7 +412,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         changjingTitle.setText(netSceneDetails.getTitle());
                         suoshuqingjingTv.setText(netSceneDetails.getScene_title());
                         locationTv.setText(netSceneDetails.getAddress());
-                        timeTv.setText(TimestampToTimeUtils.getStandardDate(netSceneDetails.getCreated_on()));
+                        timeTv.setText(netSceneDetails.getCreated_at());
                         ImageLoader.getInstance().displayImage(netSceneDetails.getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netSceneDetails.getUser_info().getNickname());
                         isSpertAndSummary(userInfo, netSceneDetails.getUser_info().getIs_expert(), netSceneDetails.getUser_info().getSummary());
@@ -477,9 +536,20 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
                 Toast.makeText(SceneDetailActivity.this, "分享场景", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.popup_scene_detail_more_jubao:
+                Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
+                intent1.putExtra("target_id", id);
+                intent1.putExtra("type", 4 + "");
+                startActivity(intent1);
+                break;
+            case R.id.popup_scene_detail_more_cancel:
+                popupWindow.dismiss();
+                break;
+
             case R.id.activity_scenedetails_back:
                 onBackPressed();
                 break;
@@ -535,10 +605,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_moreuser:
                 break;
             case R.id.activity_scenedetails_more:
-                Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
-                intent1.putExtra("target_id", id);
-                intent1.putExtra("type", 4 + "");
-                startActivity(intent1);
+                showPopup();
                 break;
         }
     }
