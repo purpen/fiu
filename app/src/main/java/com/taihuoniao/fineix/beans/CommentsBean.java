@@ -30,7 +30,7 @@ public class CommentsBean extends NetBean {
         }
     }
 
-    public static class CommentItem {
+    public static class CommentItem{
         private String _id;
         private String content;
         public long user_id;
