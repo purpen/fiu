@@ -24,7 +24,7 @@ public class SceneDetails extends NetBean {
     private String fine;
     private String is_check;
     private String status;
-    private String created_on;
+    private String created_at;
     private String updated_on;
     private String cover_url;
     private String scene_title;
@@ -88,12 +88,12 @@ public class SceneDetails extends NetBean {
         this.cover_url = cover_url;
     }
 
-    public String getCreated_on() {
-        return created_on;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setCreated_on(String created_on) {
-        this.created_on = created_on;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public String getDes() {
@@ -103,7 +103,6 @@ public class SceneDetails extends NetBean {
     public void setDes(String des) {
         this.des = des;
     }
-
 
 
     public List<Product> getProduct() {

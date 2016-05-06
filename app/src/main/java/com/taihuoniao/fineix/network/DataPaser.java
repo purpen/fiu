@@ -517,7 +517,7 @@ public class DataPaser {
                                 sceneDetails.setView_count(data.optString("view_count"));
                                 sceneDetails.setLove_count(data.optInt("love_count"));
                                 sceneDetails.setComment_count(data.optString("comment_count"));
-                                sceneDetails.setCreated_on(data.optString("created_on"));
+                                sceneDetails.setCreated_at(data.optString("created_at"));
                                 sceneDetails.setCover_url(data.optString("cover_url"));
                                 sceneDetails.setScene_title(data.optString("scene_title"));
                                 SceneDetails.UserInfo userInfo = new SceneDetails.UserInfo();
