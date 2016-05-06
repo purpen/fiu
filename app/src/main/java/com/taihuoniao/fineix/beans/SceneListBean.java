@@ -22,7 +22,6 @@ public class SceneListBean {
     private String is_check;
     private String status;
     private String created_at;
-    private String updated_on;
     private User user_info;
     private String cover_url;
 
@@ -169,7 +168,7 @@ public class SceneListBean {
         private String nickname;
         private String avatar_url;
         private String summary;
-        private String counter;
+//        private String counter;
         private String follow_count;
         private String fans_count;
         private String love_count;
@@ -191,13 +190,13 @@ public class SceneListBean {
             this.avatar_url = avatar_url;
         }
 
-        public String getCounter() {
-            return counter;
-        }
+//        public String getCounter() {
+//            return counter;
+//        }
 
-        public void setCounter(String counter) {
-            this.counter = counter;
-        }
+//        public void setCounter(String counter) {
+//            this.counter = counter;
+//        }
 
         public String getFans_count() {
             return fans_count;

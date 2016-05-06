@@ -93,6 +93,7 @@ public class MineFragment extends MyBaseFragment {
     public static final int REQUEST_FANS = 3;
     private User user;
     private ArrayList<ImgTxtItem> gvList;
+    private boolean isInitLoad=true;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
     public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
@@ -108,8 +109,11 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initData();
     }
+
+
 
     private void initData() {
 //        partnerName = activity.getResources().getStringArray(R.array.partner_name);
@@ -188,14 +192,17 @@ public class MineFragment extends MyBaseFragment {
         });
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
-            loadData();
+            if (isInitLoad){
+                isInitLoad=false;
+            }else {
+                loadData();
+            }
         } else {
             rl.setVisibility(View.VISIBLE);
         }
@@ -224,21 +231,23 @@ public class MineFragment extends MyBaseFragment {
     @Override
     protected void refreshUIAfterNet() {
         if (user == null) return;
+        if (user.counter!=null){
+            if (adapter != null && gvList != null) {
+                for (int i = 0; i < gvList.size(); i++) {//TODO 注意顺序和GridView位置
+                    switch (i) {
+                        case 0:
+                            gvList.get(i).count = user.counter.order_total_count;
+                            break;
+                        case 1:
+                            gvList.get(i).count = user.counter.message_total_count;
+                            break;
+                    }
 
-        if (adapter != null && gvList != null) {
-            for (int i = 0; i < gvList.size(); i++) {//TODO 注意顺序和GridView位置
-                switch (i) {
-                    case 0:
-                        gvList.get(i).count = user.counter.order_total_count;
-                        break;
-                    case 1:
-                        gvList.get(i).count = user.counter.message_total_count;
-                        break;
                 }
-
+                adapter.notifyDataSetChanged();
             }
-            adapter.notifyDataSetChanged();
         }
+
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }

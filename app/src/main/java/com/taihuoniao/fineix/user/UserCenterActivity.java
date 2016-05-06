@@ -210,6 +210,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         Fragment fragment = fm.findFragmentByTag(clazz.getSimpleName());
         if (fragment == null) {
             fragment = (Fragment) clazz.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString(TAG,String.valueOf(userId));
+            fragment.setArguments(bundle);
             fm.beginTransaction().add(R.id.fl_box, fragment, clazz.getSimpleName()).commit();
         } else {
             fm.beginTransaction().show(fragment).commit();

@@ -192,6 +192,22 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    /**
+     * 根据用户ID查找CJ
+     * @param page
+     * @param size
+     * @param userId
+     * @param callBack
+     */
+    public static void getSceneList(String page, String size,String userId,RequestCallBack<String> callBack) {
+        String url = NetworkConstance.scene_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("user_id", userId);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //个人中心
     //用户列表
     public static void userList(String page, String size, String sort, String has_scene, RequestCallBack<String> callBack) {
@@ -416,9 +432,26 @@ public class ClientDiscoverAPI {
             params.addQueryStringParameter("lat", String.valueOf(ll.latitude));
             params.addQueryStringParameter("lng", String.valueOf(ll.longitude));
         }
-        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
-        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
-//        MD5Utils.sign(params,NetworkConstance.QING_JING, callBack);
+//        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
+//        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.QING_JING, params, callBack);
+        MD5Utils.sign(params,NetworkConstance.QING_JING, callBack);
+    }
+
+
+    /**
+     * 获取用户的情景列表
+     * @param page
+     * @param pageSize
+     * @param userId
+     * @param callBack
+     */
+    public static void getQJList(String page,String pageSize,String userId,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", pageSize);
+        params.addQueryStringParameter("sort", "0");
+        params.addQueryStringParameter("stick","0");
+        MD5Utils.sign(params,NetworkConstance.QING_JING, callBack);
     }
 
     //找回忘记的密码

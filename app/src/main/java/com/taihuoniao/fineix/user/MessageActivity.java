@@ -30,9 +30,9 @@ import butterknife.OnClick;
 
 /**
  * @author lilin
- * created at 2016/4/28 19:15
+ *         created at 2016/4/28 19:15
  */
-public class MessageActivity extends BaseActivity{
+public class MessageActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.item_push_setting)
@@ -45,24 +45,25 @@ public class MessageActivity extends BaseActivity{
     CustomItemLayout item_notice;
     private WaittingDialog dialog;
     private User user;
-    public MessageActivity(){
+
+    public MessageActivity() {
         super(R.layout.activity_message);
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"消息");
-        dialog=new WaittingDialog(this);
-        item_push_setting.setTVStyle(R.mipmap.sys_msg,"系统通知", R.color.color_333);
-        item_clear_cache.setTVStyle(R.mipmap.icon_comment,"评论", R.color.color_333);
-        item_to_comment.setTVStyle(R.mipmap.private_msg,"私信",R.color.color_333);
-        item_notice.setTVStyle(R.mipmap.notice,"提醒", R.color.color_333);
+        custom_head.setHeadCenterTxtShow(true, "消息");
+        dialog = new WaittingDialog(this);
+        item_push_setting.setTVStyle(R.mipmap.sys_msg, "系统通知", R.color.color_333);
+        item_clear_cache.setTVStyle(R.mipmap.icon_comment, "评论", R.color.color_333);
+        item_to_comment.setTVStyle(R.mipmap.private_msg, "私信", R.color.color_333);
+        item_notice.setTVStyle(R.mipmap.notice, "提醒", R.color.color_333);
     }
 
-    @OnClick({R.id.item_push_setting,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_notice})
-    void onClick(View v){
-        Intent intent=null;
-        switch (v.getId()){
+    @OnClick({R.id.item_push_setting, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_notice})
+    void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
             case R.id.item_push_setting:
                 startActivity(new Intent(activity, SystemNoticeActivity.class));
                 break;
@@ -73,8 +74,8 @@ public class MessageActivity extends BaseActivity{
                 Util.makeToast("私信");
                 break;
             case R.id.item_notice: //关注我的
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
+                intent = new Intent(activity, FocusFansActivity.class);
+                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
         }
@@ -120,9 +121,11 @@ public class MessageActivity extends BaseActivity{
         if (user == null) {
             return;
         }
-        item_push_setting.setTipsNum(user.counter.fiu_notice_count); //系统通知
-        item_clear_cache.setTipsNum(user.counter.fiu_comment_count); //评论
-        item_to_comment.setTipsNum(user.counter.message_count);   //私信
+        if (user.counter != null) {
+            item_push_setting.setTipsNum(user.counter.fiu_notice_count); //系统通知
+            item_clear_cache.setTipsNum(user.counter.fiu_comment_count); //评论
+            item_to_comment.setTipsNum(user.counter.message_count);   //私信
+        }
 //        item_notice.setTipsNum();
 //        if (TextUtils.isEmpty(user.realname)) {
 //            tv_real.setVisibility(View.GONE);

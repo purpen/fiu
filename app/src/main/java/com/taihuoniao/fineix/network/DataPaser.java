@@ -626,7 +626,7 @@ public class DataPaser {
                             user.setLove_count(us.optString("love_count"));
                             user.setFollow_count(us.optString("follow_count"));
                             user.setFans_count(us.optString("fans_count"));
-                            user.setCounter(us.optString("counter"));
+//                            user.setCounter(us.optString("counter"));
                             user.setAvatar_url(us.optString("avatar_url"));
                             sceneListBean.setUser_info(user);
                             JSONArray product = job.getJSONArray("product");

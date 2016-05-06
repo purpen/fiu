@@ -107,14 +107,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp5"
-                android:layout_marginBottom="@dimen/dp5"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/ll_qj"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp5"
                     android:layout_weight="1"
                     android:background="@mipmap/focus"
                     android:gravity="center"
@@ -135,7 +133,9 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
-
+                <View
+                    android:layout_width="@dimen/dp5"
+                    android:layout_height="match_parent"/>
                 <LinearLayout
                     android:id="@+id/ll_cj"
                     android:layout_width="match_parent"
@@ -161,12 +161,13 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
-
+                <View
+                    android:layout_width="@dimen/dp5"
+                    android:layout_height="match_parent"/>
                 <LinearLayout
                     android:id="@+id/ll_focus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp5"
                     android:layout_weight="1"
                     android:background="@mipmap/focus"
                     android:gravity="center"
@@ -187,12 +188,13 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
-
+                <View
+                    android:layout_width="@dimen/dp5"
+                    android:layout_height="match_parent"/>
                 <LinearLayout
                     android:id="@+id/ll_fans"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp5"
                     android:layout_weight="1"
                     android:background="@mipmap/favorites"
                     android:gravity="center"
