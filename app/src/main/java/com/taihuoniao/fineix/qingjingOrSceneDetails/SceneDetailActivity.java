@@ -23,12 +23,17 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
+import com.taihuoniao.fineix.adapters.SceneDetailProductListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
+import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
@@ -87,6 +92,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView moreComment;
     private ImageView love;
     private TextView loveTv;
+    private ListViewForScrollView productListView;
+    private ListViewForScrollView nearProductListView;
     //网络请求对话框
     private WaittingDialog dialog;
     //图片加载
@@ -97,7 +104,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean isShowAll = false;
     //当前用户是否已经点赞
     private int isLove = 0;//0是未点赞，1是已点赞
-
+    private SceneDetails netScene = null;//网络请求返回数据
+    //场景下的商品
+    private List<ProductAndSceneListBean.SceneItem> sceneProductList;
+    private SceneDetailProductListAdapter sceneProductAdapter;
+    //相近产品
+    private int currentTime = 1;
+    private List<ProductListBean> nearProductList;
+    private GoodListAdapter goodListAdapter;
 
     public SceneDetailActivity() {
         super(0);
@@ -135,6 +149,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         moreComment = (ImageView) findViewById(R.id.activity_scenedetails_morecomment);
         love = (ImageView) findViewById(R.id.activity_scenedetails_love);
         loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
+        productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
+        nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
         dialog = new WaittingDialog(SceneDetailActivity.this);
     }
 
@@ -172,8 +188,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         commentsListView.setAdapter(sceneDetailCommentAdapter);
         allComment.setOnClickListener(this);
         moreComment.setOnClickListener(this);
+        loveRelative.setOnClickListener(this);
         love.setOnClickListener(this);
         loveTv.setOnClickListener(this);
+        sceneProductList = new ArrayList<>();
+        sceneProductAdapter = new SceneDetailProductListAdapter(SceneDetailActivity.this, sceneProductList);
+        productListView.setAdapter(sceneProductAdapter);
+        nearProductList = new ArrayList<>();
+        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList);
+        nearProductListView.setAdapter(goodListAdapter);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
 //                .showImageForEmptyUri(R.mipmap.default_backround)
@@ -190,14 +213,53 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     protected void requestNet() {
         dialog.show();
         DataPaser.sceneDetails(id + "", handler);
-        DataPaser.commentsList(1 + "", 3 + "", id, 12 + "", handler);
+        DataPaser.commentsList(1 + "", 3 + "", id, null, 12 + "", handler);
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
+        DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
     }
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.ADD_PRODUCT_LIST:
+                    ProductBean netProductBean = (ProductBean) msg.obj;
+                    if (netProductBean.isSuccess() && currentTime == 1) {
+                        if (netProductBean.getList().size() <= 0) {
+                            return;
+                        }
+                        StringBuilder tags = new StringBuilder();
+                        for (int i = 0; i < netProductBean.getList().size(); i++) {
+                            List<String> categoryList = netProductBean.getList().get(i).getCategory_tags();
+                            if (categoryList != null && categoryList.size() > 0) {
+                                for (int j = 0; j < categoryList.size(); j++) {
+                                    tags.append(",").append(netProductBean.getList().get(i).getCategory_tags().get(j));
+                                }
+                                if (tags.length() > 0) {
+                                    tags.deleteCharAt(0);
+                                }
+                            }
+                        }
+                        currentTime++;
+                        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, tags.toString(), null, null, handler);
+                    } else if (netProductBean.isSuccess() && currentTime == 2) {
+                        dialog.dismiss();
+                        nearProductList.clear();
+                        nearProductList.addAll(netProductBean.getList());
+                        goodListAdapter.notifyDataSetChanged();
+                    } else {
+                        dialog.dismiss();
+                        Toast.makeText(SceneDetailActivity.this, netProductBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case DataConstants.PRODUCT_AND_SCENE:
+                    ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
+                    if (netProScene.isSuccess()) {
+                        sceneProductList.clear();
+                        sceneProductList.addAll(netProScene.getData().getRows());
+                        sceneProductAdapter.notifyDataSetChanged();
+                    }
+                    break;
                 case DataConstants.CANCEL_LOVE_SCENE:
                     SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean1.isSuccess()) {
@@ -205,6 +267,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
+                        loveTv.setText("点赞");
                         loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
                         loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
                         moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
@@ -225,9 +288,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 1;
                         love.setImageResource(R.mipmap.love_yes);
-                        loveCount.setText(netSceneLoveBean.getData().getLove_count() + "人赞过");
-                        loveCountTv.setText(netSceneLoveBean.getData().getLove_count() + "");
-                        moreUser.setText(netSceneLoveBean.getData().getLove_count() + "+");
+                        loveTv.setText("取消点赞");
+                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+                        loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+                        moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
                         if (netSceneLoveBean.getData().getLove_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
@@ -267,19 +331,23 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     SceneDetails netSceneDetails = (SceneDetails) msg.obj;
                     if (netSceneDetails.isSuccess()) {
 //                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
+                        netScene = netSceneDetails;
                         ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg);
                         //用户是否已经点赞
                         isLove = netSceneDetails.getIs_love();
                         switch (isLove) {
                             case 1:
                                 love.setImageResource(R.mipmap.love_yes);
+                                loveTv.setText("取消点赞");
                                 break;
                             default:
                                 love.setImageResource(R.mipmap.like_height_43px);
+                                loveTv.setText("点赞");
                                 break;
                         }
                         //场景上的商品
                         productList = netSceneDetails.getProduct();
+                        getNearProductList();
                         //添加商品
                         addProductToImg();
                         changjingTitle.setText(netSceneDetails.getTitle());
@@ -294,6 +362,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         desTv.setText(netSceneDetails.getDes());
                         //添加标签
                         addLabelToLinear(netSceneDetails.getTag_titles(), netSceneDetails.getTags());
+
                         viewCount.setText(netSceneDetails.getView_count());
                         loveCountTv.setText(String.format("%d", netSceneDetails.getLove_count()));
                         commentNum.setText(netSceneDetails.getComment_count());
@@ -314,6 +383,19 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
+
+    //获取相近产品
+    private void getNearProductList() {
+        if (productList == null || productList.size() <= 0) {
+            return;
+        }
+        StringBuilder ids = new StringBuilder();
+        for (int i = 0; i < productList.size(); i++) {
+            ids.append(",").append(productList.get(i).getId());
+        }
+        ids.deleteCharAt(0);
+        DataPaser.getProductList(null, null, null, 1 + "", 8 + "", ids.toString(), null, null, null, handler);
+    }
 
     private void addProductToImg() {
         if (productList == null || productList.size() == 0) {
@@ -416,6 +498,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     }
                 }
                 break;
+            case R.id.activity_scenedetails_loverelative:
             case R.id.activity_scenedetails_love:
             case R.id.activity_scenedetails_lovetv:
                 if (!LoginInfo.isUserLogin()) {
@@ -438,9 +521,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_commentcount:
             case R.id.activity_scenedetails_allcomment:
             case R.id.activity_scenedetails_morecomment:
+                if (netScene == null) {
+                    dialog.show();
+                    DataPaser.sceneDetails(id + "", handler);
+                    return;
+                }
                 Intent intent = new Intent(SceneDetailActivity.this, CommentListActivity.class);
                 intent.putExtra("target_id", id);
                 intent.putExtra("type", 12 + "");
+                intent.putExtra("target_user_id", netScene.getUser_info().getUser_id());
                 startActivity(intent);
                 break;
             case R.id.activity_scenedetails_moreuser:

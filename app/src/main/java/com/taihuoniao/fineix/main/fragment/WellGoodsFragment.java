@@ -8,14 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,9 +29,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinRecyclerAdapter;
-import com.taihuoniao.fineix.adapters.SlidingFocusAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
@@ -40,8 +40,8 @@ import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
+import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
-import com.taihuoniao.fineix.beans.ProductListData;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -54,7 +54,6 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
@@ -62,9 +61,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener {
+public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
+    //界面下的控件
     private ImageView searchImg;
     private ImageView cartImg;
+    private ListView listView;
+    private ProgressBar progressBar;
+    //headerview下的控件
     private AbsoluteLayout absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
@@ -79,61 +82,41 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private PinRecyclerAdapter pinRecyclerAdapter;
     private DisplayImageOptions options;
     private ScrollableView scrollableView;
-    private SlidingFocusImageView sfiv;
     private ViewPagerAdapter viewPagerAdapter;
-    private SlidingFocusAdapter sfAdapter = null;
     private int page = 1;
     private static final String PRODUCT_STATE = "1"; //表示正常在线
-    private TextView tv_name;
-    private TextView tv_price;
+    //商品列表
+    private int productPage = 1;
+    private List<ProductListBean> productList;
+    private GoodListAdapter goodListAdapter;
+    private int lastSavedFirstVisibleItem = -1;
+    private int lastTotalItem = -1;
 
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
         cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
-        scrollableView = (ScrollableView) view.findViewById(R.id.scrollableView);
-        sfiv = (SlidingFocusImageView) view.findViewById(R.id.sfiv);
-        tv_name = (TextView) view.findViewById(R.id.tv_name);
-        tv_price = (TextView) view.findViewById(R.id.tv_price);
-        sfiv.setAnimationDuration(500);
-        sfiv.setFadingEdgeLength(200);
-        sfiv.setSpacing(10);
-        sfiv.setGravity(Gravity.CENTER_VERTICAL);
-        absoluteLayout = (AbsoluteLayout) view.findViewById(R.id.fragment_wellgoods_absolute);
+        listView = (ListView) view.findViewById(R.id.fragment_wellgoods_listview);
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_wellgoods_progress);
+        //headerview
+        View header = View.inflate(getActivity(), R.layout.header_fragment_wellgoods, null);
+        scrollableView = (ScrollableView) header.findViewById(R.id.scrollableView);
+        absoluteLayout = (AbsoluteLayout) header.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
         absoluteLayout.setLayoutParams(lp);
-        labelRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_label_recycler);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_recycler);
+        labelRecycler = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_label_recycler);
+        recyclerView = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_recycler);
+        listView.addHeaderView(header);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
 
-    @Override
-    protected void installListener() {
-        sfiv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("onItemSelected", "" + position);
-//                ((SlidingFocusAdapter) sfiv.getAdapter()).notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        sfiv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO 处理点击事件
-            }
-        });
-    }
 
     @Override
     protected void requestNet() {
         dialog.show();
+        DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null,null, handler);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -172,34 +155,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         });
 //        DataPaser.hotLabelList(labelPage + "", handler);
         DataPaser.categoryList(1 + "", 10 + "", handler);
-        ClientDiscoverAPI.getProductList(String.valueOf(page), new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo == null) {
-                    return;
-                }
-
-                if (TextUtils.isEmpty(responseInfo.result)) {
-                    return;
-                }
-
-                ProductListData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ProductListData>>() {
-                });
-                if (data.rows == null) {
-                    return;
-                }
-
-                if (data.rows.size() == 0) {
-                    return;
-                }
-                setSlidingFocusImageViewData(data.rows);
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-
-            }
-        });
         //热门标签
         ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
             @Override
@@ -227,24 +182,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         DataPaser.brandList(1, 50, handler);
     }
 
-    private void setSlidingFocusImageViewData(ArrayList<ProductListBean> list) {
-        if (list == null) {
-            return;
-        }
-        if (list.size() == 0) {
-            return;
-        }
-
-        if (sfAdapter == null) {//获得产品列表的一项  list.get(0)
-            sfAdapter = new SlidingFocusAdapter(sfiv, list.get(0).banner_asset, activity);
-            tv_name.setText(list.get(0).getTitle());
-            tv_price.setText("￥" + list.get(0).getSale_price());
-            sfiv.setAdapter(sfAdapter);
-            sfiv.setSelection(Integer.MAX_VALUE / 2);
-        } else {
-            sfAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     protected void initList() {
@@ -272,6 +209,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         recyclerView.setLayoutManager(layoutManager);
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
+        productList = new ArrayList<>();
+        goodListAdapter = new GoodListAdapter(getActivity(), productList);
+        listView.setAdapter(goodListAdapter);
+        listView.setOnScrollListener(this);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
 //                .showImageForEmptyUri(R.mipmap.default_backround)
@@ -285,6 +226,19 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.ADD_PRODUCT_LIST:
+                    progressBar.setVisibility(View.GONE);
+                    ProductBean netProduct = (ProductBean) msg.obj;
+                    if (netProduct.isSuccess()) {
+                        if (productPage == 1) {
+                            productList.clear();
+                            lastSavedFirstVisibleItem = -1;
+                            lastTotalItem = -1;
+                        }
+                        productList.addAll(netProduct.getList());
+                        goodListAdapter.notifyDataSetChanged();
+                    }
+                    break;
                 case DataConstants.BRAND_LIST:
                     BrandListBean netBrandListBean = (BrandListBean) msg.obj;
                     if (netBrandListBean.isSuccess()) {
@@ -309,6 +263,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     break;
             }
         }
@@ -447,6 +402,25 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             case R.id.fragment_wellgoods_cart:
                 Toast.makeText(getActivity(), "跳转到购物车", Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
+        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+                && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
+                ) {
+            lastSavedFirstVisibleItem = firstVisibleItem;
+            lastTotalItem = totalItemCount;
+            productPage++;
+            progressBar.setVisibility(View.VISIBLE);
+            DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null, handler);
         }
     }
 }

@@ -40,6 +40,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     //上个界面传递过来的评论关联id
     private String target_id;
     private String type;//类型  12 场景评论
+    private String target_user_id;//关联用户id
     //界面下的控件
     private GlobalTitleLayout titleLayout;
     private PullToRefreshListView pullToRefreshLayout;
@@ -76,10 +77,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         target_id = getIntent().getStringExtra("target_id");
         type = getIntent().getStringExtra("type");
-        if (target_id == null || type == null) {
+        target_user_id = getIntent().getStringExtra("target_user_id");
+        if (target_id == null || type == null || target_user_id == null) {
             Toast.makeText(CommentListActivity.this, "数据错误", Toast.LENGTH_SHORT).show();
-            if (dialog!=null){
-                if (dialog.isShowing()){
+            if (dialog != null) {
+                if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
             }
@@ -99,7 +101,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
+                DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
             }
         });
         sendBtn.setOnClickListener(this);
@@ -129,7 +131,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
+        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
     }
 
     private Handler handler = new Handler() {
@@ -146,7 +148,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         reply_user_id = null;
                         editText.setText("");
                         currentPage = 1;
-                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, type, handler);
+                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
                     }
@@ -209,10 +211,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                             Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        DataPaser.sendComment(target_id, editText.getText().toString(), type, is_reply, reply_id, reply_user_id, handler);
+                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id, handler);
                         break;
                     default:
-                        DataPaser.sendComment(target_id, editText.getText().toString(), type, is_reply, null, null, handler);
+                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, null, null, handler);
                         break;
                 }
                 break;

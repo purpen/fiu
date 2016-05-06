@@ -11,20 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
 import java.util.List;
 
 /**
- * Created by taihuoniao on 2016/5/5.
+ * Created by taihuoniao on 2016/5/6.
  */
-public class GoodListAdapter extends BaseAdapter {
+public class SceneDetailProductListAdapter extends BaseAdapter {
     private Activity activity;
-    private List<ProductListBean> list;
+    private List<ProductAndSceneListBean.SceneItem> list;
 
-    public GoodListAdapter(Activity activity, List<ProductListBean> list) {
+    public SceneDetailProductListAdapter(Activity activity, List<ProductAndSceneListBean.SceneItem> list) {
         this.activity = activity;
         this.list = list;
     }
@@ -63,11 +63,11 @@ public class GoodListAdapter extends BaseAdapter {
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         holder.nameTv.setText(list.get(position).getTitle());
         holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
-        if (list.get(position).banner_asset.size() > 0) {
-            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
+        if (list.get(position).getBanner_asset().size() > 0) {
+            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getBanner_asset(), activity));
         }
         holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-        if (list.get(position).getAttrbute().equals("1")) {
+        if ("1".equals(list.get(position).getAttrbute())) {
             holder.img.setVisibility(View.VISIBLE);
         } else {
             holder.img.setVisibility(View.INVISIBLE);
@@ -83,9 +83,9 @@ public class GoodListAdapter extends BaseAdapter {
     static class ClickListener implements View.OnClickListener, AdapterView.OnItemClickListener {
         private Activity activity;
         private int position;
-        private List<ProductListBean> list;
+        private List<ProductAndSceneListBean.SceneItem> list;
 
-        public ClickListener(Activity activity, List<ProductListBean> list, int position) {
+        public ClickListener(Activity activity, List<ProductAndSceneListBean.SceneItem> list, int position) {
             this.activity = activity;
             this.list = list;
             this.position = position;

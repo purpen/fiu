@@ -63,7 +63,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     @Override
     protected void requestNet() {
         progressBar.setVisibility(View.VISIBLE);
-        DataPaser.getProductList(categoryBean.getList().get(position).get_id(),null,null, currentPage + "", 8 + "", null, null, handler);
+        DataPaser.getProductList(categoryBean.getList().get(position).get_id(),null,null, currentPage + "", 8 + "", null, null,null,null, handler);
     }
 
     @Override

@@ -99,9 +99,9 @@ public class GoodListFragment extends BaseFragment implements EditRecyclerAdapte
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
                 if (tag_id.equals("0")) {
-                    DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, handler);
+                    DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null,null,null, handler);
                 } else {
-                    DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, handler);
+                    DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null,null,null, handler);
                 }
             }
         });
@@ -119,7 +119,7 @@ public class GoodListFragment extends BaseFragment implements EditRecyclerAdapte
         progressBar.setVisibility(View.VISIBLE);
         if (tag_id.equals("0")) {
             recyclerView.setVisibility(View.GONE);
-            DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, handler);
+            DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null,null,null, handler);
         } else {
             recyclerView.setVisibility(View.VISIBLE);
             DataPaser.categoryLabel(tag_id, handler);
@@ -187,7 +187,7 @@ public class GoodListFragment extends BaseFragment implements EditRecyclerAdapte
         goodListAdapter.notifyDataSetChanged();
         dialog.show();
         Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
-        DataPaser.getProductList(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, handler);
+        DataPaser.getProductList(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null,null,null, handler);
     }
 
 }

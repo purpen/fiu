@@ -17,7 +17,8 @@ import com.taihuoniao.fineix.utils.MD5Utils;
 public class ClientDiscoverAPI {
     //产品
     //列表
-    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids, RequestCallBack<String> callBack) {
+    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                                      String stick, String fine, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_productsList;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("category_id", category_id);
@@ -27,6 +28,8 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("ids", ids);
         params.addQueryStringParameter("ignore_ids", ignore_ids);
+        params.addQueryStringParameter("stick", stick);
+        params.addQueryStringParameter("fine", fine);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -198,13 +201,13 @@ public class ClientDiscoverAPI {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String scene_id, String stick, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String scene_id, String sort, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("scene_id", scene_id);
-        params.addQueryStringParameter("stick", stick);
+        params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("dis", dis);
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
@@ -270,6 +273,52 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    //收货地址
+    //获取省市列表
+    public static void getProvinceList(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.urlString_province_cities;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        NetworkManager.getInstance().add("getProvinceList", httpHandler);
+    }
+
+    //收货地址
+    //获取用户收货地址列表
+    public static void getAddressList(String page, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.urlString_address_lists;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        NetworkManager.getInstance().add("getAddressList", httpHandler);
+    }
+
+    //收货地址
+    //提交正在编辑的收货地址
+    public static void commitAddressNet(String id, String name, String phone, String province, String city, String address, String zip, String is_default, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.urlString_new_address;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("name", name);
+        params.addQueryStringParameter("phone", phone);
+        params.addQueryStringParameter("province", province);
+        params.addQueryStringParameter("city", city);
+        params.addQueryStringParameter("address", address);
+        params.addQueryStringParameter("zip", zip);
+        params.addQueryStringParameter("is_default", is_default);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        NetworkManager.getInstance().add("commitAddress", httpHandler);
+    }
+
+    //收货地址
+    //删除某个收货地址
+    public static void deleteAddressNet(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.urlString_delete_address;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        NetworkManager.getInstance().add("deleteAddress", httpHandler);
+    }
+
     //公共
     //举报
     public static void report(String target_id, String type, String evt, RequestCallBack<String> callBack) {
@@ -333,11 +382,12 @@ public class ClientDiscoverAPI {
 
     //评论
     //提交评论
-    public static void sendComment(String target_id, String content, String type, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
+    public static void sendComment(String target_id, String content, String type, String target_user_id, String is_reply, String reply_id, String reply_user_id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.send_comment;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("content", content);
+        params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("is_reply", is_reply);
         params.addQueryStringParameter("reply_id", reply_id);
         params.addQueryStringParameter("reply_user_id", reply_user_id);
@@ -348,13 +398,13 @@ public class ClientDiscoverAPI {
 
     //评论
     //列表
-    public static void commentsList(String page, String size, String target_id,String target_user_id,String type, RequestCallBack<String> callBack) {
+    public static void commentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.comments_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("target_id", target_id);
-        params.addQueryStringParameter("target_user_id",target_user_id);
+        params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("type", type);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
@@ -638,10 +688,10 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
     }
 
-    public static void getSystemNotice(String page,String pageSize,RequestCallBack<String> callBack){
+    public static void getSystemNotice(String page, String pageSize, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page",page);
-        params.addBodyParameter("size",pageSize);
+        params.addBodyParameter("page", page);
+        params.addBodyParameter("size", pageSize);
         MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
     }
 
