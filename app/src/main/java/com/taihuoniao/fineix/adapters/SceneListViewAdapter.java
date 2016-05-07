@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainApplication;
 
 import java.util.List;
@@ -24,12 +25,14 @@ public class SceneListViewAdapter extends BaseAdapter {
     private Context context;
     private List<SceneListBean> list;
     private List<LoveSceneBean.LoveSceneItem> loveList;
+    private List<SearchBean.SearchItem> searchList;
     private DisplayImageOptions options;
 
-    public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList) {
+    public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList,List<SearchBean.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.loveList = loveList;
+        this.searchList = searchList;
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
 //                .showImageForEmptyUri(R.mipmap.default_backround)
@@ -45,6 +48,8 @@ public class SceneListViewAdapter extends BaseAdapter {
             return list.size();
         } else if (loveList != null) {
             return loveList.size();
+        }else if(searchList!=null){
+            return searchList.size();
         }
         return 0;
     }
@@ -55,6 +60,8 @@ public class SceneListViewAdapter extends BaseAdapter {
             return list.get(position);
         } else if (loveList != null) {
             return loveList.get(position);
+        }else if(searchList!=null){
+            return searchList.get(position);
         }
         return null;
     }
@@ -112,6 +119,18 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.suoshuQingjing.setText(loveList.get(position).getScene_title());
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
+        }else if(searchList!=null){
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
+//            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
+            ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
+            holder.userName.setText(searchList.get(position).getUser_info().getNickname());
+            isSpertAndSummary(holder.userInfo, searchList.get(position).getUser_info().getIs_expert(), searchList.get(position).getUser_info().getSummary());
+            holder.viewCount.setText(searchList.get(position).getView_count());
+            holder.loveCount.setText(searchList.get(position).getLove_count());
+            holder.sceneTitle.setText(searchList.get(position).getTitle());
+            holder.suoshuQingjing.setText(searchList.get(position).getScene_title());
+            holder.location.setText(searchList.get(position).getAddress());
+            holder.time.setText(searchList.get(position).getCreated_at());
         }
         return convertView;
     }

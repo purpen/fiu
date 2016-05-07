@@ -117,6 +117,8 @@ public class DataConstants {
     public static final int REQUESTCODE_ADDNEWADDRESS = 48;
     //获取收货地址
     public static final int GET_ADDRESS_LIST = 47;
+    //搜索结果
+    public static final int SEARCH_LIST = 46;
 
 
     //SharedPreferences 存储文件名

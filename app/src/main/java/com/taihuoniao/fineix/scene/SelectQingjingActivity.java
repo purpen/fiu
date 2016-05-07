@@ -85,7 +85,7 @@ public class SelectQingjingActivity extends BaseActivity implements View.OnClick
         qingjingGrid.setHorizontalSpacing(space);
         qingjingGrid.setVerticalSpacing(space);
         qingjingList = new ArrayList<>();
-        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, SelectQingjingActivity.this, space);
+        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, SelectQingjingActivity.this, space);
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
         titleLayout.setFocusable(true);

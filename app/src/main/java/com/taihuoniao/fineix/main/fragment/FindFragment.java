@@ -53,6 +53,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -142,13 +143,16 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
-                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("q", hotLabelList.get(postion).getTitle_cn());
+                intent.putExtra("t", "8");
+                startActivity(intent);
             }
         });
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null,null);
         sceneListView.setAdapter(sceneListViewAdapter);
         sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
@@ -219,8 +223,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-        //用户大小不一的头像
-        DataPaser.userList(1 + "", 50 + "", null, null, handler);
+
         //热门标签
         ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
             @Override
@@ -307,6 +310,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onResume() {
         super.onResume();
+        //用户大小不一的头像
+        DataPaser.userList(1 + "", 50 + "", null, null, handler);
         if (scrollableView != null) {
             scrollableView.start();
         }

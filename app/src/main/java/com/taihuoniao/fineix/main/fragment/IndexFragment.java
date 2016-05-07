@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -70,7 +71,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             }
         });
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList,null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null,null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
         getCurrentLocation();
@@ -193,7 +194,9 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 Toast.makeText(getActivity(), "订阅", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fragment_index_search:
-                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("t", 9 + "");
+                startActivity(intent);
                 break;
         }
     }

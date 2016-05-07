@@ -106,7 +106,7 @@ public class GoodListFragment extends BaseFragment implements EditRecyclerAdapte
             }
         });
         productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(getActivity(), productList);
+        goodListAdapter = new GoodListAdapter(getActivity(), productList,null);
         listView.setAdapter(goodListAdapter);
     }
 

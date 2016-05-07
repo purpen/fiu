@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="491"
             android:background="@mipmap/product_left_label"
@@ -37,7 +37,7 @@
 
         <ImageView
             android:id="@+id/img_fiu"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="74"
@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="168"
             android:background="@mipmap/product_right_label"

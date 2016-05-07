@@ -50,6 +50,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -116,7 +117,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null,null, handler);
+        DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null, handler);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -178,8 +179,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
             }
         });
-        //品牌列表
-        DataPaser.brandList(1, 50, handler);
+
     }
 
 
@@ -197,7 +197,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         pinLabelRecyclerAdapter = new PinLabelRecyclerAdapter(getActivity(), hotLabelList, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
-                Toast.makeText(getActivity(), "点击条目 = " + postion, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("q", hotLabelList.get(postion).getTitle_cn());
+                intent.putExtra("t", "10");
+                startActivity(intent);
             }
         });
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
@@ -210,7 +213,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
         productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(getActivity(), productList);
+        goodListAdapter = new GoodListAdapter(getActivity(), productList,null);
         listView.setAdapter(goodListAdapter);
         listView.setOnScrollListener(this);
         options = new DisplayImageOptions.Builder()
@@ -302,6 +305,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onResume() {
         super.onResume();
+        //品牌列表
+        DataPaser.brandList(1, 50, handler);
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -347,6 +352,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         }
         int top = absoluteLayout.getTop();
         int bottom = absoluteLayout.getBottom();
+        if (bottom - top <= 0) {
+            return;
+        }
         for (int i = 0; i < randomImgs.size(); i++) {
             RandomImg randomImg = randomImgs.get(i);
 

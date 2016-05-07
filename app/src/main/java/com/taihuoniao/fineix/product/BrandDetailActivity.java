@@ -90,7 +90,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         id = getIntent().getStringExtra("id");
-        if (id == null ) {
+        if (id == null) {
             Toast.makeText(BrandDetailActivity.this, "暂无此品牌详细信息", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -101,7 +101,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg.setLayoutParams(lp);
 
         productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(BrandDetailActivity.this, productList);
+        goodListAdapter = new GoodListAdapter(BrandDetailActivity.this, productList,null);
         listView.setAdapter(goodListAdapter);
         listView.setOnScrollListener(this);
     }
@@ -111,7 +111,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     protected void requestNet() {
         dialog.show();
         DataPaser.brandDetail(id, handler);
-        DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, null,null,handler);
+        DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, null, null, handler);
     }
 
     private Handler handler = new Handler() {
@@ -200,15 +200,12 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             lastTotalItem = totalItemCount;
             page++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null,null,null, handler);
+            DataPaser.getProductList(null, id, null, page + "", 8 + "", null, null, null, null, handler);
         }
     }
 
     /**
-     * 柔化效果(高斯模糊)(优化后比上面快三倍)
-     *
-     * @param bmp
-     * @return
+     * 柔化效果(高斯模糊)
      */
     private Bitmap blurImageAmeliorate(Bitmap bmp) {
         long start = System.currentTimeMillis();
@@ -269,7 +266,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         long end = System.currentTimeMillis();
-        Log.d("may", "used time=" + (end - start));
+        Log.e("<<<mohu", "used time=" + (end - start));
         return bitmap;
     }
 }

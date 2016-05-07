@@ -1,113 +1,156 @@
 package com.taihuoniao.fineix.scene.fragments;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ImgTxtItem;
-import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
-import com.taihuoniao.fineix.user.FocusFansActivity;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
+import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lilin
- * created at 2016/4/25 18:38
+ *         created at 2016/4/25 18:38
  */
-public class QJResultFragment extends MyBaseFragment {
-    public QJResultFragment() {
+public class QJResultFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+    private String q;
+    private String t;
+    //控件
+    private PullToRefreshGridView pullToRefreshView;
+    private GridView gridView;
+    private ProgressBar progressBar;
+    //情景列表
+    private int page = 1;
+    private List<SearchBean.SearchItem> list;
+    private AllQingjingGridAdapter allQingjingGridAdapter;
+    private WaittingDialog dialog;
+
+    public static QJResultFragment newInstance(String q, String t) {
+
+        Bundle args = new Bundle();
+        args.putString("q", q);
+        args.putString("t", t);
+        QJResultFragment fragment = new QJResultFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.setFragmentLayout(R.layout.fragment_list);
-        super.onCreateView(inflater, container, savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        q = getArguments().getString("q", null);
+        t = getArguments().getString("t", null);
+    }
+
+    @Override
+    protected View initView() {
+        View view = View.inflate(getActivity(), R.layout.fragment_qjresult, null);
+        pullToRefreshView = (PullToRefreshGridView) view.findViewById(R.id.fragment_qjresult_pullrefreshview);
+        gridView = pullToRefreshView.getRefreshableView();
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_qjresult_progress);
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
     @Override
-    protected void loadData() {
-
-    }
-
-    @Override
-    protected void initViews() {
-
-    }
-
-
-    private void setOnClickListener(View view, final ImgTxtItem item) {
-        view.setOnClickListener(new View.OnClickListener() {
+    protected void initList() {
+        pullToRefreshView.setPullToRefreshEnabled(false);
+        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
-            public void onClick(View view) {
-                switch (item.imgId) {
-                    case R.mipmap.taobao:
-                        Util.makeToast(activity, "taobao");
-                        break;
-                    case R.mipmap.tmall:
-                        Util.makeToast(activity, "tmall");
-                        break;
-                    case R.mipmap.jd:
-                        Util.makeToast(activity, "jd");
-                        break;
-                    case R.mipmap.amzon:
-                        Util.makeToast(activity, "amzon");
-                        break;
-                }
+            public void onLastItemVisible() {
+                progressBar.setVisibility(View.VISIBLE);
+                page++;
+                DataPaser.search(q, t, page + "", handler);
             }
         });
-    }
-
-//    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
-    protected void onClick(View v) {
-        Intent intent=null;
-        switch (v.getId()) {
-            case R.id.ll_qj:
-                Util.makeToast("我创建的情景");
-                //
-                break;
-            case R.id.ll_cj:
-                Util.makeToast("我创建的场景");
-                break;
-            case R.id.ll_focus:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FOCUS_TYPE);
-                startActivity(intent);
-                break;
-            case R.id.ll_fans:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
-                startActivity(intent);
-                break;
-            case R.id.iv_detail:
-                Util.makeToast(activity, "个人详情");
-                break;
-            case R.id.iv_calendar:
-                Util.makeToast(activity, "日历");
-                break;
-            case R.id.item_about_us:
-                Util.makeToast(activity, "关于我们");
-                break;
-            case R.id.item_feedback:
-                Util.makeToast(activity, "反馈");
-                break;
-            case R.id.item_partner:
-                Util.makeToast(activity, "合作伙伴");
-                break;
-            case R.id.bt_register:
-                intent = new Intent(getActivity(),
-                        OptRegisterLoginActivity.class);
-
-                startActivity(intent);
-                break;
-
-        }
+        gridView.setNumColumns(2);
+        int space = DensityUtils.dp2px(getActivity(), 5);
+        gridView.setHorizontalSpacing(space);
+        gridView.setVerticalSpacing(space);
+        list = new ArrayList<>();
+        allQingjingGridAdapter = new AllQingjingGridAdapter(null, list, getActivity(), space);
+        gridView.setAdapter(allQingjingGridAdapter);
+        gridView.setOnItemClickListener(this);
     }
 
     @Override
-    protected void installListener() {
+    protected void requestNet() {
+        Log.e("<<<qjresult", "q=" + q + ",t=" + t);
+        if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
+            return;
+        }
+        dialog.show();
+        DataPaser.search(q, t, page + "", handler);
+    }
 
+    public void refreshData(String q, String t) {
+        this.q = q;
+        this.t = t;
+        page = 1;
+        requestNet();
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case DataConstants.SEARCH_LIST:
+                    dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
+                    SearchBean netSearch = (SearchBean) msg.obj;
+                    if (netSearch.isSuccess()) {
+                        if (page == 1) {
+                            list.clear();
+                        }
+                        list.addAll(netSearch.getData().getRows());
+                        allQingjingGridAdapter.notifyDataSetChanged();
+                    }
+                    break;
+                case DataConstants.NET_FAIL:
+                    dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        //cancelNet();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) gridView.getAdapter().getItem(position);
+        if (searchItem != null) {
+            Intent intent = new Intent(getActivity(), QingjingDetailActivity.class);
+            intent.putExtra("id", searchItem.get_id());
+            startActivity(intent);
+        }
     }
 }

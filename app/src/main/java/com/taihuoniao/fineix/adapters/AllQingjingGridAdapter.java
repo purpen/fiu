@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 
 import java.util.List;
 
@@ -18,23 +19,35 @@ import java.util.List;
  */
 public class AllQingjingGridAdapter extends BaseAdapter {
     private List<QingJingListBean.QingJingItem> list;
+    private List<SearchBean.SearchItem> searchList;
     private Context context;
     private int horizontalSpace = 0;//gridview的水平间距
 
-    public AllQingjingGridAdapter(List<QingJingListBean.QingJingItem> list, Context context, int horizontalSpace) {
+    public AllQingjingGridAdapter(List<QingJingListBean.QingJingItem> list, List<SearchBean.SearchItem> searchList, Context context, int horizontalSpace) {
         this.list = list;
+        this.searchList = searchList;
         this.context = context;
         this.horizontalSpace = horizontalSpace;
     }
 
     @Override
     public int getCount() {
-        return list == null ? 0 : list.size();
+        if (list != null) {
+            return list.size();
+        } else if (searchList != null) {
+            return searchList.size();
+        }
+        return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        if (list != null) {
+            return list.get(position);
+        } else if (searchList != null) {
+            return searchList.get(position);
+        }
+        return null;
     }
 
     @Override
@@ -58,9 +71,15 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
-        holder.addressTv.setText(list.get(position).getAddress());
-        holder.title.setText(list.get(position).getTitle());
+        if (list != null) {
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+            holder.addressTv.setText(list.get(position).getAddress());
+            holder.title.setText(list.get(position).getTitle());
+        } else if (searchList != null) {
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
+            holder.addressTv.setText(searchList.get(position).getAddress());
+            holder.title.setText(searchList.get(position).getTitle());
+        }
         return convertView;
     }
 
