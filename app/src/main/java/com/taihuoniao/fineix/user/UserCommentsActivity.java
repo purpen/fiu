@@ -68,7 +68,7 @@ public class UserCommentsActivity extends BaseActivity{
     @Override
     protected void requestNet() {
         dialog.show();
-        ClientDiscoverAPI.commentsList(String.valueOf(curPage),pageSize,null, LoginInfo.getUserId()+"", COMMENT_TYPE, new RequestCallBack<String>() {
+        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage),pageSize,null, LoginInfo.getUserId()+"", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

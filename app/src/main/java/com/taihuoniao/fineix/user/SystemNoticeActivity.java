@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ListView;
 
 import com.google.gson.JsonSyntaxException;
@@ -13,6 +14,7 @@ import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author lilin
@@ -37,7 +40,7 @@ public class SystemNoticeActivity extends BaseActivity {
     private static final String PAGE_SIZE = "9999";
     private int curPage = 1;
     private WaittingDialog dialog;
-
+    private ArrayList<SystemNoticeData.SystemNoticeItem> list;
     public SystemNoticeActivity() {
         super(R.layout.activity_system_notice);
     }
@@ -49,6 +52,17 @@ public class SystemNoticeActivity extends BaseActivity {
         custom_head.setHeadRightTxtShow(true,R.string.clear);
     }
 
+    @OnClick(R.id.tv_head_right)
+    void performClick(View v){
+        switch (v.getId()){
+            case R.id.tv_head_right:
+                if (list==null || list.size()==0) return;
+                list.clear();
+                adapter.notifyDataSetChanged();
+                Util.makeToast("已清空");
+                break;
+        }
+    }
     @Override
     protected void requestNet() {
         ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
@@ -63,13 +77,13 @@ public class SystemNoticeActivity extends BaseActivity {
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 try {
-                    SystemNoticeData noticeData = JsonUtil.fromJson(responseInfo.result, SystemNoticeData.class);
-                    if (noticeData.isSuccess()){
-                        ArrayList<SystemNoticeData.SystemNoticeItem> rows = noticeData.rows;
-                        refreshUI(rows);
+                    HttpResponse<SystemNoticeData> response= JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<SystemNoticeData>>(){});
+                    if (response.isSuccess()){
+                        list = response.getData().rows;
+                        refreshUI();
                         return;
                     }
-                    Util.makeToast(noticeData.getMessage());
+                    Util.makeToast(response.getMessage());
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
@@ -86,7 +100,7 @@ public class SystemNoticeActivity extends BaseActivity {
     }
 
     @Override
-    protected void refreshUI(List list) {
+    protected void refreshUI() {
         if (list==null) return;
         if (list.size()==0){
             Util.makeToast("暂无数据！");

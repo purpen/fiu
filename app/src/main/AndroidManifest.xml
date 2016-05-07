@@ -131,6 +131,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             />
+        <activity
+            android:name=".user.PrivateMessageListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
 
         <activity
             android:name=".user.OptRegisterLoginActivity"

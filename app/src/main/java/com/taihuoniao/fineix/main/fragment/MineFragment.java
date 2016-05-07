@@ -254,10 +254,10 @@ public class MineFragment extends MyBaseFragment {
 //            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
-        if (TextUtils.isEmpty(user.realname)) {
+        if (TextUtils.isEmpty(user.summary)) {
             tv_real.setVisibility(View.GONE);
         } else {
-            tv_real.setText(user.realname);
+            tv_real.setText(user.summary);
         }
 
         if (TextUtils.isEmpty(user.nickname)) {
@@ -299,7 +299,7 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -330,9 +330,9 @@ public class MineFragment extends MyBaseFragment {
             case R.id.iv_detail:
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
-//            case R.id.iv_calendar:
-//                Util.makeToast(activity, "日历");
-//                break;
+            case R.id.ibtn:
+                Util.makeToast("认证");
+                break;
             case R.id.item_about_us:
                 startActivity(new Intent(activity, AboutUsActivity.class));
                 break;

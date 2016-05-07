@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,6 +48,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         holder.tv_name.setText(item.getUser().getNickname());
         holder.tv_desc.setText(item.getContent());
         holder.tv_time.setText(item.getCreated_at());
+        holder.iv.setVisibility(View.VISIBLE);
         imageLoader.displayImage(item.target_small_cover_url,holder.iv,options);
         holder.riv.setOnClickListener(new View.OnClickListener() {
             @Override

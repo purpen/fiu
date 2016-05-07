@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.beans;
 
-import com.taihuoniao.fineix.network.HttpResponse;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,7 +7,7 @@ import java.util.ArrayList;
  * @author lilin
  *         created at 2016/5/5 23:51
  */
-public class SystemNoticeData extends HttpResponse {
+public class SystemNoticeData{
     public int total_rows;
     public ArrayList<SystemNoticeItem> rows;
     public long current_user_id;

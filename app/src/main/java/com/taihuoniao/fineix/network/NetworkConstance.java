@@ -85,6 +85,9 @@ public class NetworkConstance {
     public static final String send_comment = BASE_URL + "/comment/ajax_comment";
     //列表
     public static final String comments_list = BASE_URL + "/comment/getlist";
+
+    //我接收到的评论列表
+    public static final String MY_COMMENTS_LIST = BASE_URL + "/my/comment_list";
     //分类
     //分类标签
     public static final String category_label = BASE_URL + "/category/fetch_child_tags";

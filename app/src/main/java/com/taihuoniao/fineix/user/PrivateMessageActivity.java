@@ -69,27 +69,27 @@ public class PrivateMessageActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-//        ClientDiscoverAPI.getRecordMessage(String.valueOf(curPage), PAGE_SIZE, TYPE_USER, new RequestCallBack<String>() {
-//            @Override
-//            public void onStart() {
-//                if (dialog!=null) dialog.show();
-//            }
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                dialog.dismiss();
-//                if (responseInfo==null) return;
-//                if (TextUtils.isEmpty(responseInfo.result)) return;
-//                //TODO
-//
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException e, String s) {
-//                dialog.dismiss();
-//                Util.makeToast(s);
-//            }
-//        });
+        ClientDiscoverAPI.messageDetailList(String.valueOf(curPage),new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                if (dialog!=null) dialog.show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                //TODO
+
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                Util.makeToast(s);
+            }
+        });
     }
 
     @OnClick({R.id.btn})

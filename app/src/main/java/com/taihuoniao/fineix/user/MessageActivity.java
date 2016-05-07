@@ -71,7 +71,7 @@ public class MessageActivity extends BaseActivity {
                 startActivity(new Intent(activity, UserCommentsActivity.class));
                 break;
             case R.id.item_to_comment:
-                Util.makeToast("私信");
+                startActivity(new Intent(activity,PrivateMessageListActivity.class));
                 break;
             case R.id.item_notice: //关注我的
                 intent = new Intent(activity, FocusFansActivity.class);

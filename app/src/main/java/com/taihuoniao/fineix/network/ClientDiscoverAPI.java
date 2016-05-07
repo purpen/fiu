@@ -408,6 +408,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("type", type);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+    //评论
+    //列表
+    public static void mycommentsList(String page, String size, String target_id, String target_user_id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.MY_COMMENTS_LIST;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("target_id", target_id);
+        params.addQueryStringParameter("target_user_id", target_user_id);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 
     //分类
     //分类标签
@@ -731,11 +743,11 @@ public class ClientDiscoverAPI {
     }
 
     /**
-     * 私信详情
+     * 私信详情列表
      * @param to_user_id
      * @param callBack
      */
-    public static void messageDetail(String to_user_id,RequestCallBack<String> callBack){
+    public static void messageDetailList(String to_user_id,RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("to_user_id",to_user_id);
         MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);

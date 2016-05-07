@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,6 +56,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouchBase;
 import com.taihuoniao.fineix.view.imageViewTouch.easing.Linear;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -95,6 +97,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_fans;
     @Bind(R.id.bt_focus)
     Button bt_focus;
+    @Bind(R.id.ibtn)
+    ImageButton ibtn;
     private User user;
     private Uri mImageUri;
     private FragmentManager fm;
@@ -159,8 +163,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
         if (userId==LoginInfo.getUserId()){
             ll_btn_box.setVisibility(View.GONE);
+            ibtn.setVisibility(View.VISIBLE);
         }else {
             ll_btn_box.setVisibility(View.VISIBLE);
+            ibtn.setVisibility(View.GONE);
         }
     }
 
@@ -299,10 +305,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }else{
             bt_focus.setText("已关注");
         }
-        if (!TextUtils.isEmpty(user.nickname)){
+        if (!TextUtils.isEmpty(user.summary)){
             if (LoginInfo.getUserId()!=userId){
                 tv_title.setVisibility(View.VISIBLE);
-                tv_title.setText(user.nickname);
+                tv_title.setText(user.summary);
             }else {
                 tv_title.setVisibility(View.GONE);
             }
@@ -336,7 +342,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    @OnClick({R.id.ll_box, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans, R.id.iv_right, R.id.iv_detail, R.id.bt_focus, R.id.bt_msg})
+    @OnClick({R.id.ll_box, R.id.ll_qj,R.id.ibtn,R.id.ll_cj, R.id.ll_focus, R.id.ll_fans, R.id.iv_right, R.id.iv_detail, R.id.bt_focus, R.id.bt_msg})
     void performClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -345,6 +351,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.iv_right:
                 startActivity(new Intent(activity, EditUserInfoActivity.class));
+                break;
+            case R.id.ibtn:
+                Util.makeToast("认证");
                 break;
             case R.id.bt_focus:
                 bt_focus.setEnabled(false);

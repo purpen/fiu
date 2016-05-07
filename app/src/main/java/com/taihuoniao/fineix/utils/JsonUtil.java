@@ -41,6 +41,9 @@ public class JsonUtil {
         return (T) ((HttpResponse<T>) gson.fromJson(json, token.getType())).getData();
     }
 
+    public static <T> HttpResponse<T> json2Bean(String json, TypeToken<HttpResponse<T>> token) throws JsonSyntaxException {
+        return (HttpResponse<T>) gson.fromJson(json, token.getType());
+    }
 
     public static String toJson(Object object) {
         return gson.toJson(object);
