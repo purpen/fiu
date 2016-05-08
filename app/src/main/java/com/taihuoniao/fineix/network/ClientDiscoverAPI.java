@@ -762,7 +762,7 @@ public class ClientDiscoverAPI {
      * @param to_user_id
      * @param callBack
      */
-    public static void messageDetail(String to_user_id,RequestCallBack<String> callBack){
+    public static void messageDetailList(String to_user_id,RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("to_user_id",to_user_id);
         MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
