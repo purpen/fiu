@@ -327,6 +327,8 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("evt", evt);
+        params.addQueryStringParameter("application", 3 + "");
+        params.addQueryStringParameter("from_to", 4 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -357,6 +359,19 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", 30 + "");
         params.addQueryStringParameter("domain", domain);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //公共
+    //搜索列表
+    public static void search(String q, String t, String page, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.search;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("q", q);
+        params.addQueryStringParameter("t", t);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("evt", "tag");
+        params.addQueryStringParameter("size", 8 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -743,11 +758,11 @@ public class ClientDiscoverAPI {
     }
 
     /**
-     * 私信详情列表
+     * 私信详情
      * @param to_user_id
      * @param callBack
      */
-    public static void messageDetailList(String to_user_id,RequestCallBack<String> callBack){
+    public static void messageDetail(String to_user_id,RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("to_user_id",to_user_id);
         MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);

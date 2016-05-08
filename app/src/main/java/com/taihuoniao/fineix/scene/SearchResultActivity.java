@@ -1,20 +1,15 @@
 package com.taihuoniao.fineix.scene;
 
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SlidingTabPageAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.SceneDetails;
-import com.taihuoniao.fineix.scene.fragments.CJResultFragment;
-import com.taihuoniao.fineix.scene.fragments.ProductResultFragment;
-import com.taihuoniao.fineix.scene.fragments.QJResultFragment;
-import com.taihuoniao.fineix.scene.fragments.UserResultFragment;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.CustomViewPager;
@@ -26,18 +21,33 @@ import butterknife.OnClick;
 
 /**
  * 站内搜索界面
+ *
  * @author lilin
  *         created at 2016/4/21 17:56
  */
-public class SearchResultActivity extends BaseActivity {
+public class SearchResultActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    //上个界面传递过来的数据
+    private String q;//搜索关键字
+    private String t;//搜索什么 7.商品；8.情景；9.场景；10.情景产品；11.场景分享语
+//    private String evt;//搜索方式 content:内容；tag:标签搜索(情景需要传此参数)
+
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.custom_sliding_tab)
     CustomSlidingTab custom_sliding_tab;
     @Bind(R.id.custom_view_pager)
     CustomViewPager custom_view_pager;
-    private String[] titles = {"情景", "场景", "用户", "产品"};
-    private Class[] clazzs={QJResultFragment.class, CJResultFragment.class, UserResultFragment.class, ProductResultFragment.class};
+    private String[] titles = {"情景", "场景", "产品"};
+    //    private Class[] clazzs = {QJResultFragment.class, CJResultFragment.class, ProductResultFragment.class};
+    private SlidingTabPageAdapter slidingTabPageAdapter;
+
+    @Override
+    protected void getIntentData() {
+        q = getIntent().getStringExtra("q");
+        t = getIntent().getStringExtra("t");
+//        evt = getIntent().getStringExtra("evt");
+        Log.e("<<<sousuo", "q=" + q + ",t=" + t);
+    }
 
     public SearchResultActivity() {
         super(R.layout.activity_search_result);
@@ -50,39 +60,56 @@ public class SearchResultActivity extends BaseActivity {
         custom_sliding_tab.setTextColor(getResources().getColor(R.color.color_333));
         custom_sliding_tab.setTypeface(null, Typeface.NORMAL);
         custom_sliding_tab.setTextSize(getResources().getDimensionPixelSize(R.dimen.sp14));
-        custom_view_pager.setAdapter(new SlidingTabPageAdapter(getSupportFragmentManager(),clazzs,Arrays.asList(titles)));
+        slidingTabPageAdapter = new SlidingTabPageAdapter(getSupportFragmentManager(), Arrays.asList(titles), q, t);
+        custom_view_pager.setAdapter(slidingTabPageAdapter);
         custom_sliding_tab.setViewPager(custom_view_pager);
+        custom_sliding_tab.setOnPageChangeListener(this);
+        custom_head.getHeadRightTV().setFocusable(true);
+        custom_head.getHeadRightTV().setFocusableInTouchMode(true);
+        custom_head.getHeadRightTV().requestFocus();
     }
 
 
     @Override
     protected void installListener() {
-        custom_head.getSearchET().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence cs, int start, int before, int count) {
-                String keyWord = cs.toString().trim();
-                if (!TextUtils.isEmpty(keyWord)) {
+        custom_head.getSearchET().setOnKeyListener(new View.OnKeyListener() {//输入完后按键盘上的搜索键【回车键改为了搜索键】
 
-                } else {
-
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (SearchResultActivity.this.getCurrentFocus() != null) {
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SearchResultActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    //开始搜索
+                    slidingTabPageAdapter.notifyDataSetChanged();
                 }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+                return false;
             }
         });
+    }
+
+    @Override
+    protected void initList() {
+        if (t != null) {
+            switch (t) {
+                case "9":
+                    custom_view_pager.setCurrentItem(1);
+                    break;
+                case "10":
+                    custom_view_pager.setCurrentItem(2);
+                    break;
+                default:
+                    custom_view_pager.setCurrentItem(0);
+                    break;
+            }
+        }
+
     }
 
     @OnClick({R.id.tv_head_right, R.id.ib_search})
     protected void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibtn:
-                custom_head.getSearchET().getText().clear();
+                custom_head.getSearchET().setText("");
                 break;
             case R.id.tv_head_right:
                 finish();
@@ -90,4 +117,29 @@ public class SearchResultActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position) {
+            case 1:
+                t = "9";
+                break;
+            case 2:
+                t = "10";
+                break;
+            default:
+                t = "8";
+                break;
+        }
+        slidingTabPageAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

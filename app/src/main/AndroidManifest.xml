@@ -52,6 +52,9 @@
             android:name=".user.AddNewAddressActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".scene.SearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".product.WebActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

@@ -207,7 +207,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         sceneProductAdapter = new SceneDetailProductListAdapter(SceneDetailActivity.this, sceneProductList);
         productListView.setAdapter(sceneProductAdapter);
         nearProductList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList);
+        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList,null);
         nearProductListView.setAdapter(goodListAdapter);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)

@@ -46,6 +46,7 @@ import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SkipBind;
 import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
@@ -1120,6 +1121,36 @@ public class DataPaser {
             }
         });
 
+    }
+
+    //公共
+    //搜索列表
+    public static void search(String q, String t, String page, final Handler handler) {
+        ClientDiscoverAPI.search(q, t, page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<sousuo", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SEARCH_LIST;
+                msg.obj = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
     }
 
     //公共

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
@@ -23,20 +24,32 @@ import java.util.List;
 public class GoodListAdapter extends BaseAdapter {
     private Activity activity;
     private List<ProductListBean> list;
+    private List<SearchBean.SearchItem> searchList;
 
-    public GoodListAdapter(Activity activity, List<ProductListBean> list) {
+    public GoodListAdapter(Activity activity, List<ProductListBean> list, List<SearchBean.SearchItem> searchList) {
         this.activity = activity;
         this.list = list;
+        this.searchList = searchList;
     }
 
     @Override
     public int getCount() {
-        return list == null ? 0 : list.size();
+        if (list != null) {
+            return list.size();
+        } else if (searchList != null) {
+            return searchList.size();
+        }
+        return 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        if (list != null) {
+            return list.get(position);
+        } else if (searchList != null) {
+            return searchList.get(position);
+        }
+        return null;
     }
 
     @Override
@@ -61,22 +74,41 @@ public class GoodListAdapter extends BaseAdapter {
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
-        holder.nameTv.setText(list.get(position).getTitle());
-        holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
-        if (list.get(position).banner_asset.size() > 0) {
-            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
+        if (list != null) {
+            holder.nameTv.setText(list.get(position).getTitle());
+            holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
+            if (list.get(position).banner_asset.size() > 0) {
+                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
+            }
+            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
+            if (list.get(position).getAttrbute().equals("1")) {
+                holder.img.setVisibility(View.VISIBLE);
+            } else {
+                holder.img.setVisibility(View.INVISIBLE);
+            }
+            ClickListener clickListener = new ClickListener(activity, list, null, position);
+            holder.slidingFocusImageView.setOnItemClickListener(clickListener);
+            holder.nameTv.setOnClickListener(clickListener);
+            holder.priceTv.setOnClickListener(clickListener);
+            holder.img.setOnClickListener(clickListener);
+        } else if (searchList != null) {
+            holder.nameTv.setText(searchList.get(position).getTitle());
+            holder.priceTv.setText(String.format("¥%s", searchList.get(position).getSale_price()));
+            if (searchList.get(position).getBanners().size() > 0) {
+                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, searchList.get(position).getBanners(), activity));
+            }
+            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
+            if (searchList.get(position).getAttrbute().equals("1")) {
+                holder.img.setVisibility(View.VISIBLE);
+            } else {
+                holder.img.setVisibility(View.INVISIBLE);
+            }
+            ClickListener clickListener = new ClickListener(activity, null, searchList, position);
+            holder.slidingFocusImageView.setOnItemClickListener(clickListener);
+            holder.nameTv.setOnClickListener(clickListener);
+            holder.priceTv.setOnClickListener(clickListener);
+            holder.img.setOnClickListener(clickListener);
         }
-        holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-        if (list.get(position).getAttrbute().equals("1")) {
-            holder.img.setVisibility(View.VISIBLE);
-        } else {
-            holder.img.setVisibility(View.INVISIBLE);
-        }
-        ClickListener clickListener = new ClickListener(activity, list, position);
-        holder.slidingFocusImageView.setOnItemClickListener(clickListener);
-        holder.nameTv.setOnClickListener(clickListener);
-        holder.priceTv.setOnClickListener(clickListener);
-        holder.img.setOnClickListener(clickListener);
         return convertView;
     }
 
@@ -84,24 +116,34 @@ public class GoodListAdapter extends BaseAdapter {
         private Activity activity;
         private int position;
         private List<ProductListBean> list;
+        private List<SearchBean.SearchItem> searchList;
 
-        public ClickListener(Activity activity, List<ProductListBean> list, int position) {
+        public ClickListener(Activity activity, List<ProductListBean> list, List<SearchBean.SearchItem> searchList, int position) {
             this.activity = activity;
             this.list = list;
+            this.searchList = searchList;
             this.position = position;
         }
 
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            intent.putExtra("id", list.get(position).get_id());
+            if (list != null) {
+                intent.putExtra("id", list.get(position).get_id());
+            } else if (searchList != null) {
+                intent.putExtra("id", searchList.get(position).get_id());
+            }
             activity.startActivity(intent);
         }
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            intent.putExtra("id", list.get(this.position).get_id());
+            if (list != null) {
+                intent.putExtra("id", list.get(this.position).get_id());
+            } else if (searchList != null) {
+                intent.putExtra("id", searchList.get(this.position).get_id());
+            }
             activity.startActivity(intent);
         }
     }

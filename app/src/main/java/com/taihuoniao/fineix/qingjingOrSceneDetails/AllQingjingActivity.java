@@ -95,7 +95,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         qingjingGrid.setHorizontalSpacing(space);
         qingjingGrid.setVerticalSpacing(space);
         qingjingList = new ArrayList<>();
-        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, AllQingjingActivity.this, space);
+        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList,null, AllQingjingActivity.this, space);
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
         getCurrentLocation();

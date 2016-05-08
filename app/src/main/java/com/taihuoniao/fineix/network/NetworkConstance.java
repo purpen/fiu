@@ -75,6 +75,8 @@ public class NetworkConstance {
     public static final String brand_detail = BASE_URL + "/scene_brands/view";
     //分类列表
     public static final String category_list = BASE_URL + "/category/getlist";
+    //搜索列表
+    public static final String search = BASE_URL + "/search/getlist";
     //商品和场景关联列表
     public static final String product_and_scenelist = BASE_URL + "/sight_and_product";
     //购物车
