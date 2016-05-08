@@ -753,4 +753,29 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
     }
 
+    //验证红包是否可用
+    public static void checkRedBagUsableNet(String uuid, String rid, String code, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/use_bonus";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+//        params.addQueryStringParameter("uuid", uuid);
+        params.addQueryStringParameter("rid", rid);
+        params.addQueryStringParameter("code", code);
+        MD5Utils.sign(params, url, callBack, false);
+    }
+
+    //帐户处我的红包
+    public static void myRedBagNet(String uuid, String used, String time, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/my/bonus";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+//        params.addQueryStringParameter();("uuid", uuid);
+//        params.addQueryStringParameter();("used", used);
+//        params.addQueryStringParameter();("is_expired", time);
+//        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
+//        httpUtils.send(HttpRequest.HttpMethod.POST, url, params, callBack);
+////        params.addQueryStringParameter("uuid", uuid);
+        params.addQueryStringParameter("used", used);
+        params.addQueryStringParameter("is_expired", time);
+        MD5Utils.sign(params, url, callBack, false);
+    }
+
 }

@@ -143,7 +143,19 @@ public class DataConstants {
     //找回密码
     public static final int PARSER_FIND_PASSWORD = 10;
 
+    //首页　自定义下拉刷新中mHandler.sendEmptyMessageDelayed(__,__)的第一个参数
+    public static final int CUSTOM_PULLTOREFRESH_HOME = 7;
+    //验证红包是否可用
+    public static final int PARSER_CHECK_REDBAG_USABLE=42;
+
+    //商品详情界面到可用红包界面的requestcode和resultcode
+    public static final int REQUESTCODE_REDBAG = 57;
+    public static final int RESULTCODE_REDBAG  = 56;
     public static final String GUIDE_TAG = "guide";
     public static final int GUIDE_INTERVAL = 3000;
     public static final String APP_ID = "";
+    //帐户处我的红包未过期
+    public static final int PARSER_MY_REDBAG_UNTIMEOUT = 19;
+    //帐户处我的红包已过期
+    public static final int PARSER_MY_REDBAG_TIMEOUT = 20;
 }

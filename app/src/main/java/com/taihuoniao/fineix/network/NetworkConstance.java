@@ -142,5 +142,5 @@ public class NetworkConstance {
     public static final String SEND_MESSAGE = BASE_URL + "/message/ajax_message";
 
     //消息详情
-    public static final String MESSAGE_DETAIL = BASE_URL + "/message/ajax_message";
+    public static final String MESSAGE_DETAIL = BASE_URL + "/message/view";
 }

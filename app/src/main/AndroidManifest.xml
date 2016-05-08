@@ -136,7 +136,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             />
-
+        <activity
+            android:name=".user.RedBagActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.OptRegisterLoginActivity"
             android:screenOrientation="portrait"

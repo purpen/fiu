@@ -45,6 +45,11 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.color_333));
         holder.tv_time.setText(item.last_time_at);
+        if (item.is_read>0){
+            holder.tv_num.setVisibility(View.VISIBLE);
+        }else {
+            holder.tv_num.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -57,6 +62,8 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         TextView tv_desc;
         @Bind(R.id.tv_time)
         TextView tv_time;
+        @Bind(R.id.tv_num)
+        TextView tv_num;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

@@ -18,10 +18,12 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,7 +42,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     private static final String TYPE_ALL="0"; //与全部用户私信列表
     private WaittingDialog dialog;
     private PrivateMessageListAdapter adapter;
-    private List<PrivateMessageListData.RowItem> mList;
+    private List<PrivateMessageListData.RowItem> mList=new ArrayList<>();
     public PrivateMessageListActivity(){
         super(R.layout.activity_private_message_list);
     }
@@ -70,6 +72,13 @@ public class PrivateMessageListActivity extends BaseActivity{
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        mList.clear();
+        requestNet();
+    }
+
+    @Override
     protected void requestNet() {
         ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override
@@ -84,8 +93,8 @@ public class PrivateMessageListActivity extends BaseActivity{
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<PrivateMessageListData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<PrivateMessageListData>>() {});
                 if (response.isSuccess()){
-                    mList = response.getData().rows;
-                    refreshUI(mList);
+                    List<PrivateMessageListData.RowItem> list = response.getData().rows;
+                    refreshUI(list);
                     return;
                 }
                 Util.makeToast(response.getMessage());
@@ -108,9 +117,11 @@ public class PrivateMessageListActivity extends BaseActivity{
         }
 
         if (adapter==null){
-            adapter=new PrivateMessageListAdapter(list,activity);
+            mList.addAll(list);
+            adapter=new PrivateMessageListAdapter(mList,activity);
             lv.setAdapter(adapter);
         }else {
+            mList.addAll(list);
             adapter.notifyDataSetChanged();
         }
     }

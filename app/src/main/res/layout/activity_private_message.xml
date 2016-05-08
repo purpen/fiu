@@ -14,8 +14,8 @@
         android:layout_below="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
+        android:divider="@null"
+        android:scrollbars="none"
         />
 
     <LinearLayout

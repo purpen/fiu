@@ -38,7 +38,7 @@ public class LoginInfo implements Serializable {
     private String company;
     private String phone;
     private int first_login;
-
+    private static LoginInfo loginInfo;
     private LoginInfo() {
     }
 
@@ -58,11 +58,23 @@ public class LoginInfo implements Serializable {
 
     }
 
+    public static String getHeadPicUrl() {
+        if (isUserLogin()) {
+            if (loginInfo==null){
+                String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+                loginInfo = JsonUtil.fromJson(login_info,new TypeToken<HttpResponse<LoginInfo>>(){});
+            }
+            return loginInfo.medium_avatar_url;
+        }
+        return null;
+    }
+
     public static long getUserId() {
         if (isUserLogin()) {
-            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-            LoginInfo loginInfo = JsonUtil.fromJson(login_info,new TypeToken<HttpResponse<LoginInfo>>(){});
-            Log.e("<<<", "LoginInfo._id=" + loginInfo._id);
+            if (loginInfo==null){
+                String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+                loginInfo = JsonUtil.fromJson(login_info,new TypeToken<HttpResponse<LoginInfo>>(){});
+            }
             return loginInfo._id;
         }
         return -1;

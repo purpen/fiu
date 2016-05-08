@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
@@ -40,6 +41,7 @@ import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.QingjingSubsBean;
+import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -1434,6 +1436,77 @@ public class DataPaser {
                     e.printStackTrace();
                 }
                 msg.obj = findPasswordInfo;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //验证红包是否可用接口
+    public static void checkRedbagUsableParser(String uuid, String rid, String code, final Handler handler) {
+        ClientDiscoverAPI.checkRedBagUsableNet(uuid, rid, code, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CheckRedBagUsable checkRedBagUsable = null;
+                Message msg = new Message();
+
+                msg.what = DataConstants.PARSER_CHECK_REDBAG_USABLE;
+
+                try {
+                    checkRedBagUsable = new CheckRedBagUsable();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject redbagObj = obj.getJSONObject("data");
+                    checkRedBagUsable.setCode(redbagObj.optString("code"));
+                    checkRedBagUsable.setCoin_money(redbagObj.optString("coin_money"));
+                    checkRedBagUsable.setUseful(redbagObj.optString("useful"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = checkRedBagUsable;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //帐户处未过期红包
+    public static void unTimeoutParser(String uuid, final String used, final String time, final Handler handler) {
+        ClientDiscoverAPI.myRedBagNet(uuid, used, time, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<RedBagUntimeout> list = null;
+                Message msg = new Message();
+                if ("0".equals(used)) {
+                    msg.what = DataConstants.PARSER_MY_REDBAG_TIMEOUT;
+                } else {
+                    msg.what = DataConstants.PARSER_MY_REDBAG_UNTIMEOUT;
+                }
+                try {
+                    list = new ArrayList<RedBagUntimeout>();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject redbagObj = obj.getJSONObject("data");
+                    JSONArray redbagArrs = redbagObj.getJSONArray("rows");
+                    for (int i = 0; i < redbagArrs.length(); i++) {
+                        JSONObject redbagArr = redbagArrs.getJSONObject(i);
+                        RedBagUntimeout untimeout = new RedBagUntimeout();
+                        untimeout.setAmount(redbagArr.optInt("amount"));
+                        untimeout.setMin_amount(redbagArr.optInt("min_amount"));
+                        untimeout.setCode(redbagArr.optString("code"));
+                        list.add(untimeout);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = list;
                 handler.sendMessage(msg);
             }
 

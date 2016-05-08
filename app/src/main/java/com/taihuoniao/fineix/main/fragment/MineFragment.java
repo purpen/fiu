@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
+import com.taihuoniao.fineix.user.RedBagActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -374,6 +375,9 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 3:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
+                        break;
+                    case 6:
+                        startActivity(new Intent(getActivity(), RedBagActivity.class));
                         break;
                     case 7:
                         startActivity(new Intent(activity, SelectAddressActivity.class));

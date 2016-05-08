@@ -16,6 +16,7 @@ public class PrivateMessageListData implements Serializable{
         public String last_time_at;
         public Users users;
         public LastContent last_content;
+        public int is_read;
     }
 
     public class Users implements Serializable{
