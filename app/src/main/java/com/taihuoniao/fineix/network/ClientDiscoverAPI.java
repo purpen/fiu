@@ -793,4 +793,18 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, url, callBack, false);
     }
 
+    /**
+     * 修改密码
+     * @param password
+     * @param new_password
+     * @param callBack
+     */
+    public static void updatePassword(String password,String new_password,RequestCallBack<String> callBack){
+        String url = NetworkConstance.BASE_URL + "/my/modify_password";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("password", password);
+        params.addQueryStringParameter("new_password",new_password);
+        MD5Utils.sign(params, url, callBack, false);
+    }
+
 }

@@ -60,7 +60,7 @@
     <string name="select_city">选择城市</string>
     <string name="locating">定位中...</string>
     <string name="location_error">定位失败</string>
-
+    <string name="complete">完成</string>
     <string-array name="mine_gv_txt">
         <item>订单</item>
         <item>消息</item>

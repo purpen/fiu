@@ -28,6 +28,8 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomHeadView custom_head;
     @Bind(R.id.item_push_setting)
     CustomItemLayout item_push_setting;
+    @Bind(R.id.item_update_psd)
+    CustomItemLayout item_update_psd;
     @Bind(R.id.item_clear_cache)
     CustomItemLayout item_clear_cache;
     @Bind(R.id.item_to_comment)
@@ -48,6 +50,7 @@ public class SystemSettingsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"系统设置");
+        item_update_psd.setTVStyle(0,"修改密码", R.color.color_333);
         item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
         item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
         item_to_comment.setTVStyle(0,"去评价", R.color.color_333);
@@ -58,10 +61,13 @@ public class SystemSettingsActivity extends BaseActivity{
         setCacheSize();
     }
 
-    @OnClick({R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
+    @OnClick({R.id.item_update_psd,R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
     void onClick(View view){
         Intent intent=null;
         switch (view.getId()){
+            case R.id.item_update_psd:
+                startActivity(new Intent(activity,UpdatePasswordActivity.class));
+                break;
             case R.id.btn_logout:
                 SPUtil.clear(activity,DataConstants.LOGIN_INFO);
                 startActivity(new Intent(activity,MainActivity.class));

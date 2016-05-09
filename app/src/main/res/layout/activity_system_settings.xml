@@ -9,10 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <com.taihuoniao.fineix.view.CustomItemLayout
-        android:id="@+id/item_push_setting"
+        android:id="@+id/item_update_psd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp10"
+        />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_push_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         />
     <TextView
         android:layout_width="match_parent"
