@@ -17,26 +17,101 @@
         android:paddingLeft="5dp"
         android:text=""/>
 
+    <ImageView
+        android:id="@+id/image_shopcart_item"
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:src="@mipmap/ic_launcher"/>
+
     <LinearLayout
         android:id="@+id/linear_item_right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/image_shopcart_item"
-            android:layout_width="90dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitXY"/>
 
         <LinearLayout
+            android:id="@+id/linear_edit_shopcart_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:focusable="true"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:id="@+id/tv_subtract_shopcart_item_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.3"
+                    android:background="@color/yellow_bd8913"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tv_counts_shopcart_item_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="8"
+                    android:background="@drawable/grey_no_corner"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="#333333"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tv_add_shopcart_item_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.3"
+                    android:background="@color/yellow_bd8913"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:id="@+id/tv_color_shopcart_item_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="颜色/分类："
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:id="@+id/tv_count_shopcart_item_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="数量 * "
+                    android:textSize="11sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_complete_shopcart_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_title_shopcart_item"
@@ -48,7 +123,7 @@
                 android:minLines="2"
                 android:paddingRight="10dp"
                 android:text="标题"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="13sp"/>
 
             <LinearLayout

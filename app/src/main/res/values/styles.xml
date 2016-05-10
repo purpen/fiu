@@ -8,6 +8,11 @@
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>
+    <!--帐户中客服电话调用的popupwindow的动画效果-->
+    <style name="dialogstyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
 
     <style name="transparent">
         <item name="android:windowBackground">@color/color_transparent</item>
@@ -64,6 +69,12 @@
         <item name="android:maxHeight">10dp</item>
         <item name="android:minHeight">10dp</item>
     </style>
+    <!--评价界面五颗星-->
+    <style name="customRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/start_evaluate</item>
+        <item name="android:minHeight">19dp</item>
+        <item name="android:maxHeight">19dp</item>
+    </style>
     <!--注册中手机号，密码，验证码，注册-->
     <style name="RegisterAndLogin">
         <item name="android:layout_width">match_parent</item>
@@ -94,5 +105,42 @@
     <!--自定义购物车中checkbox的图案样式-->
     <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/slector_checkbox</item>
+    </style>
+    <!--订单详情细条布局的样式-->
+    <style name="order_details_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/white</item>
+    </style>
+    <!--订单详情细条布局中textview的样式-->
+    <style name="order_details_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <!--帐户中待付款、待发货那一行的数量红圈-->
+    <style name="AccountCommingPayRedCircle">
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_width">13dp</item>
+        <item name="android:background">@drawable/shape_bg_mainred_news_product</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:text">23</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+    <!--帐户中待付款、待发货那一行的相对布局-->
+    <style name="AccountCommingPayRelative">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
     </style>
 </resources>

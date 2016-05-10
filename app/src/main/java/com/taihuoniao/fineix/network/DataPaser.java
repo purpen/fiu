@@ -19,6 +19,7 @@ import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
+import com.taihuoniao.fineix.beans.ApplyForRefund;
 import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.BrandListBean;
@@ -42,6 +43,11 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowBuyItemBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
+import com.taihuoniao.fineix.beans.OrderDetails;
+import com.taihuoniao.fineix.beans.OrderDetailsAddress;
+import com.taihuoniao.fineix.beans.OrderDetailsProducts;
+import com.taihuoniao.fineix.beans.OrderEntity;
+import com.taihuoniao.fineix.beans.OrderItem;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
@@ -57,6 +63,7 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.ShopCart;
+import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.beans.ShopCartItem;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.beans.SkipBind;
@@ -67,6 +74,7 @@ import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.beans.TryDetailsUserBean;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
+import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.beans.UserListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -218,8 +226,8 @@ public class DataPaser {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
-                Log.e("<<<chanpin",responseInfo.result);
-                WriteJsonToSD.writeToSD("json",responseInfo.result);
+                Log.e("<<<chanpin", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 msg.what = DataConstants.GOODS_DETAILS;
                 try {
                     JSONObject obj = new JSONObject(responseInfo.result);
@@ -1516,7 +1524,8 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
+//                Log.e("<<<denglu", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 if (responseInfo == null) {
                     return;
                 }
@@ -2022,7 +2031,7 @@ public class DataPaser {
     }
 
     //添加购物车
-    public static void addToCart( String target_id, String type, String n, final Handler handler) {
+    public static void addToCart(String target_id, String type, String n, final Handler handler) {
         ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -2046,8 +2055,8 @@ public class DataPaser {
     }
 
     //立即购买(验证数据并生成临时订单)
-    public static void buyNow( String target_id, String type, String n, final Handler handler) {
-        ClientDiscoverAPI.buyNow( target_id, type, n, new RequestCallBack<String>() {
+    public static void buyNow(String target_id, String type, String n, final Handler handler) {
+        ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -2101,4 +2110,245 @@ public class DataPaser {
         });
     }
 
+    //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
+    public static void orderPayDetailsParser(String rid, final Handler handler) {
+        ClientDiscoverAPI.OrderPayNet(rid, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
+                List<OrderDetails> ordersList = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_ORDER_DETAILS;
+                try {
+                    ordersList = new ArrayList<OrderDetails>();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject orderObj = obj.getJSONObject("data");
+                    OrderDetails details = new OrderDetails();
+                    details.setRid(orderObj.optString("rid"));
+                    details.setExpress_company(orderObj.optString("express_company"));
+                    details.setExpress_no(orderObj.optString("express_no"));
+                    details.setCreated_at(orderObj.optString("created_at"));
+                    details.setFreight(orderObj.optString("freight"));
+                    details.setItems_count(orderObj.optString("items_count"));
+                    details.setPay_money(orderObj.optString("pay_money"));
+                    details.setPayment_method(orderObj.optString("payment_method"));
+                    details.setTotal_money(orderObj.optString("total_money"));
+                    details.setStatus(orderObj.optString("status"));
+                    JSONObject arr = orderObj.getJSONObject("express_info");
+                    List<OrderDetailsAddress> addressList = new ArrayList<OrderDetailsAddress>();
+                    OrderDetailsAddress address = new OrderDetailsAddress();
+                    address.setAddress(arr.optString("address"));
+                    address.setName(arr.optString("name"));
+                    address.setCity(arr.optString("city"));
+                    address.setPhone(arr.optString("phone"));
+                    address.setProvince(arr.optString("province"));
+                    addressList.add(address);
+
+                    details.setAddresses(addressList);
+                    JSONArray productsArrays = orderObj.getJSONArray("items");
+                    List<OrderDetailsProducts> productsList = new ArrayList<OrderDetailsProducts>();
+                    for (int j = 0; j < productsArrays.length(); j++) {
+                        JSONObject productsArr = productsArrays.getJSONObject(j);
+                        OrderDetailsProducts products = new OrderDetailsProducts();
+                        products.setName(productsArr.optString("name"));
+                        products.setCover_url(productsArr.optString("cover_url"));
+                        products.setPrice(productsArr.optString("price"));
+                        products.setProduct_id(productsArr.optString("product_id"));
+                        products.setQuantity(productsArr.optString("quantity"));
+                        products.setSale_price(productsArr.optString("sale_price"));
+                        products.setSku(productsArr.optString("sku"));
+                        products.setSku_name(productsArr.optString("sku_name"));
+                        productsList.add(products);
+                    }
+                    details.setProducts(productsList);
+                    ordersList.add(details);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = ordersList;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //申请退款
+    public static void applyForRefundParser(String rid, String option, String content, final Handler handler) {
+        ClientDiscoverAPI.applyForRefundNet(rid, option, content, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<申请退款", responseInfo.result);
+                ApplyForRefund refund = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_APPLY_REFUND;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject refundObj = obj.getJSONObject("data");
+                    refund = new ApplyForRefund();
+                    refund.setSuccess(obj.optString("success"));
+                    refund.setMessage(obj.optString("message"));
+                    refund.setRid(refundObj.optString("rid"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = refund;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //账户处的订单列表
+    public static void orderListParser(String status, String page, String size, final Handler handler) {
+        ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<OrderEntity> list = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_ORDER;
+                try {
+                    list = new ArrayList<OrderEntity>();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject orderObj = obj.getJSONObject("data");
+                    JSONArray orderArrs = orderObj.getJSONArray("rows");
+                    for (int i = 0; i < orderArrs.length(); i++) {
+                        JSONObject orderArr = orderArrs.getJSONObject(i);
+                        OrderEntity orderEntity = new OrderEntity();
+                        orderEntity.setRid(orderArr.optString("rid"));
+                        orderEntity.setItems_count(orderArr.optString("items_count"));
+                        orderEntity.setTotal_money(orderArr.optString("total_money"));
+                        orderEntity.setPay_money(orderArr.optString("pay_money"));
+                        orderEntity.setFreight(orderArr.optString("freight"));
+                        orderEntity.setStatus_label(orderArr.optString("status_label"));
+                        orderEntity.setCreated_at(orderArr.optString("created_at"));
+                        orderEntity.setStatus(orderArr.optString("status"));
+                        JSONArray array = orderArr.getJSONArray("items");
+                        List<OrderItem> itemList = new ArrayList<OrderItem>();
+                        for (int j = 0; j < array.length(); j++) {
+                            JSONObject arr = array.getJSONObject(j);
+                            OrderItem item = new OrderItem();
+                            item.setSku(arr.optString("sku"));
+                            item.setProduct_id(arr.optString("product_id"));
+                            item.setQuantity(arr.optString("quantity"));
+                            item.setSale_price(arr.optString("sale_price"));
+                            item.setName(arr.optString("name"));
+                            item.setSku_name(arr.optString("sku_name"));
+                            item.setCover_url(arr.optString("cover_url"));
+                            itemList.add(item);
+                        }
+                        orderEntity.setOrderItem(itemList);
+                        list.add(orderEntity);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = list;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //账户处的用户个人信息的解析
+    public static void userInfoParser(final Handler handler) {
+        ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<",responseInfo.result);
+                UserInfo userInfo = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_USER_INFO;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject userObj = obj.getJSONObject("data");
+                    userInfo = UserInfo.getInstance();
+                    userInfo.setSuccess(obj.optBoolean("success"));
+                    userInfo.setAccount(userObj.optString("account"));
+                    userInfo.setNickname(userObj.optString("nickname"));
+                    userInfo.setTrue_nickname(userObj.optString("true_nickname"));
+                    userInfo.setSex(userObj.optString("sex"));
+                    userInfo.setBirthday(userObj.optString("birthday"));
+                    userInfo.setMedium_avatar_url(userObj.optString("medium_avatar_url"));
+                    userInfo.setRealname(userObj.optString("realname"));
+                    userInfo.setPhone(userObj.optString("phone"));
+                    userInfo.setAddress(userObj.optString("address"));
+                    userInfo.setZip(userObj.optString("zip"));
+                    userInfo.setIm_qq(userObj.optString("im_qq"));
+                    userInfo.setWeixin(userObj.optString("weixin"));
+                    userInfo.setCompany(userObj.optString("company"));
+                    userInfo.setProvince_id(userObj.optString("province_id"));
+                    userInfo.setDistrict_id(userObj.optString("district_id"));
+                    userInfo.setRank_id(userObj.optString("rank_id"));
+                    userInfo.setRank_title(userObj.optString("rank_title"));
+                    userInfo.setBird_coin(userObj.optString("bird_coin"));
+                    userInfo.set_id(userObj.optString("_id"));
+                    JSONObject counterObj = userObj.getJSONObject("counter");
+                    userInfo.setOrder_wait_payment(counterObj.optString("order_wait_payment"));
+                    userInfo.setOrder_ready_goods(counterObj.optString("order_ready_goods"));
+                    userInfo.setOrder_evaluate(counterObj.optString("order_evaluate"));
+                    userInfo.setOrder_total_count(counterObj.optString("order_total_count"));
+                    userInfo.setOrder_sended_goods(counterObj.optString("order_sended_goods"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = userInfo;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+    //购物车中单个商品的库存（即最大加减数）
+    public static void shopcartInventoryParser(final Handler handler) {
+        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<ShopCartInventoryItemBean> list = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PASER_SHOPCART_INVENTORY_ITEM;
+                try {
+                    list = new ArrayList<ShopCartInventoryItemBean>();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject jsonObj = obj.getJSONObject("data");
+                    JSONArray jsonArray = jsonObj.getJSONArray("items");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        ShopCartInventoryItemBean bean = new ShopCartInventoryItemBean();
+                        bean.setN(jsonObject.optString("n"));
+                        bean.setProduct_id(jsonObject.optString("product_id"));
+                        bean.setQuantity(jsonObject.optString("quantity"));
+                        bean.setTarget_id(jsonObject.optString("target_id"));
+                        bean.setType(jsonObject.optString("type"));
+                        list.add(bean);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = list;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
 }

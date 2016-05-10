@@ -7,28 +7,25 @@ import java.util.List;
  * Created by android on 2016/3/6.
  */
 public class CartDoOrder implements Serializable {
-    private String pay_money,is_nowbuy,rid,user_id,expired,is_cart,created_on,updated_on,_id,success;
+    private String pay_money, is_nowbuy, rid, user_id, expired, is_cart, created_on, updated_on, _id, success, message, kind;
     private List<CartDoOrderBonus> bonus;
     private List<CartOrderContent> cartOrderContents;
     private List<CartOrderContentItem> cartOrderContentItems;
 
-    @Override
-    public String toString() {
-        return "CartDoOrder{" +
-                "pay_money='" + pay_money + '\'' +
-                ", is_nowbuy='" + is_nowbuy + '\'' +
-                ", rid='" + rid + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", expired='" + expired + '\'' +
-                ", is_cart='" + is_cart + '\'' +
-                ", created_on='" + created_on + '\'' +
-                ", updated_on='" + updated_on + '\'' +
-                ", _id='" + _id + '\'' +
-                ", success='" + success + '\'' +
-                ", bonus=" + bonus +
-                ", cartOrderContents=" + cartOrderContents +
-                ", cartOrderContentItems=" + cartOrderContentItems +
-                '}';
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getSuccess() {

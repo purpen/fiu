@@ -133,6 +133,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private void initView() {
 //        StatusBarChange.initWindow(ConfirmOrderActivity.this);
         titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
         addressRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_addrelative);
         noAddressTv = (TextView) findViewById(R.id.activity_confirmorder_noaddresstv);
         nameTv = (TextView) findViewById(R.id.activity_confirmorder_name);

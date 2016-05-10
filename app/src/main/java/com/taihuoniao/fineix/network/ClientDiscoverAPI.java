@@ -908,8 +908,9 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         NetworkManager.getInstance().add("cancelLove", httpHandler);
     }
+
     //点赞
-    public static void loveNet( String id, String type, RequestCallBack<String> callBack) {
+    public static void loveNet(String id, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_love;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
@@ -917,8 +918,9 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         NetworkManager.getInstance().add("love", httpHandler);
     }
+
     //添加购物车
-    public static void addToCartNet( String target_id, String type, String n, RequestCallBack<String> callBack) {
+    public static void addToCartNet(String target_id, String type, String n, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_add_to_cart;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
@@ -929,7 +931,7 @@ public class ClientDiscoverAPI {
     }
 
     //立即购买(验证数据并会生成临时订单)
-    public static void buyNow( String target_id, String type, String n, RequestCallBack<String> callBack) {
+    public static void buyNow(String target_id, String type, String n, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_buy_now;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("target_id", target_id);
@@ -937,5 +939,89 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("n", n);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         NetworkManager.getInstance().add("buyNow", httpHandler);
+    }
+
+    //删除订单/my/delete_order
+    public static void deleteOrderNet(String rid, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/my/delete_order";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //取消订单
+    public static void cancelOrderNet(String rid, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/my/cancel_order";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //订单支付详情和订单详情都是这,发表评价界面的产品图片也从这获取
+    public static void OrderPayNet(String rid, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/detail";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //申请退款
+    public static void applyForRefundNet(String rid, String option, String content, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/apply_refund";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        params.addQueryStringParameter("option", option);
+        params.addQueryStringParameter("content", content);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //确认收货
+    public static void confirmReceiveNet(String rid, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/take_delivery";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //发表评价
+    public static void publishEvaluateNet(String rid, String array, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/product/ajax_comment";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        params.addQueryStringParameter("array", array);
+        params.addQueryStringParameter("from_site", "4");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //账户处的订单列表
+    public static void orderListNet(String status, String page, String size, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/orders";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("status", status);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //账户处的用户个人信息
+    public static void userInfoNet(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/user";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //购物车中单个商品的库存（即最大加减数）
+    public static void shopcartInventoryNet(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/fetch_cart_product_count";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //购物车中商品加减数量
+    public static void shopcartAddSubtractNet(String array,RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/edit_cart";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("array",array);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

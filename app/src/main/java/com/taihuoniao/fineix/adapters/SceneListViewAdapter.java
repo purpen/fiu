@@ -28,7 +28,7 @@ public class SceneListViewAdapter extends BaseAdapter {
     private List<SearchBean.SearchItem> searchList;
     private DisplayImageOptions options;
 
-    public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList,List<SearchBean.SearchItem> searchList) {
+    public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList, List<SearchBean.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.loveList = loveList;
@@ -48,7 +48,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             return list.size();
         } else if (loveList != null) {
             return loveList.size();
-        }else if(searchList!=null){
+        } else if (searchList != null) {
             return searchList.size();
         }
         return 0;
@@ -60,7 +60,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             return list.get(position);
         } else if (loveList != null) {
             return loveList.get(position);
-        }else if(searchList!=null){
+        } else if (searchList != null) {
             return searchList.get(position);
         }
         return null;
@@ -73,7 +73,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_scenelist, null);
             holder = new ViewHolder();
@@ -95,7 +95,10 @@ public class SceneListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         if (list != null) {
+//            holder.backgroundImg.setTag(list.get(position).getCover_url());
+//            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
             ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
@@ -119,7 +122,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.suoshuQingjing.setText(loveList.get(position).getScene_title());
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
-        }else if(searchList!=null){
+        } else if (searchList != null) {
             ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
