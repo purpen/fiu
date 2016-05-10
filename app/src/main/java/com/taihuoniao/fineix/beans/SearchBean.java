@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,7 +31,8 @@ public class SearchBean extends NetBean {
         }
     }
 
-    public static class SearchItem {
+    public static class SearchItem implements Serializable{
+        private boolean isSelect;
         private String _id;
         private String cover_url;
         private String title;
@@ -43,6 +45,14 @@ public class SearchBean extends NetBean {
         private List<String> banners;
         private String sale_price;
         private String attrbute;
+
+        public boolean isSelect() {
+            return isSelect;
+        }
+
+        public void setIsSelect(boolean isSelect) {
+            this.isSelect = isSelect;
+        }
 
         public String getAttrbute() {
             return attrbute;

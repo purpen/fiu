@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
@@ -32,7 +31,6 @@ import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -50,7 +48,7 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/4/13 17:42
  */
-public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> implements View.OnClickListener{
+public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> implements View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.mv)
@@ -93,7 +91,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
                 }
                 MyLocationData locData = new MyLocationData.Builder()
                         .accuracy(bdLocation.getRadius())
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                                // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(100).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
@@ -114,6 +112,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, R.string.select_qj);
+        custom_head.setHeadRightTxtShow(true, R.string.confirm);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
 //        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
@@ -137,9 +136,9 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     }
 
     private void getNearByData(LatLng ll) {//附近的情境
-        page=1;
-        pageSize=3;
-        ClientDiscoverAPI.getNearByQJData(ll, radius, page, pageSize,STICK_ALL,new RequestCallBack<String>() {
+        page = 1;
+        pageSize = 3;
+        ClientDiscoverAPI.getNearByQJData(ll, radius, page, pageSize, STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框
@@ -178,9 +177,9 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
 
     @Override
     protected void requestNet() {//推荐情境
-        page=1;
-        pageSize=2;
-        ClientDiscoverAPI.getNearByQJData(null,0, page, pageSize,STICK_SELECT,new RequestCallBack<String>() {
+        page = 1;
+        pageSize = 2;
+        ClientDiscoverAPI.getNearByQJData(null, 0, page, pageSize, STICK_SELECT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框
@@ -217,7 +216,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         });
     }
 
-    private void refreshGVUI(ArrayList<QingJingItem> list){
+    private void refreshGVUI(ArrayList<QingJingItem> list) {
         if (list == null) {
 //            Util.makeToast(activity, "数据异常");
             return;
@@ -229,7 +228,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         }
         rl_recommend.setVisibility(View.VISIBLE);
         if (recommendAdapter == null) {
-            recommendAdapter = new QJRecommonedAdapter(list,activity);
+            recommendAdapter = new QJRecommonedAdapter(list, activity);
             cgv.setAdapter(recommendAdapter);
         } else {
             recommendAdapter.notifyDataSetChanged();
@@ -293,14 +292,14 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //TODO 跳转详情页
-                Util.makeToast(activity,"跳转情景详情");
+                Util.makeToast(activity, "跳转情景详情");
             }
         });
         tv_all.setOnClickListener(this);
         mBDMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                activity.startActivity(new Intent(activity,DisplayOverlayerActivity.class));
+                activity.startActivity(new Intent(activity, DisplayOverlayerActivity.class));
             }
 
             @Override
@@ -312,10 +311,10 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.tv_all:
                 //TODO 跳转全部场景界面
-                Util.makeToast(activity,"跳转情景列表");
+                Util.makeToast(activity, "跳转情景列表");
                 break;
         }
     }

@@ -54,6 +54,8 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -152,7 +154,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null);
         sceneListView.setAdapter(sceneListViewAdapter);
         sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
@@ -409,7 +411,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 @Override
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Toast.makeText(getActivity(), "又点击了" + randomImg1.id, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), UserCenterActivity.class);
+                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA, randomImg1.id);
+                    startActivity(intent);
                 }
             });
             absoluteLayout.addView(img);
@@ -429,7 +433,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_find_search:
-                Toast.makeText(getActivity(), "搜索", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(getActivity(), SearchActivity.class);
+                intent1.putExtra("t", "8");
+                startActivity(intent1);
                 break;
             case R.id.fragment_find_location:
                 Intent intent = new Intent(getActivity(), HotCitiesActivity.class);

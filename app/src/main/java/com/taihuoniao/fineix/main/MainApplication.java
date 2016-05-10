@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.main;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
@@ -11,11 +12,13 @@ import android.util.DisplayMetrics;
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.beans.IsLogin;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
@@ -107,8 +110,11 @@ public class MainApplication extends Application {
 //                .showImageForEmptyUri(R.mipmap.ic_launcher)
 //                .showImageOnFail(R.mipmap.ic_launcher)
 //                .showImageOnLoading(R.mipmap.ic_launcher)
-                .cacheInMemory(true)
-//                .imageScaleType(ImageScaleType.EXACTLY)
+//                .cacheInMemory(true)
+                .considerExifParams(true)
+                .displayer(new SimpleBitmapDisplayer())
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
@@ -118,7 +124,7 @@ public class MainApplication extends Application {
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
                 .diskCacheSize(100 * 1024 * 1024).tasksProcessingOrder(QueueProcessingType.LIFO)
-                .memoryCache(new LruMemoryCache(4 * 1024 * 1024)).memoryCacheSize(4 * 1024 * 1024)
+                .memoryCache(new WeakMemoryCache()).memoryCacheSize(4 * 1024 * 1024)
                 .threadPoolSize(5)
                 .build();
 //        ImageLoaderConfiguration config2 = new ImageLoaderConfiguration.Builder(

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="95dp"
+              android:background="@color/white"
+              android:descendantFocusability="blocksDescendants"
+              android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/checkbox_shopcart_item"
+        style="@style/CustomCheckboxTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:clickable="false"
+        android:paddingLeft="5dp"
+        android:text=""/>
+
+    <LinearLayout
+        android:id="@+id/linear_item_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/image_shopcart_item"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:focusable="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title_shopcart_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:minLines="2"
+                android:paddingRight="10dp"
+                android:text="标题"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:id="@+id/tv_color_shopcart_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="颜色/分类："
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:id="@+id/tv_count_shopcart_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="数量 * "
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_price_shopcart_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="价钱"
+                android:textColor="@color/red"
+                android:textSize="11sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

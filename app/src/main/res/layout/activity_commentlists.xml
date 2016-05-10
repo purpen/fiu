@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:ptr="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+    >
+
+    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
+        android:id="@+id/activity_commentlists_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:id="@+id/activity_commentlists_bottomrelative"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#f4f4f4"/>
+
+        <Button
+            android:id="@+id/activity_commentlists_commitbtn"
+            android:layout_width="75dp"
+            android:layout_height="33dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shap_tryuse_red"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
+
+        <EditText
+            android:id="@+id/activity_commentlists_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/activity_commentlists_commitbtn"
+            android:background="@drawable/backround_corner_gray"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/activity_commentlists_bottomrelative"
+        android:layout_below="@id/activity_commentlists_titlelayout"
+        android:background="@color/white">
+
+        <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/activity_commentlists_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:scrollbars="none"
+            />
+
+        <ProgressBar
+            android:id="@+id/activity_commentlists_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/activity_commentlists_nocomments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无评论"
+            android:textColor="#999999"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+</RelativeLayout>

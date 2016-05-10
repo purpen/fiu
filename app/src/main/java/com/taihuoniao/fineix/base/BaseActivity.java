@@ -3,14 +3,13 @@ package com.taihuoniao.fineix.base;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
-import android.view.WindowManager;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.taihuoniao.fineix.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -72,7 +71,11 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     protected void refreshUI() {
 
     }
+
     protected void refreshUI(List<T> list) {
 
+    }
+
+    public void handMessage(Message msg) {
     }
 }

@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pullrefresh="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f4f4"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
+        android:id="@+id/title_shopcart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/relative_full_shopcart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_shopcart"
+        android:visibility="gone">
+
+        <com.taihuoniao.fineix.view.PullRefreshLayout
+            android:id="@+id/pull_container"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/linear_delete_count_shopcart"
+
+            android:scrollbars="none"
+            pullrefresh:actionViewId="@+id/action_view"
+            pullrefresh:toolViewId="@+id/tool_view">
+
+            <include
+                android:id="@+id/action_view"
+                layout="@layout/pull_refresh_refresh_layout" />
+
+            <include
+                android:id="@+id/tool_view"
+                layout="@layout/pull_refresh_tool_layout" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.taihuoniao.fineix.view.ListViewForScrollView
+                        android:id="@+id/lv_shopcart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:divider="#f4f4f4"
+                        android:dividerHeight="5dp" />
+
+                </LinearLayout>
+            </ScrollView>
+        </com.taihuoniao.fineix.view.PullRefreshLayout>
+
+        <RelativeLayout
+            android:id="@+id/linear_delete_count_shopcart"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white">
+
+            <CheckBox
+                android:id="@+id/checkbox_choice_all_shopcart_item"
+                style="@style/CustomCheckboxTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:paddingLeft="5dp"
+                android:text="全选" />
+
+            <TextView
+                android:id="@+id/tv_totalprice_shopcart_item"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_toLeftOf="@+id/bt_delete_calculate_shopcart_item"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="13dp"
+                android:text="合计：¥0.00" />
+
+            <Button
+                android:id="@+id/bt_delete_calculate_shopcart_item"
+                android:layout_width="100dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:text="结算"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_stroll_shopcart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_shopcart">
+
+        <TextView
+            android:id="@+id/tv_center"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_center"
+            android:layout_centerHorizontal="true"
+            android:drawablePadding="15dp"
+            android:drawableTop="@mipmap/shopcart_grey"
+            android:text="您的购物车内暂无商品！"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/bt_stroll_shopcart_empty"
+            android:layout_width="100dp"
+            android:layout_height="44dp"
+            android:layout_below="@+id/tv_center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/shap_redbutton_commit"
+            android:text="去逛逛"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </RelativeLayout>
+</RelativeLayout>

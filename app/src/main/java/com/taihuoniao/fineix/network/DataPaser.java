@@ -23,6 +23,10 @@ import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CartBean;
+import com.taihuoniao.fineix.beans.CartDoOrder;
+import com.taihuoniao.fineix.beans.CartDoOrderBonus;
+import com.taihuoniao.fineix.beans.CartOrderContent;
+import com.taihuoniao.fineix.beans.CartOrderContentItem;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
@@ -32,8 +36,12 @@ import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
+import com.taihuoniao.fineix.beans.GoodsDetailsBean;
 import com.taihuoniao.fineix.beans.JDProductBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.NowBuyBean;
+import com.taihuoniao.fineix.beans.NowBuyItemBean;
+import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
@@ -42,14 +50,21 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.QingjingSubsBean;
 import com.taihuoniao.fineix.beans.RedBagUntimeout;
+import com.taihuoniao.fineix.beans.RelationProductsBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.beans.ShopCart;
+import com.taihuoniao.fineix.beans.ShopCartItem;
+import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.beans.SkipBind;
+import com.taihuoniao.fineix.beans.SkusBean;
 import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
+import com.taihuoniao.fineix.beans.TryCommentsBean;
+import com.taihuoniao.fineix.beans.TryDetailsUserBean;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.beans.UserListBean;
@@ -194,6 +209,83 @@ public class DataPaser {
             }
         });
 
+    }
+
+    //产品
+    //自营商品详情
+    public static void goodsDetails(String id, final Handler handler) {
+        ClientDiscoverAPI.goodsDetailsNet(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                Log.e("<<<chanpin",responseInfo.result);
+                WriteJsonToSD.writeToSD("json",responseInfo.result);
+                msg.what = DataConstants.GOODS_DETAILS;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    GoodsDetailsBean goodsDetailsBean = new GoodsDetailsBean();
+                    goodsDetailsBean.setSuccess(obj.optBoolean("success"));
+                    goodsDetailsBean.setMessage(obj.optString("message"));
+                    JSONObject data = obj.getJSONObject("data");
+                    if (goodsDetailsBean.isSuccess()) {
+                        goodsDetailsBean.set_id(data.optString("_id"));
+                        goodsDetailsBean.setTitle(data.optString("title"));
+                        goodsDetailsBean.setSale_price(data.optString("sale_price"));
+                        goodsDetailsBean.setMarket_price(data.optString("market_price"));
+                        goodsDetailsBean.setIs_love(data.optString("is_love"));
+                        goodsDetailsBean.setShare_view_url(data.optString("share_view_url"));
+                        goodsDetailsBean.setShare_desc(data.optString("share_desc"));
+                        JSONArray asset = data.getJSONArray("asset");
+                        List<String> imgUrlList = new ArrayList<>();
+                        for (int i = 0; i < asset.length(); i++) {
+                            String imgUrl = asset.optString(i);
+                            imgUrlList.add(imgUrl);
+                        }
+                        goodsDetailsBean.setImgUrlList(imgUrlList);
+                        JSONArray relationProducts = data.getJSONArray("relation_products");
+                        List<RelationProductsBean> relationProductsList = new ArrayList<>();
+                        for (int i = 0; i < relationProducts.length(); i++) {
+                            JSONObject job = relationProducts.optJSONObject(i);
+                            RelationProductsBean relationProductsBean = new RelationProductsBean();
+                            relationProductsBean.set_id(job.optString("_id"));
+                            relationProductsBean.setCover_url(job.optString("cover_url"));
+                            relationProductsBean.setTitle(job.optString("title"));
+                            relationProductsBean.setSale_price(job.optString("sale_price"));
+                            relationProductsList.add(relationProductsBean);
+                        }
+                        goodsDetailsBean.setRelationProductsList(relationProductsList);
+                        goodsDetailsBean.setWap_view_url(data.optString("wap_view_url"));
+                        goodsDetailsBean.setContent_view_url(data.optString("content_view_url"));
+                        goodsDetailsBean.setCover_url(data.optString("cover_url"));
+                        goodsDetailsBean.setSkus_count(data.optString("skus_count"));
+                        if (Integer.parseInt(data.optString("skus_count")) > 0) {
+                            List<SkusBean> skuList = new ArrayList<>();
+                            JSONArray skus = data.getJSONArray("skus");
+                            for (int i = 0; i < skus.length(); i++) {
+                                JSONObject jsonObject = skus.getJSONObject(i);
+                                SkusBean skusBean = new SkusBean();
+                                skusBean.set_id(jsonObject.optString("_id"));
+                                skusBean.setMode(jsonObject.optString("mode"));
+                                skusBean.setPrice(jsonObject.optString("price"));
+                                skusBean.setQuantity(jsonObject.optString("quantity"));
+                                skuList.add(skusBean);
+                            }
+                            goodsDetailsBean.setSkus(skuList);
+                        }
+                        goodsDetailsBean.setInventory(data.optString("inventory"));
+                    }
+                    msg.obj = goodsDetailsBean;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
     }
 
     //产品
@@ -406,8 +498,8 @@ public class DataPaser {
 
     //情景
     //列表数据
-    public static void qingjingList(String page, String stick, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.qingjingList(page, stick, dis, lng, lat, new RequestCallBack<String>() {
+    public static void qingjingList(String page, String sort, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.qingjingList(page, sort, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -893,6 +985,46 @@ public class DataPaser {
     }
 
     //收货地址
+    //  默认收货地址的解析
+    public static void getDefaultAddress(final Handler handler) {
+        ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DEFAULT_ADDRESS;
+                AddressBean addressBean = null;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject data = obj.getJSONObject("data");
+                    addressBean = new AddressBean();
+                    addressBean.setHas_default(data.optString("has_default"));
+                    if ("1".equals(addressBean.getHas_default())) {
+                        addressBean.set_id(data.optString("_id"));
+                        addressBean.setName(data.optString("name"));
+                        addressBean.setPhone(data.optString("phone"));
+                        addressBean.setAddress(data.optString("address"));
+                        addressBean.setZip(data.optString("zip"));
+                        addressBean.setProvince(data.optString("province"));
+                        addressBean.setCity(data.optString("city"));
+                        addressBean.setProvince_name(data.optString("province_name"));
+                        addressBean.setCity_name(data.optString("city_name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = addressBean;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+
+    //收货地址
     //  获取用户的收货地址列表
     public static void getAddressList(String page, final Handler handler) {
         ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
@@ -1265,6 +1397,87 @@ public class DataPaser {
         });
     }
 
+    //评论列表
+    //  商品详情界面的评论列表的解析
+    public static void getGoodsDetailsCommentsList(String target_id, String page, final Handler handler) {
+        ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.GOODS_DETAILS_COMMENTS;
+                msg.obj = parserTryDetailsCommentsList(responseInfo.result);
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    private static List<TryCommentsBean> parserTryDetailsCommentsList(String jsonString) {
+        List<TryCommentsBean> list = null;
+        try {
+            list = new ArrayList<>();
+            JSONObject obj = new JSONObject(jsonString);
+            JSONObject data = obj.getJSONObject("data");
+            JSONArray rows = data.getJSONArray("rows");
+            for (int i = 0; i < rows.length(); i++) {
+                JSONObject job = rows.getJSONObject(i);
+                TryCommentsBean bean = new TryCommentsBean();
+                bean.set_id(job.optString("_id"));
+                bean.setUser_id(job.optString("user_id"));
+                bean.setContent(job.optString("content"));
+                bean.setStar(job.optString("star"));
+                bean.setTarget_id(job.optString("target_id"));
+                bean.setTarget_user_id(job.optString("target_user_id"));
+                bean.setSku_id(job.optString("sku_id"));
+                bean.setDeleted(job.optString("deleted"));
+                bean.setReply_user_id(job.optString("reply_user_id"));
+                bean.setFloor(job.optString("floor"));
+                bean.setType(job.optString("type"));
+                bean.setSub_type(job.optString("sub_type"));
+                JSONObject userJob = job.getJSONObject("user");
+                TryDetailsUserBean user = new TryDetailsUserBean();
+                user.set_id(userJob.optString("_id"));
+                user.setNickname(userJob.optString("nickname"));
+                user.setHome_url(userJob.optString("home_url"));
+                user.setSmall_avatar_url(userJob.optString("small_avatar_url"));
+                user.setSymbol(userJob.optString("symbol"));
+                user.setMini_avatar_url(userJob.optString("mini_avatar_url"));
+                user.setMedium_avatar_url(userJob.optString("medium_avatar_url"));
+                user.setBig_avatar_url(userJob.optString("big_avatar_url"));
+                bean.setUser(user);
+                if (!job.optString("target_user").equals("null")) {
+                    JSONObject targetUserJob = job.getJSONObject("target_user");
+                    TryDetailsUserBean targetUser = new TryDetailsUserBean();
+                    targetUser.set_id(targetUserJob.optString("_id"));
+                    targetUser.setNickname(targetUserJob.optString("nickname"));
+                    targetUser.setHome_url(targetUserJob.optString("home_url"));
+                    targetUser.setSmall_avatar_url(targetUserJob.optString("small_avatar_url"));
+                    targetUser.setSymbol(targetUserJob.optString("symbol"));
+                    targetUser.setMini_avatar_url(targetUserJob.optString("mini_avatar_url"));
+                    targetUser.setMedium_avatar_url(targetUserJob.optString("medium_avatar_url"));
+                    targetUser.setBig_avatar_url(targetUserJob.optString("big_avatar_url"));
+                    bean.setTarget_user(targetUser);
+                }
+                bean.setLove_count(job.optString("love_count"));
+                bean.setInvented_love_count(job.optString("invented_love_count"));
+                bean.setIs_reply(job.optString("is_reply"));
+                bean.setReply_id(job.optString("reply_id"));
+                bean.setCreated_at(job.optString("created_at"));
+                bean.setCreated_on(job.optString("created_on"));
+                bean.setUpdated_on(job.optString("updated_on"));
+                list.add(bean);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     //分类
     //分类标签
     public static void categoryLabel(String tag_id, final Handler handler) {
@@ -1294,6 +1507,7 @@ public class DataPaser {
             }
         });
     }
+
 
     //登录的解析
     public static void loginParser(String uuid, final Handler handler, final String phone, final String password) {
@@ -1548,5 +1762,343 @@ public class DataPaser {
         });
     }
 
+    //立即下单
+    public static void nowConfirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code, final Handler handler) {
+        ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.NOW_CONFIRM_ORDER;
+                NowConfirmBean nowConfirmBean = new NowConfirmBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    nowConfirmBean.setSuccess(job.optBoolean("success"));
+                    nowConfirmBean.setMessage(job.optString("message"));
+                    JSONObject data = job.getJSONObject("data");
+                    if (nowConfirmBean.isSuccess()) {
+                        nowConfirmBean.setRid(data.optString("rid"));
+                        nowConfirmBean.setPay_money(data.optString("pay_money"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = nowConfirmBean;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //购物车
+    public static void shopCartParser(final Handler handler) {
+        ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<ShopCart> list = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_SHOP_CART;
+                try {
+                    list = new ArrayList<ShopCart>();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject shopCartObj = obj.getJSONObject("data");
+                    ShopCart shopCart = new ShopCart();
+                    shopCart.set_id(shopCartObj.optString("_id"));
+                    shopCart.setTotal_price(shopCartObj.optString("total_price"));
+
+                    List<ShopCartItem> itemList = new ArrayList<ShopCartItem>();
+                    JSONArray shopCartArrs = shopCartObj.getJSONArray("items");
+                    for (int i = 0; i < shopCartArrs.length(); i++) {
+                        JSONObject shopCartArr = shopCartArrs.getJSONObject(i);
+                        ShopCartItem shopCartItem = new ShopCartItem();
+                        shopCartItem.setTotal_price(shopCartArr.optString("total_price"));
+                        shopCartItem.setCover(shopCartArr.optString("cover"));
+                        shopCartItem.setN(shopCartArr.optString("n"));
+                        shopCartItem.setTarget_id(shopCartArr.optString("target_id"));
+                        shopCartItem.setProduct_id(shopCartArr.optString("product_id"));
+                        shopCartItem.setType(shopCartArr.optString("type"));
+                        shopCartItem.setSku_mode(shopCartArr.optString("sku_mode"));
+                        shopCartItem.setTitle(shopCartArr.optString("title"));
+                        itemList.add(shopCartItem);
+                    }
+                    shopCart.setShopCartItemList(itemList);
+                    list.add(shopCart);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = list;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //购物车数量
+    public static void shopCartNumberParser(final Handler handler) {
+        ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ShopCartNumber shopCartNumber = null;
+                Message msg = new Message();
+                msg.what = DataConstants.PARSER_SHOP_CART_NUMBER;
+                try {
+                    shopCartNumber = new ShopCartNumber();
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    shopCartNumber.setSuccess(obj.optString("success"));
+                    JSONObject cartNumberObj = obj.getJSONObject("data");
+                    shopCartNumber.setCount(cartNumberObj.optString("count"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                msg.obj = shopCartNumber;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //购物车结算获取数据传给确认订单界面
+    public static void shopCartCalculateParser(String array, final Handler handler) {
+        ClientDiscoverAPI.calculateShopCartNet(array, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        List<CartDoOrder> list = null;
+                        Message msg = new Message();
+                        msg.what = DataConstants.PARSER_SHOP_CART_CALCULATE;
+                        try {
+                            list = new ArrayList<CartDoOrder>();
+                            JSONObject obj = new JSONObject(responseInfo.result);
+                            JSONObject cartDoOrderObjs = obj.getJSONObject("data");
+                            CartDoOrder cartDoOrder = new CartDoOrder();
+                            cartDoOrder.setSuccess(obj.optString("success"));
+                            cartDoOrder.setIs_nowbuy(cartDoOrderObjs.optString("is_nowbuy"));
+                            cartDoOrder.setPay_money(cartDoOrderObjs.optString("pay_money"));
+                            List<CartDoOrderBonus> bonusList = new ArrayList<CartDoOrderBonus>();
+                            JSONArray bonusArray = cartDoOrderObjs.getJSONArray("bonus");
+                            for (int j = 0; j < bonusArray.length(); j++) {
+                                JSONObject bonusObj = bonusArray.getJSONObject(j);
+                                CartDoOrderBonus cartDoOrderBonus = new CartDoOrderBonus();
+                                cartDoOrderBonus.set__extend__(bonusObj.optString("__extend__"));
+                                cartDoOrderBonus.setAmount(bonusObj.optString("amount"));
+                                cartDoOrderBonus.setCode(bonusObj.optString("code"));
+                                cartDoOrderBonus.setCreated_on(bonusObj.optString("created_on"));
+                                cartDoOrderBonus.setExpired_at(bonusObj.optString("expired_at"));
+                                cartDoOrderBonus.setExpired_label(bonusObj.optString("expired_label"));
+                                cartDoOrderBonus.setGet_at(bonusObj.optString("get_at"));
+                                cartDoOrderBonus.setMin_amount(bonusObj.optString("min_amount"));
+                                cartDoOrderBonus.setOrder_rid(bonusObj.optString("order_rid"));
+                                cartDoOrderBonus.setProduct_id(bonusObj.optString("product_id"));
+                                cartDoOrderBonus.setStatus(bonusObj.optString("status"));
+                                cartDoOrderBonus.setUpdated_on(bonusObj.optString("updated_on"));
+                                cartDoOrderBonus.setUsed(bonusObj.optString("used"));
+                                cartDoOrderBonus.setUsed_at(bonusObj.optString("used_at"));
+                                cartDoOrderBonus.setUsed_by(bonusObj.optString("used_by"));
+                                cartDoOrderBonus.setUser_id(bonusObj.optString("user_id"));
+                                cartDoOrderBonus.setXname(bonusObj.optString("xname"));
+                                bonusList.add(cartDoOrderBonus);
+                            }
+                            cartDoOrder.setBonus(bonusList);
+                            JSONObject carDoOrderObj = cartDoOrderObjs.getJSONObject("order_info");
+                            cartDoOrder.setRid(carDoOrderObj.optString("rid"));
+                            cartDoOrder.set_id(carDoOrderObj.optString("_id"));
+                            cartDoOrder.setCreated_on(carDoOrderObj.optString("created_on"));
+                            cartDoOrder.setExpired(carDoOrderObj.optString("expired"));
+                            cartDoOrder.setUpdated_on(carDoOrderObj.optString("updated_on"));
+                            cartDoOrder.setUser_id(carDoOrderObj.optString("user_id"));
+                            cartDoOrder.setIs_cart(carDoOrderObj.optString("is_cart"));
+
+                            List<CartOrderContent> contentList = new ArrayList<CartOrderContent>();
+                            JSONObject contentObjs = carDoOrderObj.getJSONObject("dict");
+                            CartOrderContent cartOrderContent = new CartOrderContent();
+                            cartOrderContent.setCard_money(contentObjs.optString("card_money"));
+                            cartOrderContent.setCoin_money(contentObjs.optString("coin_money"));
+                            cartOrderContent.setFreight(contentObjs.optString("freight"));
+                            cartOrderContent.setInvoice_caty(contentObjs.optString("invoice_caty"));
+                            cartOrderContent.setInvoice_type(contentObjs.optString("invoice_type"));
+                            cartOrderContent.setItems_count(contentObjs.optString("items_count"));
+                            cartOrderContent.setSummary(contentObjs.optString("summary"));
+                            cartOrderContent.setPayment_method(contentObjs.optString("payment_method"));
+                            cartOrderContent.setTotal_money(contentObjs.optString("total_money"));
+                            cartOrderContent.setTransfer(contentObjs.optString("transfer"));
+                            cartOrderContent.setTransfer_time(contentObjs.optString("transfer_time"));
+                            cartOrderContent.setInvoice_content(contentObjs.optString("invoice_content"));
+                            contentList.add(cartOrderContent);
+                            cartDoOrder.setCartOrderContents(contentList);
+
+                            JSONArray itemArray = contentObjs.getJSONArray("items");
+                            List<CartOrderContentItem> itemList = new ArrayList<CartOrderContentItem>();
+                            for (int i = 0; i < itemArray.length(); i++) {
+                                JSONObject itemObj = itemArray.getJSONObject(i);
+                                CartOrderContentItem item = new CartOrderContentItem();
+                                item.setCover(itemObj.optString("cover"));
+                                item.setPrice(itemObj.optString("price"));
+                                item.setProduct_id(itemObj.optString("product_id"));
+                                item.setQuantity(itemObj.optString("quantity"));
+                                item.setSale_price(itemObj.optString("sale_price"));
+                                item.setSku(itemObj.optString("sku"));
+                                item.setSku_mode(itemObj.optString("sku_mode"));
+                                item.setSubtotal(itemObj.optString("subtotal"));
+                                item.setTarget_id(itemObj.optString("target_id"));
+                                item.setTitle(itemObj.optString("title"));
+                                item.setType(itemObj.optString("type"));
+                                item.setView_url(itemObj.optString("view_url"));
+                                itemList.add(item);
+                            }
+                            cartDoOrder.setCartOrderContentItems(itemList);
+                            list.add(cartDoOrder);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        msg.obj = list;
+                        handler.sendMessage(msg);
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+                    }
+                }
+        );
+    }
+
+    //取消点赞
+    public static void parserCancelLove(String id, String type, final Handler handler) {
+        ClientDiscoverAPI.cancelLoveNet(id, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CANCEL_LOVE;
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    msg.obj = job.optBoolean("success", false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+//                Toast.makeText(THNApplication.getContext(), "取消点赞失败", Toast.LENGTH_SHORT).show();
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //点赞
+    public static void parserLove(String id, String type, final Handler handler) {
+        ClientDiscoverAPI.loveNet(id, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.LOVE;
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    msg.obj = job.optBoolean("success", false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+//                Toast.makeText(THNApplication.getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //添加购物车
+    public static void addToCart( String target_id, String type, String n, final Handler handler) {
+        ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.ADD_TO_CART;
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    String result = job.optString("message");
+                    msg.obj = result;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
+
+    //立即购买(验证数据并生成临时订单)
+    public static void buyNow( String target_id, String type, String n, final Handler handler) {
+        ClientDiscoverAPI.buyNow( target_id, type, n, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.BUY_NOW;
+
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject data = obj.getJSONObject("data");
+                    NowBuyBean nowBuyBean = new NowBuyBean();
+                    nowBuyBean.setSuccess(obj.optBoolean("success"));
+                    nowBuyBean.setMessage(obj.optString("message"));
+                    if (nowBuyBean.getSuccess()) {
+                        nowBuyBean.setBonus_number(data.getJSONArray("bonus").length());
+                        nowBuyBean.setIs_nowbuy(data.optString("is_nowbuy"));
+                        nowBuyBean.setPay_money(data.optString("pay_money"));
+                        JSONObject order_info = data.getJSONObject("order_info");
+                        nowBuyBean.setRid(order_info.optString("rid"));
+                        JSONObject dict = order_info.getJSONObject("dict");
+                        nowBuyBean.setTransfer_time(dict.optString("transfer_time"));
+                        nowBuyBean.setSummary(dict.optString("summary"));
+                        nowBuyBean.setPayment_method(dict.optString("payment_method"));
+                        JSONArray items = dict.getJSONArray("items");
+                        List<NowBuyItemBean> itemList = new ArrayList<NowBuyItemBean>();
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject job = items.getJSONObject(i);
+                            NowBuyItemBean nowBuyItemBean = new NowBuyItemBean();
+                            nowBuyItemBean.setCover(job.optString("cover"));
+                            nowBuyItemBean.setType(job.optString("type"));
+                            nowBuyItemBean.setTitle(job.optString("title"));
+                            nowBuyItemBean.setSubtotal(job.optString("subtotal"));
+                            nowBuyItemBean.setSku_name(job.optString("sku_name"));
+                            nowBuyItemBean.setSku_mode(job.optString("sku_mode"));
+                            nowBuyItemBean.setQuantity(job.optString("quantity"));
+                            itemList.add(nowBuyItemBean);
+                        }
+                        nowBuyBean.setItemList(itemList);
+                        nowBuyBean.set_id(order_info.optString("_id"));
+                    }
+                    msg.obj = nowBuyBean;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+            }
+        });
+    }
 
 }

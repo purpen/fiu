@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -34,6 +35,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     //上个界面传递过来用来判断是选择情景还是查看情景的标识
 //    private int isSelect = 0;//0 是从情景列表中跳转过来的 1是从选择情景界面跳转
     //界面下的控件
+    private ImageView searchQJImg;
     private ImageView createQingjingImg;
     private PullToRefreshGridView pullToRefreshView;
     private GridView qingjingGrid;
@@ -55,6 +57,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     @Override
     protected void initView() {
         setContentView(R.layout.activity_all_qingjing);
+        searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);
         pullToRefreshView = (PullToRefreshGridView) findViewById(R.id.activity_all_qingjing_pullrefreshview);
         qingjingGrid = pullToRefreshView.getRefreshableView();
@@ -65,6 +68,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     @Override
     protected void initList() {
 //        isSelect = getIntent().getIntExtra("isSelect", 0);
+        searchQJImg.setOnClickListener(this);
         createQingjingImg.setOnClickListener(this);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
@@ -95,7 +99,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         qingjingGrid.setHorizontalSpacing(space);
         qingjingGrid.setVerticalSpacing(space);
         qingjingList = new ArrayList<>();
-        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList,null, AllQingjingActivity.this, space);
+        allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, AllQingjingActivity.this, space);
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
         getCurrentLocation();
@@ -163,15 +167,20 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 //            setResult(DataConstants.RESULTCODE_SELECTQJ_ALLQJ, intent);
 //            finish();
 //        } else {
-            Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
-            intent.putExtra("id", qingjingList.get(position).get_id());
-            startActivity(intent);
+        Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
+        intent.putExtra("id", qingjingList.get(position).get_id());
+        startActivity(intent);
 //        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_all_qingjing_search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("t", "8");
+                startActivity(intent);
+                break;
             case R.id.activity_all_qingjing_createqinjing:
                 MainApplication.tag = 2;
                 startActivity(new Intent(AllQingjingActivity.this, SelectPhotoOrCameraActivity.class));

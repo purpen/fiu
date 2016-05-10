@@ -213,7 +213,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
         productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(getActivity(), productList,null);
+        goodListAdapter = new GoodListAdapter(getActivity(), productList, null);
         listView.setAdapter(goodListAdapter);
         listView.setOnScrollListener(this);
         options = new DisplayImageOptions.Builder()
@@ -405,7 +405,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_wellgoods_search:
-                Toast.makeText(getActivity(), "跳转到搜索界面", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("t", "10");
+                startActivity(intent);
                 break;
             case R.id.fragment_wellgoods_cart:
                 Toast.makeText(getActivity(), "跳转到购物车", Toast.LENGTH_SHORT).show();

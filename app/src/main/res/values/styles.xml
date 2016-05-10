@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="@style/AppBaseTheme"></style>
+    <style name="AppTheme" parent="@style/AppBaseTheme"/>
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -39,10 +39,12 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
     <style name="custom_progress_dialog" parent="@style/CustomDialog">
         <item name="android:windowBackground">@drawable/corner_black</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@null</item>
         <item name="android:background">@android:color/white</item>
@@ -55,6 +57,12 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!-- 自定义ratingbar -->
+    <style name="roomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_star</item>
+        <item name="android:maxHeight">10dp</item>
+        <item name="android:minHeight">10dp</item>
     </style>
     <!--注册中手机号，密码，验证码，注册-->
     <style name="RegisterAndLogin">
@@ -77,5 +85,14 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_weight">1</item>
+    </style>
+    <!--自定义全局标题栏-->
+    <declare-styleable name="GlobalTitleLayout">
+        <attr name="global_title_layout_title" format="reference|string"/>
+        <attr name="global_title_layout_show_back" format="boolean"/>
+    </declare-styleable>
+    <!--自定义购物车中checkbox的图案样式-->
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/slector_checkbox</item>
     </style>
 </resources>

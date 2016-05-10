@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <ImageView
+            android:id="@+id/activity_confirmorder_productimg"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_centerVertical="true"
+            />
+
+
+        <TextView
+            android:id="@+id/activity_confirmorder_producttitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="9dp"
+            android:layout_toRightOf="@id/activity_confirmorder_productimg"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="wow 男人的口袋工具箱 创意螺丝刀等等"
+            android:textColor="#000000"
+            android:textSize="13sp"/>
+
+        <LinearLayout
+            android:id="@+id/activity_confirmorder_skusrelative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_confirmorder_producttitle"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/activity_confirmorder_productimg"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="颜色/种类:"
+                android:textColor="#999999"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/activity_confirmorder_skuname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="白色"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=",数量*"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/activity_confirmorder_skunumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/activity_confirmorder_totalprice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_confirmorder_skusrelative"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/activity_confirmorder_productimg"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/red"
+            android:textSize="13sp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
