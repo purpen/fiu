@@ -204,6 +204,15 @@ public class CustomHeadView extends RelativeLayout {
         }
 
     }
+    public void setHeadRightTxtShow(boolean isShow, String str) {
+        if (isShow) {
+            tv_head_right.setVisibility(View.VISIBLE);
+            tv_head_right.setText(str);
+        } else {
+            tv_head_right.setVisibility(View.GONE);
+        }
+
+    }
 
     public TextView getHeadRightTV(){
         return tv_head_right;

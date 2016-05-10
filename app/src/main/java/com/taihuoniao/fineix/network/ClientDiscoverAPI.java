@@ -523,12 +523,12 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
 
-    public static void getNearByQJData(LatLng ll, int radius, int page, int pageSize, int stick, RequestCallBack<String> callBack) {
+    public static void getQJData(LatLng ll, int radius, String page, String pageSize, String stick, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("page", String.valueOf(page));
-        params.addQueryStringParameter("size", String.valueOf(pageSize));
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("size",pageSize);
         params.addQueryStringParameter("sort", "0");
-        params.addQueryStringParameter("stick", String.valueOf(stick));
+        params.addQueryStringParameter("stick", stick);
         if (radius > 0) {
             params.addQueryStringParameter("dis", String.valueOf(radius));
         }

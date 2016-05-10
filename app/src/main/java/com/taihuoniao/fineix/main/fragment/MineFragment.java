@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.RedBagActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
@@ -300,10 +301,13 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.btn,R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
+            case R.id.btn:
+                startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                break;
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;

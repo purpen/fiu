@@ -52,6 +52,12 @@
             android:name=".user.AddNewAddressActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".user.CompleteUserInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.OrderInterestQJActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".scene.SearchActivity"
             android:screenOrientation="portrait"/>
         <activity

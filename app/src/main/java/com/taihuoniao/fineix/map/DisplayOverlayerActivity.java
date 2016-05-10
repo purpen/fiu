@@ -57,9 +57,9 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     private int pageSize;//本界面只展示三条
     private int radius = 5000; //搜索半径
     private boolean isFirstLoc = true;
-    private static final int STICK_ALL = 0; //所有情境
-    private static final int STICK_SELECT = 1; //精选情境
-    private static final int STICK_NO = 2; //非精选情境
+    private static final String STICK_ALL = "0"; //所有情境
+    private static final String STICK_SELECT = "1"; //精选情境
+    private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
     private NearByQJAdapter nearByAdapter; //附近的情境
 
@@ -134,7 +134,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         page = 1;
         pageSize = 1000;
         radius = 0;
-        ClientDiscoverAPI.getNearByQJData(ll, radius, page, pageSize, STICK_ALL, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getQJData(ll,radius,String.valueOf(page),String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框

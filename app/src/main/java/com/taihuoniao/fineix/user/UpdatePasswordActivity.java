@@ -49,7 +49,6 @@ public class UpdatePasswordActivity extends BaseActivity {
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.tv_head_right:
-                v.setEnabled(false);
                 submitData(v);
                 break;
         }
@@ -60,25 +59,22 @@ public class UpdatePasswordActivity extends BaseActivity {
         String newPsd = et_new.getText().toString().trim();
         if (TextUtils.isEmpty(originPsd)) {
             Util.makeToast("请填写原密码");
-            v.setEnabled(true);
             return;
         }
 
         if (TextUtils.isEmpty(newPsd)) {
             Util.makeToast("请填写新密码");
-            v.setEnabled(true);
             return;
         }
 
         if (TextUtils.equals(originPsd, newPsd)) {
             Util.makeToast("原密码不能和新密码相同");
-            v.setEnabled(true);
             return;
         }
-
         ClientDiscoverAPI.updatePassword(originPsd, newPsd, new RequestCallBack<String>() {
             @Override
             public void onStart() {
+                v.setEnabled(false);
                 if (dialog != null) dialog.show();
             }
 

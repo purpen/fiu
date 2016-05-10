@@ -76,9 +76,9 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     private int radius = 5000; //搜索半径
     private boolean isFirstLoc = true;
     private BitmapDescriptor bitmapDescripter;
-    private static final int STICK_ALL = 0; //所有情境
-    private static final int STICK_SELECT = 1; //精选情境
-    private static final int STICK_NO = 2; //非精选情境
+    private static final String STICK_ALL = "0"; //所有情境
+    private static final String STICK_SELECT = "1"; //精选情境
+    private static final String STICK_NO = "2"; //非精选情境
 
     public SelectOrSearchQJActivity() {
         super(R.layout.activity_qj_select_search);
@@ -139,7 +139,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     private void getNearByData(LatLng ll) {//附近的情境
         page=1;
         pageSize=3;
-        ClientDiscoverAPI.getNearByQJData(ll, radius, page, pageSize,STICK_ALL,new RequestCallBack<String>() {
+        ClientDiscoverAPI.getQJData(ll, radius,String.valueOf(page),String.valueOf(pageSize),STICK_ALL,new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框
@@ -180,7 +180,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     protected void requestNet() {//推荐情境
         page=1;
         pageSize=2;
-        ClientDiscoverAPI.getNearByQJData(null,0, page, pageSize,STICK_SELECT,new RequestCallBack<String>() {
+        ClientDiscoverAPI.getQJData(null,0,String.valueOf(page),String.valueOf(pageSize),STICK_SELECT,new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框
