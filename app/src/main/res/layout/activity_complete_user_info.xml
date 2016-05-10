@@ -17,6 +17,7 @@
         android:layout_marginTop="@dimen/dp80"
         >
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/riv"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
             app:riv_corner_radius="@dimen/dp100"
@@ -25,12 +26,14 @@
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:layout_width="@dimen/dp20"
             android:layout_height="@dimen/dp20"
+            app:riv_corner_radius="@dimen/dp100"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:src="@mipmap/ic_launcher"
             />
     </RelativeLayout>
-    <RadioGroup
+
+    <com.taihuoniao.fineix.view.SegmentedGroup
         android:id="@+id/radioGroup"
         android:contentDescription="性别"
         android:layout_width="@dimen/dp200"
@@ -38,7 +41,6 @@
         android:layout_below="@+id/rl"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/border_radius5"
         android:layout_marginTop="@dimen/dp30"
         >
         <RadioButton
@@ -46,16 +48,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:textColor="@color/color_333"
+            android:checked="true"
+            android:gravity="center"
             android:textSize="@dimen/sp14"
             android:button="@null"
             android:text="男"
-            />
-        <View
-            android:layout_width="@dimen/dp05"
-            android:layout_height="match_parent"
-            android:background="@color/color_999"
             />
         <RadioButton
             android:id="@+id/female"
@@ -68,11 +66,6 @@
             android:button="@null"
             android:layout_weight="1"
             />
-        <View
-            android:layout_width="@dimen/dp05"
-            android:layout_height="match_parent"
-            android:background="@color/color_999"
-            />
         <RadioButton
             android:id="@+id/secret"
             android:layout_width="match_parent"
@@ -84,7 +77,7 @@
             android:gravity="center"
             android:text="保密"
             />
-    </RadioGroup>
+    </com.taihuoniao.fineix.view.SegmentedGroup>
 
     <EditText
         android:id="@+id/et_nickname"

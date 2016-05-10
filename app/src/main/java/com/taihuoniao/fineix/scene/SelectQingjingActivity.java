@@ -81,7 +81,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     private int mapPage; //默认查看第一页
     private int pageSize;//本界面只展示三条
     private int radius = 5000; //搜索半径
-    private static final int STICK_ALL = 0; //所有情境
+    private static final String STICK_ALL = "0"; //所有情境
     //    private GridView qingjingGrid;
     private WaittingDialog dialog;
     //情景列表
@@ -342,7 +342,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     private void getNearByData(LatLng ll) {//附近的情境
         mapPage = 1;
         pageSize = 3;
-        ClientDiscoverAPI.getNearByQJData(ll, radius, mapPage, pageSize, STICK_ALL, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(mapPage), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框

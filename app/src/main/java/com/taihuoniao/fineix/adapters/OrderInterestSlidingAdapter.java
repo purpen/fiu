@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Gallery;
@@ -8,9 +9,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -58,11 +65,37 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
         return convertView;
     }
 
-    private void setOnClickListener(ImageButton itbn,QingJingListBean.QingJingItem item){
+    private void setOnClickListener(ImageButton itbn, final QingJingListBean.QingJingItem item){
         itbn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //TODO
+            public void onClick(final View view) {
+                ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
+                    @Override
+                    public void onStart() {
+                        view.setEnabled(false);
+                        super.onStart();
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        view.setEnabled(true);
+                        if (responseInfo==null) return;
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (response.isSuccess()){
+                            Util.makeToast(response.getMessage());
+                            return;
+                        }
+
+                        Util.makeToast(response.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        view.setEnabled(true);
+                        Util.makeToast(s);
+                    }
+                });
             }
         });
     }

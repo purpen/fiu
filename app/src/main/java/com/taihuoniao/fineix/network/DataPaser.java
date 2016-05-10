@@ -1528,7 +1528,7 @@ public class DataPaser {
                 //TODO 保存登录信息
                 SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
 
-                LogUtil.e("ResponseInfo", responseInfo.result);
+                LogUtil.e("LOGIN_INFO", responseInfo.result);
 
                 //TODO 后期改造
                 LoginInfo loginInfo = null;

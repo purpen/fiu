@@ -109,7 +109,6 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initData();
     }
 
@@ -195,12 +194,12 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
             if (isInitLoad){
                 isInitLoad=false;
             }else {
+                LogUtil.e(TAG+"onResume", LoginInfo.isUserLogin() + "");
                 loadData();
             }
         } else {

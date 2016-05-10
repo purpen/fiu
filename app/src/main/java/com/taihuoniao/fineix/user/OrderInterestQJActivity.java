@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -64,17 +65,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 tv_current.setText(String.valueOf(++i));
-//                sfiv.invalidate();
                 adapter.notifyDataSetChanged();
-                //初始化“缩放动画”类的实例，表示从1倍放大到1.5倍，并且放大的中心点是图片的中心点
-//                ScaleAnimation animation = new ScaleAnimation(0.8f, 1.0f, 0.8f, 1.0f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                //从1倍到1.5倍需要1秒钟
-//                animation.setDuration(500);
-                //开始执行动画
-//                view.startAnimation(animation);
-//                animation.setFillAfter(true);
-//                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -87,7 +78,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.btn:
-                //TODO
+                startActivity(new Intent(activity,CompleteUserInfoActivity.class));
                 break;
         }
     }

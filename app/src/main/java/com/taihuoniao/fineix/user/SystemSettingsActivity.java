@@ -69,7 +69,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 startActivity(new Intent(activity,UpdatePasswordActivity.class));
                 break;
             case R.id.btn_logout:
-                SPUtil.clear(activity,DataConstants.LOGIN_INFO);
+                SPUtil.remove(activity,DataConstants.LOGIN_INFO);
                 startActivity(new Intent(activity,MainActivity.class));
                 finish();
                 break;

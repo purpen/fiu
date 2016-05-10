@@ -70,21 +70,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".user.SelectAddressActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".user.AddNewAddressActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".scene.SelectAllQingjingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.CompleteUserInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".user.OrderInterestQJActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".scene.SearchActivity"
             android:screenOrientation="portrait"/>

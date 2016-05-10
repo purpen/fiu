@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="现在你可以订阅感兴趣的情景来开始"
-        android:layout_marginTop="@dimen/dp15"
-        android:layout_marginBottom="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginBottom="@dimen/dp10"
         android:textSize="@dimen/sp12"
         android:textColor="@color/color_666"
         />
@@ -27,7 +27,7 @@
         android:layout_below="@+id/tv"
         android:layout_above="@+id/ll"
         android:unselectedAlpha="0.5"
-        android:spacing="10dp"
+        android:spacing="@dimen/dp10"
         />
     <LinearLayout
         android:id="@+id/ll"
@@ -36,7 +36,7 @@
         android:layout_above="@+id/btn"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dp80"
-        android:layout_marginBottom="@dimen/dp15"
+        android:paddingBottom="@dimen/dp10"
         >
         <TextView
             android:id="@+id/tv_current"

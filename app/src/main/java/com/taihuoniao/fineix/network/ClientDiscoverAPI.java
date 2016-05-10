@@ -492,16 +492,9 @@ public class ClientDiscoverAPI {
     public static void clickLoginNet(String uuid, String phone, String password, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/login";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-//        params.addQueryStringParameter();("mobile", phone);
-//        params.addQueryStringParameter();("from_to", "2");
-//        params.addQueryStringParameter();("password", password);
-//        params.addQueryStringParameter();("uuid", uuid);
-//        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
-//        HttpHandler<String> handler = httpUtils.send(HttpRequest.HttpMethod.POST, url, params, callBack);
         params.addQueryStringParameter("mobile", phone);
-        params.addQueryStringParameter("from_to", "2");
+        params.addQueryStringParameter("from_to", "2");     //登录渠道
         params.addQueryStringParameter("password", password);
-////        params.addQueryStringParameter("uuid", uuid);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
 
@@ -714,6 +707,22 @@ public class ClientDiscoverAPI {
         }
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
+
+    /**
+     * 更新用户信息
+     * @param nickname
+     * @param summary
+     * @param callBack
+     */
+    public static void updateNickNameSummary(String nickname, String summary,String sex,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("nickname",nickname);
+        params.addQueryStringParameter("summary",summary);
+        params.addQueryStringParameter("sex",sex);
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
+
+
 
     /**
      * 获取所有城市

@@ -12,14 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -178,18 +188,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_login:
-                String phone = phoneNum.getText().toString();
-                String password = et_password.getText().toString();
-                if (!TextUtils.isEmpty(phone)) {
-                    if (!TextUtils.isEmpty(password)) {
-                        mDialog.show();
-                        DataPaser.loginParser(MainApplication.uuid, mHandler, phone, password);
-                    } else {
-                        Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(LoginActivity.this, "请输入用户名", Toast.LENGTH_SHORT).show();
-                }
+//                String phone = phoneNum.getText().toString();
+//                String password = et_password.getText().toString();
+                submitData(v);
+
+//                if (!TextUtils.isEmpty(phone)) {
+//                    if (!TextUtils.isEmpty(password)) {
+//                        mDialog.show();
+//                        DataPaser.loginParser(MainApplication.uuid, mHandler, phone, password);
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "请输入用户名", Toast.LENGTH_SHORT).show();
+//                }
                 break;
             case R.id.image_close_login:
                 OptRegisterLoginActivity.instance.finish();
@@ -202,4 +214,75 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+
+    private void submitData(final View v) {
+        String phone = phoneNum.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            Util.makeToast("请输入手机号");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)){
+            Util.makeToast("请输入密码");
+            return;
+        }
+
+        ClientDiscoverAPI.clickLoginNet(MainApplication.uuid, phone, password, new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                v.setEnabled(false);
+                if(mDialog!=null) mDialog.show();
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                v.setEnabled(true);
+                mDialog.dismiss();
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                });
+                LogUtil.e("LOGIN_INFO", responseInfo.result);
+                if (response.isSuccess()){
+                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
+                    if (response.getData().getFirst_login()==1){ //1是首次登录
+                        if (ToRegisterActivity.instance != null) {
+                            ToRegisterActivity.instance.finish();
+                        }
+                        if (RegisterActivity.instance != null) {
+                            RegisterActivity.instance.finish();
+                        }
+                        if (OptRegisterLoginActivity.instance != null) {
+                            OptRegisterLoginActivity.instance.finish();
+                        }
+                        if (ToLoginActivity.instance != null) {
+                            ToLoginActivity.instance.finish();
+                        }
+                        startActivity(new Intent(activity,OrderInterestQJActivity.class));
+                        finish();
+                    }else {
+                        startActivity(new Intent(activity,MainActivity.class));
+                        finish();
+                    }
+                    return;
+                }
+                Util.makeToast(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                v.setEnabled(true);
+                mDialog.dismiss();
+                Util.makeToast("对不起，网络异常");
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
