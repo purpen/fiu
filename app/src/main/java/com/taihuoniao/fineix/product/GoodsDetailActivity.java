@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -73,6 +74,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     RecyclerView recommendRecycler;
     @Bind(R.id.activity_goods_detail_buy_now)
     Button buyNowBtn;
+    @Bind(R.id.activity_goods_detail_webview)
+    WebView webView;
     //判断产品是自营的还是第三方商城的标识
     private String attrbute = "0";// 1.官网；2.淘宝；3.天猫；4.京东
     private String url = null;
@@ -156,7 +159,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         dialog.show();
         DataPaser.goodsDetail(id, handler);
         DataPaser.productAndScene(page + "", 8 + "", null, id, handler);
-        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null,null,null, handler);
+        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null, null, null, handler);
     }
 
 
@@ -183,7 +186,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         DataPaser.goodsDetail(id, handler);
                         break;
                     case "1":
-                        Toast.makeText(GoodsDetailActivity.this, "自营产品", Toast.LENGTH_SHORT).show();
+                        Intent intent2 = new Intent(GoodsDetailActivity.this, MyGoodsDetailsActivity.class);
+                        intent2.putExtra("id", id);
+                        startActivity(intent2);
                         break;
                     default:
                         if (url == null) {
@@ -191,9 +196,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             DataPaser.goodsDetail(id, handler);
                             return;
                         }
-                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
-                        intent.putExtra("url", url);
-                        startActivity(intent);
+                        webView.getSettings().setJavaScriptEnabled(true);
+                        webView.loadUrl(url);
+                        Toast.makeText(GoodsDetailActivity.this, "正在跳转到浏览器，请稍等", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
+//                        intent.putExtra("url", url);
+//                        startActivity(intent);
                         break;
                 }
                 break;
@@ -229,7 +237,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             }
                         }
                         currentTime++;
-                        DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(),null,null, handler);
+                        DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(), null, null, handler);
                     } else if (netProductBean.isSuccess() && currentTime == 2) {
                         dialog.dismiss();
                         if (recommendPage == 1) {

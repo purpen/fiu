@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="@color/red"
+
+    >
+
+    <ImageView
+
+        android:id="@+id/global_title_back"
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:paddingTop="13dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="13dp"
+        android:paddingLeft="10dp"
+        android:src="@mipmap/back_3x" />
+
+    <TextView
+        android:id="@+id/global_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="标题"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/global_title_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="10dp"
+        android:clickable="true"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:visibility="gone"/>
+
+
+    <!--“购物车”的图标按钮-->
+    <ImageView
+        android:id="@+id/global_title_image_shopcart"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:padding="12dp"
+        android:src="@mipmap/cart_title" />
+
+    <!--“购物车上标记所购数量的小黑圆圈”的图标按钮-->
+    <TextView
+        android:id="@+id/global_title_image_shopcart_counter"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="9dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:textSize="9sp"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_bg_num_shopcart"
+        android:visibility="gone"/>
+    <!--“搜索”的图标按钮-->
+    <ImageView
+        android:id="@+id/global_title_image_search"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/global_title_image_shopcart"
+        android:clickable="true"
+        android:padding="13dp"
+        android:src="@mipmap/search_title" />
+
+    <!--“分享”的图标按钮-->
+    <ImageView
+        android:id="@+id/global_title_image_share"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:padding="2dp"
+        android:src="@mipmap/share_3x"
+        android:visibility="gone" />
+
+    <!--“设置”的图标按钮-->
+    <ImageView
+        android:id="@+id/global_title_image_set"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="6dp"
+        android:padding="5dp"
+        android:clickable="true"
+        android:src="@mipmap/set"
+        android:visibility="gone" />
+
+</RelativeLayout>

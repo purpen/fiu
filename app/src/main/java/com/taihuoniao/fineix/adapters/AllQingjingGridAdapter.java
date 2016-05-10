@@ -67,6 +67,10 @@ public class AllQingjingGridAdapter extends BaseAdapter {
             lp.height = lp.width * 16 / 9;
             holder.addressTv = (TextView) convertView.findViewById(R.id.item_allqingjing_address);
             holder.title = (TextView) convertView.findViewById(R.id.item_allqingjing_title);
+            holder.selectImg = (ImageView) convertView.findViewById(R.id.item_allqingjing_selectbackground);
+            ViewGroup.LayoutParams slp = holder.selectImg.getLayoutParams();
+            slp.width = lp.width;
+            slp.height = lp.height;
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -75,10 +79,20 @@ public class AllQingjingGridAdapter extends BaseAdapter {
             ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
             holder.addressTv.setText(list.get(position).getAddress());
             holder.title.setText(list.get(position).getTitle());
+            if (list.get(position).isSelect()) {
+                holder.selectImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.selectImg.setVisibility(View.GONE);
+            }
         } else if (searchList != null) {
             ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
             holder.addressTv.setText(searchList.get(position).getAddress());
             holder.title.setText(searchList.get(position).getTitle());
+            if (searchList.get(position).isSelect()) {
+                holder.selectImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.selectImg.setVisibility(View.GONE);
+            }
         }
         return convertView;
     }
@@ -87,5 +101,6 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         ImageView backgroundImg;
         TextView addressTv;
         TextView title;
+        ImageView selectImg;
     }
 }

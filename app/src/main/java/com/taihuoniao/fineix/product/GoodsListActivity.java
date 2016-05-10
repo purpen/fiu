@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.product;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -79,7 +81,9 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                 Toast.makeText(GoodsListActivity.this, "跳转到购物车", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_good_list_search:
-                Toast.makeText(GoodsListActivity.this, "搜索", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("t", "10");
+                startActivity(intent);
                 break;
         }
     }
@@ -111,7 +115,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                         goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         firstViewPager.setAdapter(goodListFirtViewPagerAdapter);
                         firstSliding.setViewPager(firstViewPager);
-                        firstViewPager.setCurrentItem(position,true);
+                        firstViewPager.setCurrentItem(position, true);
                     }
                     break;
                 case DataConstants.CART_NUM:

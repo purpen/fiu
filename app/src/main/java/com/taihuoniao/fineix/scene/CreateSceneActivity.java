@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -234,12 +235,12 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 areaTv.setText("");
                 break;
             case R.id.activity_create_scene_qingjing:
-                if (location == null) {
-                    getCurrentLocation();
-                    return;
-                }
+//                if (location == null) {
+//                    getCurrentLocation();
+//                    return;
+//                }
                 Intent intent1 = new Intent(CreateSceneActivity.this, SelectQingjingActivity.class);
-                intent1.putExtra("latLng", new LatLng(location[1], location[0]));
+//                intent1.putExtra("latLng", new LatLng(location[1], location[0]));
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
 //                Intent intent1 = new Intent(CreateSceneActivity.this, SelectOrSearchQJActivity.class);
 //                startActivity(intent1);
@@ -412,6 +413,14 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ:
+                    SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
+                    if (searchItem != null) {
+                        scene_id = searchItem.get_id();
+                        qingjingLinear.removeAllViews();
+                        addQingjingToLinear(searchItem.getTitle());
+                    }
+                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_SELECTQJ:
                     QingJingListBean.QingJingItem qingJingItem = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
                     if (qingJingItem != null) {

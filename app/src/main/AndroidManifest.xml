@@ -42,6 +42,30 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".product.MyGoodsDetailsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.AddNewAddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.ConfirmOrderActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.GoodsCommentsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.PayWayActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".user.SelectAddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.ShopCarActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.TransferTimeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".product.GoodsListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
@@ -51,6 +75,10 @@
         <activity
             android:name=".user.AddNewAddressActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".scene.SelectAllQingjingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.CompleteUserInfoActivity"
             android:screenOrientation="portrait"/>

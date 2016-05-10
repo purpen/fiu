@@ -99,18 +99,30 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.activity_search_productrelative:
                 t = "10";
-                selectFragment();
-//                refreshData();
+                if (productResultFragment != null) {
+                    selectFragment();
+                    refreshData();
+                } else {
+                    selectFragment();
+                }
                 break;
             case R.id.activity_search_cjrelative:
                 t = "9";
-                selectFragment();
-//                refreshData();
+                if (cjResultFragment != null) {
+                    selectFragment();
+                    refreshData();
+                } else {
+                    selectFragment();
+                }
                 break;
             case R.id.activity_search_qjrelative:
                 t = "8";
-                selectFragment();
-//                refreshData();
+                if (qjResultFragment != null) {
+                    selectFragment();
+                    refreshData();
+                } else {
+                    selectFragment();
+                }
                 break;
             case R.id.activity_search_back:
                 onBackPressed();
@@ -128,7 +140,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         switch (t) {
             case "8":
                 if (qjResultFragment == null) {
-                    qjResultFragment = QJResultFragment.newInstance(q, t);
+                    qjResultFragment = QJResultFragment.newInstance(editText.getText().toString().trim(), t);
                     ft.add(R.id.activity_search_container, qjResultFragment);
                 } else {
                     ft.show(qjResultFragment);
@@ -138,7 +150,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "9":
                 if (cjResultFragment == null) {
-                    cjResultFragment = CJResultFragment.newInstance(q, t);
+                    cjResultFragment = CJResultFragment.newInstance(editText.getText().toString().trim(), t);
                     ft.add(R.id.activity_search_container, cjResultFragment);
                 } else {
                     ft.show(cjResultFragment);
@@ -148,7 +160,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "10":
                 if (productResultFragment == null) {
-                    productResultFragment = ProductResultFragment.newInstance(q, t);
+                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t);
                     ft.add(R.id.activity_search_container, productResultFragment);
                 } else {
                     ft.show(productResultFragment);
@@ -164,14 +176,14 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         if (TextUtils.isEmpty(editText.getText().toString())) {
             return;
         }
-        if (qjResultFragment != null) {
-            qjResultFragment.refreshData(editText.getText().toString(), t);
+        if (qjResultFragment != null && "8".equals(t)) {
+            qjResultFragment.refreshData(editText.getText().toString().trim(), t);
         }
-        if (cjResultFragment != null) {
-            cjResultFragment.refreshData(editText.getText().toString(), t);
+        if (cjResultFragment != null && "9".equals(t)) {
+            cjResultFragment.refreshData(editText.getText().toString().trim(), t);
         }
-        if (productResultFragment != null) {
-            productResultFragment.refreshData(editText.getText().toString(), t);
+        if (productResultFragment != null && "10".equals(t)) {
+            productResultFragment.refreshData(editText.getText().toString().trim(), t);
         }
 
     }

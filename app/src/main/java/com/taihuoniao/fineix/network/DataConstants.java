@@ -9,6 +9,7 @@ public class DataConstants {
     public static final int SceneDetailActivity = 101;
     public static final int ElseActivity = 102;//其他不需要刷新界面的activity
     public static final int QingjingDetailActivity = 103;
+    public static final int MyGoodsDetailsActivity = 104;
     //场景详情界面跳转到注册界面广播Action
     public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";
     //情景详情界面跳转到注册界面广播action
@@ -84,9 +85,11 @@ public class DataConstants {
     //CreateSceneActivity到SelectQingjingActivity界面的请求码和返回码
     public static final int REQUESTCODE_CREATESCENE_SELECTQJ = 65;
     public static final int RESULTCODE_CREATESCENE_SELECTQJ = 64;
+    public static final int RESULTCODE_CREATESCENE_SEARCHQJ = 44;
     //SelectQingjingActivity到AllQingjingActivity界面的请求码和返回码
     public static final int REQUESTCODE_SELECTQJ_ALLQJ = 63;
     public static final int RESULTCODE_SELECTQJ_ALLQJ = 62;
+    public static final int RESULTCODE_SELECTQJ_SALLQJ = 45;
     //举报
     public static final int REPORT = 61;
     //产品详情
@@ -119,6 +122,27 @@ public class DataConstants {
     public static final int GET_ADDRESS_LIST = 47;
     //搜索结果
     public static final int SEARCH_LIST = 46;
+    //广播接收action
+    public static final String BROAD_GOODS_DETAILS = "com.taihuoniao.fiu.goodsdetails";
+    //自营产品详情
+    public static final int GOODS_DETAILS = 43;
+    //商品详情评论列表
+    public static final int GOODS_DETAILS_COMMENTS = 42;
+    //购物车数量
+    public static final int PARSER_SHOP_CART_NUMBER = 41;
+    public static final int PARSER_SHOP_CART = 40;
+    public static final int PARSER_SHOP_CART_CALCULATE = 39;
+    public static final int DEFAULT_ADDRESS = 38;
+    public static final int REQUESTCODE_ADDRESS = 37;
+    public static final int RESULTCODE_TRANSFER_TIME = 36;
+    public static final int REQUESTCODE_TRANSFER_TIME = 35;
+    public static final int NOW_CONFIRM_ORDER = 34;
+    public static final int PARSER_PAY_ALIPAY = 33;
+    public static final int PARSER_PAY_WECHAT = 32;
+    public static final int BUY_NOW = 31;
+    public static final int ADD_TO_CART = 30;
+    public static final int CANCEL_LOVE = 29;
+    public static final int LOVE = 28;
 
 
     //SharedPreferences 存储文件名
@@ -148,11 +172,11 @@ public class DataConstants {
     //首页　自定义下拉刷新中mHandler.sendEmptyMessageDelayed(__,__)的第一个参数
     public static final int CUSTOM_PULLTOREFRESH_HOME = 7;
     //验证红包是否可用
-    public static final int PARSER_CHECK_REDBAG_USABLE=42;
+    public static final int PARSER_CHECK_REDBAG_USABLE = 42;
 
     //商品详情界面到可用红包界面的requestcode和resultcode
     public static final int REQUESTCODE_REDBAG = 57;
-    public static final int RESULTCODE_REDBAG  = 56;
+    public static final int RESULTCODE_REDBAG = 56;
     public static final String GUIDE_TAG = "guide";
     public static final int GUIDE_INTERVAL = 3000;
     public static final String APP_ID = "";

@@ -59,4 +59,12 @@
             android:textColor="@color/white"
             android:textSize="13sp"/>
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/item_allqingjing_selectbackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/select_qj_background"
+        android:visibility="gone"/>
 </RelativeLayout>

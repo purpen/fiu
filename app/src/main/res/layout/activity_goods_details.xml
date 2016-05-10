@@ -5,7 +5,7 @@
                 android:background="#f4f4f4"
                 android:fitsSystemWindows="true">
 
-    <com.taihuoniao.fineix.view.GlobalTitleLayout
+    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
         android:id="@+id/activity_goodsdetails_titlelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

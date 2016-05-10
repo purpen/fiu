@@ -19,6 +19,8 @@ public class NetworkConstance {
     public static final String add_product = BASE_URL + "/scene_product/add";
     //产品详情
     public static final String good_details = BASE_URL + "/scene_product/view";
+    // 自营商品详情
+    public static final String urlString_goods_details = BASE_URL + "/product/view";
     //获取京东商品信息
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
@@ -60,6 +62,8 @@ public class NetworkConstance {
     //收货地址
     //省市列表
     public static final String urlString_province_cities = BASE_URL + "/shopping/fetch_areas";
+    //  获取用户默认收货地址接口
+    public static final String urlString_default_address = BASE_URL + "/shopping/default_address";
     //  获取用户收货地址列表
     public static final String urlString_address_lists = BASE_URL + "/shopping/address";
     //  新增收货地址(编辑)
@@ -87,7 +91,6 @@ public class NetworkConstance {
     public static final String send_comment = BASE_URL + "/comment/ajax_comment";
     //列表
     public static final String comments_list = BASE_URL + "/comment/getlist";
-
     //我接收到的评论列表
     public static final String MY_COMMENTS_LIST = BASE_URL + "/my/comment_list";
     //分类
@@ -145,4 +148,17 @@ public class NetworkConstance {
 
     //消息详情
     public static final String MESSAGE_DETAIL = BASE_URL + "/message/view";
+
+    //  立即下单
+    public static final String urlString_now_confirmorder = BASE_URL + "/shopping/confirm";
+
+    //  取消点赞
+    public static final String urlString_cancellove = BASE_URL + "/favorite/ajax_cancel_love";
+
+    //  点赞接口
+    public static final String urlString_love = BASE_URL + "/favorite/ajax_love";
+    //  添加购物车
+    public static final String urlString_add_to_cart = BASE_URL + "/shopping/add_cart";
+    //  立即购买
+    public static final String urlString_buy_now = BASE_URL + "/shopping/now_buy";
 }

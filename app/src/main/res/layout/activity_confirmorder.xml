@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f4f4f4"
+                android:fitsSystemWindows="true">
+
+    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
+        android:id="@+id/activity_confirmorder_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:id="@+id/activity_confirmorder_bottomrelative"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/grey_no_corner"
+        >
+
+        <TextView
+            android:id="@+id/activity_confirmorder_savetv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:gravity="center"
+            android:text="节省:"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/activity_confirmorder_savemoney"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/activity_confirmorder_savetv"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/activity_confirmorder_paybtn"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/red"
+            android:text="提交订单"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/activity_confirmorder_payprice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@id/activity_confirmorder_paybtn"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="9dp"
+            android:layout_toLeftOf="@id/activity_confirmorder_payprice"
+            android:gravity="center"
+            android:text="合计:"
+            android:textColor="#000000"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/activity_confirmorder_bottomrelative"
+        android:layout_below="@id/activity_confirmorder_title"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="95dp">
+
+            <RelativeLayout
+                android:id="@+id/activity_confirmorder_addrelative"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/white"
+                >
+
+                <ImageView
+                    android:id="@+id/activity_confirmorder_seatimg"
+                    android:layout_width="41dp"
+                    android:layout_height="match_parent"
+                    android:padding="13dp"
+                    android:src="@mipmap/seat"/>
+
+                <ImageView
+                    android:id="@+id/activity_confirmorder_moreaddressimg"
+                    android:layout_width="50dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentRight="true"
+                    android:padding="20dp"
+                    android:src="@mipmap/back2"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_toLeftOf="@id/activity_confirmorder_moreaddressimg"
+                    android:layout_toRightOf="@id/activity_confirmorder_seatimg"
+                    android:gravity="center"
+                    >
+
+
+                    <TextView
+                        android:id="@+id/activity_confirmorder_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textColor="#212121"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_confirmorder_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_confirmorder_name"
+                        android:layout_marginTop="5dp"
+                        android:singleLine="true"
+                        android:textColor="#212121"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_confirmorder_fulladdress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_confirmorder_address"
+                        android:layout_marginTop="5dp"
+                        android:singleLine="true"
+                        android:textColor="#212121"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_confirmorder_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/activity_confirmorder_fulladdress"
+                        android:layout_marginTop="5dp"
+                        android:singleLine="true"
+                        android:textColor="#212121"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/activity_confirmorder_noaddresstv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="请设置收货地址"
+                        android:textColor="#999999"
+                        android:textSize="14sp"
+                        />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <com.xf.taihuoniao.app.custom.ListViewForScrollView
+                android:id="@+id/activity_confirmorder_productlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <RelativeLayout
+                android:id="@+id/activity_confirmorder_transferrelative"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                >
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_transfermethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="18dp"
+                    android:gravity="center_vertical"
+                    android:text="配送方式： "
+                    android:textColor="#999999"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_transfertv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/activity_confirmorder_transfermethod"
+                    android:gravity="center_vertical"
+                    android:text="免费配送"
+                    android:textColor="#000000"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_confirmorder_timerelative"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                >
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/back_arrow"/>
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="18dp"
+                    android:gravity="center_vertical"
+                    android:text="送货时间： "
+                    android:textColor="#999999"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_timetv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/activity_confirmorder_time"
+                    android:gravity="center_vertical"
+                    android:text="任意时间"
+                    android:textColor="#000000"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_confirmorder_redbagrelative"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                >
+
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/back_arrow"/>
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_redbag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="18dp"
+                    android:gravity="center_vertical"
+                    android:text="使用红包： "
+                    android:textColor="#999999"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/activity_confirmorder_redbagtv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/activity_confirmorder_redbag"
+                    android:gravity="center_vertical"
+                    android:text="无可用红包"
+                    android:textColor="#000000"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="10dp"
+                android:text="备注："
+                android:textColor="#999999"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/activity_confirmorder_edit"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/backround_corner_gray"
+                android:gravity="top"
+                android:padding="5dp"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

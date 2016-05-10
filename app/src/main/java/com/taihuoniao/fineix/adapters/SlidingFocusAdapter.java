@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
@@ -60,8 +59,8 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
             ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv);
         }
 
-        LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
-        LogUtil.e(TAG,"Position=====>>"+position);
+//        LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
+//        LogUtil.e(TAG,"Position=====>>"+position);
         convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-200,activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
         return convertView;
     }

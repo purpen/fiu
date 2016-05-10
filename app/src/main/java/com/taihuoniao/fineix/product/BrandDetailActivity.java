@@ -175,6 +175,15 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
+    @Override
+    protected void onDestroy() {
+        //cancelNet();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
+        super.onDestroy();
+    }
 
     @Override
     public void onClick(View v) {

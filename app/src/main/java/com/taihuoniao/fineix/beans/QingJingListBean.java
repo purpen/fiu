@@ -19,7 +19,7 @@ public class QingJingListBean extends NetBean {
         this.data = data;
     }
 
-    public static class Data{
+    public static class Data {
         private List<QingJingItem> rows;
 
         public List<QingJingItem> getRows() {
@@ -31,7 +31,8 @@ public class QingJingListBean extends NetBean {
         }
     }
 
-    public static class QingJingItem implements Serializable{
+    public static class QingJingItem implements Serializable {
+        private boolean isSelect;
         private String _id;
         private String title;
         private String des;
@@ -48,6 +49,14 @@ public class QingJingListBean extends NetBean {
         private String status;
         private String created_on;
         private String cover_url;
+
+        public boolean isSelect() {
+            return isSelect;
+        }
+
+        public void setIsSelect(boolean isSelect) {
+            this.isSelect = isSelect;
+        }
 
         public String get_id() {
             return _id;
