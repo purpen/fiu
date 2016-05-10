@@ -142,11 +142,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         addressDetailsTv = (TextView) findViewById(R.id.activity_confirmorder_fulladdress);
         phoneTv = (TextView) findViewById(R.id.activity_confirmorder_phone);
         productsListView = (ListViewForScrollView) findViewById(R.id.activity_confirmorder_productlist);
-//        productImg = (ImageView) findViewById(R.id.activity_confirmorder_productimg);
-//        productTitle = (TextView) findViewById(R.id.activity_confirmorder_producttitle);
-//        skuNameTv = (TextView) findViewById(R.id.activity_confirmorder_skuname);
-//        numberTv = (TextView) findViewById(R.id.activity_confirmorder_skunumber);
-//        totalPriceTv = (TextView) findViewById(R.id.activity_confirmorder_totalprice);
         RelativeLayout transferRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_transferrelative);
         TextView transferTv = (TextView) findViewById(R.id.activity_confirmorder_transfertv);
         timeRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_timerelative);
