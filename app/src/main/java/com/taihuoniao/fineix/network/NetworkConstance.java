@@ -167,4 +167,10 @@ public class NetworkConstance {
 
     //  提醒
     public static final String NOTICE_LIST = BASE_URL + "/my/remind_list";
+
+    //  退出登录
+    public static final String LOGOUT = BASE_URL + "/auth/logout";
+
+    //  发现好友
+    public static final String FIND_FRIENDS = BASE_URL + "/user/find_user";
 }

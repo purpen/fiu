@@ -71,60 +71,60 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof ThirdLogin) {
-                            ThirdLogin thirdLogin = (ThirdLogin) msg.obj;
-                            if (mDialog.isShowing()) {
-                                mDialog.dismiss();
-                            }
-                            if ("true".equals(thirdLogin.getSuccess())) {
-                                Log.e(">>>", ">>>>>userId>>>" + userId);
-                                Log.e(">>>", ">>>>>openidForWeChat>>>" + openidForWeChat);
-                                //为0不存在，1是存在，不存在表示第一次用这个三方号登录本APP，那就去绑定界面，存在则直接进入APP
-                                if ("0".equals(thirdLogin.getHas_user())) {
-                                    Intent intent = new Intent(ToLoginActivity.this, BindPhoneActivity.class);
-                                    intent.putExtra("oid", userId);
-                                    intent.putExtra("oidForWeChat", openidForWeChat);
-                                    intent.putExtra("token", token);
-                                    intent.putExtra("avatarUrl", avatarUrl);
-                                    intent.putExtra("nickName", nickName);
-                                    intent.putExtra("type", type + "");
-                                    intent.putExtra("sex", sex);
-                                    startActivity(intent);
-                                } else {
-                                    switch (MainApplication.which_activity) {
-                                        case DataConstants.SceneDetailActivity:
-                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                                            break;
-                                        case DataConstants.ElseActivity:
-                                            break;
-                                        default:
-//                                            THNMainActivity.instance.finish();
-                                            Intent intent = new Intent(ToLoginActivity.this,
-                                                    MainActivity.class);
-                                            startActivity(intent);
-                                            break;
-                                    }
-                                    MainApplication.getIsLoginInfo().setIs_login("1");
-                                    mDialog.dismiss();
-                                    if (OptRegisterLoginActivity.instance != null) {
-                                        OptRegisterLoginActivity.instance.finish();
-                                    }
-                                    if (ToRegisterActivity.instance != null) {
-                                        ToRegisterActivity.instance.finish();
-                                    }
-                                    mHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ToLoginActivity.this.finish();
-                                        }
-                                    }, 600);
-                                }
-                            } else {
-                                Toast.makeText(ToLoginActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof ThirdLogin) {
+//                            ThirdLogin thirdLogin = (ThirdLogin) msg.obj;
+//                            if (mDialog.isShowing()) {
+//                                mDialog.dismiss();
+//                            }
+//                            if ("true".equals(thirdLogin.getSuccess())) {
+//                                Log.e(">>>", ">>>>>userId>>>" + userId);
+//                                Log.e(">>>", ">>>>>openidForWeChat>>>" + openidForWeChat);
+//                                //为0不存在，1是存在，不存在表示第一次用这个三方号登录本APP，那就去绑定界面，存在则直接进入APP
+//                                if ("0".equals(thirdLogin.getHas_user())) {
+//                                    Intent intent = new Intent(ToLoginActivity.this, BindPhoneActivity.class);
+//                                    intent.putExtra("oid", userId);
+//                                    intent.putExtra("oidForWeChat", openidForWeChat);
+//                                    intent.putExtra("token", token);
+//                                    intent.putExtra("avatarUrl", avatarUrl);
+//                                    intent.putExtra("nickName", nickName);
+//                                    intent.putExtra("type", type + "");
+//                                    intent.putExtra("sex", sex);
+//                                    startActivity(intent);
+//                                } else {
+//                                    switch (MainApplication.which_activity) {
+//                                        case DataConstants.SceneDetailActivity:
+//                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
+//                                            break;
+//                                        case DataConstants.ElseActivity:
+//                                            break;
+//                                        default:
+////                                            THNMainActivity.instance.finish();
+//                                            Intent intent = new Intent(ToLoginActivity.this,
+//                                                    MainActivity.class);
+//                                            startActivity(intent);
+//                                            break;
+//                                    }
+//                                    MainApplication.getIsLoginInfo().setIs_login("1");
+//                                    mDialog.dismiss();
+//                                    if (OptRegisterLoginActivity.instance != null) {
+//                                        OptRegisterLoginActivity.instance.finish();
+//                                    }
+//                                    if (ToRegisterActivity.instance != null) {
+//                                        ToRegisterActivity.instance.finish();
+//                                    }
+//                                    mHandler.postDelayed(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            ToLoginActivity.this.finish();
+//                                        }
+//                                    }, 600);
+//                                }
+//                            } else {
+//                                Toast.makeText(ToLoginActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
 
                     break;
             }

@@ -76,8 +76,8 @@
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <QZone
-        AppId="101092227"
-        AppKey="ba61849a6ab90421e849c116f4f4dea4"
+        AppId="1105329592"
+        AppKey="CaKcLeg32YeVF7b9"
         Enable="true"
         Id="3"
         ShareByAppClient="true"
@@ -96,32 +96,32 @@
 		默认值为false。此外，微信收藏不支持此字段。
 	-->
     <Wechat
-        AppId="wx08a55a284c50442e"
-        AppSecret="883a0e643dd36002a0484781a92a3f0f"
+        AppId="wxdf5f6f5907a238e8"
+        AppSecret="227f6fe4c54ad3e51eed975815167b0b"
         BypassApproval="false"
         Enable="true"
         Id="4"
         SortId="4"/>
 
     <WechatMoments
-        AppId="wx08a55a284c50442e"
-        AppSecret="883a0e643dd36002a0484781a92a3f0f"
+        AppId="wxdf5f6f5907a238e8"
+        AppSecret="227f6fe4c54ad3e51eed975815167b0b"
         BypassApproval="false"
         Enable="true"
         Id="5"
         SortId="5"/>
 
     <WechatFavorite
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wxdf5f6f5907a238e8"
+        AppSecret="227f6fe4c54ad3e51eed975815167b0b"
         Enable="false"
         Id="6"
         SortId="6"/>
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <QQ
-        AppId="101092227"
-        AppKey="ba61849a6ab90421e849c116f4f4dea4"
+        AppId="1105329592"
+        AppKey="CaKcLeg32YeVF7b9"
         Enable="true"
         Id="7"
         ShareByAppClient="true"

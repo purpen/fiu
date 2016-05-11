@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
  * @author lilin
  * created at 2016/5/8 17:45
  */
-public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFriendItem>{
+public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
     private FindFriendRecycleViewAdapter adapter;
     private ImageLoader imageLoader;
     public FindFriendAdapter(List list, Activity activity){
@@ -46,7 +46,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFrie
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final FindFriendData.FindFriendItem item = list.get(position);
+        final FindFriendData.User item = list.get(position);
         ViewHolder holder=null;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_find_friend,null);
@@ -58,7 +58,18 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFrie
 
         imageLoader.displayImage(item.medium_avatar_url,holder.riv,options);
         holder.tv_name.setText(item.nickname);
-        holder.tv_desc.setText("北京 朝阳");//TODO 地址
+//        if (TextUtils.equals(item.sex,"1")){
+//            holder.tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.male,0);
+//        }else {
+//            holder.tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.female,0);
+//        }
+
+        if (item.areas!=null &&item.areas.size()>=2){
+            holder.tv_desc.setVisibility(View.VISIBLE);
+            holder.tv_desc.setText(String.format("%s %s",item.areas.get(0),item.areas.get(1)));
+        }else {
+            holder.tv_desc.setVisibility(View.INVISIBLE);
+        }
         if (item.is_love==FocusFansAdapter.NOT_LOVE){
             holder.btn.setText("关注");
             holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
@@ -71,8 +82,8 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFrie
         setOnClickListener(holder.btn,item);
         LinearLayoutManager manager = new LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false);
         holder.recycler_view.setLayoutManager(manager);
-        if (item.scene !=null || item.scene.size()>0){
-            adapter=new FindFriendRecycleViewAdapter(activity,item.scene);
+        if (item.scene_sight !=null || item.scene_sight.size()>0){
+            adapter=new FindFriendRecycleViewAdapter(activity,item.scene_sight);
             holder.recycler_view.setAdapter(adapter);
             adapter.setmOnItemClickLitener(new FindFriendRecycleViewAdapter.OnItemClickListener() {
                 @Override
@@ -80,8 +91,8 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFrie
 
 //                    Util.makeToast("positon=="+position);
                     Intent intent = new Intent(activity, SceneDetailActivity.class);
-                    LogUtil.e(TAG,item.scene.get(position)._id+"");
-                    intent.putExtra("id", item.scene.get(position)._id);//场景ID
+                    LogUtil.e(TAG,item.scene_sight.get(position)._id+"");
+                    intent.putExtra("id", item.scene_sight.get(position)._id);//场景ID
                     activity.startActivity(intent);
                 }
 
@@ -103,7 +114,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.FindFrie
         return convertView;
     }
 
-    private void setOnClickListener(final Button button,final FindFriendData.FindFriendItem item){
+    private void setOnClickListener(final Button button,final FindFriendData.User item){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,15 +1,10 @@
 package com.taihuoniao.fineix.beans;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 
-
-import com.google.gson.reflect.TypeToken;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
@@ -23,7 +18,6 @@ public class LoginInfo implements Serializable {
     private static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
     private long _id;
-    private String success;
     private String message;
     private String account;
     private String nickname;
@@ -48,27 +42,26 @@ public class LoginInfo implements Serializable {
     private LoginInfo() {
     }
 
-    private static LoginInfo ourInstance;
+    private static LoginInfo instance;
 
     public static LoginInfo getInstance() {
-        if (ourInstance == null)
-            init(MainApplication.getContext());
-        return ourInstance;
+        if (instance == null)
+            instance=new LoginInfo();
+        return instance;
     }
 
     //初始化于Application onCreate()中执行
-    public static void init(Context context) {
-        ourInstance = new LoginInfo();
-        sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-        editor = sp.edit();
-
-    }
+//    public static void init(Context context) {
+//        ourInstance = new LoginInfo();
+//        sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+//        editor = sp.edit();
+//
+//    }
 
     public static String getHeadPicUrl() {
         if (isUserLogin()) {
             String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-            loginInfo = JsonUtil.fromJson(login_info, new TypeToken<HttpResponse<LoginInfo>>() {
-            });
+            loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo.medium_avatar_url;
         }
         return null;
@@ -77,8 +70,7 @@ public class LoginInfo implements Serializable {
     public static LoginInfo getLoginInfo(){
         if (isUserLogin()) {
             String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-            loginInfo = JsonUtil.fromJson(login_info, new TypeToken<HttpResponse<LoginInfo>>() {
-            });
+            loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo;
         }
         return null;
@@ -87,8 +79,7 @@ public class LoginInfo implements Serializable {
     public static long getUserId() {
         if (isUserLogin()) {
             String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-            loginInfo = JsonUtil.fromJson(login_info, new TypeToken<HttpResponse<LoginInfo>>() {
-            });
+            loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo._id;
         }
         return -1;
@@ -110,27 +101,6 @@ public class LoginInfo implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "LoginInfo{" +
-                "success='" + success + '\'' +
-                ", message='" + message + '\'' +
-                ", account='" + account + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", true_nickname='" + true_nickname + '\'' +
-                ", realname='" + realname + '\'' +
-                ", sex='" + sex + '\'' +
-                ", medium_avatar_url='" + medium_avatar_url + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", address='" + address + '\'' +
-                ", zip='" + zip + '\'' +
-                ", im_qq='" + im_qq + '\'' +
-                ", weixin='" + weixin + '\'' +
-                ", company='" + company + '\'' +
-                ", phone='" + phone + '\'' +
-                ", first_login=" + first_login +
-                '}';
-    }
 
     public String getNickname() {
         return nickname;
@@ -220,14 +190,6 @@ public class LoginInfo implements Serializable {
         this.company = company;
     }
 
-    public static LoginInfo getOurInstance() {
-        return ourInstance;
-    }
-
-    public static void setOurInstance(LoginInfo ourInstance) {
-        LoginInfo.ourInstance = ourInstance;
-    }
-
     public int getFirst_login() {
         return first_login;
     }
@@ -240,11 +202,6 @@ public class LoginInfo implements Serializable {
         return sp.getString("isLogin", "");
     }
 
-    public void setSuccess(String success) {
-        this.success = success;
-        editor.putString("isLogin", success);
-        editor.commit();
-    }
 
     public String getMessage() {
         return message;

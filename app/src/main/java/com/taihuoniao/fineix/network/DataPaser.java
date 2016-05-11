@@ -1587,7 +1587,7 @@ public class DataPaser {
     }
 
     //第三方登录
-    public static void thirdLoginParser(final String oid, String access_token, String type, final Handler handler) {
+    public static void thirdLoginParser(final String oid, String access_token, String type,final Handler handler) {
         ClientDiscoverAPI.thirdLoginNet(oid, access_token, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -1598,8 +1598,8 @@ public class DataPaser {
                     JSONObject obj = new JSONObject(responseInfo.result);
                     JSONObject thirdObj = obj.getJSONObject("data");
                     thirdLogin = new ThirdLogin();
-                    thirdLogin.setSuccess(obj.optString("success"));
-                    thirdLogin.setHas_user(thirdObj.optString("has_user"));
+//                    thirdLogin.setSuccess(obj.optString("success"));
+//                    thirdLogin.setHas_user(thirdObj.optString("has_user"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

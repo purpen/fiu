@@ -38,10 +38,10 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         this.mOnItemClickLitener=itemClickLitener;
     }
     private Activity activity;
-    private ArrayList<FindFriendData.FriendSceneItem> list;
+    private ArrayList<FindFriendData.CJItem> list;
     private DisplayImageOptions options;
     private ImageLoader imageLoader;
-    public FindFriendRecycleViewAdapter(Activity activity, ArrayList<FindFriendData.FriendSceneItem> list) {
+    public FindFriendRecycleViewAdapter(Activity activity, ArrayList<FindFriendData.CJItem> list) {
         this.activity = activity;
         this.list = list;
         imageLoader=ImageLoader.getInstance();
@@ -64,7 +64,7 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        FindFriendData.FriendSceneItem item= list.get(position);
+        FindFriendData.CJItem item= list.get(position);
         if (mOnItemClickLitener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

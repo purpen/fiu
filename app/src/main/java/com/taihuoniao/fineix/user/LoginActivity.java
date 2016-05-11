@@ -246,8 +246,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 });
                 LogUtil.e("LOGIN_INFO", responseInfo.result);
                 if (response.isSuccess()) {
-                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
-                    if (response.getData().identify.is_scene_subscribe == 0) { // 未订阅
+                    LoginInfo loginInfo=response.getData();
+                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
                         if (ToRegisterActivity.instance != null) {
                             ToRegisterActivity.instance.finish();

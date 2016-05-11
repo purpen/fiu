@@ -4,6 +4,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
@@ -1050,5 +1051,30 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("type", type);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+
+    /**
+     * 发现好友列表
+     * @param callBack
+     */
+    public static void findFriends(String page,String size,String sight_count,String sort,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("sight_count",sight_count); //场景数量
+        params.addQueryStringParameter("sort",sort); //0是最新 1是随机
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.FIND_FRIENDS, callBack);
+    }
+
+    /**
+     * 退出登录
+     * @param callBack
+     */
+    public static void logout(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("uuid", MainApplication.uuid);
+        params.addQueryStringParameter("from_to","2"); // 1.ios;2.android;3.win;4.ipad;
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.LOGOUT, callBack);
     }
 }

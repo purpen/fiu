@@ -60,10 +60,10 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
     private int curPage = 1;
     private boolean isLoadMore = false;
     private static final String PAGE_SIZE = "10";
-    private static final String SORT="1";
+    private static final String SORT="1";  //随机排序
     private static final String HAS_SCENE="1";
     private FindFriendAdapter adapter;
-    private List<SceneListBean> mList=new ArrayList();
+    private List<FindFriendData.User> mList=new ArrayList();
     private ListView lv;
     private WaittingDialog dialog;
     public FindFriendsActivity(){
@@ -111,7 +111,8 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.userList(String.valueOf(curPage), PAGE_SIZE,SORT,HAS_SCENE,new RequestCallBack<String>() {
+        String sight_count="5";
+        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE,sight_count,SORT,new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog!=null){
@@ -128,7 +129,7 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 HttpResponse<FindFriendData> response = JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<FindFriendData>>(){});
                 if (response.isSuccess()) {
                     FindFriendData data = response.getData();
-                    List list = data.rows;
+                    List list = data.users;
                     refreshUI(list);
                     return;
                 }

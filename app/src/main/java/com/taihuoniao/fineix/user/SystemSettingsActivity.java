@@ -3,12 +3,21 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.view.View;
+
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -69,9 +78,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 startActivity(new Intent(activity,UpdatePasswordActivity.class));
                 break;
             case R.id.btn_logout:
-                SPUtil.remove(activity,DataConstants.LOGIN_INFO);
-                startActivity(new Intent(activity,MainActivity.class));
-                finish();
+                logout();
                 break;
             case R.id.item_clear_cache:
                 myAsyncTask.execute();
@@ -100,6 +107,31 @@ public class SystemSettingsActivity extends BaseActivity{
                 break;
         }
     }
+
+    private void logout() {
+        ClientDiscoverAPI.logout(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){//   退出成功
+                    Util.makeToast(response.getMessage());
+                    SPUtil.remove(activity,DataConstants.LOGIN_INFO);
+                    startActivity(new Intent(activity,MainActivity.class));
+                    finish();
+                    return;
+                }
+                Util.makeToast(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                LogUtil.e(TAG,"网络异常,退出登录失败");
+            }
+        });
+    }
+
     private AsyncTask myAsyncTask=new AsyncTask() {
         @Override
         protected void onPreExecute() {
