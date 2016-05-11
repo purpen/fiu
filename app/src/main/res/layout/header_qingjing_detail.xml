@@ -259,4 +259,43 @@
             android:textColor="#666666"
             android:textSize="13sp"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_qingjingdetail_emptyview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="75dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:gravity="center"
+            android:text="创建新的场景"
+            android:textColor="#666666"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="在这里上传图片、选一段文字，即发表你的第一个情景"
+            android:textColor="#666666"
+            android:textSize="13sp"/>
+
+        <Button
+            android:id="@+id/activity_qingjingdetail_createscene"
+            android:layout_width="219dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/corner_yellow"
+            android:gravity="center"
+            android:text="+ 创建场景"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+    </LinearLayout>
 </LinearLayout>

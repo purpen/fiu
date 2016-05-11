@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.beans.IsLogin;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
@@ -36,6 +35,7 @@ import java.util.UUID;
  * ¥
  * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
  * 在客户端scene是场景，qingjing是情景，而在服务器端sight是场景，scene是情景
+ * 检查在DataConstants.NETWORK_FAILURE情况下dialog是否隐藏
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
@@ -112,7 +112,7 @@ public class MainApplication extends Application {
 //                .showImageOnLoading(R.mipmap.ic_launcher)
                 .cacheInMemory(true)
                 .considerExifParams(true)
-                .displayer(new FadeInBitmapDisplayer(500))
+//                .displayer(new FadeInBitmapDisplayer(500))
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)

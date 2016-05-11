@@ -83,7 +83,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         titleLayout.setContinueTvVisible(false);
         titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
         list = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list,null);
+        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list,null,null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
         pullToRefreshView.setPullToRefreshEnabled(false);

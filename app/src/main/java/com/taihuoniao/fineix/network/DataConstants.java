@@ -148,6 +148,7 @@ public class DataConstants {
     public static final int PARSER_ORDER = 25;
     public static final int PARSER_USER_INFO = 24;
     public static final int PASER_SHOPCART_INVENTORY_ITEM = 23;
+    public static final int FIU_USER = 22;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -40,9 +42,11 @@ import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
+import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -50,6 +54,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -65,7 +70,9 @@ import java.util.Random;
 public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
     //界面下的控件
     private ImageView searchImg;
-    private ImageView cartImg;
+    private RelativeLayout cartRelative;
+    private TextView cartNumber;
+    //    private ImageView cartImg;
     private ListView listView;
     private ProgressBar progressBar;
     //headerview下的控件
@@ -97,7 +104,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
         searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
-        cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
+        cartRelative = (RelativeLayout) view.findViewById(R.id.fragment_wellgoods_cart_relative);
+        cartNumber = (TextView) view.findViewById(R.id.fragment_wellgoods_cart_number);
+//        cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
         listView = (ListView) view.findViewById(R.id.fragment_wellgoods_listview);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_wellgoods_progress);
         //headerview
@@ -186,7 +195,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected void initList() {
         searchImg.setOnClickListener(this);
-        cartImg.setOnClickListener(this);
+//        cartImg.setOnClickListener(this);
+        cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
@@ -229,6 +239,20 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.PARSER_SHOP_CART_NUMBER:
+                    if (msg.obj != null) {
+                        if (msg.obj instanceof ShopCartNumber) {
+                            ShopCartNumber numberCart = null;
+                            numberCart = (ShopCartNumber) msg.obj;
+                            if (!"0".equals(numberCart.getCount())) {
+                                cartNumber.setVisibility(View.VISIBLE);
+                                cartNumber.setText(numberCart.getCount());
+                            } else {
+                                cartNumber.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                    break;
                 case DataConstants.ADD_PRODUCT_LIST:
                     progressBar.setVisibility(View.GONE);
                     ProductBean netProduct = (ProductBean) msg.obj;
@@ -305,6 +329,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onResume() {
         super.onResume();
+        DataPaser.shopCartNumberParser(handler);
         //品牌列表
         DataPaser.brandList(1, 50, handler);
         if (scrollableView != null) {
@@ -341,12 +366,16 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             randomImg.id = list.get(i).get_id().get$id();
             randomImg.url = list.get(i).getCover_url();
             randomImg.type = list.get(i).getBrands_size_type();
-            if ("1".equals(randomImg.type)) {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-            } else if ("2".equals(randomImg.type)) {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
-            } else {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+            switch (randomImg.type) {
+                case "1":
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
+                    break;
+                case "2":
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
+                    break;
+                default:
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+                    break;
             }
             randomImgs.add(randomImg);
         }
@@ -409,8 +438,12 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 intent.putExtra("t", "10");
                 startActivity(intent);
                 break;
-            case R.id.fragment_wellgoods_cart:
-                Toast.makeText(getActivity(), "跳转到购物车", Toast.LENGTH_SHORT).show();
+            case R.id.fragment_wellgoods_cart_relative:
+                if(!LoginInfo.isUserLogin()){
+
+                }
+                Intent intent1 = new Intent(getActivity(), ShopCarActivity.class);
+                startActivity(intent1);
                 break;
         }
     }

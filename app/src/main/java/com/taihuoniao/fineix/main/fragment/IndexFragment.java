@@ -13,12 +13,15 @@ import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+    private View fragment_view;
     private ImageView searchImg;
     private ImageView subsImg;
     private PullToRefreshListView pullToRefreshLayout;
@@ -45,6 +49,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected void requestNet() {
+//        handler.sendMessageDelayed()
     }
 
     @Override
@@ -71,7 +76,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             }
         });
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
         getCurrentLocation();
@@ -93,13 +98,13 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_index, null);
-        searchImg = (ImageView) view.findViewById(R.id.fragment_index_search);
-        subsImg = (ImageView) view.findViewById(R.id.fragment_index_subs);
-        pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
+        fragment_view = View.inflate(getActivity(), R.layout.fragment_index, null);
+        searchImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_search);
+        subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
+        pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
         dialog = new WaittingDialog(getActivity());
-        return view;
+        return fragment_view;
     }
 
     //    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
@@ -191,7 +196,12 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_index_subs:
-                Toast.makeText(getActivity(), "订阅", Toast.LENGTH_SHORT).show();
+                if (!LoginInfo.isUserLogin()) {
+                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
+                    return;
+                }
+                startActivity(new Intent(getActivity(), SubsCJListActivity.class));
                 break;
             case R.id.fragment_index_search:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);

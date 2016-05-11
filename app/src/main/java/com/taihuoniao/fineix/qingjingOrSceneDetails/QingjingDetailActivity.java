@@ -7,11 +7,13 @@ import android.content.IntentFilter;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,8 +40,11 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -77,6 +82,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private List<CommonBean.CommonItem> headList;
     private SceneDetailUserHeadAdapter sceneDetailUserHeadAdapter;
     private TextView moreUser;
+    private LinearLayout emptyView;
+    private Button createBtn;
     private ListView changjingListView;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
@@ -129,6 +136,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         labelLinear = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_labellinear);
         userHeadGrid = (GridViewForScrollView) header.findViewById(R.id.activity_qingjingdetail_grid);
         moreUser = (TextView) header.findViewById(R.id.activity_qingjingdetail_more_user);
+        emptyView = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_emptyview);
+        createBtn = (Button) header.findViewById(R.id.activity_qingjingdetail_createscene);
         changjingListView.addHeaderView(header);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
@@ -142,6 +151,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void initList() {
+        MainApplication.which_activity = DataConstants.QingjingDetailActivity;
         id = getIntent().getStringExtra("id");
         if (id == null) {
             Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
@@ -161,8 +171,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         userHeadGrid.setAdapter(sceneDetailUserHeadAdapter);
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
+        createBtn.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null);
+        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null,null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
         changjingListView.setOnTouchListener(this);
@@ -192,8 +203,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         is_subscript = 0;
                         subsTv.setText("+订阅此情景");
                         subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-                        subscriptionCount.setText(netQingjingSubs.getData().getSubscription_count() + "人订阅");
-                        moreUser.setText(netQingjingSubs.getData().getSubscription_count() + "+");
+                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
+                        moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
                         if (netQingjingSubs.getData().getSubscription_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
@@ -211,8 +222,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         is_subscript = 1;
                         subsTv.setText("取消订阅");
                         subsImg.setImageResource(R.mipmap.subs_yes);
-                        subscriptionCount.setText(netQingjingSubsBean.getData().getSubscription_count() + "人订阅");
-                        moreUser.setText(netQingjingSubsBean.getData().getSubscription_count() + "+");
+                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
+                        moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
                         if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
@@ -234,6 +245,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
+                        if (currentPage == 1 && sceneList.size() == 0) {
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
                         sceneListViewAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -308,7 +324,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(QingjingDetailActivity.this, "跳转到搜索情景界面" + tagsTitleList.get(finalI), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(QingjingDetailActivity.this, SearchActivity.class);
+                    intent.putExtra("q",tagsTitleList.get(finalI));
+                    intent.putExtra("t", "8");
+                    startActivity(intent);
                 }
             });
             labelLinear.addView(view);
@@ -346,6 +365,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.activity_qingjingdetail_more_user:
                 break;
+            case R.id.activity_qingjingdetail_createscene:
             case R.id.activity_qingjingdetail_create:
                 MainApplication.whichQingjing = QingjingDetailBean;
                 MainApplication.tag = 1;
@@ -381,7 +401,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.activity_qingjingdetail_grid:
-                Toast.makeText(QingjingDetailActivity.this, "点击了头像" + headList.get(position).get_id(), Toast.LENGTH_SHORT).show();
+                Log.e("<<<","点击position="+position);
+                Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA,headList.get(position).getUser().getUser_id());
+                startActivity(intent1);
                 break;
         }
     }
@@ -393,7 +416,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
-        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+        if (visibleItemCount > changjingListView.getHeaderViewsCount() && (firstVisibleItem + visibleItemCount >= totalItemCount)
                 && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
                 ) {
             lastSavedFirstVisibleItem = firstVisibleItem;

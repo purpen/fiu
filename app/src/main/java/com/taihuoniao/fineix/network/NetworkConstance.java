@@ -173,4 +173,8 @@ public class NetworkConstance {
 
     //  发现好友
     public static final String FIND_FRIENDS = BASE_URL + "/user/find_user";
+    //最fiu伙伴
+    public static final String fiu_user_list = BASE_URL + "/user/find_user";
+    //首页订阅的场景列表
+    public static final String subs_cjlist = BASE_URL+"/my/my_subscription";
 }

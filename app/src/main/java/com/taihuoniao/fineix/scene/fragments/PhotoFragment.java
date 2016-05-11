@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AlbumGridAdapter;
@@ -76,8 +77,10 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             titleLayout.setTitle(R.string.film_album);
             albumGridAdapter = new AlbumGridAdapter(getActivity(), albumList.get(MainApplication.systemPhotoPath).getPhotos());
         } else {
-            titleLayout.setTitle(albumList.get(albumPaths.get(0)).getTitle());
-            albumGridAdapter = new AlbumGridAdapter(getActivity(), albumList.get(albumPaths.get(0)).getPhotos());
+            if (albumList.size() > 0 && albumPaths.size() > 0) {
+                titleLayout.setTitle(albumList.get(albumPaths.get(0)).getTitle());
+                albumGridAdapter = new AlbumGridAdapter(getActivity(), albumList.get(albumPaths.get(0)).getPhotos());
+            }
         }
         albumListAdapter = new AlbumListAdapter(getActivity(), albumPaths, albumList);
         albumListView.setAdapter(albumListAdapter);
@@ -141,6 +144,10 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 }
                 break;
             case R.id.title_continue:
+                if(photoItem==null){
+                    Toast.makeText(getActivity(),"请选择一张图片",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 ImageUtils.processPhotoItem(getActivity(), photoItem);
                 break;
         }
@@ -211,12 +218,14 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void selectImg(int position) {
-        albumGridAdapter.selectImg(position);
-        photoItem = (PhotoItem) albumGridAdapter.getItem(position);
-        Uri uri = photoItem.getImageUri().startsWith("file:") ? Uri.parse(photoItem
-                .getImageUri()) : Uri.parse("file://" + photoItem.getImageUri());
-        photoImg.setImageBitmap(ImageUtils.decodeBitmapWithSize(uri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth(), true));
-        gridView.smoothScrollToPositionFromTop(position, 0);
+        if (albumGridAdapter != null) {
+            albumGridAdapter.selectImg(position);
+            photoItem = (PhotoItem) albumGridAdapter.getItem(position);
+            Uri uri = photoItem.getImageUri().startsWith("file:") ? Uri.parse(photoItem
+                    .getImageUri()) : Uri.parse("file://" + photoItem.getImageUri());
+            photoImg.setImageBitmap(ImageUtils.decodeBitmapWithSize(uri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth(), true));
+            gridView.smoothScrollToPositionFromTop(position, 0);
+        }
     }
 
 }
