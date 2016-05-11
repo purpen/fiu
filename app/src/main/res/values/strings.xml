@@ -126,4 +126,14 @@
         <item>女</item>
         <item>男</item>
     </string-array>
+    <string name="first_in_qing_title">情境定位</string>
+    <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
+    <string name="first_in_jing_title">场景布局</string>
+    <string name="first_in_jing_des">给自己设一个局，换一处风情、换一面质地、换各色朝朝暮暮</string>
+    <string name="first_in_fiu_title">Fiu是什么</string>
+    <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，Fiu同寻常</string>
+    <string name="first_in_pin_title">品牌Mall</string>
+    <string name="first_in_pin_des">你的欲望，予我追寻格调的动力；我的橱窗，给你智居的千方百计</string>
+    <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
+    <string name="first_in_wo_des">不为人知的，呼之欲出的都放在这里</string>
 </resources>

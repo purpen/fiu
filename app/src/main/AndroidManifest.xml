@@ -70,6 +70,9 @@
             android:name=".product.ConfirmOrderActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".qingjingOrSceneDetails.SubsCJListActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".product.GoodsCommentsActivity"
             android:screenOrientation="portrait"/>
         <activity

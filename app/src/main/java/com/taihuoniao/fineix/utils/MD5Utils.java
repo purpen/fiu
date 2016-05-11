@@ -53,6 +53,7 @@ public class MD5Utils {
 //        boolean firstIn = true;
 //        params.addQueryStringParameter("client_id", "1415289600");
         params.addQueryStringParameter("uuid", MainApplication.uuid);
+        params.addQueryStringParameter("app_type", "2");
 //        params.addQueryStringParameter("channel", channel);
 //        params.addQueryStringParameter("time", NetworkConstance.CONN_TIMEOUT + "");
         List<NameValuePair> list = params.getQueryStringParams();

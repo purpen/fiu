@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListFirtViewPagerAdapter;
@@ -78,7 +77,8 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_good_list_cart_relative:
-                Toast.makeText(GoodsListActivity.this, "跳转到购物车", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(GoodsListActivity.this, ShopCarActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.activity_good_list_search:
                 Intent intent = new Intent(this, SearchActivity.class);
@@ -120,7 +120,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                     break;
                 case DataConstants.CART_NUM:
                     CartBean netCartBean = (CartBean) msg.obj;
-                    if (netCartBean.isSuccess()) {
+                    if (netCartBean.isSuccess() && netCartBean.getData().getCount() > 0) {
                         cartNumber.setVisibility(View.VISIBLE);
                         cartNumber.setText(String.format("%d", netCartBean.getData().getCount()));
                     } else {

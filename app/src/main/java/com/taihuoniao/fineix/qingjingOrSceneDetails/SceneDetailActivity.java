@@ -46,7 +46,9 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
@@ -614,7 +616,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.activity_scenedetails_grid:
-                Toast.makeText(SceneDetailActivity.this, "跳转到个人中心", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA,headList.get(position).getUser().getUser_id());
+                startActivity(intent1);
                 break;
         }
     }

@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.FindPasswordInfo;
+import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.GoodsDetailsBean;
 import com.taihuoniao.fineix.beans.JDProductBean;
@@ -2315,6 +2316,7 @@ public class DataPaser {
             }
         });
     }
+
     //购物车中单个商品的库存（即最大加减数）
     public static void shopcartInventoryParser(final Handler handler) {
         ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
@@ -2351,4 +2353,34 @@ public class DataPaser {
             }
         });
     }
+
+    //最fiu伙伴
+    public static void fiuUserList(String page, String size, String type, String sight_count, String sort, final Handler handler) {
+        ClientDiscoverAPI.fiuUserList(page, size, type, sight_count, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<fiu",responseInfo.result);
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.FIU_USER;
+                msg.obj = new FiuUserListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type1 = new TypeToken<FiuUserListBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type1);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+
 }

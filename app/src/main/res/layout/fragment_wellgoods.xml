@@ -23,14 +23,33 @@
             android:paddingRight="16dp"
             android:src="@mipmap/head_search"/>
 
-        <ImageView
-            android:id="@+id/fragment_wellgoods_cart"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/fragment_wellgoods_cart_relative"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="17dp"
-            android:paddingRight="17dp"
-            android:src="@mipmap/cart"/>
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:src="@mipmap/cart"/>
+
+            <TextView
+                android:id="@+id/fragment_wellgoods_cart_number"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/cart_num_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <ListView

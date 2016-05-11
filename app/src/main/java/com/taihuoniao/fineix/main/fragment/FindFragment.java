@@ -38,12 +38,12 @@ import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
+import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.beans.UserListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -154,7 +154,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null,null);
         sceneListView.setAdapter(sceneListViewAdapter);
         sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
@@ -255,13 +255,20 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DataConstants.USER_LIST:
+                case DataConstants.FIU_USER:
                     dialog.dismiss();
-                    UserListBean netUserListBean = (UserListBean) msg.obj;
-                    if (netUserListBean.isSuccess()) {
-                        addImgToAbsolute(netUserListBean.getData().getRows());
+                    FiuUserListBean netUser = (FiuUserListBean) msg.obj;
+                    if (netUser.isSuccess()) {
+                        addImgToAbsolute(netUser.getData().getUsers());
                     }
                     break;
+//                case DataConstants.USER_LIST:
+//                    dialog.dismiss();
+//                    UserListBean netUserListBean = (UserListBean) msg.obj;
+//                    if (netUserListBean.isSuccess()) {
+//                        addImgToAbsolute(netUserListBean.getData().getRows());
+//                    }
+//                    break;
                 case DataConstants.QINGJING_LIST:
                     dialog.dismiss();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
@@ -313,7 +320,10 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onResume() {
         super.onResume();
         //用户大小不一的头像
-        DataPaser.userList(1 + "", 50 + "", null, null, handler);
+        if (absoluteLayout.getChildCount() <= 0) {
+            DataPaser.fiuUserList(1 + "",40 + "", null, null, 1 + "", handler);
+//            DataPaser.userList(1 + "", 50 + "", null, null, handler);
+        }
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -353,20 +363,25 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
 
-    private void addImgToAbsolute(List<UserListBean.UserListItem> list) {
+    private void addImgToAbsolute(List<FiuUserListBean.FiuUserItem> list) {
         Random random = new Random();
         List<RandomImg> randomImgs = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             RandomImg randomImg = new RandomImg();
             randomImg.id = list.get(i).get_id();
             randomImg.url = list.get(i).getMedium_avatar_url();
-            randomImg.type = list.get(i).getAvatar_size_type();
-            if (randomImg.type.equals("1")) {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-            } else if (randomImg.type.equals("2")) {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
-            } else {
-                randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+            randomImg.type = i % 3 + 1 + "";
+            Log.e("<<<大小", "type=" + randomImg.type);
+            switch (randomImg.type) {
+                case "1":
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
+                    break;
+                case "2":
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
+                    break;
+                default:
+                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+                    break;
             }
             randomImgs.add(randomImg);
         }

@@ -80,7 +80,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             }
         });
         list = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), null, null, list);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), null, null, list,null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
     }

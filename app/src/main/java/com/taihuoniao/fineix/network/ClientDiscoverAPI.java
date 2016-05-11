@@ -550,8 +550,8 @@ public class ClientDiscoverAPI {
 
     public static void getQJData(LatLng ll, int radius, String page, String pageSize, String stick, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("page",page);
-        params.addQueryStringParameter("size",pageSize);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", pageSize);
         params.addQueryStringParameter("sort", "0");
         params.addQueryStringParameter("stick", stick);
         if (radius > 0) {
@@ -710,18 +710,18 @@ public class ClientDiscoverAPI {
 
     /**
      * 更新用户信息
+     *
      * @param nickname
      * @param summary
      * @param callBack
      */
-    public static void updateNickNameSummary(String nickname, String summary,String sex,RequestCallBack<String> callBack) {
+    public static void updateNickNameSummary(String nickname, String summary, String sex, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("nickname",nickname);
-        params.addQueryStringParameter("summary",summary);
-        params.addQueryStringParameter("sex",sex);
+        params.addQueryStringParameter("nickname", nickname);
+        params.addQueryStringParameter("summary", summary);
+        params.addQueryStringParameter("sex", sex);
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
-
 
 
     /**
@@ -1018,10 +1018,31 @@ public class ClientDiscoverAPI {
     }
 
     //购物车中商品加减数量
-    public static void shopcartAddSubtractNet(String array,RequestCallBack<String> callBack) {
+    public static void shopcartAddSubtractNet(String array, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/shopping/edit_cart";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("array",array);
+        params.addQueryStringParameter("array", array);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //最fiu伙伴
+    public static void fiuUserList(String page, String size, String type, String sight_count, String sort, RequestCallBack<String> callBack) {
+        String url  =NetworkConstance.fiu_user_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("type",type);
+        params.addQueryStringParameter("sight_count",sight_count);
+        params.addQueryStringParameter("sort",sort);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //首页订阅的情景下的场景和关注的人所创建的场景列表
+    public static void subsCJList(String page,String size,String sort,RequestCallBack<String>callBack){
+        String url = NetworkConstance.subs_cjlist;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("sort",sort);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }
