@@ -131,7 +131,7 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-        DataPaser.cartNum(mHandler);
+        DataPaser.shopCartNumberParser(mHandler);
     }
 
     @Override
@@ -173,6 +173,10 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
 
     private void initView() {
         titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_goodsdetails_titlelayout);
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setRightSearchButton(false);
         loveRelative = (RelativeLayout) findViewById(R.id.activity_goodsdetails_loverelative);
         loveImg = (ImageView) findViewById(R.id.activity_goodsdetails_loveimg);
         shareRelative = (RelativeLayout) findViewById(R.id.activity_goodsdetails_sharerelative);
@@ -355,7 +359,7 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
                         for (int k = 0; k < scrollLinear.getChildCount(); k++) {
                             TextView text = (TextView) scrollLinear.getChildAt(k).getTag();
                             if (k == j) {
-                                text.setBackgroundResource(R.drawable.shap_tryuse_red);
+                                text.setBackgroundResource(R.drawable.corner_yellow);
                                 text.setTextColor(getResources().getColor(R.color.white));
                             } else {
                                 text.setBackgroundResource(R.drawable.backround_corner_gray);

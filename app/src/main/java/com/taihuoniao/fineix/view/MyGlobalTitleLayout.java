@@ -19,7 +19,7 @@ import com.taihuoniao.fineix.product.ShopCarActivity;
 
 /**
  * 可复用标题栏
- * <p>
+ * <p/>
  * 添加自定义属性 标题|返回键 slf  ff3366
  */
 public class MyGlobalTitleLayout extends RelativeLayout {
@@ -112,11 +112,12 @@ public class MyGlobalTitleLayout extends RelativeLayout {
                 }
             });
 
-
+            view.setBackgroundResource(R.color.red);
         }
         if (typedArray != null) {
             typedArray.recycle();
         }
+
     }
 
     /**
@@ -130,6 +131,9 @@ public class MyGlobalTitleLayout extends RelativeLayout {
             titleText.setText(title);
         }
 
+    }
+    public void setTitleColor(int resid){
+        titleText.setTextColor(resid);
     }
 
     /**
@@ -146,6 +150,10 @@ public class MyGlobalTitleLayout extends RelativeLayout {
             rightButton.setText(buttonText);
             rightButton.setOnClickListener(onRightButtonClickListener);
         }
+    }
+    public void setRightColor(int resid){
+        rightButton.setTextColor(resid);
+
     }
 
     public void setRightButton(CharSequence title) {
@@ -247,6 +255,10 @@ public class MyGlobalTitleLayout extends RelativeLayout {
         } else {
             backButton.setVisibility(GONE);
         }
+    }
+
+    public void setBackImg(int resid) {
+        backButton.setImageResource(resid);
     }
 
     //

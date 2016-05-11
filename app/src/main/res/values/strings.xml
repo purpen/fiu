@@ -66,6 +66,7 @@
     <string name="not_switch_sku">请选择颜色/分类</string>
     <string name="note_update_at">上一次刷新：%1$s</string>
     <string name="note_not_update">尚未更新</string>
+    <string name="all_order">全部订单</string>
     <!--删除收货地址界面-->
     <string name="delete_success">删除成功</string>
     <!-- 选择收货时间-->

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:id="@+id/image_evaluate"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="11dp"
+                android:paddingTop="33dp"
+                android:text="评价"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+            <!--android:isIndicator="false"必设这句，否则点击星条无反应-->
+            <!--<RatingBar-->
+            <!--android:id="@+id/ratingbar_evaluate"-->
+            <!--style="?android:attr/ratingBarStyleSmall"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:isIndicator="false"-->
+            <!--android:rating="5"-->
+            <!--android:stepSize="1.0" />-->
+
+            <RatingBar
+                android:id="@+id/ratingbar_evaluate"
+                style="@style/customRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="5"
+                android:stepSize="1.0" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f4f4f4" />
+
+    <EditText
+        android:id="@+id/et_evaluate"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/shap_home_gridview"
+        android:gravity="top"
+        android:hint="写下您对商品的感受，对他人帮助很大"
+        android:lineSpacingExtra="2dp"
+        android:padding="5dp"
+        android:textSize="14sp">
+
+        <requestFocus />
+    </EditText>
+</LinearLayout>

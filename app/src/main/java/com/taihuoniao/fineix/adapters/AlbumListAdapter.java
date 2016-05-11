@@ -63,7 +63,7 @@ public class AlbumListAdapter extends BaseAdapter {
         }
         hold.name.setText(albumList.get(albumPaths.get(position)).getTitle());
         hold.number.setText(albumList.get(albumPaths.get(position)).getPhotos().size()+"");
-        ImageLoader.getInstance().displayImage("file://" + albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), new ImageViewAware(hold.img), null, null, null);
+        ImageLoader.getInstance().displayImage("file://" + albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), new ImageViewAware(hold.img));
         return convertView;
     }
 

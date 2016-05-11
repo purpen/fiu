@@ -118,9 +118,13 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 //防止焦点放生在此区域
                 break;
             case R.id.fragment_camera_takepic:
-                Toast.makeText(getActivity(), "获得用户的当前经纬度", Toast.LENGTH_SHORT).show();
                 try {
-                    cameraInst.takePicture(null, null, new Camera.PictureCallback() {
+                    cameraInst.takePicture(new Camera.ShutterCallback() {
+                        @Override
+                        public void onShutter() {
+
+                        }
+                    }, null, new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
                             bundle = new Bundle();
@@ -131,7 +135,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     });
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getActivity(), "拍照失败，请重试！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "拍照失败！", Toast.LENGTH_SHORT).show();
                     try {
                         cameraInst.startPreview();
                     } catch (Throwable e) {
@@ -566,7 +570,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     cameraInst = null;
                 }
             } catch (Exception e) {
-                Toast.makeText(getActivity(), "相机已经关了", Toast.LENGTH_SHORT).show();
+                Log.e("<<<","相机已经关闭");
             }
 
         }
@@ -601,7 +605,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 dialog.dismiss();
                 ImageUtils.processPhotoItem(getActivity(), new PhotoItem(result, System.currentTimeMillis()));
             } else {
-                Toast.makeText(getActivity(), "拍照失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "拍照失败！", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -48,6 +48,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     private List<ShopCart> mList = new ArrayList<>();
     private List<Map<String, Object>> totalList = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> list_delete = new ArrayList<Map<String, Object>>();
+    HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
     private ShopCartAdapter adapter;
     private int mCarNum = 0;
     private MyGlobalTitleLayout title = null;
@@ -152,10 +153,17 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof List) {
                             doOrderList.clear();
                             doOrderList.addAll((List<CartDoOrder>) msg.obj);
-                            Intent intent = new Intent(ShopCarActivity.this, ConfirmOrderActivity.class);
-                            intent.putExtra("cartBean", doOrderList.get(0));
-                            startActivity(intent);
-
+                            //用户以前加入购物车的商品现在已经下架了，购物车中还显示，这时点确认订单，就给他提示，让他删掉已经下架的商品，否则不能往下走
+                            if ("false".equals(doOrderList.get(0).getSuccess())) {
+                                if (mDialog.isShowing()) {
+                                    mDialog.dismiss();
+                                }
+                                Toast.makeText(ShopCarActivity.this, doOrderList.get(0).getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Intent intent = new Intent(ShopCarActivity.this, ConfirmOrderActivity.class);
+                                intent.putExtra("cartBean", doOrderList.get(0));
+                                startActivity(intent);
+                            }
                         }
                     }
                     break;
@@ -200,7 +208,17 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         mShopCartListView = (ListViewForScrollView) findViewById(R.id.lv_shopcart);
         adapter = new ShopCartAdapter(totalList, ShopCarActivity.this, this);
         mShopCartListView.setAdapter(adapter);
+        adapter.setOnTwoClickedListener(new ShopCartAdapter.OnTwoClickedListener() {
+            @Override
+            public void onLetterCliced(HashMap<Integer, String> hashMap) {
+                ShopCarActivity.this.hashMap = hashMap;
+            }
+        });
         title = (MyGlobalTitleLayout) findViewById(R.id.title_shopcart);
+        title.setBackgroundResource(R.color.white);
+        title.setTitleColor(getResources().getColor(R.color.black333333));
+        title.setBackImg(R.mipmap.back_black);
+        title.setRightColor(getResources().getColor(R.color.black333333));
         title.setTitle("购物车（" + mCarNum + "）");
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
@@ -208,6 +226,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
             @Override
             public void onClick(View v) {
                 if (change == 0) {
+                    mDialog.show();
                     title.setRightButton("完成");
                     mDeleteCalculate.setText("删除");
                     mAllPrice.setVisibility(View.INVISIBLE);
@@ -241,7 +260,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             for (int i = 0; i < totalList.size(); i++) {
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
-                                    mDeleteCalculate.setBackgroundResource(R.color.red);
+                                    mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                                 }
                             }
                             if (count == totalList.size()) {
@@ -252,12 +271,36 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     change = 1;
                     setChange(change);
                 } else {
+                    StringBuilder addSubtractBuilder = new StringBuilder();
+                    addSubtractBuilder.append("[");
+                    for (int i = 0; i < ShopCarActivity.this.hashMap.size(); i++) {
+                        addSubtractBuilder.append("{\"target_id\":" + totalList.get(i).get("keyTargetId") +
+                                ",\"n\":" + ShopCarActivity.this.hashMap.get(i) + ",\"type\":" + 1 + "},");
+
+                    }
+                    addSubtractBuilder.append("]");
+                    addSubtractBuilder.replace(addSubtractBuilder.length() - 2, addSubtractBuilder.length() - 1, "");
+                    String addSubtractArray = addSubtractBuilder.toString();
+                    if (!mDialog.isShowing()) {
+                        mDialog.show();
+                    }
+                    ClientDiscoverAPI.shopcartAddSubtractNet(addSubtractArray, new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            DataPaser.shopCartParser(mHandler);
+                        }
+
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+
+                        }
+                    });
                     title.setRightButton("编缉");
                     mAllPrice.setVisibility(View.VISIBLE);
                     mAllPrice.setText("合计：¥0.00");
                     mDeleteCalculate.setText("结算");
                     mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
-                    DataPaser.shopCartParser(mHandler);
+//                    DataPaser.shopCartParser(mHandler);
                     mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -275,7 +318,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
                                     mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                                    mDeleteCalculate.setBackgroundResource(R.color.red);
+                                    mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                                 }
                             }
                             mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
@@ -305,7 +348,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     if (totalList.get(i).get("status").equals(true)) {
                         count = count + 1;
                         mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                        mDeleteCalculate.setBackgroundResource(R.color.red);
+                        mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                     }
                 }
                 mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
@@ -328,11 +371,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         //在这change为1是因为在上面切换了“编缉”、“完成”这一按钮后，change在括号内最后一行代码处被赋为了1，
                         // 所以，在这里1所代表的状态即是上面0所代表的状态，反之亦然
                         if (change == 1) {
-                            mDeleteCalculate.setBackgroundResource(R.color.red);
+                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                         } else if (change == 0) {
-                            mDeleteCalculate.setBackgroundResource(R.color.red);
+                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                         } else {
-                            mDeleteCalculate.setBackgroundResource(R.color.red);
+                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                         }
 
                         totalList.get(i).put("status", true);
@@ -397,7 +440,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 
                 } else {
                     if (!list_delete.isEmpty()) {
-                        DataPaser.shopCartCalculateParser( array, mHandler);
+                        DataPaser.shopCartCalculateParser(array, mHandler);
                     }
 
                 }
@@ -416,7 +459,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
             mProgress.setVisibility(View.VISIBLE);
             mActionText.setText(R.string.note_pull_loading);
 
-            DataPaser.shopCartParser( mHandler);
+            DataPaser.shopCartParser(mHandler);
 
             mHandler.sendEmptyMessageDelayed(DataConstants.CUSTOM_PULLTOREFRESH_HOME, 1000);
         }

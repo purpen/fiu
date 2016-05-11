@@ -1,12 +1,12 @@
 package com.taihuoniao.fineix.product;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -229,6 +229,9 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private void initView() {
         MyGlobalTitleLayout title = (MyGlobalTitleLayout) findViewById(R.id.title_payway);
         title.setTitle("支付方式");
+        title.setBackgroundResource(R.color.white);
+        title.setTitleColor(getResources().getColor(R.color.black333333));
+        title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
         title.setBackButtonListener(new View.OnClickListener() {

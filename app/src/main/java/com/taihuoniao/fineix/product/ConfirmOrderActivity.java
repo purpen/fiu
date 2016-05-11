@@ -133,6 +133,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private void initView() {
 //        StatusBarChange.initWindow(ConfirmOrderActivity.this);
         titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
         addressRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_addrelative);
         noAddressTv = (TextView) findViewById(R.id.activity_confirmorder_noaddresstv);
         nameTv = (TextView) findViewById(R.id.activity_confirmorder_name);
@@ -140,11 +142,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         addressDetailsTv = (TextView) findViewById(R.id.activity_confirmorder_fulladdress);
         phoneTv = (TextView) findViewById(R.id.activity_confirmorder_phone);
         productsListView = (ListViewForScrollView) findViewById(R.id.activity_confirmorder_productlist);
-//        productImg = (ImageView) findViewById(R.id.activity_confirmorder_productimg);
-//        productTitle = (TextView) findViewById(R.id.activity_confirmorder_producttitle);
-//        skuNameTv = (TextView) findViewById(R.id.activity_confirmorder_skuname);
-//        numberTv = (TextView) findViewById(R.id.activity_confirmorder_skunumber);
-//        totalPriceTv = (TextView) findViewById(R.id.activity_confirmorder_totalprice);
         RelativeLayout transferRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_transferrelative);
         TextView transferTv = (TextView) findViewById(R.id.activity_confirmorder_transfertv);
         timeRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_timerelative);

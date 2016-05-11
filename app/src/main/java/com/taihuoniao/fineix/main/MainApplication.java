@@ -18,7 +18,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.beans.IsLogin;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
@@ -110,9 +110,9 @@ public class MainApplication extends Application {
 //                .showImageForEmptyUri(R.mipmap.ic_launcher)
 //                .showImageOnFail(R.mipmap.ic_launcher)
 //                .showImageOnLoading(R.mipmap.ic_launcher)
-//                .cacheInMemory(true)
+                .cacheInMemory(true)
                 .considerExifParams(true)
-                .displayer(new SimpleBitmapDisplayer())
+                .displayer(new FadeInBitmapDisplayer(500))
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)

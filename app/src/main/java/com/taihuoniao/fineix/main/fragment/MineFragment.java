@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
+import com.taihuoniao.fineix.user.AllOrderActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
@@ -109,6 +110,7 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initData();
     }
 
@@ -194,12 +196,13 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+//        LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
             if (isInitLoad){
                 isInitLoad=false;
             }else {
-                LogUtil.e(TAG+"onResume", LoginInfo.isUserLogin() + "");
+//                LogUtil.e(TAG+"onResume", LoginInfo.isUserLogin() + "");
                 loadData();
             }
         } else {
@@ -360,7 +363,7 @@ public class MineFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
-                        Util.makeToast("订单");
+                        startActivity(new Intent(activity, AllOrderActivity.class));
                         break;
                     case 1:
                         startActivity(new Intent(activity, MessageActivity.class));

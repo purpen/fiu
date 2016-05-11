@@ -162,7 +162,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
         changjingListView.setOnTouchListener(this);
@@ -190,6 +190,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubs.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 0;
+                        subsTv.setText("+订阅此情景");
                         subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                         subscriptionCount.setText(netQingjingSubs.getData().getSubscription_count() + "人订阅");
                         moreUser.setText(netQingjingSubs.getData().getSubscription_count() + "+");
@@ -208,6 +209,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 1;
+                        subsTv.setText("取消订阅");
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(netQingjingSubsBean.getData().getSubscription_count() + "人订阅");
                         moreUser.setText(netQingjingSubsBean.getData().getSubscription_count() + "+");
@@ -267,9 +269,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         switch (is_subscript) {
                             case 1:
                                 subsImg.setImageResource(R.mipmap.subs_yes);
+                                subsTv.setText("取消订阅");
                                 break;
                             default:
                                 subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+                                subsTv.setText("+订阅此情景");
                                 break;
                         }
                         if (netQingjingDetailBean.getData().getSubscription_count() > 14) {

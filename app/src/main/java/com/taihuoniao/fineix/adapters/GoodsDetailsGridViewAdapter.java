@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.RelationProductsBean;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class GoodsDetailsGridViewAdapter extends BaseAdapter {
     public GoodsDetailsGridViewAdapter(Context context, List<RelationProductsBean> relationProductsBeanList) {
         this.context = context;
         this.relationProductsBeanList = relationProductsBeanList;
-        String diskCachePath = context.getExternalCacheDir().getAbsolutePath();
+        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
         bitmapUtils = new BitmapUtils(context, diskCachePath)
                 .configMemoryCacheEnabled(true)
                 .configDefaultCacheExpiry(1024 * 1024 * 4)
