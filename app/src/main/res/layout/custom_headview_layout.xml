@@ -129,7 +129,16 @@
             android:visibility="gone"
             />
     </RelativeLayout>
-
+    <ImageButton
+        android:id="@+id/ib_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/selector_fff_eee"
+        android:src="@mipmap/icon_more"
+        android:padding="@dimen/dp16"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        />
     <ImageButton
         android:id="@+id/iv_head_search"
         android:layout_width="wrap_content"

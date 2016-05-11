@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -160,7 +161,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initView() {
         dialog=new WaittingDialog(this);
-
         if (userId==LoginInfo.getUserId()){
             ll_btn_box.setVisibility(View.GONE);
             ibtn.setVisibility(View.VISIBLE);

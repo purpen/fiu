@@ -82,14 +82,14 @@
     <string-array name="mine_gv_txt">
         <item>订单</item>
         <item>消息</item>
-        <item>订阅的情景</item>
+        <item>订阅</item>
        <!-- <item>收藏</item>-->
-        <item>系统设置</item>
         <item>赞过</item>
         <item>积分</item>
         <item>礼券</item>
         <item>收货地址</item>
         <item>服务条款</item>
+        <item>系统设置</item>
     </string-array>
 
     <string-array name="partner_name">
@@ -121,6 +121,7 @@
     <string name="select_gender">请选择性别</string>
     <string name="select_address">请选择地址</string>
     <string name="input_signature">您还没有个性签名</string>
+    <string name="complete_user_info">选好了，开始Fiu之旅</string>
     <string-array name="user_gender">
         <item>女</item>
         <item>男</item>

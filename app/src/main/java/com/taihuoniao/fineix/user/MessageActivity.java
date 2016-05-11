@@ -73,10 +73,8 @@ public class MessageActivity extends BaseActivity {
             case R.id.item_to_comment:
                 startActivity(new Intent(activity,PrivateMessageListActivity.class));
                 break;
-            case R.id.item_notice: //关注我的
-                intent = new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
-                startActivity(intent);
+            case R.id.item_notice: //提醒
+                startActivity(new Intent(activity, NoticeActivity.class));
                 break;
         }
     }

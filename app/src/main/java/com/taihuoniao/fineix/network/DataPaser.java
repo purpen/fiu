@@ -1511,71 +1511,71 @@ public class DataPaser {
 
     //登录的解析
     public static void loginParser(String uuid, final Handler handler, final String phone, final String password) {
-        ClientDiscoverAPI.clickLoginNet(uuid, phone, password, new RequestCallBack<String>() {
-            Context context = MainApplication.getContext();
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-
-                if (responseInfo == null) {
-                    return;
-                }
-
-                if (TextUtils.isEmpty(responseInfo.result)) {
-                    return;
-                }
-
-                //TODO 保存登录信息
-                SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
-
-                LogUtil.e("LOGIN_INFO", responseInfo.result);
-
-                //TODO 后期改造
-                LoginInfo loginInfo = null;
-                Message msg = new Message();
-                msg.what = DataConstants.PARSER_LOGIN;
-                try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject loginObj = obj.getJSONObject("data");
-
-                    loginInfo = LoginInfo.getInstance();
-                    loginInfo.setId(obj.optLong("_id"));
-                    loginInfo.setSuccess(obj.optString("success"));
-                    loginInfo.setMessage(obj.optString("message"));
-                    loginInfo.setAccount(loginObj.optString("account"));
-                    loginInfo.setPhone(loginObj.optString("phone"));
-                    loginInfo.setNickname(loginObj.optString("nickname"));
-                    loginInfo.setTrue_nickname(loginObj.optString("true_nickname"));
-                    loginInfo.setAddress(loginObj.optString("address"));
-                    loginInfo.setBirthday(loginObj.optString("birthday"));
-                    loginInfo.setCompany(loginObj.optString("company"));
-                    loginInfo.setIm_qq(loginObj.optString("im_qq"));
-                    loginInfo.setSex(loginObj.optString("sex"));
-                    loginInfo.setRealname(loginObj.optString("realname"));
-                    loginInfo.setZip(loginObj.optString("zip"));
-                    loginInfo.setWeixin(loginObj.optString("weixin"));
-                    loginInfo.setMedium_avatar_url(loginObj.optString("medium_avatar_url"));
-//                    loginInfo.setFirst_login(Integer.parseInt(loginObj.optString("first_login")));奇怪，一加这句就会崩，可我怎么看也没解析错啊？待查……
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                msg.obj = loginInfo;
-
-                SharedPreferences sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-                // TODO 向本地保存信息
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString(MainApplication.THN_MOBILE, phone);
-                edit.putString(MainApplication.THN_PASSWORD, password);
-                edit.commit();
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
-            }
-        });
+//        ClientDiscoverAPI.clickLoginNet(uuid, phone, password, new RequestCallBack<String>() {
+//            Context context = MainApplication.getContext();
+//
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//
+//                if (responseInfo == null) {
+//                    return;
+//                }
+//
+//                if (TextUtils.isEmpty(responseInfo.result)) {
+//                    return;
+//                }
+//
+//                //TODO 保存登录信息
+//                SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
+//
+//                LogUtil.e("LOGIN_INFO", responseInfo.result);
+//
+//                //TODO 后期改造
+//                LoginInfo loginInfo = null;
+//                Message msg = new Message();
+//                msg.what = DataConstants.PARSER_LOGIN;
+//                try {
+//                    JSONObject obj = new JSONObject(responseInfo.result);
+//                    JSONObject loginObj = obj.getJSONObject("data");
+//
+//                    loginInfo = LoginInfo.getInstance();
+//                    loginInfo.setId(obj.optLong("_id"));
+//                    loginInfo.setSuccess(obj.optString("success"));
+//                    loginInfo.setMessage(obj.optString("message"));
+//                    loginInfo.setAccount(loginObj.optString("account"));
+//                    loginInfo.setPhone(loginObj.optString("phone"));
+//                    loginInfo.setNickname(loginObj.optString("nickname"));
+//                    loginInfo.setTrue_nickname(loginObj.optString("true_nickname"));
+//                    loginInfo.setAddress(loginObj.optString("address"));
+//                    loginInfo.setBirthday(loginObj.optString("birthday"));
+//                    loginInfo.setCompany(loginObj.optString("company"));
+//                    loginInfo.setIm_qq(loginObj.optString("im_qq"));
+//                    loginInfo.setSex(loginObj.optString("sex"));
+//                    loginInfo.setRealname(loginObj.optString("realname"));
+//                    loginInfo.setZip(loginObj.optString("zip"));
+//                    loginInfo.setWeixin(loginObj.optString("weixin"));
+//                    loginInfo.setMedium_avatar_url(loginObj.optString("medium_avatar_url"));
+////                    loginInfo.setFirst_login(Integer.parseInt(loginObj.optString("first_login")));奇怪，一加这句就会崩，可我怎么看也没解析错啊？待查……
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                msg.obj = loginInfo;
+//
+//                SharedPreferences sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+//                // TODO 向本地保存信息
+//                SharedPreferences.Editor edit = sp.edit();
+//                edit.putString(MainApplication.THN_MOBILE, phone);
+//                edit.putString(MainApplication.THN_PASSWORD, password);
+//                edit.commit();
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+//            }
+//        });
     }
 
     //第三方登录

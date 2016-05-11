@@ -157,7 +157,7 @@ public class UserQJFragment extends MyBaseFragment {
         if (list == null) return;
         if (list.size() == 0) {
             if (isLoadMore) {
-                Util.makeToast("没有更多数据哦！");
+
             } else {
                 Util.makeToast("暂无数据！");
             }

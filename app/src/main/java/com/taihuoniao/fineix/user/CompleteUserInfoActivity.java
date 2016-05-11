@@ -28,6 +28,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
 import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.Base64Utils;
@@ -184,6 +185,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()) {
+                    startActivity(new Intent(activity, MainActivity.class));
                     finish();
                     Util.makeToast(response.getMessage());
                     return;

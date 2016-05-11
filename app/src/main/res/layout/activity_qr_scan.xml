@@ -4,13 +4,18 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical" >
-
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <SurfaceView
+        android:layout_below="@+id/custom_head"
         android:id="@+id/capture_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <RelativeLayout
+        android:layout_below="@+id/custom_head"
         android:id="@+id/capture_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -60,7 +65,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/qr_scan_tips"
             android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
         <TextView
             android:id="@+id/tv_bar"
             android:layout_width="wrap_content"
@@ -70,7 +75,7 @@
             android:layout_marginTop="30dp"
             android:text="我的二维码"
             android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:textSize="@dimen/dp16" />
         <ImageView
             android:id="@+id/capture_mask_left"
             android:layout_width="wrap_content"

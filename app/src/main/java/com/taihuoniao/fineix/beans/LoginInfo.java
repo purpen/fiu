@@ -14,6 +14,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by android on 2016/1/20.
@@ -39,7 +40,11 @@ public class LoginInfo implements Serializable {
     private String phone;
     private int first_login;
     private static LoginInfo loginInfo;
-
+    public Identify identify;
+    public ArrayList<String> areas;
+    public class Identify{
+        public int is_scene_subscribe;
+    }
     private LoginInfo() {
     }
 
@@ -65,6 +70,16 @@ public class LoginInfo implements Serializable {
             loginInfo = JsonUtil.fromJson(login_info, new TypeToken<HttpResponse<LoginInfo>>() {
             });
             return loginInfo.medium_avatar_url;
+        }
+        return null;
+    }
+
+    public static LoginInfo getLoginInfo(){
+        if (isUserLogin()) {
+            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+            loginInfo = JsonUtil.fromJson(login_info, new TypeToken<HttpResponse<LoginInfo>>() {
+            });
+            return loginInfo;
         }
         return null;
     }

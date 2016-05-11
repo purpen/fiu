@@ -96,7 +96,7 @@ public class MineFragment extends MyBaseFragment {
     private boolean isInitLoad=true;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
-    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_accout, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service};
+    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service,R.mipmap.gv_accout};
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
@@ -300,13 +300,10 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.btn,R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
-            case R.id.btn:
-                startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                break;
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
@@ -371,18 +368,18 @@ public class MineFragment extends MyBaseFragment {
                     case 2:
                         startActivity(new Intent(activity, OrderQJActivity.class));
                         break;
-                    case 4:
+                    case 3:
                         Intent intent = new Intent(getActivity(), HasLoveActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
                         break;
-                    case 3:
+                    case 8:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
                         break;
-                    case 6:
+                    case 5:
                         startActivity(new Intent(getActivity(), RedBagActivity.class));
                         break;
-                    case 7:
+                    case 6:
                         startActivity(new Intent(activity, SelectAddressActivity.class));
                         break;
                 }

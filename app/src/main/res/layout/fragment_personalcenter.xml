@@ -244,12 +244,6 @@
                 android:id="@+id/item_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <Button
-                android:id="@+id/btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp45"
-                android:text="订阅感兴趣的情景"
-                />
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"

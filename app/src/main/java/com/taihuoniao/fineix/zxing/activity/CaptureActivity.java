@@ -45,6 +45,7 @@ import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.decode.DecodeThread;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
@@ -98,7 +99,7 @@ public final class CaptureActivity extends BaseActivity implements
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_qr_scan);
-
+        ((CustomHeadView)findViewById(R.id.custom_head)).setHeadCenterTxtShow(true,"扫一扫");
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         TextView tv_bar = (TextView) findViewById(R.id.tv_bar);
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);

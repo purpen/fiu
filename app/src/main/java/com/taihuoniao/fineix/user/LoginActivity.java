@@ -223,16 +223,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
 
-        if (TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Util.makeToast("请输入密码");
             return;
         }
 
-        ClientDiscoverAPI.clickLoginNet(MainApplication.uuid, phone, password, new RequestCallBack<String>() {
+        ClientDiscoverAPI.clickLoginNet(phone, password, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 v.setEnabled(false);
-                if(mDialog!=null) mDialog.show();
+                if (mDialog != null) mDialog.show();
                 super.onStart();
             }
 
@@ -240,14 +240,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 v.setEnabled(true);
                 mDialog.dismiss();
-                if (responseInfo==null) return;
+                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
                 LogUtil.e("LOGIN_INFO", responseInfo.result);
-                if (response.isSuccess()){
+                if (response.isSuccess()) {
                     SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO, responseInfo.result);
-                    if (response.getData().getFirst_login()==1){ //1是首次登录
+                    if (response.getData().identify.is_scene_subscribe == 0) { // 未订阅
+                        updateUserIdentity();
                         if (ToRegisterActivity.instance != null) {
                             ToRegisterActivity.instance.finish();
                         }
@@ -260,10 +261,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (ToLoginActivity.instance != null) {
                             ToLoginActivity.instance.finish();
                         }
-                        startActivity(new Intent(activity,OrderInterestQJActivity.class));
+                        startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         finish();
-                    }else {
-                        startActivity(new Intent(activity,MainActivity.class));
+                    } else {
+                        startActivity(new Intent(activity, MainActivity.class));
                         finish();
                     }
                     return;
@@ -279,6 +280,30 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
 
+    }
+
+    private void updateUserIdentity() {
+        String type = "1";//设置非首次登录
+        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e("updateUserIdentity",responseInfo.result);
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){
+                    LogUtil.e("updateUserIdentity","成功改为非首次登录");
+                    return;
+                }
+                LogUtil.e("改为非首次登录失败",responseInfo.result+"==="+response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                if (TextUtils.isEmpty(s)) return;
+                LogUtil.e("网络异常","改为非首次登录失败");
+            }
+        });
     }
 
     @Override

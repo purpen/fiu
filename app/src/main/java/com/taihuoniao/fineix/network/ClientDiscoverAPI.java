@@ -489,7 +489,7 @@ public class ClientDiscoverAPI {
     }
 
     //点击登录按钮
-    public static void clickLoginNet(String uuid, String phone, String password, RequestCallBack<String> callBack) {
+    public static void clickLoginNet(String phone, String password, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/login";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("mobile", phone);
@@ -937,5 +937,32 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("n", n);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         NetworkManager.getInstance().add("buyNow", httpHandler);
+    }
+
+    /**
+     * 更新用户是否首次登录的标识
+     * @param type
+     * @param callBack
+     */
+    public static void updateUserIdentify(String type,RequestCallBack<String> callBack){
+        String url = NetworkConstance.UPDATE_USER_IDENTIFY;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    /**
+     * 获得提醒列表
+     * @param page
+     * @param size
+     * @param type
+     * @param callBack
+     */
+    public static void getNoticeList(String page,String size,String type,RequestCallBack<String> callBack){
+        String url = NetworkConstance.NOTICE_LIST;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

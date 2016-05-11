@@ -161,4 +161,10 @@ public class NetworkConstance {
     public static final String urlString_add_to_cart = BASE_URL + "/shopping/add_cart";
     //  立即购买
     public static final String urlString_buy_now = BASE_URL + "/shopping/now_buy";
+
+    //  更新是否首次登录标识
+    public static final String UPDATE_USER_IDENTIFY = BASE_URL + "/my/update_user_identify";
+
+    //  提醒
+    public static final String NOTICE_LIST = BASE_URL + "/my/remind_list";
 }

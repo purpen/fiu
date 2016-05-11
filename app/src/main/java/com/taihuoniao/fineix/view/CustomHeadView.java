@@ -29,7 +29,7 @@ public class CustomHeadView extends RelativeLayout {
     private EditText et_search;
     private ImageButton ib_search;
     private RelativeLayout rl_search;
-
+    private ImageButton ib_right;
     public CustomHeadView(Context context) {
         this(context, null);
     }
@@ -63,11 +63,24 @@ public class CustomHeadView extends RelativeLayout {
         head_view_shop = (ImageButton) view.findViewById(R.id.head_view_shop);
         tv_tip_num=(TextView)view.findViewById(R.id.tv_tip_num);
         tv_head_right = (TextView) view.findViewById(R.id.tv_head_right);
+        ib_right=(ImageButton) view.findViewById(R.id.ib_right);
         head_goback.setOnClickListener(onClickListener);
 //        head_view_shop.setOnClickListener(onClickListener);
         rl_head_shop.setOnClickListener(onClickListener);
         iv_head_search.setOnClickListener(onClickListener);
         iv_left.setOnClickListener(onClickListener);
+    }
+
+    public void setRightImgBtnShow(boolean isShow){
+        if (isShow){
+            ib_right.setVisibility(VISIBLE);
+        }else {
+            ib_right.setVisibility(GONE);
+        }
+    }
+
+    public ImageButton getRightImgBtn(){
+        return ib_right;
     }
 
     public ImageButton getClearSearchBtn(){
