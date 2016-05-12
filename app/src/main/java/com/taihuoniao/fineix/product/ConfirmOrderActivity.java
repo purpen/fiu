@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.RedBagActivity;
+import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -97,6 +98,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         df = new DecimalFormat("######0.00");
         titleLayout.setRightSearchButton(false);
         titleLayout.setRightShopCartButton(false);
+        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
         titleLayout.setTitle("确认订单");
         addressRelative.setOnClickListener(this);
         timeRelative.setOnClickListener(this);

@@ -36,6 +36,7 @@ import java.util.UUID;
  * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
  * 在客户端scene是场景，qingjing是情景，而在服务器端sight是场景，scene是情景
  * 检查在DataConstants.NETWORK_FAILURE情况下dialog是否隐藏
+ * 检查所有的Log和Toast，删除没用的提示
  */
 public class MainApplication extends Application {
     private static MainApplication instance;

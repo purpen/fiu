@@ -25,7 +25,7 @@
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
         android:text="我不想要了"
-        android:textColor="@color/red"
+        android:textColor="@color/black333333"
         android:textSize="14sp" />
 
     <Button
@@ -39,7 +39,7 @@
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
         android:text="其他"
-        android:textColor="@color/red"
+        android:textColor="@color/black333333"
         android:textSize="14sp" />
 
     <Button
@@ -53,7 +53,7 @@
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
         android:text="取消"
-        android:textColor="@color/red"
+        android:textColor="@color/black333333"
         android:textSize="14sp" />
 
 

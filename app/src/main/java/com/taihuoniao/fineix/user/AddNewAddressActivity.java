@@ -166,7 +166,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void setData() {
         addressBean = (AddressBean) getIntent().getSerializableExtra("addressBean");
-        titleLayout.setTitle("编辑收货地址");
+        titleLayout.setTitle(R.string.edit_address, getResources().getColor(R.color.black333333));
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
@@ -181,6 +181,8 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void initView() {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_addnewaddress_title);
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
         commitBtn = (Button) findViewById(R.id.activity_addnewaddress_commitbtn);
         nameEdt = (EditText) findViewById(R.id.activity_addnewaddress_name);
         phoneEdt = (EditText) findViewById(R.id.activity_addnewaddress_phone);
@@ -291,7 +293,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     private void putData() {
 
         if (addressBean != null) {
-            titleLayout.setRightTv(R.string.delete, R.color.title_black, new View.OnClickListener() {
+            titleLayout.setRightTv(R.string.delete, getResources().getColor(R.color.black333333), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(AddNewAddressActivity.this);

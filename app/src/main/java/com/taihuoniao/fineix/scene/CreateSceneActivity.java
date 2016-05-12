@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -66,14 +67,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private EditText contentEdt;
     private EditText titleEdt;
     private TextView locationTv;
-    private LinearLayout addAddressLinear;
+    private RelativeLayout addAddressLinear;
     private ImageView locationImg;
-    private RelativeLayout addressRelative;
+    //    private RelativeLayout addressRelative;
     private RecyclerView recyclerView;
     private AddressRecycleAdapter recyclerAdapter;
-    private TextView addressTv, areaTv;
+    //    private TextView addressTv, areaTv;
     private ImageView deleteAddressImg;
     private RelativeLayout labelRelative;
+    private HorizontalScrollView labelHorizontal;
     private LinearLayout labelLinear;
     private RelativeLayout qingjingRelative;
     private LinearLayout qingjingLinear;
@@ -104,19 +106,19 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         contentEdt = (EditText) findViewById(R.id.activity_create_scene_contentedt);
         titleEdt = (EditText) findViewById(R.id.activity_create_scene_titleedt);
         locationTv = (TextView) findViewById(R.id.activity_create_scene_location);
-        addAddressLinear = (LinearLayout) findViewById(R.id.activity_create_scene_add_addresslinear);
-        addressRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_addressrelative);
+        addAddressLinear = (RelativeLayout) findViewById(R.id.activity_create_scene_add_addresslinear);
+//        addressRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_addressrelative);
         locationImg = (ImageView) findViewById(R.id.location);
         recyclerView = (RecyclerView) findViewById(R.id.activity_create_scene_recycler);
-        addressTv = (TextView) findViewById(R.id.activity_create_scene_address);
-        areaTv = (TextView) findViewById(R.id.activity_create_scene_area);
+//        addressTv = (TextView) findViewById(R.id.activity_create_scene_address);
+//        areaTv = (TextView) findViewById(R.id.activity_create_scene_area);
         deleteAddressImg = (ImageView) findViewById(R.id.activity_create_scene_deleteaddress);
         labelRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_labelrelative);
+        labelHorizontal = (HorizontalScrollView) findViewById(R.id.activity_create_scene_label_horizontal);
         labelLinear = (LinearLayout) findViewById(R.id.activity_create_scene_labellinear);
         qingjingRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_qingjing);
         qingjingLinear = (LinearLayout) findViewById(R.id.activity_create_scene_qingjinglinear);
         if (MainApplication.tag == 2) {
-            qingjingLinear.setVisibility(View.GONE);
             qingjingRelative.setVisibility(View.GONE);
         }
         dialog = new WaittingDialog(CreateSceneActivity.this);
@@ -146,7 +148,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             }
         });
         addAddressLinear.setOnClickListener(this);
-        addressRelative.setOnClickListener(this);
+//        addressRelative.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         poiInfoList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
@@ -155,9 +157,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         recyclerView.setLayoutManager(layoutManager);
         location = ImageUtils.location;
         if (location != null) {
+            recyclerView.setVisibility(View.VISIBLE);
             //图片上有位置信息
             getAddressByCoordinate();
         } else {
+            recyclerView.setVisibility(View.GONE);
             //图片上无位置信息
             getCurrentLocation();
         }
@@ -169,6 +173,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             scene_id = MainApplication.whichQingjing.getData().get_id();
             qingjingLinear.removeAllViews();
             addQingjingToLinear(MainApplication.whichQingjing.getData().getTitle());
+            qingjingRelative.setEnabled(false);
         }
     }
 
@@ -180,7 +185,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-                    getAddressByCoordinate();
+//                    getAddressByCoordinate();
+                    dialog.dismiss();
                 }
             }
         });
@@ -220,7 +226,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_create_scene_add_addresslinear:
-            case R.id.activity_create_scene_addressrelative:
+//            case R.id.activity_create_scene_addressrelative:
             case R.id.location:
                 if (location == null) {
                     getCurrentLocation();
@@ -231,8 +237,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 startActivityForResult(intent, DataConstants.REQUESTCODE_CREATESCENE_BDSEARCH);
                 break;
             case R.id.activity_create_scene_deleteaddress:
-                addressTv.setText("");
-                areaTv.setText("");
+                locationTv.setText("添加地点");
                 break;
             case R.id.activity_create_scene_qingjing:
 //                if (location == null) {
@@ -274,7 +279,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(CreateSceneActivity.this, "请添加标签", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(addressTv.getText()) || TextUtils.isEmpty(areaTv.getText())) {
+                if (!TextUtils.isEmpty(locationTv.getText()) && locationTv.getText().toString().equals("添加地点")) {
                     Toast.makeText(CreateSceneActivity.this, "请选择地址", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -286,8 +291,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 if (tags.length() > 0) {
                     tags.deleteCharAt(0);
                 }
+                Log.e("<<<", "创建" + MainApplication.tag);
                 if (MainApplication.tag == 1) {
                     if (scene_id == null) {
+                        dialog.dismiss();
                         Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -339,9 +346,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             scene_id, tags.toString(), product_id.toString(), product_title.toString(),
-                            product_price.toString(), product_x.toString(), product_y.toString(), city
-//                                    + district
-                                    + addressTv.getText().toString(),
+                            product_price.toString(), product_x.toString(), product_y.toString(), locationTv.getText().toString(),
                             lat + "", lng + "",
                             handler);
                 } else if (MainApplication.tag == 2) {
@@ -364,9 +369,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                            tags.toString(), city
-//                                    + district
-                                    + addressTv.getText().toString(), tmp, lat + "", lng + "", handler);
+                            tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "", handler);
+                }else{
+                    dialog.dismiss();
                 }
                 break;
             case R.id.title_back:
@@ -434,8 +439,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String city = data.getStringExtra("city");
                     String district = data.getStringExtra("district");
                     if (poiInfo != null) {
-                        addressTv.setText(poiInfo.name);
-                        areaTv.setText(String.format("%s，%s", district, city));
+                        locationTv.setText(poiInfo.name);
                         lng = poiInfo.location.longitude;
                         lat = poiInfo.location.latitude;
                     }
@@ -459,6 +463,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void addQingjingToLinear(String title) {
+        qingjingLinear.setVisibility(View.VISIBLE);
         View view = View.inflate(CreateSceneActivity.this, R.layout.item_horizontal_address, null);
         TextView textView = (TextView) view.findViewById(R.id.item_horizontal_tv);
         textView.setText(title);
@@ -469,6 +474,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     //标签
     private void addToLinear(String str, int _id) {
+        labelHorizontal.setVisibility(View.VISIBLE);
         View view = View.inflate(CreateSceneActivity.this, R.layout.view_horizontal_label_item, null);
         TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
         textView.setText(str);
@@ -482,10 +488,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void click(int postion) {
-        addressTv.setText(poiInfoList.get(postion).name);
-        areaTv.setText(String.format("%s，%s", district, city));
+        locationTv.setText(String.format("%s %s", city, poiInfoList.get(postion).name));
         lng = poiInfoList.get(postion).location.longitude;
         lat = poiInfoList.get(postion).location.latitude;
+        recyclerView.setVisibility(View.GONE);
     }
 
     private Handler handler = new Handler() {
@@ -495,8 +501,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.CREATE_QINGJING:
                     dialog.dismiss();
                     NetBean netBean1 = (NetBean) msg.obj;
-                    Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean1.isSuccess()) {
+                        Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
                         MainApplication.whichQingjing = null;
                         MainApplication.tagInfoList = null;
                         if (SelectPhotoOrCameraActivity.instance != null) {
@@ -509,6 +515,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                             EditPictureActivity.instance.finish();
                         }
                         CreateSceneActivity.this.finish();
+                    } else {
+                        Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.CREATE_SCENE:

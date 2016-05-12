@@ -5,7 +5,7 @@
                 android:background="#ececec"
                 android:fitsSystemWindows="true">
 
-    <com.taihuoniao.fineix.view.GlobalTitleLayout
+    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
         android:id="@+id/activity_select_address_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -18,7 +18,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:text="+添加新地址"
-        android:textColor="#ff3366"
+        android:textColor="#333333"
         android:textSize="16sp"/>
 
     <LinearLayout

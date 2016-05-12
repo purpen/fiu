@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
@@ -33,6 +34,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
     private ProgressBar progressBar;
+    private TextView emptyView;
     //场景列表
     private int page = 1;
     private WaittingDialog dialog;
@@ -64,6 +66,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_index_progress);
+        emptyView = (TextView) view.findViewById(R.id.fragment_index_emptyview);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -115,6 +118,11 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                             list.clear();
                         }
                         list.addAll(netSearch.getData().getRows());
+                        if(list.size()<=0){
+                            emptyView.setVisibility(View.VISIBLE);
+                        }else{
+                            emptyView.setVisibility(View.GONE);
+                        }
                         sceneListViewAdapter.notifyDataSetChanged();
                     }
                     break;

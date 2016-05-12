@@ -76,7 +76,7 @@
                     android:paddingBottom="10dp"
                     android:paddingTop="5dp"
                     android:text="¥288.00"
-                    android:textColor="@color/red"
+                    android:textColor="@color/yellow_bd8913"
                     android:textSize="11sp"/>
             </LinearLayout>
         </RelativeLayout>

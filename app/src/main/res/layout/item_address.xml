@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:src="@mipmap/create1"/>
 
             <LinearLayout
@@ -62,7 +62,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/background_corner_red"
+                        android:background="@drawable/corner_yellow"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="4dp"
                         android:text="默认地址"
                         android:textColor="@color/white"
                         android:textSize="12sp"
@@ -104,7 +108,7 @@
             android:id="@+id/item_address_deletetv"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="#ff3366"
+            android:background="@color/yellow_bd8913"
             android:gravity="center"
             android:padding="15dp"
             android:text="删除"

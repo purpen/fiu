@@ -181,7 +181,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 });
                 break;
             case 10://待发货
-                mHolder.mLeftButton.setVisibility(View.INVISIBLE);
+                mHolder.mLeftButton.setVisibility(View.GONE);
+                mHolder.mRightButton.setVisibility(View.GONE);
                 mHolder.mRightButton.setText(applyForRefund);
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override

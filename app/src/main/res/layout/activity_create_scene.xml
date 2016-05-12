@@ -82,55 +82,14 @@
                 android:layout_height="1px"
                 android:background="#e2e2e2"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/activity_create_scene_add_addresslinear"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
-                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@mipmap/location_34"/>
-
-                <TextView
-                    android:id="@+id/activity_create_scene_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="添加地点"
-                    android:textColor="@color/black333333"
-                    android:textSize="13sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e2e2e2"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_create_scene_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@color/white"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e2e2e2"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/location"
@@ -150,38 +109,37 @@
                     android:paddingRight="12dp"
                     android:src="@mipmap/cancel_gray"/>
 
-                <RelativeLayout
-                    android:id="@+id/activity_create_scene_addressrelative"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/activity_create_scene_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/activity_create_scene_deleteaddress"
                     android:layout_toRightOf="@id/location"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/activity_create_scene_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textColor="@color/black333333"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:id="@+id/activity_create_scene_area"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/activity_create_scene_address"
-                        android:layout_marginTop="6dp"
-                        android:singleLine="true"
-                        android:textColor="#999999"
-                        android:textSize="11sp"/>
-                </RelativeLayout>
+                    android:text="添加地点"
+                    android:textColor="@color/black333333"
+                    android:textSize="13sp"/>
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#e2e2e2"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_create_scene_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone"
+                android:background="@color/white"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e2e2e2"/>
+
 
             <RelativeLayout
                 android:id="@+id/activity_create_scene_labelrelative"
@@ -214,9 +172,11 @@
                 android:background="#e2e2e2"/>
 
             <HorizontalScrollView
+                android:id="@+id/activity_create_scene_label_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@color/white"
+                android:visibility="gone"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -268,8 +228,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@color/white"
-                android:paddingLeft="15dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:paddingLeft="15dp">
 
             </LinearLayout>
 

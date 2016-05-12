@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -13,6 +12,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainApplication;
 
 /**
  * Created by taihuoniao on 2016/5/11.
@@ -73,7 +73,7 @@ public class FirstInAppUtils {
                 popupWindow.dismiss();
             }
         });
-        popupWindow = new PopupWindow(popView, ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT, true);
+        popupWindow = new PopupWindow(popView, MainApplication.getContext().getScreenWidth()-DensityUtils.dp2px(activity,50), ViewGroup.MarginLayoutParams.WRAP_CONTENT, true);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -86,16 +86,16 @@ public class FirstInAppUtils {
             }
         });
         popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(activity,
-                R.color.white));
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
+                R.color.nothing));
+//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return false;
+//                // 这里如果返回true的话，touch事件将被拦截
+//                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+//            }
+//        });
     }
 
 

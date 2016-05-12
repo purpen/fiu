@@ -283,7 +283,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="在这里上传图片、选一段文字，即发表你的第一个情景"
+            android:text="在这里上传图片、选一段文字，即刻开启你的情景之路吧"
             android:textColor="#666666"
             android:textSize="13sp"/>
 

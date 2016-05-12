@@ -95,7 +95,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         commentsListAdapter = new CommentsListAdapter(CommentListActivity.this, commentList);
         listView.setAdapter(commentsListAdapter);
         pullToRefreshLayout.setPullToRefreshEnabled(false);
-        pullToRefreshLayout.setEmptyView(nothingTv);
+//        pullToRefreshLayout.setEmptyView(nothingTv);
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -164,6 +164,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                             commentList.clear();
                         }
                         commentList.addAll(netCommentsBean.getData().getRows());
+                        if (commentList.size() <= 0) {
+                            nothingTv.setVisibility(View.VISIBLE);
+                        } else {
+                            nothingTv.setVisibility(View.GONE);
+                        }
                         commentsListAdapter.notifyDataSetChanged();
                     }
                     break;

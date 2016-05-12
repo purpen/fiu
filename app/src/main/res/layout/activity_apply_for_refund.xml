@@ -102,7 +102,7 @@
             android:layout_toRightOf="@+id/tv_money"
             android:layout_centerVertical="true"
             android:textSize="14sp"
-            android:textColor="@color/red"/>
+            android:textColor="@color/yellow_bd8913"/>
     </RelativeLayout>
     <EditText
         android:id="@+id/et_refund"

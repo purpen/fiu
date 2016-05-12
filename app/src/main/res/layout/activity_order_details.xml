@@ -179,7 +179,7 @@
                     android:layout_toRightOf="@+id/tv_totalmoney"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    android:textColor="@color/red"/>
+                    android:textColor="@color/yellow_bd8913"/>
             </RelativeLayout>
 
             <RelativeLayout style="@style/order_details_layout">
@@ -197,7 +197,7 @@
                     android:layout_toRightOf="@+id/tv_freight"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    android:textColor="@color/red"/>
+                    android:textColor="@color/yellow_bd8913"/>
             </RelativeLayout>
 
             <RelativeLayout style="@style/order_details_layout">
@@ -215,7 +215,7 @@
                     android:layout_toRightOf="@+id/tv_paymoney"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    android:textColor="@color/red"/>
+                    android:textColor="@color/yellow_bd8913"/>
             </RelativeLayout>
 
             <TextView
@@ -227,8 +227,8 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:text="联系客服"
-                android:textColor="@color/red"
-                android:textSize="17sp"/>
+                android:textColor="#666666"
+                android:textSize="13sp"/>
 
         </LinearLayout>
     </ScrollView>
@@ -247,12 +247,13 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/bt_right_order_details"
-            android:background="@drawable/shape_red_line_bg"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:background="@drawable/yellow_corner_white"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
             android:text="取消订单"
-            android:textColor="@color/red"
+            android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
 
         <TextView
@@ -262,12 +263,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/shape_red_line_bg"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:background="@drawable/yellow_corner_white"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
             android:text="立即支付"
-            android:textColor="@color/red"
+            android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
     </RelativeLayout>
 

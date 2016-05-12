@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:background="#ff3366"
-        android:text="提交"
+        android:background="@color/yellow_bd8913"
+        android:text="提交申请"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 

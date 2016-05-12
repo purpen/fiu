@@ -85,7 +85,9 @@ public class ReturnGoodsActivity extends Activity {
     private void iniView() {
         ActivityUtil.getInstance().addActivity(this);
         title = (MyGlobalTitleLayout) findViewById(R.id.title_return);
-        title.setTitle("退换货/售后");
+        title.setTitle("退款/售后");
+        title.setBackgroundResource(R.color.white);
+        title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
         mDialog = new WaittingDialog(this);
