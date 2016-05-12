@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -12,15 +13,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BindPhone;
+import com.taihuoniao.fineix.beans.FindFriendData;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SkipBind;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
@@ -51,7 +64,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         if (msg.obj instanceof SkipBind) {
                             SkipBind skipBind = (SkipBind) msg.obj;
                             if ("true".equals(skipBind.getSuccess())) {
-                                loginSuccess();
+//                                loginSuccess();
                             } else {
                                 Toast.makeText(BindPhoneActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
                             }
@@ -63,7 +76,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         if (msg.obj instanceof BindPhone) {
                             BindPhone bindPhone = (BindPhone) msg.obj;
                             if ("true".equals(bindPhone.getSuccess())) {
-                                loginSuccess();
+//                                loginSuccess();
                             } else {
                                 Toast.makeText(BindPhoneActivity.this, "绑定失败，请核查手机号和密码是否正确", Toast.LENGTH_SHORT).show();
                             }
@@ -82,11 +95,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//        setContentView(R.layout.activity_bind_phone);
         overridePendingTransition(R.anim.up_register, 0);
         ActivityUtil.getInstance().addActivity(this);
         instance = this;
-//        iniView();
         initData();
 
 
@@ -128,13 +139,57 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_bindPhone:
+            case R.id.bt_bindPhone: //绑定已有账号
                 mPhoneNumber = mPhone.getText() + "";
                 mPassWordNumber = mPassWord.getText() + "";
-                DataPaser.bindPhoneParser(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, mHandler);
+                ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (responseInfo == null) return;
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                        });
+
+                        if (response.isSuccess()) {
+                            LoginInfo loginInfo = response.getData();
+                            SPUtil.write(activity, DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            loginSuccess(loginInfo);
+                        }else {
+                            Util.makeToast(response.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        Util.makeToast("网络异常");
+                    }
+                });
+//                DataPaser.bindPhoneParser(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, mHandler);
                 break;
-            case R.id.tv_click_login_bindPhone:
-                DataPaser.skipBindParser(MainApplication.uuid, openId, unionId, token, nickName, sex, avatarUrl, type, mHandler);
+            case R.id.tv_click_login_bindPhone: //跳过绑定直接登录
+//                DataPaser.skipBindParser(MainApplication.uuid, openId, unionId, token, nickName, sex, avatarUrl, type, mHandler);
+                ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (responseInfo == null) return;
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                        });
+
+                        if (response.isSuccess()) {
+                            LoginInfo loginInfo = response.getData();
+                            SPUtil.write(activity, DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            loginSuccess(loginInfo);
+                        }else {
+                            Util.makeToast(response.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        Util.makeToast("网络异常");
+                    }
+                });
                 break;
             case R.id.image_close_bindPhone:
                 if (OptRegisterLoginActivity.instance != null) {
@@ -162,7 +217,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
 
     //选择绑定成功，或跳过绑定之后完成登录，跳入相应界面
-    private void loginSuccess() {
+    private void loginSuccess(LoginInfo loginInfo) {
         switch (MainApplication.which_activity) {
             case DataConstants.SceneDetailActivity:
                 sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
@@ -171,19 +226,64 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             default:
 //                THNMainActivity.instance.finish();
-                Intent intent = new Intent(BindPhoneActivity.this,
-                        MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(BindPhoneActivity.this,
+//                        MainActivity.class);
+//                startActivity(intent);
                 break;
         }
-        MainApplication.getIsLoginInfo().setIs_login("1");
+//        MainApplication.getIsLoginInfo().setIs_login("1");
         mDialog.dismiss();
-        OptRegisterLoginActivity.instance.finish();
-        mHandler.postDelayed(new Runnable() {
+//        OptRegisterLoginActivity.instance.finish();
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                BindPhoneActivity.this.finish();
+//            }
+//        }, 600);
+        if (ToRegisterActivity.instance != null) {
+            ToRegisterActivity.instance.finish();
+        }
+        if (RegisterActivity.instance != null) {
+            RegisterActivity.instance.finish();
+        }
+        if (OptRegisterLoginActivity.instance != null) {
+            OptRegisterLoginActivity.instance.finish();
+        }
+        if (ToLoginActivity.instance != null) {
+            ToLoginActivity.instance.finish();
+        }
+
+        if (loginInfo.identify.is_scene_subscribe == 0) { //未订阅
+            updateUserIdentity();
+            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+        } else {
+            activity.startActivity(new Intent(activity, MainActivity.class));
+        }
+
+        finish();
+    }
+
+    private void updateUserIdentity() {
+        String type = "1";//设置非首次登录
+        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
-            public void run() {
-                BindPhoneActivity.this.finish();
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e("updateUserIdentity", responseInfo.result);
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()) {
+                    LogUtil.e("updateUserIdentity", "成功改为非首次登录");
+                    return;
+                }
+                LogUtil.e("改为非首次登录失败", responseInfo.result + "===" + response.getMessage());
             }
-        }, 600);
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                if (TextUtils.isEmpty(s)) return;
+                LogUtil.e("网络异常", "改为非首次登录失败");
+            }
+        });
     }
 }

@@ -271,18 +271,17 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             openidForWeChat = platDB.getUserId();
             token = platDB.getToken().toString();
             userId = null;
-            if (TextUtils.equals(LOGIN_TYPE_QQ, LOGIN_TYPE_QQ)) {
+            if (TextUtils.equals(LOGIN_TYPE_QQ,loginType)) {
                 //QQ的ID得这样获取，这是MOB公司的错，不是字段写错了
                 userId = platform.getDb().get("weibo").toString();
             } else if (TextUtils.equals(LOGIN_TYPE_WX, loginType)) {
                 //微信这个神坑，我已无力吐槽，干嘛要搞两个ID出来，泥马，后台说要传的是这个ID，字段没有错！用platDB.getUserId()不行！
                 userId = platform.getDb().get("unionid").toString();
-            } else if (TextUtils.equals(LOGIN_TYPE_SINA, loginType)) {
+            } else {
                 //除QQ和微信两特例，其他的ID这样取就行了
                 userId = platDB.getUserId().toString();
             }
 //            DataPaser.thirdLoginParser(userId, token,loginType,mHandler);
-
             doThirdLogin();
         }
     }
@@ -295,6 +294,9 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (mDialog!=null){
+                    mDialog.dismiss();
+                }
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
@@ -335,32 +337,26 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                         }
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
                         mDialog.dismiss();
+                        if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
+                            updateUserIdentity();
+
+                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                        }else {
+                            activity.startActivity(new Intent(activity,MainActivity.class));
+                        }
+
+                        if (ToRegisterActivity.instance != null) {
+                            ToRegisterActivity.instance.finish();
+                        }
+                        if (RegisterActivity.instance != null) {
+                            RegisterActivity.instance.finish();
+                        }
                         if (OptRegisterLoginActivity.instance != null) {
                             OptRegisterLoginActivity.instance.finish();
                         }
                         if (ToLoginActivity.instance != null) {
                             ToLoginActivity.instance.finish();
                         }
-
-                        if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
-                            updateUserIdentity();
-                            if (ToRegisterActivity.instance != null) {
-                                ToRegisterActivity.instance.finish();
-                            }
-                            if (RegisterActivity.instance != null) {
-                                RegisterActivity.instance.finish();
-                            }
-                            if (OptRegisterLoginActivity.instance != null) {
-                                OptRegisterLoginActivity.instance.finish();
-                            }
-                            if (ToLoginActivity.instance != null) {
-                                ToLoginActivity.instance.finish();
-                            }
-                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                        }else {
-                            activity.startActivity(new Intent(activity,MainActivity.class));
-                        }
-
                         finish();
                     }
                 } else {
@@ -370,6 +366,9 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
+                if (mDialog!=null){
+                    mDialog.dismiss();
+                }
                 Util.makeToast("网络异常");
             }
         });

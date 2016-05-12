@@ -529,15 +529,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("union_id", union_id);
         params.addQueryStringParameter("access_token", access_token);
         params.addQueryStringParameter("third_source", type);
-        params.addQueryStringParameter("from_to", "2");
+        params.addQueryStringParameter("from_to", "2"); //Android
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
 
     //第三方登录之快捷注册(不绑定手机号)
-    public static void skipBindNet(String uuid, String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, RequestCallBack<String> callBack) {
+    public static void skipBindNet(String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/third_register_without_phone";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-////        params.addQueryStringParameter("uuid", uuid);
         params.addQueryStringParameter("nickname", nickname);
         params.addQueryStringParameter("sex", sex);
         params.addQueryStringParameter("oid", oid);

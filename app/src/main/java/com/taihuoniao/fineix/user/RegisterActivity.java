@@ -17,16 +17,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.EmailUtils;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 
 import org.json.JSONObject;
@@ -193,20 +202,19 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo==null){
+                if (responseInfo==null) return;
+                if (responseInfo.result==null) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){
+                    Util.makeToast(response.getMessage());
                     return;
                 }
-                if (responseInfo.result==null){
-                    return;
-                }
-                Util.makeToast(responseInfo.result);
+                Util.makeToast(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (!TextUtils.isEmpty(s)){
-                    Util.makeToast(s);
-                }
+                Util.makeToast("请检查网络");
             }
         }, phone);
     }
@@ -217,31 +225,62 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ClientDiscoverAPI.clickRegisterNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (!TextUtils.isEmpty(responseInfo.result)) {
-                    try {
-                        JSONObject obj = new JSONObject(responseInfo.result);
-                        String successObject = obj.optString("success");
-                        if ("true".equals(successObject)) {
-                            Util.makeToast("注册成功");
-//                            RegisterInfo user = (RegisterInfo) DataParser.parserRegisterToList(responseInfo.result);
-//                            Log.e(">>>", ">>>>>which_activity>>>" +MainApplication.which_activity);
-//                            Log.e(">>>", ">>>>>forPaywayToMain>>>" +THNApplication.forPaywayToMain);
-                            Intent registerIntent = new Intent(RegisterActivity.this,LoginActivity.class);
-                            startActivity(registerIntent);
+                if(responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                });
 
-                        } else {
-                            JSONObject obj2 = new JSONObject(responseInfo.result);
-                            String  failure= obj2.optString("message");
-                            if (!TextUtils.isEmpty(failure)){
-                                Util.makeToast(failure);
-                            }
-                        }
-                        //点击跳到登录界面
-
-
-                    } catch (Exception e) {
+                if (response.isSuccess()) {
+                    LoginInfo loginInfo=response.getData();
+                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
+                        updateUserIdentity();
+                        startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                    } else {
+                        startActivity(new Intent(activity, MainActivity.class));
                     }
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (RegisterActivity.instance != null) {
+                        RegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                    return;
                 }
+                Util.makeToast(response.getMessage());
+
+//                if (!TextUtils.isEmpty(responseInfo.result)) {
+//                    try {
+//                        JSONObject obj = new JSONObject(responseInfo.result);
+//                        String successObject = obj.optString("success");
+//                        if ("true".equals(successObject)) {
+//                            Util.makeToast("注册成功");
+////                            RegisterInfo user = (RegisterInfo) DataParser.parserRegisterToList(responseInfo.result);
+////                            Log.e(">>>", ">>>>>which_activity>>>" +MainApplication.which_activity);
+////                            Log.e(">>>", ">>>>>forPaywayToMain>>>" +THNApplication.forPaywayToMain);
+//                            Intent registerIntent = new Intent(RegisterActivity.this,LoginActivity.class);
+//                            startActivity(registerIntent);
+//
+//                        } else {
+//                            JSONObject obj2 = new JSONObject(responseInfo.result);
+//                            String  failure= obj2.optString("message");
+//                            if (!TextUtils.isEmpty(failure)){
+//                                Util.makeToast(failure);
+//                            }
+//                        }
+//                        //点击跳到登录界面
+//
+//
+//                    } catch (Exception e) {
+//                    }
+//                }
             }
 
 
@@ -252,6 +291,30 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
             }
         }, password, phone, code);
+    }
+
+    private void updateUserIdentity() {
+        String type = "1";//设置非首次登录
+        ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e("updateUserIdentity",responseInfo.result);
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){
+                    LogUtil.e("updateUserIdentity","成功改为非首次登录");
+                    return;
+                }
+                LogUtil.e("改为非首次登录失败",responseInfo.result+"==="+response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                if (TextUtils.isEmpty(s)) return;
+                LogUtil.e("网络异常","改为非首次登录失败");
+            }
+        });
     }
 
     @Override

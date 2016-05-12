@@ -250,24 +250,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
-                        if (ToRegisterActivity.instance != null) {
-                            ToRegisterActivity.instance.finish();
-                        }
-                        if (RegisterActivity.instance != null) {
-                            RegisterActivity.instance.finish();
-                        }
-                        if (OptRegisterLoginActivity.instance != null) {
-                            OptRegisterLoginActivity.instance.finish();
-                        }
-                        if (ToLoginActivity.instance != null) {
-                            ToLoginActivity.instance.finish();
-                        }
                         startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                        finish();
                     } else {
                         startActivity(new Intent(activity, MainActivity.class));
-                        finish();
                     }
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (RegisterActivity.instance != null) {
+                        RegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
                     return;
                 }
                 Util.makeToast(response.getMessage());

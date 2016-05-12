@@ -1644,7 +1644,7 @@ public class DataPaser {
 
     //第三方登录之快捷注册(不绑定手机号)
     public static void skipBindParser(String uuid, String oid, String union_id, String access_token, String nickname, String sex, String avatar_url, String type, final Handler handler) {
-        ClientDiscoverAPI.skipBindNet(uuid, oid, union_id, access_token, nickname, sex, avatar_url, type, new RequestCallBack<String>() {
+        ClientDiscoverAPI.skipBindNet(oid, union_id, access_token, nickname, sex, avatar_url, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SkipBind skipBind = null;
