@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="@dimen/dp16"
     android:paddingRight="@dimen/dp16"
     android:paddingTop="@dimen/dp5"
     android:paddingBottom="@dimen/dp5"
-    android:descendantFocusability="blocksDescendants"
-    >
+    android:descendantFocusability="blocksDescendants">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,13 +51,14 @@
             android:textColor="@color/color_666"
             />
     </LinearLayout>
-    <ImageView
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
         android:id="@+id/iv"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:background="@drawable/border_radius5"
+        app:riv_corner_radius="@dimen/dp100"
         android:textSize="@dimen/sp12"
         android:textColor="@color/color_333"
         android:src="@mipmap/ic_launcher"

@@ -58,8 +58,8 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         View view = Util.inflateView(context, R.layout.share_layout, this);
         gv_share = (GridView) view.findViewById(R.id.gv_share);
         tv_cancel = view.findViewById(R.id.tv_cancel);
-        int[] image={R.mipmap.qq,R.mipmap.qqzone,R.mipmap.sina,R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.wechatfavorite};
-        String[] name={"QQ","QQ空间","新浪微博","微信好友","微信朋友圈","微信收藏"};
+        int[] image={R.mipmap.qq,R.mipmap.qqzone,R.mipmap.sina,R.mipmap.wechat,R.mipmap.wechatmoment};
+        String[] name={"QQ","QQ空间","新浪微博","微信好友","微信朋友圈"};
         List<HashMap<String, Object>> shareList=new ArrayList<HashMap<String,Object>>();
         for(int i=0;i<image.length;i++){
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -102,7 +102,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     params.setTitleUrl("Constants.SHARE_URI + detail.goods_id"); // 标题的超链接
                     params.setImageUrl("Constants.PIC_URI+detail.goods_img");
                     params.setSite(context.getString(R.string.app_name));
-                    params.setSiteUrl("http://www.dmore.com.cn/");
+                    params.setSiteUrl("http://www.taihuoniao.com/");
                     Platform qzone = ShareSDK.getPlatform (QZone.NAME);
                     qzone.setPlatformActionListener (CustomShareView.this); // 设置分享事件回调
                     qzone.share(params);
@@ -112,7 +112,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setTitle("detail.goods_name");
                     params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setImageUrl("http://www.taihuoniao.com/");
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     weibo.share(params);
@@ -121,10 +121,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     //wechat
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setUrl("http://www.taihuoniao.com/");
                     params.setTitle("detail.goods_name");
                     params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setImageUrl("http://pic9.nipic.com/20100904/4845745_195609329636_2.jpg");
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(CustomShareView.this);
                     wechat.share(params);
@@ -133,26 +133,26 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     //wechatmoment
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
+                    params.setUrl("http://www.taihuoniao.com/");
                     params.setTitle("detail.goods_name");
                     params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setImageUrl("http://pic9.nipic.com/20100904/4845745_195609329636_2.jpg");
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(CustomShareView.this);
                     wechatMoments.share(params);
                     break;
-                case 5:
-                    //wefa
-                    params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
-                    params.setTitle("detail.goods_name");
-                    params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+//                case 5:
+//                    //wefa
+//                    params = new Platform.ShareParams();
+//                    params.setShareType(Platform.SHARE_WEBPAGE);
+//                    params.setUrl("");
+//                    params.setTitle("detail.goods_name");
+//                    params.setText("detail.goods_name");
+//                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
 //                    Platform wechatFavorite = ShareSDK.getPlatform(WechatFavorite.NAME);
 //                    wechatFavorite.setPlatformActionListener(CustomShareView.this);
 //                    wechatFavorite.share(params);
-                    break;
+//                    break;
             }
         }
     };
