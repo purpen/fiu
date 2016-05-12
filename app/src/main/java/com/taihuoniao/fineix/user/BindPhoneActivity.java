@@ -240,6 +240,15 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 //                BindPhoneActivity.this.finish();
 //            }
 //        }, 600);
+
+
+        if (loginInfo.identify.is_scene_subscribe == 0) { //未订阅
+            updateUserIdentity();
+            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+        } else {
+            activity.startActivity(new Intent(activity, MainActivity.class));
+        }
+
         if (ToRegisterActivity.instance != null) {
             ToRegisterActivity.instance.finish();
         }
@@ -251,13 +260,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         }
         if (ToLoginActivity.instance != null) {
             ToLoginActivity.instance.finish();
-        }
-
-        if (loginInfo.identify.is_scene_subscribe == 0) { //未订阅
-            updateUserIdentity();
-            startActivity(new Intent(activity, OrderInterestQJActivity.class));
-        } else {
-            activity.startActivity(new Intent(activity, MainActivity.class));
         }
 
         finish();
