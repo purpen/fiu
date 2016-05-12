@@ -771,7 +771,6 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
     }
 
-
     /**
      * 获取聊天记录
      *
@@ -1096,5 +1095,16 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("uuid", MainApplication.uuid);
         params.addQueryStringParameter("from_to","2"); // 1.ios;2.android;3.win;4.ipad;
         HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.LOGOUT, callBack);
+    }
+
+    /**
+     * 获取手机状态
+     * @param account
+     * @param callBack
+     */
+    public static void getPhoneState(String account,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("account",account);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.GET_REGIST_STATE, callBack);
     }
 }

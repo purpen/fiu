@@ -13,6 +13,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -42,27 +43,27 @@ public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.Syst
             holder=(ViewHolder)convertView.getTag();
         }
 
-        holder.tv_name.setText(item.title);
+        holder.title.setText(item.title);
         holder.tv_desc.setText(item.content);
         holder.tv_time.setText(item.created_at);
-        if (!TextUtils.isEmpty(item.url)){
-            holder.iv.setVisibility(View.VISIBLE);
-            imageLoader.displayImage(item.url,holder.iv,options);
+        if (!TextUtils.isEmpty(item.cover_url)){
+            holder.riv.setVisibility(View.VISIBLE);
+            imageLoader.displayImage(item.cover_url,holder.riv,options);
         }else {
-            holder.iv.setVisibility(View.GONE);
+            holder.riv.setVisibility(View.GONE);
         }
         return convertView;
     }
 
     static class ViewHolder {
-        @Bind(R.id.tv_name)
-        TextView tv_name;
+        @Bind(R.id.title)
+        TextView title;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
         @Bind(R.id.tv_time)
         TextView tv_time;
-        @Bind(R.id.iv)
-        ImageView iv;
+        @Bind(R.id.riv)
+        RoundedImageView riv;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

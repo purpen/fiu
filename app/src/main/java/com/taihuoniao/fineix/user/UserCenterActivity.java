@@ -305,10 +305,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }else{
             bt_focus.setText("已关注");
         }
-        if (!TextUtils.isEmpty(user.summary)){
+        if (!TextUtils.isEmpty(user.nickname)){
             if (LoginInfo.getUserId()!=userId){
                 tv_title.setVisibility(View.VISIBLE);
-                tv_title.setText(user.summary);
+                tv_title.setText(user.nickname);
             }else {
                 tv_title.setVisibility(View.GONE);
             }
@@ -319,13 +319,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (!TextUtils.isEmpty(user.head_pic_url)) {
             ImageUtils.loadBgImg(user.head_pic_url, ll_box);
         }
-        if (TextUtils.isEmpty(user.realname)) {
+
+        if (TextUtils.isEmpty(user.summary)) {
             tv_real.setVisibility(View.GONE);
         } else {
-            tv_real.setText(user.realname);
+            tv_real.setText(user.summary);
         }
 
-        if (TextUtils.isEmpty(user.nickname)) {
+
+        if (TextUtils.isEmpty(user.nickname) || LoginInfo.getUserId()!=userId) {
             tv_nick.setVisibility(View.GONE);
         } else {
             tv_nick.setText(user.nickname);

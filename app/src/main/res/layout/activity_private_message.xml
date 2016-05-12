@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
@@ -10,13 +10,12 @@
 
     <ListView
         android:id="@+id/lv"
-        android:layout_above="@+id/send_box"
-        android:layout_below="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/send_box"
+        android:layout_below="@+id/custom_head"
         android:divider="@null"
-        android:scrollbars="none"
-        />
+        android:scrollbars="none" />
 
     <LinearLayout
         android:id="@+id/send_box"
@@ -24,33 +23,35 @@
         android:layout_height="@dimen/dp55"
         android:layout_alignParentBottom="true"
         android:background="@color/color_eee"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
         >
         <EditText
             android:id="@+id/et"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp35"
-            android:gravity="center_vertical"
-            android:background="@drawable/border_radius5"
-            android:paddingLeft="@dimen/dp10"
-            android:textColorHint="@color/color_666"
-            android:textColor="@color/color_333"
-            android:hint="说点什么吧"
-            android:textSize="@dimen/sp14"
-            android:layout_weight="4"
             android:layout_marginLeft="@dimen/dp16"
-            />
+            android:layout_weight="4"
+            android:background="@drawable/border_radius5"
+            android:gravity="center_vertical"
+            android:hint="说点什么吧"
+            android:paddingLeft="@dimen/dp10"
+            android:textColor="@color/color_333"
+            android:textColorHint="@color/color_666"
+            android:textSize="@dimen/sp14" />
+
         <Button
             android:id="@+id/btn"
             android:layout_width="@dimen/dp80"
             android:layout_height="@dimen/dp35"
-            android:background="@drawable/shap_redbutton_commit"
             android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp16"
+            android:background="@drawable/shap_redbutton_commit"
             android:text="发送"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp14"
-            android:layout_marginRight="@dimen/dp16"
-            />
+            android:textSize="@dimen/sp14" />
     </LinearLayout>
 </RelativeLayout>

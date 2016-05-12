@@ -12,6 +12,7 @@ public class FocusFansItem implements Serializable {
     public int follow_id;
     public int group_id;
     public int type;
+    public boolean focus_flag;
     public int is_read;
     public Follow follows;
     public class Follow implements Serializable {

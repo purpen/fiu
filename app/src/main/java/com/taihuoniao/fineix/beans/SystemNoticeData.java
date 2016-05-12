@@ -17,7 +17,9 @@ public class SystemNoticeData{
         public String content;
         public String created_at;
         public String url;
+        public String cover_url;
         public int state;
+        public int evt;
         public int send_count;
     }
 }

@@ -67,15 +67,27 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
         //关注界面
         if (TextUtils.equals(FocusFansActivity.FOCUS_TYPE,pageType)){
             if (userId==LoginInfo.getUserId()){ //是自己
-                holder.btn.setText("已关注");
-                holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-                holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
-                holder.btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {//取消关注
-                        showFocusFansConfirmView(item,"停止关注");
-                    }
-                });
+                if (item.focus_flag){
+                    holder.btn.setText("关注");
+                    holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+                    holder.btn.setBackgroundResource(R.drawable.border_radius5);
+                    holder.btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {//关注
+                            showFocusFansConfirmView(item,"开始关注");
+                        }
+                    });
+                }else {
+                    holder.btn.setText("已关注");
+                    holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+                    holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+                    holder.btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {//取消关注
+                            showFocusFansConfirmView(item,"停止关注");
+                        }
+                    });
+                }
             }else { //处理别人的关注列表
 //                if (item.is_love==NOT_LOVE){ //LoginInfo.getUserId()没有关注
 //                    holder.btn.setText("关注");
@@ -163,31 +175,60 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     final FocusFansItem item =(FocusFansItem)view.getTag();
                     if (userId==LoginInfo.getUserId()){ //关注列表做取消关注操作
                         if (item==null) return;
-                        ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id+"", new RequestCallBack<String>() {
-                            @Override
-                            public void onSuccess(ResponseInfo<String> responseInfo) {
-                                view.setEnabled(true);
-                                PopupWindowUtil.dismiss();
-                                if (responseInfo==null) return;
-                                if (TextUtils.isEmpty(responseInfo.result)) return;
-                                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                                if (response.isSuccess()){
-                                    list.remove(item);
-                                    notifyDataSetChanged();
+                        if (item.focus_flag){
+                            ClientDiscoverAPI.focusOperate(item.follows.user_id+"", new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    view.setEnabled(true);
+                                    PopupWindowUtil.dismiss();
+                                    if (responseInfo==null) return;
+                                    if (TextUtils.isEmpty(responseInfo.result)) return;
+                                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                                    if (response.isSuccess()){
+                                        item.focus_flag=false;
+                                        notifyDataSetChanged();
+                                        Util.makeToast(response.getMessage());
+                                        return;
+                                    }
                                     Util.makeToast(response.getMessage());
-                                    return;
+
                                 }
 
-                                Util.makeToast(response.getMessage());
-                            }
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    view.setEnabled(true);
+                                    PopupWindowUtil.dismiss();
+                                    Util.makeToast(s);
+                                }
+                            });
+                        }else {
+                            ClientDiscoverAPI.cancelFocusOperate(item.follows.user_id+"", new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    view.setEnabled(true);
+                                    PopupWindowUtil.dismiss();
+                                    if (responseInfo==null) return;
+                                    if (TextUtils.isEmpty(responseInfo.result)) return;
+                                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                                    if (response.isSuccess()){
+//                                    list.remove(item);
+                                        item.focus_flag=true;  //变为可关注
+                                        notifyDataSetChanged();
+                                        Util.makeToast(response.getMessage());
+                                        return;
+                                    }
 
-                            @Override
-                            public void onFailure(HttpException e, String s) {
-                                view.setEnabled(true);
-                                PopupWindowUtil.dismiss();
-                                Util.makeToast(s);
-                            }
-                        });
+                                    Util.makeToast(response.getMessage());
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    view.setEnabled(true);
+                                    PopupWindowUtil.dismiss();
+                                    Util.makeToast(s);
+                                }
+                            });
+                        }
                     }else { //处理别人的关注和粉丝列表
                         dealOthersFocusFans(item,view);
                     }

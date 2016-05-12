@@ -138,7 +138,7 @@ public class NetworkConstance {
     public static final String UPLOAD_BG_URL = BASE_URL + "/my/add_head_pic";
 
     //获取系统通知
-    public static final String SYSTEM_NOTICE = BASE_URL + "/notice";
+    public static final String SYSTEM_NOTICE = BASE_URL + "/notice/getlist";
 
     //获取消息记录
     public static final String MESSAGE_RECORD = BASE_URL + "/message";
@@ -177,4 +177,6 @@ public class NetworkConstance {
     public static final String fiu_user_list = BASE_URL + "/user/find_user";
     //首页订阅的场景列表
     public static final String subs_cjlist = BASE_URL+"/my/my_subscription";
+    //  检查是否注册
+    public static final String GET_REGIST_STATE = BASE_URL + "/auth/check_account";
 }

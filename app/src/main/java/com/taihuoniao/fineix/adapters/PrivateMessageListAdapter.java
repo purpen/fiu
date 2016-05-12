@@ -46,9 +46,9 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.color_333));
         holder.tv_time.setText(item.last_time_at);
         if (item.is_read>0){
-            holder.tv_num.setVisibility(View.VISIBLE);
-        }else {
             holder.tv_num.setVisibility(View.GONE);
+        }else {
+            holder.tv_num.setVisibility(View.VISIBLE);
         }
         return convertView;
     }

@@ -55,7 +55,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public static RegisterActivity instance = null;
     private ReadSmsContent readSmsContent;
     private String phone;
-
+    private boolean phoneCanUse;
     public RegisterActivity(){
         super(R.layout.activity_register);
     }
@@ -129,6 +129,81 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case R.id.vertify:
                 phone = editUser.getText().toString();
                 if (!TextUtils.isEmpty(phone) && EmailUtils.isMobileNO(phone)) {
+                    IsPhoneRegisted(phone);
+//                    submitphone(phone);
+//                    new Thread() {
+//                        @Override
+//                        public void run() {
+//                            super.run();
+//
+//                            int recordSed = 60;
+//                            Message msg = new Message();
+//                            msg.what = 1;
+//                            mHandler.sendMessage(msg);
+//
+//                            for (; ; ) {
+//                                if (--recordSed < 0)
+//                                    break;
+//
+//                                Message msg2 = new Message();
+//                                msg2.what = 2;
+//                                msg2.arg1 = recordSed;
+//                                mHandler.sendMessage(msg2);
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    // TODO Auto-generated catch block
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//
+//                            Message msg3 = new Message();
+//                            msg3.what = 3;
+//                            mHandler.sendMessage(msg3);
+//                        }
+//
+//                    }.start();
+                } else {
+                    Util.makeToast("请输入正确的手机号");
+                }
+                break;
+            case R.id.register:
+                final String codes = editCode.getText().toString();
+                final String phone1 = editUser.getText().toString();
+                final String password = editPass.getText().toString();
+
+                if (!TextUtils.isEmpty(phone1) && phone1.length() == 11) {
+                    if (!TextUtils.isEmpty(password) && password.length() >= 6 && password.length() <= 20) {
+
+                        if (!TextUtils.isEmpty(phone1)
+                                && EmailUtils.isMobileNO(phone1)) {
+                            NetworkManager.getInstance().cancel("register");
+                            NetworkManager.getInstance().cancelAll();
+                            submitData(password, phone1, codes);
+                        } else {
+                            Util.makeToast("请输入正确的手机号");
+                        }
+                    } else {
+                        Util.makeToast("请输入6-20位密码");
+                    }
+                } else {
+                    Util.makeToast("请输入正确的手机号");
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void IsPhoneRegisted(final String phone) { //true 未被注册
+        ClientDiscoverAPI.getPhoneState(phone, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if(response.isSuccess()){
                     submitphone(phone);
                     new Thread() {
                         @Override
@@ -162,38 +237,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         }
 
                     }.start();
-                } else {
-                    Util.makeToast("请输入正确的手机号");
+                }else {
+                    Util.makeToast(response.getMessage());
                 }
-                break;
-            case R.id.register:
+            }
 
-                final String codes = editCode.getText().toString();
-                final String phone1 = editUser.getText().toString();
-                final String password = editPass.getText().toString();
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Util.makeToast("网络异常");
+            }
+        });
 
-                if (!TextUtils.isEmpty(phone1) && phone1.length() == 11) {
-                    if (!TextUtils.isEmpty(password) && password.length() >= 6 && password.length() <= 20) {
-
-                        if (!TextUtils.isEmpty(phone1)
-                                && EmailUtils.isMobileNO(phone1)) {
-                            NetworkManager.getInstance().cancel("register");
-                            NetworkManager.getInstance().cancelAll();
-                            submitData(password, phone1, codes);
-                        } else {
-                            Util.makeToast("请输入正确的手机号");
-                        }
-                    } else {
-                        Util.makeToast("请输入6-20位密码");
-                    }
-                } else {
-                    Util.makeToast("请输入正确的手机号");
-                }
-
-                break;
-            default:
-                break;
-        }
     }
 
     // 提交手机号的方法

@@ -1,7 +1,10 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.JsonSyntaxException;
@@ -10,11 +13,15 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -49,7 +56,7 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void initView() {
         dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "系统通知");
-        custom_head.setHeadRightTxtShow(true,R.string.clear);
+//        custom_head.setHeadRightTxtShow(true,R.string.clear);
     }
 
     @OnClick(R.id.tv_head_right)
@@ -63,6 +70,42 @@ public class SystemNoticeActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    protected void installListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (list!=null && list.size()>0){
+                    SystemNoticeData.SystemNoticeItem item = list.get(i);
+                    Intent intent=null;
+                    switch (item.evt){
+                        case 0://链接
+                            Uri uri = Uri.parse(item.url);
+                            intent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(intent);
+                            break;
+                        case 1: //情景
+                            intent=new Intent(activity, QingjingDetailActivity.class);
+                            intent.putExtra("id",item.url);
+                            startActivity(intent);
+                            break;
+                        case 2: //场景
+                            intent=new Intent(activity, SceneDetailActivity.class);
+                            intent.putExtra("id",item.url);
+                            startActivity(intent);
+                            break;
+                        case 3: //产品
+                            intent=new Intent(activity, GoodsDetailActivity.class);
+                            intent.putExtra("id",item.url);
+                            startActivity(intent);
+                            break;
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     protected void requestNet() {
         ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {

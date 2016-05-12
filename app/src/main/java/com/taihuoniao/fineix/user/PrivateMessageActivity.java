@@ -1,10 +1,14 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -21,6 +25,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -42,6 +47,9 @@ public class PrivateMessageActivity extends BaseActivity{
     ListView lv;
     @Bind(R.id.et)
     EditText et;
+    @Bind(R.id.send_box)
+    LinearLayout send_box;
+    private boolean isSendMsg=false;
     private int curPage=1;
     private static final String PAGE_SIZE="10";
     private static final String TYPE_USER="1"; //与某个用户的记录
@@ -64,6 +72,7 @@ public class PrivateMessageActivity extends BaseActivity{
     @Override
     protected void initView() {
         dialog=new WaittingDialog(this);
+        lv.requestFocus();
         if (user!=null){
             if (TextUtils.isEmpty(user.nickname)){
                 if (!TextUtils.isEmpty(user.phone)){
@@ -84,7 +93,7 @@ public class PrivateMessageActivity extends BaseActivity{
         ClientDiscoverAPI.messageDetailList(String.valueOf(user._id),new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null) dialog.show();
+                if (dialog!=null&&!isSendMsg) dialog.show();
             }
 
             @Override
@@ -96,6 +105,9 @@ public class PrivateMessageActivity extends BaseActivity{
                 });
 
                 if (response.isSuccess()){
+                    if (isSendMsg){
+                        et.requestFocus();
+                    }
                     MessageDetailData data = response.getData();
                     List<MessageDetailData.MessageItem> list = data.mailbox;
                     refreshUI(list);
@@ -115,7 +127,6 @@ public class PrivateMessageActivity extends BaseActivity{
     void performClick(View v){
         switch (v.getId()){
             case R.id.btn:
-                v.setEnabled(false);
                 if (user._id== LoginInfo.getUserId()){
                     Util.makeToast("您不能跟自己聊天！");
                     return;
@@ -130,19 +141,20 @@ public class PrivateMessageActivity extends BaseActivity{
 
         if (TextUtils.isEmpty(content)) {
             Util.makeToast("私信内容不能为空哦！");
-            v.setEnabled(true);
             return;
         }
         ClientDiscoverAPI.sendMessage(String.valueOf(user._id), content, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null) dialog.show();
+//                if (dialog!=null) dialog.show();
+                v.setEnabled(false);
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                isSendMsg=true;
                 v.setEnabled(true);
-                dialog.dismiss();
+//                dialog.dismiss();
                 if (responseInfo==null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -160,7 +172,7 @@ public class PrivateMessageActivity extends BaseActivity{
             @Override
             public void onFailure(HttpException e, String s) {
                 v.setEnabled(true);
-                dialog.dismiss();
+//                dialog.dismiss();
                 Util.makeToast("请您检查网络！");
             }
         });
@@ -184,4 +196,45 @@ public class PrivateMessageActivity extends BaseActivity{
         }
         lv.setSelection(list.size());
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            send_box.requestFocus();
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public  boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof LinearLayout)) {
+            int[] leftTop = { 0, 0 };
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
