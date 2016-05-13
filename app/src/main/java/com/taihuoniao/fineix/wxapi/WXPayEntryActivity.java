@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.wxapi;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -19,15 +21,18 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 
     public interface WXPayResultListener {
         void onSuccess();
+
         void onFailure();
+
         void onCancel();
     }
 
     private static WXPayResultListener listener;
 
-    public static void setWXPayResultListener(WXPayResultListener listener){
-        WXPayEntryActivity.listener=listener;
+    public static void setWXPayResultListener(WXPayResultListener listener) {
+        WXPayEntryActivity.listener = listener;
     }
+
     private IWXAPI api;
 
     public WXPayEntryActivity() {
@@ -61,35 +66,30 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     public void onResp(BaseResp resp) {
         LogUtil.e(TAG, "onPayFinish, errCode = " + resp.errCode);
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//			builder.setTitle(R.string.app_tip);
             String resultTip = "";
             switch (resp.errCode) {
                 case 0:
                     resultTip = "支付成功";
-                    if (listener!=null){
+                    if (listener != null) {
                         listener.onSuccess();
                     }
                     Util.makeToast(activity, resultTip);
                     break;
                 case -1:
                     resultTip = "支付异常";
-                    if (listener!=null){
+                    if (listener != null) {
                         listener.onFailure();
                     }
                     Util.makeToast(activity, resultTip);
                     break;
                 case -2:
                     resultTip = "您取消了支付";
-                    if (listener!=null){
+                    if (listener != null) {
                         listener.onCancel();
                     }
                     Util.makeToast(activity, resultTip);
                     break;
             }
-//			builder.setMessage(resultTip);
-//			builder.show();
-//            startActivity(new Intent(activity, UserOrderListActivity.class));
             finish();
         }
     }

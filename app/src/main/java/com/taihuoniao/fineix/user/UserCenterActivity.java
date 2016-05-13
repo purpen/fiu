@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -100,6 +101,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     Button bt_focus;
     @Bind(R.id.ibtn)
     ImageButton ibtn;
+    @Bind(R.id.iv_bg)
+    ImageView iv_bg;
     private User user;
     private Uri mImageUri;
     private FragmentManager fm;
@@ -317,7 +320,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv, options);
         }
         if (!TextUtils.isEmpty(user.head_pic_url)) {
-            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
+//            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
+            ImageLoader.getInstance().displayImage(user.head_pic_url,iv_bg,options);
         }
 
         if (TextUtils.isEmpty(user.summary)) {

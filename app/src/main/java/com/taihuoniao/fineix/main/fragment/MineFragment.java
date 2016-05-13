@@ -88,6 +88,8 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_focus;
     @Bind(R.id.tv_fans)
     TextView tv_fans;
+    @Bind(R.id.iv_bg)
+    ImageView iv_bg;
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
     public static final int REQUEST_FOCUS = 2;
@@ -254,7 +256,8 @@ public class MineFragment extends MyBaseFragment {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
         if (!TextUtils.isEmpty(user.head_pic_url)) {
-            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
+//            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
+            ImageLoader.getInstance().displayImage(user.head_pic_url,iv_bg);
 //            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }

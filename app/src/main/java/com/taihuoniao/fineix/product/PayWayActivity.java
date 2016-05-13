@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.pay.alipay.AliPay;
+import com.taihuoniao.fineix.pay.wxpay.WXPay;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
@@ -46,14 +50,14 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private ImageView mImageAlipay;
     private ImageView mImageWechat;
     private String mTotalMoney, mRid;
-    private String mPayway = "alipay";
+    private String mPayway = NetworkConstance.ALI_PAY;
     private TextView mPayMoney;
     private Button mPayNow;
     private WaittingDialog mWaittingDialog = null;
     private CustomDialogForPay mDialog;
     private boolean mBack = true;//判断是否让返回键生效
     private DecimalFormat df = null;
-
+    private String orderId;
 //    private Handler mHandler = new Handler() {
 //        @Override
 //        public void handleMessage(Message msg) {
@@ -207,9 +211,18 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         ActivityUtil.getInstance().addActivity(this);
         mWaittingDialog = new WaittingDialog(this);
 //        regToWx();
+        getIntentData();
         initData();
         initView();
 
+    }
+
+
+    private void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("orderId")){
+            orderId=intent.getStringExtra("orderId");
+        }
     }
 
 //    private void regToWx() {
@@ -265,20 +278,34 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
             case R.id.linear_alipay:
                 mImageAlipay.setImageResource(R.mipmap.check_red);
                 mImageWechat.setImageResource(R.mipmap.circle_payway);
-                mPayway = "alipay";
+                mPayway = NetworkConstance.ALI_PAY;
                 break;
             case R.id.linear_wechat:
-
                 mImageWechat.setImageResource(R.mipmap.check_red);
                 mImageAlipay.setImageResource(R.mipmap.circle_payway);
-                mPayway = "weichat";
+                mPayway = NetworkConstance.WX_PAY;
                 break;
             case R.id.bt_paynow_payway:
-                Toast.makeText(PayWayActivity.this, "支付", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PayWayActivity.this, "支付", Toast.LENGTH_SHORT).show();
 //                if (!mWaittingDialog.isShowing()) {
 //                    mWaittingDialog.show();
 //                }
 //                DataParser.payParser(THNApplication.uuid, mRid, mPayway, mHandler);
+                if (TextUtils.equals(NetworkConstance.ALI_PAY,mPayway)){
+                    AliPay.pay(orderId, PayWayActivity.this, new AliPay.AlipayListener() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+                }else if (TextUtils.equals(NetworkConstance.WX_PAY,mPayway)){
+                    WXPay.pay(orderId,PayWayActivity.this);
+                }
                 break;
         }
     }

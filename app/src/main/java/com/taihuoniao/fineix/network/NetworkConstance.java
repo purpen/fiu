@@ -5,6 +5,8 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class NetworkConstance {
+    public static final String ALI_PAY="alipay";
+    public static final String WX_PAY="weichat";
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
@@ -179,4 +181,7 @@ public class NetworkConstance {
     public static final String subs_cjlist = BASE_URL+"/my/my_subscription";
     //  检查是否注册
     public static final String GET_REGIST_STATE = BASE_URL + "/auth/check_account";
+
+    //支付URL
+    public static final String PAY_URL = BASE_URL + "/shopping/payed";
 }

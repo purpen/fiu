@@ -414,6 +414,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/transparent"/>
+
         <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

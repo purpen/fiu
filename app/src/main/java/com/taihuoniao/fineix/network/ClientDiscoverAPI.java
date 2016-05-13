@@ -1107,4 +1107,17 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("account",account);
         HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.GET_REGIST_STATE, callBack);
     }
+
+    /**
+     * 获取支付参数
+     * @param rid
+     * @param payaway
+     * @param callBack
+     */
+    public static void getPayParams(String rid,String payaway,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid",rid);
+        params.addQueryStringParameter("payaway",payaway);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.PAY_URL, callBack,true);
+    }
 }
