@@ -15,15 +15,16 @@
  */
 package com.taihuoniao.fineix.zxing.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.ClipboardManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -36,11 +37,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.StringUtils;
@@ -51,6 +56,7 @@ import com.taihuoniao.fineix.zxing.decode.DecodeThread;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
 import com.taihuoniao.fineix.zxing.utils.CaptureActivityHandler;
 import com.taihuoniao.fineix.zxing.utils.InactivityTimer;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 
@@ -66,7 +72,10 @@ import java.lang.reflect.Field;
  */
 public final class CaptureActivity extends BaseActivity implements
         SurfaceHolder.Callback {
-
+    private static final String INFO_TYPE_QJ = "10";
+    private static final String INFO_TYPE_CJ = "11";
+    private static final String INFO_TYPE_CP = "12";
+    private static final String INFO_TYPE_USER = "13";
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
     private CameraManager cameraManager;
@@ -99,7 +108,7 @@ public final class CaptureActivity extends BaseActivity implements
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_qr_scan);
-        ((CustomHeadView)findViewById(R.id.custom_head)).setHeadCenterTxtShow(true,"扫一扫");
+        ((CustomHeadView) findViewById(R.id.custom_head)).setHeadCenterTxtShow(true, "扫一扫");
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         TextView tv_bar = (TextView) findViewById(R.id.tv_bar);
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
@@ -226,27 +235,71 @@ public final class CaptureActivity extends BaseActivity implements
 //
 //	startActivity(new Intent(CaptureActivity.this, ResultActivity.class)
 //		.putExtras(bundle));
-        LogUtil.e("handleDecode","handleDecode");
-        handler.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                handleText(rawResult.getText());
-            }
-        }, 800);
+        LogUtil.e("handleDecode", "handleDecode");
+//        handler.postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                handleText(rawResult.getText());
+//            }
+//        }, 800);
+        handleText(rawResult.getText());
     }
 
     private void handleText(String text) {
-
-        if (StringUtils.isUrl(text)) {
-            showUrlOption(text);
-        } else {
-            handleOtherText(text);
+        String url = text;
+        if (TextUtils.isEmpty(text)) return;
+        Intent intent=null;
+        LogUtil.e("handleText", text);
+        if (text.contains("taihuoniao.com")) {
+            if (!text.contains("?")) {//是咱们的域名但没参数
+                return;
+            }
+            if (text.contains("infoType") && text.contains("infoId")) { //能正确获取到参数
+                url = url.substring(url.indexOf("?") + 1, url.length());
+                String[] args = url.split("&");
+                String infoType = args[0].split("=")[1];
+                String infoId = args[1].split("=")[1];
+                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
+                if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
+                    LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
+                    return;
+                }
+                if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
+                    intent=new Intent(CaptureActivity.this, UserCenterActivity.class);
+                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA,infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
+                    intent = new Intent(CaptureActivity.this, QingjingDetailActivity.class);
+                    intent.putExtra("id",infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转场景详情
+                    intent = new Intent(CaptureActivity.this, SceneDetailActivity.class);
+                    intent.putExtra("id",infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
+                    intent=new Intent(CaptureActivity.this, GoodsDetailActivity.class);
+                    intent.putExtra("id",infoId);
+                    startActivity(intent);
+                }
+            }
+        } else {//扫描的不是咱们网站的二维码
+            //浏览器跳转到该链接
+            Uri uri = Uri.parse(text);
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
         }
+
+//        if (StringUtils.isUrl(text)) {
+//            showUrlOption(text);
+//        } else {
+//            handleOtherText(text);
+//        }
     }
 
+
     private void showUrlOption(final String url) {
-        LogUtil.e("showUrlOption",url);
+        LogUtil.e("showUrlOption", url);
 //        if (url.contains("scan_login")) {
 //            showConfirmLogin(url);
 //            return;

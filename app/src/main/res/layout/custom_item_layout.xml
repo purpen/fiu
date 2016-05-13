@@ -69,6 +69,16 @@
         android:src="@mipmap/ic_launcher"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/iv_bar_code"
+        android:layout_width="@dimen/dp30"
+        android:layout_height="@dimen/dp30"
+        android:src="@mipmap/code2"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/dp5"
+        android:layout_toLeftOf="@id/iv_more_arrow"
+        android:visibility="gone"
+        />
     <TextView
         android:id="@+id/tv_arrow_left"
         android:layout_width="wrap_content"

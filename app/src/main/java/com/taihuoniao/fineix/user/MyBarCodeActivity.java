@@ -72,8 +72,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         }
 
         try {
-            bitmap_2code = QrCodeUtils.Create2DCode(String.format(
-                    "http://www.taihuoniao.com/u/%s", LoginInfo.getUserId()));
+            bitmap_2code = QrCodeUtils.Create2DCode(String.format(//13为用户类型
+                    "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s",13,LoginInfo.getUserId()));
             iv_bar_code.setImageBitmap(bitmap_2code);
         } catch (WriterException e) {
             e.printStackTrace();

@@ -1,9 +1,12 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -68,7 +71,27 @@ public class SystemSettingsActivity extends BaseActivity{
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
         setCacheSize();
+//        getAppPemission();
     }
+
+//    public void getAppPemission() {
+//        PackageManager pm = this.getPackageManager();
+//        PackageInfo info;
+//        try {
+//            info = pm.getPackageInfo(getPackageName(),PackageManager.GET_PERMISSIONS);
+//            String[] packagePermissions = info.requestedPermissions;
+//            LogUtil.e("AppPemission",info.packageName);
+//            if (packagePermissions != null) {
+//                for (int i = 0; i < packagePermissions.length; i++) {
+//                    LogUtil.e("result", packagePermissions[i]);
+//                }
+//            } else {
+//                LogUtil.e("name", info.packageName + ": no permissions");
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @OnClick({R.id.item_update_psd,R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
     void onClick(View view){

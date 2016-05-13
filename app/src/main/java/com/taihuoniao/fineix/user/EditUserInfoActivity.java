@@ -129,6 +129,7 @@ public class EditUserInfoActivity extends BaseActivity {
         custom_area.setTVStyle(0, R.string.user_area, R.color.color_333);
         custom_area.setTvArrowLeftStyle(true, R.string.select_city);
         custom_code.setTVStyle(0, R.string.user_code, R.color.color_333);
+        custom_code.setIvArrowLeftShow(true);
         custom_auth.setTVStyle(0, R.string.user_auth, R.color.color_333);
     }
 

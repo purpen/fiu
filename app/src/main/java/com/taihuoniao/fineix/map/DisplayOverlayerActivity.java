@@ -67,6 +67,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         super(R.layout.activity_display_overlayer);
     }
 
+
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "附近所有情境");

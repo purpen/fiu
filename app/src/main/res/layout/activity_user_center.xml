@@ -61,7 +61,7 @@
             android:layout_width="@dimen/dp70"
             android:layout_height="@dimen/dp70"
             app:riv_border_color="@android:color/white"
-            app:riv_border_width="@dimen/dp2"
+            app:riv_border_width="@dimen/dp1"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/dp5"
             android:src="@mipmap/ic_launcher" />

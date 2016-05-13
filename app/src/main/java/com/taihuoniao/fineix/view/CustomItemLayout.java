@@ -30,6 +30,7 @@ public class CustomItemLayout extends RelativeLayout {
     private TextView tv_arrow_left1;
     private RoundedImageView iv_user_avatar;
     private RelativeLayout rl_item_box;
+    private ImageView iv_arrow_left;
     public CustomItemLayout(Context context) {
         this(context,null);
     }
@@ -54,6 +55,7 @@ public class CustomItemLayout extends RelativeLayout {
         tv_arrow_left=(TextView)view.findViewById(R.id.tv_arrow_left);
         tv_arrow_left1=(TextView)view.findViewById(R.id.tv_arrow_left1);
         iv_user_avatar=(RoundedImageView)view.findViewById(R.id.iv_user_avatar);
+        iv_arrow_left=(ImageView)view.findViewById(R.id.iv_bar_code);
     }
 
     public void setRightMoreImgStyle(boolean isShow){
@@ -64,6 +66,13 @@ public class CustomItemLayout extends RelativeLayout {
         }
     }
 
+    public void setIvArrowLeftShow(boolean isShow){
+        if (isShow){
+            iv_arrow_left.setVisibility(VISIBLE);
+        }else {
+            iv_arrow_left.setVisibility(GONE);
+        }
+    }
     public RoundedImageView getAvatarIV(){
         return iv_user_avatar;
     }
