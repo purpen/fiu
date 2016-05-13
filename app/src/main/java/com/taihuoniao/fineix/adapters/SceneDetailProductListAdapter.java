@@ -67,10 +67,22 @@ public class SceneDetailProductListAdapter extends BaseAdapter {
             holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getBanner_asset(), activity));
         }
         holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-        if ("1".equals(list.get(position).getAttrbute())) {
-            holder.img.setVisibility(View.VISIBLE);
-        } else {
-            holder.img.setVisibility(View.INVISIBLE);
+        switch (list.get(position).getAttrbute()) {
+            case "1":
+                holder.img.setImageResource(R.mipmap.product_fiu);
+                break;
+            case "2":
+                holder.img.setImageResource(R.mipmap.product_taobao);
+                break;
+            case "3":
+                holder.img.setImageResource(R.mipmap.product_tianmao);
+                break;
+            case "4":
+                holder.img.setImageResource(R.mipmap.product_jingdong);
+                break;
+            default:
+                holder.img.setVisibility(View.INVISIBLE);
+                break;
         }
         ClickListener clickListener = new ClickListener(activity, list, position);
         holder.slidingFocusImageView.setOnItemClickListener(clickListener);

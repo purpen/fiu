@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -47,9 +48,10 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     private WaittingDialog dialog;
 
 
+
     @Override
     protected void requestNet() {
-//        handler.sendMessageDelayed()
+
     }
 
     @Override
@@ -150,6 +152,9 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case -2:
+
+                    break;
                 case DataConstants.SCENE_LIST:
                     pullToRefreshLayout.onRefreshComplete();
                     dialog.dismiss();

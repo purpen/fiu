@@ -268,7 +268,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         dialog.dismiss();
                         break;
                 }
-                Toast.makeText(SearchURLActivity.this, "商品id = " + id + ",类型 = " + type, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchURLActivity.this, "商品id = " + id + ",类型 = " + type, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -293,7 +293,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         String price = priceTv.getText().toString();
                         TagItem tagItem = new TagItem(name, price);
                         tagItem.setType(type);
-                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
+//                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
                         tagItem.setId(netAdd.getData().getId());
                         tagItem.setImagePath(imagePath);
                         Intent intent = new Intent();

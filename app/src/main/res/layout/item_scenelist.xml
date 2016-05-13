@@ -69,7 +69,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="11dp"
-                android:src="@mipmap/eye_heiht_22px"/>
+                android:src="@mipmap/eye_white"/>
 
             <TextView
                 android:id="@+id/item_scenelist_view_count"
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="11dp"
                 android:layout_marginLeft="13dp"
-                android:src="@mipmap/like_height_22px"/>
+                android:src="@mipmap/heart_white"/>
 
             <TextView
                 android:id="@+id/item_scenelist_love_count"
@@ -98,17 +98,18 @@
 
         <TextView
             android:id="@+id/item_scenelist_scene_title"
-            android:layout_width="wrap_content"
+            android:layout_width="256dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:background="@mipmap/scene_title_background"
             android:gravity="center_vertical"
             android:lineSpacingExtra="8dp"
             android:maxLines="2"
-            android:maxWidth="265dp"
+            android:paddingBottom="3dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="5dp"
+            android:text="最美的不是下雨天，是曾与你躲过雨的屋檐"
             android:textColor="@color/white"
             android:textSize="20sp"/>
 
@@ -123,7 +124,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="11dp"
-                android:src="@mipmap/star_height_22px"/>
+                android:src="@mipmap/star_white"/>
 
             <TextView
                 android:id="@+id/item_scenelist_suoshuqingjing"
@@ -165,8 +166,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="11dp"
-
-                android:src="@mipmap/location_height_22px"/>
+                android:src="@mipmap/location_white_width_16px"/>
 
             <TextView
                 android:id="@+id/item_scenelist_location"

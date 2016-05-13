@@ -103,7 +103,6 @@ public class SceneListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         if (list != null) {
 //            holder.backgroundImg.setTag(list.get(position).getCover_url());
 //            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
@@ -154,6 +153,13 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.suoshuQingjing.setText(subsList.get(position).getScene_title());
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
+        }
+        if (holder.sceneTitle.getText().length() < 8) {
+            holder.sceneTitle.setTextSize(40);
+        } else if (holder.sceneTitle.getText().length() >= 13) {
+            holder.sceneTitle.setTextSize(20);
+        } else {
+            holder.sceneTitle.setTextSize(30);
         }
         return convertView;
     }

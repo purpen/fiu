@@ -72,7 +72,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void requestNet() {
-        DataPaser.userInfoParser(handler);
+
     }
 
     @OnClick({R.id.activity_all_order_myorderrelative, R.id.activity_all_order_daifukuanrelative, R.id.activity_all_order_daifahuorelative,
@@ -119,6 +119,12 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
             case R.id.activity_all_order_ymxrelative:
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DataPaser.userInfoParser(handler);
     }
 
     private Handler handler = new Handler() {

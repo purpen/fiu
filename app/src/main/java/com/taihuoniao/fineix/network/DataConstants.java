@@ -149,12 +149,19 @@ public class DataConstants {
     public static final int PARSER_USER_INFO = 24;
     public static final int PASER_SHOPCART_INVENTORY_ITEM = 23;
     public static final int FIU_USER = 22;
+    //购物车跳转到首页需要切换到品页面的广播
+    public static final String BroadShopCart = "com.taihuoniao.fiu.shopcart";
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";
 
     public static final String LOGIN_INFO = "LOGIN_INFO";
-
+    public static final String SHAREDPREFRENCES_FIRST_IN = "fiu_first_in";//第一次进入app
+    public static final String FIRST_IN_QING = "FirstInQing";//判断是不是第一次进入情界面
+    public static final String FIRST_IN_JING = "FirstInJing";//判断是不是第一次进入景界面
+    public static final String FIRST_IN_FIU = "FirstInFiu";//第一次进入Fiu
+    public static final String FIRST_IN_PIN = "FirstInPin";//第一次进入品
+    public static final String FIRST_IN_WO = "FirstInWo";//第一次进入我
     //登录
     public static final int PARSER_LOGIN = 9;
     //网络数据请求失败

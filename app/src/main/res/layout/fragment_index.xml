@@ -81,4 +81,11 @@
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->
     <!--android:text="选择和搜索情景" />-->
+    <TextView
+        android:id="@+id/fragment_index_emptyview"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="没找到？\n或许Fiu首页有你要查的东西"/>
 </FrameLayout>

@@ -76,7 +76,7 @@
         android:layout_above="@id/bottom_line"
         android:layout_below="@id/top_line"
         android:gravity="center"
-        android:text="暂无评论"
+        android:text="你可是第一个看到它的人，快来评论一下吧"
         android:visibility="gone"/>
 
     <ProgressBar

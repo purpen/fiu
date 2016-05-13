@@ -69,6 +69,7 @@
     <string name="all_order">全部订单</string>
     <!--删除收货地址界面-->
     <string name="delete_success">删除成功</string>
+    <string name="edit_address">编辑收货地址</string>
     <!-- 选择收货时间-->
     <string name="transfer_time_a">任意时间</string>
     <string name="transfer_time_b">周一到周五</string>

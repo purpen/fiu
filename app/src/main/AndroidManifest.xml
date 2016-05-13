@@ -51,6 +51,9 @@
             android:name=".user.AllOrderActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".user.SelectAddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".user.ShopOrderListActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -77,9 +80,6 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".product.PayWayActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".user.SelectAddressActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".product.ShopCarActivity"
@@ -118,7 +118,7 @@
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/NoTitleFullscreen"
             />
         <activity
             android:name=".zxing.activity.CaptureActivity"

@@ -266,6 +266,7 @@
         android:id="@+id/activity_all_order_ymxrelative"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:visibility="gone"
         android:background="@color/white">
 
         <ImageView

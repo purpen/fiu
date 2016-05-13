@@ -81,10 +81,22 @@ public class GoodListAdapter extends BaseAdapter {
                 holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
             }
             holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-            if (list.get(position).getAttrbute().equals("1")) {
-                holder.img.setVisibility(View.VISIBLE);
-            } else {
-                holder.img.setVisibility(View.INVISIBLE);
+            switch (list.get(position).getAttrbute()) {
+                case "1":
+                    holder.img.setImageResource(R.mipmap.product_fiu);
+                    break;
+                case "2":
+                    holder.img.setImageResource(R.mipmap.product_taobao);
+                    break;
+                case "3":
+                    holder.img.setImageResource(R.mipmap.product_tianmao);
+                    break;
+                case "4":
+                    holder.img.setImageResource(R.mipmap.product_jingdong);
+                    break;
+                default:
+                    holder.img.setVisibility(View.INVISIBLE);
+                    break;
             }
             ClickListener clickListener = new ClickListener(activity, list, null, position);
             holder.slidingFocusImageView.setOnItemClickListener(clickListener);
@@ -98,10 +110,22 @@ public class GoodListAdapter extends BaseAdapter {
                 holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, searchList.get(position).getBanners(), activity));
             }
             holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-            if (searchList.get(position).getAttrbute().equals("1")) {
-                holder.img.setVisibility(View.VISIBLE);
-            } else {
-                holder.img.setVisibility(View.INVISIBLE);
+            switch (searchList.get(position).getAttrbute()) {
+                case "1":
+                    holder.img.setImageResource(R.mipmap.product_fiu);
+                    break;
+                case "2":
+                    holder.img.setImageResource(R.mipmap.product_taobao);
+                    break;
+                case "3":
+                    holder.img.setImageResource(R.mipmap.product_tianmao);
+                    break;
+                case "4":
+                    holder.img.setImageResource(R.mipmap.product_jingdong);
+                    break;
+                default:
+                    holder.img.setVisibility(View.INVISIBLE);
+                    break;
             }
             ClickListener clickListener = new ClickListener(activity, null, searchList, position);
             holder.slidingFocusImageView.setOnItemClickListener(clickListener);

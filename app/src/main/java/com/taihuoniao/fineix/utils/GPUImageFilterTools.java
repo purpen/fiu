@@ -106,6 +106,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageWhiteBalanceFilter;
 public class GPUImageFilterTools {
     public static FilterList getList() {
         final FilterList filters = new FilterList();
+        filters.addFilter("原图",FilterType.NORMAL);
         filters.addFilter("Contrast", FilterType.CONTRAST);
         filters.addFilter("Invert", FilterType.INVERT);
         filters.addFilter("Pixelation", FilterType.PIXELATION);
@@ -130,32 +131,32 @@ public class GPUImageFilterTools {
         filters.addFilter("Vignette", FilterType.VIGNETTE);
         filters.addFilter("ToneCurve", FilterType.TONE_CURVE);
 
-        filters.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
-        filters.addFilter("Blend (Source Over)", FilterType.BLEND_SOURCE_OVER);
-        filters.addFilter("Blend (Color Burn)", FilterType.BLEND_COLOR_BURN);
-        filters.addFilter("Blend (Color Dodge)", FilterType.BLEND_COLOR_DODGE);
-        filters.addFilter("Blend (Darken)", FilterType.BLEND_DARKEN);
-        filters.addFilter("Blend (Dissolve)", FilterType.BLEND_DISSOLVE);
-        filters.addFilter("Blend (Exclusion)", FilterType.BLEND_EXCLUSION);
-        filters.addFilter("Blend (Hard Light)", FilterType.BLEND_HARD_LIGHT);
-        filters.addFilter("Blend (Lighten)", FilterType.BLEND_LIGHTEN);
-        filters.addFilter("Blend (Add)", FilterType.BLEND_ADD);
-        filters.addFilter("Blend (Divide)", FilterType.BLEND_DIVIDE);
-        filters.addFilter("Blend (Multiply)", FilterType.BLEND_MULTIPLY);
-        filters.addFilter("Blend (Overlay)", FilterType.BLEND_OVERLAY);
-        filters.addFilter("Blend (Screen)", FilterType.BLEND_SCREEN);
-        filters.addFilter("Blend (Alpha)", FilterType.BLEND_ALPHA);
-        filters.addFilter("Blend (Color)", FilterType.BLEND_COLOR);
-        filters.addFilter("Blend (Hue)", FilterType.BLEND_HUE);
-        filters.addFilter("Blend (Saturation)", FilterType.BLEND_SATURATION);
-        filters.addFilter("Blend (Luminosity)", FilterType.BLEND_LUMINOSITY);
-        filters.addFilter("Blend (Linear Burn)", FilterType.BLEND_LINEAR_BURN);
-        filters.addFilter("Blend (Soft Light)", FilterType.BLEND_SOFT_LIGHT);
-        filters.addFilter("Blend (Subtract)", FilterType.BLEND_SUBTRACT);
-        filters.addFilter("Blend (Chroma Key)", FilterType.BLEND_CHROMA_KEY);
-        filters.addFilter("Blend (Normal)", FilterType.BLEND_NORMAL);
-
-        filters.addFilter("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA);
+//        filters.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
+//        filters.addFilter("Blend (Source Over)", FilterType.BLEND_SOURCE_OVER);
+//        filters.addFilter("Blend (Color Burn)", FilterType.BLEND_COLOR_BURN);
+//        filters.addFilter("Blend (Color Dodge)", FilterType.BLEND_COLOR_DODGE);
+//        filters.addFilter("Blend (Darken)", FilterType.BLEND_DARKEN);
+//        filters.addFilter("Blend (Dissolve)", FilterType.BLEND_DISSOLVE);
+//        filters.addFilter("Blend (Exclusion)", FilterType.BLEND_EXCLUSION);
+//        filters.addFilter("Blend (Hard Light)", FilterType.BLEND_HARD_LIGHT);
+//        filters.addFilter("Blend (Lighten)", FilterType.BLEND_LIGHTEN);
+//        filters.addFilter("Blend (Add)", FilterType.BLEND_ADD);
+//        filters.addFilter("Blend (Divide)", FilterType.BLEND_DIVIDE);
+//        filters.addFilter("Blend (Multiply)", FilterType.BLEND_MULTIPLY);
+//        filters.addFilter("Blend (Overlay)", FilterType.BLEND_OVERLAY);
+//        filters.addFilter("Blend (Screen)", FilterType.BLEND_SCREEN);
+//        filters.addFilter("Blend (Alpha)", FilterType.BLEND_ALPHA);
+//        filters.addFilter("Blend (Color)", FilterType.BLEND_COLOR);
+//        filters.addFilter("Blend (Hue)", FilterType.BLEND_HUE);
+//        filters.addFilter("Blend (Saturation)", FilterType.BLEND_SATURATION);
+//        filters.addFilter("Blend (Luminosity)", FilterType.BLEND_LUMINOSITY);
+//        filters.addFilter("Blend (Linear Burn)", FilterType.BLEND_LINEAR_BURN);
+//        filters.addFilter("Blend (Soft Light)", FilterType.BLEND_SOFT_LIGHT);
+//        filters.addFilter("Blend (Subtract)", FilterType.BLEND_SUBTRACT);
+//        filters.addFilter("Blend (Chroma Key)", FilterType.BLEND_CHROMA_KEY);
+//        filters.addFilter("Blend (Normal)", FilterType.BLEND_NORMAL);
+//
+//        filters.addFilter("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA);
         filters.addFilter("Gaussian Blur", FilterType.GAUSSIAN_BLUR);
         filters.addFilter("Crosshatch", FilterType.CROSSHATCH);
 
@@ -204,6 +205,8 @@ public class GPUImageFilterTools {
 
     public static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
         switch (type) {
+            case NORMAL:
+                return new GPUImageFilter();
             case CONTRAST:
                 return new GPUImageContrastFilter(2.0f);
             case GAMMA:
@@ -400,7 +403,7 @@ public class GPUImageFilterTools {
     }
 
     public enum FilterType {
-        CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
+        NORMAL,CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
         SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME, OPACITY, RGB, WHITE_BALANCE, VIGNETTE, TONE_CURVE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
         BLEND_DISSOLVE, BLEND_EXCLUSION, BLEND_SOURCE_OVER, BLEND_HARD_LIGHT, BLEND_LIGHTEN, BLEND_ADD, BLEND_DIVIDE, BLEND_MULTIPLY, BLEND_OVERLAY, BLEND_SCREEN, BLEND_ALPHA,
         BLEND_COLOR, BLEND_HUE, BLEND_SATURATION, BLEND_LUMINOSITY, BLEND_LINEAR_BURN, BLEND_SOFT_LIGHT, BLEND_SUBTRACT, BLEND_CHROMA_KEY, BLEND_NORMAL, LOOKUP_AMATORKA,

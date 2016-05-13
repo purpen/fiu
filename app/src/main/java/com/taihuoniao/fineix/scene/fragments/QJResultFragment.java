@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
@@ -38,6 +39,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
     private PullToRefreshGridView pullToRefreshView;
     private GridView gridView;
     private ProgressBar progressBar;
+    private TextView emptyView;
     //情景列表
     private int page = 1;
     private List<SearchBean.SearchItem> list;
@@ -67,6 +69,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         pullToRefreshView = (PullToRefreshGridView) view.findViewById(R.id.fragment_qjresult_pullrefreshview);
         gridView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_qjresult_progress);
+        emptyView = (TextView) view.findViewById(R.id.fragment_qjresult_emptyview);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -122,6 +125,11 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
                             list.clear();
                         }
                         list.addAll(netSearch.getData().getRows());
+                        if (list.size() <= 0) {
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
                         allQingjingGridAdapter.notifyDataSetChanged();
                     }
                     break;

@@ -19,7 +19,7 @@ import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
-import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class SelectAddressActivity extends Activity implements View.OnClickListener {
     //控件
-    private GlobalTitleLayout titleLayout;
+    private MyGlobalTitleLayout titleLayout;
     private TextView addNewAddressTv;
     private LinearLayout emptyView;
     private PullToRefreshListView pullToRefresh;
@@ -62,7 +62,12 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 
     private void setData() {
         titleLayout.setTitle("选择收货地址");
-        titleLayout.setBackListener(new View.OnClickListener() {
+        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setRightShopCartButton(false);
+        titleLayout.setRightSearchButton(false);
+        titleLayout.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -79,7 +84,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         });
         addNewAddressTv.setOnClickListener(this);
         pullToRefresh.setPullToRefreshEnabled(false);
-        listView.setEmptyView(emptyView);
+//        listView.setEmptyView(emptyView);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this, mHandler, dialog);
@@ -106,7 +111,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     }
 
     private void initView() {
-        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_select_address_title);
+        titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_select_address_title);
         addNewAddressTv = (TextView) findViewById(R.id.activity_select_address_addnewaddresstv);
         emptyView = (LinearLayout) findViewById(R.id.activity_select_address_emptylinear);
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
@@ -174,6 +179,11 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     dialog.dismiss();
                     List<AddressBean> list1 = (List<AddressBean>) msg.obj;
                     list.addAll(list1);
+                    if(list1.size()<=0){
+                        emptyView.setVisibility(View.VISIBLE);
+                    }else{
+                        emptyView.setVisibility(View.GONE);
+                    }
                     listViewAdapter.notifyDataSetChanged();
                     break;
                 case DataConstants.NETWORK_FAILURE:

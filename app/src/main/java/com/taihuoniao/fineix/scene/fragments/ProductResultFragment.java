@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
@@ -34,6 +35,7 @@ public class ProductResultFragment extends BaseFragment {
     private PullToRefreshListView pullToRefreshView;
     private ListView listView;
     private ProgressBar progressBar;
+    private TextView emptyView;
     private WaittingDialog dialog;
     //产品列表
     private int page = 1;
@@ -63,6 +65,7 @@ public class ProductResultFragment extends BaseFragment {
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_product_result_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_product_result_progressBar);
+        emptyView = (TextView) view.findViewById(R.id.fragment_product_result_emptyview);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -113,6 +116,11 @@ public class ProductResultFragment extends BaseFragment {
                             list.clear();
                         }
                         list.addAll(netSearch.getData().getRows());
+                        if (list.size() <= 0) {
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyView.setVisibility(View.GONE);
+                        }
                         goodListAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getActivity(), netSearch.getMessage(), Toast.LENGTH_SHORT).show();

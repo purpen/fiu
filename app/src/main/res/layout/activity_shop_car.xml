@@ -116,7 +116,7 @@
             android:layout_centerHorizontal="true"
             android:drawablePadding="15dp"
             android:drawableTop="@mipmap/shopcart_grey"
-            android:text="您的购物车内暂无商品！"
+            android:text="购物车又空啦，回“品”入点新货吧"
             android:textSize="14sp" />
 
         <Button

@@ -46,6 +46,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -77,6 +78,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView locationImg;
     private TextView locationTv;
     private TextView timeTv;
+    private LinearLayout leftLabelLinear;
     private ImageView userHead;
     private TextView userName;
     private TextView userInfo;
@@ -117,6 +119,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //当前用户是否已经点赞
     private int isLove = 0;//0是未点赞，1是已点赞
     private SceneDetails netScene = null;//网络请求返回数据
+    private SceneDetails.UserInfo netUserInfo = null;//网络请求返回用户信息
     //场景下的商品
     private List<ProductAndSceneListBean.SceneItem> sceneProductList;
     private SceneDetailProductListAdapter sceneProductAdapter;
@@ -144,6 +147,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
         locationTv = (TextView) findViewById(R.id.activity_scenedetails_location);
         timeTv = (TextView) findViewById(R.id.activity_scenedetails_time);
+        leftLabelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_left_label);
         userHead = (ImageView) findViewById(R.id.activity_scenedetails_userhead);
         userName = (TextView) findViewById(R.id.activity_scenedetails_username);
         userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
@@ -180,6 +184,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
         backgroundImg.setLayoutParams(lp);
+        ViewGroup.LayoutParams rLp = imgRelative.getLayoutParams();
+        rLp.width = lp.width;
+        rLp.height = lp.height;
+        imgRelative.setLayoutParams(rLp);
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
@@ -188,6 +196,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         locationTv.setOnClickListener(this);
+        leftLabelLinear.setOnClickListener(this);
         commentImg.setOnClickListener(this);
         commentNum.setOnClickListener(this);
         moreImg.setOnClickListener(this);
@@ -209,7 +218,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         sceneProductAdapter = new SceneDetailProductListAdapter(SceneDetailActivity.this, sceneProductList);
         productListView.setAdapter(sceneProductAdapter);
         nearProductList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList,null);
+        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList, null);
         nearProductListView.setAdapter(goodListAdapter);
         options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.mipmap.default_backround)
@@ -412,9 +421,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         //添加商品
                         addProductToImg();
                         changjingTitle.setText(netSceneDetails.getTitle());
+                        if (changjingTitle.getText().length() < 8) {
+                            changjingTitle.setTextSize(40);
+                        } else if (changjingTitle.getText().length() >= 13) {
+                            changjingTitle.setTextSize(20);
+                        } else {
+                            changjingTitle.setTextSize(30);
+                        }
                         suoshuqingjingTv.setText(netSceneDetails.getScene_title());
                         locationTv.setText(netSceneDetails.getAddress());
                         timeTv.setText(netSceneDetails.getCreated_at());
+                        netUserInfo = netSceneDetails.getUser_info();
                         ImageLoader.getInstance().displayImage(netSceneDetails.getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netSceneDetails.getUser_info().getNickname());
                         isSpertAndSummary(userInfo, netSceneDetails.getUser_info().getIs_expert(), netSceneDetails.getUser_info().getSummary());
@@ -472,21 +489,21 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             tagItem.setPrice(product.getPrice());
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            labelView.pointOrAll(product.getX() <= 0.5, isShowAll);
-            if (product.getX() > 0.5) {
-                labelView.post(new Runnable() {
-                    @Override
-                    public void run() {
-//                        Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
-                        labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
-                        labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
-                    }
-                });
-            } else {
+            labelView.pointOrAll(true, isShowAll);
+//            if (product.getX() > 0.5) {
+//                labelView.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
+//                        labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
+//                        labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
+//                    }
+//                });
+//            } else {
 //                Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
                 labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
                 labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
-            }
+//            }
             labelView.setLayoutParams(labelLp);
             imgRelative.addView(labelView);
             labelView.wave();
@@ -516,7 +533,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(SceneDetailActivity.this, "跳转到搜索场景界面" + tagsTitleList.get(finalI), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SceneDetailActivity.this, SearchActivity.class);
+                    intent.putExtra("q",tagsTitleList.get(finalI));
+                    intent.putExtra("t", "9");
+                    startActivity(intent);
                 }
             });
             labelLinear.addView(view);
@@ -538,6 +558,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_scenedetails_left_label:
+                if(netUserInfo==null){
+                    dialog.show();
+                    DataPaser.sceneDetails(id,handler);
+                    return;
+                }
+                Intent intent = new Intent(SceneDetailActivity.this,UserCenterActivity.class);
+                intent.putExtra(FocusFansActivity.USER_ID_EXTRA,netUserInfo.getUser_id());
+                startActivity(intent);
+                break;
             case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
                 Toast.makeText(SceneDetailActivity.this, "分享场景", Toast.LENGTH_SHORT).show();
@@ -557,6 +587,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_scenedetails_locationimg:
             case R.id.activity_scenedetails_location:
+//                跳转到地图界面，查看附近的场景
                 Toast.makeText(SceneDetailActivity.this, "跳转到地图界面", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_background:
@@ -598,11 +629,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     DataPaser.sceneDetails(id + "", handler);
                     return;
                 }
-                Intent intent = new Intent(SceneDetailActivity.this, CommentListActivity.class);
-                intent.putExtra("target_id", id);
-                intent.putExtra("type", 12 + "");
-                intent.putExtra("target_user_id", netScene.getUser_info().getUser_id());
-                startActivity(intent);
+                Intent intent2 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
+                intent2.putExtra("target_id", id);
+                intent2.putExtra("type", 12 + "");
+                intent2.putExtra("target_user_id", netScene.getUser_info().getUser_id());
+                startActivity(intent2);
                 break;
             case R.id.activity_scenedetails_moreuser:
                 break;
@@ -617,7 +648,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         switch (parent.getId()) {
             case R.id.activity_scenedetails_grid:
                 Intent intent1 = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA,headList.get(position).getUser().getUser_id());
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, headList.get(position).getUser().getUser_id());
                 startActivity(intent1);
                 break;
         }

@@ -2,7 +2,9 @@ package com.taihuoniao.fineix.scene;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +29,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     //界面下的控件
     private ImageView backImg;
     private EditText editText;
+    private ImageView deleteImg;
+    private TextView cancelTv;
     private RelativeLayout qjRelative;
     private TextView qjTv;
     private TextView qjLine;
@@ -51,6 +55,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_search);
         backImg = (ImageView) findViewById(R.id.activity_search_back);
         editText = (EditText) findViewById(R.id.activity_search_edittext);
+        deleteImg = (ImageView) findViewById(R.id.activity_search_delete);
+        cancelTv = (TextView) findViewById(R.id.activity_search_cancel);
         qjRelative = (RelativeLayout) findViewById(R.id.activity_search_qjrelative);
         qjTv = (TextView) findViewById(R.id.activity_search_qjtv);
         qjLine = (TextView) findViewById(R.id.activity_search_qjline);
@@ -74,6 +80,28 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         backImg.setFocusable(true);
         backImg.setFocusableInTouchMode(true);
         backImg.requestFocus();
+        deleteImg.setOnClickListener(this);
+        cancelTv.setOnClickListener(this);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>0){
+                    deleteImg.setVisibility(View.VISIBLE);
+                }else{
+                    deleteImg.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         editText.setOnKeyListener(new View.OnKeyListener() {//输入完后按键盘上的搜索键【回车键改为了搜索键】
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -97,6 +125,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_search_delete:
+                editText.setText("");
+                break;
             case R.id.activity_search_productrelative:
                 t = "10";
                 if (productResultFragment != null) {
@@ -122,6 +153,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     refreshData();
                 } else {
                     selectFragment();
+                }
+                break;
+            case R.id.activity_search_cancel:
+                if(!TextUtils.isEmpty(editText.getText().toString())){
+                    editText.setText("");
+                }else{
+                    onBackPressed();
                 }
                 break;
             case R.id.activity_search_back:

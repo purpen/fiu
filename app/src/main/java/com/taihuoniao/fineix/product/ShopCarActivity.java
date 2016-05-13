@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.adapters.ShopCartAdapter;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -363,7 +364,12 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_stroll_shopcart_empty://购物车为空时，去逛逛
-                onBackPressed();
+//                onBackPressed();
+                Intent broadIntent = new Intent();
+                broadIntent.setAction(DataConstants.BroadShopCart);
+                sendBroadcast(broadIntent);
+                Intent intent = new Intent(ShopCarActivity.this, MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.checkbox_choice_all_shopcart_item://全选
                 for (int i = 0; i < totalList.size(); i++) {

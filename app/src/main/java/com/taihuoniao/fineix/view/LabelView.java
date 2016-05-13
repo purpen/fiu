@@ -204,6 +204,9 @@ public class LabelView extends LinearLayout {
         }
         labelParams.setMargins(left + (gpuRelative.getWidth() - params.width) / 2, top, 0, 0);
 //        if (tagInfo.isLeft()) {
+        Log.e("<<<", "left=" + left + ",top=" + top + ",params.width=" + params.width + ",params.heigt=" + params.height + ",画布宽=" + mImageView.getWidth()
+                + ",画布高=" + mImageView.getHeight());
+        //0.2641975308641975,0.5
         tagInfo.setX(than(left, params.width));
         tagInfo.setY(than(top, params.height));
 //        } else {

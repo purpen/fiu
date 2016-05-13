@@ -32,6 +32,7 @@
                     android:src="@mipmap/ic_launcher"/>
 
                 <LinearLayout
+                    android:background="@drawable/jianbian_scenelist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -41,14 +42,14 @@
 
                     <TextView
                         android:id="@+id/activity_scenedetails_changjing_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="256dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:background="@mipmap/scene_title_background"
                         android:gravity="center_vertical"
                         android:lineSpacingExtra="8dp"
                         android:maxLines="2"
-                        android:maxWidth="265dp"
+                        android:paddingBottom="3dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="5dp"
@@ -68,7 +69,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="11dp"
-                            android:src="@mipmap/star_height_22px"/>
+                            android:src="@mipmap/star_white"/>
 
                         <TextView
                             android:id="@+id/activity_scenedetails_suoshuqingjing"
@@ -77,25 +78,9 @@
                             android:layout_marginLeft="6dp"
                             android:gravity="center_vertical"
                             android:text="232"
-                            android:textColor="#000000"
+                            android:textColor="@color/white"
                             android:textSize="9sp"/>
 
-                        <ImageView
-                            android:id="@+id/activity_scenedetails_locationimg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="11dp"
-                            android:layout_marginLeft="22dp"
-                            android:src="@mipmap/location_height_22px"/>
-
-                        <TextView
-                            android:id="@+id/activity_scenedetails_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
-                            android:gravity="center_vertical"
-                            android:text="北京市 朝阳区"
-                            android:textColor="#212121"
-                            android:textSize="9sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -103,7 +88,7 @@
                             android:layout_marginLeft="8dp"
                             android:gravity="center_vertical"
                             android:text="|"
-                            android:textColor="#212121"
+                            android:textColor="@color/white"
                             android:textSize="9sp"/>
 
                         <TextView
@@ -113,7 +98,32 @@
                             android:layout_marginLeft="8dp"
                             android:gravity="center_vertical"
                             android:text="3天前"
-                            android:textColor="#212121"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/activity_scenedetails_locationimg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="11dp"
+                            android:layout_marginLeft="22dp"
+                            android:src="@mipmap/location_white_width_16px"/>
+
+                        <TextView
+                            android:id="@+id/activity_scenedetails_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="北京市 朝阳区"
+                            android:textColor="@color/white"
                             android:textSize="9sp"/>
                     </LinearLayout>
 
@@ -125,6 +135,7 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
+                            android:id="@+id/activity_scenedetails_left_label"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="720"

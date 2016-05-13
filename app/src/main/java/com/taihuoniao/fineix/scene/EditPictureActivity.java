@@ -131,11 +131,22 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setTitle(R.string.tools);
         titleLayout.setContinueListener(this);
         EffectUtil.clear();
-        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+        ImageLoader.getInstance().loadImage(imageUri.toString(), new ImageLoadingListener() {
             @Override
-            public void callback(Bitmap result) {
-                currentBitmap = result;
-                gpuImageView.setImage(result);
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                Log.e("<<<图片地址","uri="+imageUri);
+                currentBitmap = loadedImage;
+                gpuImageView.setImage(loadedImage);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
                 if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
                     int containerHeight = gpuRelative.getHeight();
@@ -152,9 +163,37 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
                 initEditView();
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
 
             }
         });
+//        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+//            @Override
+//            public void callback(Bitmap result) {
+//                currentBitmap = result;
+//                gpuImageView.setImage(result);
+//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
+//                if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
+//                    int containerHeight = gpuRelative.getHeight();
+//                    int systemHeight = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
+//                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
+//                    lp.width = lp.height * 3 / 4;
+//                } else {
+//                    int containerWidth = gpuRelative.getWidth();
+//                    int systemWidth = MainApplication.getContext().getScreenWidth();
+//                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
+//                    lp.height = lp.width * 4 / 3;
+//                }
+//                picWidth = lp.width;
+//                picHeight = lp.height;
+//                gpuImageView.setLayoutParams(lp);
+//                initEditView();
+//
+//            }
+//        });
         //设置布局大小一样
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
