@@ -42,10 +42,11 @@
 
             <TextView
                 android:id="@+id/tv_num"
-                android:layout_width="@dimen/dp8"
-                android:layout_height="@dimen/dp8"
+                android:layout_width="@dimen/dp5"
+                android:layout_height="@dimen/dp5"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp5"
+                android:layout_marginRight="@dimen/dp5"
                 android:layout_toRightOf="@+id/tv_name"
                 android:background="@drawable/cart_num_bg"
                 android:visibility="gone"

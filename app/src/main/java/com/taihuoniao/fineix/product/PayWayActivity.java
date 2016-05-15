@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -21,10 +22,13 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.pay.alipay.AliPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
+import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.wxapi.WXPayEntryActivity;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -58,6 +62,8 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private boolean mBack = true;//判断是否让返回键生效
     private DecimalFormat df = null;
     private String orderId;
+    private Handler mHandler=new Handler();
+
 //    private Handler mHandler = new Handler() {
 //        @Override
 //        public void handleMessage(Message msg) {
@@ -295,20 +301,61 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                     AliPay.pay(orderId, PayWayActivity.this, new AliPay.AlipayListener() {
                         @Override
                         public void onSuccess() {
-
+                            delayThreeSeconds();
                         }
 
                         @Override
-                        public void onFailure() {
-
+                        public void onFailure() {//可能支付失败
+                            delayThreeSeconds();
                         }
                     });
                 }else if (TextUtils.equals(NetworkConstance.WX_PAY,mPayway)){
                     WXPay.pay(orderId,PayWayActivity.this);
+                    WXPayEntryActivity.setWXPayResultListener(new WXPayEntryActivity.WXPayResultListener() {
+                        @Override
+                        public void onSuccess() {
+                            LogUtil.e("onSuccess", "支付成功");
+                            delayThreeSeconds();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            LogUtil.e("onCancel", "取消支付");
+                            delayThreeSeconds();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            LogUtil.e("onFailure", "支付失败");
+                            delayThreeSeconds();
+                        }
+                    });
                 }
                 break;
         }
     }
+
+    //延时三秒再跳转去订单支付详情界面是为给服务器留时间以确保其及时更新数据
+    private void delayThreeSeconds() {
+        mBack = false;
+        mDialog.show();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDialog.dismiss();
+                toPayDetailsActivity();
+            }
+        }, 3000);
+    }
+
+    //跳到订单支付详情界面
+    private void toPayDetailsActivity() {
+        Intent intent = new Intent(PayWayActivity.this, PayDetailsActivity.class);
+        intent.putExtra("rid", mRid);
+        intent.putExtra("payway", mPayway);
+        startActivity(intent);
+    }
+
 
     /**
      * call alipay sdk pay. 调用SDK支付

@@ -48,8 +48,21 @@ public class SystemNoticeActivity extends BaseActivity {
     private int curPage = 1;
     private WaittingDialog dialog;
     private ArrayList<SystemNoticeData.SystemNoticeItem> list;
+    private int unread_count;
     public SystemNoticeActivity() {
         super(R.layout.activity_system_notice);
+    }
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(getClass().getSimpleName())){
+            String count = intent.getStringExtra(getClass().getSimpleName());
+            if (TextUtils.isEmpty(count)) return;
+            if (TextUtils.isDigitsOnly(count)){
+                unread_count=Integer.valueOf(intent.getStringExtra(getClass().getSimpleName()));
+            }
+        }
     }
 
     @Override
@@ -148,6 +161,10 @@ public class SystemNoticeActivity extends BaseActivity {
         if (list.size()==0){
             Util.makeToast("暂无数据！");
             return;
+        }
+
+        for (int i=0;i<unread_count;i++){
+            list.get(i).is_unread=true;
         }
 
         if (adapter==null){

@@ -42,12 +42,12 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         holder.tv_name.setTextColor(activity.getResources().getColor(R.color.color_af8323));
         holder.tv_name.setText(item.users.to_user.nickname);
         holder.tv_desc.setText(item.last_content.content);
-        holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
+//        holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.color_333));
         holder.tv_time.setText(item.last_time_at);
         if (item.is_read>0){
             holder.tv_num.setVisibility(View.GONE);
-        }else {
+        }else {//0是未读
             holder.tv_num.setVisibility(View.VISIBLE);
         }
         return convertView;

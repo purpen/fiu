@@ -15,6 +15,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
+import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -138,10 +140,12 @@ public class SystemSettingsActivity extends BaseActivity{
                 if (responseInfo==null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                if (response.isSuccess()){//   退出成功
-                    Util.makeToast(response.getMessage());
+                if (response.isSuccess()){//   退出成功跳转首页
+                    Util.makeToast("退出成功");
                     SPUtil.remove(activity,DataConstants.LOGIN_INFO);
-                    startActivity(new Intent(activity,MainActivity.class));
+                    Intent intent=new Intent(activity,MainActivity.class);
+                    intent.putExtra(IndexFragment.class.getSimpleName(),IndexFragment.class.getSimpleName());
+                    startActivity(intent);
                     finish();
                     return;
                 }

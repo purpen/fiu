@@ -63,22 +63,6 @@ public class WXPay {
                 if (response.isSuccess()) {
                     WXPayParams data = response.getData();
                     wxPay(data);
-                    WXPayEntryActivity.setWXPayResultListener(new WXPayEntryActivity.WXPayResultListener() {
-                        @Override
-                        public void onSuccess() {
-                            LogUtil.e("onSuccess", "支付成功");
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            LogUtil.e("onCancel", "取消支付");
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            LogUtil.e("onFailure", "支付失败");
-                        }
-                    });
                     return;
                 }
                 Util.makeToast(response.getMessage());

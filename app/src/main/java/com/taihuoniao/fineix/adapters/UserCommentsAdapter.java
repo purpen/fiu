@@ -49,6 +49,11 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         holder.tv_desc.setText(item.getContent());
         holder.tv_time.setText(item.getCreated_at());
         holder.iv.setVisibility(View.VISIBLE);
+        if (item.is_unread){
+            holder.dot.setVisibility(View.VISIBLE);
+        }else {
+            holder.dot.setVisibility(View.GONE);
+        }
         imageLoader.displayImage(item.target_small_cover_url,holder.iv,options);
         holder.riv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,8 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
         TextView tv_time;
         @Bind(R.id.iv)
         ImageView iv;
+        @Bind(R.id.dot)
+        TextView dot;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

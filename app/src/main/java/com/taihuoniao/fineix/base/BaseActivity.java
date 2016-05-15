@@ -39,11 +39,11 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getIntentData();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         ShareSDK.initSDK(this);
         super.onCreate(savedInstanceState);
         this.activity = this;
-        getIntentData();
         if (layoutResID != 0) {
             setContentView(layoutResID);
         }

@@ -14,10 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="现在你可以订阅感兴趣的情景来开始"
+        android:text="@string/order_interest_qj"
         android:layout_marginTop="@dimen/dp10"
         android:layout_marginBottom="@dimen/dp10"
-        android:textSize="@dimen/sp12"
+        android:textSize="@dimen/sp10"
         android:textColor="@color/color_666"
         />
     <com.taihuoniao.fineix.view.SlidingFocusImageView
@@ -65,4 +65,11 @@
         android:textSize="@dimen/sp14"
         android:text="下一步"
         android:textColor="@android:color/white" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+        />
 </RelativeLayout>

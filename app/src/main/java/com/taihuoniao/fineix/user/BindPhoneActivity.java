@@ -137,14 +137,24 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.bt_bindPhone: //绑定已有账号
                 mPhoneNumber = mPhone.getText() + "";
                 mPassWordNumber = mPassWord.getText() + "";
                 ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, new RequestCallBack<String>() {
                     @Override
+                    public void onStart() {
+                        v.setEnabled(false);
+                        if (mDialog==null){
+                            mDialog.show();
+                        }
+                    }
+
+                    @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        v.setEnabled(true);
+                        mDialog.dismiss();
                         if (responseInfo == null) return;
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
@@ -161,6 +171,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(HttpException e, String s) {
+                        v.setEnabled(true);
+                        mDialog.dismiss();
                         Util.makeToast("网络异常");
                     }
                 });
@@ -168,9 +180,20 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_click_login_bindPhone: //跳过绑定直接登录
 //                DataPaser.skipBindParser(MainApplication.uuid, openId, unionId, token, nickName, sex, avatarUrl, type, mHandler);
+
                 ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
                     @Override
+                    public void onStart() {
+                        v.setEnabled(false);
+                        if (mDialog==null){
+                            mDialog.show();
+                        }
+                    }
+
+                    @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        v.setEnabled(true);
+                        mDialog.dismiss();
                         if (responseInfo == null) return;
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
@@ -187,6 +210,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(HttpException e, String s) {
+                        v.setEnabled(true);
+                        mDialog.dismiss();
                         Util.makeToast("网络异常");
                     }
                 });

@@ -10,7 +10,8 @@ public class OrderDetails implements Serializable {
     private String rid,created_at,status,payment_method,total_money,pay_money,freight,items_count,express_company,express_no;
     private List<OrderDetailsAddress> addresses;
     private List<OrderDetailsProducts> products;
-
+    public OrderDetailsAddress express_info;
+    public OrderDetailsProducts item;
 
     public String getExpress_company() {
         return express_company;

@@ -39,6 +39,7 @@ public class CommentsBean extends NetBean {
         private User user;
         private String reply_user_nickname;
         public String target_small_cover_url;
+        public boolean is_unread;
         public String getReply_user_nickname() {
             return reply_user_nickname;
         }

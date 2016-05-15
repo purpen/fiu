@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -33,9 +34,11 @@ import butterknife.ButterKnife;
  */
 public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListBean.QingJingItem>{
     private SlidingFocusImageView sfiv;
-    public OrderInterestSlidingAdapter(SlidingFocusImageView sfiv,List list, Activity activity){
+    private ProgressBar progressBar;
+    public OrderInterestSlidingAdapter(SlidingFocusImageView sfiv, List list, Activity activity, ProgressBar progressBar){
         super(list,activity);
         this.sfiv=sfiv;
+        this.progressBar=progressBar;
     }
 
     @Override
@@ -72,18 +75,20 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                 ClientDiscoverAPI.subsQingjing(item.get_id(), new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
+                        if (progressBar!=null) progressBar.setVisibility(View.VISIBLE);
                         view.setEnabled(false);
                         super.onStart();
                     }
 
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
                         if (responseInfo==null) return;
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()){
-                            Util.makeToast(response.getMessage());
+                            Util.makeToast("订阅成功");
                             return;
                         }
 
@@ -92,6 +97,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
 
                     @Override
                     public void onFailure(HttpException e, String s) {
+                        progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
                         Util.makeToast(s);
                     }

@@ -35,7 +35,7 @@
             android:id="@+id/tv_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/qj_location"
+            android:drawableLeft="@mipmap/location_white_width_16px"
             android:drawablePadding="@dimen/dp5"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp10"

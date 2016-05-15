@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -198,13 +199,12 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        LogUtil.e(TAG, LoginInfo.isUserLogin() + "");
         if (LoginInfo.isUserLogin()) {
             rl.setVisibility(View.GONE);
             if (isInitLoad){
                 isInitLoad=false;
             }else {
-//                LogUtil.e(TAG+"onResume", LoginInfo.isUserLogin() + "");
+                LogUtil.e("非首次onResume","加载");
                 loadData();
             }
         } else {

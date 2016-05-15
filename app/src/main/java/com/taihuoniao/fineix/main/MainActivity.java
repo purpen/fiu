@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TabItem;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
@@ -24,6 +27,7 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -72,9 +76,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<TabItem> tabList;
     private ArrayList<Fragment> fragments;
     private Fragment showFragment;
+    private String which = IndexFragment.class.getSimpleName();
 
     public MainActivity() {
         super(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
+            which = IndexFragment.class.getSimpleName();
+        }
+        which2Switch();
+        super.onNewIntent(intent);
+    }
+
+    private void which2Switch() {
+        if (TextUtils.equals(IndexFragment.class.getSimpleName(), which)) {
+            switchFragmentandImg(IndexFragment.class);
+        } else if (TextUtils.equals(MineFragment.class.getSimpleName(), which)) {
+            switchFragmentandImg(MineFragment.class);
+        }
+    }
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
+            which = IndexFragment.class.getSimpleName();
+        }
     }
 
     @Override
@@ -87,7 +117,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (savedInstanceState != null) {
             recoverAllState(savedInstanceState);
         } else {
-            switchFragmentandImg(IndexFragment.class);
+//            if (TextUtils.equals(IndexFragment.class.getSimpleName(),which)){
+//                switchFragmentandImg(IndexFragment.class);
+//            }
+            which2Switch();
         }
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
@@ -191,7 +224,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_nav4: //个人中心
 //                custom_head.setVisibility(View.GONE);
-                switchFragmentandImg(MineFragment.class);
+                if (LoginInfo.isUserLogin()) {
+                    switchFragmentandImg(MineFragment.class);
+                } else {
+                    which = MineFragment.class.getSimpleName();
+                    startActivity(new Intent(activity, ToLoginActivity.class));
+                }
                 break;
         }
     }

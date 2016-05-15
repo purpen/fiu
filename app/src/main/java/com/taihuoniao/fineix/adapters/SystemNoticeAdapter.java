@@ -46,6 +46,11 @@ public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.Syst
         holder.title.setText(item.title);
         holder.tv_desc.setText(item.content);
         holder.tv_time.setText(item.created_at);
+        if (item.is_unread){//未读
+            holder.dot.setVisibility(View.VISIBLE);
+        }else {
+            holder.dot.setVisibility(View.GONE);
+        }
         if (!TextUtils.isEmpty(item.cover_url)){
             holder.riv.setVisibility(View.VISIBLE);
             imageLoader.displayImage(item.cover_url,holder.riv,options);
@@ -60,6 +65,8 @@ public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.Syst
         TextView title;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
+        @Bind(R.id.dot)
+        TextView dot;
         @Bind(R.id.tv_time)
         TextView tv_time;
         @Bind(R.id.riv)

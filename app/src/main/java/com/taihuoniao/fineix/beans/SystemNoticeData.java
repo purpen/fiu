@@ -21,5 +21,6 @@ public class SystemNoticeData{
         public int state;
         public int evt;
         public int send_count;
+        public boolean is_unread;
     }
 }

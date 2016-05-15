@@ -1120,4 +1120,5 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("payaway",payaway);
         HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.PAY_URL, callBack,true);
     }
+
 }

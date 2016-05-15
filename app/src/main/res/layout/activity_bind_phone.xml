@@ -41,10 +41,9 @@
         android:background="@drawable/shap_home_gridview"
         android:ems="8"
         android:hint="手机号"
-        android:inputType="number"
+        android:inputType="phone"
         android:maxLength="11"
         android:paddingLeft="5dp"
-        android:phoneNumber="true"
         android:singleLine="true">
 
         <requestFocus />

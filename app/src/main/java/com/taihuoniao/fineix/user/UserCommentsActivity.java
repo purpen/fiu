@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -16,7 +14,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -38,6 +35,7 @@ public class UserCommentsActivity extends BaseActivity{
     @Bind(R.id.lv)
     ListView lv;
     private int curPage=1;
+    private int unread_count;
     private List<CommentsBean.CommentItem> list;
     private static final String pageSize="9999";
     private static final String COMMENT_TYPE="12";
@@ -46,7 +44,17 @@ public class UserCommentsActivity extends BaseActivity{
     public UserCommentsActivity(){
         super(R.layout.activity_user_comments);
     }
-
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(getClass().getSimpleName())){
+            String count = intent.getStringExtra(getClass().getSimpleName());
+            if (TextUtils.isEmpty(count)) return;
+            if (TextUtils.isDigitsOnly(count)){
+                unread_count=Integer.valueOf(intent.getStringExtra(getClass().getSimpleName()));
+            }
+        }
+    }
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"评论");
@@ -101,6 +109,11 @@ public class UserCommentsActivity extends BaseActivity{
             Util.makeToast("暂无评论");
             return;
         }
+
+        for (int i=0;i<unread_count;i++){
+            list.get(i).is_unread=true;
+        }
+
         if (adapter==null){
             adapter=new UserCommentsAdapter(list,activity);
             lv.setAdapter(adapter);

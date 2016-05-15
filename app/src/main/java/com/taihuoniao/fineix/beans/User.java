@@ -62,6 +62,7 @@ public class User implements Serializable {
         public int fiu_notice_count;
         public int sight_love_count;
         public int message_total_count;
+        public int fiu_alert_count;
         public int order_wait_payment;
         public int order_ready_goods;
         public int order_sended_goods;

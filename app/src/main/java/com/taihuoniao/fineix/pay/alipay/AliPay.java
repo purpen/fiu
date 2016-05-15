@@ -65,7 +65,7 @@ public class AliPay{
 				if (TextUtils.equals(resultStatus, "9000")) {
 					if (listener!=null){
 						listener.onSuccess();
-						Util.makeToast("支付成功");
+//						Util.makeToast("支付成功");
 					}
 				} else {
 					// 判断resultStatus 为非“9000”则代表可能支付失败
@@ -77,7 +77,7 @@ public class AliPay{
 						if (listener!=null){
 							listener.onFailure();
 						}
-						Util.makeToast("支付失败");
+//						Util.makeToast("可能支付失败");
 					}
 				}
 				break;

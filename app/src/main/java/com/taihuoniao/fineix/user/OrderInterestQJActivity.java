@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -42,6 +43,8 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     TextView tv_current;
     @Bind(R.id.tv_sum)
     TextView tv_sum;
+    @Bind(R.id.progress_bar)
+    ProgressBar progress_bar;
     private int curPage = 1;
     private static final String PAGE_SIZE = "10";
     private static final String TYPE_SCENE = "scene";
@@ -121,7 +124,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
         if (list.size() == 0) return;
         tv_sum.setText(String.format("/%s", String.valueOf(list.size())));
         if (adapter == null) {
-            adapter = new OrderInterestSlidingAdapter(sfiv, list, activity);
+            adapter = new OrderInterestSlidingAdapter(sfiv, list, activity,progress_bar);
             sfiv.setGravity(Gravity.CENTER_VERTICAL);
             sfiv.setAdapter(adapter);
         } else {

@@ -51,6 +51,12 @@ public class MessageActivity extends BaseActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        requestNet();
+    }
+
+    @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "消息");
         dialog = new WaittingDialog(this);
@@ -64,13 +70,21 @@ public class MessageActivity extends BaseActivity {
     void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
-            case R.id.item_push_setting:
-                startActivity(new Intent(activity, SystemNoticeActivity.class));
+            case R.id.item_push_setting: //系统通知
+                intent=new Intent(activity, SystemNoticeActivity.class);
+                if (user!=null){
+                    intent.putExtra(SystemNoticeActivity.class.getSimpleName(),user.counter.fiu_notice_count);
+                }
+                startActivity(intent);
                 break;
             case R.id.item_clear_cache: //评论列表
-                startActivity(new Intent(activity, UserCommentsActivity.class));
+                intent=new Intent(activity, UserCommentsActivity.class);
+                if (user!=null){
+                    intent.putExtra(UserCommentsActivity.class.getSimpleName(),user.counter.fiu_comment_count);
+                }
+                startActivity(intent);
                 break;
-            case R.id.item_to_comment:
+            case R.id.item_to_comment: //评论列表
                 startActivity(new Intent(activity,PrivateMessageListActivity.class));
                 break;
             case R.id.item_notice: //提醒
@@ -123,28 +137,7 @@ public class MessageActivity extends BaseActivity {
             item_push_setting.setTipsNum(user.counter.fiu_notice_count); //系统通知
             item_clear_cache.setTipsNum(user.counter.fiu_comment_count); //评论
             item_to_comment.setTipsNum(user.counter.message_count);   //私信
+            item_notice.setTipsNum(user.counter.fiu_alert_count);   //提醒数量
         }
-//        item_notice.setTipsNum();
-//        if (TextUtils.isEmpty(user.realname)) {
-//            tv_real.setVisibility(View.GONE);
-//        } else {
-//            tv_real.setText(user.realname);
-//        }
-//
-//        if (TextUtils.isEmpty(user.nickname)) {
-//            tv_nick.setVisibility(View.GONE);
-//        } else {
-//            tv_nick.setText(user.nickname);
-//        }
-//
-//        if (TextUtils.isEmpty(user.rank_title)) {
-//            tv_rank.setVisibility(View.GONE);
-//        } else {
-//            tv_rank.setText(user.rank_title);
-//        }
-//        tv_qj.setText(String.valueOf(user.scene_count));
-//        tv_cj.setText(String.valueOf(user.sight_count));
-//        tv_focus.setText(String.valueOf(user.follow_count));
-//        tv_fans.setText(String.valueOf(user.fans_count));
     }
 }

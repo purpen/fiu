@@ -60,7 +60,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@null"
                     android:padding="@dimen/dp16"
-                    android:src="@mipmap/settings" />
+                    android:src="@mipmap/edit_info" />
             </RelativeLayout>
 
             <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
