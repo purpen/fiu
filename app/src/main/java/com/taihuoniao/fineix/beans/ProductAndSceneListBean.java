@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,39 +20,74 @@ public class ProductAndSceneListBean extends NetBean {
     }
 
     public static class Data {
-        private List<SceneItem> rows;
+        private List<ProductAndSceneItem> rows;
 
-        public List<SceneItem> getRows() {
+        public List<ProductAndSceneItem> getRows() {
             return rows;
         }
 
-        public void setRows(List<SceneItem> rows) {
+        public void setRows(List<ProductAndSceneItem> rows) {
             this.rows = rows;
         }
     }
 
-    public static class SceneItem {
+    public static class ProductAndSceneItem {
+        private Product product;
+        private String sight_id;
+        private Sight sight;
+
+        public String getSight_id() {
+            return sight_id;
+        }
+
+        public void setSight_id(String sight_id) {
+            this.sight_id = sight_id;
+        }
+
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            this.product = product;
+        }
+
+        public Sight getSight() {
+            return sight;
+        }
+
+        public void setSight(Sight sight) {
+            this.sight = sight;
+        }
+    }
+    public static class Sight{
+        private String scene_title;
+
+        public String getScene_title() {
+            return scene_title;
+        }
+
+        public void setScene_title(String scene_title) {
+            this.scene_title = scene_title;
+        }
+    }
+    public static class Product{
         private String _id;
         private String title;
-        private String market_price;
-        private String attrbute;
+        private String oid;
         private String sale_price;
-        private List<String> banner_asset = new ArrayList<>();
+        private String market_price;
+        private String link;
+        private String attrbute;
+        private String cover_url;
+        private List<String> banner_asset;
 
-        public String getSale_price() {
-            return sale_price;
+        public String get_id() {
+            return _id;
         }
 
-        public void setSale_price(String sale_price) {
-            this.sale_price = sale_price;
-        }
-
-        public List<String> getBanner_asset() {
-            return banner_asset;
-        }
-
-        public void setBanner_asset(List<String> banner_asset) {
-            this.banner_asset = banner_asset;
+        public void set_id(String _id) {
+            this._id = _id;
         }
 
         public String getAttrbute() {
@@ -64,6 +98,30 @@ public class ProductAndSceneListBean extends NetBean {
             this.attrbute = attrbute;
         }
 
+        public List<String> getBanner_asset() {
+            return banner_asset;
+        }
+
+        public void setBanner_asset(List<String> banner_asset) {
+            this.banner_asset = banner_asset;
+        }
+
+        public String getCover_url() {
+            return cover_url;
+        }
+
+        public void setCover_url(String cover_url) {
+            this.cover_url = cover_url;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public void setLink(String link) {
+            this.link = link;
+        }
+
         public String getMarket_price() {
             return market_price;
         }
@@ -72,12 +130,20 @@ public class ProductAndSceneListBean extends NetBean {
             this.market_price = market_price;
         }
 
-        public String get_id() {
-            return _id;
+        public String getSale_price() {
+            return sale_price;
         }
 
-        public void set_id(String _id) {
-            this._id = _id;
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
+        }
+
+        public String getOid() {
+            return oid;
+        }
+
+        public void setOid(String oid) {
+            this.oid = oid;
         }
 
         public String getTitle() {

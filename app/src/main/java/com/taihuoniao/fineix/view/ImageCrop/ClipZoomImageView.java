@@ -320,8 +320,14 @@ public class ClipZoomImageView extends ImageView implements
             if (d == null)
                 return;
             // 垂直方向的边距
-            mVerticalPadding = (getHeight() - getWidth() * 4 / 3) / 2;
-
+//            mVerticalPadding = (getHeight() - getWidth() * 4 / 3) / 2;
+            if (getHeight() * 9 < getWidth() * 16) {
+                mVerticalPadding = 0;
+                mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
+            } else {
+                mHorizontalPadding = 0;
+                mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
+            }
             int width = getWidth();
             int height = getHeight();
             // 拿到图片的宽和高
@@ -370,7 +376,7 @@ public class ClipZoomImageView extends ImageView implements
         Canvas canvas = new Canvas(bitmap);
         draw(canvas);
         return Bitmap.createBitmap(bitmap, mHorizontalPadding,
-                mVerticalPadding, getWidth(), getHeight() - 2 * mVerticalPadding
+                mVerticalPadding, getWidth() - 2 * mHorizontalPadding, getHeight() - 2 * mVerticalPadding
         );
     }
 

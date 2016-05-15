@@ -57,14 +57,21 @@ public class ClipImageBorderView extends View {
         super.onDraw(canvas);
         // 计算矩形区域的宽度
         mWidth = getWidth();
+        if (getHeight() * 9 < getWidth() * 16) {
+            mVerticalPadding = 0;
+            mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
+        } else {
+            mHorizontalPadding = 0;
+            mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
+        }
         // 计算距离屏幕垂直边界 的边距
-        mVerticalPadding = (getHeight() - mWidth * 4 / 3) / 2;
+//        mVerticalPadding = (getHeight() - mWidth * 4 / 3) / 2;
         mPaint.setColor(Color.parseColor("#aa000000"));
         mPaint.setStyle(Style.FILL);
         // 绘制左边1
-        canvas.drawRect(0, 0, 0, getHeight(), mPaint);
+        canvas.drawRect(0, 0, mHorizontalPadding, getHeight(), mPaint);
         // 绘制右边2
-        canvas.drawRect(getWidth(), 0, getWidth(),
+        canvas.drawRect(getWidth() - mHorizontalPadding, 0, getWidth(),
                 getHeight(), mPaint);
         // 绘制上边3
         canvas.drawRect(0, 0, getWidth(),
@@ -76,13 +83,13 @@ public class ClipImageBorderView extends View {
         mPaint.setColor(mBorderColor);
         mPaint.setStrokeWidth(mBorderWidth);
         mPaint.setStyle(Style.STROKE);
-        canvas.drawRect(0, mVerticalPadding, getWidth(), getHeight() - mVerticalPadding, mPaint);
+        canvas.drawRect(mHorizontalPadding, mVerticalPadding, getWidth() - mHorizontalPadding, getHeight() - mVerticalPadding, mPaint);
 
     }
 
-    public void setHorizontalPadding(int mHorizontalPadding) {
-        this.mHorizontalPadding = mHorizontalPadding;
-
-    }
+//    public void setHorizontalPadding(int mHorizontalPadding) {
+//        this.mHorizontalPadding = mHorizontalPadding;
+//
+//    }
 
 }

@@ -309,6 +309,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                             Log.e("<<<", "没有用过的标签");
                             return;
                         }
+                        usedLabelList.clear();
                         usedLabelList.addAll(netUsedLabel.getUsedLabelList());
                         usedLabelRelative.setVisibility(View.VISIBLE);
                         hotLabelViewPagerAdapter.notifyDataSetChanged();

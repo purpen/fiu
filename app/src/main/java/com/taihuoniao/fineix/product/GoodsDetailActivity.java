@@ -84,7 +84,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private GoodsDetailBean netGood;//网络请求返回值
     //所属场景列表
     private int page = 1;
-    private List<ProductAndSceneListBean.SceneItem> changjingList;
+    private List<ProductAndSceneListBean.ProductAndSceneItem> changjingList;
     private GoodsDetailSceneRecyclerAdapter changjingAdaper;
     //推荐列表
     private int recommendPage = 1;
@@ -349,7 +349,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void click(int postion) {
         Intent intent = new Intent(GoodsDetailActivity.this, SceneDetailActivity.class);
-        intent.putExtra("id", changjingList.get(postion).get_id());
+        intent.putExtra("id", changjingList.get(postion).getSight_id());
         startActivity(intent);
     }
 }

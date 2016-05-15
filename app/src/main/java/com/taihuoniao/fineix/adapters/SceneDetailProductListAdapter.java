@@ -22,9 +22,9 @@ import java.util.List;
  */
 public class SceneDetailProductListAdapter extends BaseAdapter {
     private Activity activity;
-    private List<ProductAndSceneListBean.SceneItem> list;
+    private List<ProductAndSceneListBean.ProductAndSceneItem> list;
 
-    public SceneDetailProductListAdapter(Activity activity, List<ProductAndSceneListBean.SceneItem> list) {
+    public SceneDetailProductListAdapter(Activity activity, List<ProductAndSceneListBean.ProductAndSceneItem> list) {
         this.activity = activity;
         this.list = list;
     }
@@ -61,13 +61,13 @@ public class SceneDetailProductListAdapter extends BaseAdapter {
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
-        holder.nameTv.setText(list.get(position).getTitle());
-        holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
-        if (list.get(position).getBanner_asset().size() > 0) {
-            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getBanner_asset(), activity));
+        holder.nameTv.setText(list.get(position).getProduct().getTitle());
+        holder.priceTv.setText(String.format("¥%s", list.get(position).getProduct().getSale_price()));
+        if (list.get(position).getProduct().getBanner_asset().size() > 0) {
+            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getProduct().getBanner_asset(), activity));
         }
         holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
-        switch (list.get(position).getAttrbute()) {
+        switch (list.get(position).getProduct().getAttrbute()) {
             case "1":
                 holder.img.setImageResource(R.mipmap.product_fiu);
                 break;
@@ -95,9 +95,9 @@ public class SceneDetailProductListAdapter extends BaseAdapter {
     static class ClickListener implements View.OnClickListener, AdapterView.OnItemClickListener {
         private Activity activity;
         private int position;
-        private List<ProductAndSceneListBean.SceneItem> list;
+        private List<ProductAndSceneListBean.ProductAndSceneItem> list;
 
-        public ClickListener(Activity activity, List<ProductAndSceneListBean.SceneItem> list, int position) {
+        public ClickListener(Activity activity, List<ProductAndSceneListBean.ProductAndSceneItem> list, int position) {
             this.activity = activity;
             this.list = list;
             this.position = position;
@@ -106,14 +106,14 @@ public class SceneDetailProductListAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            intent.putExtra("id", list.get(position).get_id());
+            intent.putExtra("id", list.get(position).getProduct().get_id());
             activity.startActivity(intent);
         }
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            intent.putExtra("id", list.get(this.position).get_id());
+            intent.putExtra("id", list.get(this.position).getProduct().get_id());
             activity.startActivity(intent);
         }
     }

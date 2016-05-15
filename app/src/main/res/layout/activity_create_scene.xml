@@ -43,7 +43,7 @@
 
                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                     android:id="@+id/activity_create_scene_img"
-                    android:layout_width="87dp"
+                    android:layout_width="86dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     />

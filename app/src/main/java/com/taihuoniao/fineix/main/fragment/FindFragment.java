@@ -164,7 +164,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 if (location == null && bdLocation != null) {
                     dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-                    MapUtil.destroyLocationClient();
+//                    MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                     DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
@@ -273,6 +273,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     dialog.dismiss();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
                     if (netQingjingListBean.isSuccess()) {
+                        qingjingList.clear();
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
                     }
@@ -329,6 +330,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         }
     }
 
+
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
         ArrayList<String> urlList = new ArrayList<String>();
@@ -355,6 +357,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onDestroy() {
         //        cancelNet();
+        MapUtil.destroyLocationClient();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;

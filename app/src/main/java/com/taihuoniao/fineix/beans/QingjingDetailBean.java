@@ -128,6 +128,27 @@ public class QingjingDetailBean extends NetBean {
         public void setTitle(String title) {
             this.title = title;
         }
+        private Location location;
+
+        public Location getLocation() {
+            return location;
+        }
+
+        public void setLocation(Location location) {
+            this.location = location;
+        }
+    }
+
+    public static class Location{
+        private List<String> coordinates;
+
+        public List<String> getCoordinates() {
+            return coordinates;
+        }
+
+        public void setCoordinates(List<String> coordinates) {
+            this.coordinates = coordinates;
+        }
     }
 
     public static class UserInfo {

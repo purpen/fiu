@@ -1,10 +1,7 @@
 package com.taihuoniao.fineix.network;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,7 +37,6 @@ import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.GoodsDetailsBean;
 import com.taihuoniao.fineix.beans.JDProductBean;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowBuyItemBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
@@ -78,8 +74,6 @@ import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.beans.UserListBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
@@ -95,6 +89,34 @@ import java.util.List;
  * 数据解析类
  */
 public class DataPaser {
+    //产品
+    //产出用户添加的产品
+    public static void deleteProduct(String id, final Handler handler) {
+        ClientDiscoverAPI.deleteProduct(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DELETE_PRODUCT;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
     //产品
     //列表
     public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
@@ -160,12 +182,12 @@ public class DataPaser {
     //产品
     //用户添加产品
     public static void addProduct(String attrbute, String oid, String sku_id, String title, String market_price, String sale_price,
-                                  String link, String cover_url, final Handler handler) {
-        ClientDiscoverAPI.addProduct(attrbute, oid, sku_id, title, market_price, sale_price, link, cover_url, new RequestCallBack<String>() {
+                                  String link, String cover_url, String banners_url, final Handler handler) {
+        ClientDiscoverAPI.addProduct(attrbute, oid, sku_id, title, market_price, sale_price, link, cover_url, banners_url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<addproduct", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<addproduct", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT;
                 msg.obj = new AddProductBean();
@@ -227,8 +249,8 @@ public class DataPaser {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
-                Log.e("<<<chanpin", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<chanpin", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 msg.what = DataConstants.GOODS_DETAILS;
                 try {
                     JSONObject obj = new JSONObject(responseInfo.result);
@@ -511,6 +533,7 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingList(page, sort, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<情景列表", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_LIST;
                 msg.obj = new QingJingListBean();
@@ -571,8 +594,8 @@ public class DataPaser {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<changjing", responseInfo.result);
-                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                        Log.e("<<<changjing", responseInfo.result);
+//                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.SCENE_DETAILS;
                         SceneDetails sceneDetails = new SceneDetails();
@@ -632,6 +655,12 @@ public class DataPaser {
                                 userInfo.setSummary(user_info.optString("summary"));
                                 userInfo.setIs_expert(user_info.optString("is_expert"));
                                 sceneDetails.setUser_info(userInfo);
+                                JSONObject jsonObject1 = data.getJSONObject("location");
+                                JSONArray jsonArray = jsonObject1.getJSONArray("coordinates");
+                                String[] location = new String[2];
+                                location[0] = jsonArray.getString(1);
+                                location[1] = jsonArray.getString(0);
+                                sceneDetails.setLocation(location);
                             }
                         } catch (
                                 JSONException e
@@ -720,7 +749,7 @@ public class DataPaser {
         ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+                Log.e("<<<场景列表", responseInfo.result);
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SCENE_LIST;
@@ -825,6 +854,8 @@ public class DataPaser {
         ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<用过的标签",responseInfo.result);
+                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.USED_LABEL_LIST;
                 UsedLabel usedLabel = new UsedLabel();
@@ -1588,7 +1619,7 @@ public class DataPaser {
     }
 
     //第三方登录
-    public static void thirdLoginParser(final String oid, String access_token, String type,final Handler handler) {
+    public static void thirdLoginParser(final String oid, String access_token, String type, final Handler handler) {
         ClientDiscoverAPI.thirdLoginNet(oid, access_token, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

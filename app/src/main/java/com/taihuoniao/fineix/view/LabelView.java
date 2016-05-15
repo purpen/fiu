@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.utils.DensityUtils;
 
 
 /**
@@ -27,16 +26,16 @@ public class LabelView extends LinearLayout {
     //贴纸
     private MyImageViewTouch mImageView;
     //容器
-    private ViewGroup gpuRelative;
+    private RelativeLayout gpuRelative;
 
     private TagItem tagInfo = new TagItem();
     private float parentWidth = 0;
     private float parentHeight = 0;
     //    private ImageView labelIcon;
-    private RelativeLayout relativeLeft;
-    private TextView nameRight;
-    private TextView priceLeft;
-    private ImageView pointLeft;
+//    private RelativeLayout relativeLeft;
+//    private TextView nameRight;
+//    private TextView priceLeft;
+//    private ImageView pointLeft;
     //    private TextView labelTxtLeft;
 //    private TextView priceTxtLeft;
     private RelativeLayout relativeRight;
@@ -54,10 +53,10 @@ public class LabelView extends LinearLayout {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
 //        labelIcon = (ImageView) findViewById(R.id.view_label_point);
-        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
-        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
-        nameRight = (TextView) findViewById(R.id.view_label_right_name);
-        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
+//        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
+//        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
+//        nameRight = (TextView) findViewById(R.id.view_label_right_name);
+//        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
 //        labelTxtLeft = (TextView) findViewById(R.id.view_label_left_name);
 //        priceTxtLeft = (TextView) findViewById(R.id.view_label_left_price);
         relativeRight = (RelativeLayout) findViewById(R.id.view_label_right);
@@ -72,10 +71,10 @@ public class LabelView extends LinearLayout {
         super(context, attr);
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
 //        labelIcon = (ImageView) findViewById(R.id.view_label_point);
-        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
-        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
-        nameRight = (TextView) findViewById(R.id.view_label_right_name);
-        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
+//        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
+//        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
+//        nameRight = (TextView) findViewById(R.id.view_label_right_name);
+//        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
 //        labelTxtLeft = (TextView) findViewById(R.id.view_label_left_name);
 //        priceTxtLeft = (TextView) findViewById(R.id.view_label_left_price);
         relativeRight = (RelativeLayout) findViewById(R.id.view_label_right);
@@ -92,8 +91,8 @@ public class LabelView extends LinearLayout {
 //        tagInfo.setType(tagItem.getType());
         tagInfo = tagItem;
         nameLeft.setText(tagItem.getName());
-        nameRight.setText(tagItem.getName());
-        priceLeft.setText(tagItem.getPrice());
+//        nameRight.setText(tagItem.getName());
+//        priceLeft.setText(tagItem.getPrice());
         priceRight.setText(tagItem.getPrice());
     }
 
@@ -132,25 +131,25 @@ public class LabelView extends LinearLayout {
      * @param left
      * @param top
      */
-    public void addTo(final MyImageViewTouch overlay, ViewGroup parent, final int left, final int top) {
-        if (left > parent.getWidth() / 2) {
-            tagInfo.setLeft(false);
-        }
+    public void addTo(final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
+//        if (left > parent.getWidth() / 2) {
+//            tagInfo.setLeft(false);
+//        }
         mImageView = overlay;
         gpuRelative = parent;
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) overlay.getLayoutParams();
-        this.parentWidth = lp.width;
-        setImageWidth((int) parentWidth);
-        this.parentHeight = lp.height;
-        setImageHeight((int) this.parentHeight);
-        if (tagInfo.isLeft()) {
-            relativeRight.setVisibility(View.GONE);
-            relativeLeft.setVisibility(View.VISIBLE);
-            //点到左边缘的位置,不是整个控件
-            int toLeft = left - DensityUtils.dp2px(getContext(), 62) - DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
-            Log.e("<<<", "toLeft=" + toLeft + ",top=" + top);
-            setupLocation(toLeft, top);
-            parent.addView(this);
+//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) overlay.getLayoutParams();
+        this.parentWidth = overlay.getWidth();
+//        setImageWidth((int) parentWidth);
+        this.parentHeight = overlay.getHeight();
+//        setImageHeight((int) this.parentHeight);
+//        if (tagInfo.isLeft()) {
+//            relativeRight.setVisibility(View.GONE);
+//            relativeLeft.setVisibility(View.VISIBLE);
+//            //点到左边缘的位置,不是整个控件
+//            int toLeft = left - DensityUtils.dp2px(getContext(), 62) - DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
+//            Log.e("<<<", "toLeft=" + toLeft + ",top=" + top);
+//            setupLocation(toLeft, top);
+//            parent.addView(this);
 //            post(new Runnable() {
 //                @Override
 //                public void run() {
@@ -161,22 +160,22 @@ public class LabelView extends LinearLayout {
 //                    relativeLeft.setVisibility(View.VISIBLE);
 //                }
 //            });
-        } else {
-            relativeRight.setVisibility(View.INVISIBLE);
-            relativeLeft.setVisibility(View.GONE);
-            setupLocation(20, 20);
-            parent.addView(this);
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    //因为商品名称的控件宽度不定。所以需要等布局完成才能加载
-                    //点到左边缘的位置,不是整个控件
-                    int toLeft = left - nameLeft.getWidth() + DensityUtils.dp2px(getContext(), 15) + DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
-                    setupLocation(toLeft, top);
-                    relativeRight.setVisibility(View.VISIBLE);
-                }
-            });
-        }
+//        } else {
+            relativeRight.setVisibility(View.VISIBLE);
+//            relativeLeft.setVisibility(View.GONE);
+            setupLocation(left, top);
+            parent.addView(LabelView.this);
+//            post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //因为商品名称的控件宽度不定。所以需要等布局完成才能加载
+//                    //点到左边缘的位置,不是整个控件
+//                    int toLeft = left - nameLeft.getWidth() + DensityUtils.dp2px(getContext(), 15) + DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
+//                    setupLocation(toLeft, top);
+//                    relativeRight.setVisibility(View.VISIBLE);
+//                }
+//            });
+//        }
 
     }
 
@@ -185,15 +184,15 @@ public class LabelView extends LinearLayout {
         this.left = leftLoc;
         this.top = topLoc;
 
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
         RelativeLayout.LayoutParams labelParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (left + getWidth() > params.width) {
+        if (left + getWidth() > mImageView.getWidth()) {
             //右边缘
-            left = params.width - getWidth();
+            left = mImageView.getWidth() - getWidth();
         }
-        if (top + getHeight() > params.height) {
+        if (top + getHeight() > mImageView.getHeight()) {
             //下边缘
-            top = params.height - getHeight();
+            top = mImageView.getHeight() - getHeight();
         }
         if (top < 0) {
             top = 0;
@@ -202,13 +201,13 @@ public class LabelView extends LinearLayout {
             //左边缘
             left = 0;
         }
-        labelParams.setMargins(left + (gpuRelative.getWidth() - params.width) / 2, top, 0, 0);
+        labelParams.setMargins(left + (gpuRelative.getWidth() - mImageView.getWidth()) / 2, top, 0, 0);
 //        if (tagInfo.isLeft()) {
-        Log.e("<<<", "left=" + left + ",top=" + top + ",params.width=" + params.width + ",params.heigt=" + params.height + ",画布宽=" + mImageView.getWidth()
+        Log.e("<<<", "left=" + left + ",top=" + top +  ",画布宽=" + mImageView.getWidth()
                 + ",画布高=" + mImageView.getHeight());
         //0.2641975308641975,0.5
-        tagInfo.setX(than(left, params.width));
-        tagInfo.setY(than(top, params.height));
+        tagInfo.setX(than(left, mImageView.getWidth()));
+        tagInfo.setY(than(top, mImageView.getHeight()));
 //        } else {
 //            tagInfo.setX(than(left + nameLeft.getWidth() - DensityUtils.dp2px(getContext(), 15) - DensityUtils.dp2px(getContext(), 2), params.width));
 //            tagInfo.setY(than(top + DensityUtils.dp2px(getContext(), 4), params.height));
@@ -220,21 +219,21 @@ public class LabelView extends LinearLayout {
         return num2 == 0 ? 0 : (num1 / num2);
     }
 
-    private void setImageWidth(int width) {
-        this.imageWidth = width;
-    }
+//    private void setImageWidth(int width) {
+//        this.imageWidth = width;
+//    }
 
-    private int getImageWidth() {
-        return imageWidth <= 0 ? mImageView.getWidth() : imageWidth;
-    }
-
-    private void setImageHeight(int height) {
-        this.imageHeight = height;
-    }
-
-    private int getImageHeight() {
-        return imageHeight <= 0 ? (int) this.parentHeight : imageHeight;
-    }
+//    private int getImageWidth() {
+//        return imageWidth <= 0 ? mImageView.getWidth() : imageWidth;
+//    }
+//
+//    private void setImageHeight(int height) {
+//        this.imageHeight = height;
+//    }
+//
+//    private int getImageHeight() {
+//        return imageHeight <= 0 ? (int) this.parentHeight : imageHeight;
+//    }
 
     private int left = -1, top = -1;
     private int imageWidth = 0;
@@ -252,27 +251,28 @@ public class LabelView extends LinearLayout {
 
     //显示全部内容还是只显示点
     public void pointOrAll(boolean isLeft, boolean showAll) {
-        if (isLeft) {
-            relativeRight.setVisibility(GONE);
-            nameLeft.setVisibility(GONE);
-            pointRight.setVisibility(GONE);
-            priceRight.setVisibility(GONE);
-            if (showAll) {
-                relativeLeft.setVisibility(VISIBLE);
-                priceLeft.setVisibility(VISIBLE);
-                pointLeft.setVisibility(VISIBLE);
-                nameRight.setVisibility(VISIBLE);
-            } else {
-                relativeLeft.setVisibility(VISIBLE);
-                priceLeft.setVisibility(INVISIBLE);
-                nameRight.setVisibility(INVISIBLE);
-                pointLeft.setVisibility(VISIBLE);
-            }
-        } else {
-            relativeLeft.setVisibility(GONE);
-            nameRight.setVisibility(GONE);
-            pointLeft.setVisibility(GONE);
-            priceLeft.setVisibility(GONE);
+//        if (isLeft) {
+//            relativeRight.setVisibility(GONE);
+//            nameLeft.setVisibility(GONE);
+//            pointRight.setVisibility(GONE);
+//            priceRight.setVisibility(GONE);
+//            if (showAll) {
+//                relativeLeft.setVisibility(VISIBLE);
+//                priceLeft.setVisibility(VISIBLE);
+//                pointLeft.setVisibility(VISIBLE);
+//                nameRight.setVisibility(VISIBLE);
+//            } else {
+//                relativeLeft.setVisibility(VISIBLE);
+//                priceLeft.setVisibility(INVISIBLE);
+//                nameRight.setVisibility(INVISIBLE);
+//                pointLeft.setVisibility(VISIBLE);
+//            }
+//        } else {
+
+//            relativeLeft.setVisibility(GONE);
+//            nameRight.setVisibility(GONE);
+//            pointLeft.setVisibility(GONE);
+//            priceLeft.setVisibility(GONE);
             if (showAll) {
                 relativeRight.setVisibility(VISIBLE);
                 priceRight.setVisibility(VISIBLE);
@@ -284,7 +284,7 @@ public class LabelView extends LinearLayout {
                 nameLeft.setVisibility(INVISIBLE);
                 pointRight.setVisibility(VISIBLE);
             }
-        }
+//        }
     }
 
     public void wave() {
@@ -306,12 +306,12 @@ public class LabelView extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (pointLeft.getVisibility() == VISIBLE) {
-                    pointLeft.startAnimation(as);
-                }
-                if (pointRight.getVisibility() == VISIBLE) {
+//                if (pointLeft.getVisibility() == VISIBLE) {
+//                    pointLeft.startAnimation(as);
+//                }
+//                if (pointRight.getVisibility() == VISIBLE) {
                     pointRight.startAnimation(as);
-                }
+//                }
             }
 
             @Override
@@ -319,17 +319,17 @@ public class LabelView extends LinearLayout {
 
             }
         });
-        if (pointLeft.getVisibility() == VISIBLE) {
-            pointLeft.startAnimation(as);
-        }
-        if (pointRight.getVisibility() == VISIBLE) {
+//        if (pointLeft.getVisibility() == VISIBLE) {
+//            pointLeft.startAnimation(as);
+//        }
+//        if (pointRight.getVisibility() == VISIBLE) {
             pointRight.startAnimation(as);
-        }
+//        }
     }
 
     public void stopAnim() {
         pointRight.clearAnimation();
-        pointLeft.clearAnimation();
+//        pointLeft.clearAnimation();
     }
 
     public void updateLocation(int x, int y) {

@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/jianbian_scenelist"
             android:orientation="vertical"
             >
 
@@ -46,6 +47,7 @@
 
 
             <LinearLayout
+                android:id="@+id/activity_qingjingdetail_addresslinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -56,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="11dp"
                     android:layout_marginLeft="22dp"
-                    android:src="@mipmap/location_height_22px"/>
+                    android:src="@mipmap/location_white_width_16px"/>
 
                 <TextView
                     android:id="@+id/activity_qingjingdetail_location"
@@ -65,7 +67,7 @@
                     android:layout_marginLeft="6dp"
                     android:gravity="center_vertical"
                     android:text="北京市 朝阳区"
-                    android:textColor="#212121"
+                    android:textColor="@color/white"
                     android:textSize="9sp"/>
 
                 <TextView
@@ -74,7 +76,7 @@
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
                     android:text="|"
-                    android:textColor="#212121"
+                    android:textColor="@color/white"
                     android:textSize="9sp"/>
 
                 <TextView
@@ -84,7 +86,7 @@
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
                     android:text="3天前"
-                    android:textColor="#212121"
+                    android:textColor="@color/white"
                     android:textSize="9sp"/>
             </LinearLayout>
 
@@ -96,6 +98,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/activity_qingjingdetail_leftlabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="720"

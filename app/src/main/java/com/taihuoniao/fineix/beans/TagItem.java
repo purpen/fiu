@@ -34,7 +34,7 @@ public class TagItem implements Serializable {
     private double y = 0.5;
 
     private int recordCount;
-    private boolean left = true;
+    private boolean left = false;
 
 
     public String getPrice() {
@@ -46,7 +46,7 @@ public class TagItem implements Serializable {
     }
 
     public boolean isLeft() {
-        return left;
+        return false;
     }
 
     public void setLeft(boolean left) {

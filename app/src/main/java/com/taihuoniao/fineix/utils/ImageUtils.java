@@ -166,12 +166,12 @@ public class ImageUtils {
         }
     }
 
-    //判断图片是不是4：3
+    //判断图片是不是16:9
     public static boolean isFourToThree(String imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath, options);
-        return options.outHeight * 3 / 4 == options.outWidth;
+        return (options.outHeight * 9) == (options.outWidth * 16);
     }
 
     //从文件中读取照片
@@ -280,18 +280,20 @@ public class ImageUtils {
     }
 
 
-    public static void loadBgImg(String url,View view){
-        new MyAsyncTask(url,view).execute();
+    public static void loadBgImg(String url, View view) {
+        new MyAsyncTask(url, view).execute();
     }
 
-    private static class MyAsyncTask extends AsyncTask<String,Void,Bitmap>{
+    private static class MyAsyncTask extends AsyncTask<String, Void, Bitmap> {
         private View view;
         private String url;
-        public MyAsyncTask(String url,View view) {
+
+        public MyAsyncTask(String url, View view) {
             super();
-            this.view=view;
-            this.url=url;
+            this.view = view;
+            this.url = url;
         }
+
         @Override
         protected Bitmap doInBackground(String... params) {
             return ImageLoader.getInstance().loadImageSync(url);
@@ -303,7 +305,7 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap decodeUriAsBitmap(Uri uri){
+    public static Bitmap decodeUriAsBitmap(Uri uri) {
 
         Bitmap bitmap = null;
         try {

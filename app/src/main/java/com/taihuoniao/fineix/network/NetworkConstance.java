@@ -15,6 +15,8 @@ public class NetworkConstance {
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
     //产品
+    //删除用户添加的产品
+    public static final String delete_product = BASE_URL + "/scene_product/deleted";
     //列表
     public static final String urlString_productsList = BASE_URL + "/scene_product/getlist";
     //添加产品
@@ -84,7 +86,7 @@ public class NetworkConstance {
     //搜索列表
     public static final String search = BASE_URL + "/search/getlist";
     //商品和场景关联列表
-    public static final String product_and_scenelist = BASE_URL + "/sight_and_product";
+    public static final String product_and_scenelist = BASE_URL + "/sight_and_product/getlist";
     //购物车
     //购物车数量
     public static final String cart_number = BASE_URL + "/shopping/fetch_cart_count";
@@ -178,7 +180,7 @@ public class NetworkConstance {
     //最fiu伙伴
     public static final String fiu_user_list = BASE_URL + "/user/find_user";
     //首页订阅的场景列表
-    public static final String subs_cjlist = BASE_URL+"/my/my_subscription";
+    public static final String subs_cjlist = BASE_URL + "/my/my_subscription";
     //  检查是否注册
     public static final String GET_REGIST_STATE = BASE_URL + "/auth/check_account";
 

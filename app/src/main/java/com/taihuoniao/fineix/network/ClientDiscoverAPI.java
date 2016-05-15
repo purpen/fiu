@@ -15,6 +15,14 @@ import com.taihuoniao.fineix.utils.MD5Utils;
  */
 public class ClientDiscoverAPI {
     //产品
+    //删除用户添加的产品
+    public static  void deleteProduct(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.delete_product;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id",id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //产品
     //列表
     public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                       String stick, String fine, RequestCallBack<String> callBack) {
@@ -35,7 +43,7 @@ public class ClientDiscoverAPI {
     //产品
     //添加产品
     public static void addProduct(String attrbute, String oid, String sku_id, String title, String market_price, String sale_price,
-                                  String link, String cover_url, RequestCallBack<String> callBack) {
+                                  String link, String cover_url,String banners_url, RequestCallBack<String> callBack) {
         String url = NetworkConstance.add_product;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("attrbute", attrbute);
@@ -46,6 +54,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sale_price", sale_price);
         params.addQueryStringParameter("link", link);
         params.addQueryStringParameter("cover_url", cover_url);
+        params.addQueryStringParameter("banners_url",banners_url);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -438,6 +447,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("sort","1");
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("type", type);

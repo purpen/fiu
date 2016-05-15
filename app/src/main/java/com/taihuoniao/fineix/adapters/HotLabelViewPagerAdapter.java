@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -73,17 +74,25 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
             gridView.setAdapter(hotLabelAdapter);
         } else {
             if (position == 0) {
+                Log.e("<<<使用过的标签适配", "");
                 gridView.setAdapter(usedLabelAdapter);
             } else if (position == 1) {
+                Log.e("<<<热门标签适配", "");
                 gridView.setAdapter(hotLabelAdapter);
             }
         }
+//        Log.e("<<<标签位置", "position=" + position);
         container.addView(view);
         return view;
     }
 
+    private ViewGroup container;
+    private Object object;
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+        this.container = container;
+        this.object = object;
         container.removeView(container.getChildAt(position));
     }
 
@@ -120,6 +129,7 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
             }
             TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
             textView.setText(usedLabelList.get(position).getTitle_cn());
+            Log.e("<<<使用过的标签", usedLabelList.get(position).getTitle_cn());
             return convertView;
         }
     }
@@ -148,6 +158,7 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
             }
             TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
             textView.setText(hotLabelList.get(position).getTitle_cn());
+            Log.e("<<<热门标签", hotLabelList.get(position).getTitle_cn());
             return convertView;
         }
     }
