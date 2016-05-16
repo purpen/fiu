@@ -7,6 +7,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.zxing.WriterException;
@@ -15,6 +16,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.utils.FileUtils;
+import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -50,6 +52,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     @Bind(R.id.tv_address)
     TextView tv_address;
     private Bitmap bitmap_2code;
+    @Bind(R.id.rl)
+    RelativeLayout rl;
     public MyBarCodeActivity(){
         super(R.layout.activity_bar_code);
     }
@@ -128,43 +132,48 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     break;
                 case R.id.ll1://微信
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
-                    params.setTitle("detail.goods_name");
-                    params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setShareType(Platform.SHARE_IMAGE);
+                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                    params.setUrl("http://www.taihuoniao.com");
+                    params.setTitle("有Fiu的生活");
+                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(MyBarCodeActivity.this);
                     wechat.share(params);
                     break;
                 case R.id.ll2: //微信朋友圈
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("Constants.SHARE_URI + detail.goods_id");
-                    params.setTitle("detail.goods_name");
-                    params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setShareType(Platform.SHARE_IMAGE);
+                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                    params.setUrl("http://www.taihuoniao.com");
+                    params.setTitle("有Fiu的生活");
+                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(MyBarCodeActivity.this);
                     wechatMoments.share(params);
                     break;
                 case R.id.ll3://新浪微博
                     params = new Platform.ShareParams();
-                    params.setTitle("detail.goods_name");
-                    params.setText("detail.goods_name");
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                    params.setTitle("有Fiu的生活");
+                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
                     weibo.share(params);
                     break;
                 case R.id.ll4:
                     params= new Platform.ShareParams();
-                    params.setTitle("detail.goods_name");
-                    params.setText("detail.goods_name");
-                    params.setTitleUrl("Constants.SHARE_URI + detail.goods_id"); // 标题的超链接
-                    params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                    params.setShareType(Platform.SHARE_IMAGE);
+                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                    params.setTitle("有Fiu的生活");
+                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                    params.setTitleUrl("http://www.taihuoniao.com"); // 标题的超链接
+                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     params.setSite("");
-                    params.setSiteUrl("http://www.dmore.com.cn/");
+                    params.setSiteUrl("http://www.taihuoniao.com/");
                     Platform qzone = ShareSDK.getPlatform (QZone.NAME);
                     qzone.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
                     qzone.share(params);

@@ -68,7 +68,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
         return convertView;
     }
 
-    private void setOnClickListener(ImageButton itbn, final QingJingListBean.QingJingItem item){
+    private void setOnClickListener(final ImageButton itbn, final QingJingListBean.QingJingItem item){
         itbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -88,6 +88,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()){
+                            itbn.setImageResource(R.mipmap.ordered_qj);
                             Util.makeToast("订阅成功");
                             return;
                         }

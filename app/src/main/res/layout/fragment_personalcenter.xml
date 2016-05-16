@@ -118,7 +118,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/ll_qj"
+                    android:id="@+id/ll_cj"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -127,17 +127,16 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_qj"
+                        android:id="@+id/tv_cj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="情景"
+                        android:text="场景"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
@@ -145,7 +144,7 @@
                     android:layout_width="@dimen/dp5"
                     android:layout_height="match_parent"/>
                 <LinearLayout
-                    android:id="@+id/ll_cj"
+                    android:id="@+id/ll_qj"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -154,10 +153,9 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_cj"
+                        android:id="@+id/tv_qj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 
@@ -165,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp5"
-                        android:text="场景"
+                        android:text="情景"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
@@ -185,7 +183,6 @@
                         android:id="@+id/tv_focus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 
@@ -212,7 +209,6 @@
                         android:id="@+id/tv_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 

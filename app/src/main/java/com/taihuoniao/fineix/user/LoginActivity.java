@@ -204,8 +204,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                }
                 break;
             case R.id.image_close_login:
-                OptRegisterLoginActivity.instance.finish();
-                ToLoginActivity.instance.finish();
+                if (OptRegisterLoginActivity.instance!=null){
+                    OptRegisterLoginActivity.instance.finish();
+                }
+                if (ToLoginActivity.instance!=null){
+                    ToLoginActivity.instance.finish();
+                }
                 finish();
                 break;
             case R.id.image_back_login:

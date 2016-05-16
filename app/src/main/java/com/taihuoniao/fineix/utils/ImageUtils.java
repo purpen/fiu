@@ -77,7 +77,7 @@ public class ImageUtils {
             }
         }
         FileOutputStream outputStream = new FileOutputStream(jpgFile); // 文件输出流
-        croppedImage.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+        croppedImage.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
         outputStream.close();
         Log.e("<<<", "path = " + jpgFile.getPath());
         return jpgFile.getPath();
@@ -320,5 +320,14 @@ public class ImageUtils {
 
         return bitmap;
 
+    }
+
+    public static Bitmap convertViewToBitmap(View view){
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+
+        return bitmap;
     }
 }

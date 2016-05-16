@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -200,10 +201,10 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 //wechat
                 params = new Platform.ShareParams();
                 params.setShareType(Platform.SHARE_WEBPAGE);
-                params.setUrl("Constants.SHARE_URI + detail.goods_id");
-                params.setTitle("detail.goods_name");
-                params.setText("detail.goods_name");
-                params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                params.setUrl("http://www.taihuoniao.com");
+                params.setTitle("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
+                params.setText("有Fiu才有意思");
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 wechat.setPlatformActionListener(this);
                 wechat.share(params);
@@ -211,15 +212,15 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
             case R.id.item_sina:
                 //sina
                 params = new Platform.ShareParams();
-                params.setTitle("detail.goods_name");
-                params.setText("detail.goods_name");
-                params.setImageUrl("Constants.PIC_URI+detail.goods_img");
+                params.setTitle("有Fiu才有意思！");
+                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
                 Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 weibo.setPlatformActionListener(this); // 设置分享事件回调
                 weibo.share(params);
                 break;
             case R.id.item_contacts:
-                String content="我是分享内容....";
+                String content="有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/";
                 Uri sms = Uri.parse("smsto:");
                 Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
                 sendIntent.putExtra( "sms_body",content);
