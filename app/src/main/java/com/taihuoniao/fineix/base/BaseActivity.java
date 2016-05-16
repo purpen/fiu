@@ -30,6 +30,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
                 .showImageOnLoading(R.mipmap.ic_launcher)
                 .showImageForEmptyUri(R.mipmap.ic_launcher)
                 .showImageOnFail(R.mipmap.ic_launcher)
+                .delayBeforeLoading(0)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)

@@ -591,6 +591,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", pageSize);
         params.addQueryStringParameter("sort", "0");
         params.addQueryStringParameter("stick", "0");
+        params.addQueryStringParameter("user_id",userId);
         MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
     }
 
