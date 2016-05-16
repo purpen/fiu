@@ -11,7 +11,7 @@ import com.taihuoniao.fineix.R;
 /**
  * FlowLayout is much more like a {@link android.widget.LinearLayout}, but it can automatically
  * separate the widgets wrapped in it into multiple lines just like the water flow.
- * <p/>
+ * <p>
  * Inspired by {@see http://hzqtc.github.io/2013/12/android-custom-layout-flowlayout.html}
  *
  * @author liangfeizc {@see http://www.liangfeizc.com}
@@ -62,6 +62,14 @@ public class FlowLayout extends ViewGroup {
 
     public void setHorizontalSpacing(int pixelSize) {
         mHorizontalSpacing = pixelSize;
+    }
+
+    public int getHorizontalSpacing() {
+        return mHorizontalSpacing;
+    }
+
+    public int getVerticalSpacing() {
+        return mVerticalSpacing;
     }
 
     public void setVerticalSpacing(int pixelSize) {

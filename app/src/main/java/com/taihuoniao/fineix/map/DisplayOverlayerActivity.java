@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.map;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -77,6 +80,16 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);
         mBDMap.setMyLocationEnabled(true);
         startLocate();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                QingJingItem qingJing = (QingJingItem) lv.getAdapter().getItem(position);
+                Intent intent = new Intent();
+                intent.putExtra("qingjing", qingJing);
+                setResult(DataConstants.RESULTCODE_MAP, intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -114,7 +127,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
                 }
                 MyLocationData locData = new MyLocationData.Builder()
                         .accuracy(bdLocation.getRadius())
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                                // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(100).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
@@ -135,7 +148,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         page = 1;
         pageSize = 1000;
         radius = 0;
-        ClientDiscoverAPI.getQJData(ll,radius,String.valueOf(page),String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 //TODO 弹出加载框
@@ -205,12 +218,12 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
 
                 QingJingItem item = list.get(which);
                 if (item == null) {
-                     return true;
+                    return true;
                 }
                 LatLng ll = marker.getPosition();
                 View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-                LogUtil.e("huge",item.cover_url);
-                ImageLoader.getInstance().displayImage(item.cover_url,((ImageView) view.findViewById(R.id.iv)));
+                LogUtil.e("huge", item.cover_url);
+                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)));
                 ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
                 ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
                 InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, listener);

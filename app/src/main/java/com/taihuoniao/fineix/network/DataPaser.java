@@ -909,8 +909,8 @@ public class DataPaser {
         ClientDiscoverAPI.labelList(parent_id, page, size, sort, is_hot, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<全部标签", responseInfo.result);
+                WriteJsonToSD.writeToSD("quanbubiaoqian", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.LABEL_LIST;
                 AllLabel allLabel = new AllLabel();

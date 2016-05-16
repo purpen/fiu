@@ -508,8 +508,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //            } else {
 //                Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
-            labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 9 / 16);
+            labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
 //            }
+            Log.e("<<<", "x=" + product.getX() + ",y=" + product.getY());
+            Log.e("<<<", "leftMargin=" + labelLp.leftMargin + ",topMargin=" + labelLp.topMargin);
             labelView.setLayoutParams(labelLp);
             imgRelative.addView(labelView);
             labelView.wave();

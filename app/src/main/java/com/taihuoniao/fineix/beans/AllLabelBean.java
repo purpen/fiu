@@ -152,4 +152,12 @@ public class AllLabelBean implements Serializable {
     public void setUsed_count(String used_count) {
         this.used_count = used_count;
     }
+
+    @Override
+    public String toString() {
+        return "AllLabelBean{" +
+                "children=" + children +
+                ", title_cn='" + title_cn + '\'' +
+                '}';
+    }
 }

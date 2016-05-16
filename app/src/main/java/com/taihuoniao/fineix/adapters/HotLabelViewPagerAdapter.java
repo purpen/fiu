@@ -23,16 +23,15 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
     private Context context;
     private List<UsedLabelBean> usedLabelList;
     private List<HotLabel.HotLabelBean> hotLabelList;
-    private HotLaelAdapter hotLabelAdapter;
-    private UsedLabelAdapter usedLabelAdapter;
+//    private HotLaelAdapter hotLabelAdapter;
+//    private UsedLabelAdapter usedLabelAdapter;
     private LabelClick labelClick;
 
     public HotLabelViewPagerAdapter(Context context, List<UsedLabelBean> usedLabelList, List<HotLabel.HotLabelBean> hotLabelList, LabelClick labelClick) {
         this.context = context;
         this.usedLabelList = usedLabelList;
         this.hotLabelList = hotLabelList;
-        usedLabelAdapter = new UsedLabelAdapter();
-        hotLabelAdapter = new HotLaelAdapter();
+
         this.labelClick = labelClick;
     }
 
@@ -50,8 +49,12 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
 
     @Override
     public void notifyDataSetChanged() {
-        usedLabelAdapter.notifyDataSetChanged();
-        hotLabelAdapter.notifyDataSetChanged();
+//        usedLabelAdapter.notifyDataSetChanged();
+//        hotLabelAdapter.notifyDataSetChanged();
+//        destroyItem(container, 0, object);
+//        destroyItem(container, 1, object);
+//        instantiateItem(container, 0);
+//        instantiateItem(container,1);
         super.notifyDataSetChanged();
     }
 
@@ -71,14 +74,14 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
         GridViewForScrollView gridView = (GridViewForScrollView) view.findViewById(R.id.view_label_gridview_grid);
         gridView.setOnItemClickListener(this);
         if (usedLabelList.size() == 0) {
-            gridView.setAdapter(hotLabelAdapter);
+            gridView.setAdapter(new HotLaelAdapter());
         } else {
             if (position == 0) {
                 Log.e("<<<使用过的标签适配", "");
-                gridView.setAdapter(usedLabelAdapter);
+                gridView.setAdapter(new UsedLabelAdapter());
             } else if (position == 1) {
                 Log.e("<<<热门标签适配", "");
-                gridView.setAdapter(hotLabelAdapter);
+                gridView.setAdapter(new HotLaelAdapter());
             }
         }
 //        Log.e("<<<标签位置", "position=" + position);

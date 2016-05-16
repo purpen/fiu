@@ -153,6 +153,9 @@ public class DataConstants {
     public static final String BroadShopCart = "com.taihuoniao.fiu.shopcart";
     //删除用户添加的产品
     public static final int DELETE_PRODUCT = 21;
+    public static final int RESULTCODE_MAP_SELECTQJ = 20;
+    public static final int REQUESTCODE_SELECTQJ_MAP = 19;
+    public static final int RESULTCODE_MAP = 18;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

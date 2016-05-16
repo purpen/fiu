@@ -32,10 +32,12 @@ import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -370,7 +372,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "", handler);
-                }else{
+                } else {
                     dialog.dismiss();
                 }
                 break;
@@ -424,6 +426,14 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         scene_id = searchItem.get_id();
                         qingjingLinear.removeAllViews();
                         addQingjingToLinear(searchItem.getTitle());
+                    }
+                    break;
+                case DataConstants.RESULTCODE_MAP_SELECTQJ:
+                    QingJingItem qingJing = (QingJingItem) data.getSerializableExtra("qingjing");
+                    if (qingJing != null) {
+                        scene_id = qingJing._id + "";
+                        qingjingLinear.removeAllViews();
+                        addQingjingToLinear(qingJing.title);
                     }
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_SELECTQJ:
@@ -505,15 +515,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
                         MainApplication.whichQingjing = null;
                         MainApplication.tagInfoList = null;
-                        if (SelectPhotoOrCameraActivity.instance != null) {
-                            SelectPhotoOrCameraActivity.instance.finish();
-                        }
-                        if (CropPictureActivity.instance != null) {
-                            CropPictureActivity.instance.finish();
-                        }
-                        if (EditPictureActivity.instance != null) {
-                            EditPictureActivity.instance.finish();
-                        }
+                        startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
                         CreateSceneActivity.this.finish();
                     } else {
                         Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();

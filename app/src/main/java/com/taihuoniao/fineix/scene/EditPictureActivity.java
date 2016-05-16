@@ -157,7 +157,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     lp.width = containerWidth > 0 ? containerWidth : systemWidth;
                     lp.height = lp.width * 16 / 9;
                 }
-                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 picWidth = lp.width;
                 picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
@@ -262,6 +262,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
             }
         });
+
     }
 
     private void showPopup() {
@@ -277,6 +278,27 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         View overView = View.inflate(EditPictureActivity.this,
                 R.layout.view_over, null);
         mImageView = (MyImageViewTouch) overView.findViewById(R.id.view_over_mimg);
+        /*gpuRelative.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.e("<<<gpuRelative", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
+                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
+            }
+        });
+        mImageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.e("<<<mImageView", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
+                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
+            }
+        });
+        gpuImageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.e("<<<gpuImageView", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
+                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
+            }
+        });*/
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(picHeight * 9 / 16, picHeight);
         p.addRule(RelativeLayout.CENTER_HORIZONTAL);
         overView.setLayoutParams(p);

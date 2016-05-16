@@ -39,17 +39,11 @@ public class AllLabelGridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-//        if (allLabelList.size() > page * 10) {
+//        if (allLabelBean.getChildren().size() > 10 * allLabelBean.getPage()) {
 //            type = 1;
-//            return page * 10;
+//            return allLabelBean.getPage() * 10;
 //        }
 //        type = 2;
-//        return allLabelList.size();
-        if (allLabelBean.getChildren().size() > 10 * allLabelBean.getPage()) {
-            type = 1;
-            return allLabelBean.getPage() * 10;
-        }
-        type = 2;
         return allLabelBean.getChildren().size();
     }
 

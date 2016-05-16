@@ -16,7 +16,7 @@ public class DensityUtils {
     /**
      * dp转px
      */
-    public static int dp2px(Context context, float dpVal) {
+    public static int dp2px(Context context, double dpVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpVal * scale + 0.5f);
 //        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

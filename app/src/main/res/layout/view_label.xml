@@ -13,11 +13,10 @@
 
         <TextView
             android:id="@+id/view_label_left_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="114dp"
+            android:layout_height="24dp"
             android:background="@drawable/label_left"
             android:gravity="center"
-            android:maxHeight="24dp"
             android:maxWidth="114dp"
             android:singleLine="true"
             android:text="亮神智能感应灯"
@@ -26,8 +25,8 @@
 
         <TextView
             android:id="@+id/view_label_right_price"
-            android:layout_width="wrap_content"
-            android:layout_height="23dp"
+            android:layout_width="63dp"
+            android:layout_height="24dp"
             android:layout_toRightOf="@id/view_label_left_name"
             android:background="@mipmap/label_price"
             android:gravity="center"
@@ -38,7 +37,7 @@
         <ImageView
             android:id="@+id/view_label_right_point"
             android:layout_width="15dp"
-            android:layout_height="wrap_content"
+            android:layout_height="15dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/view_label_right_price"

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 
 /**
@@ -161,10 +162,19 @@ public class LabelView extends LinearLayout {
 //                }
 //            });
 //        } else {
-            relativeRight.setVisibility(View.VISIBLE);
+        double bi = overlay.getWidth() / parent.getWidth();
+        priceRight.setWidth(DensityUtils.dp2px(getContext(), 63 * bi));
+        priceRight.setHeight(DensityUtils.dp2px(getContext(), 24 * bi));
+        nameLeft.setWidth(DensityUtils.dp2px(getContext(), 114 * bi));
+        nameLeft.setHeight(DensityUtils.dp2px(getContext(), 24 * bi));
+        pointRight.setMaxWidth(DensityUtils.dp2px(getContext(), 15 * bi));
+        pointRight.setMinimumWidth(DensityUtils.dp2px(getContext(), 15 * bi));
+        pointRight.setMaxHeight(DensityUtils.dp2px(getContext(), 15 * bi));
+        pointRight.setMinimumHeight(DensityUtils.dp2px(getContext(), 15 * bi));
+        relativeRight.setVisibility(View.VISIBLE);
 //            relativeLeft.setVisibility(View.GONE);
-            setupLocation(left, top);
-            parent.addView(LabelView.this);
+        setupLocation(left, top);
+        parent.addView(LabelView.this);
 //            post(new Runnable() {
 //                @Override
 //                public void run() {
@@ -201,9 +211,11 @@ public class LabelView extends LinearLayout {
             //左边缘
             left = 0;
         }
+        //left=179,top=461,画布宽=451,画布高=802
+        // x=0.3968957871396896,y=0.5748129675810474
         labelParams.setMargins(left + (gpuRelative.getWidth() - mImageView.getWidth()) / 2, top, 0, 0);
 //        if (tagInfo.isLeft()) {
-        Log.e("<<<", "left=" + left + ",top=" + top +  ",画布宽=" + mImageView.getWidth()
+        Log.e("<<<", "left=" + left + ",top=" + top + ",画布宽=" + mImageView.getWidth()
                 + ",画布高=" + mImageView.getHeight());
         //0.2641975308641975,0.5
         tagInfo.setX(than(left, mImageView.getWidth()));
@@ -212,6 +224,7 @@ public class LabelView extends LinearLayout {
 //            tagInfo.setX(than(left + nameLeft.getWidth() - DensityUtils.dp2px(getContext(), 15) - DensityUtils.dp2px(getContext(), 2), params.width));
 //            tagInfo.setY(than(top + DensityUtils.dp2px(getContext(), 4), params.height));
 //        }
+        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
         setLayoutParams(labelParams);
     }
 
@@ -273,17 +286,17 @@ public class LabelView extends LinearLayout {
 //            nameRight.setVisibility(GONE);
 //            pointLeft.setVisibility(GONE);
 //            priceLeft.setVisibility(GONE);
-            if (showAll) {
-                relativeRight.setVisibility(VISIBLE);
-                priceRight.setVisibility(VISIBLE);
-                pointRight.setVisibility(VISIBLE);
-                nameLeft.setVisibility(VISIBLE);
-            } else {
-                relativeRight.setVisibility(VISIBLE);
-                priceRight.setVisibility(INVISIBLE);
-                nameLeft.setVisibility(INVISIBLE);
-                pointRight.setVisibility(VISIBLE);
-            }
+        if (showAll) {
+            relativeRight.setVisibility(VISIBLE);
+            priceRight.setVisibility(VISIBLE);
+            pointRight.setVisibility(VISIBLE);
+            nameLeft.setVisibility(VISIBLE);
+        } else {
+            relativeRight.setVisibility(VISIBLE);
+            priceRight.setVisibility(INVISIBLE);
+            nameLeft.setVisibility(INVISIBLE);
+            pointRight.setVisibility(VISIBLE);
+        }
 //        }
     }
 
@@ -310,7 +323,7 @@ public class LabelView extends LinearLayout {
 //                    pointLeft.startAnimation(as);
 //                }
 //                if (pointRight.getVisibility() == VISIBLE) {
-                    pointRight.startAnimation(as);
+                pointRight.startAnimation(as);
 //                }
             }
 
@@ -323,7 +336,7 @@ public class LabelView extends LinearLayout {
 //            pointLeft.startAnimation(as);
 //        }
 //        if (pointRight.getVisibility() == VISIBLE) {
-            pointRight.startAnimation(as);
+        pointRight.startAnimation(as);
 //        }
     }
 

@@ -1,20 +1,22 @@
 package com.taihuoniao.fineix.scene.labelFragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllLabelListViewAdapter;
 import com.taihuoniao.fineix.adapters.AllLabelViewPagerAdapter1;
 import com.taihuoniao.fineix.adapters.HotLabelViewPagerAdapter;
-import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 
 /**
  * Created by taihuoniao on 2016/4/12.
  */
-public class AllLabelFragment extends BaseFragment {
+public class AllLabelFragment extends Fragment {
     private int position;
     private AllLabelBean allLabelBean;
     private AllLabelListViewAdapter adapter;
@@ -38,24 +40,14 @@ public class AllLabelFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return initView();
+    }
+
+
+    protected View initView() {
         position = getArguments() != null ? getArguments().getInt("position") : 0;
         allLabelBean = getArguments() != null ? (AllLabelBean) getArguments().getSerializable("alllabel") : null;
-    }
-
-    @Override
-    protected void requestNet() {
-
-    }
-
-    @Override
-    protected void initList() {
-
-    }
-
-    @Override
-    protected View initView() {
         View view = View.inflate(getActivity(), R.layout.view_alllabel_listview, null);
 //        ListView listView = (ListView) view.findViewById(R.id.view_alllabel_listview_listview);
         ListViewForScrollView listView = (ListViewForScrollView) view.findViewById(R.id.view_alllabel_listview_listview);

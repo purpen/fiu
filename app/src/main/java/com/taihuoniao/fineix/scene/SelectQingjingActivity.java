@@ -145,12 +145,22 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         mBDMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                activity.startActivity(new Intent(activity, DisplayOverlayerActivity.class));
+                activity.startActivityForResult(new Intent(activity, DisplayOverlayerActivity.class), DataConstants.REQUESTCODE_SELECTQJ_MAP);
             }
 
             @Override
             public boolean onMapPoiClick(MapPoi mapPoi) {
                 return false;
+            }
+        });
+        nearListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                QingJingItem qingJingItem = (QingJingItem) nearListView.getAdapter().getItem(position);
+                Intent intent1 = new Intent();
+                intent1.putExtra("qingjing", qingJingItem);
+                setResult(DataConstants.RESULTCODE_MAP_SELECTQJ, intent1);
+                finish();
             }
         });
     }
@@ -226,6 +236,15 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case DataConstants.RESULTCODE_MAP:
+                    QingJingItem qingJing = (QingJingItem) data.getSerializableExtra("qingjing");
+                    if(qingJing!=null){
+                        Intent intent1 = new Intent();
+                        intent1.putExtra("qingjing", qingJing);
+                        setResult(DataConstants.RESULTCODE_MAP_SELECTQJ, intent1);
+                        finish();
+                    }
+                    break;
                 case DataConstants.RESULTCODE_SELECTQJ_ALLQJ:
                     QingJingListBean.QingJingItem qingJingItem = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
                     if (qingJingItem != null) {

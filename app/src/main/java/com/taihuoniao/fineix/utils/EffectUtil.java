@@ -134,10 +134,10 @@ public class EffectUtil {
 
 
     //----添加标签-----
-    public static void addLabelEditable(MyImageViewTouch overlay, RelativeLayout container,
+    public static void addLabelEditable(MyImageViewTouch mImageView, RelativeLayout gpuRelative,
                                         LabelView label, int left, int top) {
-        addLabel(overlay, container, label, left, top);
-        addLabel2Overlay(overlay, label);
+        addLabel(mImageView, gpuRelative, label, left, top);
+        addLabel2Overlay(mImageView, label);
     }
 
     private static void addLabel(MyImageViewTouch overlay, RelativeLayout container, LabelView label, int left, int top) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -14,17 +15,17 @@
         android:textColor="#212121"
         android:textSize="14sp"/>
 
-    <com.taihuoniao.fineix.view.GridViewForScrollView
-        android:id="@+id/view_alllabel_item_grid"
+    <com.taihuoniao.fineix.view.WordWrapView
+        android:id="@+id/view_alllabel_item_flow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:horizontalSpacing="5dp"
-        android:numColumns="5"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:verticalSpacing="10dp"/>
+        />
+
 
     <RelativeLayout
+        android:id="@+id/view_alllabel_item_morerelative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp">
@@ -57,9 +58,9 @@
 
     <ImageView
         android:id="@+id/view_alllabel_item_moreimg"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
         android:src="@mipmap/arrow_down_gray"/>
 </LinearLayout>
