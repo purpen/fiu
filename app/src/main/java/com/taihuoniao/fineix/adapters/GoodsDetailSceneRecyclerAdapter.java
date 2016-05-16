@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsDetailSceneRecyclerAdapter.VH> {
     private Context context;
-    private List<ProductAndSceneListBean.SceneItem> list;
+    private List<ProductAndSceneListBean.ProductAndSceneItem> list;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public GoodsDetailSceneRecyclerAdapter(Context context, List<ProductAndSceneListBean.SceneItem> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public GoodsDetailSceneRecyclerAdapter(Context context, List<ProductAndSceneListBean.ProductAndSceneItem> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.context = context;
         this.list = list;
         this.itemClick = itemClick;
@@ -40,7 +40,7 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
                 itemClick.click(position);
             }
         });
-        holder.textView.setText(list.get(position).getTitle());
+        holder.textView.setText(list.get(position).getSight().getScene_title());
     }
 
     @Override

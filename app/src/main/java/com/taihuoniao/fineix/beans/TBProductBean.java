@@ -19,15 +19,24 @@ public class TBProductBean extends NetBean {
     }
 
     public static class Data {
-        private Results results;
+        private List<TBProductItem> rows;
 
-        public Results getResults() {
-            return results;
+        public List<TBProductItem> getRows() {
+            return rows;
         }
 
-        public void setResults(Results results) {
-            this.results = results;
+        public void setRows(List<TBProductItem> rows) {
+            this.rows = rows;
         }
+        //        private Results results;
+//
+//        public Results getResults() {
+//            return results;
+//        }
+//
+//        public void setResults(Results results) {
+//            this.results = results;
+//        }
     }
 
     public static class Results {
@@ -43,34 +52,60 @@ public class TBProductBean extends NetBean {
     }
 
     public static class TBProductItem {
-        private String item_url;
-        private String pict_url;
-        private String reserve_price;
+       private String oid;
         private String title;
-        private String zk_final_price;
+        private String cover_url;
+        private List<String> banners_url;
+        private String market_price;
+        private String sale_price;
+        private String link;
 
-        public String getItem_url() {
-            return item_url;
+        public List<String> getBanners_url() {
+            return banners_url;
         }
 
-        public void setItem_url(String item_url) {
-            this.item_url = item_url;
+        public void setBanners_url(List<String> banners_url) {
+            this.banners_url = banners_url;
         }
 
-        public String getPict_url() {
-            return pict_url;
+        public String getCover_url() {
+            return cover_url;
         }
 
-        public void setPict_url(String pict_url) {
-            this.pict_url = pict_url;
+        public void setCover_url(String cover_url) {
+            this.cover_url = cover_url;
         }
 
-        public String getReserve_price() {
-            return reserve_price;
+        public String getLink() {
+            return link;
         }
 
-        public void setReserve_price(String reserve_price) {
-            this.reserve_price = reserve_price;
+        public void setLink(String link) {
+            this.link = link;
+        }
+
+        public String getMarket_price() {
+            return market_price;
+        }
+
+        public void setMarket_price(String market_price) {
+            this.market_price = market_price;
+        }
+
+        public String getOid() {
+            return oid;
+        }
+
+        public void setOid(String oid) {
+            this.oid = oid;
+        }
+
+        public String getSale_price() {
+            return sale_price;
+        }
+
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
         }
 
         public String getTitle() {
@@ -79,14 +114,6 @@ public class TBProductBean extends NetBean {
 
         public void setTitle(String title) {
             this.title = title;
-        }
-
-        public String getZk_final_price() {
-            return zk_final_price;
-        }
-
-        public void setZk_final_price(String zk_final_price) {
-            this.zk_final_price = zk_final_price;
         }
     }
 }

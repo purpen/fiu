@@ -50,6 +50,7 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,6 +68,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView qingjingTitle;
     private TextView locationTv;
     private TextView timeTv;
+    private LinearLayout leftLabel;
     private ImageView userHead;
     private TextView userName;
     private TextView userInfo;
@@ -89,6 +91,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private SceneListViewAdapter sceneListViewAdapter;
     private LinearLayout subLinear;
     private ImageView subsImg;
+    private LinearLayout addressLinear;
     private TextView subsTv;
     private List<CommentsBean.CommentItem> commentList;
     private SceneDetailCommentAdapter sceneDetailCommentAdapter;
@@ -98,6 +101,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView loveTv;
     //网络请求对话框
     private WaittingDialog dialog;
+    private com.taihuoniao.fineix.beans.QingjingDetailBean.UserInfo netUserInfo;
+    private String[] locaiton = null;//服务器返回经纬度
     //图片加载
     private DisplayImageOptions options;
     //场景列表页码
@@ -127,7 +132,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         backgroundImg = (ImageView) header.findViewById(R.id.activity_qingjingdetail_background);
         qingjingTitle = (TextView) header.findViewById(R.id.activity_qingjingdetail_qingjing_title);
         locationTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_location);
+        addressLinear = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_addresslinear);
         timeTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_time);
+        leftLabel = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_leftlabel);
         userHead = (ImageView) header.findViewById(R.id.activity_qingjingdetail_userhead);
         userName = (TextView) header.findViewById(R.id.activity_qingjingdetail_username);
         userInfo = (TextView) header.findViewById(R.id.activity_qingjingdetail_userinfo);
@@ -166,6 +173,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
+        addressLinear.setOnClickListener(this);
+        leftLabel.setOnClickListener(this);
         headList = new ArrayList<>();
         sceneDetailUserHeadAdapter = new SceneDetailUserHeadAdapter(QingjingDetailActivity.this, headList);
         userHeadGrid.setAdapter(sceneDetailUserHeadAdapter);
@@ -173,7 +182,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         moreUser.setOnClickListener(this);
         createBtn.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null, null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
         changjingListView.setOnTouchListener(this);
@@ -273,12 +282,15 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         qingjingTitle.setText(netQingjingDetailBean.getData().getTitle());
                         locationTv.setText(netQingjingDetailBean.getData().getAddress());
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
+                        netUserInfo = netQingjingDetailBean.getData().getUser_info();
                         ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
                         isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());
+                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(1), netQingjingDetailBean.getData()
+                                .getLocation().getCoordinates().get(0)};
                         //添加标签
                         addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
                         is_subscript = netQingjingDetailBean.getData().getIs_subscript();
@@ -325,7 +337,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(QingjingDetailActivity.this, SearchActivity.class);
-                    intent.putExtra("q",tagsTitleList.get(finalI));
+                    intent.putExtra("q", tagsTitleList.get(finalI));
                     intent.putExtra("t", "8");
                     startActivity(intent);
                 }
@@ -360,6 +372,24 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_qingjingdetail_addresslinear:
+                if (locaiton == null) {
+                    dialog.show();
+                    DataPaser.qingjingDetails(id, handler);
+                    return;
+                }
+                Toast.makeText(QingjingDetailActivity.this, "跳转到附近的情景" + Arrays.toString(locaiton), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.activity_qingjingdetail_leftlabel:
+                if (netUserInfo == null) {
+                    dialog.show();
+                    DataPaser.qingjingDetails(id, handler);
+                    return;
+                }
+                Intent intent = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
+                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
+                startActivity(intent);
+                break;
             case R.id.activity_qingjingdetail_back:
                 onBackPressed();
                 break;
@@ -401,9 +431,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.activity_qingjingdetail_grid:
-                Log.e("<<<","点击position="+position);
+                Log.e("<<<", "点击position=" + position);
                 Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA,headList.get(position).getUser().getUser_id());
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, headList.get(position).getUser().getUser_id());
                 startActivity(intent1);
                 break;
         }

@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.Addon;
@@ -133,13 +134,13 @@ public class EffectUtil {
 
 
     //----添加标签-----
-    public static void addLabelEditable(MyImageViewTouch overlay, ViewGroup container,
+    public static void addLabelEditable(MyImageViewTouch overlay, RelativeLayout container,
                                         LabelView label, int left, int top) {
         addLabel(overlay, container, label, left, top);
         addLabel2Overlay(overlay, label);
     }
 
-    private static void addLabel(MyImageViewTouch overlay, ViewGroup container, LabelView label, int left, int top) {
+    private static void addLabel(MyImageViewTouch overlay, RelativeLayout container, LabelView label, int left, int top) {
         label.addTo(overlay, container, left, top);
     }
 

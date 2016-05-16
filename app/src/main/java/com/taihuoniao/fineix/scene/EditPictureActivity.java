@@ -28,15 +28,23 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
@@ -47,6 +55,7 @@ import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -131,69 +140,31 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setTitle(R.string.tools);
         titleLayout.setContinueListener(this);
         EffectUtil.clear();
-        ImageLoader.getInstance().loadImage(imageUri.toString(), new ImageLoadingListener() {
+        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                Log.e("<<<图片地址","uri="+imageUri);
-                currentBitmap = loadedImage;
-                gpuImageView.setImage(loadedImage);
+            public void callback(Bitmap result) {
+                currentBitmap = result;
+                gpuImageView.setImage(result);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-                if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
+                if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
                     int containerHeight = gpuRelative.getHeight();
                     int systemHeight = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
                     lp.height = containerHeight > 0 ? containerHeight : systemHeight;
-                    lp.width = lp.height * 3 / 4;
+                    lp.width = lp.height * 9 / 16;
                 } else {
                     int containerWidth = gpuRelative.getWidth();
                     int systemWidth = MainApplication.getContext().getScreenWidth();
                     lp.width = containerWidth > 0 ? containerWidth : systemWidth;
-                    lp.height = lp.width * 4 / 3;
+                    lp.height = lp.width * 16 / 9;
                 }
+                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 picWidth = lp.width;
                 picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
                 initEditView();
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
 
             }
         });
-//        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
-//            @Override
-//            public void callback(Bitmap result) {
-//                currentBitmap = result;
-//                gpuImageView.setImage(result);
-//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-//                if (gpuImageView.getWidth() * 4 > 3 * gpuImageView.getHeight()) {
-//                    int containerHeight = gpuRelative.getHeight();
-//                    int systemHeight = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
-//                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
-//                    lp.width = lp.height * 3 / 4;
-//                } else {
-//                    int containerWidth = gpuRelative.getWidth();
-//                    int systemWidth = MainApplication.getContext().getScreenWidth();
-//                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
-//                    lp.height = lp.width * 4 / 3;
-//                }
-//                picWidth = lp.width;
-//                picHeight = lp.height;
-//                gpuImageView.setLayoutParams(lp);
-//                initEditView();
-//
-//            }
-//        });
         //设置布局大小一样
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -361,11 +332,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             return;
         }
         //链接的默认位置
-        int left = MainApplication.getContext().getScreenWidth() / 2;
+        int left = mImageView.getWidth() / 4;
         int top = mImageView.getHeight() / 2;
-        if (labels.size() == 0 && left == 0 && top == 0) {
-            left = gpuRelative.getWidth() / 2 - 10;
-            top = mImageView.getHeight() / 2;
+        if (left <= 0 || top <= 0) {
+            left = 0;
+            top = 0;
         }
         LabelView label = new LabelView(EditPictureActivity.this);
         label.init(tagItem);
@@ -382,9 +353,36 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 savePicture();
                 break;
             case R.id.pop_edit_delete:
-                EffectUtil.removeLabelEditable(mImageView, gpuRelative, labelView);
-                labels.remove(labelView);
-                popupWindow.dismiss();
+                dialog.show();
+                ClientDiscoverAPI.deleteProduct(labelView.getTagInfo().getId(), new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
+                        NetBean netBean = new NetBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<NetBean>() {
+                            }.getType();
+                            netBean = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            Log.e("<<<", "数据解析异常" + e.toString());
+                        }
+                        if (netBean.isSuccess()) {
+                            EffectUtil.removeLabelEditable(mImageView, gpuRelative, labelView);
+                            labels.remove(labelView);
+                            popupWindow.dismiss();
+                        } else {
+                            Toast.makeText(EditPictureActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        Toast.makeText(EditPictureActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 break;
             case R.id.pop_edit_edit:
                 startActivityForResult(new Intent(EditPictureActivity.this, SelectStoreActivity.class), DataConstants.REQUESTCODE_EDITEDIT_SEARCHSTORE);
@@ -447,8 +445,10 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             cv.drawBitmap(gpuImageView.capture(), null, dst, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Toast.makeText(EditPictureActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
+            return;
             //出现异常存储的是未加滤镜效果的图片
-            cv.drawBitmap(currentBitmap, null, dst, null);
+//            cv.drawBitmap(currentBitmap, null, dst, null);
         }
         //加商品
         EffectUtil.applyOnSave(cv, mImageView);

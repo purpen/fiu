@@ -60,6 +60,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private EditText priceTv;
     private Button confirmBtn;
     private String imagePath;//商品图片路径
+    //网络请求返回值
+    private JDProductBean netJingDong;
+    private TBProductBean netTaoBao;
 
     public SearchURLActivity() {
         super(R.layout.activity_search_url);
@@ -123,28 +126,34 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 //https://www.amazon.cn/b/ref=lp_1791114071_gbsl_ulm_l-1_2192_69a77115?rh=i%3Ababy%2Cn%3A1791114071%2Cn%3A1791114071&ie=UTF8&node=1791114071
                 Log.e("<<<finish>>>", url);
                 if (url.startsWith("http://item.m.jd.com/product/")) {
-                    findRelative.setVisibility(View.VISIBLE);
+
                     if (url.contains("id")) {
+                        type = DataConstants.JINGDONG;
+                        findRelative.setVisibility(View.VISIBLE);
                         id = url.substring(url.indexOf("id=") + 3, url.indexOf("&", url.indexOf("id")));
                     } else if (url.endsWith(".html")) {
+                        type = DataConstants.JINGDONG;
+                        findRelative.setVisibility(View.VISIBLE);
                         id = url.substring(url.indexOf("product/") + 8, url.indexOf(".", url.indexOf("product/")));
                     }
-                    type = DataConstants.JINGDONG;
                 } else if (url.startsWith("http://h5.m.taobao.com/awp/core/detail")) {
-                    findRelative.setVisibility(View.VISIBLE);
+
                     if (url.contains("id")) {
+                        findRelative.setVisibility(View.VISIBLE);
                         id = url.substring(url.indexOf("id") + 3, url.indexOf("&", url.indexOf("id")));
                         type = DataConstants.TAOBAO;
                     }
                 } else if (url.startsWith("https://detail.m.tmall.com/item")) {
-                    findRelative.setVisibility(View.VISIBLE);
+
                     if (url.contains("id")) {
+                        findRelative.setVisibility(View.VISIBLE);
                         id = url.substring(url.indexOf("id") + 3, url.indexOf("&", url.indexOf("id")));
                         type = DataConstants.TIANMAO;
                     }
                 } else if (url.startsWith("http://www.amazon.cn/gp/aw/d")) {
-                    findRelative.setVisibility(View.VISIBLE);
+
                     if (url.contains("id")) {
+                        findRelative.setVisibility(View.VISIBLE);
                         id = url.substring(url.indexOf("B0"), url.indexOf("?", url.indexOf("B0")));
                         type = DataConstants.YAMAXUN;
                     }
@@ -232,15 +241,38 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 switch (type) {
                     case DataConstants.JINGDONG:
                         attrbute = "4";
+                        if (id.equals("-1")) {
+                            return;
+                        }
+                        if (netJingDong == null) {
+                            dialog.show();
+                            DataPaser.getJDProductData(handler, id);
+                            return;
+                        }
+                        StringBuilder banners_url = new StringBuilder();
+                        for (int i = 0; i < netJingDong.getData().getRows().get(0).getBanners_url().size(); i++) {
+                            banners_url.append("&&").append(netJingDong.getData().getRows().get(0).getBanners_url().get(i));
+                        }
+                        if (banners_url.length() > 3) {
+                            banners_url.delete(0, 2);
+                        } else {
+                            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        DataPaser.addProduct(attrbute, netJingDong.getData().getRows().get(0).getOid(), null, netJingDong.getData().getRows().get(0).getTitle(),
+                                netJingDong.getData().getRows().get(0).getMarket_price(), netJingDong.getData().getRows().get(0).getSale_price(),
+                                netJingDong.getData().getRows().get(0).getLink(), netJingDong.getData().getRows().get(0).getCover_url(), banners_url.toString(), handler);
                         break;
                     case DataConstants.TAOBAO:
                         attrbute = "2";
+                        addTBPro(attrbute);
                         break;
                     case DataConstants.TIANMAO:
                         attrbute = "3";
+                        addTBPro(attrbute);
                         break;
                 }
-                DataPaser.addProduct(attrbute, id, sku_id, name, market_price, sale_price, link, imagePath, handler);
+//                DataPaser.addProduct(attrbute, id, sku_id, name, market_price, sale_price, link, imagePath, handler);
 
                 break;
             case R.id.title_continue:
@@ -271,6 +303,31 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
 //                Toast.makeText(SearchURLActivity.this, "商品id = " + id + ",类型 = " + type, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void addTBPro(String attrbute) {
+        if (id.equals("-1")) {
+            return;
+        }
+        if (netTaoBao == null) {
+            dialog.show();
+            DataPaser.getTBProductData(handler, id);
+            return;
+        }
+        StringBuilder banners_url = new StringBuilder();
+        for (int i = 0; i < netTaoBao.getData().getRows().get(0).getBanners_url().size(); i++) {
+            banners_url.append("&&").append(netTaoBao.getData().getRows().get(0).getBanners_url().get(i));
+        }
+        if (banners_url.length() > 3) {
+            banners_url.delete(0, 2);
+        } else {
+            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        DataPaser.addProduct(attrbute, netTaoBao.getData().getRows().get(0).getOid(), null, netTaoBao.getData().getRows().get(0).getTitle(),
+                netTaoBao.getData().getRows().get(0).getMarket_price(), netTaoBao.getData().getRows().get(0).getSale_price(),
+                netTaoBao.getData().getRows().get(0).getLink(), netTaoBao.getData().getRows().get(0).getCover_url(), banners_url.toString(), handler);
+
     }
 
     @Override
@@ -309,15 +366,16 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
 //                    dialog.dismiss();
                     JDProductBean netJD = (JDProductBean) msg.obj;
                     if (netJD.isSuccess()) {
-                        imagePath = netJD.getData().getListproductbase_result().get(0).getImagePath();
+                        netJingDong = netJD;
+                        imagePath = netJD.getData().getRows().get(0).getCover_url();
                         ImageLoader.getInstance().displayImage(imagePath, productsImg);
-                        nameTv.setText(netJD.getData().getListproductbase_result().get(0).getName());
-                        priceTv.setText(netJD.getData().getListproductbase_result().get(0).getSale_price());
-                        market_price = netJD.getData().getListproductbase_result().get(0).getMarket_price();
-                        sale_price = netJD.getData().getListproductbase_result().get(0).getSale_price();
-                        link = netJD.getData().getListproductbase_result().get(0).getUrl();
-                        name = netJD.getData().getListproductbase_result().get(0).getName();
-                        sku_id = netJD.getData().getListproductbase_result().get(0).getSkuId();
+                        nameTv.setText(netJD.getData().getRows().get(0).getTitle());
+                        priceTv.setText(netJD.getData().getRows().get(0).getSale_price());
+                        market_price = netJD.getData().getRows().get(0).getMarket_price();
+                        sale_price = netJD.getData().getRows().get(0).getSale_price();
+                        link = netJD.getData().getRows().get(0).getLink();
+                        name = netJD.getData().getRows().get(0).getTitle();
+                        sku_id = null;
                         showPopup();
                     } else {
                         Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
@@ -326,14 +384,27 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 case DataConstants.TAOBAO:
                     TBProductBean netTB = (TBProductBean) msg.obj;
                     if (netTB.isSuccess()) {
-                        TBProductBean.TBProductItem item = netTB.getData().getResults().getN_tbk_item().get(0);
-                        imagePath = item.getPict_url();
+                        TBProductBean.TBProductItem item = null;
+                        try {
+                            item = netTB.getData().getRows().get(0);
+                        } catch (IndexOutOfBoundsException e) {
+                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
+                            popupWindow.dismiss();
+                            return;
+                        }
+                        if (item == null) {
+                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
+                            popupWindow.dismiss();
+                            return;
+                        }
+                        netTaoBao = netTB;
+                        imagePath = item.getCover_url();
                         ImageLoader.getInstance().displayImage(imagePath, productsImg);
                         nameTv.setText(item.getTitle());
-                        priceTv.setText(item.getZk_final_price());
-                        market_price = item.getReserve_price();
-                        sale_price = item.getZk_final_price();
-                        link = item.getItem_url();
+                        priceTv.setText(item.getSale_price());
+                        market_price = item.getMarket_price();
+                        sale_price = item.getSale_price();
+                        link = item.getLink();
                         name = item.getTitle();
                         sku_id = null;
                         showPopup();

@@ -151,6 +151,8 @@ public class DataConstants {
     public static final int FIU_USER = 22;
     //购物车跳转到首页需要切换到品页面的广播
     public static final String BroadShopCart = "com.taihuoniao.fiu.shopcart";
+    //删除用户添加的产品
+    public static final int DELETE_PRODUCT = 21;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

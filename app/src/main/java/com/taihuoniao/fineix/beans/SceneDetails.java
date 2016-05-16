@@ -30,6 +30,15 @@ public class SceneDetails extends NetBean {
     private String scene_title;
     private UserInfo user_info;
     private int is_love;
+    private String[] location;
+
+    public String[] getLocation() {
+        return location;
+    }
+
+    public void setLocation(String[] location) {
+        this.location = location;
+    }
 
     public int getLove_count() {
         return love_count;

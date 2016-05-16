@@ -99,9 +99,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/activity_edit_bottom_linear"
         android:layout_below="@id/activity_edit_titlelayout"
-        android:layout_centerHorizontal="true"
-        android:background="#080808"
-        android:gravity="center_horizontal">
+        android:background="#080808">
 
         <jp.co.cyberagent.android.gpuimage.GPUImageView
             android:id="@+id/activity_edit_gpuimage"

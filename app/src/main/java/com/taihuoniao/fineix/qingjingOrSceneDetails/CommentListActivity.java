@@ -1,12 +1,13 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +43,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private String type;//类型  12 场景评论
     private String target_user_id;//关联用户id
     //界面下的控件
+    private View activityView;
     private GlobalTitleLayout titleLayout;
     private PullToRefreshListView pullToRefreshLayout;
     private TextView nothingTv;
@@ -55,6 +57,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private WaittingDialog dialog;
     //评论列表页码
     private int currentPage = 1;
+    //判断软键盘弹起还是隐藏
+    private boolean isOpen = false;//false隐藏 true 显示
 
     public CommentListActivity() {
         super(0);
@@ -62,12 +66,15 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_commentlist);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        activityView = View.inflate(CommentListActivity.this, R.layout.activity_commentlist, null);
+        setContentView(activityView);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_commentlist_titlelayout);
         pullToRefreshLayout = (PullToRefreshListView) findViewById(R.id.activity_commentlist_pulltorefreshview);
         nothingTv = (TextView) findViewById(R.id.activity_commentlist_nothing);
         progressBar = (ProgressBar) findViewById(R.id.activity_commentlist_progressbar);
         listView = pullToRefreshLayout.getRefreshableView();
+        listView.setSelector(R.color.nothing);
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
         dialog = new WaittingDialog(this);
@@ -104,26 +111,39 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
             }
         });
+        pullToRefreshLayout.setOnClickListener(this);
         sendBtn.setOnClickListener(this);
         listView.setOnItemClickListener(this);
-        editText.addTextChangedListener(new TextWatcher() {
+        activityView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    sendBtn.setText("取消");
-                } else if (s.length() > 0) {
-                    sendBtn.setText("发送");
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                Log.e("<<<评论布局改变", "left=" + left + ",top=" + top + ",right=" + right + ",bottom=" + bottom + ",oldLeft=" + oldLeft
+//                        + ",oldTop=" + oldTop + ",oldRight=" + oldRight + ",oldBottom=" + oldBottom);
+                if (oldRight != 0 && oldBottom != 0) {
+                    if (bottom < oldBottom) {
+//                        Log.e("<<<", "弹起");
+                        isOpen = true;
+                    } else if (bottom > oldBottom) {
+//                        Log.e("<<<", "键盘隐藏");
+                        isOpen = false;
+                    }
                 }
             }
-
+        });
+        listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-
+            public boolean onTouch(View v, MotionEvent event) {
+//                Log.e("<<<touch","event="+event.getAction()+",isopen="+isOpen);
+                if (isOpen && event.getAction() == MotionEvent.ACTION_UP) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    editText.setHint("评论一下");
+                    is_reply = 0 + "";
+                    reply_id = null;
+                    reply_user_id = null;
+                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -190,17 +210,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_commentlist_send:
-                if (sendBtn.getText().toString().equals("取消") && editText.getHint().toString().startsWith("回复")) {
-                    editText.setHint("评论一下");
-                    is_reply = 0 + "";
-                    reply_id = null;
-                    reply_user_id = null;
-                    return;
-                }
                 if (TextUtils.isEmpty(editText.getText())) {
                     return;
                 }
@@ -213,6 +227,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 switch (is_reply) {
                     case "1":
                         if (reply_id == null || reply_user_id == null) {
+                            dialog.dismiss();
                             Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -228,11 +243,18 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String name = commentList.get(position).getUser().getNickname();
-        editText.setHint("回复  " + name + ":");
-        is_reply = 1 + "";
-        reply_id = commentList.get(position).get_id();
-        reply_user_id = commentList.get(position).getUser().get_id();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//获取状态信息
+        if (!isOpen) {
+            String name = commentList.get(position).getUser().getNickname();
+            editText.setHint("回复  " + name + ":");
+            is_reply = 1 + "";
+            reply_id = commentList.get(position).get_id();
+            reply_user_id = commentList.get(position).getUser().get_id();
+            //2.调用showSoftInput方法显示软键盘，其中view为聚焦的view组件
+            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        }
+
     }
 
     private String is_reply = 0 + "";//是回复还是评论 0评论 1回复
