@@ -8,7 +8,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/11.
  */
 public class AllLabelBean implements Serializable {
-    private int page = 1;//gridview显示的页码
+    private int page = 2;//gridview显示的页码
     private String _id;
     private String title_cn;
     private String parent_id;

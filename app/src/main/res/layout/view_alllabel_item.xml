@@ -15,12 +15,14 @@
         android:textColor="#212121"
         android:textSize="14sp"/>
 
-    <com.taihuoniao.fineix.view.WordWrapView
+    <com.taihuoniao.fineix.view.FlowLayout
         android:id="@+id/view_alllabel_item_flow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
+        app:horizontalSpacing="5dp"
+        app:verticalSpacing="10dp"
         />
 
 

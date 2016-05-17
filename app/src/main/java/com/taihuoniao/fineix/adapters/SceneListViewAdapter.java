@@ -155,11 +155,11 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.time.setText(subsList.get(position).getCreated_at());
         }
         if (holder.sceneTitle.getText().length() < 8) {
-            holder.sceneTitle.setTextSize(40);
-        } else if (holder.sceneTitle.getText().length() >= 13) {
             holder.sceneTitle.setTextSize(20);
+        } else if (holder.sceneTitle.getText().length() >= 13) {
+            holder.sceneTitle.setTextSize(10);
         } else {
-            holder.sceneTitle.setTextSize(30);
+            holder.sceneTitle.setTextSize(15);
         }
         return convertView;
     }

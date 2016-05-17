@@ -34,7 +34,7 @@ public class FlowLayout extends ViewGroup {
      * }
      * }
      */
-
+    private int line = -1;//默认行数,当超过line行就不再添加子view
     private static final int DEFAULT_HORIZONTAL_SPACING = 5;
     private static final int DEFAULT_VERTICAL_SPACING = 5;
 
@@ -51,14 +51,21 @@ public class FlowLayout extends ViewGroup {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
         try {
             mHorizontalSpacing = a.getDimensionPixelSize(
-                    R.styleable.FlowLayout_horizontal_spacing, DEFAULT_HORIZONTAL_SPACING);
+                    R.styleable.FlowLayout_horizontalSpacing, DEFAULT_HORIZONTAL_SPACING);
             mVerticalSpacing = a.getDimensionPixelSize(
-                    R.styleable.FlowLayout_vertical_spacing, DEFAULT_VERTICAL_SPACING);
+                    R.styleable.FlowLayout_verticalSpacing, DEFAULT_VERTICAL_SPACING);
         } finally {
             a.recycle();
         }
     }
 
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
 
     public void setHorizontalSpacing(int pixelSize) {
         mHorizontalSpacing = pixelSize;
@@ -89,7 +96,7 @@ public class FlowLayout extends ViewGroup {
         int childTop = paddingTop;
 
         int lineHeight = 0;
-
+        int curentLine = 1;//当前行数
         // Measure each child and put the child to the right of previous child
         // if there's enough room for it, otherwise, wrap the line and put the child to next line.
         for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
@@ -106,6 +113,10 @@ public class FlowLayout extends ViewGroup {
             lineHeight = Math.max(childHeight, lineHeight);
 
             if (childLeft + childWidth + paddingRight > myWidth) {
+                curentLine++;
+                if (line > -1 && curentLine > line) {
+                    break;
+                }
                 childLeft = paddingLeft + childWidth;
                 childTop += mVerticalSpacing + lineHeight;
                 lineHeight = childHeight;
@@ -131,7 +142,7 @@ public class FlowLayout extends ViewGroup {
         int childTop = paddingTop;
 
         int lineHeight = 0;
-
+        int currentLine = 1;
         for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
             View childView = getChildAt(i);
 
@@ -145,6 +156,10 @@ public class FlowLayout extends ViewGroup {
             lineHeight = Math.max(childHeight, lineHeight);
 
             if (childLeft + childWidth + paddingRight > myWidth) {
+                currentLine++;
+                if (line > -1 && currentLine > line) {
+                    break;
+                }
                 childLeft = paddingLeft;
                 childTop += mVerticalSpacing + lineHeight;
                 lineHeight = childHeight;
