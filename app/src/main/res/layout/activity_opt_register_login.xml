@@ -39,7 +39,7 @@
             android:textColor="@android:color/white"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp30"
             android:paddingTop="10dp"
             android:gravity="center_horizontal"
             >
@@ -54,8 +54,8 @@
                 android:id="@+id/tv_click_login"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="5dp"
                 android:text="立即登录"
+                android:paddingLeft="@dimen/dp5"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"/>

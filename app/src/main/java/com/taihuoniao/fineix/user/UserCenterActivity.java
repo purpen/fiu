@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CropOptionAdapter;
+import com.taihuoniao.fineix.adapters.FindFriendRecycleViewAdapter;
 import com.taihuoniao.fineix.adapters.FocusFansAdapter;
 import com.taihuoniao.fineix.adapters.UserCJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
@@ -45,6 +47,7 @@ import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -100,7 +103,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private static final int PICK_FROM_FILE = 0;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
-    private boolean isLoadMore = false;
     private WaittingDialog dialog;
     @Bind(R.id.lv_cj)
     ListView lv_cj;
@@ -153,6 +155,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
         lv_cj.addHeaderView(headView);
         lv_qj.addHeaderView(headView);
+        lv_cj.setAdapter(adapterCJ);
+        lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.GONE);
             ibtn.setVisibility(View.VISIBLE);
@@ -226,6 +230,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (dialog != null) {
                     if (curPage == 1) dialog.show();
                 }
+                curPage++;
             }
 
             @Override
@@ -262,15 +267,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      */
     private void refreshCJUI(List<SceneListBean> list) {
         if (list == null) return;
-        if (isLoadMore) {
-            if (list.size() == 0) return;
-        } else {
-            if (list.size() == 0) {
-                lv_cj.setAdapter(null);
-                return;
-            }
-        }
-        curPage++;
+        if (list.size() == 0) return;
         if (adapterCJ == null) {
             mSceneList.addAll(list);
             adapterCJ = new UserCJListAdapter(mSceneList, activity);
@@ -291,6 +288,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onStart() {
                 if (curPage == 1) dialog.show();
+                curPage++;
             }
 
             @Override
@@ -322,15 +320,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     //更新情景UI
     private void refreshQJUI(List<QingJingListBean.QingJingItem> list) {
         if (list == null) return;
-        if (isLoadMore) {
-            if (list.size() == 0) return;
-        } else {
-            if (list.size() == 0) {
-                lv_qj.setAdapter(null);
-                return;
-            }
-        }
-        curPage++;
+        if (list.size() == 0) return;
         if (adapterQJ == null) {
             mQJList.addAll(list);
             adapterQJ = new UserQJListAdapter(mQJList, activity);
@@ -396,107 +386,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-
-//    @OnClick({R.id.ll_box, R.id.ll_qj,R.id.ibtn,R.id.ll_cj, R.id.ll_focus, R.id.ll_fans, R.id.iv_right, R.id.iv_detail, R.id.bt_focus, R.id.bt_msg})
-//    void performClick(View v) {
-//        Intent intent = null;
-//        switch (v.getId()) {
-//            case R.id.iv_detail:
-//                finish();
-//                break;
-//            case R.id.iv_right:
-//                startActivity(new Intent(activity, EditUserInfoActivity.class));
-//                break;
-//            case R.id.ibtn:
-//                Util.makeToast("认证");
-//                break;
-//            case R.id.bt_focus:
-////                bt_focus.setEnabled(false);
-//                if (user.is_love == FocusFansAdapter.NOT_LOVE){
-//                    ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
-//                        @Override
-//                        public void onSuccess(ResponseInfo<String> responseInfo) {
-////                            bt_focus.setEnabled(true);
-//                            if (responseInfo == null) return;
-//                            if (TextUtils.isEmpty(responseInfo.result)) return;
-//                            LogUtil.e("focusOperate",responseInfo.result);
-//                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-//                            if (response.isSuccess()) {
-//                                user.is_love=FocusFansAdapter.LOVE;
-////                                bt_focus.setText("已关注");
-//                                Util.makeToast(response.getMessage());
-//                                return;
-//                            }
-//
-//                            Util.makeToast(response.getMessage());
-//                        }
-//
-//                        @Override
-//                        public void onFailure(HttpException e, String s) {
-////                            bt_focus.setEnabled(true);
-//                            Util.makeToast(s);
-//                        }
-//                    });
-//                }else {
-//                    ClientDiscoverAPI.cancelFocusOperate(userId+"", new RequestCallBack<String>() {
-//                        @Override
-//                        public void onSuccess(ResponseInfo<String> responseInfo) {
-////                            bt_focus.setEnabled(true);
-//                            PopupWindowUtil.dismiss();
-//                            if (responseInfo==null) return;
-//                            if (TextUtils.isEmpty(responseInfo.result)) return;
-//                            LogUtil.e("cancelFocusOperate",responseInfo.result);
-//                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-//                            if (response.isSuccess()){
-//                                user.is_love=FocusFansAdapter.NOT_LOVE;
-////                                bt_focus.setText("关注");
-//                                Util.makeToast(response.getMessage());
-//                                return;
-//                            }
-//
-//                            Util.makeToast(response.getMessage());
-//                        }
-//
-//                        @Override
-//                        public void onFailure(HttpException e, String s) {
-////                            bt_focus.setEnabled(true);
-//                            PopupWindowUtil.dismiss();
-//                            Util.makeToast(s);
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.bt_msg:
-//                intent=new Intent(activity,PrivateMessageActivity.class);
-//                intent.putExtra(UserCenterActivity.class.getSimpleName(),user);
-//                startActivity(intent);
-//                break;
-//            case R.id.ll_qj:
-////                switchFragmentandImg(UserQJFragment.class);
-//                break;
-//            case R.id.ll_cj:
-////                switchFragmentandImg(UserCJFragment.class);
-//                break;
-//            case R.id.ll_focus:
-//                intent = new Intent(activity, FocusFansActivity.class);
-//                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FOCUS_TYPE);
-//                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, userId);
-//                startActivity(intent);
-//                break;
-//            case R.id.ll_fans:
-//                intent = new Intent(activity, FocusFansActivity.class);
-//                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
-//                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, userId);
-//                startActivity(intent);
-//                break;
-//
-//            case R.id.ll_box:
-////                if (LoginInfo.getUserId()!=userId) return;
-////                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar));
-//                break;
-//        }
-//    }
-
     private View initPopView(int layout) {
         View view = Util.inflateView(this, layout, null);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
@@ -521,12 +410,21 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_cj.setOnClickListener(this);
         ll_qj.setOnClickListener(this);
 
+        lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SceneListBean item=mSceneList.get(i-1);
+                Intent intent = new Intent(activity, SceneDetailActivity.class);
+                intent.putExtra("id", item.get_id());
+                startActivity(intent);
+            }
+        });
+
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 if (i == SCROLL_STATE_IDLE ||i==SCROLL_STATE_FLING) {
                     if (absListView.getLastVisiblePosition() == mSceneList.size()) {
-                        isLoadMore = true;
                         LogUtil.e("curPage==",curPage+"");
                         loadCJData();
                     }
@@ -546,13 +444,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     LogUtil.e("mQJList.size",mQJList.size()+"");
                     if (mQJList.size()%2==0){
                         if (absListView.getLastVisiblePosition() == mQJList.size()/2) {
-                            isLoadMore = true;
                             LogUtil.e("curPage==偶数",curPage+"");
                             loadQJData();
                         }
                     }else {
                         if (absListView.getLastVisiblePosition() == mQJList.size()/2+1) {
-                            isLoadMore = true;
                             LogUtil.e("curPage==奇数",curPage+"");
                             loadQJData();
                         }
@@ -690,24 +586,24 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     private void showCj(){
+        lv_cj.setVisibility(View.VISIBLE);
+        lv_qj.setVisibility(View.GONE);
         which=MineFragment.REQUEST_CJ;
         curPage=1;
-        isLoadMore=false;
         mSceneList.clear();
-        lv_qj.setVisibility(View.GONE);
-        lv_cj.setVisibility(View.VISIBLE);
+        adapterCJ=null;
         loadCJData();
     }
 
     private void showQJ(){
+        lv_qj.setVisibility(View.VISIBLE);
+        lv_cj.setVisibility(View.GONE);
+        which=MineFragment.REQUEST_QJ;
+        curPage=1;
         LogUtil.e("清除前==",mQJList.size()+"");
         mQJList.clear();
         LogUtil.e("清除后==",mQJList.size()+"");
-        which=MineFragment.REQUEST_QJ;
-        curPage=1;
-        isLoadMore=false;
-        lv_cj.setVisibility(View.GONE);
-        lv_qj.setVisibility(View.VISIBLE);
+        adapterQJ=null;
         loadQJData();
     }
 

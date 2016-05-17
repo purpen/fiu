@@ -167,15 +167,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         mSinaWeiBo.setOnClickListener(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mDialogAppear) {
-            if (!mDialog.isShowing()) {
-                mDialog.show();
-            }
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (mDialogAppear) {
+//            if (!mDialog.isShowing()) {
+//                mDialog.show();
+//            }
+//        }
+//    }
 
     @Override
     public void finish() {

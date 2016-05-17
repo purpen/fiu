@@ -23,8 +23,8 @@
             android:gravity="center"
             >
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@mipmap/wechat"
                 android:background="@null"
                 />
@@ -46,8 +46,8 @@
             android:gravity="center"
             >
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@mipmap/wechatmoment"
                 android:background="@null"
                 />
@@ -70,8 +70,8 @@
             android:gravity="center"
             >
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@mipmap/sina"
                 android:background="@null"
                 />
@@ -93,8 +93,8 @@
             android:gravity="center"
             >
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@mipmap/qqzone"
                 android:background="@null"
                 />

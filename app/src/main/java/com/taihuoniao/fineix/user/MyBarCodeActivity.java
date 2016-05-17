@@ -38,9 +38,9 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * @author lilin
- * created at 2016/4/26 14:09
+ *         created at 2016/4/26 14:09
  */
-public class MyBarCodeActivity extends BaseActivity implements PlatformActionListener {
+public class MyBarCodeActivity extends BaseActivity implements PlatformActionListener, View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.iv_bar_code)
@@ -54,41 +54,47 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private Bitmap bitmap_2code;
     @Bind(R.id.rl)
     RelativeLayout rl;
-    public MyBarCodeActivity(){
+    @Bind(R.id.iv)
+    ImageView iv;
+    public MyBarCodeActivity() {
         super(R.layout.activity_bar_code);
     }
+
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"二维码");
+        custom_head.setHeadCenterTxtShow(true, "二维码");
         custom_head.setRightImgBtnShow(true);
-        LoginInfo loginInfo=LoginInfo.getLoginInfo();
-        if (loginInfo!=null){
-            ImageLoader.getInstance().displayImage(loginInfo.getMedium_avatar_url(),riv);
+        LoginInfo loginInfo = LoginInfo.getLoginInfo();
+        if (loginInfo != null) {
+            ImageLoader.getInstance().displayImage(loginInfo.getMedium_avatar_url(), riv);
             tv_name.setText(loginInfo.getNickname());
-            if (TextUtils.equals(loginInfo.getSex(),"1")){
-                tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.male,0);
-            }else {
-                tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.female,0);
+            if (TextUtils.equals(loginInfo.getSex(), "1")) {
+                tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.male, 0);
+            } else {
+                tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.female, 0);
             }
-            if (loginInfo.areas!=null && loginInfo.areas.size()==2){
-                tv_address.setText(String.format("%s %s",loginInfo.areas.get(0),loginInfo.areas.get(1)));
+            if (loginInfo.areas != null && loginInfo.areas.size() == 2) {
+                tv_address.setText(String.format("%s %s", loginInfo.areas.get(0), loginInfo.areas.get(1)));
             }
         }
 
         try {
             bitmap_2code = QrCodeUtils.Create2DCode(String.format(//13为用户类型
-                    "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s",13,LoginInfo.getUserId()));
+                    "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s", 13, LoginInfo.getUserId()));
             iv_bar_code.setImageBitmap(bitmap_2code);
         } catch (WriterException e) {
             e.printStackTrace();
         }
+
+        Bitmap bitmap = ImageUtils.convertViewToBitmap(rl);
+        iv.setImageBitmap(bitmap);
     }
 
     @OnClick(R.id.ib_right)
-    void performClick(View v){
-        switch (v.getId()){
+    void performClick(View v) {
+        switch (v.getId()) {
             case R.id.ib_right:
-                PopupWindowUtil.show(activity,initPopView(R.layout.popup_share_code));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_share_code));
                 break;
         }
     }
@@ -102,89 +108,88 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         View ll2 = view.findViewById(R.id.ll2);
         View ll3 = view.findViewById(R.id.ll3);
         View ll4 = view.findViewById(R.id.ll4);
-        iv_take_photo.setOnClickListener(onClickListener);
-        iv_take_album.setOnClickListener(onClickListener);
-        iv_close.setOnClickListener(onClickListener);
-        ll1.setOnClickListener(onClickListener);
-        ll2.setOnClickListener(onClickListener);
-        ll3.setOnClickListener(onClickListener);
-        ll4.setOnClickListener(onClickListener);
+        iv_take_photo.setOnClickListener(this);
+        iv_take_album.setOnClickListener(this);
+        iv_close.setOnClickListener(this);
+        ll1.setOnClickListener(this);
+        ll2.setOnClickListener(this);
+        ll3.setOnClickListener(this);
+        ll4.setOnClickListener(this);
         return view;
     }
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = null;
-            Platform.ShareParams params=null;
-            switch (v.getId()) {
-                case R.id.tv_take_photo:
-                    if (FileUtils.bitmapToFile(bitmap_2code,FileUtils.getSavePath("Fiu") + "/bar_code.png")){
-                        Util.makeToast("二维码已保存到Fiu文件夹下");
-                    }else {
-                        Util.makeToast("SD卡不可写，二维码保存失败");
-                    }
-                    PopupWindowUtil.dismiss();
-                    break;
-                case R.id.tv_album:
-                    startActivity(new Intent(activity,CaptureActivity.class));
-                    PopupWindowUtil.dismiss();
-                    break;
-                case R.id.ll1://微信
-                    params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_IMAGE);
-                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
-                    params.setUrl("http://www.taihuoniao.com");
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-                    wechat.setPlatformActionListener(MyBarCodeActivity.this);
-                    wechat.share(params);
-                    break;
-                case R.id.ll2: //微信朋友圈
-                    params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_IMAGE);
-                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
-                    params.setUrl("http://www.taihuoniao.com");
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-                    wechatMoments.setPlatformActionListener(MyBarCodeActivity.this);
-                    wechatMoments.share(params);
-                    break;
-                case R.id.ll3://新浪微博
-                    params = new Platform.ShareParams();
-                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
-                    weibo.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
-                    weibo.share(params);
-                    break;
-                case R.id.ll4:
-                    params= new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_IMAGE);
-                    params.setImageData(ImageUtils.convertViewToBitmap(rl));
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
-                    params.setTitleUrl("http://www.taihuoniao.com"); // 标题的超链接
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    params.setSite("");
-                    params.setSiteUrl("http://www.taihuoniao.com/");
-                    Platform qzone = ShareSDK.getPlatform (QZone.NAME);
-                    qzone.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
-                    qzone.share(params);
-                    break;
-                case R.id.tv_cancel:
-                default:
-                    PopupWindowUtil.dismiss();
-                    break;
-            }
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        Platform.ShareParams params = null;
+        switch (v.getId()) {
+            case R.id.tv_take_photo:
+                if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath("Fiu") + "/bar_code.png")) {
+                    Util.makeToast("二维码已保存到Fiu文件夹下");
+                } else {
+                    Util.makeToast("SD卡不可写，二维码保存失败");
+                }
+                PopupWindowUtil.dismiss();
+                break;
+            case R.id.tv_album:
+                startActivity(new Intent(activity, CaptureActivity.class));
+                PopupWindowUtil.dismiss();
+                break;
+            case R.id.ll1://微信
+                params = new Platform.ShareParams();
+                params.setShareType(Platform.SHARE_IMAGE);
+                params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                params.setUrl("http://www.taihuoniao.com");
+                params.setTitle("有Fiu的生活");
+                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
+                Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                wechat.setPlatformActionListener(MyBarCodeActivity.this);
+                wechat.share(params);
+                break;
+            case R.id.ll2: //微信朋友圈
+                params = new Platform.ShareParams();
+                params.setShareType(Platform.SHARE_IMAGE);
+                params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                params.setUrl("http://www.taihuoniao.com");
+                params.setTitle("有Fiu的生活");
+                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
+                Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                wechatMoments.setPlatformActionListener(MyBarCodeActivity.this);
+                wechatMoments.share(params);
+                break;
+            case R.id.ll3://新浪微博
+                params = new Platform.ShareParams();
+                params.setImageData(ImageUtils.convertViewToBitmap(rl));
+                params.setTitle("有Fiu的生活");
+                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
+                Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                weibo.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
+                weibo.share(params);
+                break;
+            case R.id.ll4:
+                params = new Platform.ShareParams();
+                params.setShareType(Platform.SHARE_IMAGE);
+                Bitmap bitmap = ImageUtils.convertViewToBitmap(rl);
+                params.setImageData(bitmap);
+                params.setTitle("有Fiu的生活");
+                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
+                params.setTitleUrl("http://www.taihuoniao.com"); // 标题的超链接
+                params.setImageUrl(LoginInfo.getHeadPicUrl());
+                params.setSite("");
+                params.setSiteUrl("http://www.taihuoniao.com/");
+                Platform qzone = ShareSDK.getPlatform(QZone.NAME);
+                qzone.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
+                qzone.share(params);
+                break;
+            case R.id.tv_cancel:
+            default:
+                PopupWindowUtil.dismiss();
+                break;
         }
-    };
+    }
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -201,10 +206,10 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         handler.sendEmptyMessage(3);
     }
 
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 3:
                     Util.makeToast("对不起，分享出错");
                     break;

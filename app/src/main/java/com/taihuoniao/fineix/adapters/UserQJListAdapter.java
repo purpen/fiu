@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -45,7 +47,8 @@ public class UserQJListAdapter extends CommonBaseAdapter<QingJingListBean.QingJi
             holder=(ViewHolder)convertView.getTag();
         }
 
-        QingJingListBean.QingJingItem left_qj,right_qj = null;
+        final QingJingListBean.QingJingItem left_qj;
+        QingJingListBean.QingJingItem right_qj = null;
         left_qj=list.get(2*position);
 
         if (position == list.size() / 2) {
@@ -61,9 +64,26 @@ public class UserQJListAdapter extends CommonBaseAdapter<QingJingListBean.QingJi
         imageLoader.displayImage(left_qj.getCover_url(),holder.iv_cover_left,options);
         holder.tv_title_left.setText(left_qj.getTitle());
         holder.tv_desc_left.setText(left_qj.getAddress());
-
+        holder.rl_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, QingjingDetailActivity.class);
+                intent.putExtra("id",left_qj.get_id());
+                activity.startActivity(intent);
+            }
+        });
+        final QingJingListBean.QingJingItem finalRight_qj = right_qj;
+        holder.rl_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, QingjingDetailActivity.class);
+                intent.putExtra("id", finalRight_qj.get_id());
+                activity.startActivity(intent);
+            }
+        });
         return convertView;
     }
+
 
     static class ViewHolder {
         @Bind(R.id.rl_left)

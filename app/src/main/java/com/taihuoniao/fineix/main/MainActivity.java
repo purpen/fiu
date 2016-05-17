@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -228,7 +229,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     switchFragmentandImg(MineFragment.class);
                 } else {
                     which = MineFragment.class.getSimpleName();
-                    startActivity(new Intent(activity, ToLoginActivity.class));
+                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }
                 break;
         }
