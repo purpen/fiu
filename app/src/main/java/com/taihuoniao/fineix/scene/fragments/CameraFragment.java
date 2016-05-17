@@ -67,7 +67,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private int curZoomValue = 0;
     private Handler handler = new Handler();
     private Bundle bundle;//存储图片
-    private int PHOTO_SIZE = 2000;
+//    private int PHOTO_SIZE = 2000;
 
 
     @Override
@@ -207,15 +207,15 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         parameters = cameraInst.getParameters();
         parameters.setPictureFormat(PixelFormat.JPEG);
         //if (adapterSize == null) {
-        setUpPicSize(parameters);
-        setUpPreviewSize(parameters);
-        //}
-        if (adapterSize != null) {
-            parameters.setPictureSize(adapterSize.width, adapterSize.height);
-        }
-        if (previewSize != null) {
-            parameters.setPreviewSize(previewSize.width, previewSize.height);
-        }
+//        setUpPicSize(parameters);
+//        setUpPreviewSize(parameters);
+//        //}
+//        if (adapterSize != null) {
+//            parameters.setPictureSize(adapterSize.width, adapterSize.height);
+//        }
+//        if (previewSize != null) {
+//            parameters.setPreviewSize(previewSize.width, previewSize.height);
+//        }
 
 
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);//1连续对焦
@@ -246,6 +246,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             return;
         } else {
             previewSize = findBestPreviewResolution();
+            Log.e("<<<", "预览像素=" + previewSize.height + "," + previewSize.width + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         }
     }
 
@@ -279,6 +280,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 //
         List<Camera.Size> rawSupportedSizes = cameraParameters.getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
+            Log.e("<<<为空情况下", "预览像素=" + defaultPreviewResolution.height + "," + defaultPreviewResolution.width
+                    + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
             return defaultPreviewResolution;
         }
 
@@ -322,19 +325,29 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
 
             // 找到与屏幕分辨率完全匹配的预览界面分辨率直接返回
-            if (width == MainApplication.getContext().getScreenWidth()
-                    && height == MainApplication.getContext().getScreenHeight()) {
+            if (width == surfaceView.getWidth()
+                    && height == surfaceView.getHeight()) {
+                Log.e("<<<与屏幕相同分辨率", "预览像素=" + supportedPreviewResolution.height + "," + supportedPreviewResolution.width
+                        + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
                 return supportedPreviewResolution;
             }
         }
 
         // 如果没有找到合适的，并且还有候选的像素，则设置其中最大比例的，对于配置比较低的机器不太合适
         if (!supportedPreviewResolutions.isEmpty()) {
-            Camera.Size largestPreview = supportedPreviewResolutions.get(0);
-            return largestPreview;
+            for (int i = 0; i < supportedPreviewResolutions.size(); i++) {
+                Camera.Size largestPreview = supportedPreviewResolutions.get(i);
+                if (surfaceView.getWidth() * largestPreview.height == surfaceView.getHeight() * largestPreview.width) {
+                    Log.e("<<<与宽高比例一样的分辨率", "预览像素=" + largestPreview.height + "," + largestPreview.width
+                            + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
+                    return largestPreview;
+                }
+            }
         }
 
         // 没有找到合适的，就返回默认的
+        Log.e("<<<最终返回默认像素", "预览像素=" + defaultPreviewResolution.height + "," + defaultPreviewResolution.width
+                + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         return defaultPreviewResolution;
 
     }
@@ -373,10 +386,14 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         });
         // 如果没有找到合适的，并且还有候选的像素，对于照片，则取其中最大比例的，而不是选择与屏幕分辨率相同的
         if (!sortedSupportedPicResolutions.isEmpty()) {
+            Log.e("<<<拍照图片最大像素", "预览像素=" + sortedSupportedPicResolutions.get(0).height + "," + sortedSupportedPicResolutions.get(0).width
+                    + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
             return sortedSupportedPicResolutions.get(0);
         }
 
         // 没有找到合适的，就返回默认的
+        Log.e("<<<拍照图片默认像素", "预览像素=" + defaultPictureResolution.height + "," + defaultPictureResolution.width
+                + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         return defaultPictureResolution;
     }
 
@@ -486,6 +503,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private BitmapFactory.Options options = null;
+
     private String saveToSDCard(byte[] data) throws IOException {
         Bitmap croppedImage;
 
@@ -493,12 +512,12 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-        PHOTO_SIZE = options.outHeight > options.outWidth ? options.outWidth : options.outHeight;
+        this.options = options;
         options.inJustDecodeBounds = false;
-        Rect r = new Rect(0, 0, PHOTO_SIZE, PHOTO_SIZE);
+        Rect r = new Rect(0, 0, options.outWidth, options.outHeight);
         try {
             croppedImage = decodeRegionCrop(data, r);
+            Log.e("<<<", "拍照保存的图片=" + croppedImage.getWidth() + "," + croppedImage.getHeight());
         } catch (Exception e) {
             return null;
         }
@@ -531,9 +550,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             }
         }
         Matrix m = new Matrix();
-        m.setRotate(90, PHOTO_SIZE / 2, PHOTO_SIZE / 2);
-        Bitmap rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, PHOTO_SIZE, PHOTO_SIZE, m, true);
-        if (rotatedImage != croppedImage)
+        m.setRotate(90, options.outWidth, options.outHeight);
+        Bitmap rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, options.outWidth, options.outHeight, m, true);
+        if (rotatedImage != croppedImage && croppedImage != null)
             croppedImage.recycle();
         return rotatedImage;
     }
@@ -556,8 +575,11 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e("<<<", "surfaceChanged");
+            Log.e("<<<", "surfaceChanged" + ",width=" + width + ",height=" + height+",surfaceView.width="+surfaceView.getWidth()
+            +",surfaceView.height="+surfaceView.getHeight());
             autoFocus();
+            parameters.setPreviewSize(surfaceView.getWidth(), surfaceView.getHeight());
+            parameters.setPictureSize(surfaceView.getWidth(), surfaceView.getHeight());
         }
 
         @Override
@@ -570,7 +592,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     cameraInst = null;
                 }
             } catch (Exception e) {
-                Log.e("<<<","相机已经关闭");
+                Log.e("<<<", "相机已经关闭");
             }
 
         }

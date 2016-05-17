@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.beans.PhotoItem;
@@ -144,7 +143,6 @@ public class ImageUtils {
             fen = Integer.parseInt(longitudes[1].substring(0, longitudes[1].indexOf("/")));
             miao = Integer.parseInt(longitudes[2].substring(0, longitudes[2].indexOf("/")));
             double jingdu = du + fen / 60 + miao / 1000000 / 60 / 60;
-            Toast.makeText(MainApplication.getContext(), "经度 = " + jingdu + ",纬度 = " + weidu, Toast.LENGTH_SHORT).show();
             return new double[]{jingdu, weidu};
         }
         return null;
@@ -205,7 +203,7 @@ public class ImageUtils {
 
         }
         options.inJustDecodeBounds = false;
-        Bitmap sourceBm = BitmapFactory.decodeFile(pathName, options);
+        Bitmap sourceBm = BitmapFactory.decodeFile(pathName,options);
         return sourceBm;
     }
 
