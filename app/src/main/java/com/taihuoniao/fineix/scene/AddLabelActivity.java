@@ -169,7 +169,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         //需要登录
         DataPaser.usedLabelList(handler);
         DataPaser.labelList(null, allLabelCurrentPage, null, 0, 0, handler);
-        ClientDiscoverAPI.labelList(null, 1, 18 + "", 0, 1, new RequestCallBack<String>() {
+        ClientDiscoverAPI.labelList(null, 1, 18 + "", 3, 1, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -309,7 +309,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                             Log.e("<<<", "没有用过的标签");
                             return;
                         }
-                        usedLabelList.clear();
                         usedLabelList.addAll(netUsedLabel.getUsedLabelList());
                         usedLabelRelative.setVisibility(View.VISIBLE);
                         hotLabelViewPagerAdapter.notifyDataSetChanged();

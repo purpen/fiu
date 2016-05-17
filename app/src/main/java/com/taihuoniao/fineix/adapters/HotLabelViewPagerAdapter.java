@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,15 +22,16 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
     private Context context;
     private List<UsedLabelBean> usedLabelList;
     private List<HotLabel.HotLabelBean> hotLabelList;
-//    private HotLaelAdapter hotLabelAdapter;
-//    private UsedLabelAdapter usedLabelAdapter;
+    private HotLaelAdapter hotLabelAdapter;
+    private UsedLabelAdapter usedLabelAdapter;
     private LabelClick labelClick;
 
     public HotLabelViewPagerAdapter(Context context, List<UsedLabelBean> usedLabelList, List<HotLabel.HotLabelBean> hotLabelList, LabelClick labelClick) {
         this.context = context;
         this.usedLabelList = usedLabelList;
         this.hotLabelList = hotLabelList;
-
+        usedLabelAdapter = new UsedLabelAdapter();
+        hotLabelAdapter = new HotLaelAdapter();
         this.labelClick = labelClick;
     }
 
@@ -49,12 +49,8 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
 
     @Override
     public void notifyDataSetChanged() {
-//        usedLabelAdapter.notifyDataSetChanged();
-//        hotLabelAdapter.notifyDataSetChanged();
-//        destroyItem(container, 0, object);
-//        destroyItem(container, 1, object);
-//        instantiateItem(container, 0);
-//        instantiateItem(container,1);
+        usedLabelAdapter.notifyDataSetChanged();
+        hotLabelAdapter.notifyDataSetChanged();
         super.notifyDataSetChanged();
     }
 
@@ -74,28 +70,20 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
         GridViewForScrollView gridView = (GridViewForScrollView) view.findViewById(R.id.view_label_gridview_grid);
         gridView.setOnItemClickListener(this);
         if (usedLabelList.size() == 0) {
-            gridView.setAdapter(new HotLaelAdapter());
+            gridView.setAdapter(hotLabelAdapter);
         } else {
             if (position == 0) {
-                Log.e("<<<使用过的标签适配", "");
-                gridView.setAdapter(new UsedLabelAdapter());
+                gridView.setAdapter(usedLabelAdapter);
             } else if (position == 1) {
-                Log.e("<<<热门标签适配", "");
-                gridView.setAdapter(new HotLaelAdapter());
+                gridView.setAdapter(hotLabelAdapter);
             }
         }
-//        Log.e("<<<标签位置", "position=" + position);
         container.addView(view);
         return view;
     }
 
-    private ViewGroup container;
-    private Object object;
-
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        this.container = container;
-        this.object = object;
         container.removeView(container.getChildAt(position));
     }
 
@@ -132,7 +120,6 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
             }
             TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
             textView.setText(usedLabelList.get(position).getTitle_cn());
-            Log.e("<<<使用过的标签", usedLabelList.get(position).getTitle_cn());
             return convertView;
         }
     }
@@ -161,7 +148,6 @@ public class HotLabelViewPagerAdapter extends PagerAdapter implements AdapterVie
             }
             TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
             textView.setText(hotLabelList.get(position).getTitle_cn());
-            Log.e("<<<热门标签", hotLabelList.get(position).getTitle_cn());
             return convertView;
         }
     }

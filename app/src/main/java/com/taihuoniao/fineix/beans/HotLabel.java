@@ -33,6 +33,7 @@ public class HotLabel extends NetBean {
     public static class HotLabelBean{
         private String _id;
         private String title_cn;
+        public int line = 3;
 
         public String getTitle_cn() {
             return title_cn;
