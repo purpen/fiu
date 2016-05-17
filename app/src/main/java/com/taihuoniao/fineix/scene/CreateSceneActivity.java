@@ -344,7 +344,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
                         Log.e("<<<", "图片大小=" + stream.size());
-                    } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
+                    } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             scene_id, tags.toString(), product_id.toString(), product_title.toString(),
@@ -368,7 +368,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
                         Log.e("<<<", "图片大小=" + stream.size());
-                    } while (stream.size() > 512 * 1024);//最大上传图片不得超过512K
+                    } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
                             tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "", handler);
@@ -524,17 +524,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.CREATE_SCENE:
                     dialog.dismiss();
                     NetBean netBean = (NetBean) msg.obj;
-                    Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
                     if (netBean.isSuccess()) {
-                        if (SelectPhotoOrCameraActivity.instance != null) {
-                            SelectPhotoOrCameraActivity.instance.finish();
-                        }
-                        if (CropPictureActivity.instance != null) {
-                            CropPictureActivity.instance.finish();
-                        }
-                        if (EditPictureActivity.instance != null) {
-                            EditPictureActivity.instance.finish();
-                        }
+                        startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
                         CreateSceneActivity.this.finish();
                     }
                     break;

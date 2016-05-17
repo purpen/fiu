@@ -1,11 +1,11 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -56,7 +56,7 @@ public class AllLabelListViewAdapter extends BaseAdapter implements View.OnClick
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder hold;
+        final ViewHolder hold;
 //        ?convertView复用会导致滑过去之后的数据从新加载
         if (convertView == null) {
             hold = new ViewHolder();
@@ -74,14 +74,25 @@ public class AllLabelListViewAdapter extends BaseAdapter implements View.OnClick
 //        Log.e("<<<标签", allLabelList.get(position).toString());
 //        hold.autoFitLinearLayout.setAdapter(new AllLabelGridViewAdapter(context, allLabelList.get(position)));
         hold.flowLayout.removeAllViews();
+        hold.flowLayout.setLine(allLabelList.get(position).getPage());
 //        hold.wordWrapView.removeAllViews();
         hold.nameTv.setText(allLabelList.get(position).getTitle_cn());
         for (int i = 0; i < allLabelList.get(position).getChildren().size(); i++) {
-            View v = View.inflate(context, R.layout.view_labellist_item, null);
-            TextView textView = (TextView) v.findViewById(R.id.view_labellist_item_tv);
+//            View v = View.inflate(context, R.layout.view_labellist_item, null);
+//            TextView textView = (TextView) v.findViewById(R.id.view_labellist_item_tv);
+            TextView textView = new TextView(context);
+            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setBackgroundResource(R.drawable.background_corner_black);
+            textView.setGravity(Gravity.CENTER);
+            textView.setMinWidth(DensityUtils.dp2px(context, 60));
+            int value = DensityUtils.dp2px(context, 8);
+            textView.setPadding(value, value, value, value);
+            textView.setSingleLine(true);
+            textView.setTextSize(12);
+            textView.setTextColor(context.getResources().getColor(R.color.black333333));
             textView.setText(allLabelList.get(position).getChildren().get(i).getTitle_cn());
             final int finalI = i;
-            v.setOnClickListener(new View.OnClickListener() {
+            textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     labelClick.click(new UsedLabelBean(allLabelList.get(position).getChildren().get(finalI).get_id(), allLabelList.get(position).getChildren().get(finalI).getTitle_cn()));
@@ -92,43 +103,41 @@ public class AllLabelListViewAdapter extends BaseAdapter implements View.OnClick
         }
         hold.moreImg.setTag(position);
         hold.moreRelative.setTag(position);
-        hold.moreRelative.setOnClickListener(new Click(context, hold.flowLayout, hold.moreTv, moreClick));
-        hold.moreImg.setOnClickListener(new Click(context, hold.flowLayout, hold.moreTv, moreClick));
+        hold.moreRelative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hold.flowLayout.getLine() > -1) {
+                    hold.moreTv.setText("收起");
+                    allLabelList.get(position).setPage(-1);
+                    notifyDataSetChanged();
+                    moreClick.moreClick(0, 0, 0);
+                }else{
+                    hold.moreTv.setText("更多");
+                    allLabelList.get(position).setPage(2);
+                    notifyDataSetChanged();
+                    moreClick.moreClick(0,0,0);
+                }
+            }
+        });
+       hold.moreImg.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               if (hold.flowLayout.getLine() > -1) {
+                   hold.moreTv.setText("收起");
+                   allLabelList.get(position).setPage(-1);
+                   notifyDataSetChanged();
+                   moreClick.moreClick(0, 0, 0);
+               }else{
+                   hold.moreTv.setText("更多");
+                   allLabelList.get(position).setPage(2);
+                   notifyDataSetChanged();
+                   moreClick.moreClick(0,0,0);
+               }
+           }
+       });
         return convertView;
     }
 
-
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        labelClick.click(allLabelList.get((Integer) parent.getTag()).getChildren().get(position));
-//    }
-
-    public static class Click implements View.OnClickListener {
-        Context context;
-        FlowLayout flowLayout;
-        TextView textView;
-        MoreClick moreClick;
-
-        public Click(Context context, FlowLayout flowLayout, TextView textView, MoreClick moreClick) {
-            this.context = context;
-            this.flowLayout = flowLayout;
-            this.textView = textView;
-            this.moreClick = moreClick;
-        }
-
-        @Override
-        public void onClick(View v) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) flowLayout.getLayoutParams();
-            if (flowLayout.getHeight() <= DensityUtils.dp2px(context, 75)) {
-                lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                textView.setText("收起");
-            } else {
-                lp.height = DensityUtils.dp2px(context, 72);
-                textView.setText("更多");
-            }
-            moreClick.moreClick(0, 0, 0);
-        }
-    }
 
     @Override
     public void onClick(View v) {
