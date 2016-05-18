@@ -54,8 +54,6 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private Bitmap bitmap_2code;
     @Bind(R.id.rl)
     RelativeLayout rl;
-    @Bind(R.id.iv)
-    ImageView iv;
     public MyBarCodeActivity() {
         super(R.layout.activity_bar_code);
     }
@@ -86,8 +84,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
             e.printStackTrace();
         }
 
-        Bitmap bitmap = ImageUtils.convertViewToBitmap(rl);
-        iv.setImageBitmap(bitmap);
+//        Bitmap bitmap = ImageUtils.convertViewToBitmap(rl);
+//        iv.setImageBitmap(bitmap);
     }
 
     @OnClick(R.id.ib_right)

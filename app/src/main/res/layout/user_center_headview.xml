@@ -6,7 +6,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp240">
+        android:layout_height="@dimen/dp250">
         <ImageView
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
@@ -72,6 +72,7 @@
                 app:riv_border_width="@dimen/dp1"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/dp5"
+                android:layout_marginTop="@dimen/dp15"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
@@ -102,48 +103,51 @@
                 android:text="达人|V4"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />
-            <ImageButton
-                android:id="@+id/ibtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp10"
-                android:layout_marginBottom="@dimen/dp10"
-                android:background="@null"
-                android:src="@mipmap/authentication"
-                android:visibility="gone"
-                />
-            <LinearLayout
-                android:id="@+id/ll_btn_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp10"
-                android:orientation="horizontal"
-                android:visibility="gone">
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/ibtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10"
+            android:background="@null"
+            android:src="@mipmap/authentication"
+            android:visibility="gone"
+            />
+        <LinearLayout
+            android:id="@+id/ll_btn_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
 
-                <Button
-                    android:id="@+id/bt_focus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp30"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/shap_redbutton_commit"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp12" />
+            <Button
+                android:id="@+id/bt_focus"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp30"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shap_redbutton_commit"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12" />
 
-                <Button
-                    android:id="@+id/bt_msg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp30"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/dp20"
-                    android:background="@drawable/shap_redbutton_commit"
-                    android:text="私信"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp12" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/bt_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp30"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/dp20"
+                android:background="@drawable/shap_redbutton_commit"
+                android:text="私信"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -199,7 +203,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
                 android:text="情景"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />

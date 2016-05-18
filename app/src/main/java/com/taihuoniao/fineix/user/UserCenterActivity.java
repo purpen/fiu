@@ -1,21 +1,10 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -25,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -34,14 +21,10 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.CropOptionAdapter;
-import com.taihuoniao.fineix.adapters.FindFriendRecycleViewAdapter;
 import com.taihuoniao.fineix.adapters.FocusFansAdapter;
 import com.taihuoniao.fineix.adapters.UserCJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CropOption;
-import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -51,20 +34,15 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.utils.Base64Utils;
-import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -101,13 +79,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private LinearLayout ll_qj;
     private LinearLayout ll_cj;
     private User user;
-    private Uri mImageUri;
     private int which = MineFragment.REQUEST_CJ;
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     private WaittingDialog dialog;
-    private Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"temp.jpg"));
+    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"temp.jpg"));
     @Bind(R.id.lv_cj)
     ListView lv_cj;
     @Bind(R.id.lv_qj)
@@ -129,6 +106,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        requestNet();
+    }
 
     @Override
     protected void initView() {
@@ -177,8 +159,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "requestNet==" + userId);
-        dialog.show();
         ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                if (dialog!=null) dialog.show();
+            }
+
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -636,7 +622,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
 //                    Bitmap bitmap =ImageUtils.decodeUriAsBitmap(imageUri);
-                    toCropActivity(imageUri);
+                    if (imageUri!=null){
+//                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+                        toCropActivity(imageUri);
+                    }
                     break;
             }
         }
@@ -646,47 +635,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         Intent intent=new Intent(activity,ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(),uri);
         startActivity(intent);
-    }
-
-    private void uploadFile(final File file) { //换个人中心背景图
-        if (file == null) return;
-        if (file.length() == 0) return;
-        try {
-            ClientDiscoverAPI.uploadBgImg(Base64Utils.encodeFile2Base64Str(file), new RequestCallBack<String>() {
-                @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
-                    if (responseInfo == null) {
-                        return;
-                    }
-                    if (TextUtils.isEmpty(responseInfo.result)) {
-                        return;
-                    }
-                    LogUtil.e(TAG, responseInfo.result);
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                    if (response.isSuccess()) {
-                        ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
-                        });
-                        if (!TextUtils.isEmpty(imgUploadBean.head_pic_url)) {
-//                            ImageUtils.loadBgImg(imgUploadBean.head_pic_url,ll_box);
-                            ImageLoader.getInstance().displayImage(imgUploadBean.head_pic_url,iv_bg);
-                        }
-                        Util.makeToast(response.getMessage());
-                        return;
-                    }
-                    Util.makeToast(response.getMessage());
-                }
-
-                @Override
-                public void onFailure(HttpException e, String s) {
-                    Util.makeToast(s);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (file.exists()) file.delete();
-        }
-
     }
 
 }
