@@ -1207,7 +1207,7 @@ public class DataPaser {
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据异常" + e.toString());
                 }
-                handler.sendMessage(msg);
+                handler.sendMessageDelayed(msg,300);
             }
 
             @Override

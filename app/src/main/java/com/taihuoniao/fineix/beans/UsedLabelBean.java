@@ -1,9 +1,11 @@
 package com.taihuoniao.fineix.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by taihuoniao on 2016/4/11.
  */
-public class UsedLabelBean {
+public class UsedLabelBean implements Serializable{
     private String _id;
     private String title_cn;
     private String parent_id;
@@ -19,6 +21,7 @@ public class UsedLabelBean {
     private String status;
     private String created_on;
     private String updated_on;
+    public int line = 3;
 
     public UsedLabelBean() {
     }

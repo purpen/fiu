@@ -21,6 +21,15 @@ public class BrandDetailBean extends NetBean {
         private String title;
         private String des;
         private String cover_url;
+        private String banner_url;
+
+        public String getBanner_url() {
+            return banner_url;
+        }
+
+        public void setBanner_url(String banner_url) {
+            this.banner_url = banner_url;
+        }
 
         public String get_id() {
             return _id;

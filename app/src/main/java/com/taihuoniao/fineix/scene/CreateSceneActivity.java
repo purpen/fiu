@@ -389,15 +389,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                if (SelectPhotoOrCameraActivity.instance != null) {
-                    SelectPhotoOrCameraActivity.instance.finish();
-                }
-                if (CropPictureActivity.instance != null) {
-                    CropPictureActivity.instance.finish();
-                }
-                if (EditPictureActivity.instance != null) {
-                    EditPictureActivity.instance.finish();
-                }
+                startActivity(new Intent(CreateSceneActivity.this,MainActivity.class));
                 CreateSceneActivity.this.finish();
             }
         });

@@ -45,7 +45,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setContinueListener(this);
-        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(CropPictureActivity.this, 50), true));
+        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(CropPictureActivity.this, 50), false));
     }
 
     @Override

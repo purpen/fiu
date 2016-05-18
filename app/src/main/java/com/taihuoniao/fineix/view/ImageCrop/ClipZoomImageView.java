@@ -30,7 +30,7 @@ public class ClipZoomImageView extends ImageView implements
 
     private static final String TAG = ClipZoomImageView.class.getSimpleName();
     public static float SCALE_MAX = 4.0f;
-    private static float SCALE_MID = 2.0f;
+    private static float SCALE_MID = 0.1f;
 
     /**
      * 初始化时的缩放比例，如果图片宽或高大于屏幕，此值将小于0
@@ -103,8 +103,8 @@ public class ClipZoomImageView extends ImageView implements
      * @author zhy
      */
     private class AutoScaleRunnable implements Runnable {
-        static final float BIGGER = 1.07f;
-        static final float SMALLER = 0.93f;
+        static final float BIGGER = 4.0f;
+        static final float SMALLER = 0.1f;
         private float mTargetScale;
         private float tmpScale;
 

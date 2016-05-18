@@ -166,7 +166,6 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     }
 
     private void getCurrentLocation() {
-        dialog.show();
         MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
@@ -180,6 +179,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                         .longitude(bdLocation.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
                 if (isFirstLoc) {
+                    dialog.show();
                     isFirstLoc = false;
                     LatLng ll = new LatLng(bdLocation.getLatitude(),
                             bdLocation.getLongitude());

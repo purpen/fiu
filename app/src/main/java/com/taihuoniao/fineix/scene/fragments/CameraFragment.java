@@ -18,6 +18,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -26,8 +27,8 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,7 +37,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -67,7 +67,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private int curZoomValue = 0;
     private Handler handler = new Handler();
     private Bundle bundle;//存储图片
-    private int PHOTO_SIZE = 2000;
+//    private int PHOTO_SIZE = 2000;
 
 
     @Override
@@ -135,7 +135,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     });
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getActivity(), "拍照失败！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "拍照失败，请返回重试！", Toast.LENGTH_SHORT).show();
                     try {
                         cameraInst.startPreview();
                     } catch (Throwable e) {
@@ -206,20 +206,30 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private void initCamera() {
         parameters = cameraInst.getParameters();
         parameters.setPictureFormat(PixelFormat.JPEG);
-        //if (adapterSize == null) {
+//        if (adapterSize == null) {
         setUpPicSize(parameters);
         setUpPreviewSize(parameters);
-        //}
+//        }
         if (adapterSize != null) {
             parameters.setPictureSize(adapterSize.width, adapterSize.height);
         }
         if (previewSize != null) {
             parameters.setPreviewSize(previewSize.width, previewSize.height);
+
+//            parameters.setPreviewSize(surfaceView.getWidth(), surfaceView.getHeight());
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) surfaceView.getLayoutParams();
+            if (previewSize.width != 0) {
+                lp.width = surfaceView.getWidth();
+                lp.height = lp.width*previewSize.width/previewSize.height;
+                    surfaceView.setLayoutParams(lp);
+                    Log.e("<<<最终的预览参数", "width=" + previewSize.width + ",height=" + previewSize.height + ",surface.width="
+                            + surfaceView.getWidth() + ",surface.height=" + surfaceView.getHeight());
+            }
         }
 
 
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);//1连续对焦
-
+//        cameraInst.setDisplayOrientation(180);
         setDispaly(parameters, cameraInst);
         try {
             cameraInst.setParameters(parameters);
@@ -246,8 +256,11 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             return;
         } else {
             previewSize = findBestPreviewResolution();
+//            previewSize = getPreviews();
+//            Log.e("<<<", "预览像素=" + previewSize.height + "," + previewSize.width + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         }
     }
+
 
     //控制图像的正确显示方向
     private void setDispaly(Camera.Parameters parameters, Camera camera) {
@@ -261,6 +274,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             downPolymorphic = camera.getClass().getMethod("setDisplayOrientation",
                     int.class);
             if (downPolymorphic != null) {
+                Log.e("<<<", "调整方向");
                 downPolymorphic.invoke(camera, i);
             }
         } catch (Exception e) {
@@ -274,9 +288,12 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
      * @return
      */
     private Camera.Size findBestPreviewResolution() {
+        //保证宽大于高
+        boolean isPortrait = surfaceView.getWidth() < surfaceView.getHeight();//判断手机是不是竖屏
+        int currentWidht = isPortrait ? surfaceView.getHeight() : surfaceView.getWidth();
+        int currentHeight = isPortrait ? surfaceView.getWidth() : surfaceView.getHeight();
         Camera.Parameters cameraParameters = cameraInst.getParameters();
         Camera.Size defaultPreviewResolution = cameraParameters.getPreviewSize();
-//
         List<Camera.Size> rawSupportedSizes = cameraParameters.getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
             return defaultPreviewResolution;
@@ -299,43 +316,34 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             }
         });
 
-        StringBuilder previewResolutionSb = new StringBuilder();
-        for (Camera.Size supportedPreviewResolution : supportedPreviewResolutions) {
-            previewResolutionSb.append(supportedPreviewResolution.width).append('x').append(supportedPreviewResolution.height)
-                    .append(' ');
-        }
-        Log.e("<<<", "Supported preview resolutions: " + previewResolutionSb);
-
-
-        // 移除不符合条件的分辨率
-        Iterator<Camera.Size> it = supportedPreviewResolutions.iterator();
-        while (it.hasNext()) {
-            Camera.Size supportedPreviewResolution = it.next();
-            int width = supportedPreviewResolution.width;
-            int height = supportedPreviewResolution.height;
-
-            // 移除低于下限的分辨率，尽可能取高分辨率
-            if (width * height < MIN_PREVIEW_PIXELS) {
-                it.remove();
-                continue;
-            }
-
-
-            // 找到与屏幕分辨率完全匹配的预览界面分辨率直接返回
-            if (width == MainApplication.getContext().getScreenWidth()
-                    && height == MainApplication.getContext().getScreenHeight()) {
-                return supportedPreviewResolution;
+//        StringBuilder previewResolutionSb = new StringBuilder();
+//        for (Camera.Size supportedPreviewResolution : supportedPreviewResolutions) {
+//            previewResolutionSb.append(supportedPreviewResolution.width).append('x').append(supportedPreviewResolution.height)
+//                    .append(' ');
+//        }
+//        Log.e("<<<支持的预览界面", "Supported preview resolutions: " + previewResolutionSb);
+        //如果有正好的尺寸直接返回
+        for (Camera.Size size : supportedPreviewResolutions) {
+            if (size.width == currentWidht && size.height == currentHeight) {
+                return size;
             }
         }
-
-        // 如果没有找到合适的，并且还有候选的像素，则设置其中最大比例的，对于配置比较低的机器不太合适
-        if (!supportedPreviewResolutions.isEmpty()) {
-            Camera.Size largestPreview = supportedPreviewResolutions.get(0);
-            return largestPreview;
+        //如果没有的话找一个比例差最小的返回
+        //临时size值
+        Camera.Size nowSize = defaultPreviewResolution;
+        //最小差值
+        double minCha = Double.MAX_VALUE;
+        //surfaceview的宽高比
+        double surfaceB = ((double) currentWidht) / ((double) currentHeight);
+        for (Camera.Size size : supportedPreviewResolutions) {
+            //获得当前size的宽高比
+            double sizeB = ((double) size.width) / ((double) size.height);
+            if (Math.abs(sizeB - surfaceB) < minCha) {
+                minCha = Math.abs(sizeB - surfaceB);
+                nowSize = size;
+            }
         }
-
-        // 没有找到合适的，就返回默认的
-        return defaultPreviewResolution;
+        return nowSize;
 
     }
 
@@ -373,10 +381,14 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         });
         // 如果没有找到合适的，并且还有候选的像素，对于照片，则取其中最大比例的，而不是选择与屏幕分辨率相同的
         if (!sortedSupportedPicResolutions.isEmpty()) {
+            Log.e("<<<拍照图片最大像素", "预览像素=" + sortedSupportedPicResolutions.get(0).height + "," + sortedSupportedPicResolutions.get(0).width
+                    + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
             return sortedSupportedPicResolutions.get(0);
         }
 
         // 没有找到合适的，就返回默认的
+        Log.e("<<<拍照图片默认像素", "预览像素=" + defaultPictureResolution.height + "," + defaultPictureResolution.width
+                + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         return defaultPictureResolution;
     }
 
@@ -486,6 +498,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private BitmapFactory.Options options = null;
+
     private String saveToSDCard(byte[] data) throws IOException {
         Bitmap croppedImage;
 
@@ -493,12 +507,12 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-        PHOTO_SIZE = options.outHeight > options.outWidth ? options.outWidth : options.outHeight;
+        this.options = options;
         options.inJustDecodeBounds = false;
-        Rect r = new Rect(0, 0, PHOTO_SIZE, PHOTO_SIZE);
+        Rect r = new Rect(0, 0, options.outWidth, options.outHeight);
         try {
             croppedImage = decodeRegionCrop(data, r);
+            Log.e("<<<", "拍照保存的图片=" + croppedImage.getWidth() + "," + croppedImage.getHeight());
         } catch (Exception e) {
             return null;
         }
@@ -531,9 +545,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             }
         }
         Matrix m = new Matrix();
-        m.setRotate(90, PHOTO_SIZE / 2, PHOTO_SIZE / 2);
-        Bitmap rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, PHOTO_SIZE, PHOTO_SIZE, m, true);
-        if (rotatedImage != croppedImage)
+        m.setRotate(90, options.outWidth, options.outHeight);
+        Bitmap rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, options.outWidth, options.outHeight, m, true);
+        if (rotatedImage != croppedImage && croppedImage != null)
             croppedImage.recycle();
         return rotatedImage;
     }
@@ -547,6 +561,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     cameraInst = Camera.open();
                     cameraInst.setPreviewDisplay(holder);
                     initCamera();
+
                     cameraInst.startPreview();
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -556,8 +571,12 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e("<<<", "surfaceChanged");
+            Log.e("<<<", "surfaceChanged" + ",width=" + width + ",height=" + height + ",surfaceView.width=" + surfaceView.getWidth()
+                    + ",surfaceView.height=" + surfaceView.getHeight());
             autoFocus();
+            Log.e("<<<显示出来的预览尺寸", ">>>width=" + cameraInst.getParameters().getPreviewSize().width + ",height=" + cameraInst.getParameters().getPreviewSize().height);
+//            parameters.setPreviewSize(surfaceView.getWidth(), surfaceView.getHeight());
+//            parameters.setPictureSize(surfaceView.getWidth(), surfaceView.getHeight());
         }
 
         @Override
@@ -570,7 +589,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     cameraInst = null;
                 }
             } catch (Exception e) {
-                Log.e("<<<","相机已经关闭");
+                Log.e("<<<", "相机已经关闭");
             }
 
         }

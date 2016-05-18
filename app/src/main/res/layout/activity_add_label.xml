@@ -213,7 +213,7 @@
             <com.taihuoniao.fineix.view.WrapContentViewPager
                 android:id="@+id/activity_add_label_alllabelviewpager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="700dp"
                 android:background="@color/white"/>
         </LinearLayout>
     </ScrollView>

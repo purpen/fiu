@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -67,12 +68,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private String id;
     //界面下的控件
     private View activity_view;
+    //    private ListView nearListView;
     private ScrollView scrollView;
     private LinearLayout loveRelative;
     private ImageView backImg;
     private ImageView shareImg;
     private RelativeLayout imgRelative;
     private ImageView backgroundImg;
+    private LinearLayout titleLinear;
     private TextView changjingTitle;
     private TextView suoshuqingjingTv;
     private ImageView locationImg;
@@ -82,6 +85,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView userHead;
     private TextView userName;
     private TextView userInfo;
+    //    private LinearLayout bottomLinear;
     private TextView loveCount;
     private TextView desTv;
     private LinearLayout labelLinear;
@@ -138,12 +142,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         activity_view = View.inflate(SceneDetailActivity.this, R.layout.activity_scenedetails, null);
         setContentView(activity_view);
+//        nearListView = (ListView) findViewById(R.id.activity_scenedetails_nearlistview);
+//        View header = View.inflate(SceneDetailActivity.this,R.layout.header_scenedetails,null);
         scrollView = (ScrollView) findViewById(R.id.activity_scenedetails_scrollview);
         loveRelative = (LinearLayout) findViewById(R.id.activity_scenedetails_loverelative);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
+        titleLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_titlelinear);
         changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
         suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
         locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
@@ -153,6 +160,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         userHead = (ImageView) findViewById(R.id.activity_scenedetails_userhead);
         userName = (TextView) findViewById(R.id.activity_scenedetails_username);
         userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
+//        bottomLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_bottomlinear);
         loveCount = (TextView) findViewById(R.id.activity_scenedetails_lovecount);
         desTv = (TextView) findViewById(R.id.activity_scenedetails_changjing_des);
         labelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_labellinear);
@@ -191,6 +199,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         rLp.width = lp.width;
         rLp.height = lp.height;
         imgRelative.setLayoutParams(rLp);
+//        FrameLayout.LayoutParams bLp = (FrameLayout.LayoutParams) bottomLinear.getLayoutParams();
+//        bLp.topMargin = lp.height;
+//        bottomLinear.setLayoutParams(bLp);
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
@@ -496,28 +507,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             labelView.pointOrAll(false, isShowAll);
-//            if (product.getX() > 0.5) {
-//                labelView.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
-//                        labelLp.leftMargin = (int) (product.getX() * backgroundImg.getWidth());
-//                        labelLp.topMargin = (int) (product.getY() * backgroundImg.getMeasuredHeight());
-//                    }
-//                });
-//            } else {
-//                Log.e("<<<", "x=" + (product.getX() * backgroundImg.getWidth()) + ",y=" + (product.getY() * backgroundImg.getMeasuredHeight()));
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
             labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
-//            }
-            Log.e("<<<", "x=" + product.getX() + ",y=" + product.getY());
-            Log.e("<<<", "leftMargin=" + labelLp.leftMargin + ",topMargin=" + labelLp.topMargin);
             labelView.setLayoutParams(labelLp);
             imgRelative.addView(labelView);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (labelView.nameLeft.getVisibility() == View.INVISIBLE) {
+                        return;
+                    }
                     Intent intent = new Intent(SceneDetailActivity.this, GoodsDetailActivity.class);
                     String id = labelView.getTagInfo().getId();//商品id
                     intent.putExtra("id", id);
@@ -573,7 +573,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
+                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
                 startActivity(intent);
                 break;
             case R.id.popup_scene_detail_more_share:
@@ -609,9 +609,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     View view = imgRelative.getChildAt(i);
                     if (view instanceof LabelView) {
                         LabelView labelView = (LabelView) view;
-                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-                        labelView.pointOrAll(lp.leftMargin <= backgroundImg.getWidth() / 2, isShowAll);
+                        labelView.pointOrAll(false, isShowAll);
                     }
+                }
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) titleLinear.getLayoutParams();
+                Log.e("<<<动画", "height=" + titleLinear.getHeight() + ",bottomMargin=" + lp.bottomMargin);
+                if (isShowAll) {
+                    ObjectAnimator.ofFloat(titleLinear, "translationY", titleLinear.getMeasuredHeight() + lp.bottomMargin).setDuration(300).start();
+                } else {
+                    ObjectAnimator.ofFloat(titleLinear, "translationY", 0).setDuration(300).start();
                 }
                 break;
             case R.id.activity_scenedetails_loverelative:
@@ -662,8 +668,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.activity_scenedetails_grid:
+                Log.e("<<<点击用户头像", "user-id=" + headList.get(position).getUser().getUser_id());
                 Intent intent1 = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, headList.get(position).getUser().getUser_id());
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
                 startActivity(intent1);
                 break;
             case R.id.activity_scenedetails_commentlistview:
@@ -732,28 +739,27 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //            case MotionEvent.ACTION_DOWN:
 //                startP.x = event.getX();
 //                startP.y = event.getY();
+//                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
+//                cha = startP.y + lpd.bottomMargin;
 //                break;
 //            case MotionEvent.ACTION_MOVE:
 //                nowP.x = event.getX();
 //                nowP.y = event.getY();
 //                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
+//                lp.bottomMargin = (int) (cha - nowP.y);
 //                if (nowP.y > startP.y) {
-//                    if (lp.bottomMargin > -loveRelative.getMeasuredHeight() && lp.bottomMargin <= 0) {
-//                        lp.bottomMargin = (int) (startP.y - nowP.y);
-//                    }
-//                    backImg.setVisibility(View.VISIBLE);
-//                    shareImg.setVisibility(View.VISIBLE);
+////                    backImg.setVisibility(View.VISIBLE);
+////                    createImg.setVisibility(View.VISIBLE);
 //                } else if (nowP.y < startP.y) {
-//                    if (lp.bottomMargin >= -loveRelative.getMeasuredHeight() && lp.bottomMargin < 0) {
-//                        lp.bottomMargin = (int) (startP.y - nowP.y - loveRelative.getMeasuredHeight());
-//                    }
-//                    backImg.setVisibility(View.GONE);
-//                    shareImg.setVisibility(View.GONE);
+////                    backImg.setVisibility(View.GONE);
+////                    createImg.setVisibility(View.GONE);
 //                }
 //                if (lp.bottomMargin > 0) {
 //                    lp.bottomMargin = 0;
+//                    cha = nowP.y + lp.bottomMargin;
 //                } else if (lp.bottomMargin < -loveRelative.getMeasuredHeight()) {
 //                    lp.bottomMargin = -loveRelative.getMeasuredHeight();
+//                    cha = nowP.y + lp.bottomMargin;
 //                }
 //                loveRelative.setLayoutParams(lp);
 //                break;
@@ -761,6 +767,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         return false;
     }
 
+    private double cha;//手指按下的时候，y与bottomMargin的差值
     private PointF startP = new PointF();
     private PointF nowP = new PointF();
 }

@@ -387,7 +387,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 Intent intent = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
+                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
                 startActivity(intent);
                 break;
             case R.id.activity_qingjingdetail_back:
@@ -433,7 +433,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case R.id.activity_qingjingdetail_grid:
                 Log.e("<<<", "点击position=" + position);
                 Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, headList.get(position).getUser().getUser_id());
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
                 startActivity(intent1);
                 break;
         }
