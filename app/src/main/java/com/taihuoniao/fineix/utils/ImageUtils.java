@@ -332,4 +332,5 @@ public class ImageUtils {
 
         return bitmap;
     }
+
 }

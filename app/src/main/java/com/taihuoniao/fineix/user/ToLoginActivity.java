@@ -190,6 +190,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_qq_tologin: //QQ登录
+                mQq.setEnabled(false);
                 mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
@@ -200,6 +201,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(qq);
                 break;
             case R.id.tv_weixin_tologin: //微信登录
+                mWeChat.setEnabled(false);
                 mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
@@ -212,6 +214,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(wechat);
                 break;
             case R.id.tv_weibo_tologin: //新浪微博登录
+                mSinaWeiBo.setEnabled(false);
                 mDialogAppear = true;
                 if (!mDialog.isShowing()) {
                     mDialog.show();
@@ -298,6 +301,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                mQq.setEnabled(true);
+                mWeChat.setEnabled(true);
+                mSinaWeiBo.setEnabled(true);
                 if (mDialog!=null){
                     mDialog.dismiss();
                 }
@@ -371,6 +377,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onFailure(HttpException e, String s) {
+                mQq.setEnabled(true);
+                mWeChat.setEnabled(true);
+                mSinaWeiBo.setEnabled(true);
                 if (mDialog!=null){
                     mDialog.dismiss();
                 }
@@ -405,6 +414,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
+        mQq.setEnabled(true);
+        mWeChat.setEnabled(true);
+        mSinaWeiBo.setEnabled(true);
         mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
@@ -414,6 +426,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onCancel(Platform platform, int i) {
+        mQq.setEnabled(true);
+        mWeChat.setEnabled(true);
+        mSinaWeiBo.setEnabled(true);
         mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);

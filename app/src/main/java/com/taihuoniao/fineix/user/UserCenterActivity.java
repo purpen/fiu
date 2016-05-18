@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -49,6 +52,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
+import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -100,10 +104,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private Uri mImageUri;
     private int which = MineFragment.REQUEST_CJ;
     private long userId = LoginInfo.getUserId();
-    private static final int PICK_FROM_FILE = 0;
-    private static final int PICK_FROM_CAMERA = 1;
-    private static final int CROP_FROM_CAMERA = 2;
+    private static final int REQUEST_CODE_PICK_IMAGE = 100;
+    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     private WaittingDialog dialog;
+    private Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"temp.jpg"));
     @Bind(R.id.lv_cj)
     ListView lv_cj;
     @Bind(R.id.lv_qj)
@@ -469,21 +473,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();
-                mImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "tmp" + ".png"));
-                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                try {
-                    intent.putExtra("return-data", true);
-                    startActivityForResult(intent, PICK_FROM_CAMERA);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
+                getImageFromCamera();
                 break;
             case R.id.tv_album:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                activity.startActivityForResult(Intent.createChooser(intent, "请选择要使用的应用"), PICK_FROM_FILE);//Intent.createChooser(intent, "选择要使用的应用")
                 PopupWindowUtil.dismiss();
+                getImageFromAlbum();
                 break;
             case R.id.tv_cancel:
                 PopupWindowUtil.dismiss();
@@ -607,34 +601,51 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         loadQJData();
     }
 
+    protected void getImageFromAlbum() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");//相片类型
+        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+    }
+
+    protected void getImageFromCamera() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
+        } else {
+            Util.makeToast("请确认已经插入SD卡");
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            Intent intent=null;
             File file = null;
             switch (requestCode) {
-                case PICK_FROM_CAMERA:
-                    doCrop();
-                    break;
-                case PICK_FROM_FILE:
-                    mImageUri = data.getData();
-                    doCrop();
-                    break;
-                case CROP_FROM_CAMERA:
-                    Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        Bitmap photo = extras.getParcelable("data");
-                        if (photo != null) {
-                            uploadFile(Util.saveBitmapToFile(photo));
-                        } else {
-                            Util.makeToast(activity, "截取头像失败");
-                            return;
-                        }
-//                    }
-                        break;
+                case REQUEST_CODE_PICK_IMAGE:
+                    Uri uri = data.getData();
+                    if (uri != null) {
+//                        Bitmap bitmap = ImageUtils.decodeUriAsBitmap(uri);
+//                        mClipImageLayout.setImageBitmap(bitmap);
+                        toCropActivity(uri);
+                    } else {
+                        Util.makeToast("抱歉，从相册获取图片失败");
                     }
+                    break;
+                case REQUEST_CODE_CAPTURE_CAMERA:
+//                    Bitmap bitmap =ImageUtils.decodeUriAsBitmap(imageUri);
+                    toCropActivity(imageUri);
+                    break;
             }
         }
+    }
+
+    private void toCropActivity(Uri uri){
+        Intent intent=new Intent(activity,ImageCropActivity.class);
+        intent.putExtra(ImageCropActivity.class.getSimpleName(),uri);
+        startActivity(intent);
     }
 
     private void uploadFile(final File file) { //换个人中心背景图
@@ -678,62 +689,4 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    private void doCrop() {
-        final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-        int size = list.size();
-        if (size == 0) {
-            Util.makeToast(this, "找不到图片裁剪应用");
-            return;
-        } else {
-            intent.setData(mImageUri);
-            intent.putExtra("noFaceDetection", true);
-            intent.putExtra("outputX", 400);
-            intent.putExtra("outputY", 300);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", true);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            if (size == 1) {
-                Intent i = new Intent(intent);
-                ResolveInfo res = list.get(0);
-                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                startActivityForResult(i, CROP_FROM_CAMERA);
-            } else {
-                for (ResolveInfo res : list) {
-                    final CropOption co = new CropOption();
-                    co.title = getPackageManager().getApplicationLabel(res.activityInfo.applicationInfo);
-                    co.icon = getPackageManager().getApplicationIcon(res.activityInfo.applicationInfo);
-                    co.appIntent = new Intent(intent);
-                    co.appIntent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    cropOptions.add(co);
-                }
-                CropOptionAdapter adapter = new CropOptionAdapter(getApplicationContext(), cropOptions);
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("选择要使用的应用");
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        startActivityForResult(cropOptions.get(item).appIntent, CROP_FROM_CAMERA);
-                    }
-                });
-
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-
-                        if (mImageUri != null) {
-                            getContentResolver().delete(mImageUri, null, null);
-                            mImageUri = null;
-                        }
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        }
-    }
 }
