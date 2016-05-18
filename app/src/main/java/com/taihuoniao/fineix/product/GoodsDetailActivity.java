@@ -206,7 +206,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 }
                 break;
             case R.id.activity_goods_detail_cart_relative:
-                Toast.makeText(GoodsDetailActivity.this, "跳转到购物车", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(GoodsDetailActivity.this,ShopCarActivity.class));
                 break;
             case R.id.activity_goods_detail_back:
                 onBackPressed();

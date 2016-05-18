@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class HotLabel extends NetBean {
         this.data = data;
     }
 
-    public static class Data{
+    public static class Data {
         private List<HotLabelBean> rows;
 
         public List<HotLabelBean> getRows() {
@@ -30,9 +31,18 @@ public class HotLabel extends NetBean {
         }
     }
 
-    public static class HotLabelBean{
+    public static class HotLabelBean implements Serializable {
         private String _id;
         private String title_cn;
+
+        public HotLabelBean() {
+        }
+
+        public HotLabelBean(String _id, String title_cn) {
+            this._id = _id;
+            this.title_cn = title_cn;
+        }
+
         public int line = 3;
 
         public String getTitle_cn() {

@@ -188,7 +188,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
             }
         });
-
+//品牌列表
+        DataPaser.brandList(1, 50, handler);
     }
 
 
@@ -237,7 +238,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     private Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(final Message msg) {
             switch (msg.what) {
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
                     if (msg.obj != null) {
@@ -269,8 +270,30 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 case DataConstants.BRAND_LIST:
                     BrandListBean netBrandListBean = (BrandListBean) msg.obj;
                     if (netBrandListBean.isSuccess()) {
-                        addImgToAbsolute(netBrandListBean.getData().getRows());
+                        brandItemList = netBrandListBean.getData().getRows();
+                        thread = new Thread() {
+                            @Override
+                            public void run() {
+                                int top = absoluteLayout.getTop();
+                                int bottom = absoluteLayout.getBottom();
+                                while (bottom - top <= 0) {
+                                    try {
+                                        Thread.sleep(100);
+                                    } catch (Exception e) {
+                                    } finally {
+                                        top = absoluteLayout.getTop();
+                                        bottom = absoluteLayout.getBottom();
+                                        continue;
+                                    }
+                                }
+                                handler.sendEmptyMessage(-10);
+                            }
+                        };
+                        thread.start();
                     }
+                    break;
+                case -10:
+                    addImgToAbsolute(brandItemList);
                     break;
                 case DataConstants.HOT_LABEL_LIST:
                     dialog.dismiss();
@@ -295,6 +318,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         }
     };
+    private Thread thread;
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
@@ -330,8 +354,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     public void onResume() {
         super.onResume();
         DataPaser.shopCartNumberParser(handler);
-        //品牌列表
-        DataPaser.brandList(1, 50, handler);
+
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -340,6 +363,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onDestroy() {
         //        cancelNet();
+        if (thread != null) {
+            thread.stop();
+            thread = null;
+        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
@@ -354,18 +381,25 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         startActivity(intent);
     }
 
+    private List<BrandListBean.BrandItem> brandItemList;
+
     /**
      * 数据里应有图片地址，类型，id，
      * 大 51dp 中 33dp 小 21dp
      */
     private void addImgToAbsolute(List<BrandListBean.BrandItem> list) {
+        if (list == null) {
+            return;
+        }
+        int top = absoluteLayout.getTop();
+        int bottom = absoluteLayout.getBottom();
         Random random = new Random();
         List<RandomImg> randomImgs = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             RandomImg randomImg = new RandomImg();
             randomImg.id = list.get(i).get_id().get$id();
             randomImg.url = list.get(i).getCover_url();
-            randomImg.type = list.get(i).getBrands_size_type();
+            randomImg.type = i % 3 + "";
             switch (randomImg.type) {
                 case "1":
                     randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
@@ -378,11 +412,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     break;
             }
             randomImgs.add(randomImg);
-        }
-        int top = absoluteLayout.getTop();
-        int bottom = absoluteLayout.getBottom();
-        if (bottom - top <= 0) {
-            return;
         }
         for (int i = 0; i < randomImgs.size(); i++) {
             RandomImg randomImg = randomImgs.get(i);
@@ -439,7 +468,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 startActivity(intent);
                 break;
             case R.id.fragment_wellgoods_cart_relative:
-                if(!LoginInfo.isUserLogin()){
+                if (!LoginInfo.isUserLogin()) {
 
                 }
                 Intent intent1 = new Intent(getActivity(), ShopCarActivity.class);

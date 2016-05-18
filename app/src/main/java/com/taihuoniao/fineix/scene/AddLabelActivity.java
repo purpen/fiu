@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
@@ -99,6 +102,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
 //        allLabelViewPager = (ViewPager) findViewById(R.id.activity_add_label_alllabelviewpager);
         allLabelViewPager = (WrapContentViewPager) findViewById(R.id.activity_add_label_alllabelviewpager);
         dialog = new WaittingDialog(AddLabelActivity.this);
+        IntentFilter filter = new IntentFilter(DataConstants.BroadLabelActivity);
+        registerReceiver(labelReceiver, filter);
     }
 
     @Override
@@ -112,8 +117,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         hotLabelRelative.setOnClickListener(this);
         usedLabelList = new ArrayList<>();
         hotLabelList = new ArrayList<>();
-        hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(AddLabelActivity.this, usedLabelList, hotLabelList, this);
-        labelViewPager.setAdapter(hotLabelViewPagerAdapter);
+
         labelViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private void goneColor() {
                 usedLabelLine.setVisibility(View.GONE);
@@ -285,7 +289,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                             hotLabelList.clear();
                         }
                         hotLabelList.addAll(netHotLabel.getData().getRows());
-                        hotLabelViewPagerAdapter.notifyDataSetChanged();
+                        hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
+                        labelViewPager.setAdapter(hotLabelViewPagerAdapter);
                     }
                     break;
                 case DataConstants.LABEL_LIST:
@@ -311,7 +316,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                         }
                         usedLabelList.addAll(netUsedLabel.getUsedLabelList());
                         usedLabelRelative.setVisibility(View.VISIBLE);
-                        hotLabelViewPagerAdapter.notifyDataSetChanged();
+                        hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
+                        labelViewPager.setAdapter(hotLabelViewPagerAdapter);
                     }
                     break;
                 case DataConstants.NET_FAIL:
@@ -324,6 +330,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         //        cancelNet();
+        unregisterReceiver(labelReceiver);
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
@@ -336,4 +343,23 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     public void moreClick(int position1, int position2, int distance) {
         allLabelViewPager.requestLayout();
     }
+
+    private BroadcastReceiver labelReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                int flag = intent.getIntExtra("flag", 0);
+                switch (flag) {
+                    case -1:
+                        HotLabel.HotLabelBean hotLabelBean = (HotLabel.HotLabelBean) intent.getSerializableExtra("label");
+                        click(hotLabelBean);
+                        break;
+                    case -2:
+                        UsedLabelBean usedLabelBean = (UsedLabelBean) intent.getSerializableExtra("label");
+                        click(usedLabelBean);
+                        break;
+                }
+            }
+        }
+    };
 }

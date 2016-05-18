@@ -127,29 +127,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                             productList.clear();
                             lastSavedFirstVisibleItem = -1;
                             lastTotalItem = -1;
-                            if (netProductBean.getList().size() > 0) {
-                                ImageLoader.getInstance().loadImage(netProductBean.getList().get(0).banner_asset.get(0), new ImageLoadingListener() {
-                                    @Override
-                                    public void onLoadingStarted(String imageUri, View view) {
-
-                                    }
-
-                                    @Override
-                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                                    }
-
-                                    @Override
-                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                        backgroundImg.setImageBitmap(blurImageAmeliorate(loadedImage));
-                                    }
-
-                                    @Override
-                                    public void onLoadingCancelled(String imageUri, View view) {
-
-                                    }
-                                });
-                            }
                         }
                         productList.addAll(netProductBean.getList());
                         goodListAdapter.notifyDataSetChanged();
@@ -164,6 +141,27 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         titleTv.setText(netBrandDetail.getData().getTitle());
                         ImageLoader.getInstance().displayImage(netBrandDetail.getData().getCover_url(), brandImg, option);
                         desTv.setText(netBrandDetail.getData().getDes());
+                        ImageLoader.getInstance().loadImage(netBrandDetail.getData().getBanner_url(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                backgroundImg.setImageBitmap(blurImageAmeliorate(loadedImage));
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+
+                            }
+                        });
                     } else {
                         Toast.makeText(BrandDetailActivity.this, netBrandDetail.getMessage(), Toast.LENGTH_SHORT).show();
                     }

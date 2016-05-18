@@ -166,7 +166,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
 //                    MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -259,6 +259,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     dialog.dismiss();
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
                     if (netUser.isSuccess()) {
+                        absoluteLayout.removeAllViews();
                         addImgToAbsolute(netUser.getData().getUsers());
                     }
                     break;
@@ -275,6 +276,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     if (netQingjingListBean.isSuccess()) {
                         qingjingList.clear();
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
+                        Toast.makeText(getActivity(),"测试，情景数据个数="+qingjingList.size(),Toast.LENGTH_SHORT).show();
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -297,6 +299,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                             lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
+                        Toast.makeText(getActivity(),"测试，场景数据个数="+sceneList.size(),Toast.LENGTH_SHORT).show();
                         sceneListViewAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -430,7 +433,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
                     Intent intent = new Intent(getActivity(), UserCenterActivity.class);
-                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA, randomImg1.id);
+                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(randomImg1.id));
                     startActivity(intent);
                 }
             });
@@ -487,7 +490,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+            DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
         }
     }
 }

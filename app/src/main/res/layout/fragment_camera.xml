@@ -47,7 +47,6 @@
         <SurfaceView
             android:id="@+id/fragment_camera_surface"
             android:layout_width="match_parent"
-            android:layout_marginBottom="60dp"
             android:layout_height="match_parent"/>
 
         <RelativeLayout
