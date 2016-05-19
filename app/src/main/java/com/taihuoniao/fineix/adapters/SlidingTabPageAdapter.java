@@ -36,7 +36,7 @@ public class SlidingTabPageAdapter extends FragmentPagerAdapter {
             case 1:
                 return CJResultFragment.newInstance(q, t);
             case 2:
-                return ProductResultFragment.newInstance(q, t);
+                return ProductResultFragment.newInstance(q, t,false);
             default:
                 return QJResultFragment.newInstance(q, t);
         }
