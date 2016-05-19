@@ -158,6 +158,8 @@ public class DataConstants {
     public static final int RESULTCODE_MAP = 18;
     //标签页面重新布局的广播接收器
     public static final String BroadLabelActivity = "com.taihuoniao.fiu.label";
+    //创建场景的添加产品页面的搜索广播
+    public static final String BroadSearchFragment = "com.taihuoniao.fiu.searchProduct";
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

@@ -44,7 +44,16 @@ public class SearchBean extends NetBean {
         private String created_at;
         private List<String> banners;
         private String sale_price;
+        private String market_price;
         private String attrbute;
+
+        public String getMarket_price() {
+            return market_price;
+        }
+
+        public void setMarket_price(String market_price) {
+            this.market_price = market_price;
+        }
 
         public boolean isSelect() {
             return isSelect;

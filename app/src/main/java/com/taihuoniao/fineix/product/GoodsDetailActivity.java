@@ -201,6 +201,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         }
                         ClientDiscoverAPI.wantBuy(id);
                         webView.getSettings().setJavaScriptEnabled(true);
+                        Log.e("<<<商品url", "url=" + url);
                         webView.loadUrl(url);
                         Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);

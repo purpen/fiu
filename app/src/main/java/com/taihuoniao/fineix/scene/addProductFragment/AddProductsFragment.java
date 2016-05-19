@@ -1,11 +1,15 @@
 package com.taihuoniao.fineix.scene.addProductFragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,6 +22,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -42,6 +47,12 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //网络请求返回数据商品列表
     private List<ProductListBean> productList;
     private AddProductGridAdapter addProductGridAdapter;
+    //商品搜索的时候数据
+    private int pos = -1;
+    private String q = "";//搜索关键字
+    private boolean search = false;//判断是不是搜索
+    private List<SearchBean.SearchItem> searchList;
+
 
     public static AddProductsFragment newInstance(int position, CategoryBean categoryBean) {
 
@@ -58,15 +69,21 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         position = getArguments() != null ? getArguments().getInt("position") : 0;
         categoryBean = getArguments() != null ? (CategoryBean) getArguments().getSerializable("categoryBean") : null;
+        IntentFilter filter = new IntentFilter(DataConstants.BroadSearchFragment);
+        getActivity().registerReceiver(searchProductReceiver, filter);
     }
 
     @Override
     protected void requestNet() {
         progressBar.setVisibility(View.VISIBLE);
-        if (position == -1) {
-            DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+        if (search) {
+            DataPaser.search(q, "10", currentPage + "", null, handler);
         } else {
-            DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+            if (position == -1) {
+                DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+            } else {
+                DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+            }
         }
     }
 
@@ -96,7 +113,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             }
         });
         productList = new ArrayList<>();
-        addProductGridAdapter = new AddProductGridAdapter(getActivity(), productList);
+        searchList = new ArrayList<>();
+        addProductGridAdapter = new AddProductGridAdapter(getActivity(), productList, searchList);
         grid.setAdapter(addProductGridAdapter);
         grid.setOnItemClickListener(this);
     }
@@ -114,11 +132,28 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.SEARCH_LIST:
+                    pullToRefreshView.onRefreshComplete();
+                    progressBar.setVisibility(View.GONE);
+                    SearchBean netSearch = (SearchBean) msg.obj;
+                    if (netSearch.isSuccess()) {
+                        productList.clear();
+                        if (currentPage == 1) {
+                            pullToRefreshView.lastTotalItem = -1;
+                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                            searchList.clear();
+                        }
+                        searchList.addAll(netSearch.getData().getRows());
+                        addProductGridAdapter.notifyDataSetChanged();
+                        pullToRefreshView.setLoadingTime();
+                    }
+                    break;
                 case DataConstants.ADD_PRODUCT_LIST:
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess()) {
+                        searchList.clear();
                         if (currentPage == 1) {
                             productList.clear();
                             pullToRefreshView.lastTotalItem = -1;
@@ -138,10 +173,30 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         }
     };
 
+    private BroadcastReceiver searchProductReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //搜索接口
+            pos = intent.getIntExtra("pos", -1);
+            q = intent.getStringExtra("q");
+            search = intent.getBooleanExtra("search", false);
+            Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
+            if (q != null && search && pos - 1 == position) {
+                currentPage = 1;
+                progressBar.setVisibility(View.VISIBLE);
+                DataPaser.search(q, "10", currentPage + "", null, handler);
+            } else if (!search && pos - 1 == position) {
+                currentPage = 1;
+                requestNet();
+            }
+
+        }
+    };
 
     @Override
     public void onDestroy() {
         //        cancelNet();
+        getActivity().unregisterReceiver(searchProductReceiver);
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
