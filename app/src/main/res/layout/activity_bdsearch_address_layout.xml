@@ -30,9 +30,10 @@
             />
         <ImageButton
             android:id="@+id/ibtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp15"
+            android:layout_height="@dimen/dp15"
             android:src="@mipmap/clear"
+            android:background="@null"
             android:layout_marginRight="@dimen/dp16"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

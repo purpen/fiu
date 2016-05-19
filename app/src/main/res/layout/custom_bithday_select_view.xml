@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="@dimen/dp20"
             android:text="年"
             android:textColor="@color/color_333"
             android:textSize="12sp" />
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="@dimen/dp20"
             android:text="月"
             android:textColor="@color/color_333"
             android:textSize="12sp" />
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="@dimen/dp20"
             android:text="日"
             android:textColor="@color/color_333"
             android:textSize="12sp" />

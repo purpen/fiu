@@ -125,8 +125,9 @@
     <string name="input_signature">您还没有个性签名</string>
     <string name="complete_user_info">选好了，开始Fiu之旅</string>
     <string-array name="user_gender">
-        <item>女</item>
         <item>男</item>
+        <item>女</item>
+        <item>保密</item>
     </string-array>
     <string name="first_in_qing_title">情境定位</string>
     <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>

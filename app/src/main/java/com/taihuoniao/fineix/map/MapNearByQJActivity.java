@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.map;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -49,13 +50,11 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/4/15 16:13
  */
-public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
+public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.mv)
     MapView mv;
-    @Bind(R.id.lv)
-    ListView lv;
     private BaiduMap mBDMap;
     private int page; //默认查看第一页
     private int pageSize;//本界面只展示三条
@@ -65,33 +64,40 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     private static final String STICK_SELECT = "1"; //精选情境
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
-    private NearByQJAdapter nearByAdapter; //附近的情境
     private WaittingDialog waittingDialog;
-    public DisplayOverlayerActivity() {
+    private LatLng ll;
+    private String address;
+    public MapNearByQJActivity() {
         super(R.layout.activity_display_overlayer);
     }
 
 
     @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(TAG)) {
+            ll = intent.getParcelableExtra(TAG);
+        }
+        if (intent.hasExtra("address")){
+            address=intent.getStringExtra("address");
+        }
+    }
+
+    @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "附近所有情境");
-        waittingDialog=new WaittingDialog(this);
+        if (!TextUtils.isEmpty(address)){
+            custom_head.setHeadCenterTxtShow(true,address);
+        }
+        waittingDialog = new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
-//        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
+        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);
         mBDMap.setMyLocationEnabled(true);
-        startLocate();
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                QingJingItem qingJing = (QingJingItem) lv.getAdapter().getItem(position);
-                Intent intent = new Intent();
-                intent.putExtra("qingjing", qingJing);
-                setResult(DataConstants.RESULTCODE_MAP, intent);
-                finish();
-            }
-        });
+//        startLocate();
+        if (ll != null) {
+            getNearByData(ll);
+        }
     }
 
     @Override
@@ -129,7 +135,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
                 }
                 MyLocationData locData = new MyLocationData.Builder()
                         .accuracy(bdLocation.getRadius())
-                                // 此处设置开发者获取到的方向信息，顺时针0-360
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(100).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
@@ -153,7 +159,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
         ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (waittingDialog!=null) waittingDialog.show();
+                if (waittingDialog != null) waittingDialog.show();
             }
 
             @Override
@@ -237,23 +243,12 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
 
     @Override
     protected void refreshUI(List<QingJingItem> list) {
-        if (list == null) {
-//            Util.makeToast(activity, "数据异常");
-            return;
-        }
+        if (list == null) return;
 
         if (list.size() == 0) {
             Util.makeToast(activity, "暂无数据");
             return;
         }
-
         addOverlayers(list);
-
-        if (nearByAdapter == null) {
-            nearByAdapter = new NearByQJAdapter(activity, list);
-            lv.setAdapter(nearByAdapter);
-        } else {
-            nearByAdapter.notifyDataSetChanged();
-        }
     }
 }
