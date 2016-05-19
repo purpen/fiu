@@ -76,7 +76,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
-        if (intent.hasExtra(TAG)) {
+        if (intent.hasExtra(MapNearByCJActivity.class.getSimpleName())) {
             ll = intent.getParcelableExtra(TAG);
         }
 
@@ -99,6 +99,9 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         mBDMap.setMyLocationEnabled(true);
 //        startLocate();
         if (ll!=null){
+            MapStatus.Builder builder = new MapStatus.Builder();
+            builder.target(ll).zoom(14);
+            mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
             getNearByData(ll);
         }
     }

@@ -75,7 +75,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
-        if (intent.hasExtra(TAG)) {
+        if (intent.hasExtra(MapNearByQJActivity.class.getSimpleName())) {
             ll = intent.getParcelableExtra(TAG);
         }
         if (intent.hasExtra("address")){
@@ -91,11 +91,13 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
         waittingDialog = new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
-        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);
         mBDMap.setMyLocationEnabled(true);
 //        startLocate();
         if (ll != null) {
+            MapStatus.Builder builder = new MapStatus.Builder();
+            builder.target(ll).zoom(14);
+            mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
             getNearByData(ll);
         }
     }
