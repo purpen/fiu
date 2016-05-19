@@ -14,6 +14,15 @@ public class WindowUtils {
     //沉浸式状态栏,在xmlview中添加
 //android:fitsSystemWindows="true"
 //android:clipToPadding="true"
+    public static void chenjin(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+//            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+
     public static void immerseStatusBar(Activity activity) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            Window window = activity.getWindow();

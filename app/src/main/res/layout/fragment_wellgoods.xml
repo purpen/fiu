@@ -2,23 +2,23 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
+                >
 
     <RelativeLayout
         android:id="@+id/title_relative1"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
             android:src="@mipmap/logo"/>
 
         <ImageView
             android:id="@+id/fragment_wellgoods_search"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@mipmap/head_search"/>
@@ -26,7 +26,7 @@
         <RelativeLayout
             android:id="@+id/fragment_wellgoods_cart_relative"
             android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:layout_alignParentRight="true"
             >
 

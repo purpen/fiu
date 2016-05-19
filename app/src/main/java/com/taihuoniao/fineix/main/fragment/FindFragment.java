@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +84,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private double distance = 5000;//距离
     private double[] location = null;
     //界面下的控件
+    private RelativeLayout titlelayout;
     private ImageView searchImg;
     private ImageView locationImg;
     private ListView sceneListView;
@@ -106,6 +109,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
+        titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
         searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
         locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         sceneListView = (ListView) view.findViewById(R.id.fragment_find_scenelistview);
@@ -121,8 +125,21 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         return view;
     }
 
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         searchImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
@@ -154,7 +171,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler.addItemDecoration(new PinLabelRecyclerAdapter.LabelItemDecoration(getActivity()));
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         sceneListView.setAdapter(sceneListViewAdapter);
         sceneListView.setOnScrollListener(this);
         sceneListView.setOnItemClickListener(this);
@@ -178,6 +195,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();
     }
+
 
     @Override
     protected void requestNet() {
@@ -263,20 +281,13 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         addImgToAbsolute(netUser.getData().getUsers());
                     }
                     break;
-//                case DataConstants.USER_LIST:
-//                    dialog.dismiss();
-//                    UserListBean netUserListBean = (UserListBean) msg.obj;
-//                    if (netUserListBean.isSuccess()) {
-//                        addImgToAbsolute(netUserListBean.getData().getRows());
-//                    }
-//                    break;
                 case DataConstants.QINGJING_LIST:
                     dialog.dismiss();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
                     if (netQingjingListBean.isSuccess()) {
                         qingjingList.clear();
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
-                        Toast.makeText(getActivity(),"测试，情景数据个数="+qingjingList.size(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "测试，情景数据个数=" + qingjingList.size(), Toast.LENGTH_SHORT).show();
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -299,7 +310,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                             lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
-                        Toast.makeText(getActivity(),"测试，场景数据个数="+sceneList.size(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
                         sceneListViewAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -325,8 +336,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         super.onResume();
         //用户大小不一的头像
         if (absoluteLayout.getChildCount() <= 0) {
-            DataPaser.fiuUserList(1 + "",40 + "", null, null, 1 + "", handler);
-//            DataPaser.userList(1 + "", 50 + "", null, null, handler);
+            DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
         }
         if (scrollableView != null) {
             scrollableView.start();
@@ -483,7 +493,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
-        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+        if (visibleItemCount > sceneListView.getHeaderViewsCount() && (firstVisibleItem + visibleItemCount >= totalItemCount)
                 && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
                 && location != null) {
             lastSavedFirstVisibleItem = firstVisibleItem;

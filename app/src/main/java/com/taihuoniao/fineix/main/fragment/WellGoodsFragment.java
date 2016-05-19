@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,6 +70,7 @@ import java.util.Random;
 
 public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
     //界面下的控件
+    private RelativeLayout titlelayout;
     private ImageView searchImg;
     private RelativeLayout cartRelative;
     private TextView cartNumber;
@@ -103,6 +105,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
+        titlelayout = (RelativeLayout) view.findViewById(R.id.title_relative1);
         searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
         cartRelative = (RelativeLayout) view.findViewById(R.id.fragment_wellgoods_cart_relative);
         cartNumber = (TextView) view.findViewById(R.id.fragment_wellgoods_cart_number);
@@ -191,10 +194,21 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //品牌列表
         DataPaser.brandList(1, 50, handler);
     }
-
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         searchImg.setOnClickListener(this);
 //        cartImg.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
@@ -363,7 +377,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onDestroy() {
         //        cancelNet();
-        if (thread != null) {
+        if (thread != null&&thread.isAlive()) {
             thread.stop();
             thread = null;
         }
