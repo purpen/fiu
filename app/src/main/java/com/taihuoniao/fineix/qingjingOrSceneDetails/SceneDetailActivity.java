@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -44,6 +45,7 @@ import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
@@ -254,6 +256,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         DataPaser.sceneDetails(id + "", handler);
         DataPaser.commentsList(1 + "", 3 + "", id, null, 12 + "", handler);
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
+//        关联列表数据异常
         DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
     }
 
@@ -341,6 +344,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.PRODUCT_AND_SCENE:
                     ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
                     if (netProScene.isSuccess()) {
+                        Log.e("<<<场景下的产品", "数量" + netProScene.getData().getRows().size());
                         sceneProductList.clear();
                         sceneProductList.addAll(netProScene.getData().getRows());
                         sceneProductAdapter.notifyDataSetChanged();
@@ -601,13 +605,18 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     DataPaser.sceneDetails(id, handler);
                     return;
                 }
-                if(netScene==null){
+                if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id,handler);
+                    DataPaser.sceneDetails(id, handler);
                     return;
                 }
                 String address = netScene.getAddress();
-                Toast.makeText(SceneDetailActivity.this, "跳转到地图界面" + location, Toast.LENGTH_SHORT).show();
+                LatLng ll = new LatLng(Double.parseDouble(location[1]), Double.parseDouble(location[0]));
+                Intent intent2 = new Intent(SceneDetailActivity.this, MapNearByCJActivity.class);
+                intent2.putExtra("address", address);
+                intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
+                startActivity(intent2);
+//                Toast.makeText(SceneDetailActivity.this, "跳转到地图界面" + location, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_background:
                 isShowAll = !isShowAll;
@@ -656,11 +665,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     DataPaser.sceneDetails(id + "", handler);
                     return;
                 }
-                Intent intent2 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
-                intent2.putExtra("target_id", id);
-                intent2.putExtra("type", 12 + "");
-                intent2.putExtra("target_user_id", netScene.getUser_info().getUser_id());
-                startActivity(intent2);
+                Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
+                intent3.putExtra("target_id", id);
+                intent3.putExtra("type", 12 + "");
+                intent3.putExtra("target_user_id", netScene.getUser_info().getUser_id());
+                startActivity(intent3);
                 break;
             case R.id.activity_scenedetails_moreuser:
                 break;

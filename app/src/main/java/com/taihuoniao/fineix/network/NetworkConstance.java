@@ -14,7 +14,10 @@ public class NetworkConstance {
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
+
     //产品
+    //统计用户想购买的数量
+    public static final String want_buy = BASE_URL+"/scene_product/sight_click_stat";
     //删除用户添加的产品
     public static final String delete_product = BASE_URL + "/scene_product/deleted";
     //列表

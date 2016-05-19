@@ -74,7 +74,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl:
-                startActivity(new Intent(activity, SearchResultActivity.class));
+                Intent intent = new Intent(activity,SearchActivity.class);
+                intent.putExtra("t","10");
+                startActivity(intent);
                 return;
         }
     }

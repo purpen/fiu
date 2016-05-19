@@ -7,13 +7,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/white">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
             android:text="产品详情"
             android:textColor="#000000"
             android:textSize="15sp"
@@ -22,41 +25,45 @@
         <ImageView
             android:id="@+id/activity_goods_detail_back"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@mipmap/back_black"/>
 
-        <RelativeLayout
-            android:id="@+id/activity_goods_detail_cart_relative"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="17dp"
-                android:paddingRight="17dp"
-                android:src="@mipmap/cart"/>
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/activity_goods_detail_cart_relative"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!-->-->
 
-            <TextView
-                android:id="@+id/activity_goods_detail_cart_num"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/cart_num_bg"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:visibility="gone"/>
-        </RelativeLayout>
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:paddingLeft="17dp"-->
+        <!--android:paddingRight="17dp"-->
+        <!--android:src="@mipmap/cart"/>-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/activity_goods_detail_cart_num"-->
+        <!--android:layout_width="16dp"-->
+        <!--android:layout_height="16dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@drawable/cart_num_bg"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="12sp"-->
+        <!--android:visibility="gone"/>-->
+        <!--</RelativeLayout>-->
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e2e2e2"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -64,7 +71,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <com.taihuoniao.fineix.view.ScrollableView
@@ -329,7 +336,7 @@
             <WebView
                 android:id="@+id/activity_goods_detail_webview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:visibility="gone"/>
         </LinearLayout>
 

@@ -386,8 +386,8 @@ public class DataPaser {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<tongyong", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<tongyong", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
                 msg.obj = new CommonBean();
@@ -397,7 +397,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "数据异常", Toast.LENGTH_SHORT).show();
+                    Log.e("<<<通用列表>>>", "数据解析异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -854,8 +854,8 @@ public class DataPaser {
         ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<用过的标签",responseInfo.result);
-                WriteJsonToSD.writeToSD("json",responseInfo.result);
+                Log.e("<<<用过的标签", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.USED_LABEL_LIST;
                 UsedLabel usedLabel = new UsedLabel();
@@ -1207,7 +1207,7 @@ public class DataPaser {
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据异常" + e.toString());
                 }
-                handler.sendMessageDelayed(msg,300);
+                handler.sendMessageDelayed(msg, 300);
             }
 
             @Override
@@ -1297,8 +1297,8 @@ public class DataPaser {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, page, new RequestCallBack<String>() {
+    public static void search(String q, String t, String page,String evt, final Handler handler) {
+        ClientDiscoverAPI.search(q, t, page,evt, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<sousuo", responseInfo.result);
@@ -1342,7 +1342,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
+                    Log.e("<<<场景商品关联列表>>>", "数据异常" + e.toString());
                 }
                 handler.sendMessage(msg);
             }
@@ -1418,14 +1418,20 @@ public class DataPaser {
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<pinglun", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<pinglun", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
-                Gson gson = new Gson();
-                Type type = new TypeToken<CommentsBean>() {
-                }.getType();
-                msg.obj = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                msg.obj = new CommentsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommentsBean>() {
+                    }.getType();
+                    msg.obj = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
+                }
+
                 handler.sendMessage(msg);
             }
 

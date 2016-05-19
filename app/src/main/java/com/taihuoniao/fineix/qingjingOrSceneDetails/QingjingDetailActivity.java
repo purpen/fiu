@@ -255,7 +255,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
-                        if (currentPage == 1 && sceneList.size() == 0) {
+                        if ( sceneList.size() == 0) {
                             emptyView.setVisibility(View.VISIBLE);
                         } else {
                             emptyView.setVisibility(View.GONE);
@@ -473,6 +473,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         public void onReceive(Context context, Intent intent) {
             dialog.show();
             DataPaser.qingjingDetails(id, handler);
+            currentPage = 1;
+            DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
         }
     };
 

@@ -33,16 +33,8 @@ public class ProductAndSceneListBean extends NetBean {
 
     public static class ProductAndSceneItem {
         private Product product;
-        private String sight_id;
         private Sight sight;
 
-        public String getSight_id() {
-            return sight_id;
-        }
-
-        public void setSight_id(String sight_id) {
-            this.sight_id = sight_id;
-        }
 
         public Product getProduct() {
             return product;
@@ -61,15 +53,25 @@ public class ProductAndSceneListBean extends NetBean {
         }
     }
     public static class Sight{
-        private String scene_title;
+        private String title;
+        private String _id;
 
-        public String getScene_title() {
-            return scene_title;
+        public String get_id() {
+            return _id;
         }
 
-        public void setScene_title(String scene_title) {
-            this.scene_title = scene_title;
+        public void set_id(String _id) {
+            this._id = _id;
         }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
     }
     public static class Product{
         private String _id;

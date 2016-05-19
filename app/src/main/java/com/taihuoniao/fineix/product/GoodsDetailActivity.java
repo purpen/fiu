@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -23,15 +24,16 @@ import com.taihuoniao.fineix.adapters.GoodsDetailRecommendRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailSceneRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -49,10 +51,10 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     //界面下的控件
     @Bind(R.id.activity_goods_detail_back)
     ImageView backImg;
-    @Bind(R.id.activity_goods_detail_cart_relative)
-    RelativeLayout cartRelative;
-    @Bind(R.id.activity_goods_detail_cart_num)
-    TextView cartNum;
+    //    @Bind(R.id.activity_goods_detail_cart_relative)
+//    RelativeLayout cartRelative;
+//    @Bind(R.id.activity_goods_detail_cart_num)
+//    TextView cartNum;
     @Bind(R.id.activity_goods_detail_scrollableView)
     ScrollableView scrollableView;
     private ViewPagerAdapter<String> viewPagerAdapter;
@@ -112,9 +114,10 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
 
     @Override
     protected void initView() {
+        WindowUtils.chenjin(GoodsDetailActivity.this);
         dialog = new WaittingDialog(GoodsDetailActivity.this);
         backImg.setOnClickListener(this);
-        cartRelative.setOnClickListener(this);
+//        cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
@@ -196,18 +199,19 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             DataPaser.goodsDetail(id, handler);
                             return;
                         }
+                        ClientDiscoverAPI.wantBuy(id);
                         webView.getSettings().setJavaScriptEnabled(true);
                         webView.loadUrl(url);
-                        Toast.makeText(GoodsDetailActivity.this, "正在跳转到浏览器，请稍等", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
 //                        intent.putExtra("url", url);
 //                        startActivity(intent);
                         break;
                 }
                 break;
-            case R.id.activity_goods_detail_cart_relative:
-                startActivity(new Intent(GoodsDetailActivity.this,ShopCarActivity.class));
-                break;
+//            case R.id.activity_goods_detail_cart_relative:
+//                startActivity(new Intent(GoodsDetailActivity.this, ShopCarActivity.class));
+//                break;
             case R.id.activity_goods_detail_back:
                 onBackPressed();
                 break;
@@ -281,17 +285,18 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         refreshUI(banner);
                     } else {
                         Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                     break;
-                case DataConstants.CART_NUM:
-                    CartBean netCartBean = (CartBean) msg.obj;
-                    if (netCartBean.isSuccess()) {
-                        cartNum.setVisibility(View.VISIBLE);
-                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
-                    } else {
-                        cartNum.setVisibility(View.GONE);
-                    }
-                    break;
+//                case DataConstants.CART_NUM:
+//                    CartBean netCartBean = (CartBean) msg.obj;
+//                    if (netCartBean.isSuccess()) {
+//                        cartNum.setVisibility(View.VISIBLE);
+//                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
+//                    } else {
+//                        cartNum.setVisibility(View.GONE);
+//                    }
+//                    break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     break;
@@ -330,7 +335,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void onResume() {
         super.onResume();
-        DataPaser.cartNum(handler);
+//        DataPaser.cartNum(handler);
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -349,7 +354,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void click(int postion) {
         Intent intent = new Intent(GoodsDetailActivity.this, SceneDetailActivity.class);
-        intent.putExtra("id", changjingList.get(postion).getSight_id());
+        Log.e("<<<场景详情", "id=" + changjingList.get(postion).getSight().get_id() + ",title=" + changjingList.get(postion).getSight().getTitle());
+        intent.putExtra("id", changjingList.get(postion).getSight().get_id());
         startActivity(intent);
     }
 }
