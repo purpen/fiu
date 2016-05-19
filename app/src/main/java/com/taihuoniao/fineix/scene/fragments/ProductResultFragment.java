@@ -31,6 +31,7 @@ import java.util.List;
 public class ProductResultFragment extends BaseFragment {
     private String q;
     private String t;
+    private boolean isSearch = false;
     //控件
     private PullToRefreshListView pullToRefreshView;
     private ListView listView;
@@ -42,11 +43,12 @@ public class ProductResultFragment extends BaseFragment {
     private List<SearchBean.SearchItem> list;
     private GoodListAdapter goodListAdapter;
 
-    public static ProductResultFragment newInstance(String q, String t) {
+    public static ProductResultFragment newInstance(String q, String t,boolean isSearch) {
 
         Bundle args = new Bundle();
         args.putString("q", q);
         args.putString("t", t);
+        args.putBoolean("isSearch",isSearch);
         ProductResultFragment fragment = new ProductResultFragment();
         fragment.setArguments(args);
         return fragment;
@@ -57,6 +59,7 @@ public class ProductResultFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         q = getArguments().getString("q", null);
         t = getArguments().getString("t", null);
+        isSearch = getArguments().getBoolean("isSearch");
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ProductResultFragment extends BaseFragment {
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "", handler);
+                DataPaser.search(q, t, page + "","tag", handler);
             }
         });
         list = new ArrayList<>();
@@ -93,7 +96,7 @@ public class ProductResultFragment extends BaseFragment {
             return;
         }
         dialog.show();
-        DataPaser.search(q, t, page + "", handler);
+        DataPaser.search(q, t, page + "","tag", handler);
     }
 
     public void refreshData(String q, String t) {

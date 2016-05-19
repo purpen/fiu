@@ -40,7 +40,7 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
                 itemClick.click(position);
             }
         });
-        holder.textView.setText(list.get(position).getSight().getScene_title());
+        holder.textView.setText(list.get(position).getSight().getTitle());
     }
 
     @Override

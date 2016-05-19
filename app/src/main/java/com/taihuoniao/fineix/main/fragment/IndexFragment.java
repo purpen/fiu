@@ -1,12 +1,15 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -32,6 +35,7 @@ import java.util.List;
 
 public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private View fragment_view;
+    private RelativeLayout titlelayout;
     private ImageView searchImg;
     private ImageView subsImg;
     private PullToRefreshListView pullToRefreshLayout;
@@ -47,14 +51,26 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     private WaittingDialog dialog;
 
 
-
     @Override
     protected void requestNet() {
 
     }
 
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         searchImg.setOnClickListener(this);
         subsImg.setOnClickListener(this);
 //        pullToRefreshLayout.setPullToRefreshEnabled(false);
@@ -100,6 +116,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     @Override
     protected View initView() {
         fragment_view = View.inflate(getActivity(), R.layout.fragment_index, null);
+        titlelayout = (RelativeLayout) fragment_view.findViewById(R.id.fragment_index_title);
         searchImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_search);
         subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);

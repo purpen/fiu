@@ -26,6 +26,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     //上个界面传递过来的数据
     private String q;//搜索关键字
     private String t;//搜索什么 7.商品；8.情景；9.场景；10.情景产品；11.场景分享语
+    private boolean isSearch = false;
     //界面下的控件
     private ImageView backImg;
     private EditText editText;
@@ -73,6 +74,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initList() {
         q = getIntent().getStringExtra("q");
         t = getIntent().getStringExtra("t");
+        isSearch = getIntent().getBooleanExtra("isSearch",false);
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
         }
@@ -198,7 +200,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "10":
                 if (productResultFragment == null) {
-                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t);
+                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t,false);
                     ft.add(R.id.activity_search_container, productResultFragment);
                 } else {
                     ft.show(productResultFragment);

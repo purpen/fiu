@@ -29,6 +29,7 @@ public class SearchResultActivity extends BaseActivity implements ViewPager.OnPa
     //上个界面传递过来的数据
     private String q;//搜索关键字
     private String t;//搜索什么 7.商品；8.情景；9.场景；10.情景产品；11.场景分享语
+    private boolean isSearch;//判断是不是从添加产品页面跳转过来的
 //    private String evt;//搜索方式 content:内容；tag:标签搜索(情景需要传此参数)
 
     @Bind(R.id.custom_head)
@@ -45,6 +46,7 @@ public class SearchResultActivity extends BaseActivity implements ViewPager.OnPa
     protected void getIntentData() {
         q = getIntent().getStringExtra("q");
         t = getIntent().getStringExtra("t");
+        isSearch = getIntent().getBooleanExtra("isSearch",false);
 //        evt = getIntent().getStringExtra("evt");
         Log.e("<<<sousuo", "q=" + q + ",t=" + t);
     }

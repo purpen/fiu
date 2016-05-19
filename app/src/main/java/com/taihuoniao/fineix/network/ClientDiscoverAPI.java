@@ -1,8 +1,10 @@
 package com.taihuoniao.fineix.network;
 
 import com.baidu.mapapi.model.LatLng;
+import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
@@ -14,6 +16,24 @@ import com.taihuoniao.fineix.utils.MD5Utils;
  * 参数设置
  */
 public class ClientDiscoverAPI {
+    //产品
+    //统计用户想购买的数量
+    public static void wantBuy(String id){
+        String url = NetworkConstance.want_buy;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id",id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
     //产品
     //删除用户添加的产品
     public static  void deleteProduct(String id,RequestCallBack<String>callBack){
@@ -397,13 +417,13 @@ public class ClientDiscoverAPI {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page, RequestCallBack<String> callBack) {
+    public static void search(String q, String t, String page,String evt, RequestCallBack<String> callBack) {
         String url = NetworkConstance.search;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", t);
         params.addQueryStringParameter("page", page);
-        params.addQueryStringParameter("evt", "tag");
+        params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("size", 8 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
