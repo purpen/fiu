@@ -31,6 +31,8 @@ import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
+import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -50,13 +52,11 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/4/15 16:13
  */
-public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
+public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.mv)
     MapView mv;
-    @Bind(R.id.lv)
-    ListView lv;
     private BaiduMap mBDMap;
     private int page; //默认查看第一页
     private int pageSize;//本界面只展示三条
@@ -66,12 +66,11 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
     private static final String STICK_SELECT = "1"; //精选情境
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
-    private NearByQJAdapter nearByAdapter; //附近的情境
     private WaittingDialog waittingDialog;
     private LatLng ll;
     private String address;
     public MapNearByCJActivity() {
-        super(R.layout.activity_display_overlayer);
+        super(R.layout.activity_nearby_cj);
     }
 
     @Override
@@ -159,8 +158,7 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
     private void getNearByData(LatLng ll) {//附近的所有情境
         page = 1;
         pageSize = 1000;
-        radius = 0;
-        ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(ll,String.valueOf(page), String.valueOf(pageSize),String.valueOf(radius), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (waittingDialog!=null) waittingDialog.show();
@@ -175,18 +173,18 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
                 if (responseInfo.result == null) {
                     return;
                 }
-                LogUtil.e("附近所有情境", responseInfo.result);
-                QingJingData qingJingData = null;
+                LogUtil.e("附近所有场景", responseInfo.result);
+                HttpResponse<UserCJListData> response=null;
                 try {
-                    qingJingData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<QingJingData>>() {
-                    });
+                    response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {});
+                    if (response==null) return;
+                    if (response.isSuccess()){
+                        List<SceneListBean> rows = response.getData().rows;
+                        refreshUI(rows);
+                    }
                 } catch (JsonSyntaxException e) {//TODO log
                     Util.makeToast(activity, "对不起,数据异常");
                 }
-                if (qingJingData == null) {
-                    return;
-                }
-                refreshUI(qingJingData.rows);
             }
 
             @Override
@@ -197,12 +195,12 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
         });
     }
 
-    private void addOverlayers(final List<QingJingItem> list) {
+    private void addOverlayers(final List<SceneListBean> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
         LatLng ll = null;
         MarkerOptions option = null;
         final ArrayList<Marker> markers = new ArrayList<Marker>();
-        for (QingJingItem item : list) {
+        for (SceneListBean item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
             option = new MarkerOptions().position(ll).icon(bitmapDescripter);
@@ -228,16 +226,16 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
                     }
                 };
 
-                QingJingItem item = list.get(which);
+                SceneListBean item = list.get(which);
                 if (item == null) {
                     return true;
                 }
                 LatLng ll = marker.getPosition();
                 View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-                LogUtil.e("huge", item.cover_url);
-                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)));
-                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
-                ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
+                LogUtil.e("huge", item.getCover_url());
+                ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)));
+                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
+                ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
                 InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, listener);
                 mBDMap.showInfoWindow(mInfoWindow);
                 return true;
@@ -246,7 +244,7 @@ public class MapNearByCJActivity extends BaseActivity<QingJingItem> {
     }
 
     @Override
-    protected void refreshUI(List<QingJingItem> list) {
+    protected void refreshUI(List<SceneListBean> list) {
         if (list == null) return;
 
         if (list.size() == 0) {

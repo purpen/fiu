@@ -234,6 +234,10 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    public static void getSceneList(LatLng ll,String page, String size,String dis,RequestCallBack<String> callBack){
+        getSceneList(page,size,null,null,dis,String.valueOf(ll.longitude),String.valueOf(ll.latitude),callBack);
+    }
+
     /**
      * 根据用户ID查找CJ
      *

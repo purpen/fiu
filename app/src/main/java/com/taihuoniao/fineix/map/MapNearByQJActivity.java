@@ -68,7 +68,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     private LatLng ll;
     private String address;
     public MapNearByQJActivity() {
-        super(R.layout.activity_display_overlayer);
+        super(R.layout.activity_nearby_qj);
     }
 
 
@@ -155,7 +155,6 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     private void getNearByData(LatLng ll) {//附近的所有情境
         page = 1;
         pageSize = 1000;
-        radius = 0;
         ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {

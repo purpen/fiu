@@ -14,7 +14,7 @@ public class QingJingItem implements Serializable {
     public String des;
     public ArrayList sight;
     public ArrayList<Integer> tags;
-    public QJLoation location;
+    public Location location;
     public String address;
     public int used_count;
     public int view_count;

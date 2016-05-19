@@ -24,7 +24,7 @@ public class SceneListBean {
     private String created_at;
     private User user_info;
     private String cover_url;
-
+    public Location location;
     public String getScene_title() {
         return scene_title;
     }

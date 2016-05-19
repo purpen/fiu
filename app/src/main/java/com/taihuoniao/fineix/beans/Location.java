@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author lilin
  *         created at 2016/4/7 19:52
  */
-public class QJLoation implements Serializable {
+public class Location implements Serializable {
     public String type;
     public ArrayList<Double> coordinates;
 }
