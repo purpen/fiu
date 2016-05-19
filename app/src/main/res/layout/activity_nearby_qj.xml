@@ -6,10 +6,37 @@
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/mv"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/custom_head"
-        />
+        android:layout_below="@+id/custom_head">
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp35"
+            android:text="重新搜索该区域"
+            android:background="@drawable/border_radius5"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:textSize="@dimen/sp12"
+            android:textColor="@color/color_af8323"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            />
+        <ImageButton
+            android:id="@+id/ibtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:background="@mipmap/reset_location"
+            android:layout_marginBottom="@dimen/dp50"
+            android:layout_marginLeft="@dimen/dp16"
+            />
+    </RelativeLayout>
 </RelativeLayout>

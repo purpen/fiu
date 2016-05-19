@@ -259,7 +259,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
     }
 
     private void addOverlayers(List<QingJingItem> list) {
-        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
+        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
         LatLng ll = null;
         MarkerOptions option = null;
         ArrayList<OverlayOptions> options = new ArrayList<OverlayOptions>();

@@ -188,7 +188,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     }
 
     private void addOverlayers(final List<QingJingItem> list) {
-        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
+        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
         LatLng ll = null;
         MarkerOptions option = null;
         final ArrayList<Marker> markers = new ArrayList<Marker>();

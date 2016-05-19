@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author lilin
@@ -94,13 +95,35 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);
         mBDMap.setMyLocationEnabled(true);
 //        startLocate();
+        loadCurrentData();
+    }
+
+    private void move2CurrentLocation(){
+        MapStatus.Builder builder = new MapStatus.Builder();
+        builder.target(ll).zoom(14);
+        mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+    }
+
+    private void loadCurrentData(){
         if (ll != null) {
-            MapStatus.Builder builder = new MapStatus.Builder();
-            builder.target(ll).zoom(14);
-            mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+            move2CurrentLocation();
             getNearByData(ll);
         }
     }
+
+    @OnClick({R.id.btn, R.id.ibtn})
+    void performClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn: //重新搜索
+                mBDMap.clear();
+                loadCurrentData();
+                break;
+            case R.id.ibtn: //重新定位当前经纬度
+                move2CurrentLocation();
+                break;
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -126,32 +149,6 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
         }
 
         super.onDestroy();
-    }
-
-    private void startLocate() {
-        MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                if (bdLocation == null && mv == null) {
-                    return;
-                }
-                MyLocationData locData = new MyLocationData.Builder()
-                        .accuracy(bdLocation.getRadius())
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
-                        .direction(100).latitude(bdLocation.getLatitude())
-                        .longitude(bdLocation.getLongitude()).build();
-                mBDMap.setMyLocationData(locData);
-                if (isFirstLoc) {
-                    isFirstLoc = false;
-                    LatLng ll = new LatLng(bdLocation.getLatitude(),
-                            bdLocation.getLongitude());
-                    MapStatus.Builder builder = new MapStatus.Builder();
-                    builder.target(ll).zoom(14);
-                    mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                    getNearByData(ll);
-                }
-            }
-        });
     }
 
     private void getNearByData(LatLng ll) {//附近的所有情境
@@ -195,7 +192,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     }
 
     private void addOverlayers(final List<QingJingItem> list) {
-        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
+        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
         LatLng ll = null;
         MarkerOptions option = null;
         final ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -232,7 +229,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
                 LatLng ll = marker.getPosition();
                 View view = Util.inflateView(activity, R.layout.info_window_layout, null);
                 LogUtil.e("huge", item.cover_url);
-                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)));
+                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
                 ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
                 ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
                 InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, listener);

@@ -3,9 +3,7 @@ package com.taihuoniao.fineix.map;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -27,14 +25,10 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.QingJingData;
-import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -47,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author lilin
@@ -57,6 +52,10 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     CustomHeadView custom_head;
     @Bind(R.id.mv)
     MapView mv;
+    //    @Bind(R.id.btn)
+//    Button btn;
+//    @Bind(R.id.ibtn)
+//    ImageButton ibtn;
     private BaiduMap mBDMap;
     private int page; //默认查看第一页
     private int pageSize;//本界面只展示三条
@@ -66,9 +65,11 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     private static final String STICK_SELECT = "1"; //精选情境
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
+    private BitmapDescriptor curDescripter;
     private WaittingDialog waittingDialog;
     private LatLng ll;
     private String address;
+
     public MapNearByCJActivity() {
         super(R.layout.activity_nearby_cj);
     }
@@ -80,29 +81,50 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             ll = intent.getParcelableExtra(TAG);
         }
 
-        if (intent.hasExtra("address")){
-            address=intent.getStringExtra("address");
+        if (intent.hasExtra("address")) {
+            address = intent.getStringExtra("address");
         }
 
     }
 
     @Override
     protected void initView() {
-        if (!TextUtils.isEmpty(address)){
-            custom_head.setHeadCenterTxtShow(true,address);
+        if (!TextUtils.isEmpty(address)) {
+            custom_head.setHeadCenterTxtShow(true, address);
         }
-        waittingDialog=new WaittingDialog(this);
+        waittingDialog = new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
-        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
+//        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);
-        mBDMap.setMyLocationEnabled(true);
+//        mBDMap.setMyLocationEnabled(true);
 //        startLocate();
-        if (ll!=null){
-            MapStatus.Builder builder = new MapStatus.Builder();
-            builder.target(ll).zoom(14);
-            mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        loadCurrentData();
+    }
+
+    private void move2CurrentLocation(){
+        MapStatus.Builder builder = new MapStatus.Builder();
+        builder.target(ll).zoom(14);
+        mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+    }
+
+    private void loadCurrentData(){
+        if (ll != null) {
+            move2CurrentLocation();
             getNearByData(ll);
+        }
+    }
+
+    @OnClick({R.id.btn, R.id.ibtn})
+    void performClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn: //重新搜索
+                mBDMap.clear();
+                loadCurrentData();
+                break;
+            case R.id.ibtn: //重新定位当前经纬度
+                move2CurrentLocation();
+                break;
         }
     }
 
@@ -122,7 +144,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     @Override
     protected void onDestroy() {
-        mBDMap.setMyLocationEnabled(false);
+//        mBDMap.setMyLocationEnabled(false);
         MapUtil.destroyLocationClient();
         mv.onDestroy();
         if (bitmapDescripter != null) {
@@ -141,7 +163,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                 }
                 MyLocationData locData = new MyLocationData.Builder()
                         .accuracy(bdLocation.getRadius())
-                                // 此处设置开发者获取到的方向信息，顺时针0-360
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(100).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
@@ -161,10 +183,10 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     private void getNearByData(LatLng ll) {//附近的所有情境
         page = 1;
         pageSize = 1000;
-        ClientDiscoverAPI.getSceneList(ll,String.valueOf(page), String.valueOf(pageSize),String.valueOf(radius), new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(ll, String.valueOf(page), String.valueOf(pageSize), String.valueOf(radius), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (waittingDialog!=null) waittingDialog.show();
+                if (waittingDialog != null) waittingDialog.show();
             }
 
             @Override
@@ -177,11 +199,12 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                     return;
                 }
                 LogUtil.e("附近所有场景", responseInfo.result);
-                HttpResponse<UserCJListData> response=null;
+                HttpResponse<UserCJListData> response = null;
                 try {
-                    response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {});
-                    if (response==null) return;
-                    if (response.isSuccess()){
+                    response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {
+                    });
+                    if (response == null) return;
+                    if (response.isSuccess()) {
                         List<SceneListBean> rows = response.getData().rows;
                         refreshUI(rows);
                     }
@@ -199,10 +222,10 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     }
 
     private void addOverlayers(final List<SceneListBean> list) {
-        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_gcoding);
+        bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
         LatLng ll = null;
         MarkerOptions option = null;
-        final ArrayList<Marker> markers = new ArrayList<Marker>();
+        final ArrayList<Marker> markers = new ArrayList<>();
         for (SceneListBean item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
