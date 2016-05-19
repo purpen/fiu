@@ -145,10 +145,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.GONE);
-            ibtn.setVisibility(View.VISIBLE);
+//            ibtn.setVisibility(View.VISIBLE);
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
-            ibtn.setVisibility(View.GONE);
+//            ibtn.setVisibility(View.GONE);
         }
     }
 

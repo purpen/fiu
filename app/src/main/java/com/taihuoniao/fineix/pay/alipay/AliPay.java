@@ -41,7 +41,7 @@ public class AliPay{
 	// 商户PID
 	public static final String PARTNER = "2088021152594917";
 	// 商户收款账号
-	public static final String SELLER = "2088021152594917";//dmoreaccounting@dmore.com.cn
+	public static final String SELLER = "2088021152594917";
 	// 商户私钥，pkcs8格式
 	public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAL0cenFc0hPLx1qB2pyxMD6Zf0/eV3Yi/tbP014AGV2t5sg8KZLa1gTsxDS5wVXMAcbluinWr2Sx0gdT0n7RKVd9qd0lnlEqXJOLJu/Bf5inqI6lvU9YX5ZAoEXxvE2MxCVwWJgBuzQ35jhpWsNbz1ZV0YPhN4xb6J3Oeak/9PYBAgMBAAECgYBAQXjpI9zNlSP7gLvDGgGGg6laffXB0ko8uwjam7YCup/70VVe7LRjn/9a2vLyMAs6hbwnkyatVC5FBxoytOcSmXaGjB4xBk4FEw/bhMbhIl76yWc1YUglpRfdhA2kEm2cQQ9rOO+T3Coqh4N+g9sF9PML29EUb3zeXsrdcY+fQQJBAOnm7r5jQrhCmefk6/EKJvvIPUc5r3lK0Bv+gNfCwBmin/zHPb8Yceg2zVWJxDRIZBO+6X7l4KYqK717KlkKkiUCQQDO+kBdVdpK7tkdG63z1wC3meat0NkGhNo5ciUqZrhaauII+kmn0THrpNtO4lsWIIQrb7bFIW3mMol6DmdmDXetAkA5Hk/G5m5wmLME0f5cCmKisa9lKU0UjZRsgaXtCn3mxLPVAsKtW8bVMizKaq4jJlpqCAD1ICXP7hRoXR9mRxKRAkEAlrB33/w7e8a9Z4XZdegY65Mu8WlWOHrM7nn+OQqkOaALhQHEUlvp/mf+C0adjlSKJZ2l8YvPGYO9t5F5EkHH2QJBAKaWrVN5bqRHB7PAD+naN9OFYcFwVnh50+debhGXAtdBDrIp/+4W+bgqtl9gDXK4fbj8Bxu6c3kw7ca+1cWd+HU=";
 	// 支付宝公钥

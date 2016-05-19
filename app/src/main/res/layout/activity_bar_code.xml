@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"/>
 
     <RelativeLayout
+        android:id="@+id/rl_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_radius_white"
@@ -22,7 +23,9 @@
             android:id="@+id/rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp20"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginRight="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp20"
             >
             <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                 android:id="@+id/riv"
@@ -65,9 +68,9 @@
             android:id="@+id/iv_bar_code"
             android:layout_width="266dp"
             android:layout_height="266dp"
+            android:layout_margin="@dimen/dp20"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/rl"
-            android:layout_marginBottom="@dimen/dp20"
             />
     </RelativeLayout>
 </RelativeLayout>
