@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -28,10 +27,10 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.WindowUtils;
 
 import java.util.ArrayList;
 
@@ -126,6 +125,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
 //        WindowUtils.immerseStatusBar(MainActivity.this);
+        WindowUtils.chenjin(MainActivity.this);
     }
 
     private void recoverAllState(Bundle savedInstanceState) {

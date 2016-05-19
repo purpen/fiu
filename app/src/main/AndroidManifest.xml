@@ -123,7 +123,6 @@
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"
             />
         <activity
             android:name=".zxing.activity.CaptureActivity"

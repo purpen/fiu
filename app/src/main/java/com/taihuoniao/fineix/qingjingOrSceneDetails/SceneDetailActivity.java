@@ -601,6 +601,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     DataPaser.sceneDetails(id, handler);
                     return;
                 }
+                if(netScene==null){
+                    dialog.show();
+                    DataPaser.sceneDetails(id,handler);
+                    return;
+                }
+                String address = netScene.getAddress();
                 Toast.makeText(SceneDetailActivity.this, "跳转到地图界面" + location, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_scenedetails_background:

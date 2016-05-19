@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
+                tools:context="com.taihuoniao.fineix.main.fragment.FindFragment"
     >
 
     <RelativeLayout
         android:id="@+id/fragment_find_titlelayout"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
             android:src="@mipmap/logo"/>
 
         <ImageView
             android:id="@+id/fragment_find_search"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:src="@mipmap/head_search"/>
@@ -27,7 +29,7 @@
         <ImageView
             android:id="@+id/fragment_find_location"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"

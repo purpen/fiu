@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -38,6 +39,7 @@ import com.taihuoniao.fineix.beans.QingjingSubsBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.MapNearByQJActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.scene.SearchActivity;
@@ -50,7 +52,6 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -378,7 +379,17 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     DataPaser.qingjingDetails(id, handler);
                     return;
                 }
-                Toast.makeText(QingjingDetailActivity.this, "跳转到附近的情景" + Arrays.toString(locaiton), Toast.LENGTH_SHORT).show();
+                if (QingjingDetailBean == null) {
+                    dialog.show();
+                    DataPaser.qingjingDetails(id, handler);
+                    return;
+                }
+                String address = QingjingDetailBean.getData().getAddress();
+                LatLng ll = new LatLng(Double.parseDouble(locaiton[0]), Double.parseDouble(locaiton[1]));
+                Intent intent = new Intent(QingjingDetailActivity.this, MapNearByQJActivity.class);
+                intent.putExtra(TAG, ll);
+                intent.putExtra("address", address);
+                startActivity(intent);
                 break;
             case R.id.activity_qingjingdetail_leftlabel:
                 if (netUserInfo == null) {
@@ -386,9 +397,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     DataPaser.qingjingDetails(id, handler);
                     return;
                 }
-                Intent intent = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
-                startActivity(intent);
+                Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
+                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
+                startActivity(intent1);
                 break;
             case R.id.activity_qingjingdetail_back:
                 onBackPressed();
