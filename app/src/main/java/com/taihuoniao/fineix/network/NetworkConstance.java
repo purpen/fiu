@@ -14,7 +14,7 @@ public class NetworkConstance {
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
-
+    public static final String STATUS_NEED_LOGIN="4008";
     //产品
     //统计用户想购买的数量
     public static final String want_buy = BASE_URL+"/scene_product/sight_click_stat";
@@ -111,8 +111,11 @@ public class NetworkConstance {
     //场景列表
     public static final String CHANG_JING = BASE_URL + "/scene_sight";
 
-    //获得个人中心用户信息
+    //获得用户信息自己和别人的主页
     public static final String MINE_INFO = BASE_URL + "/user/user_info";
+
+    //获得个人中心
+    public static final String USER_CENTER = BASE_URL + "/auth/user";
 
     //获得Banners
     public static final String BANNERS_URL = BASE_URL + "/gateway/slide";
@@ -189,4 +192,7 @@ public class NetworkConstance {
 
     //支付URL
     public static final String PAY_URL = BASE_URL + "/shopping/payed";
+
+    //检查登录状态
+    public static final String CHECK_LOGIN_URL = BASE_URL + "/auth/check_login";
 }

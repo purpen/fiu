@@ -32,6 +32,7 @@ public class QingJingListBean extends NetBean {
     }
 
     public static class QingJingItem implements Serializable {
+        public boolean isOrdered;
         private boolean isSelect;
         private String _id;
         private String title;

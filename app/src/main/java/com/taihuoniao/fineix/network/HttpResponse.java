@@ -3,7 +3,8 @@ package com.taihuoniao.fineix.network;
 import java.io.Serializable;
 
 /**
- * Created by Amy on 2016/4/5.
+ * @author lilin
+ * created at 2016/4/5 15:57
  */
 public class HttpResponse<T> implements Serializable{
     private boolean success;

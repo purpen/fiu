@@ -64,6 +64,11 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
 
         holder.tv_title.setText(item.getTitle());
         holder.tv_desc.setText(item.getAddress());
+        if (item.isOrdered){
+            holder.ibtn.setImageResource(R.mipmap.ordered_qj);
+        }else {
+            holder.ibtn.setImageResource(R.mipmap.order_qj);
+        }
         setOnClickListener(holder.ibtn,item);
         return convertView;
     }
@@ -89,6 +94,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()){
                             itbn.setImageResource(R.mipmap.ordered_qj);
+                            item.isOrdered=true;
                             Util.makeToast("订阅成功");
                             return;
                         }

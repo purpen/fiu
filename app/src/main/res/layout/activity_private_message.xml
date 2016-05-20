@@ -49,6 +49,7 @@
             android:layout_height="@dimen/dp35"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp16"
+            style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/shap_redbutton_commit"
             android:text="发送"
             android:textColor="@color/white"

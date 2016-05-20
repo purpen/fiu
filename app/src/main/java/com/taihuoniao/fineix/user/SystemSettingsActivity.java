@@ -113,7 +113,6 @@ public class SystemSettingsActivity extends BaseActivity{
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                //TODO 跳转app商城
                 break;
             case R.id.item_welcome_page:
                 intent=new Intent(activity,UserGuideActivity.class);
@@ -142,14 +141,14 @@ public class SystemSettingsActivity extends BaseActivity{
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()){//   退出成功跳转首页
                     Util.makeToast("退出成功");
-                    SPUtil.remove(activity,DataConstants.LOGIN_INFO);
-                    Intent intent=new Intent(activity,MainActivity.class);
-                    intent.putExtra(IndexFragment.class.getSimpleName(),IndexFragment.class.getSimpleName());
-                    startActivity(intent);
-                    finish();
-                    return;
+                }else {
+                    Util.makeToast(response.getMessage());
                 }
-                Util.makeToast(response.getMessage());
+                SPUtil.remove(activity,DataConstants.LOGIN_INFO);
+                Intent intent=new Intent(activity,MainActivity.class);
+                intent.putExtra(IndexFragment.class.getSimpleName(),IndexFragment.class.getSimpleName());
+                startActivity(intent);
+                finish();
             }
 
             @Override

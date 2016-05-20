@@ -87,9 +87,10 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     }
 
     @Override
-    protected void requestNet() {
-        String stick = "1"; //是推荐
-        ClientDiscoverAPI.getQJData(null, 0, String.valueOf(curPage), PAGE_SIZE, stick, new RequestCallBack<String>() {
+    protected void requestNet() {//sort=2 stick=0
+        String stick = "0"; //是推荐
+        String sort="2";
+        ClientDiscoverAPI.getQJData(String.valueOf(curPage),PAGE_SIZE,sort,stick, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (curPage == 1) dialog.show();

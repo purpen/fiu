@@ -188,8 +188,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 startActivity(new Intent(activity, RegisterActivity.class));
                 break;
             case R.id.tv_qq_register:
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_QQ;
@@ -198,8 +197,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(qq);
                 break;
             case R.id.tv_weibo_register:
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_SINA;
@@ -208,8 +206,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(sina);
                 break;
             case R.id.tv_weixin_register:
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_WX;
@@ -293,6 +290,11 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (mDialog!=null) mDialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (mDialog!=null){
                     mDialog.dismiss();
@@ -336,7 +338,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                                 break;
                         }
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
-                        mDialog.dismiss();
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
 

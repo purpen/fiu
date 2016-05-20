@@ -3,10 +3,12 @@ package com.taihuoniao.fineix.main;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -19,12 +21,18 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.IsLogin;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
+import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.service.LocationService;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
 
 import java.io.File;
 import java.util.List;
@@ -191,5 +199,26 @@ public class MainApplication extends Application {
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
         String uniqueId = deviceUuid.toString();
         return uniqueId;
+    }
+
+
+    public static boolean isloginValid(String json,Class clazz){
+        if (TextUtils.isEmpty(json)) return false;
+        if (clazz.equals(HttpResponse.class)){
+            HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
+            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN,response.getStatus())){//需要登录
+                SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
+                getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
+                return false;
+            }
+        }else {
+            NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
+            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN,netBean.getStatus())){//需要登录
+                SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
+                getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -582,6 +582,7 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack, false);
     }
 
+    //stick
     public static void getQJData(LatLng ll, int radius, String page, String pageSize, String stick, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
@@ -600,6 +601,15 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
     }
 
+    //订阅
+    public static void getQJData(String page, String pageSize,String sort,String stick, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", pageSize);
+        params.addQueryStringParameter("sort", sort);
+        params.addQueryStringParameter("stick", stick);
+        MD5Utils.sign(params, NetworkConstance.QING_JING, callBack);
+    }
 
     /**
      * 获取用户的情景列表
@@ -636,6 +646,12 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", userId);
         LogUtil.e("getMineInfo", userId);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.MINE_INFO, callBack, false);
+    }
+
+    //获取个人中心
+    public static void getUserCenterData(RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.USER_CENTER, callBack, false);
     }
 
     /**
@@ -1156,4 +1172,11 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.PAY_URL, callBack,true);
     }
 
+    /**
+     * 判断服务器是否登录
+     */
+    public static void getLoginStatus(RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.CHECK_LOGIN_URL,callBack);
+    }
 }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -113,7 +112,6 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initData();
     }
 
@@ -164,7 +162,7 @@ public class MineFragment extends MyBaseFragment {
             return;
         }
         dialog.show();
-        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -177,13 +175,18 @@ public class MineFragment extends MyBaseFragment {
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
-                    });
+                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
+                    if (response.isSuccess()){
+                        user=response.getData();
+                        refreshUIAfterNet();
+                        return;
+                    }
+
+
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
                 }
-                refreshUIAfterNet();
             }
 
             @Override
@@ -200,7 +203,7 @@ public class MineFragment extends MyBaseFragment {
     public void onResume() {
         super.onResume();
         if (LoginInfo.isUserLogin()) {
-            rl.setVisibility(View.GONE);
+//            rl.setVisibility(View.GONE);
             if (isInitLoad){
                 isInitLoad=false;
             }else {
@@ -208,7 +211,7 @@ public class MineFragment extends MyBaseFragment {
                 loadData();
             }
         } else {
-            rl.setVisibility(View.VISIBLE);
+//            rl.setVisibility(View.VISIBLE);
         }
     }
 

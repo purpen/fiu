@@ -154,8 +154,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void requestNet() {
-        if (userId < 0) {
-            LogUtil.e(TAG, "userId<0");
+        if (userId <= 0) {
+            LogUtil.e(TAG, "userId<=0");
             return;
         }
         LogUtil.e(TAG, "requestNet==" + userId);

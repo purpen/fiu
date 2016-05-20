@@ -62,8 +62,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToLoginActivity instance = null;
     private WaittingDialog mDialog;
-    private boolean mDialogAppear = false;//判断对话框要不要出现
-
     public ToLoginActivity() {
         super(R.layout.activity_to_login);
     }
@@ -74,13 +72,13 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
             super.handleMessage(msg);
             switch (msg.what) {
                 case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
-                    if (mDialog.isShowing()) {
+                    if (mDialog!=null) {
                         mDialog.dismiss();
                     }
                     Toast.makeText(ToLoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_ERROR:
-                    if (mDialog.isShowing()) {
+                    if (mDialog!=null) {
                         mDialog.dismiss();
                     }
                     Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
@@ -191,8 +189,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.tv_qq_tologin: //QQ登录
                 mQq.setEnabled(false);
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_QQ;
@@ -202,8 +199,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tv_weixin_tologin: //微信登录
                 mWeChat.setEnabled(false);
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_WX;
@@ -215,8 +211,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tv_weibo_tologin: //新浪微博登录
                 mSinaWeiBo.setEnabled(false);
-                mDialogAppear = true;
-                if (!mDialog.isShowing()) {
+                if (mDialog!=null) {
                     mDialog.show();
                 }
                 loginType = LOGIN_TYPE_SINA;
@@ -300,6 +295,11 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (mDialog!=null) mDialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 mQq.setEnabled(true);
                 mWeChat.setEnabled(true);
@@ -346,7 +346,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                                 break;
                         }
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
-                        mDialog.dismiss();
 
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
@@ -417,7 +416,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         mQq.setEnabled(true);
         mWeChat.setEnabled(true);
         mSinaWeiBo.setEnabled(true);
-        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
@@ -429,7 +427,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         mQq.setEnabled(true);
         mWeChat.setEnabled(true);
         mSinaWeiBo.setEnabled(true);
-        mDialogAppear = false;
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }

@@ -96,7 +96,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         dialog.show();
-        ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId() + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
