@@ -134,7 +134,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 //                Log.e("<<<touch","event="+event.getAction()+",isopen="+isOpen);
-                if (isOpen && event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (isOpen && event.getAction() == MotionEvent.ACTION_UP) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     editText.setHint("评论一下");
                     is_reply = 0 + "";

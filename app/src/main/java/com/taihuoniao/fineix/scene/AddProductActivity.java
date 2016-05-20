@@ -5,8 +5,16 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
@@ -27,7 +35,12 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
     private RelativeLayout search;
+    private EditText editText;
+    private TextView cancelTv;
     private WaittingDialog dialog;
+    private int searchPage = 1;
+    //viewpager当前页面
+    private int pos = 0;
 
     public AddProductActivity() {
         super(0);
@@ -62,22 +75,92 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
         search = (RelativeLayout) findViewById(R.id.rl);
+        editText = (EditText) findViewById(R.id.activity_add_product_edit);
+        cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
         dialog = new WaittingDialog(this);
     }
 
     @Override
     protected void installListener() {
-        search.setOnClickListener(this);
+//        search.setOnClickListener(this);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    cancelTv.setVisibility(View.VISIBLE);
+                } else {
+                    cancelTv.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        editText.setOnKeyListener(new View.OnKeyListener() {//输入完后按键盘上的搜索键【回车键改为了搜索键】
+
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (AddProductActivity.this.getCurrentFocus() != null) {
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(AddProductActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    //开始搜索
+                    Log.e("<<", "点击搜索");
+                    if (TextUtils.isEmpty(editText.getText().toString().trim())) {
+                        Log.e("<<<", "为空");
+                        return false;
+                    } else {
+                        Intent intent = new Intent(DataConstants.BroadSearchFragment);
+                        intent.putExtra("pos", pos);
+                        intent.putExtra("q", editText.getText().toString().trim());
+                        intent.putExtra("search", true);
+                        sendBroadcast(intent);
+                        Log.e("<<<", "发送广播");
+//                        DataPaser.search(editText.getText().toString().trim(), searchPage + "", "10", null, handler);
+                    }
+                }
+                return false;
+            }
+        });
+        slidingTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pos = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        cancelTv.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.rl:
-                Intent intent = new Intent(activity,SearchActivity.class);
-                intent.putExtra("t","10");
-                startActivity(intent);
-                return;
+            case R.id.activity_add_product_cancel:
+                Intent intent = new Intent(DataConstants.BroadSearchFragment);
+                intent.putExtra("pos", pos);
+                intent.putExtra("search", false);
+                sendBroadcast(intent);
+                editText.setText("");
+                Log.e("<<<", "取消搜索");
+                break;
+//            case R.id.rl:
+//                Intent intent = new Intent(activity,SearchActivity.class);
+//                intent.putExtra("t","10");
+//                startActivity(intent);
+//                return;
         }
     }
 
