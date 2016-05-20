@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -67,7 +68,8 @@ public class UserGuideActivity extends BaseActivity {
     protected void initView() {
         if (TextUtils.isEmpty(fromPage)){
             iv_welcome.setVisibility(View.VISIBLE);
-            iv_welcome.setImageResource(R.mipmap.login_or_regist);
+            ImageLoader.getInstance().displayImage("drawable://"+R.mipmap.welcome,iv_welcome);
+//            iv_welcome.setImageResource(R.mipmap.login_or_regist);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -89,7 +91,7 @@ public class UserGuideActivity extends BaseActivity {
     private void initGuide() {
         isGuide=true;
         list = new ArrayList<Integer>();
-        list.add(R.mipmap.login_or_regist);
+        list.add(R.mipmap.guide1);
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
         scrollableView.setAdapter(new ViewPagerAdapter<Integer>(activity, list));

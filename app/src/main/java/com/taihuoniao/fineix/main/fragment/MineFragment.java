@@ -1,8 +1,10 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -214,9 +216,20 @@ public class MineFragment extends MyBaseFragment {
 //            rl.setVisibility(View.VISIBLE);
         }
     }
-
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
     @Override
     protected void initViews() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+            ll_box.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);

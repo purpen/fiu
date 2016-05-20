@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author lilin
- * created at 2016/4/5 15:57
+ * created at 2016/4/5 17:39
  */
 public class HttpResponse<T> implements Serializable{
     private boolean success;

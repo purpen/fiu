@@ -23,9 +23,9 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
         this.list = list;
         this.activity = activity;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
+                .showImageOnLoading(R.mipmap.default_pic)
+                .showImageForEmptyUri(R.mipmap.default_pic)
+                .showImageOnFail(R.mipmap.default_pic)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)

@@ -162,12 +162,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null) dialog.show();
+                if (dialog!=null&& !activity.isFinishing()) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -189,7 +189,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s))
                     LogUtil.e(TAG, s);
                 Util.makeToast(s);
@@ -217,7 +217,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.getSceneList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog != null) {
+                if (dialog != null && !activity.isFinishing()) {
                     if (curPage == 1) dialog.show();
                 }
                 curPage++;
@@ -225,7 +225,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
@@ -242,7 +242,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 Util.makeToast(s);
             }
@@ -277,13 +277,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.getQJList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (curPage == 1) dialog.show();
+                if (dialog != null && !activity.isFinishing()) {
+                    if (curPage == 1) dialog.show();
+                }
                 curPage++;
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getQJList", responseInfo.result);
@@ -299,7 +301,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
+                if (dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 Util.makeToast(s);
             }
