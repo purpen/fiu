@@ -126,6 +126,9 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<>>>", responseInfo.result);
 //                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                if (handler == null) {
+                    return;
+                }
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT_LIST;
                 ProductBean productBean = new ProductBean();
@@ -1297,8 +1300,8 @@ public class DataPaser {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page,String evt, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, page,evt, new RequestCallBack<String>() {
+    public static void search(String q, String t, String page, String evt, final Handler handler) {
+        ClientDiscoverAPI.search(q, t, page, evt, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<sousuo", responseInfo.result);
@@ -1432,6 +1435,34 @@ public class DataPaser {
                     Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
                 }
 
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //评论
+    //删除评论
+    public static void deleteComment(String id, final Handler handler) {
+        ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DELETE_COMMENT;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除评论", "数据解析异常" + e.toString());
+                }
                 handler.sendMessage(msg);
             }
 

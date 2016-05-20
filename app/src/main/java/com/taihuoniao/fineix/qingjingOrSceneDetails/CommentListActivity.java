@@ -1,10 +1,13 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +40,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/21.
  */
-public class CommentListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class CommentListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     //上个界面传递过来的评论关联id
     private String target_id;
     private String type;//类型  12 场景评论
@@ -55,6 +58,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private Button sendBtn;
     //网络请求
     private WaittingDialog dialog;
+    private String currentUserId = null;//网络获取的当前用户id
     //评论列表页码
     private int currentPage = 1;
     //判断软键盘弹起还是隐藏
@@ -114,6 +118,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         pullToRefreshLayout.setOnClickListener(this);
         sendBtn.setOnClickListener(this);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         activityView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -158,6 +163,16 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.DELETE_COMMENT:
+                    NetBean netBean1 = (NetBean) msg.obj;
+                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (netBean1.isSuccess()) {
+                        currentPage = 1;
+                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
+                    }else{
+                        dialog.dismiss();
+                    }
+                    break;
                 case DataConstants.SEND_COMMENT:
                     NetBean netBean = (NetBean) msg.obj;
                     Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
@@ -171,12 +186,17 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
+                        if("0".equals(netBean.getCurrent_user_id())){
+                            MainApplication.which_activity = DataConstants.ElseActivity;
+                            startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
+                        }
                     }
                     break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     CommentsBean netCommentsBean = (CommentsBean) msg.obj;
+                    currentUserId = netCommentsBean.getCurrent_user_id();
                     if (netCommentsBean.isSuccess()) {
                         if (currentPage == 1) {
                             pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
@@ -195,6 +215,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
+                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -243,6 +264,15 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (currentUserId == null) {
+            currentPage = 1;
+            requestNet();
+            return;
+        }
+        Log.e("<<<", "currentUserId=" + currentUserId + ",user_id=" + commentList.get(position).getUser().get_id());
+        if (currentUserId.equals(commentList.get(position).getUser().get_id())) {
+            return;
+        }
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //获取状态信息
         if (!isOpen) {
@@ -260,4 +290,34 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private String is_reply = 0 + "";//是回复还是评论 0评论 1回复
     private String reply_id;//被回复评论id
     private String reply_user_id;//被回复人id
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        if (currentUserId == null) {
+            currentPage = 1;
+            requestNet();
+            return false;
+        }
+        if (currentUserId.equals(commentList.get(position).getUser().get_id())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CommentListActivity.this);
+            builder.setMessage("删除评论？");
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    CommentListActivity.this.dialog.show();
+                    DataPaser.deleteComment(commentList.get(position).get_id(), handler);
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
+//            return true;
+        }
+        return false;
+    }
 }

@@ -22,9 +22,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.taihuoniao.fineix.R;
-import java.util.Locale;
 
+import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.scene.AddProductActivity;
+
+import java.util.Locale;
 
 
 public class CustomSlidingTab extends HorizontalScrollView {
@@ -47,7 +49,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
     private ViewPager pager;
 
     private int tabCount;
-    private int selectedPosition=0;
+    private int selectedPosition = 0;
     private int currentPosition = 0;
     private float currentPositionOffset = 0f;
 
@@ -72,7 +74,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
     private int tabTextSize = 12;
     private int tabTextColor = 0xFF666666;
 
-    private int curTabTextColor=0x000000;
+    private int curTabTextColor = 0x000000;
 
     private Typeface tabTypeface = null;
     private int tabTypefaceStyle = Typeface.BOLD;
@@ -124,11 +126,11 @@ public class CustomSlidingTab extends HorizontalScrollView {
         a = context.obtainStyledAttributes(attrs, R.styleable.CustomSlidingTab);
         indicatorColor = a.getColor(R.styleable.CustomSlidingTab_pstsIndicatorColor, indicatorColor);
         underlineColor = a.getColor(R.styleable.CustomSlidingTab_pstsUnderlineColor, underlineColor);
-        curTabTextColor=a.getColor(R.styleable.CustomSlidingTab_pstsCurIndicatorColor,curTabTextColor);
+        curTabTextColor = a.getColor(R.styleable.CustomSlidingTab_pstsCurIndicatorColor, curTabTextColor);
         dividerColor = a.getColor(R.styleable.CustomSlidingTab_pstsDividerColor, dividerColor);
         indicatorHeight = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsIndicatorHeight, indicatorHeight);
         underlineHeight = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsUnderlineHeight, underlineHeight);
-        isDivierShow = a.getBoolean(R.styleable.CustomSlidingTab_pstsIsDivierShow,isDivierShow);
+        isDivierShow = a.getBoolean(R.styleable.CustomSlidingTab_pstsIsDivierShow, isDivierShow);
         dividerPadding = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsDividerPadding, dividerPadding);
         tabPadding = a.getDimensionPixelSize(R.styleable.CustomSlidingTab_pstsTabPaddingLeftRight, tabPadding);
         tabBackgroundResId = a.getResourceId(R.styleable.CustomSlidingTab_pstsTabBackground, tabBackgroundResId);
@@ -231,12 +233,22 @@ public class CustomSlidingTab extends HorizontalScrollView {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(position);
+                if(isSearch){
+                    cancelSearch.cancelSearch();
+                }
             }
         });
 
         tab.setPadding(tabPadding, 0, tabPadding, 0);
         tabsContainer.addView(tab, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
     }
+    private boolean isSearch = false;
+    private AddProductActivity.CancelSearch cancelSearch;
+    public void setAddProductActivity(boolean isSearch,AddProductActivity.CancelSearch cancelSearch){
+        this.isSearch  = isSearch;
+        this.cancelSearch = cancelSearch;
+    }
+
 
     private void updateTabStyles() {
 
@@ -251,9 +263,9 @@ public class CustomSlidingTab extends HorizontalScrollView {
                 TextView tab = (TextView) v;
                 tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
-                if (selectedPosition==i){
+                if (selectedPosition == i) {
                     tab.setTextColor(curTabTextColor);
-                }else {
+                } else {
                     tab.setTextColor(tabTextColor);
                 }
 
@@ -328,7 +340,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
         canvas.drawRect(0, height - underlineHeight, tabsContainer.getWidth(), height, rectPaint);
 
         // draw divider
-        if (isDivierShow){
+        if (isDivierShow) {
             dividerPaint.setColor(dividerColor);
             for (int i = 0; i < tabCount - 1; i++) {
                 View tab = tabsContainer.getChildAt(i);
@@ -366,7 +378,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
-            selectedPosition=position;
+            selectedPosition = position;
             updateTabStyles();
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
@@ -380,8 +392,8 @@ public class CustomSlidingTab extends HorizontalScrollView {
         invalidate();
     }
 
-    public void setCurTabTextColor(int curTabTextColor){
-        this.curTabTextColor=curTabTextColor;
+    public void setCurTabTextColor(int curTabTextColor) {
+        this.curTabTextColor = curTabTextColor;
         invalidate();
     }
 

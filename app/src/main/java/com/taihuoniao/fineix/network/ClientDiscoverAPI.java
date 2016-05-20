@@ -255,7 +255,7 @@ public class ClientDiscoverAPI {
     }
 
     public static void getSceneList(LatLng ll,String page, String size,String dis,RequestCallBack<String> callBack){
-        getSceneList(page,size,null,null,dis,String.valueOf(ll.longitude),String.valueOf(ll.latitude),callBack);
+        getSceneList(page, size, null, null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
     }
 
     /**
@@ -488,6 +488,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("target_user_id", target_user_id);
         params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //评论
+    //删除评论
+    public static void deleteComment(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.delete_comment;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id",id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

@@ -5,8 +5,8 @@ package com.taihuoniao.fineix.network;
  * 网络请求url封装
  */
 public class NetworkConstance {
-    public static final String ALI_PAY="alipay";
-    public static final String WX_PAY="weichat";
+    public static final String ALI_PAY = "alipay";
+    public static final String WX_PAY = "weichat";
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
@@ -17,7 +17,7 @@ public class NetworkConstance {
     public static final String STATUS_NEED_LOGIN="4008";
     //产品
     //统计用户想购买的数量
-    public static final String want_buy = BASE_URL+"/scene_product/sight_click_stat";
+    public static final String want_buy = BASE_URL + "/scene_product/sight_click_stat";
     //删除用户添加的产品
     public static final String delete_product = BASE_URL + "/scene_product/deleted";
     //列表
@@ -98,6 +98,8 @@ public class NetworkConstance {
     public static final String send_comment = BASE_URL + "/comment/ajax_comment";
     //列表
     public static final String comments_list = BASE_URL + "/comment/getlist";
+    //删除评论
+    public static final String delete_comment = BASE_URL + "/comment/deleted";
     //我接收到的评论列表
     public static final String MY_COMMENTS_LIST = BASE_URL + "/my/comment_list";
     //分类

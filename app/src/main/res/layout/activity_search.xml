@@ -13,6 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
+            android:visibility="gone"
             android:paddingRight="20dp"
             android:src="@mipmap/back_black"/>
 
@@ -27,6 +28,7 @@
             android:textSize="16sp"/>
 
         <RelativeLayout
+            android:layout_marginLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="27dp"
             android:layout_centerVertical="true"
@@ -96,7 +98,7 @@
             <TextView
                 android:id="@+id/activity_search_qjline"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="3dp"
                 android:layout_alignLeft="@id/activity_search_qjtv"
                 android:layout_alignParentBottom="true"
                 android:layout_alignRight="@id/activity_search_qjtv"
@@ -122,7 +124,7 @@
             <TextView
                 android:id="@+id/activity_search_cjline"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="3dp"
                 android:layout_alignLeft="@id/activity_search_cjtv"
                 android:layout_alignParentBottom="true"
                 android:layout_alignRight="@id/activity_search_cjtv"
@@ -148,7 +150,7 @@
             <TextView
                 android:id="@+id/activity_search_productline"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="3dp"
                 android:layout_alignLeft="@id/activity_search_producttv"
                 android:layout_alignParentBottom="true"
                 android:layout_alignRight="@id/activity_search_producttv"

@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -32,6 +33,8 @@ import butterknife.Bind;
  * Created by taihuoniao on 2016/5/11.
  */
 public class SubsCJListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    @Bind(R.id.activity_subs_cjlist_title)
+    GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_subs_cjlist_pullrefreshview)
     PullToRefreshListView pullToRefreshView;
     @Bind(R.id.activity_subs_cjlist_progress)
@@ -50,9 +53,19 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
 
     @Override
     protected void initView() {
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setTitle(R.string.subs, getResources().getColor(R.color.black333333));
         listView = pullToRefreshView.getRefreshableView();
         dialog = new WaittingDialog(SubsCJListActivity.this);
-        pullToRefreshView.setPullToRefreshEnabled(false);
+        pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                dialog.show();
+                requestNet();
+            }
+        });
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {

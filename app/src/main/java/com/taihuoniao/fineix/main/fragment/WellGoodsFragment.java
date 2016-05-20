@@ -379,11 +379,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         //        cancelNet();
         if (thread != null&&thread.isAlive()) {
             thread.stop();
-            thread = null;
         }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
-            handler = null;
         }
         super.onDestroy();
     }

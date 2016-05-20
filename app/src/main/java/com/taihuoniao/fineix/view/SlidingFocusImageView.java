@@ -1,18 +1,15 @@
 package com.taihuoniao.fineix.view;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Transformation;
 import android.widget.Gallery;
 
-public class SlidingFocusImageView extends Gallery
-{
+public class SlidingFocusImageView extends Gallery {
     private int mCoveflowCenter = 0;
-    public  SlidingFocusImageView(Context context, AttributeSet attrs){
+
+    public SlidingFocusImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

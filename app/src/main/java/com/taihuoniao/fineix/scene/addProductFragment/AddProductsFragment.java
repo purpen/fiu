@@ -87,6 +87,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         }
     }
 
+
     @Override
     protected void initList() {
         GridView grid = pullToRefreshView.getRefreshableView();
@@ -179,13 +180,14 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             //搜索接口
             pos = intent.getIntExtra("pos", -1);
             q = intent.getStringExtra("q");
-            search = intent.getBooleanExtra("search", false);
             Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
-            if (q != null && search && pos - 1 == position) {
+            if (q != null && intent.getBooleanExtra("search", false) && pos - 1 == position) {
+                search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
                 progressBar.setVisibility(View.VISIBLE);
                 DataPaser.search(q, "10", currentPage + "", null, handler);
-            } else if (!search && pos - 1 == position) {
+            } else if (search && !intent.getBooleanExtra("search", true)) {
+                search = false;
                 currentPage = 1;
                 requestNet();
             }

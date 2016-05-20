@@ -160,6 +160,8 @@ public class DataConstants {
     public static final String BroadLabelActivity = "com.taihuoniao.fiu.label";
     //创建场景的添加产品页面的搜索广播
     public static final String BroadSearchFragment = "com.taihuoniao.fiu.searchProduct";
+    //删除评论
+    public static final int DELETE_COMMENT = 17;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

@@ -58,8 +58,8 @@ public class CommentsListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.headImg = (ImageView) convertView.findViewById(R.id.item_comment_head);
             holder.name = (TextView) convertView.findViewById(R.id.item_comment_name);
-            holder.huifu = (TextView) convertView.findViewById(R.id.item_comment_huifu);
-            holder.whoName = (TextView) convertView.findViewById(R.id.item_comment_who_name);
+//            holder.huifu = (TextView) convertView.findViewById(R.id.item_comment_huifu);
+//            holder.whoName = (TextView) convertView.findViewById(R.id.item_comment_who_name);
             holder.content = (TextView) convertView.findViewById(R.id.item_comment_content);
             holder.time = (TextView) convertView.findViewById(R.id.item_comment_time);
             convertView.setTag(holder);
@@ -68,15 +68,12 @@ public class CommentsListAdapter extends BaseAdapter {
         }
         ImageLoader.getInstance().displayImage(list.get(position).getUser().getSmall_avatar_url(), holder.headImg, options);
         holder.name.setText(list.get(position).getUser().getNickname());
-        holder.content.setText(list.get(position).getContent());
+
         holder.time.setText(list.get(position).getCreated_at());
         if (list.get(position).getReply_user_nickname() != null) {
-            holder.whoName.setText(list.get(position).getReply_user_nickname());
-            holder.whoName.setVisibility(View.VISIBLE);
-            holder.huifu.setVisibility(View.VISIBLE);
+            holder.content.setText("回复 " + list.get(position).getReply_user_nickname() + ": " + list.get(position).getContent());
         } else {
-            holder.whoName.setVisibility(View.GONE);
-            holder.huifu.setVisibility(View.GONE);
+            holder.content.setText(list.get(position).getContent());
         }
 
         return convertView;
@@ -85,8 +82,8 @@ public class CommentsListAdapter extends BaseAdapter {
     static class ViewHolder {
         ImageView headImg;
         TextView name;
-        TextView huifu;
-        TextView whoName;
+        //        TextView huifu;
+//        TextView whoName;
         TextView content;
         TextView time;
     }

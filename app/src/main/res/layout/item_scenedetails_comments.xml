@@ -7,19 +7,18 @@
 
     <ImageView
         android:id="@+id/item_scenedetails_comments_head"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
+        android:layout_width="32dp"
+        android:layout_height="32dp"/>
 
     <TextView
         android:id="@+id/item_scenedetails_comments_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/comment_background"
-        android:gravity="center_vertical"
+        android:background="@drawable/comment"
         android:lineSpacingExtra="8dp"
-        android:maxWidth="210dp"
-        android:text="产品设计的不错很好！产品设计的不错很好！！"
+        android:maxEms="10"
+        android:text="产品设计的不错很"
         android:textColor="#666666"
         android:textSize="11sp"/>
 </LinearLayout>

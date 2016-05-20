@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -121,6 +122,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
+        listView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
         dialog = new WaittingDialog(getActivity());
         return fragment_view;
     }

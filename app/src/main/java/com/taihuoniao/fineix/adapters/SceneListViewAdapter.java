@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -99,6 +100,10 @@ public class SceneListViewAdapter extends BaseAdapter {
             lp.width = MainApplication.getContext().getScreenWidth();
             lp.height = lp.width * 16 / 9;
             holder.backgroundImg.setLayoutParams(lp);
+            holder.bottomLinear = (LinearLayout) convertView.findViewById(R.id.item_scenedetails_bottomlinear);
+            ViewGroup.LayoutParams bLp = holder.bottomLinear.getLayoutParams();
+            bLp.height = lp.height / 2;
+            holder.bottomLinear.setLayoutParams(bLp);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -187,5 +192,6 @@ public class SceneListViewAdapter extends BaseAdapter {
         TextView suoshuQingjing;
         TextView location;
         TextView time;
+        LinearLayout bottomLinear;
     }
 }

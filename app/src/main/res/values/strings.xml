@@ -67,6 +67,7 @@
     <string name="note_update_at">上一次刷新：%1$s</string>
     <string name="note_not_update">尚未更新</string>
     <string name="all_order">全部订单</string>
+    <string name="subs">订阅</string>
     <!--删除收货地址界面-->
     <string name="delete_success">删除成功</string>
     <string name="edit_address">编辑收货地址</string>
@@ -85,7 +86,7 @@
         <item>订单</item>
         <item>消息</item>
         <item>订阅</item>
-       <!-- <item>收藏</item>-->
+        <!-- <item>收藏</item>-->
         <item>赞过</item>
         <item>积分</item>
         <item>礼券</item>

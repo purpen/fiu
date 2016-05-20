@@ -8,7 +8,9 @@
     <com.taihuoniao.fineix.view.SlidingFocusImageView
         android:id="@+id/sfiv"
         android:layout_width="match_parent"
-        android:layout_height="151dp"
+        android:layout_height="161dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:spacing="10dp"
         />
 

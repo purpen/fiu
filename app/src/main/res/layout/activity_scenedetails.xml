@@ -4,10 +4,44 @@
                 android:layout_height="match_parent"
     >
 
+    <LinearLayout
+        android:id="@+id/activity_scenedetails_loverelative"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/activity_scenedetails_love"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/like_height_43px"/>
+
+        <TextView
+            android:id="@+id/activity_scenedetails_lovetv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:gravity="center"
+            android:text="赞"
+            android:textColor="@color/yellow_bd8913"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/line6"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/activity_scenedetails_loverelative"
+        android:background="#e2e2e2"/>
+
     <ScrollView
         android:id="@+id/activity_scenedetails_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/line6"
         android:scrollbars="none"
         >
 
@@ -133,7 +167,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="11dp"
                         android:gravity="bottom"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp">
 
                         <LinearLayout
                             android:id="@+id/activity_scenedetails_left_label"
@@ -220,7 +255,7 @@
                     android:lineSpacingExtra="8dp"
                     android:text="我勒个去，啊顺利打开附件ask啊顺利打开附件，啊上的浪费空间。啊手动阀似的咖啡碱。阿斯蒂芬卢卡斯京东方啊是懒得看风景阿里山的看法。飞机ask的飞机喀什地方就，发生的飞机啊速度飞快。"
                     android:textColor="#212121"
-                    android:textSize="9sp"/>
+                    android:textSize="11sp"/>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -274,11 +309,11 @@
                     <TextView
                         android:id="@+id/activity_scenedetails_viewcount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="6dp"
                         android:text="234"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="12sp"/>
 
                     <ImageView
                         android:layout_width="18dp"
@@ -289,11 +324,11 @@
                     <TextView
                         android:id="@+id/activity_scenedetails_love_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="6dp"
                         android:text="234"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="12sp"/>
 
                     <ImageView
                         android:id="@+id/activity_scenedetails_commentimg"
@@ -305,19 +340,15 @@
                     <TextView
                         android:id="@+id/activity_scenedetails_commentcount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="6dp"
                         android:text="234"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="12sp"/>
 
                 </LinearLayout>
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dedede"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -410,7 +441,8 @@
             <com.taihuoniao.fineix.view.ListViewForScrollView
                 android:id="@+id/activity_scenedetails_productlistview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:dividerHeight="0dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -437,33 +469,9 @@
             <com.taihuoniao.fineix.view.ListViewForScrollView
                 android:id="@+id/activity_scenedetails_nearproductlistview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:dividerHeight="0dp"/>
 
-            <LinearLayout
-                android:id="@+id/activity_scenedetails_loverelative"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                android:gravity="center"
-                >
-
-                <ImageView
-                    android:id="@+id/activity_scenedetails_love"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/like_height_43px"/>
-
-                <TextView
-                    android:id="@+id/activity_scenedetails_lovetv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
-                    android:gravity="center"
-                    android:text="点赞"
-                    android:textColor="@color/yellow_bd8913"
-                    android:textSize="14sp"/>
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -357,7 +357,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 0;
                         love.setImageResource(R.mipmap.like_height_43px);
-                        loveTv.setText("点赞");
                         loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
                         loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
                         moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
@@ -378,7 +377,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
                         isLove = 1;
                         love.setImageResource(R.mipmap.love_yes);
-                        loveTv.setText("取消点赞");
                         loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
                         loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
                         moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
@@ -428,11 +426,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         switch (isLove) {
                             case 1:
                                 love.setImageResource(R.mipmap.love_yes);
-                                loveTv.setText("取消点赞");
                                 break;
                             default:
                                 love.setImageResource(R.mipmap.like_height_43px);
-                                loveTv.setText("点赞");
                                 break;
                         }
                         //场景上的商品

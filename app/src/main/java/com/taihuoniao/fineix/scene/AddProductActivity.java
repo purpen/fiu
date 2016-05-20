@@ -40,7 +40,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private WaittingDialog dialog;
     private int searchPage = 1;
     //viewpager当前页面
-    private int pos = 0;
+//    private int pos = 0;
+    //判断是不是搜索状态下的标识
+    private boolean isSearch = false;
 
     public AddProductActivity() {
         super(0);
@@ -114,10 +116,11 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         Log.e("<<<", "为空");
                         return false;
                     } else {
+                        isSearch = true;
                         Intent intent = new Intent(DataConstants.BroadSearchFragment);
-                        intent.putExtra("pos", pos);
+                        intent.putExtra("pos", viewPager.getCurrentItem());
                         intent.putExtra("q", editText.getText().toString().trim());
-                        intent.putExtra("search", true);
+                        intent.putExtra("search", isSearch);
                         sendBroadcast(intent);
                         Log.e("<<<", "发送广播");
 //                        DataPaser.search(editText.getText().toString().trim(), searchPage + "", "10", null, handler);
@@ -126,41 +129,30 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 return false;
             }
         });
-        slidingTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        cancelTv.setOnClickListener(this);
+        slidingTab.setAddProductActivity(true, new CancelSearch() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                pos = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void cancelSearch() {
+                Intent intent = new Intent(DataConstants.BroadSearchFragment);
+                intent.putExtra("search", false);
+                sendBroadcast(intent);
+                editText.setText("");
             }
         });
-        cancelTv.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_add_product_cancel:
-                Intent intent = new Intent(DataConstants.BroadSearchFragment);
-                intent.putExtra("pos", pos);
-                intent.putExtra("search", false);
-                sendBroadcast(intent);
+//                isSearch = false;
+//                Intent intent = new Intent(DataConstants.BroadSearchFragment);
+//                intent.putExtra("pos", viewPager.getCurrentItem());
+//                intent.putExtra("search", isSearch);
+//                sendBroadcast(intent);
                 editText.setText("");
-                Log.e("<<<", "取消搜索");
+//                Log.e("<<<", "取消搜索");
                 break;
-//            case R.id.rl:
-//                Intent intent = new Intent(activity,SearchActivity.class);
-//                intent.putExtra("t","10");
-//                startActivity(intent);
-//                return;
         }
     }
 
@@ -183,6 +175,10 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             }
         }
     };
+
+    public interface CancelSearch{
+        void cancelSearch();
+    }
 
     @Override
     protected void onDestroy() {
