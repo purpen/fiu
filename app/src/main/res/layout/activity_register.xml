@@ -69,7 +69,7 @@
             android:gravity="center"
             android:onClick="onSendVertifyCode"
             android:text="获取验证码"
-            android:textColor="@color/red" />
+            android:textColor="@color/color_af8323" />
     </LinearLayout>
 
     <EditText

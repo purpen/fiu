@@ -72,8 +72,6 @@ public class MineFragment extends MyBaseFragment {
     LinearLayout ll;
     @Bind(R.id.ll_box)
     LinearLayout ll_box;
-    @Bind(R.id.rl)
-    RelativeLayout rl;
     @Bind(R.id.riv)
     RoundedImageView riv;
     @Bind(R.id.tv_real)
@@ -322,7 +320,7 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.btn,R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -365,13 +363,8 @@ public class MineFragment extends MyBaseFragment {
 //            case R.id.item_partner:
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
-            case R.id.bt_register:
-                intent = new Intent(getActivity(),
-                        OptRegisterLoginActivity.class);
-
-                startActivity(intent);
-                break;
-
+            case R.id.btn:
+                startActivity(new Intent(activity,OrderInterestQJActivity.class));
         }
     }
 

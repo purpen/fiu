@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/order_interest_qj"
-        android:layout_marginTop="@dimen/dp10"
-        android:layout_marginBottom="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp20"
         android:textSize="@dimen/sp10"
         android:textColor="@color/color_666"
         />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dp80"
+        android:layout_marginRight="75dp"
         android:paddingBottom="@dimen/dp10"
         >
         <TextView

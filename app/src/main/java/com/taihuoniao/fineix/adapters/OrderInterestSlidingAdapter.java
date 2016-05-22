@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
@@ -56,7 +57,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
 
         ImageLoader.getInstance().displayImage(item.getCover_url(),holder.iv);
         if (sfiv.getSelectedItemPosition()==position){
-            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-300, ViewGroup.LayoutParams.WRAP_CONTENT));
+            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()- DensityUtils.dp2px(activity,150), ViewGroup.LayoutParams.WRAP_CONTENT));
         }else {
             convertView.setScaleY(0.9f);
             convertView.setScaleX(0.9f);

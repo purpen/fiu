@@ -62,9 +62,9 @@ public class PrivateMessageListActivity extends BaseActivity{
                 if (mList==null) return;
                 if (mList.size()<=i) return;
                 User user = new User();
-                user._id=mList.get(i).users.to_user.id;
-                user.nickname=mList.get(i).users.to_user.nickname;
-                user.avatar=mList.get(i).users.to_user.big_avatar_url;
+                user._id=mList.get(i).users.from_user.id;
+                user.nickname=mList.get(i).users.from_user.nickname;
+                user.avatar=mList.get(i).users.from_user.big_avatar_url;
                 intent.putExtra(UserCenterActivity.class.getSimpleName(),user);
                 startActivity(intent);
             }

@@ -40,6 +40,7 @@
         android:id="@+id/item_to_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         />
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_welcome_page"
@@ -64,9 +65,12 @@
         />
 
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/btn_logout"
-        style="@style/RegisterAndLogin"
         android:layout_centerHorizontal="true"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_margin="@dimen/dp16"
         android:background="@drawable/shap_redbutton_commit"
         android:onClick="onLogin"
         android:text="退出当前账户"

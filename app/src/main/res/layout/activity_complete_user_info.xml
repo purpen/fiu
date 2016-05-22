@@ -44,12 +44,23 @@
         android:layout_marginTop="@dimen/dp30"
         >
         <RadioButton
+            android:id="@+id/secret"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14"
+            android:gravity="center"
+            android:text="保密"
+            />
+        <RadioButton
             android:id="@+id/male"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textColor="@color/color_333"
-            android:checked="true"
             android:gravity="center"
             android:textSize="@dimen/sp14"
             android:button="@null"
@@ -65,17 +76,6 @@
             android:gravity="center"
             android:button="@null"
             android:layout_weight="1"
-            />
-        <RadioButton
-            android:id="@+id/secret"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:textColor="@color/color_333"
-            android:textSize="@dimen/sp14"
-            android:gravity="center"
-            android:text="保密"
             />
     </com.taihuoniao.fineix.view.SegmentedGroup>
 

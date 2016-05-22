@@ -63,7 +63,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     RoundedImageView riv;
     @Bind(R.id.radioGroup)
     SegmentedGroup radioGroup;
-    private String gender = MALE;
+    private String gender = SECRET;
     private static final String SECRET = "0";
     private static final String MALE = "1";
     private static final String FEMALE = "2";
@@ -220,8 +220,8 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     if (extras != null) {
                         Bitmap photo = extras.getParcelable("data");
                         if (photo != null) {
-                            file = Util.saveBitmapToFile(photo);
-                            uploadFile(file);
+//                            file = Util.saveBitmapToFile(photo);
+                            uploadFile(photo);
                         } else {
                             Util.makeToast(activity, "截取头像失败");
                             return;
@@ -232,15 +232,10 @@ public class CompleteUserInfoActivity extends BaseActivity {
         }
     }
 
-    private void uploadFile(final File file) {
-        if (file == null) {
-            return;
-        }
-        if (file.length() == 0) {
-            return;
-        }
+    private void uploadFile(final Bitmap bitmap) {
+        if (bitmap == null) return;
         try {
-            ClientDiscoverAPI.uploadImg(Base64Utils.encodeFile2Base64Str(file), TYPE, new RequestCallBack<String>() {
+            ClientDiscoverAPI.uploadImg(Util.saveBitmap2Base64Str(bitmap), TYPE, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     if (responseInfo == null) {
@@ -255,7 +250,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
                         ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
                         });
                         if (!TextUtils.isEmpty(imgUploadBean.file_url)) {
-                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, riv, options);
+                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url,riv);
                         }
                         Util.makeToast(response.getMessage());
                         return;
@@ -268,10 +263,10 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     Util.makeToast(s);
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (file.exists()) file.delete();
+            if (bitmap!=null) bitmap.recycle();
         }
     }
 

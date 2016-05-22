@@ -6,14 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-//import com.zcjcn.R;
-//import com.zcjcn.ui.wheelview.OnWheelChangedListener;
-//import com.zcjcn.ui.wheelview.StringWheelAdapter;
-//import com.zcjcn.ui.wheelview.WheelView;
-//import com.zcjcn.utils.LogUtil;
-//import com.zcjcn.utils.TimeUtil;
-
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.TimeUtil;

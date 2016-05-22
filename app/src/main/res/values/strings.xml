@@ -114,7 +114,7 @@
     <string name="user_signature">个性签名</string>
     <string name="user_sex">性别</string>
     <string name="user_birthday">生日</string>
-    <string name="user_auth">申请认证</string>
+    <string name="user_auth">身份标签</string>
     <string name="user_code">我的二维码</string>
     <string name="user_area">地区</string>
     <string name="title_modify_nickname">修改昵称</string>

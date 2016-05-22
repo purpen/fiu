@@ -38,9 +38,9 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
             holder=(ViewHolder)convertView.getTag();
         }
 
-        imageLoader.displayImage(item.users.to_user.big_avatar_url,holder.riv,options);
+        imageLoader.displayImage(item.users.from_user.big_avatar_url,holder.riv,options);
         holder.tv_name.setTextColor(activity.getResources().getColor(R.color.color_af8323));
-        holder.tv_name.setText(item.users.to_user.nickname);
+        holder.tv_name.setText(item.users.from_user.nickname);
         holder.tv_desc.setText(item.last_content.content);
 //        holder.tv_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
         holder.tv_desc.setTextColor(activity.getResources().getColor(R.color.color_333));

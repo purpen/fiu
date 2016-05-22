@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -59,7 +60,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
     private LinearLayout ll_box;
     private LinearLayout ll_btn_box;
-    private TextView tv_title;
+    @Bind(R.id.tv_title)
+    TextView tv_title;
     private RoundedImageView riv;
     private TextView tv_real;
     private TextView tv_nick;
@@ -72,8 +74,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private Button bt_msg;
     private ImageButton ibtn;
     private ImageView iv_bg;
-    private ImageButton iv_detail;
-    private ImageButton iv_right;
+    @Bind(R.id.iv_detail)
+    ImageButton iv_detail;
+    @Bind(R.id.iv_right)
+    ImageButton iv_right;
     private LinearLayout ll_focus;
     private LinearLayout ll_fans;
     private LinearLayout ll_qj;
@@ -115,13 +119,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initView() {
         View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
-        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
+//        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
         riv = ButterKnife.findById(headView, R.id.riv);
         tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
         tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
-        tv_title = ButterKnife.findById(headView, R.id.tv_title);
+//        tv_title = ButterKnife.findById(headView, R.id.tv_title);
         ibtn = ButterKnife.findById(headView, R.id.ibtn);
         ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
         tv_cj = ButterKnife.findById(headView, R.id.tv_cj);
@@ -131,7 +135,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         bt_focus = ButterKnife.findById(headView, R.id.bt_focus);
         bt_msg = ButterKnife.findById(headView, R.id.bt_msg);
         ll_box = ButterKnife.findById(headView, R.id.ll_box);
-        iv_right = ButterKnife.findById(headView, R.id.iv_right);
+//        iv_right = ButterKnife.findById(headView, R.id.iv_right);
         ll_focus = ButterKnife.findById(headView, R.id.ll_focus);
         ll_fans = ButterKnife.findById(headView, R.id.ll_fans);
         ll_cj = ButterKnife.findById(headView, R.id.ll_cj);
@@ -347,11 +351,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             }
         }
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv, options);
+            ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
         if (!TextUtils.isEmpty(user.head_pic_url)) {
-//            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
-            ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
+            ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
         }
 
         if (TextUtils.isEmpty(user.summary)) {

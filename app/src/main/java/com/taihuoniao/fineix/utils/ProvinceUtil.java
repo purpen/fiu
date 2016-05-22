@@ -78,7 +78,7 @@ public class ProvinceUtil {
 
     public static ArrayList<String> getProvinces() {
         if (data==null){
-            Util.makeToast("抱歉无法获得地址数据,请先开启网络");
+            Util.makeToast("抱歉无法获得地址数据,请先确保网络畅通");
             return null;
         }
         ArrayList<String> provinces = new ArrayList<String>();

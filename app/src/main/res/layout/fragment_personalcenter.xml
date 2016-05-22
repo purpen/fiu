@@ -31,7 +31,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp50"
+                        android:layout_height="@dimen/dp30"
                         android:gravity="center_vertical">
 
                         <ImageButton
@@ -41,7 +41,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             android:background="@null"
-                            android:padding="@dimen/dp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/dp16"
                             android:src="@mipmap/personal_detail" />
 
                         <ImageView
@@ -66,8 +67,8 @@
 
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv"
-                        android:layout_width="@dimen/dp70"
-                        android:layout_height="@dimen/dp70"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="@dimen/dp60"
                         android:layout_gravity="center_horizontal"
                         app:riv_border_color="@android:color/white"
                         app:riv_border_width="@dimen/dp1"
@@ -82,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:textColor="@color/color_333"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/sp14" />
 
                     <TextView
@@ -91,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:textColor="@color/color_333"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
 
                     <TextView
@@ -99,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:textColor="@color/color_333"
+                        android:textColor="@@android:color/white"
                         android:textSize="@dimen/sp12" />
 
                 </LinearLayout>
@@ -257,7 +258,12 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 />
-
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp40"
+                android:visibility="gone"
+                />
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"
                 android:layout_width="match_parent"
@@ -275,23 +281,4 @@
             </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
-
-    <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#79000000"
-        android:clickable="true"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/bt_register"
-            android:layout_width="300dp"
-            android:layout_height="@dimen/dp60"
-            android:layout_centerInParent="true"
-            android:text="登录/注册"
-            android:textColor="@color/color_af8323"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
 </FrameLayout>

@@ -164,7 +164,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 startActivity(new Intent(activity, MyBarCodeActivity.class));
                 break;
             case R.id.custom_auth:
-                //TODO 申请认证
+                startActivity(new Intent(activity,RankTagActivity.class));
                 break;
         }
     }
@@ -414,7 +414,7 @@ public class EditUserInfoActivity extends BaseActivity {
     protected void refreshUI() {
         if (user != null) {
             if (!TextUtils.isEmpty(user.medium_avatar_url)) {
-                ImageLoader.getInstance().displayImage(user.medium_avatar_url,custom_user_avatar.getAvatarIV(), options);
+                ImageLoader.getInstance().displayImage(user.medium_avatar_url,custom_user_avatar.getAvatarIV());
             }
 //            custom_user_name.setTvArrowLeftStyle(true, userLogin.user_name, R.color.color_333);
 //            custom_user_name.sertTVRightTxt(userLogin.user_name);
@@ -475,8 +475,8 @@ public class EditUserInfoActivity extends BaseActivity {
                     if (extras != null) {
                         Bitmap photo = extras.getParcelable("data");
                         if (photo != null) {
-                            file = Util.saveBitmapToFile(photo);
-                            uploadFile(file);
+//                            file = Util.saveBitmapToFile(photo);
+                            uploadFile(photo);
                         } else {
                             Util.makeToast(activity, "截取头像失败");
                             return;
@@ -487,16 +487,11 @@ public class EditUserInfoActivity extends BaseActivity {
         }
     }
 
-    private void uploadFile(final File file) {
-        if (file==null){
-            return;
-        }
-        if (file.length()==0){
-            return;
-        }
+    private void uploadFile(final Bitmap bitmap) {
+        if (bitmap==null)  return;
         String type="3";
         try {
-            ClientDiscoverAPI.uploadImg(Base64Utils.encodeFile2Base64Str(file), type, new RequestCallBack<String>() {
+            ClientDiscoverAPI.uploadImg(Util.saveBitmap2Base64Str(bitmap), type, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     if (responseInfo==null){
@@ -511,7 +506,7 @@ public class EditUserInfoActivity extends BaseActivity {
                         ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
                         });
                         if (!TextUtils.isEmpty(imgUploadBean.file_url)) {
-                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, custom_user_avatar.getAvatarIV(), options);
+                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, custom_user_avatar.getAvatarIV());
                         }
                         Util.makeToast(response.getMessage());
                         return;
@@ -524,10 +519,10 @@ public class EditUserInfoActivity extends BaseActivity {
                     Util.makeToast(s);
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            if (file.exists())  file.delete();
+
         }
 
     }

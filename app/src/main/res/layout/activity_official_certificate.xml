@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_f7f7f7"
+        android:orientation="vertical">
+
+        <com.taihuoniao.fineix.view.CustomHeadView
+            android:id="@+id/custom_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp5"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="认证身份"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp5"
+            android:layout_marginLeft="@dimen/dp16"
+            android:text="认证信息"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:background="@drawable/shape_radius_white"
+            android:hint="输入认证信息 如:我是商量好过"
+            android:paddingLeft="@dimen/dp10"
+            android:textColorHint="@color/color_999"
+            android:textSize="@dimen/sp12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp5"
+            android:layout_marginLeft="@dimen/dp16"
+            android:text="联系方式"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:background="@drawable/shape_radius_white"
+            android:hint="手机/QQ/邮箱"
+            android:paddingLeft="@dimen/dp10"
+            android:textColorHint="@color/color_999"
+            android:textSize="@dimen/sp12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp5"
+            android:text="身份证"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <RelativeLayout
+            android:id="@+id/rl_id"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp150"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="+上传身份证"
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/sp14" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp150"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                android:src="@mipmap/ic_launcher"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp5"
+            android:text="名片"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <RelativeLayout
+            android:id="@+id/rl_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp150"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="+上传名片"
+                android:textColor="@color/color_999"
+                android:textSize="@dimen/sp14" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp150"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                android:src="@mipmap/ic_launcher"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp20"
+            android:layout_marginBottom="@dimen/dp20"
+            android:background="@drawable/shap_redbutton_commit"
+            android:text="提交"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp16" />
+    </LinearLayout>
+</ScrollView>

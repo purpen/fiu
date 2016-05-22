@@ -221,6 +221,7 @@ public class Util {
 		}
 		return file;
 	}
+
 	public static String saveBitmap2Base64Str(Bitmap bitmap) {
 		String imgStr=null;
 		try {

@@ -96,7 +96,7 @@ public class RoundedImageView extends ImageView {
     if (index >= 0) {
       setScaleType(SCALE_TYPES[index]);
     } else {
-      setScaleType(ScaleType.FIT_CENTER);
+      setScaleType(ScaleType.CENTER_CROP);
     }
 
     float cornerRadiusOverride =

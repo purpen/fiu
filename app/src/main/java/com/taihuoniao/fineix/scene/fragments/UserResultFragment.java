@@ -241,7 +241,7 @@ public class UserResultFragment extends MyBaseFragment {
         });
     }
 
-    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.bt_register,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
+    @OnClick({R.id.item_about_us, R.id.item_feedback, R.id.item_partner,R.id.ll_qj,R.id.ll_cj,R.id.ll_focus,R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent=null;
         switch (v.getId()) {
@@ -276,12 +276,6 @@ public class UserResultFragment extends MyBaseFragment {
                 break;
             case R.id.item_partner:
                 Util.makeToast(activity, "合作伙伴");
-                break;
-            case R.id.bt_register:
-                intent = new Intent(getActivity(),
-                        OptRegisterLoginActivity.class);
-
-                startActivity(intent);
                 break;
 
         }
