@@ -29,4 +29,5 @@
     <color name="color_eee">#eee</color>
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>
+    <color name="default_background_label">#ff303030</color>
 </resources>

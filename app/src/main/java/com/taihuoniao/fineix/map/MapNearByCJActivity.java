@@ -186,12 +186,12 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         ClientDiscoverAPI.getSceneList(ll, String.valueOf(page), String.valueOf(pageSize), String.valueOf(radius), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (waittingDialog != null) waittingDialog.show();
+                if (waittingDialog != null&&!activity.isFinishing()) waittingDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                waittingDialog.dismiss();
+                if (waittingDialog!=null) waittingDialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
@@ -215,7 +215,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                waittingDialog.dismiss();
+                if (waittingDialog!=null) waittingDialog.dismiss();
                 LogUtil.e(TAG, s);
             }
         });
@@ -248,7 +248,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                 InfoWindow.OnInfoWindowClickListener listener = new InfoWindow.OnInfoWindowClickListener() {
                     public void onInfoWindowClick() {
                         // TODO InfoWindow 点击
-                        Util.makeToast(activity, "InfoWindow被点击");
+//                        Util.makeToast(activity, "InfoWindow被点击");
                     }
                 };
 

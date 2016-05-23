@@ -68,9 +68,19 @@
             android:id="@+id/iv_bar_code"
             android:layout_width="266dp"
             android:layout_height="266dp"
-            android:layout_margin="@dimen/dp20"
+            android:layout_margin="@dimen/dp15"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/rl"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:text="扫描二维码关注我的Fiu"
+            android:textColor="@color/color_af8323"
+            android:textSize="@dimen/sp14"
+            android:layout_below="@+id/iv_bar_code"
+            android:layout_marginBottom="@dimen/dp20"
             />
     </RelativeLayout>
 </RelativeLayout>
