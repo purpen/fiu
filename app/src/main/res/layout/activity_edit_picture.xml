@@ -112,7 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_above="@id/activity_edit_bottom_linear"
-        android:background="#1d1f21"
+        android:background="@color/black_touming"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">

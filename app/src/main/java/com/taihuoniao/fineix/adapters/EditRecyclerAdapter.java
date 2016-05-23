@@ -55,7 +55,15 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
 //            filterAdjuster.adjust(50);
 //        }
 //        holder.imageView.requestRender();
-        holder.imageView.setImageResource(R.mipmap.ic_launcher);
+
+        switch (position){
+            case 0:
+                holder.imageView.setImageResource(R.mipmap.filter1);
+                break;
+            default:
+                holder.imageView.setImageResource(R.mipmap.ic_launcher);
+                break;
+        }
         holder.textView.setText(filterList.getName(position));
         if (filterList.isSelected(position)) {
             holder.redTv.setVisibility(View.VISIBLE);
