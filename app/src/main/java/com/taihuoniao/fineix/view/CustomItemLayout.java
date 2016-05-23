@@ -186,6 +186,8 @@ public class CustomItemLayout extends RelativeLayout {
             }else {
                 tv_tip_num.setText("+99");
             }
+        }else {
+            tv_tip_num.setVisibility(GONE);
         }
     }
 
