@@ -69,18 +69,20 @@ public class AllQingjingGridAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_allqingjing, null);
+            convertView = View.inflate(context, R.layout.item_qingjing_list, null);
             holder = new ViewHolder();
-            holder.backgroundImg = (ImageView) convertView.findViewById(R.id.item_allqingjing_img);
+            holder.backgroundImg = (ImageView) convertView.findViewById(R.id.item_qingjing_list_background);
             ViewGroup.LayoutParams lp = holder.backgroundImg.getLayoutParams();
             lp.width = (parent.getWidth() - horizontalSpace) / 2;
             lp.height = lp.width * 16 / 9;
-            holder.addressTv = (TextView) convertView.findViewById(R.id.item_allqingjing_address);
-            holder.title = (TextView) convertView.findViewById(R.id.item_allqingjing_title);
+            holder.backgroundImg.setLayoutParams(lp);
+            holder.addressTv = (TextView) convertView.findViewById(R.id.item_qingjing_list_address);
+            holder.title = (TextView) convertView.findViewById(R.id.item_qingjing_list_title);
             holder.selectImg = (ImageView) convertView.findViewById(R.id.item_allqingjing_selectbackground);
             ViewGroup.LayoutParams slp = holder.selectImg.getLayoutParams();
             slp.width = lp.width;
             slp.height = lp.height;
+            holder.selectImg.setLayoutParams(slp);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

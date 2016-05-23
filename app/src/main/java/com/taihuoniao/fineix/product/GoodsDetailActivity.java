@@ -72,7 +72,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     ImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
-//    @Bind(R.id.activity_goods_detail_product_des)
+    //    @Bind(R.id.activity_goods_detail_product_des)
 //    TextView productDes;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
     RecyclerView changjingRecycler;
@@ -159,6 +159,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 .considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360))
                 .build();
+        scrollableView.setFocusable(true);
+        scrollableView.setFocusableInTouchMode(true);
+        scrollableView.requestFocus();
     }
 
     @Override
@@ -283,7 +286,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         if (netGoodsDetailBean.getData().getBrand() != null) {
                             ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
                             brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
-                        }else{
+                        } else {
                             brandLinear.setVisibility(View.GONE);
                             brandRelative.setVisibility(View.GONE);
                         }

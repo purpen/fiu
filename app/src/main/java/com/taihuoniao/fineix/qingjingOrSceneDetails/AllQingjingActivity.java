@@ -35,6 +35,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     //上个界面传递过来用来判断是选择情景还是查看情景的标识
 //    private int isSelect = 0;//0 是从情景列表中跳转过来的 1是从选择情景界面跳转
     //界面下的控件
+    private View activity_view;
     private ImageView searchQJImg;
     private ImageView createQingjingImg;
     private PullToRefreshGridView pullToRefreshView;
@@ -56,7 +57,8 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_all_qingjing);
+        activity_view = View.inflate(AllQingjingActivity.this,R.layout.activity_all_qingjing,null);
+        setContentView(activity_view);
         searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);
         pullToRefreshView = (PullToRefreshGridView) findViewById(R.id.activity_all_qingjing_pullrefreshview);
@@ -187,4 +189,19 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 break;
         }
     }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//            //判断是不是第一次进入Fiu界面
+//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
+//            if (isFirstIn) {
+//                FirstInAppUtils.showPop(AllQingjingActivity.this, FirstInAppUtils.ALL, activity_view);
+//                SharedPreferences.Editor editor = firstInSp.edit();
+//                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
+//                editor.apply();
+//            }
+//        }
+//    }
 }

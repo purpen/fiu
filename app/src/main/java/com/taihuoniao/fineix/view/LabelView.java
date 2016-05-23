@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 /**
  * @author tongqian.ni
  */
-public class LabelView extends LinearLayout implements View.OnFocusChangeListener {
+public class LabelView extends LinearLayout  {
     //贴纸
     private MyImageViewTouch mImageView;
     //容器
@@ -43,7 +43,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
     public TextView nameLeft;
     private TextView priceRight;
     private ImageView pointRight;
-    private ImageView deleteImg;
+//    private ImageView deleteImg;
 //    private TextView labelTxtRight;
 //    private TextView priceTxtRight;
 
@@ -65,8 +65,8 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
-        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-        this.setOnFocusChangeListener(this);
+//        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
+//        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -85,8 +85,8 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
-        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-        this.setOnFocusChangeListener(this);
+//        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
+//        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -137,7 +137,10 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
      * @param left
      * @param top
      */
-    public void addTo(final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
+    public void addTo(OnClickListener deleteListener, final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
+//        if (deleteListener != null) {
+//            deleteImg.setOnClickListener(deleteListener);
+//        }
 //        if (left > parent.getWidth() / 2) {
 //            tagInfo.setLeft(false);
 //        }
@@ -357,12 +360,5 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         wave();
     }
 
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v == this && hasFocus) {
-            deleteImg.setVisibility(VISIBLE);
-        } else {
-            deleteImg.setVisibility(GONE);
-        }
-    }
+
 }

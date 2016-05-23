@@ -18,60 +18,6 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/activity_goodsdetails_loverelative"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-
-            <TextView
-                android:id="@+id/activity_goodsdetails_lovetv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="5dp"
-                android:gravity="center"
-                android:text="赞"
-                android:textColor="#ff999999"
-                android:textSize="10sp"/>
-
-            <ImageView
-                android:id="@+id/activity_goodsdetails_loveimg"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:layout_above="@id/activity_goodsdetails_lovetv"
-                android:layout_marginBottom="3dp"
-                android:src="@mipmap/heart_red_3x"/>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/activity_goodsdetails_sharerelative"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/activity_goodsdetails_shareimg"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:src="@mipmap/share_grey"/>
-
-            <TextView
-                android:id="@+id/activity_goodsdetails_sharetv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/activity_goodsdetails_shareimg"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="分享"
-                android:textColor="#ff999999"
-                android:textSize="10sp"/>
-        </RelativeLayout>
-
         <TextView
             android:id="@+id/activity_goodsdetails_cart"
             android:layout_width="0dp"

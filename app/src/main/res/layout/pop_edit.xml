@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:background="#fafbfd"
               android:orientation="vertical"
-              android:paddingBottom="17dp">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,54 +19,27 @@
             android:text="编辑产品"
             android:textColor="#999999"
             android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/pop_edit_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
-            android:text="取消"
-            android:textColor="#999999"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/pop_edit_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:paddingLeft="18dp"
-            android:paddingRight="21dp"
-            android:text="确定"
-            android:textColor="#999999"
-            android:textSize="16sp"/>
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e6e8ea"/>
+    <ImageView
+        android:id="@+id/pop_edit_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:src="@mipmap/ic_launcher"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingLeft="49dp"
+        android:paddingRight="49dp">
 
-        <ImageView
-            android:id="@+id/pop_edit_img"
-            android:layout_width="101dp"
-            android:layout_height="98dp"
-            android:src="@mipmap/ic_launcher"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/pop_edit_img"
             android:orientation="vertical">
 
             <EditText
@@ -80,6 +53,18 @@
                 android:singleLine="true"
                 android:textColor="@color/title_black"
                 android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/pop_edit_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/black_corner_white"
+                android:gravity="center_vertical"
+                android:paddingLeft="19dp"
+                android:singleLine="true"
+                android:textColor="@color/title_black"
+                android:textSize="15sp"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,36 +90,70 @@
                     android:gravity="center_vertical"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:textColor="@color/title_black"
                     android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/pop_edit_price_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textColor="@color/title_black"
+                    android:textSize="15sp"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/pop_edit_edit"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/yellow_corner_white"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="修改产品链接"
-        android:textColor="@color/red"
-        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/pop_edit_delete"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/background_corner_red"
+        android:layout_marginLeft="49dp"
+        android:layout_marginRight="49dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/yellow_corner_white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="删除产品"
-        android:textColor="@color/white"
+        android:textColor="@color/yellow_bd8913"
         android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="46dp"
+        android:background="#e2e2e3"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/pop_edit_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/black333333"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/pop_edit_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/yellow_bd8913"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
 </LinearLayout>

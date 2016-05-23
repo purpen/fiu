@@ -99,7 +99,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart = null;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if ("false".equals(numberCart.getSuccess())) {
+                            if (!numberCart.isSuccess()) {
                                 title.setTitle("购物车(0)");
                             } else {
                                 title.setTitle("购物车(" + numberCart.getCount() + ")");

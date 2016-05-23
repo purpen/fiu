@@ -95,9 +95,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private TextView cancelTv;
     private TextView confirmTv;
     private ImageView productImg;
-    private EditText nameTv;
-    private EditText priceTv;
-    private Button editBtn;
+    private EditText name;
+    private EditText price;
+    private TextView nameTv;
+    private TextView priceTv;
+    //    private Button editBtn;
     private Button deleteBtn;
     //当前图片的bitmap
     private Bitmap currentBitmap;
@@ -240,9 +242,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         cancelTv = (TextView) popup_view.findViewById(R.id.pop_edit_cancel);
         confirmTv = (TextView) popup_view.findViewById(R.id.pop_edit_confirm);
         productImg = (ImageView) popup_view.findViewById(R.id.pop_edit_img);
-        nameTv = (EditText) popup_view.findViewById(R.id.pop_edit_name);
-        priceTv = (EditText) popup_view.findViewById(R.id.pop_edit_price);
-        editBtn = (Button) popup_view.findViewById(R.id.pop_edit_edit);
+        name = (EditText) popup_view.findViewById(R.id.pop_edit_name);
+        price = (EditText) popup_view.findViewById(R.id.pop_edit_price);
+        nameTv = (TextView) popup_view.findViewById(R.id.pop_edit_name_tv);
+        priceTv = (TextView) popup_view.findViewById(R.id.pop_edit_price_tv);
+//        editBtn = (Button) popup_view.findViewById(R.id.pop_edit_edit);
         deleteBtn = (Button) popup_view.findViewById(R.id.pop_edit_delete);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
@@ -250,7 +254,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         cancelTv.setOnClickListener(this);
         confirmTv.setOnClickListener(this);
-        editBtn.setOnClickListener(this);
+//        editBtn.setOnClickListener(this);
         deleteBtn.setOnClickListener(this);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -320,10 +324,15 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 labelView = label;
                 TagItem tagItem = label.getTagInfo();
                 if (tagItem.getType() == 1) {
-                    return;
+                    name.setVisibility(View.GONE);
+                    price.setVisibility(View.GONE);
+                    nameTv.setVisibility(View.VISIBLE);
+                    priceTv.setVisibility(View.VISIBLE);
                 }
-                ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg,options500_500);
+                ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg, options500_500);
+                name.setText(tagItem.getName());
                 nameTv.setText(tagItem.getName());
+                price.setText(tagItem.getPrice());
                 priceTv.setText(tagItem.getPrice());
                 showPopup();
             }
@@ -349,9 +358,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             left = 0;
             top = 0;
         }
-        LabelView label = new LabelView(EditPictureActivity.this);
+        final LabelView label = new LabelView(EditPictureActivity.this);
         label.init(tagItem);
-        EffectUtil.addLabelEditable(mImageView, gpuRelative, label, left, top);
+        EffectUtil.addLabelEditable(null, mImageView, gpuRelative, label, left, top);
         labels.add(label);
     }
 
@@ -395,13 +404,13 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 });
 
                 break;
-            case R.id.pop_edit_edit:
-                startActivityForResult(new Intent(EditPictureActivity.this, SelectStoreActivity.class), DataConstants.REQUESTCODE_EDITEDIT_SEARCHSTORE);
-                break;
+//            case R.id.pop_edit_edit:
+//                startActivityForResult(new Intent(EditPictureActivity.this, SelectStoreActivity.class), DataConstants.REQUESTCODE_EDITEDIT_SEARCHSTORE);
+//                break;
             case R.id.pop_edit_confirm:
                 TagItem tagItem = labelView.getTagInfo();
-                tagItem.setName(nameTv.getText().toString());
-                tagItem.setPrice(priceTv.getText().toString());
+                tagItem.setName(name.getText().toString());
+                tagItem.setPrice(price.getText().toString());
                 labelView.init(tagItem);
                 popupWindow.dismiss();
                 break;
@@ -443,6 +452,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     }
 
     //保存图片
+
     private void savePicture() {
         if (mImageView.getWidth() <= 0 || mImageView.getHeight() <= 0) {
             return;
@@ -555,9 +565,20 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     TagItem tagItem = (TagItem) data.getSerializableExtra("tagItem");
                     if (requestCode == DataConstants.REQUESTCODE_EDIT_SEARCHSTORE) {
                         addLabel(tagItem);
+//                        SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//                        //判断是不是第一次进入Fiu界面
+//                        boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_URL, true);
+//                        if (isFirstIn) {
+//                            FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.ADDURL, activity_view);
+//                            SharedPreferences.Editor editor = firstInSp.edit();
+//                            editor.putBoolean(DataConstants.FIRST_IN_URL, false);
+//                            editor.apply();
+//                        }
                     } else {
-                        ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg,options500_500);
+                        ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg, options500_500);
+                        name.setText(tagItem.getName());
                         nameTv.setText(tagItem.getName());
+                        price.setText(tagItem.getPrice());
                         priceTv.setText(tagItem.getPrice());
                     }
                     break;
@@ -583,6 +604,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                             //是自动添加标签还是后添加
                             TagItem tag = new TagItem(productListBean.getTitle(), productListBean.getSale_price());
                             tag.setId(productListBean.get_id());
+                            tag.setImagePath(productListBean.getCover_url());
                             tag.setType(1);
                             addLabel(tag);
                             EffectUtil.addStickerImage(mImageView, EditPictureActivity.this, loadedImage);
@@ -599,4 +621,20 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             }
         }
     }
+
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//            //判断是不是第一次进入Fiu界面
+//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_CREATE, true);
+//            if (isFirstIn) {
+//                FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.CREATE, activity_view);
+//                SharedPreferences.Editor editor = firstInSp.edit();
+//                editor.putBoolean(DataConstants.FIRST_IN_CREATE, false);
+//                editor.apply();
+//            }
+//        }
+//    }
 }

@@ -93,7 +93,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private LinearLayout subLinear;
     private ImageView subsImg;
     private LinearLayout addressLinear;
-    private TextView subsTv;
+//    private TextView subsTv;
     private List<CommentsBean.CommentItem> commentList;
     private SceneDetailCommentAdapter sceneDetailCommentAdapter;
     private TextView allComment;
@@ -127,7 +127,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         progressBar = (ProgressBar) findViewById(R.id.activity_qingjingdetail_progress);
         subLinear = (LinearLayout) findViewById(R.id.activity_qingjingdetail_sublinear);
         subsImg = (ImageView) findViewById(R.id.activity_qingjingdetail_subsimg);
-        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
+//        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
         //headerView中的控件
         View header = View.inflate(QingjingDetailActivity.this, R.layout.header_qingjing_detail, null);
         backgroundImg = (ImageView) header.findViewById(R.id.activity_qingjingdetail_background);
@@ -218,7 +218,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubs.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 0;
-                        subsTv.setText("+订阅此情景");
                         subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
@@ -237,7 +236,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 1;
-                        subsTv.setText("取消订阅");
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
@@ -305,11 +303,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         switch (is_subscript) {
                             case 1:
                                 subsImg.setImageResource(R.mipmap.subs_yes);
-                                subsTv.setText("取消订阅");
+//                                subsTv.setText("取消订阅");
                                 break;
                             default:
                                 subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-                                subsTv.setText("+订阅此情景");
+//                                subsTv.setText("+订阅此情景");
                                 break;
                         }
                         if (netQingjingDetailBean.getData().getSubscription_count() > 14) {

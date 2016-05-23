@@ -252,8 +252,8 @@ public class DataPaser {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
-//                Log.e("<<<chanpin", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<chanpin", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 msg.what = DataConstants.GOODS_DETAILS;
                 try {
                     JSONObject obj = new JSONObject(responseInfo.result);
@@ -1928,7 +1928,7 @@ public class DataPaser {
                 try {
                     shopCartNumber = new ShopCartNumber();
                     JSONObject obj = new JSONObject(responseInfo.result);
-                    shopCartNumber.setSuccess(obj.optString("success"));
+                    shopCartNumber.setSuccess(obj.optBoolean("success"));
                     JSONObject cartNumberObj = obj.getJSONObject("data");
                     shopCartNumber.setCount(cartNumberObj.optString("count"));
                 } catch (JSONException e) {

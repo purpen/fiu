@@ -63,6 +63,9 @@ public class GoodsCommentsActivity extends Activity {
         titleLayout.setRightShopCartButton(false);
         titleLayout.setRightSearchButton(false);
         titleLayout.setTitle("评论");
+        titleLayout.setBackgroundResource(R.color.white);
+        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
         bottomRelative.setVisibility(View.GONE);
         pullToRefreshView.setPullToRefreshEnabled(false);
         pullToRefreshView.setOnScrollListener(new AbsListView.OnScrollListener() {

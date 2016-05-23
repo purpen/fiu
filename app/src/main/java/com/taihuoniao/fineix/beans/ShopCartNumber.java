@@ -6,7 +6,8 @@ import java.io.Serializable;
  * Created by android on 2016/3/5.
  */
 public class ShopCartNumber implements Serializable {
-    private String count,success;
+    private boolean success;
+    private String count;
 
     @Override
     public String toString() {
@@ -16,11 +17,11 @@ public class ShopCartNumber implements Serializable {
                 '}';
     }
 
-    public String getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 

@@ -42,18 +42,7 @@
             android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/view_label_right_price"
             android:src="@mipmap/point01"/>
-
-        <ImageView
-            android:id="@+id/view_label_delete"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/view_label_right_point"
-            android:layout_alignEnd="@+id/view_label_right_price"
-            android:layout_alignRight="@+id/view_label_right_price"
-            android:layout_alignTop="@+id/view_label_right_point"
-            android:src="@mipmap/cancel"/>
     </RelativeLayout>
-
     <!--<RelativeLayout-->
     <!--android:id="@+id/view_label_left"-->
     <!--android:layout_width="wrap_content"-->

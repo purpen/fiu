@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -78,6 +79,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout imgRelative;
     private ImageView backgroundImg;
     private LinearLayout titleLinear;
+    private FrameLayout frameLayout;
     private TextView changjingTitle;
     private TextView suoshuqingjingTv;
     private ImageView locationImg;
@@ -118,7 +120,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //网络请求对话框
     private WaittingDialog dialog;
     //图片加载
-    private DisplayImageOptions options,options750_1334;
+    private DisplayImageOptions options, options750_1334;
     //图片上的商品
     private List<SceneDetails.Product> productList;
     //是否显示标签和价格的标识
@@ -153,6 +155,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
         titleLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_titlelinear);
+        frameLayout = (FrameLayout) findViewById(R.id.activity_scenedetails_framelayout);
         changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
         suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
         locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
@@ -245,7 +248,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();
-        options750_1334= new DisplayImageOptions.Builder()
+        options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
                 .showImageOnFail(R.mipmap.default_background_750_1334)
@@ -427,7 +430,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     if (netSceneDetails.isSuccess()) {
 //                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
                         netScene = netSceneDetails;
-                        ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg,options750_1334);
+                        ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg, options750_1334);
                         //用户是否已经点赞
                         isLove = netSceneDetails.getIs_love();
                         switch (isLove) {
@@ -444,13 +447,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         //添加商品
                         addProductToImg();
                         changjingTitle.setText(netSceneDetails.getTitle());
-                        if (changjingTitle.getText().length() < 8) {
-                            changjingTitle.setTextSize(40);
-                        } else if (changjingTitle.getText().length() >= 13) {
-                            changjingTitle.setTextSize(20);
-                        } else {
-                            changjingTitle.setTextSize(30);
-                        }
+                        setTitleWidth();
                         suoshuqingjingTv.setText(netSceneDetails.getScene_title());
                         locationTv.setText(netSceneDetails.getAddress());
                         timeTv.setText(netSceneDetails.getCreated_at());
@@ -485,6 +482,40 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
+
+    private void setTitleWidth() {
+        double leng = changjingTitle.getText().length();
+        for (char c : changjingTitle.getText().toString().toCharArray()) {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                leng -= 0.5;
+            }
+        }
+        int l = 0;
+        if (leng * 10 % 10 != 0) {
+            l = 1 + (int) leng;
+        } else {
+            l = (int) leng;
+        }
+//            遍历所有字符判断是否含有英文字符。有的话算半个
+        if (l < 8) {
+            changjingTitle.setTextSize(40);
+        } else {
+            changjingTitle.setTextSize(20);
+        }
+//        动态改变宽高
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) frameLayout.getLayoutParams();
+        if (l * changjingTitle.getTextSize() < DensityUtils.dp2px(SceneDetailActivity.this, 300)) {
+            lp.width = (int) (changjingTitle.getTextSize() * l);
+        } else {
+            lp.width = DensityUtils.dp2px(SceneDetailActivity.this, 300);
+        }
+        if (changjingTitle.getTextSize() < DensityUtils.sp2px(SceneDetailActivity.this, 30) && lp.width <= DensityUtils.dp2px(SceneDetailActivity.this, 300)) {
+            lp.height = DensityUtils.dp2px(SceneDetailActivity.this, 28);
+        } else {
+            lp.height = DensityUtils.dp2px(SceneDetailActivity.this, 55);
+        }
+        frameLayout.setLayoutParams(lp);
+    }
 
     //获取相近产品
     private void getNearProductList() {

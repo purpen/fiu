@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -27,11 +23,9 @@ import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -317,47 +311,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-            if (showFragment instanceof IndexFragment) {
-                //判断是不是第一次进入情界面
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
-                if (isFirstIn) {
-                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.QING, fragmetnContainer);
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
-                    editor.apply();
-                }
-            } else if (showFragment instanceof FindFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
-                if (isFirstIn) {
-                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.JING, fragmetnContainer);
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
-                    editor.apply();
-                }
-            } else if (showFragment instanceof WellGoodsFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
-                if (isFirstIn) {
-                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.PIN, fragmetnContainer);
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
-                    editor.apply();
-                }
-            } else if (showFragment instanceof MineFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
-                if (isFirstIn) {
-                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.WO, fragmetnContainer);
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
-                    editor.apply();
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//            if (showFragment instanceof IndexFragment) {
+//                //判断是不是第一次进入情界面
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
+//                if (isFirstIn) {
+//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.QING, fragmetnContainer);
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
+//                    editor.apply();
+//                }
+//            } else if (showFragment instanceof FindFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
+//                if (isFirstIn) {
+//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.JING, fragmetnContainer);
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
+//                    editor.apply();
+//                }
+//            } else if (showFragment instanceof WellGoodsFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
+//                if (isFirstIn) {
+//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.PIN, fragmetnContainer);
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
+//                    editor.apply();
+//                }
+//            } else if (showFragment instanceof MineFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
+//                if (isFirstIn) {
+//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.WO, fragmetnContainer);
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
+//                    editor.apply();
+//                }
+//            }
+//        }
+//    }
 
     private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
         @Override
