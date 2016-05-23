@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
-import android.util.TypedValue;
 
 /**
  * Created by taihuoniao on 2016/1/27.
@@ -27,9 +26,9 @@ public class DensityUtils {
     /**
      * sp转px
      */
-    public static int sp2px(Context context, float spVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.getResources().getDisplayMetrics());
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
     }
 
     /**

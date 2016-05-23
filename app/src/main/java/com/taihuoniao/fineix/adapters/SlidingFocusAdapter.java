@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
     private SlidingFocusImageView sfiv;
-    public SlidingFocusAdapter(SlidingFocusImageView sfiv, List<T> list, Activity activity){
+    public  SlidingFocusAdapter(SlidingFocusImageView sfiv, List<T> list, Activity activity){
         super(list,activity);
         this.sfiv=sfiv;
     }

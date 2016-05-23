@@ -290,8 +290,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());
-                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(1), netQingjingDetailBean.getData()
-                                .getLocation().getCoordinates().get(0)};
+                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0), netQingjingDetailBean.getData()
+                                .getLocation().getCoordinates().get(1)};
                         //添加标签
                         addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
                         is_subscript = netQingjingDetailBean.getData().getIs_subscript();
