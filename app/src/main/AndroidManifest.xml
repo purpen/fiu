@@ -3,6 +3,7 @@
     package="com.taihuoniao.fineix"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
+
     <uses-feature android:name="android:hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
@@ -37,6 +38,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.MONKEY"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -152,9 +154,9 @@
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.MyBarCodeActivity"
+            android:keepScreenOn="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:keepScreenOn="true"
             />
         <activity
             android:name=".user.FindFriendsActivity"
@@ -394,14 +396,14 @@
         </service>
 
         <!--此处为测试value，线上版本务必更换-->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="muQDLN6lCST6qMDvTAydAilM "/>
+        <!--<meta-data-->
+            <!--android:name="com.baidu.lbsapi.API_KEY"-->
+            <!--android:value="muQDLN6lCST6qMDvTAydAilM "/>-->
 
         <!--百度地图线上API_KEY-->
-        <!--<meta-data
+        <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
+            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

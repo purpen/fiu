@@ -390,7 +390,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 String address = QingjingDetailBean.getData().getAddress();
-                LatLng ll = new LatLng(Double.parseDouble(locaiton[0]), Double.parseDouble(locaiton[1]));
+                LatLng ll = new LatLng(Double.parseDouble(locaiton[1]), Double.parseDouble(locaiton[0]));
                 Intent intent = new Intent(QingjingDetailActivity.this, MapNearByQJActivity.class);
                 intent.putExtra(MapNearByQJActivity.class.getSimpleName(), ll);
                 intent.putExtra("address", address);
