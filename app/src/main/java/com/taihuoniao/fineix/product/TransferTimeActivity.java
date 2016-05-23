@@ -38,8 +38,11 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
     private void setData() {
         transfer_time = getIntent().getStringExtra("transfer_time");
         titleLayout.setTitle("送货时间");
+        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
+        titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightShopCartButton(false);
         titleLayout.setRightSearchButton(false);
+        titleLayout.setBackgroundResource(R.color.white);
         anyLinear.setOnClickListener(this);
         workLinear.setOnClickListener(this);
         restLinear.setOnClickListener(this);
@@ -83,13 +86,13 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
         restImg.setImageResource(R.mipmap.check);
         switch (transfer_time) {
             case "a":
-                anyImg.setImageResource(R.mipmap.check_red);
+                anyImg.setImageResource(R.mipmap.checked);
                 break;
             case "b":
-                workImg.setImageResource(R.mipmap.check_red);
+                workImg.setImageResource(R.mipmap.checked);
                 break;
             case "c":
-                restImg.setImageResource(R.mipmap.check_red);
+                restImg.setImageResource(R.mipmap.checked);
                 break;
         }
     }

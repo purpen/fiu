@@ -74,25 +74,29 @@
                     android:background="@drawable/jianbian_scenelist"
                     android:orientation="vertical"
                     >
-
-                    <TextView
-                        android:id="@+id/activity_scenedetails_changjing_title"
-                        android:layout_width="256dp"
-                        android:layout_height="wrap_content"
+                    <FrameLayout
                         android:layout_marginLeft="20dp"
-                        android:background="@mipmap/scene_title_background"
-                        android:gravity="center_vertical"
-                        android:lineSpacingExtra="8dp"
-                        android:maxLines="2"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingTop="5dp"
-                        android:text="最美的不过下雨天，是曾与你躲过雨的屋檐"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"/>
+                        android:id="@+id/activity_scenedetails_framelayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="matrix"
+                            android:src="@mipmap/scene_title_background"/>
 
+                        <TextView
+                            android:id="@+id/activity_scenedetails_changjing_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="40sp"
+                            android:maxWidth="300dp"
+                            android:text="详见的小路"
+                            android:maxLines="2"
+                            android:textColor="@color/white"/>
+                    </FrameLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

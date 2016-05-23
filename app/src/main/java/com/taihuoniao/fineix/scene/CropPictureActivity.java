@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
@@ -44,8 +43,9 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.crop_picture);
+        titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
-        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(CropPictureActivity.this, 50), false));
+        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenHeight() * 9 / 16, MainApplication.getContext().getScreenHeight(), false));
     }
 
     @Override
@@ -53,6 +53,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_crop);
         instance = CropPictureActivity.this;
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_crop_titlelayout);
+//        获取状态栏的高度
         clipImageLayout = (ClipImageLayout) findViewById(R.id.activity_crop_cliplayout);
         dialog = new WaittingDialog(CropPictureActivity.this);
     }

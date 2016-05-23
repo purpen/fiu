@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f7f7f7"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f7f7f7"
+    >
 
     <RelativeLayout
+        android:id="@+id/title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -31,42 +32,72 @@
             android:src="@mipmap/back_black"/>
 
 
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/activity_goods_detail_cart_relative"-->
-        <!--android:layout_width="60dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!-->-->
+        <RelativeLayout
+            android:id="@+id/activity_goods_detail_cart_relative"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            >
 
-        <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:paddingLeft="17dp"-->
-        <!--android:paddingRight="17dp"-->
-        <!--android:src="@mipmap/cart"/>-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:src="@mipmap/cart"/>
 
-        <!--<TextView-->
-        <!--android:id="@+id/activity_goods_detail_cart_num"-->
-        <!--android:layout_width="16dp"-->
-        <!--android:layout_height="16dp"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:background="@drawable/cart_num_bg"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="12sp"-->
-        <!--android:visibility="gone"/>-->
-        <!--</RelativeLayout>-->
+            <TextView
+                android:id="@+id/activity_goods_detail_cart_num"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/yellow_circle"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
     </RelativeLayout>
+
     <TextView
+        android:id="@+id/line7"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_below="@id/title1"
         android:background="#e2e2e2"/>
+
+    <RelativeLayout
+        android:id="@+id/bottom_relative1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e5e5e5"/>
+
+
+        <Button
+            android:id="@+id/activity_goods_detail_buy_now"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#bd8913"
+            android:text="去购买"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottom_relative1"
+        android:layout_below="@id/line7"
         android:scrollbars="none">
 
         <LinearLayout
@@ -99,7 +130,6 @@
                     android:id="@+id/activity_goods_detail_goods_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
                     android:text="fitbit HR智能手环"
                     android:textColor="#666666"
                     android:textSize="15sp"/>
@@ -122,6 +152,7 @@
                 android:background="#e4e4e4"/>
 
             <LinearLayout
+                android:id="@+id/activity_gooddetails_brandlinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -213,47 +244,6 @@
                     android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="19dp"
-                    android:text="商品描述"
-                    android:textColor="#212121"
-                    android:textSize="13sp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#e4e4e4"/>
-
-                <TextView
-                    android:id="@+id/activity_goods_detail_product_des"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4dp"
-                    android:maxLines="3"
-                    android:paddingBottom="25dp"
-                    android:paddingLeft="17dp"
-                    android:paddingRight="118dp"
-                    android:paddingTop="16dp"
-                    android:text="啊；是镂空雕刻技法卢卡斯京东方；绿卡技术的；浪费卡死了；打开附件；阿拉山口大家发了时刻记得发；啊看似简单方法；看见撒旦的；发了卡死了的看法奖励空间；卢卡斯京东方；卡死了的；饭卡；螺丝扣搭街坊；了拉开松井大辅发"
-                    android:textColor="#333333"
-                    android:textSize="10sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e0e0e0"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="19dp"
                     android:text="所属场景"
                     android:textColor="#212121"
                     android:textSize="13sp"/>
@@ -266,7 +256,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/activity_goods_detail_suoshuchangjing_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"/>
+                    android:layout_height="45dp"
+                    android:paddingLeft="19dp"/>
             </LinearLayout>
 
             <TextView
@@ -305,33 +296,11 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e5e5e5"/>
-
-
-            <Button
-                android:id="@+id/activity_goods_detail_buy_now"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:background="#bd8913"
-                android:text="去购买"
-                android:textColor="@color/white"
-                android:textSize="15sp"/>
-
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#e0e0e0"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="5dp"
-                android:background="#e2e2e2"/>
 
             <WebView
                 android:id="@+id/activity_goods_detail_webview"
@@ -342,4 +311,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

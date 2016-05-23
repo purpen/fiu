@@ -2,14 +2,11 @@ package com.taihuoniao.fineix.utils;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -23,57 +20,139 @@ public class FirstInAppUtils {
     public static final int FIU = 33333;
     public static final int PIN = 44444;
     public static final int WO = 55555;
+    public static final int CREATE = 66666;//第一次创建
+    public static final int ADDURL = 777777;//第一次添加链接
+    public static final int ALL = 88888;//第一次进入全部情景
+
     private static int type = 0;//判断第一次进入的哪个界面
     private static Activity activity;
     private static PopupWindow popupWindow;
 
-    public static void showPop(Activity activity1, int type1, View activity_view) {
-        activity = activity1;
-        type = type1;
-        initPop();
-        WindowManager.LayoutParams params = activity1.getWindow().getAttributes();
-        params.alpha = 0.4f;
-        activity1.getWindow().setAttributes(params);
-        activity1.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
-        popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, DensityUtils.dp2px(activity1, 80));
-    }
+//    public static void showPop(Activity activity1, int type1, View activity_view) {
+//        activity = activity1;
+//        type = type1;
+//        initPop();
+//        WindowManager.LayoutParams params = activity1.getWindow().getAttributes();
+//        params.alpha = 0.4f;
+//        activity1.getWindow().setAttributes(params);
+//        activity1.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
+//        popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
+//    }
 
     private static void initPop() {
         WindowManager windowManager = activity.getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        final View popView = View.inflate(activity, R.layout.pop_first_in, null);
-        TextView titleTv = (TextView) popView.findViewById(R.id.pop_first_in_title);
-        TextView desTv = (TextView) popView.findViewById(R.id.pop_first_in_des);
-        Button btn = (Button) popView.findViewById(R.id.pop_first_in_btn);
+//        final View popView = View.inflate(activity, R.layout.pop_first_in, null);
+//        TextView titleTv = (TextView) popView.findViewById(R.id.pop_first_in_title);
+//        TextView desTv = (TextView) popView.findViewById(R.id.pop_first_in_des);
+//        Button btn = (Button) popView.findViewById(R.id.pop_first_in_btn);
+        final View popView = View.inflate(activity, R.layout.popup_first, null);
+        final ImageView img = (ImageView) popView.findViewById(R.id.popup_first_img);
+        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         switch (type) {
             case QING:
-                titleTv.setText(R.string.first_in_qing_title);
-                desTv.setText(R.string.first_in_qing_des);
+                img.setImageResource(R.mipmap.first_in_index);
+                img.setTag(1);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ((int)(v.getTag()) == 1) {
+                            img.setImageResource(R.mipmap.first_in_index2);
+                            img.setTag(2);
+                        } else if ((int)(v.getTag()) == 2) {
+                            img.setImageResource(R.mipmap.first_in_index3);
+                            img.setTag(3);
+                        } else if ((int)(v.getTag()) == 3) {
+                            popupWindow.dismiss();
+                        }
+                    }
+                });
                 break;
             case JING:
-                titleTv.setText(R.string.first_in_jing_title);
-                desTv.setText(R.string.first_in_jing_des);
+                img.setImageResource(R.mipmap.first_in_find);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
                 break;
             case FIU:
-                titleTv.setText(R.string.first_in_fiu_title);
-                desTv.setText(R.string.first_in_fiu_des);
+                img.setImageResource(R.mipmap.first_in_fiu);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
                 break;
             case PIN:
-                titleTv.setText(R.string.first_in_pin_title);
-                desTv.setText(R.string.first_in_pin_des);
+                img.setImageResource(R.mipmap.first_in_wellgood);
+                img.setTag(4);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ((int)(v.getTag()) == 4) {
+                            img.setImageResource(R.mipmap.first_in_wellgood2);
+                            img.setTag(5);
+                        } else if ((int)(v.getTag()) == 5) {
+                            img.setImageResource(R.mipmap.first_in_wellgood3);
+                            img.setTag(6);
+                        } else if ((int)(v.getTag()) == 6) {
+                            popupWindow.dismiss();
+                        }
+                    }
+                });
                 break;
             case WO:
-                titleTv.setText(R.string.first_in_wo_title);
-                desTv.setText(R.string.first_in_wo_des);
+                img.setImageResource(R.mipmap.first_in_mine);
+                img.setTag(7);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ((int)(v.getTag()) == 7) {
+                            img.setImageResource(R.mipmap.first_in_mine2);
+                            img.setTag(8);
+                        } else if ((int)(v.getTag()) == 8) {
+                            popupWindow.dismiss();
+                        }
+                    }
+                });
+                break;
+            case CREATE:
+                img.setImageResource(R.mipmap.first_in_create);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
+                break;
+            case ADDURL:
+                img.setImageResource(R.mipmap.first_in_url);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
+                break;
+            case ALL:
+                img.setImageResource(R.mipmap.first_in_all);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
                 break;
         }
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-        popupWindow = new PopupWindow(popView, MainApplication.getContext().getScreenWidth()-DensityUtils.dp2px(activity,50), ViewGroup.MarginLayoutParams.WRAP_CONTENT, true);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popupWindow.dismiss();
+//            }
+//        });
+        popupWindow = new PopupWindow(popView, MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(activity, 50), ViewGroup.MarginLayoutParams.WRAP_CONTENT, true);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

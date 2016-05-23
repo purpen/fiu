@@ -44,7 +44,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/cart_num_bg"
+                android:background="@drawable/yellow_circle"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="10sp"
@@ -58,6 +58,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/title_relative1"
         android:dividerHeight="0dp"
+        android:divider="@null"
         android:background="#f7f7f7"/>
 
     <ProgressBar

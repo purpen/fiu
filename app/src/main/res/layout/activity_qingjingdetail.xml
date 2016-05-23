@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="13dp"
-            android:text="+订阅此情景"
+            android:text="订阅"
             android:textColor="@color/yellow_bd8913"
             android:textSize="15sp"/>
     </LinearLayout>

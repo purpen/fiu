@@ -36,8 +36,8 @@ public class GoodsDetailsGridViewAdapter extends BaseAdapter {
                 .configDefaultCacheExpiry(1024 * 1024 * 4)
                 .configDefaultBitmapMaxSize(300, 300)
                 .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configDefaultLoadingImage(R.mipmap.default_backround)
-//                .configDefaultLoadFailedImage(R.mipmap.default_backround)
+                .configDefaultLoadingImage(R.mipmap.default_background_500_500)
+                .configDefaultLoadFailedImage(R.mipmap.default_background_500_500)
                 .configThreadPoolSize(5)
                 .configDefaultImageLoadAnimation(
                         AnimationUtils.loadAnimation(context, R.anim.fade_in));

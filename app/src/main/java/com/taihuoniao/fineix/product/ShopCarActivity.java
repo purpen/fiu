@@ -99,7 +99,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart = null;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if ("false".equals(numberCart.getSuccess())) {
+                            if (!numberCart.isSuccess()) {
                                 title.setTitle("购物车(0)");
                             } else {
                                 title.setTitle("购物车(" + numberCart.getCount() + ")");
@@ -133,7 +133,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                 mAllCheck.setChecked(false);
                             }
                             mPayMoneyAll = 0.0;//全局的
-                            mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
+                            mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                             mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                             adapter.notifyDataSetChanged();
                             if (!totalList.isEmpty()) {
@@ -298,7 +298,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     });
                     title.setRightButton("编缉");
                     mAllPrice.setVisibility(View.VISIBLE);
-                    mAllPrice.setText("合计：¥0.00");
+                    mAllPrice.setText("¥0.00");
                     mDeleteCalculate.setText("结算");
                     mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
 //                    DataPaser.shopCartParser(mHandler);
@@ -322,7 +322,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                     mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                                 }
                             }
-                            mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
+                            mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                             if (count == totalList.size()) {
                                 mAllCheck.setChecked(true);
                             }
@@ -352,7 +352,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
                     }
                 }
-                mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
+                mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                 if (count == totalList.size()) {
                     mAllCheck.setChecked(true);
                 }
@@ -394,7 +394,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 
                     }
                 }
-                mAllPrice.setText("合计：¥" + df.format(mPayMoneyAll));
+                mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                 adapter.reloadListView();
                 break;
             case R.id.bt_delete_calculate_shopcart_item://结算、删除按钮
@@ -410,8 +410,10 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 for (int i = 0; i < totalList.size(); i++) {
                     if ((boolean) totalList.get(i).get("status")) {
                         list_delete.add(totalList.get(i));
-                        builder.append("{\"target_id\":" + totalList.get(i).get("keyTargetId") +
-                                ",\"n\":" + totalList.get(i).get("keyCount") + ",\"type\":" + totalList.get(i).get("keyType") + "},");
+                        builder.append("{\"target_id\":")
+                                .append(totalList.get(i).get("keyTargetId"))
+                                .append(",\"n\":").append(totalList.get(i).get("keyCount"))
+                                .append(",\"type\":").append(totalList.get(i).get("keyType")).append("},");
                     }
                 }
                 builder.append("]");

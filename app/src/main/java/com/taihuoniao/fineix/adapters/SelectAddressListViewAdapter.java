@@ -99,7 +99,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         hold.detailsAddressTv.setText(list.get(position).getAddress());
         hold.phoneTv.setText(list.get(position).getPhone());
         if (list.get(position).isSelect()) {
-            hold.isSelectImg.setImageResource(R.mipmap.check_red);
+            hold.isSelectImg.setImageResource(R.mipmap.checked);
         } else {
             hold.isSelectImg.setImageResource(R.mipmap.check);
         }

@@ -173,6 +173,9 @@ public class DataConstants {
     public static final String FIRST_IN_FIU = "FirstInFiu";//第一次进入Fiu
     public static final String FIRST_IN_PIN = "FirstInPin";//第一次进入品
     public static final String FIRST_IN_WO = "FirstInWo";//第一次进入我
+    public static final String FIRST_IN_CREATE = "FirstInCreate";//第一次创建
+    public static final String FIRST_IN_URL = "FirstInUrl";//第一次添加链接
+    public static final String FIRST_IN_ALL = "FirstInAll";//第一次进入全部情景
     //登录
     public static final int PARSER_LOGIN = 9;
     //网络数据请求失败

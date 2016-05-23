@@ -4,7 +4,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
     >
+    <RelativeLayout
+        android:id="@+id/activity_edit_main_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
 
+        <jp.co.cyberagent.android.gpuimage.GPUImageView
+            android:id="@+id/activity_edit_gpuimage"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_edit_titlelayout"
         android:layout_width="match_parent"
@@ -15,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:background="#010101"
+        android:background="#66000000"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -93,28 +105,14 @@
     </LinearLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/activity_edit_main_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/activity_edit_bottom_linear"
-        android:layout_below="@id/activity_edit_titlelayout"
-        android:background="#080808">
 
-        <jp.co.cyberagent.android.gpuimage.GPUImageView
-            android:id="@+id/activity_edit_gpuimage"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/activity_edit_recycler_linear"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_above="@id/activity_edit_bottom_linear"
-        android:background="#1d1f21"
+        android:background="@color/black_touming"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">

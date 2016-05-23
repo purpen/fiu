@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductListBean;
@@ -21,11 +22,19 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
     private List<ProductListBean> list;
     private EditRecyclerAdapter.ItemClick itemClick;
     private int itemHeight = 0;
+    private DisplayImageOptions options;
 
     public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductListBean> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.context = context;
         this.list = list;
         this.itemClick = itemClick;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -42,7 +51,7 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
                 itemClick.click(position);
             }
         });
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.img);
+        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.img, options);
         holder.title.setText(list.get(position).getTitle());
         holder.price.setText(String.format("¥ %s", list.get(position).getSale_price()));
     }

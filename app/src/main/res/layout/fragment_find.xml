@@ -36,10 +36,11 @@
             android:src="@mipmap/location_39"/>
     </RelativeLayout>
 
-    <ListView
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/fragment_find_scenelistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:dividerHeight="5dp"
         android:layout_below="@id/fragment_find_titlelayout"/>
 
     <ProgressBar

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.taihuoniao.fineix.R;
@@ -24,11 +25,20 @@ public class AlbumListAdapter extends BaseAdapter {
     private Context context;
     private List<String> albumPaths;
     private Map<String, AlbumBean> albumList;
+    private DisplayImageOptions options;
 
     public AlbumListAdapter(Context context, List<String> albumPaths, Map<String, AlbumBean> albumList) {
         this.context = context;
         this.albumPaths = albumPaths;
         this.albumList = albumList;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -62,12 +72,12 @@ public class AlbumListAdapter extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         hold.name.setText(albumList.get(albumPaths.get(position)).getTitle());
-        hold.number.setText(albumList.get(albumPaths.get(position)).getPhotos().size()+"");
-        ImageLoader.getInstance().displayImage("file://" + albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), new ImageViewAware(hold.img));
+        hold.number.setText(albumList.get(albumPaths.get(position)).getPhotos().size() + "");
+        ImageLoader.getInstance().displayImage("file://" + albumList.get(albumPaths.get(position)).getPhotos().get(0).getImageUri(), new ImageViewAware(hold.img), options);
         return convertView;
     }
 
-   static class ViewHolder {
+    static class ViewHolder {
         private ImageView img;
         private TextView name;
         private TextView number;

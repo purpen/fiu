@@ -1,20 +1,24 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +60,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private CommentsListAdapter commentsListAdapter;
     private EditText editText;
     private Button sendBtn;
+    private PopupWindow popupWindow;
+    //popupWindow下的控件
+    private TextView deleteTv;
+    private TextView cancelTv;
     //网络请求
     private WaittingDialog dialog;
     private String currentUserId = null;//网络获取的当前用户id
@@ -82,6 +90,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
         dialog = new WaittingDialog(this);
+        initPopupWindow();
     }
 
     @Override
@@ -159,17 +168,65 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
     }
 
+    private void initPopupWindow() {
+        WindowManager windowManager = CommentListActivity.this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(CommentListActivity.this, R.layout.popup_comment_delete, null);
+        deleteTv = (TextView) popup_view.findViewById(R.id.popup_comment_delete_delete);
+//        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        deleteTv.setOnClickListener(this);
+//        jubaoTv.setOnClickListener(this);
+        cancelTv.setOnClickListener(this);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(CommentListActivity.this,
+                R.color.white));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
+    }
+
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.DELETE_COMMENT:
+                    popupWindow.dismiss();
                     NetBean netBean1 = (NetBean) msg.obj;
                     Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean1.isSuccess()) {
                         currentPage = 1;
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
-                    }else{
+                    } else {
                         dialog.dismiss();
                     }
                     break;
@@ -186,7 +243,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
-                        if("0".equals(netBean.getCurrent_user_id())){
+                        if ("0".equals(netBean.getCurrent_user_id())) {
                             MainApplication.which_activity = DataConstants.ElseActivity;
                             startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
                         }
@@ -235,6 +292,16 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.popup_comment_delete_delete:
+                if (po == -1) {
+                    return;
+                }
+                dialog.show();
+                DataPaser.deleteComment(commentList.get(po).get_id(), handler);
+                break;
+            case R.id.popup_scene_detail_more_cancel:
+                popupWindow.dismiss();
+                break;
             case R.id.activity_commentlist_send:
                 if (TextUtils.isEmpty(editText.getText())) {
                     return;
@@ -292,32 +359,18 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private String reply_user_id;//被回复人id
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         if (currentUserId == null) {
             currentPage = 1;
             requestNet();
             return false;
         }
         if (currentUserId.equals(commentList.get(position).getUser().get_id())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CommentListActivity.this);
-            builder.setMessage("删除评论？");
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    CommentListActivity.this.dialog.show();
-                    DataPaser.deleteComment(commentList.get(position).get_id(), handler);
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.create().show();
-//            return true;
+            po = position;
+            showPopup();
         }
         return false;
     }
+
+    private int po = -1;//要删除的评论
 }

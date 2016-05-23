@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/item_comment_relative"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
+        android:text="阿斯兰的开发思路；看到附近啊收到了；副科级；理论来看"
         android:layout_toRightOf="@id/item_comment_head"
         android:textColor="#666666"
         android:textSize="12sp"/>

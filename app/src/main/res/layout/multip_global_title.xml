@@ -42,23 +42,24 @@
     <!--“购物车”的图标按钮-->
     <ImageView
         android:id="@+id/global_title_image_shopcart"
-        android:layout_width="45dp"
+        android:layout_width="59dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:clickable="true"
-        android:padding="12dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
         android:src="@mipmap/cart"/>
 
     <!--“购物车上标记所购数量的小黑圆圈”的图标按钮-->
     <TextView
         android:id="@+id/global_title_image_shopcart_counter"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="9dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/cart_num_bg"
+        android:background="@drawable/yellow_circle"
         android:clickable="true"
         android:gravity="center"
         android:textColor="@color/white"

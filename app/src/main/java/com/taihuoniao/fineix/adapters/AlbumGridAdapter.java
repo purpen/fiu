@@ -31,14 +31,12 @@ public class AlbumGridAdapter extends BaseAdapter {
         this.photoList = photoList;
 //        bitmapUtils = new BitmapUtils(context);
         options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default750_422)
-//                .showImageForEmptyUri(R.mipmap.default750_422)
-//                .showImageOnFail(R.mipmap.default750_422)
-//                .displayer(new FadeInBitmapDisplayer(300))
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
-//                .displayer(new RoundedBitmapDisplayer(0))
                 .build();
     }
 

@@ -12,7 +12,7 @@
         android:scaleType="centerCrop"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottom_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,39 +21,51 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="15dp">
+        <TextView
+            android:id="@+id/item_qingjing_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="#000000"
+            android:maxLines="2"
+            android:maxWidth="104dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="3dp"
+            android:paddingTop="4dp"
+            android:text="哈哈哈哈哈哈哈噶"
+            android:textColor="@color/white"
+            android:textSize="13sp"/>
 
         <ImageView
+            android:id="@+id/img"
+            android:layout_below="@id/item_qingjing_list_title"
             android:layout_width="8dp"
             android:layout_height="wrap_content"
             android:src="@mipmap/location_white_width_16px"/>
 
         <TextView
-            android:maxWidth="125dp"
+            android:layout_below="@id/item_qingjing_list_title"
+            android:layout_toRightOf="@id/img"
+            android:layout_toEndOf="@id/img"
             android:id="@+id/item_qingjing_list_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:maxWidth="125dp"
             android:singleLine="true"
             android:text="北京市 朝阳区"
             android:textColor="@color/white"
             android:textSize="10sp"/>
-    </LinearLayout>
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/item_qingjing_list_title"
+
+    <ImageView
+        android:id="@+id/item_allqingjing_selectbackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_linear"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="10dp"
-        android:background="#000000"
-        android:maxLines="2"
-        android:maxWidth="104dp"
-        android:paddingBottom="3dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="3dp"
-        android:paddingTop="4dp"
-        android:text="哈哈哈哈哈哈哈噶"
-        android:textColor="@color/white"
-        android:textSize="13sp"/>
+        android:scaleType="centerCrop"
+        android:src="@mipmap/select_qj_background"
+        android:visibility="gone"/>
 </RelativeLayout>

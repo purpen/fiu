@@ -31,9 +31,9 @@ public class ConfirmOrderProductsAdapter extends BaseAdapter {
         this.context = context;
         this.cartList = cartList;
         options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_backround)
-//                .showImageForEmptyUri(R.mipmap.default_backround)
-//                .showImageOnFail(R.mipmap.default_backround)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                .build();

@@ -74,10 +74,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initList() {
         q = getIntent().getStringExtra("q");
         t = getIntent().getStringExtra("t");
-        isSearch = getIntent().getBooleanExtra("isSearch",false);
+        isSearch = getIntent().getBooleanExtra("isSearch", false);
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
         }
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
         backImg.setOnClickListener(this);
         backImg.setFocusable(true);
         backImg.setFocusableInTouchMode(true);
@@ -92,9 +95,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>0){
+                if (s.length() > 0) {
                     deleteImg.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     deleteImg.setVisibility(View.GONE);
                 }
             }
@@ -158,9 +161,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.activity_search_cancel:
-                if(!TextUtils.isEmpty(editText.getText().toString())){
+                if (!TextUtils.isEmpty(editText.getText().toString())) {
                     editText.setText("");
-                }else{
+                } else {
                     onBackPressed();
                 }
                 break;
@@ -200,7 +203,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "10":
                 if (productResultFragment == null) {
-                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t,false);
+                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t, false);
                     ft.add(R.id.activity_search_container, productResultFragment);
                 } else {
                     ft.show(productResultFragment);

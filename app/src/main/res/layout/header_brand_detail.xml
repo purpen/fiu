@@ -12,6 +12,12 @@
         android:src="@mipmap/ic_launcher"/>
 
     <TextView
+        android:id="@+id/header_brand_detail_zhezhao"
+        android:layout_width="match_parent"
+        android:layout_height="211dp"
+        android:background="#66000000"/>
+
+    <TextView
         android:id="@+id/header_brand_detail_des"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

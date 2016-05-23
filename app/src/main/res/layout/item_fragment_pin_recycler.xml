@@ -4,8 +4,8 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:paddingLeft="25dp"
-              android:paddingRight="25dp">
+              android:paddingLeft="15dp"
+              android:paddingRight="15dp">
 
     <ImageView
         android:id="@+id/item_fragment_pin_recycler_img"
@@ -19,5 +19,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:textColor="#666666"
-        android:textSize="13sp"/>
+        android:textSize="11sp"/>
 </LinearLayout>

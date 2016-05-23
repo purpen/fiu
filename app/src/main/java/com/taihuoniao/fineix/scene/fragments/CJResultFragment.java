@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.scene.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -79,11 +81,11 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                DataPaser.search(q, t, page + "","tag", handler);
+                DataPaser.search(q, t, page + "", "tag", handler);
             }
         });
         list = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), null, null, list,null);
+        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), null, null, list, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
     }
@@ -95,7 +97,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             return;
         }
         dialog.show();
-        DataPaser.search(q, t, page + "","tag", handler);
+        DataPaser.search(q, t, page + "", "tag", handler);
     }
 
     public void refreshData(String q, String t) {
@@ -118,9 +120,9 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                             list.clear();
                         }
                         list.addAll(netSearch.getData().getRows());
-                        if(list.size()<=0){
+                        if (list.size() <= 0) {
                             emptyView.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             emptyView.setVisibility(View.GONE);
                         }
                         sceneListViewAdapter.notifyDataSetChanged();
@@ -146,6 +148,9 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
+        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+        intent.putExtra("id", searchItem.get_id());
+        startActivity(intent);
     }
 }

@@ -93,7 +93,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private LinearLayout subLinear;
     private ImageView subsImg;
     private LinearLayout addressLinear;
-    private TextView subsTv;
+//    private TextView subsTv;
     private List<CommentsBean.CommentItem> commentList;
     private SceneDetailCommentAdapter sceneDetailCommentAdapter;
     private TextView allComment;
@@ -105,7 +105,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private com.taihuoniao.fineix.beans.QingjingDetailBean.UserInfo netUserInfo;
     private String[] locaiton = null;//服务器返回经纬度
     //图片加载
-    private DisplayImageOptions options;
+    private DisplayImageOptions options, options750_1334;
     //场景列表页码
     private int currentPage = 1;
     private int lastSavedFirstVisibleItem = -1;
@@ -127,7 +127,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         progressBar = (ProgressBar) findViewById(R.id.activity_qingjingdetail_progress);
         subLinear = (LinearLayout) findViewById(R.id.activity_qingjingdetail_sublinear);
         subsImg = (ImageView) findViewById(R.id.activity_qingjingdetail_subsimg);
-        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
+//        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
         //headerView中的控件
         View header = View.inflate(QingjingDetailActivity.this, R.layout.header_qingjing_detail, null);
         backgroundImg = (ImageView) header.findViewById(R.id.activity_qingjingdetail_background);
@@ -148,12 +148,19 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         createBtn = (Button) header.findViewById(R.id.activity_qingjingdetail_createscene);
         changjingListView.addHeaderView(header);
         options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_backround)
-//                .showImageForEmptyUri(R.mipmap.default_backround)
-//                .showImageOnFail(R.mipmap.default_backround)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();
+        options750_1334 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
         dialog = new WaittingDialog(QingjingDetailActivity.this);
     }
 
@@ -211,7 +218,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubs.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 0;
-                        subsTv.setText("+订阅此情景");
                         subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
@@ -230,7 +236,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 1;
-                        subsTv.setText("取消订阅");
                         subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
@@ -255,7 +260,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             lastTotalItem = -1;
                         }
                         sceneList.addAll(netSceneList.getSceneListBeanList());
-                        if ( sceneList.size() == 0) {
+                        if (sceneList.size() == 0) {
                             emptyView.setVisibility(View.VISIBLE);
                         } else {
                             emptyView.setVisibility(View.GONE);
@@ -279,7 +284,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingDetailBean.isSuccess()) {
 //                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
                         QingjingDetailBean = netQingjingDetailBean;
-                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg);
+                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg,options750_1334);
                         qingjingTitle.setText(netQingjingDetailBean.getData().getTitle());
                         locationTv.setText(netQingjingDetailBean.getData().getAddress());
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
@@ -298,11 +303,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         switch (is_subscript) {
                             case 1:
                                 subsImg.setImageResource(R.mipmap.subs_yes);
-                                subsTv.setText("取消订阅");
+//                                subsTv.setText("取消订阅");
                                 break;
                             default:
                                 subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-                                subsTv.setText("+订阅此情景");
+//                                subsTv.setText("+订阅此情景");
                                 break;
                         }
                         if (netQingjingDetailBean.getData().getSubscription_count() > 14) {

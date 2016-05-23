@@ -94,7 +94,11 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private void setData() {
         nowBuyBean = (NowBuyBean) getIntent().getSerializableExtra("NowBuyBean");
         cartBean = (CartDoOrder) getIntent().getSerializableExtra("cartBean");
-
+        if (nowBuyBean == null && cartBean == null) {
+            Toast.makeText(ConfirmOrderActivity.this, "数据异常，请重试", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         df = new DecimalFormat("######0.00");
         titleLayout.setRightSearchButton(false);
         titleLayout.setRightShopCartButton(false);
@@ -173,10 +177,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_TRANSFER_TIME);
                 break;
             case R.id.activity_confirmorder_redbagrelative:
-                if (nowBuyBean == null && cartBean == null) {
-                    Toast.makeText(ConfirmOrderActivity.this, "数据为空，请返回重试", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 //跳转到红包界面
                 Intent intent2 = new Intent(ConfirmOrderActivity.this, RedBagActivity.class);
                 intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getRid());
@@ -211,6 +212,21 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     saveTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setText("¥ " + df.format(Double.valueOf(money)));
+                    if (nowBuyBean != null) {
+                        double nowPrice = Double.valueOf(nowBuyBean.getPay_money())-Double.valueOf(money);
+                        if(nowPrice<=0){
+                            payPriceTv.setText("¥ 0.00");
+                        }else{
+                        payPriceTv.setText("¥ " + df.format(nowPrice));}
+                    } else if (cartBean != null) {
+                        double nowPrice = Double.valueOf(cartBean.getPay_money())-Double.valueOf(money);
+                        if(nowPrice<=0){
+                            payPriceTv.setText("¥ 0.00");
+                        }else{
+                            payPriceTv.setText(String.format("¥ %s", df.format(Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money))));
+                        }
+
+                    }
                 }
                 break;
             case DataConstants.RESULTCODE_ADDRESS:

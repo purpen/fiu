@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.Util;
@@ -19,9 +20,17 @@ import java.util.List;
  */
 public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
     private SlidingFocusImageView sfiv;
+    private DisplayImageOptions options;
     public  SlidingFocusAdapter(SlidingFocusImageView sfiv, List<T> list, Activity activity){
         super(list,activity);
         this.sfiv=sfiv;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_422)
+                .showImageForEmptyUri(R.mipmap.default_background_750_422)
+                .showImageOnFail(R.mipmap.default_background_750_422)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
     }
 
     public int getCount()
@@ -44,21 +53,27 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
         T item=list.get(position%list.size());
         ViewHolder holder =null;
         if (convertView==null) {
+            convertView = View.inflate(parent.getContext(),R.layout.view_sliding_focus,null);
             holder=new ViewHolder();
-            convertView = holder.iv=new ImageView(activity);
             convertView.setTag(holder);
-            holder.iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.left = (ImageView) convertView.findViewById(R.id.view_sliding_focus_left);
+            holder.iv = (ImageView) convertView.findViewById(R.id.view_sliding_focus_img);
         }else {
             holder= (ViewHolder)convertView.getTag();
         }
 
         if (item instanceof String){
-            ImageLoader.getInstance().displayImage((String)item,holder.iv);
+            ImageLoader.getInstance().displayImage((String)item,holder.iv,options);
         }
         if (item instanceof Integer){
-            ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv);
+            ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv,options);
         }
-
+        if(position%2==1){
+            holder.left.setVisibility(View.GONE);
+        }else{
+            holder.left.setVisibility(View.VISIBLE);
+        }
+//        测试双数的话显示分割线
 //        LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
 //        LogUtil.e(TAG,"Position=====>>"+position);
         convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-200,activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
@@ -66,6 +81,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
     }
 
     static class ViewHolder{
+        ImageView left;
         ImageView iv;
     }
 }
