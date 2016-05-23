@@ -29,9 +29,9 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
         this.list = list;
         itemClick = itemClick1;
         options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_backround)
-//                .showImageForEmptyUri(R.mipmap.default_backround)
-//                .showImageOnFail(R.mipmap.default_backround)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();

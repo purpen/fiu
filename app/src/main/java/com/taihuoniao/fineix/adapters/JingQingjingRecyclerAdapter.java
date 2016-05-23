@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -22,12 +23,20 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
     private List<QingJingListBean.QingJingItem> list;
     private EditRecyclerAdapter.ItemClick itemClick;
     private int parentHeight;
+    private DisplayImageOptions options;
 
     public JingQingjingRecyclerAdapter(Context context, List<QingJingListBean.QingJingItem> list, EditRecyclerAdapter.ItemClick itemClick, int parentHeight) {
         this.context = context;
         this.list = list;
         this.itemClick = itemClick;
         this.parentHeight = parentHeight > 0 ? parentHeight : DensityUtils.dp2px(context, 267);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -49,7 +58,7 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
         lp.height = parentHeight;
         lp.width = lp.height * 9 / 16;
         holder.backgroundImg.setLayoutParams(lp);
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
         holder.title.setText(list.get(position).getTitle());
         holder.addressTv.setText(list.get(position).getAddress());
     }

@@ -22,6 +22,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -63,6 +64,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     //网络请求返回值
     private JDProductBean netJingDong;
     private TBProductBean netTaoBao;
+    private DisplayImageOptions options;
 
     public SearchURLActivity() {
         super(R.layout.activity_search_url);
@@ -184,6 +186,13 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         findRelative = (RelativeLayout) findViewById(R.id.activity_search_url_findrelative);
         findBtn = (Button) findViewById(R.id.activity_search_url_find);
         dialog = new WaittingDialog(SearchURLActivity.this);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
         initPopupWindow();
     }
 
@@ -368,7 +377,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                     if (netJD.isSuccess()) {
                         netJingDong = netJD;
                         imagePath = netJD.getData().getRows().get(0).getCover_url();
-                        ImageLoader.getInstance().displayImage(imagePath, productsImg);
+                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
                         nameTv.setText(netJD.getData().getRows().get(0).getTitle());
                         priceTv.setText(netJD.getData().getRows().get(0).getSale_price());
                         market_price = netJD.getData().getRows().get(0).getMarket_price();
@@ -399,7 +408,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         }
                         netTaoBao = netTB;
                         imagePath = item.getCover_url();
-                        ImageLoader.getInstance().displayImage(imagePath, productsImg);
+                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
                         nameTv.setText(item.getTitle());
                         priceTv.setText(item.getSale_price());
                         market_price = item.getMarket_price();

@@ -16,9 +16,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -45,10 +43,11 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private ListView listView;
     private ProgressBar progressBar;
     private ImageView backgroundImg;
+    private TextView zhezhaoTv;
     private ImageView brandImg;
     private TextView desTv;
     //加载圆图
-    private DisplayImageOptions option;
+    private DisplayImageOptions option,options750_422;
     //网络请求对话框
     private WaittingDialog dialog;
     //商品列表
@@ -71,19 +70,29 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         progressBar = (ProgressBar) findViewById(R.id.activity_brand_detail_progress);
         View header = View.inflate(BrandDetailActivity.this, R.layout.header_brand_detail, null);
         backgroundImg = (ImageView) header.findViewById(R.id.header_brand_detail_backgroundimg);
+        zhezhaoTv = (TextView) header.findViewById(R.id.header_brand_detail_zhezhao);
         brandImg = (ImageView) header.findViewById(R.id.header_brand_detail_titleimg);
         desTv = (TextView) header.findViewById(R.id.header_brand_detail_des);
         listView.addHeaderView(header);
         dialog = new WaittingDialog(BrandDetailActivity.this);
         option = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default750_422)
-//                .showImageForEmptyUri(R.mipmap.default750_422)
-//                .showImageOnFail(R.mipmap.default750_422)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
 //                .displayer(new FadeInBitmapDisplayer(300))
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360))
+                .build();
+        options750_422= new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_422)
+                .showImageForEmptyUri(R.mipmap.default_background_750_422)
+                .showImageOnFail(R.mipmap.default_background_750_422)
+//                .displayer(new FadeInBitmapDisplayer(300))
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
                 .build();
     }
 
@@ -99,9 +108,12 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
         backgroundImg.setLayoutParams(lp);
-
+        ViewGroup.LayoutParams zLp = zhezhaoTv.getLayoutParams();
+        zLp.width = lp.width;
+        zLp.height = lp.height;
+        zhezhaoTv.setLayoutParams(zLp);
         productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(BrandDetailActivity.this, productList,null);
+        goodListAdapter = new GoodListAdapter(BrandDetailActivity.this, productList, null);
         listView.setAdapter(goodListAdapter);
         listView.setOnScrollListener(this);
     }
@@ -141,27 +153,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         titleTv.setText(netBrandDetail.getData().getTitle());
                         ImageLoader.getInstance().displayImage(netBrandDetail.getData().getCover_url(), brandImg, option);
                         desTv.setText(netBrandDetail.getData().getDes());
-                        ImageLoader.getInstance().loadImage(netBrandDetail.getData().getBanner_url(), new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                backgroundImg.setImageBitmap(blurImageAmeliorate(loadedImage));
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-
-                            }
-                        });
+                        ImageLoader.getInstance().displayImage(netBrandDetail.getData().getBanner_url(),backgroundImg,options750_422);
                     } else {
                         Toast.makeText(BrandDetailActivity.this, netBrandDetail.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -173,6 +165,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
+
     @Override
     protected void onDestroy() {
         //cancelNet();

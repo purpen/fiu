@@ -50,7 +50,6 @@ import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //控件
     private GlobalTitleLayout titleLayout;
     //    private ImageView sceneImg;
-    private RoundedImageView sceneImg;
+    private ImageView sceneImg;
     private Bitmap sceneBitmap;//图片
     private EditText contentEdt;
     private EditText titleEdt;
@@ -105,7 +104,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         setContentView(R.layout.activity_create_scene);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_create_scene_titlelayout);
-        sceneImg = (RoundedImageView) findViewById(R.id.activity_create_scene_img);
+        sceneImg = (ImageView) findViewById(R.id.activity_create_scene_img);
         contentEdt = (EditText) findViewById(R.id.activity_create_scene_contentedt);
         titleEdt = (EditText) findViewById(R.id.activity_create_scene_titleedt);
         locationTv = (TextView) findViewById(R.id.activity_create_scene_location);
@@ -147,7 +146,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             public void callback(Bitmap result) {
                 sceneBitmap = result;
                 sceneImg.setImageBitmap(result);
-                sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
+//                sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
             }
         });
         addAddressLinear.setOnClickListener(this);
@@ -241,6 +240,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_create_scene_deleteaddress:
                 locationTv.setText("添加地点");
+                deleteAddressImg.setVisibility(View.GONE);
                 break;
             case R.id.activity_create_scene_qingjing:
 //                if (location == null) {
@@ -385,19 +385,19 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateSceneActivity.this);
-        builder.setMessage("确认放弃编辑吗？");
+        builder.setMessage("返回上一步？");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
                 CreateSceneActivity.this.finish();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                startActivity(new Intent(CreateSceneActivity.this,MainActivity.class));
             }
         });
         builder.create().show();
@@ -443,6 +443,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     String district = data.getStringExtra("district");
                     if (poiInfo != null) {
                         locationTv.setText(poiInfo.name);
+                        deleteAddressImg.setVisibility(View.VISIBLE);
                         lng = poiInfo.location.longitude;
                         lat = poiInfo.location.latitude;
                     }
@@ -492,6 +493,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void click(int postion) {
         locationTv.setText(String.format("%s %s", city, poiInfoList.get(postion).name));
+        deleteAddressImg.setVisibility(View.VISIBLE);
         lng = poiInfoList.get(postion).location.longitude;
         lat = poiInfoList.get(postion).location.latitude;
         recyclerView.setVisibility(View.GONE);

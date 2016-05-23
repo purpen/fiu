@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.taihuoniao.fineix.adapters.GoodsDetailRecommendRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailSceneRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
@@ -51,10 +53,10 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     //界面下的控件
     @Bind(R.id.activity_goods_detail_back)
     ImageView backImg;
-    //    @Bind(R.id.activity_goods_detail_cart_relative)
-//    RelativeLayout cartRelative;
-//    @Bind(R.id.activity_goods_detail_cart_num)
-//    TextView cartNum;
+    @Bind(R.id.activity_goods_detail_cart_relative)
+    RelativeLayout cartRelative;
+    @Bind(R.id.activity_goods_detail_cart_num)
+    TextView cartNum;
     @Bind(R.id.activity_goods_detail_scrollableView)
     ScrollableView scrollableView;
     private ViewPagerAdapter<String> viewPagerAdapter;
@@ -62,14 +64,16 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     TextView name;
     @Bind(R.id.activity_goods_detail_goods_price)
     TextView price;
+    @Bind(R.id.activity_gooddetails_brandlinear)
+    LinearLayout brandLinear;
     @Bind(R.id.activity_goods_detail_brand_relative)
     RelativeLayout brandRelative;
     @Bind(R.id.activity_goods_detail_brand_img)
     ImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
-    @Bind(R.id.activity_goods_detail_product_des)
-    TextView productDes;
+//    @Bind(R.id.activity_goods_detail_product_des)
+//    TextView productDes;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
     RecyclerView changjingRecycler;
     @Bind(R.id.activity_goods_detail_recommend_recycler)
@@ -117,7 +121,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         WindowUtils.chenjin(GoodsDetailActivity.this);
         dialog = new WaittingDialog(GoodsDetailActivity.this);
         backImg.setOnClickListener(this);
-//        cartRelative.setOnClickListener(this);
+        cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
@@ -146,9 +150,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         buyNowBtn.setOnClickListener(this);
         brandRelative.setOnClickListener(this);
         option = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default750_422)
-//                .showImageForEmptyUri(R.mipmap.default750_422)
-//                .showImageOnFail(R.mipmap.default750_422)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
 //                .displayer(new FadeInBitmapDisplayer(300))
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -210,9 +214,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         break;
                 }
                 break;
-//            case R.id.activity_goods_detail_cart_relative:
-//                startActivity(new Intent(GoodsDetailActivity.this, ShopCarActivity.class));
-//                break;
+            case R.id.activity_goods_detail_cart_relative:
+                startActivity(new Intent(GoodsDetailActivity.this, ShopCarActivity.class));
+                break;
             case R.id.activity_goods_detail_back:
                 onBackPressed();
                 break;
@@ -279,8 +283,11 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         if (netGoodsDetailBean.getData().getBrand() != null) {
                             ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
                             brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
+                        }else{
+                            brandLinear.setVisibility(View.GONE);
+                            brandRelative.setVisibility(View.GONE);
                         }
-                        productDes.setText(netGoodsDetailBean.getData().getSummary());
+//                        productDes.setText(netGoodsDetailBean.getData().getSummary());
                         attrbute = netGoodsDetailBean.getData().getAttrbute();
                         url = netGoodsDetailBean.getData().getLink();
                         refreshUI(banner);
@@ -289,17 +296,18 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         finish();
                     }
                     break;
-//                case DataConstants.CART_NUM:
-//                    CartBean netCartBean = (CartBean) msg.obj;
-//                    if (netCartBean.isSuccess()) {
-//                        cartNum.setVisibility(View.VISIBLE);
-//                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
-//                    } else {
-//                        cartNum.setVisibility(View.GONE);
-//                    }
-//                    break;
+                case DataConstants.CART_NUM:
+                    CartBean netCartBean = (CartBean) msg.obj;
+                    if (netCartBean.isSuccess()) {
+                        cartNum.setVisibility(View.VISIBLE);
+                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
+                    } else {
+                        cartNum.setVisibility(View.GONE);
+                    }
+                    break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    Toast.makeText(GoodsDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -336,7 +344,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void onResume() {
         super.onResume();
-//        DataPaser.cartNum(handler);
+        DataPaser.cartNum(handler);
         if (scrollableView != null) {
             scrollableView.start();
         }

@@ -31,7 +31,7 @@ public class SceneListViewAdapter extends BaseAdapter {
     private List<LoveSceneBean.LoveSceneItem> loveList;
     private List<SearchBean.SearchItem> searchList;
     private List<SubsCjListBean.SubsCJItem> subsList;
-    private DisplayImageOptions options;
+    private DisplayImageOptions options500_500,options750_1334;
 
     public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList,
                                 List<SearchBean.SearchItem> searchList, List<SubsCjListBean.SubsCJItem> subsList) {
@@ -40,13 +40,20 @@ public class SceneListViewAdapter extends BaseAdapter {
         this.loveList = loveList;
         this.searchList = searchList;
         this.subsList = subsList;
-        options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_backround)
-//                .showImageForEmptyUri(R.mipmap.default_backround)
-//                .showImageOnFail(R.mipmap.default_backround)
+        options500_500 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();
+        options750_1334 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -114,9 +121,9 @@ public class SceneListViewAdapter extends BaseAdapter {
         if (list != null) {
 //            holder.backgroundImg.setTag(list.get(position).getCover_url());
 //            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options750_1334);
             //数据为空
-            ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
+            ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
             isSpertAndSummary(holder.userInfo, list.get(position).getUser_info().getIs_expert(), list.get(position).getUser_info().getSummary());
             holder.viewCount.setText(list.get(position).getView_count());
@@ -126,9 +133,9 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(list.get(position).getAddress());
             holder.time.setText(list.get(position).getCreated_at());
         } else if (loveList != null) {
-            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
-            ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options);
+            ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
             isSpertAndSummary(holder.userInfo, loveList.get(position).getUser_info().getIs_expert(), loveList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(loveList.get(position).getView_count());
@@ -138,9 +145,9 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
-            ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
             isSpertAndSummary(holder.userInfo, searchList.get(position).getUser_info().getIs_expert(), searchList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(searchList.get(position).getView_count());
@@ -150,9 +157,9 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(searchList.get(position).getAddress());
             holder.time.setText(searchList.get(position).getCreated_at());
         } else if (subsList != null) {
-            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
-            ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options);
+            ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());
             isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getIs_expert(), subsList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(subsList.get(position).getView_count());
@@ -187,7 +194,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         } else {
             lp.width = DensityUtils.dp2px(context, 300);
         }
-        if (holder.sceneTitle.getTextSize() < DensityUtils.sp2px(context, 30) && lp.width < DensityUtils.dp2px(context, 300)) {
+        if (holder.sceneTitle.getTextSize() < DensityUtils.sp2px(context, 30) && lp.width <= DensityUtils.dp2px(context, 300)) {
             lp.height = DensityUtils.dp2px(context, 28);
         } else {
             lp.height = DensityUtils.dp2px(context, 55);

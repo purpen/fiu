@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -22,12 +23,21 @@ public class AllQingjingGridAdapter extends BaseAdapter {
     private List<SearchBean.SearchItem> searchList;
     private Context context;
     private int horizontalSpace = 0;//gridview的水平间距
+    private DisplayImageOptions options;
 
     public AllQingjingGridAdapter(List<QingJingListBean.QingJingItem> list, List<SearchBean.SearchItem> searchList, Context context, int horizontalSpace) {
         this.list = list;
         this.searchList = searchList;
         this.context = context;
         this.horizontalSpace = horizontalSpace;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -76,7 +86,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if (list != null) {
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
             holder.addressTv.setText(list.get(position).getAddress());
             holder.title.setText(list.get(position).getTitle());
             if (list.get(position).isSelect()) {
@@ -85,7 +95,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
                 holder.selectImg.setVisibility(View.GONE);
             }
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options);
             holder.addressTv.setText(searchList.get(position).getAddress());
             holder.title.setText(searchList.get(position).getTitle());
             if (searchList.get(position).isSelect()) {

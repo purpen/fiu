@@ -1,23 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:pullrefresh="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#f4f4f4"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+                xmlns:pullrefresh="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f4f4f4"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.MyGlobalTitleLayout
         android:id="@+id/title_shopcart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 
     <RelativeLayout
         android:id="@+id/relative_full_shopcart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_shopcart"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.taihuoniao.fineix.view.PullRefreshLayout
             android:id="@+id/pull_container"
@@ -31,11 +31,11 @@
 
             <include
                 android:id="@+id/action_view"
-                layout="@layout/pull_refresh_refresh_layout" />
+                layout="@layout/pull_refresh_refresh_layout"/>
 
             <include
                 android:id="@+id/tool_view"
-                layout="@layout/pull_refresh_tool_layout" />
+                layout="@layout/pull_refresh_tool_layout"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:divider="#f4f4f4"
-                        android:dividerHeight="5dp" />
+                        android:dividerHeight="5dp"/>
 
                 </LinearLayout>
             </ScrollView>
@@ -75,7 +75,15 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="15dp"
                 android:paddingLeft="5dp"
-                android:text="全选" />
+                android:text="全选"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_toLeftOf="@+id/tv_totalprice_shopcart_item"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="合计："/>
 
             <TextView
                 android:id="@+id/tv_totalprice_shopcart_item"
@@ -83,9 +91,9 @@
                 android:layout_height="44dp"
                 android:layout_toLeftOf="@+id/bt_delete_calculate_shopcart_item"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
                 android:paddingRight="13dp"
-                android:text="合计：¥0.00" />
+                android:text="¥0.00"
+                android:textColor="@color/yellow_bd8913"/>
 
             <Button
                 android:id="@+id/bt_delete_calculate_shopcart_item"
@@ -93,7 +101,7 @@
                 android:layout_height="44dp"
                 android:layout_alignParentRight="true"
                 android:text="结算"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -101,13 +109,14 @@
         android:id="@+id/relative_stroll_shopcart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_shopcart">
+        android:layout_below="@+id/title_shopcart"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_center"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,7 +126,7 @@
             android:drawablePadding="15dp"
             android:drawableTop="@mipmap/shopcart_grey"
             android:text="购物车又空啦，回“品”入点新货吧"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <Button
             android:id="@+id/bt_stroll_shopcart_empty"
@@ -129,6 +138,6 @@
             android:background="@drawable/shap_redbutton_commit"
             android:text="去逛逛"
             android:textColor="@color/white"
-            android:textSize="17sp" />
+            android:textSize="17sp"/>
     </RelativeLayout>
 </RelativeLayout>

@@ -282,13 +282,13 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.linear_alipay:
-                mImageAlipay.setImageResource(R.mipmap.check_red);
-                mImageWechat.setImageResource(R.mipmap.circle_payway);
+                mImageAlipay.setImageResource(R.mipmap.checked);
+                mImageWechat.setImageResource(R.mipmap.check);
                 mPayway = NetworkConstance.ALI_PAY;
                 break;
             case R.id.linear_wechat:
-                mImageWechat.setImageResource(R.mipmap.check_red);
-                mImageAlipay.setImageResource(R.mipmap.circle_payway);
+                mImageWechat.setImageResource(R.mipmap.checked);
+                mImageAlipay.setImageResource(R.mipmap.check);
                 mPayway = NetworkConstance.WX_PAY;
                 break;
             case R.id.bt_paynow_payway:

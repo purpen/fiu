@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductListBean;
@@ -24,11 +25,20 @@ public class AddProductGridAdapter extends BaseAdapter {
     private Context context;
     private List<ProductListBean> list;
     private List<SearchBean.SearchItem> searchList;
+    private DisplayImageOptions options_750_422;
 
     public AddProductGridAdapter(Context context, List<ProductListBean> list, List<SearchBean.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.searchList = searchList;
+        options_750_422 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_422)
+                .showImageForEmptyUri(R.mipmap.default_background_750_422)
+                .showImageOnFail(R.mipmap.default_background_750_422)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -92,7 +102,7 @@ public class AddProductGridAdapter extends BaseAdapter {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             mHolder.item_nicegoods_oldprice
                     .setText(ss);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), mHolder.item_nicegoods_image);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), mHolder.item_nicegoods_image,options_750_422);
         }else if(searchList.size()!=0){
             mHolder.item_nicegoods_title
                     .setText(searchList.get(position).getTitle());
@@ -108,7 +118,7 @@ public class AddProductGridAdapter extends BaseAdapter {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             mHolder.item_nicegoods_oldprice
                     .setText(ss);
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), mHolder.item_nicegoods_image);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), mHolder.item_nicegoods_image,options_750_422);
         }
         return convertView;
     }

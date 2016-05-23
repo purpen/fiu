@@ -19,16 +19,16 @@
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
         android:paddingTop="13dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <Button
             android:id="@+id/activity_search_url_find"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_corner_red"
+            android:background="@drawable/corner_yellow"
             android:gravity="center"
             android:text="@string/find"
-            android:textColor="@color/yellow_bd8913"
+            android:textColor="@color/white"
             android:textSize="15sp"/>
     </RelativeLayout>
 

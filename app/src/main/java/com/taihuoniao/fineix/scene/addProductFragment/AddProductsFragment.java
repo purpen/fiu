@@ -2,13 +2,11 @@ package com.taihuoniao.fineix.scene.addProductFragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -208,27 +206,10 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("添加此商品？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Intent intent = new Intent();
-                intent.putExtra("product", productList.get(position));
-                getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
-                getActivity().finish();
-                getActivity().finish();
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
-
+        Intent intent = new Intent();
+        intent.putExtra("product", productList.get(position));
+        getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
+        getActivity().finish();
     }
 
 

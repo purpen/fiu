@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -73,6 +74,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         pullToRefreshView = (PullToRefreshListView) findViewById(R.id.activity_has_love_pulltorefreshview);
         progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
         listView = pullToRefreshView.getRefreshableView();
+        listView.setDividerHeight(DensityUtils.dp2px(HasLoveActivity.this,5));
         dialog = new WaittingDialog(HasLoveActivity.this);
     }
 

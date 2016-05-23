@@ -34,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -116,6 +117,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private ImageLoader imageLoader;
     //图片加载完毕之后的宽高
     private int picWidth, picHeight;
+    private DisplayImageOptions options500_500;
 
     public EditPictureActivity() {
         super(0);
@@ -138,6 +140,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.tools);
+        titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
         EffectUtil.clear();
         ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
@@ -148,7 +151,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
                 if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
                     int containerHeight = gpuRelative.getHeight();
-                    int systemHeight = MainApplication.getContext().getScreenHeight() - titleLayout.getMeasuredHeight() - productsRelative.getMeasuredHeight();
+                    int systemHeight = MainApplication.getContext().getScreenHeight();
                     lp.height = containerHeight > 0 ? containerHeight : systemHeight;
                     lp.width = lp.height * 9 / 16;
                 } else {
@@ -220,6 +223,13 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
         dialog = new WaittingDialog(EditPictureActivity.this);
         imageLoader = ImageLoader.getInstance();
+        options500_500 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
         initPopupWindow();
     }
 
@@ -278,27 +288,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         View overView = View.inflate(EditPictureActivity.this,
                 R.layout.view_over, null);
         mImageView = (MyImageViewTouch) overView.findViewById(R.id.view_over_mimg);
-        /*gpuRelative.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.e("<<<gpuRelative", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
-                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
-            }
-        });
-        mImageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.e("<<<mImageView", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
-                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
-            }
-        });
-        gpuImageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.e("<<<gpuImageView", "left=" + left + ",top" + top + ",right" + right + ",bottom" + bottom
-                        + ",oldLeft" + oldLeft + ",oldTop" + oldTop + ",oldRight" + oldRight + ",oldBottom" + oldBottom);
-            }
-        });*/
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(picHeight * 9 / 16, picHeight);
         p.addRule(RelativeLayout.CENTER_HORIZONTAL);
         overView.setLayoutParams(p);
@@ -333,7 +322,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 if (tagItem.getType() == 1) {
                     return;
                 }
-                ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg);
+                ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg,options500_500);
                 nameTv.setText(tagItem.getName());
                 priceTv.setText(tagItem.getPrice());
                 showPopup();
@@ -567,7 +556,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     if (requestCode == DataConstants.REQUESTCODE_EDIT_SEARCHSTORE) {
                         addLabel(tagItem);
                     } else {
-                        ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg);
+                        ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg,options500_500);
                         nameTv.setText(tagItem.getName());
                         priceTv.setText(tagItem.getPrice());
                     }

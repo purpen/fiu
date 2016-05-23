@@ -42,46 +42,56 @@
             android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/view_label_right_price"
             android:src="@mipmap/point01"/>
+
+        <ImageView
+            android:id="@+id/view_label_delete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/view_label_right_point"
+            android:layout_alignEnd="@+id/view_label_right_price"
+            android:layout_alignRight="@+id/view_label_right_price"
+            android:layout_alignTop="@+id/view_label_right_point"
+            android:src="@mipmap/cancel"/>
     </RelativeLayout>
 
     <!--<RelativeLayout-->
-        <!--android:id="@+id/view_label_left"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone"-->
-        <!-->-->
+    <!--android:id="@+id/view_label_left"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:visibility="gone"-->
+    <!-->-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/view_label_left_price"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="23dp"-->
-            <!--android:background="@mipmap/label_price"-->
-            <!--android:gravity="center"-->
-            <!--android:text="¥1288"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="12sp"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/view_label_left_price"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="23dp"-->
+    <!--android:background="@mipmap/label_price"-->
+    <!--android:gravity="center"-->
+    <!--android:text="¥1288"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="12sp"/>-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/view_label_right_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_toRightOf="@id/view_label_left_price"-->
-            <!--android:background="@drawable/label_right"-->
-            <!--android:gravity="center"-->
-            <!--android:maxWidth="114dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:text="亮神智能感应灯"-->
-            <!--android:textColor="@color/yellow_bd8913"-->
-            <!--android:textSize="12sp"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/view_label_right_name"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_toRightOf="@id/view_label_left_price"-->
+    <!--android:background="@drawable/label_right"-->
+    <!--android:gravity="center"-->
+    <!--android:maxWidth="114dp"-->
+    <!--android:singleLine="true"-->
+    <!--android:text="亮神智能感应灯"-->
+    <!--android:textColor="@color/yellow_bd8913"-->
+    <!--android:textSize="12sp"/>-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/view_label_left_point"-->
-            <!--android:layout_width="15dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="2dp"-->
-            <!--android:layout_toRightOf="@id/view_label_left_price"-->
-            <!--android:src="@mipmap/point01"/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/view_label_left_point"-->
+    <!--android:layout_width="15dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="2dp"-->
+    <!--android:layout_toRightOf="@id/view_label_left_price"-->
+    <!--android:src="@mipmap/point01"/>-->
     <!--</RelativeLayout>-->
 
 

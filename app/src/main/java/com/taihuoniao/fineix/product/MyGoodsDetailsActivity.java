@@ -109,6 +109,7 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
     private boolean isLove = false;//判断用户是否已经点赞
     //判断用户加入或立即购买的sku是第几个
     private int which = -1;
+    private DisplayImageOptions options500_500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,9 +228,16 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
         });
         scrollView.addToBottomlinear(webView);
         optionsCoverUrl = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default750_422)
-//                .showImageForEmptyUri(R.mipmap.default750_422)
-//                .showImageOnFail(R.mipmap.default750_422)
+                .showImageOnLoading(R.mipmap.default_background_750_422)
+                .showImageForEmptyUri(R.mipmap.default_background_750_422)
+                .showImageOnFail(R.mipmap.default_background_750_422)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
+        options500_500  = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
@@ -330,7 +338,7 @@ public class MyGoodsDetailsActivity extends Activity implements View.OnClickList
                     }
 //                    url = goodsDetailsBean.getContent_view_url();
                     webView.loadUrl(goodsDetailsBean.getContent_view_url());
-                    imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, optionsCoverUrl);
+                    imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
                     productsTitle.setText(goodsDetailsBean.getTitle());
                     maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
                     quantity.setText(maxNumber + "");

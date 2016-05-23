@@ -118,7 +118,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //网络请求对话框
     private WaittingDialog dialog;
     //图片加载
-    private DisplayImageOptions options;
+    private DisplayImageOptions options,options750_1334;
     //图片上的商品
     private List<SceneDetails.Product> productList;
     //是否显示标签和价格的标识
@@ -239,12 +239,19 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList, null);
         nearProductListView.setAdapter(goodListAdapter);
         options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(R.mipmap.default_backround)
-//                .showImageForEmptyUri(R.mipmap.default_backround)
-//                .showImageOnFail(R.mipmap.default_backround)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .displayer(new RoundedBitmapDisplayer(360)).build();
+        options750_1334= new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+                .build();
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadSceneDetail);
         registerReceiver(sceneDetailReceiver, filter);
@@ -420,7 +427,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     if (netSceneDetails.isSuccess()) {
 //                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
                         netScene = netSceneDetails;
-                        ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg);
+                        ImageLoader.getInstance().displayImage(netSceneDetails.getCover_url(), backgroundImg,options750_1334);
                         //用户是否已经点赞
                         isLove = netSceneDetails.getIs_love();
                         switch (isLove) {

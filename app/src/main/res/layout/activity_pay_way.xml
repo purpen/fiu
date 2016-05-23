@@ -56,7 +56,7 @@
             android:layout_width="19dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/check_red"/>
+            android:src="@mipmap/checked"/>
 
         <ImageView
             android:layout_width="30dp"
@@ -88,7 +88,7 @@
             android:layout_width="19dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/circle_payway"/>
+            android:src="@mipmap/check"/>
 
         <ImageView
             android:layout_width="30dp"
