@@ -421,6 +421,12 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
             if (position == i) {
                 img.setImageBitmap(pointY);
             } else {
+                if(img==null){
+                    return;
+                }
+                if(pointN==null){
+                    return;
+                }
                 img.setImageBitmap(pointN);
             }
         }
