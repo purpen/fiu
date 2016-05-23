@@ -29,7 +29,7 @@
                 app:riv_border_width="@dimen/dp1"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/dp5"
-                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginTop="@dimen/dp60"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView

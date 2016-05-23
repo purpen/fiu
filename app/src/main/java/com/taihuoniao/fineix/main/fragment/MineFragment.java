@@ -251,7 +251,7 @@ public class MineFragment extends MyBaseFragment {
         if (user == null) return;
         if (user.counter!=null){
             if (adapter != null && gvList != null) {
-                for (int i = 0; i < gvList.size(); i++) {//TODO 注意顺序和GridView位置
+                for (int i = 0; i < gvList.size(); i++) { //TODO 注意顺序和GridView位置
                     switch (i) {
                         case 0:
                             gvList.get(i).count = user.counter.order_total_count;

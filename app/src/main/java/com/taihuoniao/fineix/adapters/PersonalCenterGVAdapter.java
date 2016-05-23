@@ -44,6 +44,8 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
             else {
                 holder.tv_num.setText("+99");
             }
+        }else {
+            holder.tv_num.setVisibility(View.GONE);
         }
         return convertView;
     }
