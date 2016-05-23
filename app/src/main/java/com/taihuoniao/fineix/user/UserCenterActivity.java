@@ -409,6 +409,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (mSceneList==null) return;
+                if (mSceneList.size()==0) return;
                 SceneListBean item=mSceneList.get(i-1);
                 Intent intent = new Intent(activity, SceneDetailActivity.class);
                 intent.putExtra("id", item.get_id());
