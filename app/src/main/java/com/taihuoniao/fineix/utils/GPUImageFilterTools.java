@@ -170,7 +170,6 @@ public class GPUImageFilterTools {
 //        filters.addFilter("Toon", FilterType.TOON);
 //        filters.addFilter("Smooth Toon", FilterType.SMOOTH_TOON);
 //        filters.addFilter("Halftone", FilterType.HALFTONE);
-
 //        filters.addFilter("Bulge Distortion", FilterType.BULGE_DISTORTION);
 //        filters.addFilter("Glass Sphere", FilterType.GLASS_SPHERE);
 //        filters.addFilter("Haze", FilterType.HAZE);
