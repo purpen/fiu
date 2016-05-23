@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     private ImageView subsImg;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
+    private ProgressBar progressBar;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
     //场景列表当前页码
@@ -89,6 +91,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
+                progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
                 DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
@@ -122,6 +125,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
+        progressBar = (ProgressBar) fragment_view.findViewById(R.id.fragment_index_progress);
         listView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
         dialog = new WaittingDialog(getActivity());
         return fragment_view;
@@ -176,6 +180,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 case DataConstants.SCENE_LIST:
                     pullToRefreshLayout.onRefreshComplete();
                     dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     SceneList netSceneList = (SceneList) msg.obj;
                     if (netSceneList.isSuccess()) {
                         pullToRefreshLayout.setLoadingTime();
@@ -190,6 +195,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     pullToRefreshLayout.onRefreshComplete();
                     break;
             }

@@ -2,11 +2,8 @@ package com.taihuoniao.fineix.utils;
 
 import android.util.Base64;
 
-import com.mob.tools.network.BufferedByteArrayOutputStream;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -17,7 +14,7 @@ public class Base64Utils {
     private static final String systemLineSeparator = System
             .getProperty("line.separator");
 
-    // Mapping table from 6-bit nibbles to Base64 characters.
+    // Mapping table from 6-bit nibbles to Base64 characters.b
     private static char[] map1 = new char[64];
     static {
         int i = 0;

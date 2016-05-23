@@ -607,7 +607,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 String address = netScene.getAddress();
-                LatLng ll = new LatLng(Double.parseDouble(location[1]), Double.parseDouble(location[0]));
+                LatLng ll = new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
                 Intent intent2 = new Intent(SceneDetailActivity.this, MapNearByCJActivity.class);
                 intent2.putExtra("address", address);
                 intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);

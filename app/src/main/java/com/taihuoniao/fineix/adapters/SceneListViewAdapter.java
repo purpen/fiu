@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
 
@@ -92,6 +94,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.userInfo = (TextView) convertView.findViewById(R.id.item_scenelist_user_info);
             holder.viewCount = (TextView) convertView.findViewById(R.id.item_scenelist_view_count);
             holder.loveCount = (TextView) convertView.findViewById(R.id.item_scenelist_love_count);
+            holder.frameLayout = (FrameLayout) convertView.findViewById(R.id.item_scenelist_frame);
             holder.sceneTitle = (TextView) convertView.findViewById(R.id.item_scenelist_scene_title);
             holder.suoshuQingjing = (TextView) convertView.findViewById(R.id.item_scenelist_suoshuqingjing);
             holder.location = (TextView) convertView.findViewById(R.id.item_scenelist_location);
@@ -159,13 +162,37 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-        if (holder.sceneTitle.getText().length() < 8) {
-            holder.sceneTitle.setTextSize(20);
-        } else if (holder.sceneTitle.getText().length() >= 13) {
-            holder.sceneTitle.setTextSize(10);
-        } else {
-            holder.sceneTitle.setTextSize(15);
+        double leng = holder.sceneTitle.getText().length();
+        for (char c : holder.sceneTitle.getText().toString().toCharArray()) {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                leng -= 0.5;
+            }
         }
+        int l = 0;
+        if (leng * 10 % 10 != 0) {
+            l = 1 + (int) leng;
+        } else {
+            l = (int) leng;
+        }
+//            遍历所有字符判断是否含有英文字符。有的话算半个
+        if (l < 8) {
+            holder.sceneTitle.setTextSize(40);
+        } else {
+            holder.sceneTitle.setTextSize(20);
+        }
+//        动态改变宽高
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.frameLayout.getLayoutParams();
+        if (l * holder.sceneTitle.getTextSize() < DensityUtils.dp2px(context, 300)) {
+            lp.width = (int) (holder.sceneTitle.getTextSize() * l);
+        } else {
+            lp.width = DensityUtils.dp2px(context, 300);
+        }
+        if (holder.sceneTitle.getTextSize() < DensityUtils.sp2px(context, 30) && lp.width < DensityUtils.dp2px(context, 300)) {
+            lp.height = DensityUtils.dp2px(context, 28);
+        } else {
+            lp.height = DensityUtils.dp2px(context, 55);
+        }
+        holder.frameLayout.setLayoutParams(lp);
         return convertView;
     }
 
@@ -188,6 +215,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         TextView userInfo;
         TextView viewCount;
         TextView loveCount;
+        FrameLayout frameLayout;
         TextView sceneTitle;
         TextView suoshuQingjing;
         TextView location;
