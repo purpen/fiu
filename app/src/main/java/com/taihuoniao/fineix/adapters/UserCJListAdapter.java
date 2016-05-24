@@ -56,7 +56,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         holder.time.setText(item.getCreated_at());
         double leng = holder.tv_title.getText().length();
         for (char c : holder.tv_title.getText().toString().toCharArray()) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (c >= 32 && c <= 126) {
                 leng -= 0.5;
             }
         }

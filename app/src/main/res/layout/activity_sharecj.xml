@@ -14,20 +14,33 @@
         android:layout_width="match_parent"
         android:layout_height="119dp"
         android:layout_alignParentBottom="true"
-        android:background="#121212"/>
+        android:background="#121212"
+        android:visibility="invisible"/>
 
     <RelativeLayout
         android:id="@+id/activity_share_relative"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/activity_share_recycler"
+        android:background="#121212"
         android:layout_below="@id/activity_share_title"
-        android:background="#121212">
+        >
 
-        <ImageView
-            android:id="@+id/activity_share_img"
+        <RelativeLayout
+            android:id="@+id/activity_share_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/activity_share_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"/>
+
+
+        </RelativeLayout>
+
     </RelativeLayout>
 </RelativeLayout>

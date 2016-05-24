@@ -229,6 +229,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (LoginInfo.isUserLogin()) {
                     switchFragmentandImg(MineFragment.class);
                 } else {
+                    MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();
                     startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                 }

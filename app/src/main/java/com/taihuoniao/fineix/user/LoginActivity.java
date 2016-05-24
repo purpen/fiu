@@ -23,7 +23,6 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -256,7 +255,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         updateUserIdentity();
                         startActivity(new Intent(activity, OrderInterestQJActivity.class));
                     } else {
-                        startActivity(new Intent(activity, MainActivity.class));
+//                        startActivity(new Intent(activity, MainActivity.class));
+                        switch (MainApplication.which_activity) {
+                            case DataConstants.QingjingDetailActivity:
+                                sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                                break;
+                            case DataConstants.SceneDetailActivity:
+                                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
+                                break;
+                            case DataConstants.ElseActivity:
+                                //其他不需要刷新界面的activity
+                                break;
+                            default:
+//                                    THNMainActivity.instance.finish();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
                     }
                     if (ToRegisterActivity.instance != null) {
                         ToRegisterActivity.instance.finish();
