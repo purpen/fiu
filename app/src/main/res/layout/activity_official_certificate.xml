@@ -123,6 +123,7 @@
                 android:layout_height="@dimen/dp40"
                 android:layout_marginBottom="@dimen/dp16"
                 android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
                 android:background="@drawable/shape_radius_white"
                 android:hint="手机/QQ/邮箱"
                 android:paddingLeft="@dimen/dp10"
