@@ -97,13 +97,14 @@
                 android:textSize="@dimen/sp14" />
 
             <EditText
+                android:id="@+id/et_info"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginBottom="@dimen/dp16"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
                 android:background="@drawable/shape_radius_white"
-                android:hint="输入认证信息 如:我是商量好过"
+                android:hint="输入认证信息 如:我是商量好的"
                 android:paddingLeft="@dimen/dp10"
                 android:textColorHint="@color/color_999"
                 android:textSize="@dimen/sp12" />
@@ -118,6 +119,7 @@
                 android:textSize="@dimen/sp14" />
 
             <EditText
+                android:id="@+id/et_contacts"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginBottom="@dimen/dp16"

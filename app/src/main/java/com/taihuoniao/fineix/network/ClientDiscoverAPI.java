@@ -882,16 +882,13 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, url, callBack, false);
     }
 
-    //帐户处我的红包
-    public static void myRedBagNet(String uuid, String used, String time, RequestCallBack<String> callBack) {
+
+    //红包
+    public static void myRedBagNet(String page,String size,String used, String time, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/my/bonus";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-//        params.addQueryStringParameter();("uuid", uuid);
-//        params.addQueryStringParameter();("used", used);
-//        params.addQueryStringParameter();("is_expired", time);
-//        HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);
-//        httpUtils.send(HttpRequest.HttpMethod.POST, url, params, callBack);
-////        params.addQueryStringParameter("uuid", uuid);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("used", used);
         params.addQueryStringParameter("is_expired", time);
         MD5Utils.sign(params, url, callBack, false);
@@ -1186,5 +1183,17 @@ public class ClientDiscoverAPI {
     public static void getLoginStatus(RequestCallBack<String> callBack){
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.CHECK_LOGIN_URL,callBack);
+    }
+
+
+    public static void uploadIdentityInfo(String info,String label,String contact,String id_card_a_tmp,String business_card_tmp,RequestCallBack<String> callBack){
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("info",info);
+        params.addQueryStringParameter("label",label);
+        params.addQueryStringParameter("contact",contact);
+        params.addQueryStringParameter("id_card_a_tmp",id_card_a_tmp);
+        params.addQueryStringParameter("business_card_tmp",business_card_tmp);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,NetworkConstance.UPLOAD_IDENTIFY_URL,callBack);
+        NetworkManager.getInstance().add(NetworkConstance.UPLOAD_IDENTIFY_URL,httpHandler);
     }
 }

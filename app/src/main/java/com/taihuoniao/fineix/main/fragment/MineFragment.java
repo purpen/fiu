@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
@@ -34,15 +33,12 @@ import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.RankTagActivity;
-import com.taihuoniao.fineix.user.RedBagActivity;
+import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
-import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -393,7 +389,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
                         break;
                     case 5:
-                        startActivity(new Intent(getActivity(), RedBagActivity.class));
+                        startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));
                         break;
                     case 6:
                         startActivity(new Intent(activity, SelectAddressActivity.class));

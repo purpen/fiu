@@ -204,7 +204,7 @@
             android:theme="@style/AppTheme"
             />
         <activity
-            android:name=".user.RedBagActivity"
+            android:name=".user.UsableRedPacketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             />
@@ -285,6 +285,10 @@
 
         <activity
             android:name=".user.OfficialCertificateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.UnUsableRedPacketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 

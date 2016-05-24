@@ -1800,43 +1800,44 @@ public class DataPaser {
         });
     }
 
-    //帐户处未过期红包
-    public static void unTimeoutParser(String uuid, final String used, final String time, final Handler handler) {
-        ClientDiscoverAPI.myRedBagNet(uuid, used, time, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                List<RedBagUntimeout> list = null;
-                Message msg = new Message();
-                if ("0".equals(used)) {
-                    msg.what = DataConstants.PARSER_MY_REDBAG_TIMEOUT;
-                } else {
-                    msg.what = DataConstants.PARSER_MY_REDBAG_UNTIMEOUT;
-                }
-                try {
-                    list = new ArrayList<RedBagUntimeout>();
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject redbagObj = obj.getJSONObject("data");
-                    JSONArray redbagArrs = redbagObj.getJSONArray("rows");
-                    for (int i = 0; i < redbagArrs.length(); i++) {
-                        JSONObject redbagArr = redbagArrs.getJSONObject(i);
-                        RedBagUntimeout untimeout = new RedBagUntimeout();
-                        untimeout.setAmount(redbagArr.optInt("amount"));
-                        untimeout.setMin_amount(redbagArr.optInt("min_amount"));
-                        untimeout.setCode(redbagArr.optString("code"));
-                        list.add(untimeout);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                msg.obj = list;
-                handler.sendMessage(msg);
-            }
 
-            @Override
-            public void onFailure(HttpException e, String s) {
-                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
-            }
-        });
+    //帐户处未过期红包
+    public static void unTimeoutParser(final String used, final String time, final Handler handler) {
+//        ClientDiscoverAPI.myRedBagNet(used, time, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                List<RedBagUntimeout> list = null;
+//                Message msg = new Message();
+//                if ("0".equals(used)) {
+//                    msg.what = DataConstants.PARSER_MY_REDBAG_TIMEOUT;
+//                } else {
+//                    msg.what = DataConstants.PARSER_MY_REDBAG_UNTIMEOUT;
+//                }
+//                try {
+//                    list = new ArrayList<RedBagUntimeout>();
+//                    JSONObject obj = new JSONObject(responseInfo.result);
+//                    JSONObject redbagObj = obj.getJSONObject("data");
+//                    JSONArray redbagArrs = redbagObj.getJSONArray("rows");
+//                    for (int i = 0; i < redbagArrs.length(); i++) {
+//                        JSONObject redbagArr = redbagArrs.getJSONObject(i);
+//                        RedBagUntimeout untimeout = new RedBagUntimeout();
+//                        untimeout.setAmount(redbagArr.optInt("amount"));
+//                        untimeout.setMin_amount(redbagArr.optInt("min_amount"));
+//                        untimeout.setCode(redbagArr.optString("code"));
+//                        list.add(untimeout);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                msg.obj = list;
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+//            }
+//        });
     }
 
     //立即下单

@@ -197,4 +197,7 @@ public class NetworkConstance {
 
     //检查登录状态
     public static final String CHECK_LOGIN_URL = BASE_URL + "/auth/check_login";
+
+    //上传官方认证信息
+    public static final String UPLOAD_IDENTIFY_URL = BASE_URL + "/my/talent_save";
 }

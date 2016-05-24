@@ -1,71 +1,75 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.UnUsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.RedBagUntimeout;
+import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 
 
-public class RedBagActivity extends BaseActivity{
+public class UnUsableRedPacketActivity extends BaseActivity{
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    //下拉刷新
-    private PullToRefreshListView mPullLayout;
-    private Animation mRotateUpAnimation;
-    private Animation mRotateDownAnimation;
+    @Bind(R.id.pull_lv)
+    PullToRefreshListView pull_lv;
+    private static final String PAGE_SIZE="10";
+    private int curPage=1;
     private boolean mInLoading = false;
-    private View mProgress;
-    private View mActionImage;
-    private TextView mActionText;
-    private TextView mTimeText;
-
-    private List<RedBagUntimeout> mUntimeoutList = new ArrayList<>();//
+    private List<RedBagUntimeout> mUntimeoutList = new ArrayList<>();
     private View mUntimeoutView;
     private View mTimeoutView;
     private LinearLayout mUntimeoutLinear;
     private LinearLayout mTimeoutLinear;
     private TextView mLook;
     private LinearLayout mLinearLook;
-    public static final String UNUSED = "1";//未使用过
-    public static final String ALLUSED = "0";//使用和未使用的全部
+    private List<RedPacketData.RedPacketItem> mList=new ArrayList<>();
+    private ListView lv;
+    public static final String UNUSED = "1";//未使用过红包
+
+    public static final String ALLUSED = "0";//全部
+
     public static final String UNTIMEOUT = "1";//未过期
+
     public static final String TIMEOUT = "2";//已过期
     private boolean mLookClick = false;
     private String mRid;//订单号
     private WaittingDialog mDialog;
-
-    public RedBagActivity(){
+    private UnUsableRedPacketAdapter adapter;
+    public UnUsableRedPacketActivity(){
         super(R.layout.activity_red_bag);
     }
-
-    //在这处理onSnapToTop()方法中传出来的handler message:
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -86,7 +90,7 @@ public class RedBagActivity extends BaseActivity{
                                 finish();
                             }else {
                                 //红包不可用
-                                Toast.makeText(RedBagActivity.this,"这个红包不可用",Toast.LENGTH_LONG).show();
+                                Toast.makeText(UnUsableRedPacketActivity.this,"这个红包不可用",Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -100,7 +104,7 @@ public class RedBagActivity extends BaseActivity{
                                 mUntimeoutLinear.removeAllViews();
                             }
                             for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mUntimeoutView = LayoutInflater.from(RedBagActivity.this).inflate(R.layout.account_redbag_untimeout, null);
+                                mUntimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_untimeout, null);
 
                                 TextView mRedbagCode = (TextView) mUntimeoutView
                                         .findViewById(R.id.tv_redbag_code);
@@ -140,7 +144,7 @@ public class RedBagActivity extends BaseActivity{
                                 mTimeoutLinear.removeAllViews();
                             }
                             for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mTimeoutView = LayoutInflater.from(RedBagActivity.this).inflate(R.layout.account_redbag_timeout, null);
+                                mTimeoutView = LayoutInflater.from(UnUsableRedPacketActivity.this).inflate(R.layout.account_redbag_timeout, null);
                                 TextView mRedbagCode = (TextView) mTimeoutView
                                         .findViewById(R.id.tv_redbag_code);
                                 TextView mMinMoney = (TextView) mTimeoutView
@@ -170,73 +174,76 @@ public class RedBagActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"我的红包");
-//        title.setRightSearchButton(false);
-//        title.setRightShopCartButton(false);
-        //下拉刷新
-//        mRotateUpAnimation = AnimationUtils.loadAnimation(RedBagActivity.this,
-//                R.anim.rotate_up);
-//        mRotateDownAnimation = AnimationUtils.loadAnimation(RedBagActivity.this,
-//                R.anim.rotate_down);
-        mPullLayout = (PullToRefreshListView) RedBagActivity.this
-                .findViewById(R.id.pull_container);
-//        mPullLayout.setOnActionPullListener(this);
-//        mPullLayout.setOnPullStateChangeListener(this);
-//        mPullLayout.setEnableStopInActionView(true);
-//        mProgress = RedBagActivity.this.findViewById(R.id.progress);
-//        mActionImage = RedBagActivity.this.findViewById(R.id.icon);
-//        mActionImage.setVisibility(View.VISIBLE);
-//        mActionText = (TextView) RedBagActivity.this.findViewById(R.id.pull_note);
-//        mActionText.setText("下拉刷新");
-//        mTimeText = (TextView) RedBagActivity.this.findViewById(R.id.refresh_time);
-
-        mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
-        mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
-        mLook = (TextView) findViewById(R.id.tv_look_redbag);
-        mLinearLook = (LinearLayout) findViewById(R.id.linear_look_redbag);
-
+        custom_head.setHeadCenterTxtShow(true,"过期红包");
+        lv = pull_lv.getRefreshableView();
+//        mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
+//        mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
         mDialog = new WaittingDialog(this);
-        mDialog.show();
-
         mRid = getIntent().getStringExtra("rid");
-        Log.e(">>>", ">>>ridredbag>>" + mRid);
-        //未过期未使用
-        DataPaser.unTimeoutParser(MainApplication.uuid, UNUSED, UNTIMEOUT, mHandler);
 
-        mLook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.show();
-                //已过期、使没使用全有
-                mLookClick = true;
-//                DataParser.unTimeoutParser(ALLUSED, TIMEOUT, mHandler);
-                DataPaser.unTimeoutParser(MainApplication.uuid, ALLUSED, UNTIMEOUT, mHandler);
-            }
-        });
+        //未过期未使用
+//        DataPaser.unTimeoutParser( UNUSED, UNTIMEOUT, mHandler);
+
+
+
+//        mLook.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mDialog.show();
+//                //已过期、使没使用全有
+//                mLookClick = true;
+////                DataParser.unTimeoutParser(ALLUSED, TIMEOUT, mHandler);
+//                DataPaser.unTimeoutParser(ALLUSED, UNTIMEOUT, mHandler);
+//            }
+//        });
 
     }
 
     @Override
+    protected void requestNet() {//请求可用红包
+        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage),PAGE_SIZE,ALLUSED,TIMEOUT, new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                if (!activity.isFinishing()&&mDialog!=null) mDialog.show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (mDialog!=null) mDialog.dismiss();
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<RedPacketData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<RedPacketData>>() {});
+                if (response.isSuccess()){
+                    List<RedPacketData.RedPacketItem> rows = response.getData().rows;
+                    refreshUI(rows);
+                    return;
+                }
+                Util.makeToast(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                if (mDialog!=null) mDialog.dismiss();
+                Util.makeToast("网络异常,请确保网络畅通");
+            }
+        });
+    }
+
+    @Override
     protected void installListener() {
-        mPullLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-
+                requestNet();
             }
         });
 
-        mPullLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+        pull_lv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!mInLoading) {
-                    mInLoading = true;
-                    DataPaser.unTimeoutParser(MainApplication.uuid, UNUSED, UNTIMEOUT, mHandler);
-                    if (mLookClick) {  //查看过期红包
-                        DataPaser.unTimeoutParser(MainApplication.uuid, ALLUSED, TIMEOUT, mHandler);
-                        DataPaser.unTimeoutParser(MainApplication.uuid, ALLUSED, UNTIMEOUT, mHandler);
-                    }
-                    mHandler.sendEmptyMessageDelayed(DataConstants.CUSTOM_PULLTOREFRESH_HOME, 1000);
-                }
+                curPage=1;
+                mList.clear();
+                requestNet();
             }
         });
     }
@@ -244,70 +251,25 @@ public class RedBagActivity extends BaseActivity{
     private void dataLoadFinished() {
         if (mInLoading) {
             mInLoading = false;
-            mPullLayout.onRefreshComplete();
-            mPullLayout.setLoadingTime();
-//            mPullLayout.setEnableStopInActionView(false);
-//            mPullLayout.hideActionView();
-//            mActionImage.setVisibility(View.VISIBLE);
-//            mProgress.setVisibility(View.GONE);
 
-//            if (mPullLayout.isPullOut()) {
-//                mActionText.setText(R.string.note_pull_refresh);
-//                mActionImage.clearAnimation();
-//                mActionImage.startAnimation(mRotateUpAnimation);
-//            } else {
-//                mActionText.setText(R.string.note_pull_down);
-//            }
-
-//            mTimeText.setText(getString(R.string.note_update_at,
-//                    formatDate(new Date(System.currentTimeMillis()))));
         }
     }
 
-    //定义日期格式
-    public static String formatDate(Date date) {
-        return dateFormat.format(date);
-    }
-
-    private static DateFormat dateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
-
-
-//    @Override
-    public void onSnapToTop() {
-// 下拉后，弹到顶部时，开始刷新数据
-        if (!mInLoading) {
-            mInLoading = true;
-//            mPullLayout.setEnableStopInActionView(true);
-//            mActionImage.clearAnimation();
-//            mActionImage.setVisibility(View.GONE);
-//            mProgress.setVisibility(View.VISIBLE);
-//            mActionText.setText(R.string.note_pull_loading);
-
-//            DataPaser.unTimeoutParser(MainApplication.uuid, UNUSED, UNTIMEOUT, mHandler);
-//            if (mLookClick) {  //查看过期红包
-//                DataPaser.unTimeoutParser(MainApplication.uuid, ALLUSED, TIMEOUT, mHandler);
-//                DataPaser.unTimeoutParser(MainApplication.uuid, ALLUSED, UNTIMEOUT, mHandler);
-//            }
-//            mHandler.sendEmptyMessageDelayed(DataConstants.CUSTOM_PULLTOREFRESH_HOME, 1000);
+    @Override
+    protected void refreshUI(List list) {
+        curPage++;
+        if (list==null) return;
+        if (list.size()==0) return;
+        mList.addAll(list);
+        if (adapter==null){
+            adapter=new UnUsableRedPacketAdapter(mList,activity);
+            lv.setAdapter(adapter);
+        }else {
+            adapter.notifyDataSetChanged();
+        }
+        if (pull_lv!=null){
+            pull_lv.onRefreshComplete();
+            pull_lv.setLoadingTime();
         }
     }
-//    @Override
-//    public void onPullOut() {
-//        if (!mInLoading) {
-//            mActionText.setText(R.string.note_pull_refresh);
-//            mActionImage.clearAnimation();
-//            mActionImage.startAnimation(mRotateUpAnimation);
-//        }
-//    }
-//
-//    @Override
-//    public void onPullIn() {
-//        if (!mInLoading) {
-//            mActionText.setText(R.string.note_pull_down);
-//            mActionImage.clearAnimation();
-//            mActionImage.startAnimation(mRotateDownAnimation);
-//        }
-//    }
-
 }

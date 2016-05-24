@@ -22,7 +22,7 @@ import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
-import com.taihuoniao.fineix.user.RedBagActivity;
+import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
@@ -179,7 +179,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             case R.id.activity_confirmorder_redbagrelative:
 
                 //跳转到红包界面
-                Intent intent2 = new Intent(ConfirmOrderActivity.this, RedBagActivity.class);
+                Intent intent2 = new Intent(ConfirmOrderActivity.this, UsableRedPacketActivity.class);
                 intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getRid());
 
                 startActivityForResult(intent2, DataConstants.REQUESTCODE_REDBAG);

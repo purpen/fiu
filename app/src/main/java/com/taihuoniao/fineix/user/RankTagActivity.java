@@ -3,14 +3,22 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
@@ -74,4 +82,37 @@ public class RankTagActivity extends BaseActivity{
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        updateUserInfo();
+        super.onDestroy();
+    }
+
+    private void updateUserInfo(){
+        String key="label";
+        String value=et.getText().toString().trim();
+        if (TextUtils.isEmpty(value)){
+            value=tv_tag.getText().toString().trim();
+        }
+
+        if (TextUtils.isEmpty(value)) return;
+        ClientDiscoverAPI.updateUserInfo(key, value, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){
+                    LogUtil.e(TAG,"非官方认证提交成功！");
+                    return;
+                }
+                LogUtil.e(TAG,response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                LogUtil.e(TAG,s);
+            }
+        });
+    }
 }
