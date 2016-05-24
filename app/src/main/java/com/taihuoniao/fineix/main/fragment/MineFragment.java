@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -87,16 +88,19 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_fans;
     @Bind(R.id.iv_bg)
     ImageView iv_bg;
+    @Bind(R.id.tv_tag)
+    TextView tv_tag;
+
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
     public static final int REQUEST_FOCUS = 2;
     public static final int REQUEST_FANS = 3;
     private User user;
     private ArrayList<ImgTxtItem> gvList;
-    private boolean isInitLoad=true;
+    private boolean isInitLoad = true;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
-    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service,R.mipmap.gv_accout};
+    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
@@ -111,7 +115,6 @@ public class MineFragment extends MyBaseFragment {
         super.onCreate(savedInstanceState);
         initData();
     }
-
 
 
     private void initData() {
@@ -172,9 +175,10 @@ public class MineFragment extends MyBaseFragment {
                 }
 
                 try {
-                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
-                    if (response.isSuccess()){
-                        user=response.getData();
+                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    });
+                    if (response.isSuccess()) {
+                        user = response.getData();
                         refreshUIAfterNet();
                         return;
                     }
@@ -201,16 +205,17 @@ public class MineFragment extends MyBaseFragment {
         super.onResume();
         if (LoginInfo.isUserLogin()) {
 //            rl.setVisibility(View.GONE);
-            if (isInitLoad){
-                isInitLoad=false;
-            }else {
-                LogUtil.e("非首次onResume","加载");
+            if (isInitLoad) {
+                isInitLoad = false;
+            } else {
+                LogUtil.e("非首次onResume", "加载");
                 loadData();
             }
         } else {
 //            rl.setVisibility(View.VISIBLE);
         }
     }
+
     private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -219,6 +224,7 @@ public class MineFragment extends MyBaseFragment {
         }
         return result;
     }
+
     @Override
     protected void initViews() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -246,7 +252,7 @@ public class MineFragment extends MyBaseFragment {
     @Override
     protected void refreshUIAfterNet() {
         if (user == null) return;
-        if (user.counter!=null){
+        if (user.counter != null) {
             if (adapter != null && gvList != null) {
                 for (int i = 0; i < gvList.size(); i++) { //TODO 注意顺序和GridView位置
                     switch (i) {
@@ -268,7 +274,7 @@ public class MineFragment extends MyBaseFragment {
         }
         if (!TextUtils.isEmpty(user.head_pic_url)) {
 //            ImageUtils.loadBgImg(user.head_pic_url, ll_box);
-            ImageLoader.getInstance().displayImage(user.head_pic_url,iv_bg);
+            ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
 //            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
@@ -278,17 +284,22 @@ public class MineFragment extends MyBaseFragment {
             tv_real.setText(user.summary);
         }
 
+        if (!TextUtils.isEmpty(user.label)) {
+            if (user.identify.is_expert == 0) {
+                tv_tag.setText(String.format("%s | ", user.label));
+            } else {
+                tv_tag.setText(String.format("%s | ", user.label));
+                tv_tag.setBackgroundColor(Color.GREEN);
+            }
+        }
+
         if (TextUtils.isEmpty(user.nickname)) {
             tv_nick.setVisibility(View.GONE);
         } else {
             tv_nick.setText(user.nickname);
         }
 
-        if (TextUtils.isEmpty(user.rank_title)) {
-            tv_rank.setVisibility(View.GONE);
-        } else {
-            tv_rank.setText(String.format("%s | V%s", user.rank_title, user.rank_id));
-        }
+        tv_rank.setText(String.format("V%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));
@@ -317,7 +328,7 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.btn,R.id.ll_box, R.id.iv_detail,R.id.ibtn,R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.ibtn, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -361,7 +372,7 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
             case R.id.btn:
-                startActivity(new Intent(activity,RankTagActivity.class));
+                startActivity(new Intent(activity, RankTagActivity.class));
         }
     }
 

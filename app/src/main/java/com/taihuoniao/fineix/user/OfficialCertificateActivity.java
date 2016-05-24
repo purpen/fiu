@@ -139,7 +139,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private void submitData() {
         String label = tv_tag.getText().toString().trim();
         if (TextUtils.isEmpty(label)) {
-            Util.makeToast("请先选择认证身份");
+            Util.makeToast("请选择认证身份");
             return;
         }
 

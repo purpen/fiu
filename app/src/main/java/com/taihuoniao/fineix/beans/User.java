@@ -52,6 +52,7 @@ public class User implements Serializable {
     public Counter counter;
     public String head_pic_url;
     public int is_love;
+    public String label;
     public ArrayList<String> areas;
     public class Counter implements Serializable{
         public int notice_count;
@@ -70,9 +71,7 @@ public class User implements Serializable {
         public int order_total_count;
     }
     public class Identify implements Serializable{
-        public int d3in_volunteer;
-        public int d3in_vip;
-        public int d3in_tag;
+        public int is_expert;
         public int is_scene_subscribe;
     }
 }

@@ -27,9 +27,9 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     public BaseActivity(int layoutResID) {
         this.layoutResID = layoutResID;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_pic)
-                .showImageForEmptyUri(R.mipmap.default_pic)
-                .showImageOnFail(R.mipmap.default_pic)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .delayBeforeLoading(0)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)

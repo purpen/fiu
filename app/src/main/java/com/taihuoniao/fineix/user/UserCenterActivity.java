@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -76,6 +77,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private Button bt_msg;
     private ImageButton ibtn;
     private ImageView iv_bg;
+    private TextView tv_tag;
     @Bind(R.id.iv_detail)
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
@@ -123,6 +125,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
 //        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
+        tv_tag = ButterKnife.findById(headView,R.id.tv_tag);
         riv = ButterKnife.findById(headView, R.id.riv);
         tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
@@ -372,11 +375,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             tv_nick.setText(user.nickname);
         }
 
-        if (TextUtils.isEmpty(user.rank_title)) {
-            tv_rank.setVisibility(View.GONE);
-        } else {
-            tv_rank.setText(String.format("%s | V%s", user.rank_title, user.rank_id));
+        if (!TextUtils.isEmpty(user.label)){
+            if (user.identify.is_expert==0){
+                tv_tag.setText(String.format("%s | ",user.label));
+            }else {
+                tv_tag.setText(String.format("%s | ",user.label));
+                tv_tag.setBackgroundColor(Color.GREEN);
+            }
         }
+        tv_rank.setText(String.format("V%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));
