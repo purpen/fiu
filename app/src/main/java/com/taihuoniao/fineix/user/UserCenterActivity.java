@@ -383,8 +383,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    private View initPopView(int layout) {
+    private View initPopView(int layout,String title) {
         View view = Util.inflateView(this, layout, null);
+        ((TextView)view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
         View iv_close = view.findViewById(R.id.tv_cancel);
@@ -410,9 +411,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(mSceneList.size()<=0){
-                    return;
-                }
+                if (mSceneList==null) return;
+                if (mSceneList.size()==0) return;
                 SceneListBean item=mSceneList.get(i-1);
                 Intent intent = new Intent(activity, SceneDetailActivity.class);
                 intent.putExtra("id", item.get_id());
@@ -480,7 +480,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
-                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar,"更换背景封面"));
                 break;
             case R.id.iv_right:
                 startActivity(new Intent(activity, EditUserInfoActivity.class));
@@ -644,6 +644,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private void toCropActivity(Uri uri){
         Intent intent=new Intent(activity,ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(),uri);
+        intent.putExtra(TAG,TAG);
         startActivity(intent);
     }
 

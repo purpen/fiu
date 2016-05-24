@@ -26,6 +26,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -102,13 +103,13 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         loadCurrentData();
     }
 
-    private void move2CurrentLocation(){
+    private void move2CurrentLocation() {
         MapStatus.Builder builder = new MapStatus.Builder();
-        builder.target(ll).zoom(14);
+        builder.target(ll).zoom(16);
         mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
-    private void loadCurrentData(){
+    private void loadCurrentData() {
         if (ll != null) {
             move2CurrentLocation();
             getNearByData(ll);
@@ -186,12 +187,12 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         ClientDiscoverAPI.getSceneList(ll, String.valueOf(page), String.valueOf(pageSize), String.valueOf(radius), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (waittingDialog != null) waittingDialog.show();
+                if (waittingDialog != null && !activity.isFinishing()) waittingDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                waittingDialog.dismiss();
+                if (waittingDialog != null) waittingDialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
@@ -215,7 +216,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                waittingDialog.dismiss();
+                if (waittingDialog != null) waittingDialog.dismiss();
                 LogUtil.e(TAG, s);
             }
         });
@@ -230,9 +231,11 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
             option = new MarkerOptions().position(ll).icon(bitmapDescripter);
-            option.animateType(MarkerOptions.MarkerAnimateType.drop);
             Marker marker = (Marker) mBDMap.addOverlay(option);
             markers.add(marker);
+            if (this.ll.longitude == ll.longitude && this.ll.latitude == ll.latitude) {
+                showInfoWindow(marker.getPosition(), item);
+            }
         }
 
         mBDMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
@@ -245,29 +248,40 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                         break;
                     }
                 }
-                InfoWindow.OnInfoWindowClickListener listener = new InfoWindow.OnInfoWindowClickListener() {
-                    public void onInfoWindowClick() {
-                        // TODO InfoWindow 点击
-                        Util.makeToast(activity, "InfoWindow被点击");
-                    }
-                };
 
                 SceneListBean item = list.get(which);
                 if (item == null) {
                     return true;
                 }
-                LatLng ll = marker.getPosition();
-                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-                LogUtil.e("huge", item.getCover_url());
-                ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)));
-                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
-                ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
-                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, listener);
-                mBDMap.showInfoWindow(mInfoWindow);
+                showInfoWindow(marker.getPosition(), item);
+//                LatLng ll = marker.getPosition();
+//                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+//                LogUtil.e("huge", item.getCover_url());
+//                ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)));
+//                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
+//                ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
+//                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, infoWindowClickListener);
+//                mBDMap.showInfoWindow(mInfoWindow);
                 return true;
             }
         });
     }
+
+    private void showInfoWindow(LatLng ll, SceneListBean item) {
+        View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+        ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)), options);
+        ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
+        ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
+        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, infoWindowClickListener);
+        mBDMap.showInfoWindow(mInfoWindow);
+    }
+
+    InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
+        public void onInfoWindowClick() {
+            // TODO InfoWindow 点击
+//          Util.makeToast(activity, "InfoWindow被点击");
+        }
+    };
 
     @Override
     protected void refreshUI(List<SceneListBean> list) {

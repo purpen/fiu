@@ -169,4 +169,26 @@
         <item name="android:textSize">14sp</item>
         <item name="android:text">23474233874932</item>
     </style>
+
+    <style name="LabelTextView" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/label_title_size</item>
+    </style>
+
+    <style name="CrossImageView">
+        <item name="android:paddingLeft">@dimen/padding_icon_cross</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:src">@mipmap/cross</item>
+    </style>
+
+    <style name="Label">
+        <item name="android:padding">@dimen/padding_label_view</item>
+        <item name="android:layout_marginRight">@dimen/dp10</item>
+        <item name="android:layout_marginBottom">@dimen/dp16</item>
+        <item name="android:background">@color/default_background_label</item>
+    </style>
 </resources>

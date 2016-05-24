@@ -3,7 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@android:color/white"
     >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp05"
+        android:background="@color/color_ddd"
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:text="上传身份证"
+        android:textColor="@color/color_af8323"
+        android:textSize="@dimen/sp16"
+        android:gravity="center"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp05"
+        android:background="@color/color_ddd"
+        />
     <TextView
         android:id="@+id/tv_take_photo"
         android:layout_width="match_parent"

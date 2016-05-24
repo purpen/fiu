@@ -22,6 +22,8 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 
+import java.io.ByteArrayOutputStream;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -30,6 +32,10 @@ import butterknife.OnClick;
  *         created at 2016/5/18 18:01
  */
 public class ImageCropActivity extends BaseActivity {
+    interface OnClipCompleteListener{
+        void onClipComplete(Bitmap bitmap);
+    }
+    private static OnClipCompleteListener listener;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.csiv)
@@ -39,18 +45,26 @@ public class ImageCropActivity extends BaseActivity {
     Button bt_cancel;
     @Bind(R.id.bt_clip)
     Button bt_clip;
-
     @Bind(R.id.progress_bar)
     ProgressBar progress_bar;
+    private String page;
+
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
     }
 
+    public static void setOnClipCompleteListener(OnClipCompleteListener listener){
+        ImageCropActivity.listener=listener;
+    }
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(ImageCropActivity.class.getSimpleName())) {
             uri = intent.getParcelableExtra(ImageCropActivity.class.getSimpleName());
+        }
+
+        if (intent.hasExtra(UserCenterActivity.class.getSimpleName())){
+            page=intent.getStringExtra(UserCenterActivity.class.getSimpleName());
         }
     }
 
@@ -58,8 +72,6 @@ public class ImageCropActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "裁剪图片");
         if (uri == null) return;
-//        Bitmap bitmap = ImageUtils.decodeUriAsBitmap(uri);
-//        if (bitmap==null) return;
         csiv.setImageURI(uri);
     }
 
@@ -71,7 +83,21 @@ public class ImageCropActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.bt_clip:
-                uploadFile(csiv.clip());
+                Bitmap bitmap=csiv.clip();
+                if (TextUtils.isEmpty(page)){
+                    if (listener!=null){
+                        listener.onClipComplete(bitmap);
+                        finish();
+                    }
+//                    ByteArrayOutputStream out=new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+//                    Intent intent = new Intent();
+//                    intent.putExtra(Bitmap.class.getSimpleName(),out.toByteArray());
+//                    setResult(RESULT_OK,intent);
+//                    activity.finish();
+                }else {//上传背景封面
+                    uploadFile(bitmap);
+                }
                 break;
         }
     }

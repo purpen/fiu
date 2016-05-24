@@ -100,7 +100,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 
     private void move2CurrentLocation(){
         MapStatus.Builder builder = new MapStatus.Builder();
-        builder.target(ll).zoom(14);
+        builder.target(ll).zoom(16);
         mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
@@ -157,12 +157,12 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
         ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (waittingDialog != null) waittingDialog.show();
+                if (waittingDialog != null&& !activity.isFinishing()) waittingDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                waittingDialog.dismiss();
+                if (waittingDialog!=null) waittingDialog.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
@@ -185,7 +185,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                waittingDialog.dismiss();
+                if (waittingDialog!=null) waittingDialog.dismiss();
                 LogUtil.e(TAG, s);
             }
         });
@@ -200,10 +200,13 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
             option = new MarkerOptions().position(ll).icon(bitmapDescripter);
-            option.animateType(MarkerOptions.MarkerAnimateType.drop);
             Marker marker = (Marker) mBDMap.addOverlay(option);
             markers.add(marker);
+            if (this.ll.longitude==ll.longitude && this.ll.latitude==ll.latitude){
+                showInfoWindow(marker.getPosition(),item);
+            }
         }
+
 
         mBDMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
@@ -215,28 +218,40 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
                         break;
                     }
                 }
-                InfoWindow.OnInfoWindowClickListener listener = new InfoWindow.OnInfoWindowClickListener() {
-                    public void onInfoWindowClick() {
-                        // TODO InfoWindow 点击
-                        Util.makeToast(activity, "InfoWindow被点击");
-                    }
-                };
 
                 QingJingItem item = list.get(which);
                 if (item == null) {
                     return true;
                 }
-                LatLng ll = marker.getPosition();
-                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-                LogUtil.e("huge", item.cover_url);
-                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
-                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
-                ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
-                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, listener);
-                mBDMap.showInfoWindow(mInfoWindow);
+                showInfoWindow(marker.getPosition(),item);
+//                LatLng ll = marker.getPosition();
+//                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+//                LogUtil.e("huge", item.cover_url);
+//                ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
+//                ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
+//                ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
+//                InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50,infoWindowClickListener);
+//                mBDMap.showInfoWindow(mInfoWindow);
                 return true;
             }
         });
+    }
+
+    private InfoWindow.OnInfoWindowClickListener infoWindowClickListener = new InfoWindow.OnInfoWindowClickListener() {
+        public void onInfoWindowClick() {
+            // TODO InfoWindow 点击
+//                        Util.makeToast(activity, "InfoWindow被点击");
+        }
+    };
+
+    private void showInfoWindow(LatLng ll,QingJingItem item){
+        View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+        LogUtil.e("huge", item.cover_url);
+        ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
+        ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
+        ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
+        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50,infoWindowClickListener);
+        mBDMap.showInfoWindow(mInfoWindow);
     }
 
     @Override
