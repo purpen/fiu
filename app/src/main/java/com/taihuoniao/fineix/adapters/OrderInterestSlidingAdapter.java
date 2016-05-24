@@ -55,9 +55,9 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
             holder= (ViewHolder)convertView.getTag();
         }
 
-        ImageLoader.getInstance().displayImage(item.getCover_url(),holder.iv);
+        ImageLoader.getInstance().displayImage(item.getCover_url(),holder.iv,options);
         if (sfiv.getSelectedItemPosition()==position){
-            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()- DensityUtils.dp2px(activity,150), ViewGroup.LayoutParams.WRAP_CONTENT));
+            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()- DensityUtils.dp2px(activity,120), ViewGroup.LayoutParams.WRAP_CONTENT));
         }else {
             convertView.setScaleY(0.9f);
             convertView.setScaleX(0.9f);

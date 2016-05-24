@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp15"
             android:layout_marginTop="@dimen/dp10"
             android:orientation="horizontal"
             android:visibility="gone"
@@ -123,7 +123,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp60"
         android:layout_marginTop="@dimen/dp5"
         android:layout_marginBottom="@dimen/dp5"
         android:orientation="horizontal">
@@ -131,7 +131,7 @@
         <LinearLayout
             android:id="@+id/ll_cj"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@mipmap/cj"
             android:gravity="center"
@@ -157,7 +157,7 @@
         <LinearLayout
             android:id="@+id/ll_qj"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@mipmap/scene"
             android:gravity="center"
@@ -183,7 +183,7 @@
         <LinearLayout
             android:id="@+id/ll_focus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@mipmap/focus"
             android:gravity="center"
@@ -209,7 +209,7 @@
         <LinearLayout
             android:id="@+id/ll_fans"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@mipmap/favorites"
             android:gravity="center"

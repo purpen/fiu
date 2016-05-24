@@ -166,4 +166,8 @@
         <item>赎回自由身</item>
         <item>职业buyer</item>
     </string-array>
+    <string name="user_center_qj_tip">每个情境都有故事，来都来了，讲讲你的故事吧</string>
+    <string name="user_center_cj_tip">你还没有发表过新场景哦，快来Fiu一下嘛</string>
+    <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
+    <string name="fans_tips">给你一首歌的时间就回来哦，粉丝们还等着你的新动态呢</string>
 </resources>

@@ -202,6 +202,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
+
         <activity
             android:name=".user.PrivateMessageListActivity"
             android:screenOrientation="portrait"

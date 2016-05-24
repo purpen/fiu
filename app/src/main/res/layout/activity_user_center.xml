@@ -57,4 +57,14 @@
             android:padding="@dimen/dp16"
             android:src="@mipmap/edit_info" />
     </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="330dp"
+        android:textSize="@dimen/sp12"
+        android:textColor="@color/color_999"
+        android:visibility="gone"
+        />
 </RelativeLayout>

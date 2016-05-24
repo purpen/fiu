@@ -34,6 +34,7 @@ import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
+import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.RankTagActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
@@ -372,7 +373,7 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
             case R.id.btn:
-                startActivity(new Intent(activity, RankTagActivity.class));
+                startActivity(new Intent(activity, OrderInterestQJActivity.class));
         }
     }
 

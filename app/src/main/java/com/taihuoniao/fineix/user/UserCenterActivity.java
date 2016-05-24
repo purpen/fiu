@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -92,11 +94,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     private WaittingDialog dialog;
-    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"temp.jpg"));
+    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     @Bind(R.id.lv_cj)
     ListView lv_cj;
     @Bind(R.id.lv_qj)
     ListView lv_qj;
+    @Bind(R.id.tv_tips)
+    TextView tv_tips;
+    private boolean isFirstLoad = true;
 
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
@@ -117,6 +122,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onRestart() {
         super.onRestart();
+        isFirstLoad=true;
         requestNet();
     }
 
@@ -125,7 +131,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
 //        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
-        tv_tag = ButterKnife.findById(headView,R.id.tv_tag);
+        tv_tag = ButterKnife.findById(headView, R.id.tv_tag);
         riv = ButterKnife.findById(headView, R.id.riv);
         tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
@@ -150,6 +156,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
         lv_cj.addHeaderView(headView);
         lv_qj.addHeaderView(headView);
+
         lv_cj.setAdapter(adapterCJ);
         lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
@@ -171,12 +178,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.getMineInfo(userId + "", new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null&& !activity.isFinishing()) dialog.show();
+                if (dialog != null && !activity.isFinishing()) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -198,7 +205,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(s))
                     LogUtil.e(TAG, s);
                 Util.makeToast(s);
@@ -234,7 +241,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
@@ -251,7 +258,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 Util.makeToast(s);
             }
@@ -266,7 +273,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      */
     private void refreshCJUI(List<SceneListBean> list) {
         if (list == null) return;
-        if (list.size() == 0) return;
+        if (list.size() == 0) {
+            if (isFirstLoad) {
+                isFirstLoad = false;
+                tv_tips.setVisibility(View.VISIBLE);
+                tv_tips.setText(R.string.user_center_cj_tip);
+            } else {
+                tv_tips.setVisibility(View.GONE);
+            }
+            return;
+        }
         if (adapterCJ == null) {
             mSceneList.addAll(list);
             adapterCJ = new UserCJListAdapter(mSceneList, activity);
@@ -282,7 +298,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情景数据
      */
     private void loadQJData() {
-        LogUtil.e("loadQJData",String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s",curPage,PAGE_SIZE,userId));
+        LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, PAGE_SIZE, userId));
         ClientDiscoverAPI.getQJList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
@@ -294,14 +310,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getQJList", responseInfo.result);
                 QingJingListBean listBean = JsonUtil.fromJson(responseInfo.result, QingJingListBean.class);
                 if (listBean.isSuccess()) {
                     List list = listBean.getData().getRows();
-                    LogUtil.e("每次请求==",list.size()+"");
+                    LogUtil.e("每次请求==", list.size() + "");
                     refreshQJUI(list);
                     return;
                 }
@@ -310,7 +326,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog!=null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 Util.makeToast(s);
             }
@@ -321,7 +337,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     //更新情景UI
     private void refreshQJUI(List<QingJingListBean.QingJingItem> list) {
         if (list == null) return;
-        if (list.size() == 0) return;
+        if (list.size() == 0) {
+            if (isFirstLoad) {
+                isFirstLoad = false;
+                tv_tips.setVisibility(View.VISIBLE);
+                tv_tips.setText(R.string.user_center_qj_tip);
+            } else {
+                tv_tips.setVisibility(View.GONE);
+            }
+            return;
+        }
         if (adapterQJ == null) {
             mQJList.addAll(list);
             adapterQJ = new UserQJListAdapter(mQJList, activity);
@@ -375,11 +400,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             tv_nick.setText(user.nickname);
         }
 
-        if (!TextUtils.isEmpty(user.label)){
-            if (user.identify.is_expert==0){
-                tv_tag.setText(String.format("%s | ",user.label));
-            }else {
-                tv_tag.setText(String.format("%s | ",user.label));
+        if (!TextUtils.isEmpty(user.label)) {
+            if (user.identify.is_expert == 0) {
+                tv_tag.setText(String.format("%s | ", user.label));
+            } else {
+                tv_tag.setText(String.format("%s | ", user.label));
                 tv_tag.setBackgroundColor(Color.GREEN);
             }
         }
@@ -390,9 +415,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
-    private View initPopView(int layout,String title) {
+    private View initPopView(int layout, String title) {
         View view = Util.inflateView(this, layout, null);
-        ((TextView)view.findViewById(R.id.tv_title)).setText(title);
+        ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
         View iv_close = view.findViewById(R.id.tv_cancel);
@@ -415,12 +440,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_cj.setOnClickListener(this);
         ll_qj.setOnClickListener(this);
 
-        lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (mSceneList==null) return;
-                if (mSceneList.size()==0) return;
-                SceneListBean item=mSceneList.get(i-1);
+                if (mSceneList == null) return;
+                if (mSceneList.size() == 0) return;
+                SceneListBean item = mSceneList.get(i - 1);
                 Intent intent = new Intent(activity, SceneDetailActivity.class);
                 intent.putExtra("id", item.get_id());
                 startActivity(intent);
@@ -430,9 +455,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (i == SCROLL_STATE_IDLE ||i==SCROLL_STATE_FLING) {
+                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     if (absListView.getLastVisiblePosition() == mSceneList.size()) {
-                        LogUtil.e("curPage==",curPage+"");
+                        LogUtil.e("curPage==", curPage + "");
                         loadCJData();
                     }
                 }
@@ -446,17 +471,17 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_qj.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (i == SCROLL_STATE_IDLE || i==SCROLL_STATE_FLING) {
-                    LogUtil.e("getLastVisiblePosition",absListView.getLastVisiblePosition()+"");
-                    LogUtil.e("mQJList.size",mQJList.size()+"");
-                    if (mQJList.size()%2==0){
-                        if (absListView.getLastVisiblePosition() == mQJList.size()/2) {
-                            LogUtil.e("curPage==偶数",curPage+"");
+                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
+                    LogUtil.e("getLastVisiblePosition", absListView.getLastVisiblePosition() + "");
+                    LogUtil.e("mQJList.size", mQJList.size() + "");
+                    if (mQJList.size() % 2 == 0) {
+                        if (absListView.getLastVisiblePosition() == mQJList.size() / 2) {
+                            LogUtil.e("curPage==偶数", curPage + "");
                             loadQJData();
                         }
-                    }else {
-                        if (absListView.getLastVisiblePosition() == mQJList.size()/2+1) {
-                            LogUtil.e("curPage==奇数",curPage+"");
+                    } else {
+                        if (absListView.getLastVisiblePosition() == mQJList.size() / 2 + 1) {
+                            LogUtil.e("curPage==奇数", curPage + "");
                             loadQJData();
                         }
                     }
@@ -487,7 +512,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
-                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar,"更换背景封面"));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换背景封面"));
                 break;
             case R.id.iv_right:
                 startActivity(new Intent(activity, EditUserInfoActivity.class));
@@ -572,35 +597,35 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 Util.makeToast("认证");
                 break;
             case R.id.ll_cj:
-                if (which==MineFragment.REQUEST_CJ) return;
+                if (which == MineFragment.REQUEST_CJ) return;
                 showCj();
                 break;
             case R.id.ll_qj:
-                if (which==MineFragment.REQUEST_QJ) return;
+                if (which == MineFragment.REQUEST_QJ) return;
                 showQJ();
                 break;
         }
     }
 
-    private void showCj(){
+    private void showCj() {
         lv_cj.setVisibility(View.VISIBLE);
         lv_qj.setVisibility(View.GONE);
-        which=MineFragment.REQUEST_CJ;
-        curPage=1;
+        which = MineFragment.REQUEST_CJ;
+        isFirstLoad = true;
+        curPage = 1;
         mSceneList.clear();
-        adapterCJ=null;
+        adapterCJ = null;
         loadCJData();
     }
 
-    private void showQJ(){
+    private void showQJ() {
         lv_qj.setVisibility(View.VISIBLE);
         lv_cj.setVisibility(View.GONE);
-        which=MineFragment.REQUEST_QJ;
-        curPage=1;
-        LogUtil.e("清除前==",mQJList.size()+"");
+        which = MineFragment.REQUEST_QJ;
+        isFirstLoad = true;
+        curPage = 1;
         mQJList.clear();
-        LogUtil.e("清除后==",mQJList.size()+"");
-        adapterQJ=null;
+        adapterQJ = null;
         loadQJData();
     }
 
@@ -620,11 +645,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             Util.makeToast("请确认已经插入SD卡");
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Intent intent=null;
+            Intent intent = null;
             File file = null;
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
@@ -639,7 +665,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
 //                    Bitmap bitmap =ImageUtils.decodeUriAsBitmap(imageUri);
-                    if (imageUri!=null){
+                    if (imageUri != null) {
 //                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
                         toCropActivity(imageUri);
                     }
@@ -648,10 +674,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    private void toCropActivity(Uri uri){
-        Intent intent=new Intent(activity,ImageCropActivity.class);
-        intent.putExtra(ImageCropActivity.class.getSimpleName(),uri);
-        intent.putExtra(TAG,TAG);
+    private void toCropActivity(Uri uri) {
+        Intent intent = new Intent(activity, ImageCropActivity.class);
+        intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
+        intent.putExtra(TAG, TAG);
         startActivity(intent);
     }
 

@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="75dp"
+        android:layout_marginRight="60dp"
         android:paddingBottom="@dimen/dp10"
         >
         <TextView
@@ -50,7 +50,7 @@
             android:id="@+id/tv_sum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
+            android:textSize="@dimen/sp12"
             android:textColor="@color/color_333"
             android:text="/15"
             />

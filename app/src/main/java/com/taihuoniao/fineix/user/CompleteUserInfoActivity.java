@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -89,13 +90,14 @@ public class CompleteUserInfoActivity extends BaseActivity {
                 submitData(v);
                 break;
             case R.id.riv:
-                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar,"上传头像"));
                 break;
         }
     }
 
-    private View initPopView(int layout) {
+    private View initPopView(int layout,String title) {
         View view = Util.inflateView(this, layout, null);
+        ((TextView)view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
         View iv_close = view.findViewById(R.id.tv_cancel);
