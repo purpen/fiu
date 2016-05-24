@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RedPacketData;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -124,7 +123,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
                                     public void onClick(View v) {
                                         if (mRid != null) {
 //                                            验证红包是否可用
-                                            DataPaser.checkRedbagUsableParser(MainApplication.uuid, mRid, mUntimeoutList.get(j).getCode(), mHandler);
+                                            DataPaser.checkRedbagUsableParser( mRid, mUntimeoutList.get(j).getCode(), mHandler);
                                         }
                                     }
                                 });

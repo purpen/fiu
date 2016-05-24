@@ -43,6 +43,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".qingjingOrSceneDetails.ShareCJActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -401,8 +405,8 @@
 
         <!--此处为测试value，线上版本务必更换-->
         <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="muQDLN6lCST6qMDvTAydAilM "/>-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="muQDLN6lCST6qMDvTAydAilM "/>-->
 
         <!--百度地图线上API_KEY-->
         <meta-data
