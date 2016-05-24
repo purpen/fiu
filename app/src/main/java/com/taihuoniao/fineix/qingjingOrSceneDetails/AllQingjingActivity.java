@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -189,19 +192,19 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 break;
         }
     }
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//            //判断是不是第一次进入Fiu界面
-//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
-//            if (isFirstIn) {
-//                FirstInAppUtils.showPop(AllQingjingActivity.this, FirstInAppUtils.ALL, activity_view);
-//                SharedPreferences.Editor editor = firstInSp.edit();
-//                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
-//                editor.apply();
-//            }
-//        }
-//    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+            //判断是不是第一次进入Fiu界面
+            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
+            if (isFirstIn) {
+                FirstInAppUtils.showPop(AllQingjingActivity.this, FirstInAppUtils.ALL, activity_view);
+                SharedPreferences.Editor editor = firstInSp.edit();
+                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
+                editor.apply();
+            }
+        }
+    }
 }
