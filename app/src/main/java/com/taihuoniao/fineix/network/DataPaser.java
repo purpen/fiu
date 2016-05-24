@@ -1772,8 +1772,8 @@ public class DataPaser {
     }
 
     //验证红包是否可用接口
-    public static void checkRedbagUsableParser(String uuid, String rid, String code, final Handler handler) {
-        ClientDiscoverAPI.checkRedBagUsableNet(uuid, rid, code, new RequestCallBack<String>() {
+    public static void checkRedbagUsableParser( String rid, String code, final Handler handler) {
+        ClientDiscoverAPI.checkRedBagUsableNet( rid, code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CheckRedBagUsable checkRedBagUsable = null;

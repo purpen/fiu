@@ -22,7 +22,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
 import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RedPacketData;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -40,13 +39,13 @@ import java.util.List;
 import butterknife.Bind;
 
 
-public class UsableRedPacketActivity extends BaseActivity{
+public class UsableRedPacketActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pull_lv;
-    private static final String PAGE_SIZE="10";
-    private int curPage=1;
+    private static final String PAGE_SIZE = "10";
+    private int curPage = 1;
     private boolean mInLoading = false;
     private List<RedBagUntimeout> mUntimeoutList = new ArrayList<>();
     private View mUntimeoutView;
@@ -55,7 +54,7 @@ public class UsableRedPacketActivity extends BaseActivity{
     private LinearLayout mTimeoutLinear;
     private TextView mLook;
     private LinearLayout mLinearLook;
-    private List<RedPacketData.RedPacketItem> mList=new ArrayList<>();
+    private List<RedPacketData.RedPacketItem> mList = new ArrayList<>();
     private ListView lv;
     public static final String UNUSED = "1";//未使用过红包
 
@@ -70,10 +69,12 @@ public class UsableRedPacketActivity extends BaseActivity{
     private WaittingDialog mDialog;
     private UsableRedPacketAdapter adapter;
     private View footerView;
-    public UsableRedPacketActivity(){
+
+    public UsableRedPacketActivity() {
         super(R.layout.activity_red_bag);
     }
-    public boolean isFirstLoad=true;
+
+    public boolean isFirstLoad = true;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -82,19 +83,21 @@ public class UsableRedPacketActivity extends BaseActivity{
                     dataLoadFinished();
                     break;
                 case DataConstants.PARSER_CHECK_REDBAG_USABLE:
+                    mDialog.dismiss();
                     if (msg.obj != null) {
                         if (msg.obj instanceof CheckRedBagUsable) {
-                            CheckRedBagUsable checkRedBagUsable= (CheckRedBagUsable) msg.obj;
+                            CheckRedBagUsable checkRedBagUsable = (CheckRedBagUsable) msg.obj;
                             if ("1".equals(checkRedBagUsable.getUseful())) {
                                 //红包可用
                                 Intent intent = new Intent();
                                 intent.putExtra("code", checkRedBagUsable.getCode());//红包码
+
                                 intent.putExtra("money", checkRedBagUsable.getCoin_money());//红包金额
                                 setResult(DataConstants.RESULTCODE_REDBAG, intent);
                                 finish();
-                            }else {
+                            } else {
                                 //红包不可用
-                                Toast.makeText(UsableRedPacketActivity.this,"这个红包不可用",Toast.LENGTH_LONG).show();
+                                Toast.makeText(UsableRedPacketActivity.this, "这个红包不可用", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -128,7 +131,7 @@ public class UsableRedPacketActivity extends BaseActivity{
                                     public void onClick(View v) {
                                         if (mRid != null) {
 //                                            验证红包是否可用
-                                            DataPaser.checkRedbagUsableParser(MainApplication.uuid, mRid, mUntimeoutList.get(j).getCode(), mHandler);
+                                            DataPaser.checkRedbagUsableParser(mRid, mUntimeoutList.get(j).getCode(), mHandler);
                                         }
                                     }
                                 });
@@ -178,8 +181,8 @@ public class UsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"我的红包");
-        footerView=Util.inflateView(activity,R.layout.redpacket_foot_layout,null);
+        custom_head.setHeadCenterTxtShow(true, "我的红包");
+        footerView = Util.inflateView(activity, R.layout.redpacket_foot_layout, null);
         lv = pull_lv.getRefreshableView();
         mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
         mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
@@ -190,7 +193,6 @@ public class UsableRedPacketActivity extends BaseActivity{
 
         //未过期未使用
 //        DataPaser.unTimeoutParser( UNUSED, UNTIMEOUT, mHandler);
-
 
 
 //        mLook.setOnClickListener(new View.OnClickListener() {
@@ -208,21 +210,22 @@ public class UsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {//请求可用红包
-        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage),PAGE_SIZE,UNUSED,UNTIMEOUT, new RequestCallBack<String>() {
+        ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&&mDialog!=null) mDialog.show();
+                if (!activity.isFinishing() && mDialog != null) mDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (mDialog!=null) mDialog.dismiss();
-                if (responseInfo==null) return;
+                if (mDialog != null) mDialog.dismiss();
+                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<RedPacketData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<RedPacketData>>() {});
-                if (response.isSuccess()){
-                    if (isFirstLoad){
-                        isFirstLoad=false;
+                HttpResponse<RedPacketData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<RedPacketData>>() {
+                });
+                if (response.isSuccess()) {
+                    if (isFirstLoad) {
+                        isFirstLoad = false;
                         total_rows = response.getData().total_rows;
                     }
                     List<RedPacketData.RedPacketItem> rows = response.getData().rows;
@@ -234,7 +237,7 @@ public class UsableRedPacketActivity extends BaseActivity{
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (mDialog!=null) mDialog.dismiss();
+                if (mDialog != null) mDialog.dismiss();
                 Util.makeToast("网络异常,请确保网络畅通");
             }
         });
@@ -245,7 +248,7 @@ public class UsableRedPacketActivity extends BaseActivity{
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(activity,UnUsableRedPacketActivity.class));
+                startActivity(new Intent(activity, UnUsableRedPacketActivity.class));
             }
         });
         pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -258,9 +261,9 @@ public class UsableRedPacketActivity extends BaseActivity{
         pull_lv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                curPage=1;
+                curPage = 1;
                 mList.clear();
-                if (footerView!=null&&lv.getFooterViewsCount()>0){
+                if (footerView != null && lv.getFooterViewsCount() > 0) {
                     lv.removeFooterView(footerView);
                 }
                 requestNet();
@@ -270,7 +273,13 @@ public class UsableRedPacketActivity extends BaseActivity{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                RedPacketData.RedPacketItem redPacketItem = (RedPacketData.RedPacketItem) lv.getAdapter().getItem(i);
                 //获取红包操作
+                if (mRid != null) {
+                    mDialog.show();
+//                                            验证红包是否可用
+                    DataPaser.checkRedbagUsableParser(mRid, redPacketItem.code, mHandler);
+                }
             }
         });
     }
@@ -284,20 +293,20 @@ public class UsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void refreshUI(List list) {
-        if (lv.getFooterViewsCount()==0 && mList.size()==total_rows){
+        if (lv.getFooterViewsCount() == 0 && mList.size() == total_rows) {
             lv.addFooterView(footerView);
         }
         curPage++;
-        if (list==null) return;
-        if (list.size()==0) return;
+        if (list == null) return;
+        if (list.size() == 0) return;
         mList.addAll(list);
-        if (adapter==null){
-            adapter=new UsableRedPacketAdapter(mList,activity);
+        if (adapter == null) {
+            adapter = new UsableRedPacketAdapter(mList, activity);
             lv.setAdapter(adapter);
-        }else {
+        } else {
             adapter.notifyDataSetChanged();
         }
-        if (pull_lv!=null){
+        if (pull_lv != null) {
             pull_lv.onRefreshComplete();
             pull_lv.setLoadingTime();
         }

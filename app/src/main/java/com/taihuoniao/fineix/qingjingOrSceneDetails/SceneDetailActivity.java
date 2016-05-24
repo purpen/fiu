@@ -616,7 +616,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
-                Toast.makeText(SceneDetailActivity.this, "分享场景", Toast.LENGTH_SHORT).show();
+                Intent intent4 = new Intent(SceneDetailActivity.this, ShareCJActivity.class);
+                intent4.putExtra("id", id);
+                startActivity(intent4);
                 break;
             case R.id.popup_scene_detail_more_jubao:
                 Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);

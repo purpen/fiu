@@ -873,7 +873,7 @@ public class ClientDiscoverAPI {
     }
 
     //验证红包是否可用
-    public static void checkRedBagUsableNet(String uuid, String rid, String code, RequestCallBack<String> callBack) {
+    public static void checkRedBagUsableNet(String rid, String code, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/shopping/use_bonus";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
 //        params.addQueryStringParameter("uuid", uuid);
