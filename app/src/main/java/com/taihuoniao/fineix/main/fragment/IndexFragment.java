@@ -197,6 +197,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     pullToRefreshLayout.onRefreshComplete();
+                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

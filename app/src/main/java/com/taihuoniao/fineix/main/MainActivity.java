@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +71,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView tv_nav3;
     @Bind(R.id.tv_nav4)
     TextView tv_nav4;
+    @Bind(R.id.activity_main_first_img)
+    ImageView firstImg;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private ArrayList<Fragment> fragments;
@@ -311,47 +314,105 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//            if (showFragment instanceof IndexFragment) {
-//                //判断是不是第一次进入情界面
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
-//                if (isFirstIn) {
-//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.QING, fragmetnContainer);
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
-//                    editor.apply();
-//                }
-//            } else if (showFragment instanceof FindFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
-//                if (isFirstIn) {
-//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.JING, fragmetnContainer);
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
-//                    editor.apply();
-//                }
-//            } else if (showFragment instanceof WellGoodsFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
-//                if (isFirstIn) {
-//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.PIN, fragmetnContainer);
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
-//                    editor.apply();
-//                }
-//            } else if (showFragment instanceof MineFragment) {
-//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
-//                if (isFirstIn) {
-//                    FirstInAppUtils.showPop(MainActivity.this, FirstInAppUtils.WO, fragmetnContainer);
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
-//                    editor.apply();
-//                }
-//            }
-//        }
-//    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            final SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+            if (showFragment instanceof IndexFragment) {
+                //判断是不是第一次进入情界面
+                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
+                if (isFirstIn) {
+                    firstImg.setImageResource(R.mipmap.first_in_index);
+                    firstImg.setVisibility(View.VISIBLE);
+                    firstImg.setTag(1);
+                    firstImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((int) (v.getTag()) == 1) {
+                                firstImg.setImageResource(R.mipmap.first_in_index2);
+                                firstImg.setTag(2);
+                            } else if ((int) (v.getTag()) == 2) {
+                                firstImg.setImageResource(R.mipmap.first_in_index3);
+                                firstImg.setTag(3);
+                            } else if ((int) (v.getTag()) == 3) {
+                                firstImg.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    SharedPreferences.Editor editor = firstInSp.edit();
+                    editor.putBoolean(DataConstants.FIRST_IN_QING, false);
+                    editor.apply();
+                }
+            } else if (showFragment instanceof FindFragment) {
+                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
+                if (isFirstIn) {
+                    firstImg.setImageResource(R.mipmap.first_in_find);
+                    firstImg.setTag(4);
+                    firstImg.setVisibility(View.VISIBLE);
+                    firstImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((int) (v.getTag()) == 4) {
+                                firstImg.setImageResource(R.mipmap.first_in_fiu);
+                                firstImg.setTag(5);
+                            } else if ((int) (v.getTag()) == 5) {
+                                firstImg.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    SharedPreferences.Editor editor = firstInSp.edit();
+                    editor.putBoolean(DataConstants.FIRST_IN_JING, false);
+                    editor.apply();
+                }
+            } else if (showFragment instanceof WellGoodsFragment) {
+                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
+                if (isFirstIn) {
+                    firstImg.setImageResource(R.mipmap.first_in_wellgood);
+                    firstImg.setVisibility(View.VISIBLE);
+                    firstImg.setTag(6);
+                    firstImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((int) (v.getTag()) == 6) {
+                                firstImg.setImageResource(R.mipmap.first_in_wellgood2);
+                                firstImg.setTag(7);
+                            } else if ((int) (v.getTag()) == 7) {
+                                firstImg.setImageResource(R.mipmap.first_in_wellgood3);
+                                firstImg.setTag(8);
+                            } else if ((int) (v.getTag()) == 8) {
+                                firstImg.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    SharedPreferences.Editor editor = firstInSp.edit();
+                    editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
+                    editor.apply();
+                }
+            } else if (showFragment instanceof MineFragment) {
+                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
+                if (isFirstIn) {
+                    firstImg.setImageResource(R.mipmap.first_in_mine);
+                    firstImg.setVisibility(View.VISIBLE);
+                    firstImg.setTag(7);
+                    firstImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((int) (v.getTag()) == 7) {
+                                firstImg.setImageResource(R.mipmap.first_in_mine2);
+                                firstImg.setTag(8);
+                            } else if ((int) (v.getTag()) == 8) {
+                                firstImg.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    SharedPreferences.Editor editor = firstInSp.edit();
+                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
+                    editor.apply();
+                }
+            }
+        }
+    }
 
     private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
         @Override

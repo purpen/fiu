@@ -19,14 +19,14 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     private GPUImageFilterTools.FilterList filterList;
     private GPUImageFilterTools.OnGpuImageFilterChosenListener listener;
     private int lastClick = -1;//上次点击的item
-    private ItemClick itemClick;
+//    private ItemClick itemClick;
 
     public EditRecyclerAdapter(Context context, GPUImageFilterTools.OnGpuImageFilterChosenListener listener, ItemClick itemClick) {
 //        this.imageUri = imageUri;
         this.context = context;
         this.filterList = GPUImageFilterTools.getList();
         this.listener = listener;
-        this.itemClick = itemClick;
+//        this.itemClick = itemClick;
     }
 
 
@@ -56,9 +56,42 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
 //        }
 //        holder.imageView.requestRender();
 
-        switch (position){
-            case 0:
+        switch (filterList.getName(position)) {
+            case "原图":
                 holder.imageView.setImageResource(R.mipmap.filter1);
+                break;
+            case "摩卡":
+                holder.imageView.setImageResource(R.mipmap.filter2);
+                break;
+            case "暮光":
+                holder.imageView.setImageResource(R.mipmap.muguang);
+                break;
+            case "候鸟":
+                holder.imageView.setImageResource(R.mipmap.houniao);
+                break;
+            case "戏剧":
+                holder.imageView.setImageResource(R.mipmap.xiju);
+                break;
+            case "夏日":
+                holder.imageView.setImageResource(R.mipmap.xiari);
+                break;
+            case "都市":
+                holder.imageView.setImageResource(R.mipmap.dushi);
+                break;
+            case "佳人":
+                holder.imageView.setImageResource(R.mipmap.jiaren);
+                break;
+            case "摩登":
+                holder.imageView.setImageResource(R.mipmap.modeng);
+                break;
+            case "流年":
+                holder.imageView.setImageResource(R.mipmap.liunian);
+                break;
+            case "日光":
+                holder.imageView.setImageResource(R.mipmap.riguang);
+                break;
+            case "午茶":
+                holder.imageView.setImageResource(R.mipmap.wucha);
                 break;
             default:
                 holder.imageView.setImageResource(R.mipmap.ic_launcher);
@@ -93,16 +126,9 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getPosition() == lastClick) {
-                        GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(getPosition())));
-                        if (filterAdjuster.canAdjust())
-                            itemClick.click(getPosition());
-                    } else {
-                        filterList.selectFilter(getPosition());
-                        listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(getPosition())));
-                        notifyDataSetChanged();
-                        lastClick = getPosition();
-                    }
+                    filterList.selectFilter(getPosition());
+                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(getPosition())),getPosition());
+                    notifyDataSetChanged();
                 }
             });
         }

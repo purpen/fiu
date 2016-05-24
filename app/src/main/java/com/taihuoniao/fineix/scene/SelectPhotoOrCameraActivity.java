@@ -115,19 +115,4 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
         }
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//            //判断是不是第一次进入Fiu界面
-//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
-//            if (isFirstIn) {
-//                FirstInAppUtils.showPop(SelectPhotoOrCameraActivity.this, FirstInAppUtils.FIU, activityView);
-//                SharedPreferences.Editor editor = firstInSp.edit();
-//                editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
-//                editor.apply();
-//            }
-//        }
-//    }
 }

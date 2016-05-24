@@ -297,6 +297,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             switch (msg.what) {
                 case DataConstants.FIU_USER:
                     dialog.dismiss();
+                    pullToRefreshView.onRefreshComplete();
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
                     if (netUser.isSuccess()) {
                         absoluteLayout.removeAllViews();
@@ -305,6 +306,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.QINGJING_LIST:
                     dialog.dismiss();
+                    pullToRefreshView.onRefreshComplete();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
                     if (netQingjingListBean.isSuccess()) {
                         qingjingList.clear();
@@ -315,6 +317,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.HOT_LABEL_LIST:
                     dialog.dismiss();
+                    pullToRefreshView.onRefreshComplete();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
                     if (netHotLabel.isSuccess()) {
                         hotLabelList.clear();
@@ -324,6 +327,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.SCENE_LIST:
                     dialog.dismiss();
+                    pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     SceneList netSceneList = (SceneList) msg.obj;
                     if (netSceneList.isSuccess()) {
@@ -340,7 +344,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
+                    pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

@@ -4,7 +4,6 @@
              android:layout_height="match_parent"
              android:paddingBottom="13dp"
              android:paddingLeft="15dp"
-             android:paddingRight="15dp"
              android:paddingTop="20dp">
 
     <RelativeLayout

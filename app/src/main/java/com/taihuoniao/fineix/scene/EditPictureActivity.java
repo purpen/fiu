@@ -1,7 +1,9 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -48,6 +50,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.EffectUtil;
+import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -106,7 +109,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //当前点击的labelview
     private LabelView labelView;
     //当前filter
-    private GPUImageFilter currentFilter;
+//    private GPUImageFilter currentFilter;
     //标记产品装载图片的容器
     private MyImageViewTouch mImageView;
     //添加链接装载链接的容器
@@ -177,9 +180,39 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         recyclerView.setLayoutManager(layoutManager);
         EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(EditPictureActivity.this, new GPUImageFilterTools.OnGpuImageFilterChosenListener() {
             @Override
-            public void onGpuImageFilterChosenListener(GPUImageFilter filter) {
-                currentFilter = filter;
+            public void onGpuImageFilterChosenListener(GPUImageFilter filter,int position) {
+//                currentFilter = filter;
                 gpuImageView.setFilter(filter);
+                GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
+                switch (position){
+                    case 1:
+                        filterAdjuster.adjust(97);
+                        break;
+                    case 2:
+                        filterAdjuster.adjust(45);
+                        break;
+                    case 3:
+                        filterAdjuster.adjust(0);
+                        break;
+                    case 5:
+                        filterAdjuster.adjust(40);
+                        break;
+                    case 6:
+                        filterAdjuster.adjust(100);
+                        break;
+                    case 7:
+                        filterAdjuster.adjust(25);
+                        break;
+                    case 9:
+                        filterAdjuster.adjust(55);
+                        break;
+                    case 10:
+                        filterAdjuster.adjust(53);
+                        break;
+                    case 11:
+                        filterAdjuster.adjust(60);
+                        break;
+                }
                 gpuImageView.requestRender();
             }
         }, new EditRecyclerAdapter.ItemClick() {
@@ -542,9 +575,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(currentFilter);
-        filterAdjuster.adjust(progress);
-        gpuImageView.requestRender();
+
     }
 
     @Override
@@ -565,15 +596,15 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     TagItem tagItem = (TagItem) data.getSerializableExtra("tagItem");
                     if (requestCode == DataConstants.REQUESTCODE_EDIT_SEARCHSTORE) {
                         addLabel(tagItem);
-//                        SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//                        //判断是不是第一次进入Fiu界面
-//                        boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_URL, true);
-//                        if (isFirstIn) {
-//                            FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.ADDURL, activity_view);
-//                            SharedPreferences.Editor editor = firstInSp.edit();
-//                            editor.putBoolean(DataConstants.FIRST_IN_URL, false);
-//                            editor.apply();
-//                        }
+                        SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+                        //判断是不是第一次进入Fiu界面
+                        boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_URL, true);
+                        if (isFirstIn) {
+                            FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.ADDURL, activity_view);
+                            SharedPreferences.Editor editor = firstInSp.edit();
+                            editor.putBoolean(DataConstants.FIRST_IN_URL, false);
+                            editor.apply();
+                        }
                     } else {
                         ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg, options500_500);
                         name.setText(tagItem.getName());
@@ -622,19 +653,19 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//            //判断是不是第一次进入Fiu界面
-//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_CREATE, true);
-//            if (isFirstIn) {
-//                FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.CREATE, activity_view);
-//                SharedPreferences.Editor editor = firstInSp.edit();
-//                editor.putBoolean(DataConstants.FIRST_IN_CREATE, false);
-//                editor.apply();
-//            }
-//        }
-//    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+            //判断是不是第一次进入Fiu界面
+            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_CREATE, true);
+            if (isFirstIn) {
+                FirstInAppUtils.showPop(EditPictureActivity.this, FirstInAppUtils.CREATE, activity_view);
+                SharedPreferences.Editor editor = firstInSp.edit();
+                editor.putBoolean(DataConstants.FIRST_IN_CREATE, false);
+                editor.apply();
+            }
+        }
+    }
 }

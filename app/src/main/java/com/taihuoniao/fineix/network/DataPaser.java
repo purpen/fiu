@@ -391,6 +391,9 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<tongyong", responseInfo.result);
 //                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                if (handler == null) {
+                    return;
+                }
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMON_LIST;
                 msg.obj = new CommonBean();

@@ -107,30 +107,46 @@ public class GPUImageFilterTools {
     public static FilterList getList() {
         final FilterList filters = new FilterList();
         filters.addFilter("原图", FilterType.NORMAL);
+//        filters.addFilter("摩卡", FilterType.SEPIA);
+        filters.addFilter("摩卡", FilterType.MONOCHROME);
+        filters.addFilter("暮光", FilterType.SEPIA);
+//        filters.addFilter("暮光", FilterType.MONOCHROME);
+        filters.addFilter("候鸟", FilterType.SATURATION);
+//        filters.addFilter("候鸟", FilterType.DILATION);
+        filters.addFilter("戏剧", FilterType.LOOKUP_AMATORKA);
+        filters.addFilter("夏日", FilterType.COLOR_BALANCE);
+        filters.addFilter("都市", FilterType.WHITE_BALANCE);
+        filters.addFilter("佳人", FilterType.GAMMA);
+//        filters.addFilter("佳人", FilterType.BRIGHTNESS);
+//        filters.addFilter("佳人", FilterType.TONE_CURVE);
+        filters.addFilter("摩登", FilterType.GRAYSCALE);
+        filters.addFilter("流年", FilterType.RGB);
+        filters.addFilter("日光", FilterType.BRIGHTNESS);
+        filters.addFilter("午茶", FilterType.SEPIA);
         //反差
-        filters.addFilter("Contrast", FilterType.CONTRAST);
-        filters.addFilter("Invert", FilterType.INVERT);
-        filters.addFilter("Pixelation", FilterType.PIXELATION);
-        filters.addFilter("Hue", FilterType.HUE);
-        filters.addFilter("Gamma", FilterType.GAMMA);
-        filters.addFilter("Brightness", FilterType.BRIGHTNESS);
-        filters.addFilter("Sepia", FilterType.SEPIA);
-        filters.addFilter("Grayscale", FilterType.GRAYSCALE);
-        filters.addFilter("Sharpness", FilterType.SHARPEN);
+//        filters.addFilter("Contrast", FilterType.CONTRAST);
+//        filters.addFilter("Invert", FilterType.INVERT);
+//        filters.addFilter("Pixelation", FilterType.PIXELATION);
+//        filters.addFilter("Hue", FilterType.HUE);
+//        filters.addFilter("Gamma", FilterType.GAMMA);
+//        filters.addFilter("Brightness", FilterType.BRIGHTNESS);
+//        filters.addFilter("Sepia", FilterType.SEPIA);
+//        filters.addFilter("Grayscale", FilterType.GRAYSCALE);
+//        filters.addFilter("Sharpness", FilterType.SHARPEN);
 //        filters.addFilter("Sobel Edge Detection", FilterType.SOBEL_EDGE_DETECTION);
-        filters.addFilter("3x3 Convolution", FilterType.THREE_X_THREE_CONVOLUTION);
-        filters.addFilter("Emboss", FilterType.EMBOSS);
-        filters.addFilter("Posterize", FilterType.POSTERIZE);
+//        filters.addFilter("3x3 Convolution", FilterType.THREE_X_THREE_CONVOLUTION);
+//        filters.addFilter("Emboss", FilterType.EMBOSS);
+//        filters.addFilter("Posterize", FilterType.POSTERIZE);
 //        filters.addFilter("Grouped filters", FilterType.FILTER_GROUP);
-        filters.addFilter("Saturation", FilterType.SATURATION);
-        filters.addFilter("Exposure", FilterType.EXPOSURE);
-        filters.addFilter("Highlight Shadow", FilterType.HIGHLIGHT_SHADOW);
-        filters.addFilter("Monochrome", FilterType.MONOCHROME);
-        filters.addFilter("Opacity", FilterType.OPACITY);
-        filters.addFilter("RGB", FilterType.RGB);
-        filters.addFilter("White Balance", FilterType.WHITE_BALANCE);
-        filters.addFilter("Vignette", FilterType.VIGNETTE);
-        filters.addFilter("ToneCurve", FilterType.TONE_CURVE);
+//        filters.addFilter("Saturation", FilterType.SATURATION);
+//        filters.addFilter("Exposure", FilterType.EXPOSURE);
+//        filters.addFilter("Highlight Shadow", FilterType.HIGHLIGHT_SHADOW);
+//        filters.addFilter("Monochrome", FilterType.MONOCHROME);
+//        filters.addFilter("Opacity", FilterType.OPACITY);
+//        filters.addFilter("RGB", FilterType.RGB);
+//        filters.addFilter("White Balance", FilterType.WHITE_BALANCE);
+//        filters.addFilter("Vignette", FilterType.VIGNETTE);
+//        filters.addFilter("ToneCurve", FilterType.TONE_CURVE);
 
 //        filters.addFilter("Blend (Difference)", FilterType.BLEND_DIFFERENCE);
 //        filters.addFilter("Blend (Source Over)", FilterType.BLEND_SOURCE_OVER);
@@ -157,15 +173,15 @@ public class GPUImageFilterTools {
 //        filters.addFilter("Blend (Chroma Key)", FilterType.BLEND_CHROMA_KEY);
 //        filters.addFilter("Blend (Normal)", FilterType.BLEND_NORMAL);
 //
-        filters.addFilter("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA);
-        filters.addFilter("Gaussian Blur", FilterType.GAUSSIAN_BLUR);
+//        filters.addFilter("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA);
+//        filters.addFilter("Gaussian Blur", FilterType.GAUSSIAN_BLUR);
 //        filters.addFilter("Crosshatch", FilterType.CROSSHATCH);
 
-        filters.addFilter("Box Blur", FilterType.BOX_BLUR);
+//        filters.addFilter("Box Blur", FilterType.BOX_BLUR);
 //        filters.addFilter("CGA Color Space", FilterType.CGA_COLORSPACE);
-        filters.addFilter("Dilation", FilterType.DILATION);
-        filters.addFilter("Kuwahara", FilterType.KUWAHARA);
-        filters.addFilter("RGB Dilation", FilterType.RGB_DILATION);
+//        filters.addFilter("Dilation", FilterType.DILATION);
+//        filters.addFilter("Kuwahara", FilterType.KUWAHARA);
+//        filters.addFilter("RGB Dilation", FilterType.RGB_DILATION);
 //        filters.addFilter("Sketch", FilterType.SKETCH);
 //        filters.addFilter("Toon", FilterType.TOON);
 //        filters.addFilter("Smooth Toon", FilterType.SMOOTH_TOON);
@@ -180,13 +196,13 @@ public class GPUImageFilterTools {
         //弱像素
 //        filters.addFilter("Weak Pixel Inclusion", FilterType.WEAK_PIXEL_INCLUSION);
         //伪彩色
-        filters.addFilter("False Color", FilterType.FALSE_COLOR);
+//        filters.addFilter("False Color", FilterType.FALSE_COLOR);
         //色彩平衡
-        filters.addFilter("Color Balance", FilterType.COLOR_BALANCE);
+//        filters.addFilter("Color Balance", FilterType.COLOR_BALANCE);
 //水平分
-        filters.addFilter("Levels Min (Mid Adjust)", FilterType.LEVELS_FILTER_MIN);
+//        filters.addFilter("Levels Min (Mid Adjust)", FilterType.LEVELS_FILTER_MIN);
         //双向模糊
-        filters.addFilter("Bilateral Blur", FilterType.BILATERAL_BLUR);
+//        filters.addFilter("Bilateral Blur", FilterType.BILATERAL_BLUR);
 
 //        filters.addFilter("Transform (2-D)", FilterType.TRANSFORM2D);
 
@@ -401,7 +417,7 @@ public class GPUImageFilterTools {
     }
 
     public interface OnGpuImageFilterChosenListener {
-        void onGpuImageFilterChosenListener(GPUImageFilter filter);
+        void onGpuImageFilterChosenListener(GPUImageFilter filter,int position);
     }
 
     public enum FilterType {
