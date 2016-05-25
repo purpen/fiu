@@ -96,7 +96,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         grid.setPadding(dp10, dp12, dp10, dp12);
         grid.setHorizontalSpacing(dp10);
         grid.setVerticalSpacing(dp10);
-        pullToRefreshView.setEmptyView(nothingTv);
+//        pullToRefreshView.setEmptyView(nothingTv);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -143,6 +143,11 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                             searchList.clear();
                         }
                         searchList.addAll(netSearch.getData().getRows());
+                        if (searchList.size() <= 0) {
+                            nothingTv.setVisibility(View.VISIBLE);
+                        } else {
+                            nothingTv.setVisibility(View.GONE);
+                        }
                         addProductGridAdapter.notifyDataSetChanged();
                         pullToRefreshView.setLoadingTime();
                     }
@@ -159,6 +164,11 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                             pullToRefreshView.lastSavedFirstVisibleItem = -1;
                         }
                         productList.addAll(netProductBean.getList());
+                        if (productList.size() <= 0) {
+                            nothingTv.setVisibility(View.VISIBLE);
+                        } else {
+                            nothingTv.setVisibility(View.GONE);
+                        }
                         //刷新数据
                         addProductGridAdapter.notifyDataSetChanged();
                         pullToRefreshView.setLoadingTime();

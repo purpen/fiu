@@ -52,7 +52,6 @@ import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.QingjingSubsBean;
-import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RelationProductsBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -124,8 +123,8 @@ public class DataPaser {
         ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<>>>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<商品列表", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 if (handler == null) {
                     return;
                 }
@@ -1772,8 +1771,8 @@ public class DataPaser {
     }
 
     //验证红包是否可用接口
-    public static void checkRedbagUsableParser( String rid, String code, final Handler handler) {
-        ClientDiscoverAPI.checkRedBagUsableNet( rid, code, new RequestCallBack<String>() {
+    public static void checkRedbagUsableParser(String rid, String code, final Handler handler) {
+        ClientDiscoverAPI.checkRedBagUsableNet(rid, code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CheckRedBagUsable checkRedBagUsable = null;

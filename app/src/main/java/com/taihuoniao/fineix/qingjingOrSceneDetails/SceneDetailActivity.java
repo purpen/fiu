@@ -323,25 +323,27 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case DataConstants.ADD_PRODUCT_LIST:
                     ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess() && currentTime == 1) {
-                        if (netProductBean.getList().size() <= 0) {
-                            return;
-                        }
-                        StringBuilder tags = new StringBuilder();
-                        for (int i = 0; i < netProductBean.getList().size(); i++) {
-                            List<String> categoryList = netProductBean.getList().get(i).getCategory_tags();
-                            if (categoryList != null && categoryList.size() > 0) {
-                                for (int j = 0; j < categoryList.size(); j++) {
-                                    tags.append(",").append(netProductBean.getList().get(i).getCategory_tags().get(j));
-                                }
-                                if (tags.length() > 0) {
-                                    tags.deleteCharAt(0);
-                                }
-                            }
-                        }
-                        currentTime++;
-                        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, tags.toString(), null, null, handler);
-                    } else if (netProductBean.isSuccess() && currentTime == 2) {
+//                    if (netProductBean.isSuccess() && currentTime == 1) {
+//                        if (netProductBean.getList().size() <= 0) {
+//                            return;
+//                        }
+//                        StringBuilder tags = new StringBuilder();
+//                        for (int i = 0; i < netProductBean.getList().size(); i++) {
+//                            List<String> categoryList = netProductBean.getList().get(i).getCategory_tags();
+//                            if (categoryList != null && categoryList.size() > 0) {
+//                                for (int j = 0; j < categoryList.size(); j++) {
+//                                    tags.append(",").append(netProductBean.getList().get(i).getCategory_tags().get(j));
+//                                }
+//                                if (tags.length() > 0) {
+//                                    tags.deleteCharAt(0);
+//                                }
+//                            }
+//                        }
+//                        currentTime++;
+//                        Log.e("<<<相近产品id", tags.toString());
+//                        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, tags.toString(), null, null, handler);
+//                    } else
+                    if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
                         dialog.dismiss();
                         nearProductList.clear();
                         nearProductList.addAll(netProductBean.getList());
@@ -527,7 +529,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             ids.append(",").append(productList.get(i).getId());
         }
         ids.deleteCharAt(0);
-        DataPaser.getProductList(null, null, null, 1 + "", 8 + "", ids.toString(), null, null, null, handler);
+        Log.e("<<<场景下商品id", ids.toString());
+        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null,ids.toString(), null, null, handler);
     }
 
     private void addProductToImg() {

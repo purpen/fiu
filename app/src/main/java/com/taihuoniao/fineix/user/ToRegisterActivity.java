@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -325,25 +324,27 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
                         instance.identify=thirdLogin.user.identify;
                         SPUtil.write(activity, DataConstants.LOGIN_INFO,JsonUtil.toJson(instance));
-                        switch (MainApplication.which_activity) {
-                            case DataConstants.SceneDetailActivity:
-                                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                                break;
-                            case DataConstants.ElseActivity:
-                                break;
-                            default:
-//                                Intent intent = new Intent(ToRegisterActivity.this,
-//                                        MainActivity.class);
-//                                startActivity(intent);
-                                break;
-                        }
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
-
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         }else {
-                            activity.startActivity(new Intent(activity,MainActivity.class));
+                            switch (MainApplication.which_activity) {
+                                case DataConstants.QingjingDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                                    break;
+                                case DataConstants.SceneDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
+                                    break;
+                                case DataConstants.ElseActivity:
+                                    //其他不需要刷新界面的activity
+                                    break;
+                                default:
+//                                    THNMainActivity.instance.finish();
+                                    Intent intent = new Intent(ToRegisterActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    break;
+                            }
                         }
 
                         if (ToRegisterActivity.instance != null) {

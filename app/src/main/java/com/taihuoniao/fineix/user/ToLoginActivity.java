@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -23,7 +22,6 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -333,18 +331,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
                         instance.identify=thirdLogin.user.identify;
                         SPUtil.write(activity, DataConstants.LOGIN_INFO,JsonUtil.toJson(instance));
-                        switch (MainApplication.which_activity) {
-                            case DataConstants.SceneDetailActivity:
-                                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                                break;
-                            case DataConstants.ElseActivity:
-                                break;
-                            default:
-//                                Intent intent = new Intent(ToRegisterActivity.this,
-//                                        MainActivity.class);
-//                                startActivity(intent);
-                                break;
-                        }
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
 
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
@@ -352,7 +338,22 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         }else {
-                            activity.startActivity(new Intent(activity,MainActivity.class));
+                            switch (MainApplication.which_activity) {
+                                case DataConstants.QingjingDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                                    break;
+                                case DataConstants.SceneDetailActivity:
+                                    sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
+                                    break;
+                                case DataConstants.ElseActivity:
+                                    //其他不需要刷新界面的activity
+                                    break;
+                                default:
+//                                    THNMainActivity.instance.finish();
+                                    Intent intent = new Intent(ToLoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    break;
+                            }
                         }
 
                         if (ToRegisterActivity.instance != null) {
