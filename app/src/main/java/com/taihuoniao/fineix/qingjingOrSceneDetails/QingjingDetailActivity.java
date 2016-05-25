@@ -48,6 +48,7 @@ import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -93,7 +94,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private LinearLayout subLinear;
     private ImageView subsImg;
     private LinearLayout addressLinear;
-//    private TextView subsTv;
+    //    private TextView subsTv;
     private List<CommentsBean.CommentItem> commentList;
     private SceneDetailCommentAdapter sceneDetailCommentAdapter;
     private TextView allComment;
@@ -209,6 +210,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
     }
 
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -284,7 +286,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingDetailBean.isSuccess()) {
 //                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
                         QingjingDetailBean = netQingjingDetailBean;
-                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg,options750_1334);
+                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
                         qingjingTitle.setText(netQingjingDetailBean.getData().getTitle());
                         locationTv.setText(netQingjingDetailBean.getData().getAddress());
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
@@ -421,6 +423,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 if (!LoginInfo.isUserLogin()) {
                     Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.QingjingDetailActivity;
+                    LoginCompleteUtils.id = id;
                     startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }

@@ -55,6 +55,7 @@ import com.taihuoniao.fineix.user.FocusFansActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -269,6 +270,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        关联列表数据异常
         DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
     }
+
 
     private void initPopupWindow() {
         WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
@@ -530,7 +532,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         ids.deleteCharAt(0);
         Log.e("<<<场景下商品id", ids.toString());
-        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null,ids.toString(), null, null, handler);
+        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
 
     private void addProductToImg() {
@@ -680,6 +682,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 if (!LoginInfo.isUserLogin()) {
                     Toast.makeText(SceneDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
+                    LoginCompleteUtils.id = id;
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }

@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -43,6 +44,7 @@ import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -397,7 +399,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                startActivity(new Intent(CreateSceneActivity.this,MainActivity.class));
+                startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
             }
         });
         builder.create().show();
@@ -508,14 +510,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean1 = (NetBean) msg.obj;
                     if (netBean1.isSuccess()) {
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
-                        if (MainApplication.whichQingjing != null) {
-                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                            Intent intent = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
-                            intent.putExtra("id", MainApplication.whichQingjing.getData().get_id());
-                            startActivity(intent);
-                        }
-                        MainApplication.whichQingjing = null;
-                        MainApplication.tagInfoList = null;
+                        startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
                         CreateSceneActivity.this.finish();
                     } else {
                         Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -523,11 +518,23 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.CREATE_SCENE:
                     dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
+                    GoodsDetailBean netBean = (GoodsDetailBean) msg.obj;
                     if (netBean.isSuccess()) {
-                        startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
+                        Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
+                        if (MainApplication.whichQingjing != null) {
+                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                            Intent intent = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
+                            intent.putExtra("id", MainApplication.whichQingjing.getData().get_id());
+                            MainApplication.whichQingjing = null;
+                            startActivity(intent);
+                        }
+                        MainApplication.tagInfoList = null;
+                        Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
+                        intent.putExtra("id", netBean.getData().get_id());
+                        startActivity(intent);
                         CreateSceneActivity.this.finish();
+                    } else {
+                        Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:

@@ -337,7 +337,6 @@
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.QingjingDetailActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
@@ -405,14 +404,14 @@
         </service>
 
         <!--此处为测试value，线上版本务必更换-->
-        <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="muQDLN6lCST6qMDvTAydAilM"/>
+        <!--<meta-data-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
 
         <!--百度地图线上API_KEY-->
-        <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

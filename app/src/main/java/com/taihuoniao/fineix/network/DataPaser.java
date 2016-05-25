@@ -572,15 +572,14 @@ public class DataPaser {
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.CREATE_SCENE;
-                        NetBean netBean = new NetBean();
+                        msg.obj = new GoodsDetailBean();
                         try {
-                            JSONObject job = new JSONObject(responseInfo.result);
-                            netBean.setSuccess(job.optBoolean("success"));
-                            netBean.setMessage(job.optString("message"));
-//                            netBean.setStatus(job.optString("status"));
-                            msg.obj = netBean;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<GoodsDetailBean>() {
+                            }.getType();
+                            msg.obj = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            Log.e("<<<创建场景", "数据解析异常");
                         }
                         handler.sendMessage(msg);
                     }

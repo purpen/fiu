@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
@@ -228,6 +229,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             case R.id.fragment_index_subs:
                 if (!LoginInfo.isUserLogin()) {
                     Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }

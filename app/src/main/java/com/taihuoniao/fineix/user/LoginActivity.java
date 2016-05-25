@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -256,22 +257,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         startActivity(new Intent(activity, OrderInterestQJActivity.class));
                     } else {
 //                        startActivity(new Intent(activity, MainActivity.class));
-                        switch (MainApplication.which_activity) {
-                            case DataConstants.QingjingDetailActivity:
-                                sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                                break;
-                            case DataConstants.SceneDetailActivity:
-                                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                                break;
-                            case DataConstants.ElseActivity:
-                                //其他不需要刷新界面的activity
-                                break;
-                            default:
-//                                    THNMainActivity.instance.finish();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                break;
-                        }
+                        LoginCompleteUtils.goFrom(LoginActivity.this);
                     }
                     if (ToRegisterActivity.instance != null) {
                         ToRegisterActivity.instance.finish();

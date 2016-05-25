@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -230,13 +229,10 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
-                Bitmap scBit = Bitmap.createBitmap(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9, Bitmap.Config.ARGB_4444);
+                Bitmap scBit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
                 Canvas canvas = new Canvas(scBit);//创建空图片变成画布
-                ViewGroup.LayoutParams lp = container.getLayoutParams();
-                lp.width = MainApplication.getContext().getScreenWidth();
-                lp.height = lp.width * 16 / 9;
-                container.setLayoutParams(lp);
-                container.draw(canvas);//scrollview绘制画布上
+                double bi = MainApplication.getContext().getScreenWidth() / container.getWidth();
+                container.draw(canvas);
                 canvas.save();
                 container.removeView(view);
                 img.setImageBitmap(scBit);

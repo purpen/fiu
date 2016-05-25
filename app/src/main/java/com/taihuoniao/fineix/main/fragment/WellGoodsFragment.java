@@ -57,6 +57,7 @@ import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -481,7 +482,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 break;
             case R.id.fragment_wellgoods_cart_relative:
                 if (!LoginInfo.isUserLogin()) {
-
+                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
+                    return;
                 }
                 Intent intent1 = new Intent(getActivity(), ShopCarActivity.class);
                 startActivity(intent1);

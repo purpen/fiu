@@ -481,6 +481,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 } else {
                     Toast.makeText(MyGoodsDetailsActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     //在此跳转到登录界面
+                    MainApplication.which_activity = DataConstants.ElseActivity;
                     Intent in = new Intent(MyGoodsDetailsActivity.this, OptRegisterLoginActivity.class);
                     startActivity(in);
                 }

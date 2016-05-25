@@ -208,8 +208,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-                MainApplication.tag = 1;
-                startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+                if (LoginInfo.isUserLogin()) {
+                    MainApplication.tag = 1;
+                    startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
+                } else {
+                    MainApplication.which_activity = 0;
+                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
                 break;
             case R.id.ll_nav0://情
 //                custom_head.setVisibility(View.GONE);
