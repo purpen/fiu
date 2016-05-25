@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +14,28 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.product.ApplyForRefundActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -44,6 +51,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
     private View mView;
     public BitmapUtils bitmapUtils_listview = null;
     private AlertDialog.Builder alertDialog;
+    private WaittingDialog mdialog;
 
     public ShopOrderListAdapter(List<OrderEntity> list, Context context, String optFragmentFlag) {
         super(list, context);
@@ -64,6 +72,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 .configThreadPoolSize(5)
                 .configDefaultImageLoadAnimation(
                         AnimationUtils.loadAnimation(context, R.anim.fade_in));
+        mdialog = new WaittingDialog(context);
 
     }
 
@@ -96,7 +105,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         final int status = Integer.parseInt(list.get(position).getStatus());
         final String rid = list.get(position).getRid();//订单唯一编号
         final List<OrderItem> orderItem = list.get(position).getOrderItem();
-        final String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款", seeDtails = "查看详情",
+        final String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款", seeDtails = "查看详情", tixingFahuo = "提醒发货",
                 confirmReceived = "确认收货", publishEvaluate = "发表评价", cancelOrder = "取消订单";
         switch (status) {
             case 0://已取消状态
@@ -116,16 +125,18 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mdialog.show();
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        mdialog.dismiss();
                                         removeItem(position);
                                         notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onFailure(HttpException e, String s) {
-
+                                        mdialog.dismiss();
                                     }
                                 });
                             }
@@ -162,15 +173,18 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                mdialog.show();
                                 ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        mdialog.dismiss();
                                         removeItem(position);
                                         notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onFailure(HttpException e, String s) {
+                                        mdialog.dismiss();
                                     }
                                 });
                             }
@@ -182,15 +196,38 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 break;
             case 10://待发货
                 mHolder.mLeftButton.setVisibility(View.GONE);
-                mHolder.mRightButton.setVisibility(View.GONE);
-                mHolder.mRightButton.setText(applyForRefund);
+                mHolder.mRightButton.setVisibility(View.VISIBLE);
+                mHolder.mRightButton.setText(tixingFahuo);
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent refundIntent = new Intent(context, ApplyForRefundActivity.class);
-                        refundIntent.putExtra("refundMoney", list.get(position).getPay_money());
-                        refundIntent.putExtra("rid", rid);
-                        context.startActivity(refundIntent);
+                        mdialog.show();
+                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
+                            @Override
+                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                                mdialog.dismiss();
+                                NetBean netBean = new NetBean();
+                                try {
+                                    Gson gson = new Gson();
+                                    Type type = new TypeToken<NetBean>() {
+                                    }.getType();
+                                    netBean = gson.fromJson(responseInfo.result, type);
+                                } catch (JsonSyntaxException e) {
+                                    Log.e("<<<提醒发货", "数据解析异常");
+                                }
+                                if (netBean.isSuccess()) {
+                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(HttpException error, String msg) {
+                                mdialog.dismiss();
+                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
                 break;

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -16,13 +17,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.OrderDetails;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -35,6 +41,7 @@ import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -188,8 +195,41 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                                         });
                                         break;
                                     case 10://待发货
-                                        mLeftButton.setVisibility(View.INVISIBLE);
+                                        mLeftButton.setText("提醒发货");
+                                        mLeftButton.setVisibility(View.VISIBLE);
                                         mRightButton.setText(applyForRefund);
+                                        mLeftButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                mDialog.show();
+                                                ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
+                                                    @Override
+                                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                                        mDialog.dismiss();
+                                                        NetBean netBean = new NetBean();
+                                                        try {
+                                                            Gson gson = new Gson();
+                                                            Type type = new TypeToken<NetBean>() {
+                                                            }.getType();
+                                                            netBean = gson.fromJson(responseInfo.result, type);
+                                                        } catch (JsonSyntaxException e) {
+                                                            Log.e("<<<提醒发货", "数据解析异常");
+                                                        }
+                                                        if (netBean.isSuccess()) {
+                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(HttpException error, String msg) {
+                                                        mDialog.dismiss();
+                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
                                         mRightButton.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {

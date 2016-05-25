@@ -20,18 +20,15 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BindPhone;
-import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SkipBind;
-import com.taihuoniao.fineix.main.MainActivity;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -243,19 +240,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     //选择绑定成功，或跳过绑定之后完成登录，跳入相应界面
     private void loginSuccess(LoginInfo loginInfo) {
-        switch (MainApplication.which_activity) {
-            case DataConstants.SceneDetailActivity:
-                sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                break;
-            case DataConstants.ElseActivity:
-                break;
-            default:
-//                THNMainActivity.instance.finish();
-//                Intent intent = new Intent(BindPhoneActivity.this,
-//                        MainActivity.class);
-//                startActivity(intent);
-                break;
-        }
+
 //        MainApplication.getIsLoginInfo().setIs_login("1");
         mDialog.dismiss();
 //        OptRegisterLoginActivity.instance.finish();
@@ -271,7 +256,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             updateUserIdentity();
             startActivity(new Intent(activity, OrderInterestQJActivity.class));
         } else {
-            activity.startActivity(new Intent(activity, MainActivity.class));
+            LoginCompleteUtils.goFrom(this);
+//            activity.startActivity(new Intent(activity, MainActivity.class));
         }
 
         if (ToRegisterActivity.instance != null) {

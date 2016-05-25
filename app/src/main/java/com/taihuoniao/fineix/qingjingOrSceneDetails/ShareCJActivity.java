@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import com.taihuoniao.fineix.utils.ShareCJUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,43 +175,6 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         cLp.width = layoutParams.width;
         container.setLayoutParams(cLp);
     }
-
-    //动态改变场景title背景长宽
-//    private void changeTitleParams() {
-//        double leng = sceneTitle.getText().length();
-//        for (char c : sceneTitle.getText().toString().toCharArray()) {
-//            if (c >= 32 && c <= 126) {
-//                leng -= 0.5;
-//            }
-//        }
-//
-//        int l = 0;
-//        if (leng * 10 % 10 != 0) {
-//            l = 1 + (int) leng;
-//        } else {
-//            l = (int) leng;
-//        }
-////            遍历所有字符判断是否含有英文字符。有的话算半个
-//        if (l < 8) {
-//            sceneTitle.setTextSize(40);
-//        } else {
-//            sceneTitle.setTextSize(20);
-//        }
-////        动态改变宽高
-//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-//        if (l * sceneTitle.getTextSize() < DensityUtils.dp2px(ShareCJActivity.this, 300)) {
-//            lp.width = (int) (sceneTitle.getTextSize() * l);
-//        } else {
-//            lp.width = DensityUtils.dp2px(ShareCJActivity.this, 300);
-//        }
-//        if (sceneTitle.getTextSize() < DensityUtils.sp2px(ShareCJActivity.this, 30) && lp.width <= DensityUtils.dp2px(ShareCJActivity.this, 300)) {
-//            lp.height = DensityUtils.dp2px(ShareCJActivity.this, 28);
-//        } else {
-//            lp.height = DensityUtils.dp2px(ShareCJActivity.this, 55);
-//        }
-//        frameLayout.setLayoutParams(lp);
-//    }
-
     @Override
     public void click(int postion) {
         //切换下面的线显示
@@ -229,13 +194,20 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
+                dialog.show();
                 Bitmap scBit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
                 Canvas canvas = new Canvas(scBit);//创建空图片变成画布
                 double bi = MainApplication.getContext().getScreenWidth() / container.getWidth();
                 container.draw(canvas);
                 canvas.save();
-                container.removeView(view);
-                img.setImageBitmap(scBit);
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                scBit.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                Intent intent = new Intent(ShareCJActivity.this,ShareCJSelectActivity.class);
+                intent.putExtra("bytes",os.toByteArray());
+                dialog.dismiss();
+                startActivity(intent);
+//                container.removeView(view);
+//                img.setImageBitmap(scBit);
                 break;
         }
     }

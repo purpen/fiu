@@ -18,7 +18,7 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 
 import java.util.List;
 
@@ -169,37 +169,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-        double leng = holder.sceneTitle.getText().length();
-        for (char c : holder.sceneTitle.getText().toString().toCharArray()) {
-            if (c >= 32 && c <= 126) {
-                leng -= 0.5;
-            }
-        }
-        int l = 0;
-        if (leng * 10 % 10 != 0) {
-            l = 1 + (int) leng;
-        } else {
-            l = (int) leng;
-        }
-//            遍历所有字符判断是否含有英文字符。有的话算半个
-        if (l < 8) {
-            holder.sceneTitle.setTextSize(40);
-        } else {
-            holder.sceneTitle.setTextSize(20);
-        }
-//        动态改变宽高
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.frameLayout.getLayoutParams();
-        if (l * holder.sceneTitle.getTextSize() < DensityUtils.dp2px(context, 300)) {
-            lp.width = (int) (holder.sceneTitle.getTextSize() * l);
-        } else {
-            lp.width = DensityUtils.dp2px(context, 300);
-        }
-        if (holder.sceneTitle.getTextSize() < DensityUtils.sp2px(context, 30) && lp.width <= DensityUtils.dp2px(context, 300)) {
-            lp.height = DensityUtils.dp2px(context, 28);
-        } else {
-            lp.height = DensityUtils.dp2px(context, 55);
-        }
-        holder.frameLayout.setLayoutParams(lp);
+        SceneTitleSetUtils.setTitle(holder.sceneTitle,holder.frameLayout,42,21);
         return convertView;
     }
 

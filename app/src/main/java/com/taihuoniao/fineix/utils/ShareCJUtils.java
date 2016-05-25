@@ -88,48 +88,13 @@ public class ShareCJUtils {
             case 1:
             case 2:
             case 5:
-                changeTitleParams(20);
+                SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 21, 21);
                 break;
             default:
-                changeTitleParams(40);
+                SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21);
                 break;
         }
     }
 
-    //动态改变场景title背景长宽
-    private static void changeTitleParams(int maxSize) {
-        double leng = sceneTitle.getText().length();
-        for (char c : sceneTitle.getText().toString().toCharArray()) {
-            if (c >= 32 && c <= 126) {
-                leng -= 0.5;
-            }
-        }
-
-        int l = 0;
-        if (leng * 10 % 10 != 0) {
-            l = 1 + (int) leng;
-        } else {
-            l = (int) leng;
-        }
-//            遍历所有字符判断是否含有英文字符。有的话算半个
-        if (l < 8) {
-            sceneTitle.setTextSize(maxSize);
-        } else {
-            sceneTitle.setTextSize(20);
-        }
-//        动态改变宽高
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-        if (l * sceneTitle.getTextSize() < DensityUtils.dp2px(context, 300)) {
-            lp.width = (int) (sceneTitle.getTextSize() * l);
-        } else {
-            lp.width = DensityUtils.dp2px(context, 300);
-        }
-        if (sceneTitle.getTextSize() < DensityUtils.sp2px(context, 30) && lp.width <= DensityUtils.dp2px(context, 300)) {
-            lp.height = DensityUtils.dp2px(context, 28);
-        } else {
-            lp.height = DensityUtils.dp2px(context, 55);
-        }
-        frameLayout.setLayoutParams(lp);
-    }
 
 }

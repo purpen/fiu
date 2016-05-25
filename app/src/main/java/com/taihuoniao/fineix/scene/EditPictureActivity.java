@@ -656,7 +656,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
+        if (hasFocus&&MainApplication.tag==1) {
             SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
             //判断是不是第一次进入Fiu界面
             boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_CREATE, true);
