@@ -3,15 +3,14 @@ package com.taihuoniao.fineix.utils;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 /**
  * Created by taihuoniao on 2016/5/24.
@@ -19,7 +18,7 @@ import com.taihuoniao.fineix.beans.SceneDetails;
 public class ShareCJUtils {
     static Context context;
     //    @Bind(R.id.activity_share_user_headimg)
-    static ImageView userHeadImg;
+    static RoundedImageView userHeadImg;
     //    @Bind(R.id.activity_share_user_name)
     static TextView userName;
     //    @Bind(R.id.activity_share_user_info)
@@ -43,11 +42,11 @@ public class ShareCJUtils {
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
         context = container.getContext();
         selectStyle(position);
         View view = View.inflate(context, layout, null);
-        userHeadImg = (ImageView) view.findViewById(R.id.activity_share_user_headimg);
+        userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);
         userInfo = (TextView) view.findViewById(R.id.activity_share_user_info);
         locationTv = (TextView) view.findViewById(R.id.activity_share_location);

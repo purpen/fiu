@@ -94,7 +94,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
                 holder.imageView.setImageResource(R.mipmap.wucha);
                 break;
             default:
-                holder.imageView.setImageResource(R.mipmap.ic_launcher);
+                holder.imageView.setImageResource(R.mipmap.filter1);
                 break;
         }
         holder.textView.setText(filterList.getName(position));

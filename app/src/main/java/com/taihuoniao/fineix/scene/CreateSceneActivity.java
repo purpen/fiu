@@ -31,7 +31,7 @@ import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.GoodsDetailBean;
+import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
@@ -518,7 +518,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.CREATE_SCENE:
                     dialog.dismiss();
-                    GoodsDetailBean netBean = (GoodsDetailBean) msg.obj;
+                    AddProductBean netBean = (AddProductBean) msg.obj;
                     if (netBean.isSuccess()) {
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
                         if (MainApplication.whichQingjing != null) {
@@ -530,7 +530,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         MainApplication.tagInfoList = null;
                         Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
-                        intent.putExtra("id", netBean.getData().get_id());
+                        intent.putExtra("id", netBean.getData().getId());
                         startActivity(intent);
                         CreateSceneActivity.this.finish();
                     } else {

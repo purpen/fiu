@@ -10,16 +10,19 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -59,7 +62,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     protected void initView() {
-        activity_view = View.inflate(AllQingjingActivity.this,R.layout.activity_all_qingjing,null);
+        activity_view = View.inflate(AllQingjingActivity.this, R.layout.activity_all_qingjing, null);
         setContentView(activity_view);
         searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);
@@ -184,11 +187,18 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 onBackPressed();
                 break;
             case R.id.activity_all_qingjing_createqinjing:
+                if (!LoginInfo.isUserLogin()) {
+                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(this, OptRegisterLoginActivity.class));
+                    return;
+                }
                 MainApplication.tag = 2;
                 startActivity(new Intent(AllQingjingActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
         }
     }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

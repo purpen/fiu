@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -60,6 +61,7 @@ import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
@@ -74,8 +76,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //界面下的控件
     private View activity_view;
     //    private ListView nearListView;
-    private ScrollView scrollView;
-    private LinearLayout loveRelative;
+    private MyScrollView scrollView;
+    private RelativeLayout loveRelative;
     private ImageView backImg;
     private ImageView shareImg;
     private RelativeLayout imgRelative;
@@ -150,8 +152,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         setContentView(activity_view);
 //        nearListView = (ListView) findViewById(R.id.activity_scenedetails_nearlistview);
 //        View header = View.inflate(SceneDetailActivity.this,R.layout.header_scenedetails,null);
-        scrollView = (ScrollView) findViewById(R.id.activity_scenedetails_scrollview);
-        loveRelative = (LinearLayout) findViewById(R.id.activity_scenedetails_loverelative);
+        scrollView = (MyScrollView) findViewById(R.id.activity_scenedetails_scrollview);
+        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
@@ -190,6 +192,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         initPopupWindow();
     }
 
+    private int scrollY = 0;
+    private int isEnd = 0;//0没开始，1已开始，2已结束（向上的动画，向下的相反）
+
     @Override
     protected void initList() {
         id = getIntent().getStringExtra("id");
@@ -197,6 +202,64 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
         }
+        scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
+//                Log.e("<<<scroll", "t=" + t + ",oldt=" + oldt + ",33dp=" + DensityUtils.dp2px(SceneDetailActivity.this, 33)+",isEnd="+isEnd);
+                if (scrollView.getScrollY() != scrollY) {
+                    if (t - oldt > DensityUtils.dp2px(SceneDetailActivity.this, 33) && isEnd == 0) {
+                        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(loveRelative, "translationY", -loveRelative.getMeasuredHeight()).setDuration(500);
+                        upAnimator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                isEnd = 1;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                isEnd = 2;
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        upAnimator.start();
+                    } else if (oldt - t > DensityUtils.dp2px(SceneDetailActivity.this, 33) && isEnd == 2) {
+                        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(loveRelative, "translationY", 0).setDuration(500);
+                        downAnimator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                isEnd = 1;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                isEnd = 0;
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        downAnimator.start();
+                    }
+                    scrollY = scrollView.getScrollY();
+                }
+            }
+        });
         scrollView.setOnTouchListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
@@ -489,7 +552,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     };
 
     private void setTitleWidth() {
-        SceneTitleSetUtils.setTitle(changjingTitle,frameLayout,42,21);
+        SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21);
     }
 
     //获取相近产品
@@ -763,26 +826,28 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                startP.x = event.getX();
-//                startP.y = event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startP.x = event.getX();
+                startP.y = event.getY();
 //                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
 //                cha = startP.y + lpd.bottomMargin;
-////                return false;
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                nowP.x = event.getX();
-//                nowP.y = event.getY();
+//                return false;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                nowP.x = event.getX();
+                nowP.y = event.getY();
 //                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
 //                lp.bottomMargin = (int) (cha - nowP.y);
-//                if (nowP.y > startP.y) {
-////                    backImg.setVisibility(View.VISIBLE);
-////                    createImg.setVisibility(View.VISIBLE);
-//                } else if (nowP.y < startP.y) {
-////                    backImg.setVisibility(View.GONE);
-////                    createImg.setVisibility(View.GONE);
-//                }
+                if (nowP.y > startP.y) {
+//                    backImg.setVisibility(View.VISIBLE);
+//                    createImg.setVisibility(View.VISIBLE);
+//                    ObjectAnimator.ofFloat(loveRelative, "translationY", loveRelative.getMeasuredHeight()).setDuration(500).start();
+                } else if (nowP.y < startP.y) {
+//                    backImg.setVisibility(View.GONE);
+//                    createImg.setVisibility(View.GONE);
+
+                }
 //                if (lp.bottomMargin > 0) {
 //                    lp.bottomMargin = 0;
 //                    cha = nowP.y + lp.bottomMargin;
@@ -791,8 +856,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                    cha = nowP.y + lp.bottomMargin;
 //                }
 //                loveRelative.setLayoutParams(lp);
-//                break;
-//        }
+                break;
+        }
         return false;
     }
 

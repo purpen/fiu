@@ -80,7 +80,7 @@ public class GoodListAdapter extends BaseAdapter {
             if (list.get(position).banner_asset.size() > 0) {
                 holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
             }
-            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
+            holder.slidingFocusImageView.setSelection(0);
             switch (list.get(position).getAttrbute()) {
                 case "1":
                     holder.img.setImageResource(R.mipmap.product_fiu);
