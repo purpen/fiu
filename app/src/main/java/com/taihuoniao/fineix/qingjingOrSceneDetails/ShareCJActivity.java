@@ -175,6 +175,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         cLp.width = layoutParams.width;
         container.setLayoutParams(cLp);
     }
+
     @Override
     public void click(int postion) {
         //切换下面的线显示
@@ -194,6 +195,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
+//                比例0.73472222
+//                    引导图只需要白色部分就行。不需要背景色
                 dialog.show();
                 Bitmap scBit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
                 Canvas canvas = new Canvas(scBit);//创建空图片变成画布
@@ -202,8 +205,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                 canvas.save();
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 scBit.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                Intent intent = new Intent(ShareCJActivity.this,ShareCJSelectActivity.class);
-                intent.putExtra("bytes",os.toByteArray());
+                Intent intent = new Intent(ShareCJActivity.this, ShareCJSelectActivity.class);
+                intent.putExtra("bytes", os.toByteArray());
                 dialog.dismiss();
                 startActivity(intent);
 //                container.removeView(view);

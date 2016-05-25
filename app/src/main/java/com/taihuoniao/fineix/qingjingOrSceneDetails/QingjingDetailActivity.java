@@ -114,7 +114,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     //当前用户是否已经订阅
     private int is_subscript = 0;
 
-
     public QingjingDetailActivity() {
         super(0);
     }

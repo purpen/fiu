@@ -290,7 +290,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         });
     }
-
+    private FiuUserListBean netUsers;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -299,10 +299,33 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
+                    netUsers = netUser;
                     if (netUser.isSuccess()) {
-                        absoluteLayout.removeAllViews();
-                        addImgToAbsolute(netUser.getData().getUsers());
+                        thread = new Thread() {
+                            @Override
+                            public void run() {
+                                int top = absoluteLayout.getTop();
+                                int bottom = absoluteLayout.getBottom();
+                                while (bottom - top <= 0) {
+                                    try {
+                                        Thread.sleep(100);
+                                    } catch (Exception e) {
+                                    } finally {
+                                        top = absoluteLayout.getTop();
+                                        bottom = absoluteLayout.getBottom();
+                                        continue;
+                                    }
+                                }
+                                handler.sendEmptyMessage(-10);
+                            }
+                        };
+                        thread.start();
+
                     }
+                    break;
+                case -10:
+                    absoluteLayout.removeAllViews();
+                    addImgToAbsolute(netUsers.getData().getUsers());
                     break;
                 case DataConstants.QINGJING_LIST:
                     dialog.dismiss();
@@ -351,7 +374,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         }
     };
-
+    private Thread thread;
     @Override
     public void onPause() {
         super.onPause();
@@ -401,6 +424,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onDestroy() {
         //        cancelNet();
         MapUtil.destroyLocationClient();
+        if(thread!=null&&thread.isAlive()){
+            thread.stop();
+        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;

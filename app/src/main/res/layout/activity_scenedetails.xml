@@ -4,44 +4,12 @@
                 android:layout_height="match_parent"
     >
 
-    <LinearLayout
-        android:id="@+id/activity_scenedetails_loverelative"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:gravity="center"
-        >
 
-        <ImageView
-            android:id="@+id/activity_scenedetails_love"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/like_height_43px"/>
 
-        <TextView
-            android:id="@+id/activity_scenedetails_lovetv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:gravity="center"
-            android:text="赞"
-            android:textColor="@color/yellow_bd8913"
-            android:textSize="14sp"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/line6"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_above="@id/activity_scenedetails_loverelative"
-        android:background="#e2e2e2"/>
-
-    <ScrollView
+    <com.taihuoniao.fineix.view.MyScrollView
         android:id="@+id/activity_scenedetails_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/line6"
         android:scrollbars="none"
         >
 
@@ -50,6 +18,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
+            android:paddingBottom="50dp"
             >
 
             <RelativeLayout
@@ -63,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="640dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"/>
+                    />
 
                 <LinearLayout
                     android:id="@+id/activity_scenedetails_titlelinear"
@@ -72,7 +41,6 @@
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/jianbian_scenelist"
                     android:orientation="vertical"
-                    android:paddingBottom="5dp"
                     >
 
                     <FrameLayout
@@ -92,7 +60,6 @@
                             android:id="@+id/activity_scenedetails_changjing_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:lineSpacingExtra="-5dp"
                             android:maxLines="2"
                             android:maxWidth="300dp"
                             android:text="详见的小路"
@@ -103,7 +70,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="26dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -154,7 +121,7 @@
                             android:id="@+id/activity_scenedetails_locationimg"
                             android:layout_width="wrap_content"
                             android:layout_height="11dp"
-                            android:layout_marginLeft="22dp"
+                            android:layout_marginLeft="14dp"
                             android:src="@mipmap/location_white_width_16px"/>
 
                         <TextView
@@ -189,14 +156,14 @@
 
                             <ImageView
                                 android:id="@+id/activity_scenedetails_userhead"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
                                 android:src="@mipmap/ic_launcher"
                                 />
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="32dp"
+                                android:layout_height="30dp"
                                 android:layout_marginLeft="8dp"
                                 android:gravity="center_vertical">
 
@@ -216,7 +183,7 @@
                                     android:layout_below="@id/activity_scenedetails_username"
                                     android:singleLine="true"
                                     android:text="这是人"
-                                    android:textColor="#212121"
+                                    android:textColor="#999999"
                                     android:textSize="10sp"/>
                             </RelativeLayout>
                         </LinearLayout>
@@ -481,7 +448,7 @@
 
 
         </LinearLayout>
-    </ScrollView>
+    </com.taihuoniao.fineix.view.MyScrollView>
 
 
     <RelativeLayout
@@ -512,4 +479,38 @@
             android:paddingRight="17dp"
             android:src="@mipmap/share"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/activity_scenedetails_loverelative"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="-50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        >
+        <TextView
+            android:id="@+id/line6"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+        <ImageView
+            android:id="@+id/activity_scenedetails_love"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/like_height_43px"/>
+
+        <TextView
+            android:id="@+id/activity_scenedetails_lovetv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/activity_scenedetails_love"
+            android:text="赞"
+            android:textColor="@color/yellow_bd8913"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+
 </RelativeLayout>

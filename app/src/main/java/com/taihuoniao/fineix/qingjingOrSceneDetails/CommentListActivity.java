@@ -310,6 +310,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(CommentListActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
+                    return;
                 }
                 dialog.show();
                 switch (is_reply) {

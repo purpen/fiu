@@ -10,6 +10,7 @@ import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -66,7 +67,7 @@ public class MainApplication extends Application {
     //在哪个情景下创建场景
     public static QingjingDetailBean whichQingjing = null;
     //上传图片的时候的最大限制
-    public static final int MAXPIC = 1024*1024;
+    public static final int MAXPIC = 1024 * 1024;
     // SharedPreference 中保存的手机号
     public static final String THN_MOBILE = "mobile";
     // SharedPreference 中保存的密码
@@ -100,6 +101,7 @@ public class MainApplication extends Application {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
+        Log.e("<<<", "屏幕高度=" + this.displayMetrics.heightPixels);
         return this.displayMetrics.heightPixels;
     }
 
@@ -107,6 +109,7 @@ public class MainApplication extends Application {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
+        Log.e("<<<", "屏幕宽度=" + this.displayMetrics.widthPixels);
         return this.displayMetrics.widthPixels;
     }
 
@@ -202,18 +205,18 @@ public class MainApplication extends Application {
     }
 
 
-    public static boolean isloginValid(String json,Class clazz){
+    public static boolean isloginValid(String json, Class clazz) {
         if (TextUtils.isEmpty(json)) return false;
-        if (clazz.equals(HttpResponse.class)){
+        if (clazz.equals(HttpResponse.class)) {
             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
-            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN,response.getStatus())){//需要登录
+            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
                 SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }
-        }else {
+        } else {
             NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
-            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN,netBean.getStatus())){//需要登录
+            if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
                 SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;

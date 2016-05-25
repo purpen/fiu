@@ -114,10 +114,9 @@
                 android:id="@+id/item_scenelist_scene_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="-5dp"
                 android:textSize="40sp"
-                android:maxWidth="300dp"
-                android:text="详见的小路"
+                android:maxWidth="245dp"
+                android:text="详见的小路阿三是的分厘卡似的地方浪费空间"
                 android:maxLines="2"
                 android:textColor="@color/white"/>
         </FrameLayout>

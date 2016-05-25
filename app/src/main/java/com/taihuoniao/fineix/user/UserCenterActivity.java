@@ -6,9 +6,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -453,7 +451,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (mSceneList == null) return;
                 if (mSceneList.size() == 0) return;
-                SceneListBean item = mSceneList.get(i - 1);
+                SceneListBean item = (SceneListBean) lv_cj.getAdapter().getItem(i);
                 Intent intent = new Intent(activity, SceneDetailActivity.class);
                 intent.putExtra("id", item.get_id());
                 startActivity(intent);

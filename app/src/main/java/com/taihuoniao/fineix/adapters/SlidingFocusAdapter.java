@@ -16,14 +16,15 @@ import java.util.List;
 
 /**
  * @author lilin
- * created at 2016/4/22 10:34
+ *         created at 2016/4/22 10:34
  */
-public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
+public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
     private SlidingFocusImageView sfiv;
     private DisplayImageOptions options;
-    public  SlidingFocusAdapter(SlidingFocusImageView sfiv, List<T> list, Activity activity){
-        super(list,activity);
-        this.sfiv=sfiv;
+
+    public SlidingFocusAdapter(SlidingFocusImageView sfiv, List<T> list, Activity activity) {
+        super(list, activity);
+        this.sfiv = sfiv;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_422)
                 .showImageForEmptyUri(R.mipmap.default_background_750_422)
@@ -33,54 +34,51 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T>{
                 .build();
     }
 
-    public int getCount()
-    {
-        return Integer.MAX_VALUE;
+    public int getCount() {
+        return list.size();
     }
 
-    public Object getItem(int position)
-    {
+    public Object getItem(int position) {
         return position;
     }
 
-    public long getItemId(int position)
-    {
+    public long getItemId(int position) {
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        T item=list.get(position%list.size());
-        ViewHolder holder =null;
-        if (convertView==null) {
-            convertView = View.inflate(parent.getContext(),R.layout.view_sliding_focus,null);
-            holder=new ViewHolder();
+        T item = list.get(position);
+        ViewHolder holder = null;
+        if (convertView == null) {
+            convertView = View.inflate(parent.getContext(), R.layout.view_sliding_focus, null);
+            holder = new ViewHolder();
             convertView.setTag(holder);
             holder.left = (ImageView) convertView.findViewById(R.id.view_sliding_focus_left);
             holder.iv = (ImageView) convertView.findViewById(R.id.view_sliding_focus_img);
-        }else {
-            holder= (ViewHolder)convertView.getTag();
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        if (item instanceof String){
-            ImageLoader.getInstance().displayImage((String)item,holder.iv,options);
+        if (item instanceof String) {
+            ImageLoader.getInstance().displayImage((String) item, holder.iv, options);
         }
-        if (item instanceof Integer){
-            ImageLoader.getInstance().displayImage("drawable://"+(Integer)item,holder.iv,options);
+        if (item instanceof Integer) {
+            ImageLoader.getInstance().displayImage("drawable://" + (Integer) item, holder.iv, options);
         }
-        if(position%2==1){
+        if (position % 2 == 0) {
             holder.left.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.left.setVisibility(View.VISIBLE);
         }
 //        测试双数的话显示分割线
 //        LogUtil.e(TAG,"getSelectedItemPosition=====>>"+sfiv.getSelectedItemPosition());
 //        LogUtil.e(TAG,"Position=====>>"+position);
-        convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth()-200,activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+        convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         ImageView left;
         ImageView iv;
     }

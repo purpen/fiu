@@ -481,16 +481,16 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.CREATE_QINGJING;
-                NetBean netBean = new NetBean();
+                AddProductBean netBean = new AddProductBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    netBean.setSuccess(job.optBoolean("success"));
-                    netBean.setMessage(job.optString("message"));
-//                    netBean.setStatus(job.optString("status"));
-                    msg.obj = netBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddProductBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<创建情景", "数据解析异常");
                 }
+                msg.obj = netBean;
                 handler.sendMessage(msg);
             }
 
@@ -570,12 +570,13 @@ public class DataPaser {
                 lat, lng, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Log.e("<<<创建场景", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.CREATE_SCENE;
-                        msg.obj = new GoodsDetailBean();
+                        msg.obj = new AddProductBean();
                         try {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<GoodsDetailBean>() {
+                            Type type = new TypeToken<AddProductBean>() {
                             }.getType();
                             msg.obj = gson.fromJson(responseInfo.result, type);
                         } catch (JsonSyntaxException e) {
@@ -598,8 +599,8 @@ public class DataPaser {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-//                        Log.e("<<<changjing", responseInfo.result);
-//                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+                        Log.e("<<<场景详情", responseInfo.result);
+                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.SCENE_DETAILS;
                         SceneDetails sceneDetails = new SceneDetails();
