@@ -195,6 +195,9 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 if (response.isSuccess()) {
                     Util.makeToast("您的认证信息已提交成功,我们会尽快给予审核！");
                     finish();
+                    if (RankTagActivity.instance!=null){
+                        RankTagActivity.instance.finish();
+                    }
                     return;
                 }
                 Util.makeToast(response.getMessage());

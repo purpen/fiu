@@ -200,10 +200,10 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
             case R.id.item_wx:
                 //wechat
                 params = new Platform.ShareParams();
-                params.setShareType(Platform.SHARE_WEBPAGE);
-                params.setUrl("http://m.taihuoniao.com/guide/fiu");
-                params.setTitle("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                params.setText("有Fiu才有意思");
+                params.setShareType(Platform.SHARE_TEXT);
+//                params.setUrl("http://m.taihuoniao.com/guide/fiu");
+//                params.setTitle(getResources().getString(R.string.share_title_url));
+                params.setText(getResources().getString(R.string.share_title_url));
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 wechat.setPlatformActionListener(this);
                 wechat.share(params);
@@ -211,17 +211,17 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
             case R.id.item_sina:
                 //sina
                 params = new Platform.ShareParams();
-                params.setTitle("有Fiu才有意思！");
-                params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
+                params.setShareType(Platform.SHARE_TEXT);
+//                params.setTitle("有Fiu才有意思！");
+                params.setText(getResources().getString(R.string.share_title_url));
                 Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 weibo.setPlatformActionListener(this); // 设置分享事件回调
                 weibo.share(params);
                 break;
             case R.id.item_contacts:
-                String content="有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/";
                 Uri sms = Uri.parse("smsto:");
                 Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
-                sendIntent.putExtra( "sms_body",content);
+                sendIntent.putExtra( "sms_body",getResources().getString(R.string.share_title_url));
                 sendIntent.setType("vnd.android-dir/mms-sms" );
                 startActivity(sendIntent);
                 break;

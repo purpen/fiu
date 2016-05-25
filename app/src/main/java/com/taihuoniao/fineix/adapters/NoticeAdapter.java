@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.NoticeData;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.Util;
 
@@ -58,7 +57,7 @@ public class NoticeAdapter extends CommonBaseAdapter<NoticeData.NoticeItem>{
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(activity, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA,item.s_user._id);
+                intent.putExtra(FocusActivity.USER_ID_EXTRA,item.s_user._id);
                 activity.startActivity(intent);
             }
         });

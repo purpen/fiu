@@ -9,13 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -36,8 +41,6 @@ public class ImageCropActivity extends BaseActivity {
         void onClipComplete(Bitmap bitmap);
     }
     private static OnClipCompleteListener listener;
-    @Bind(R.id.custom_head)
-    CustomHeadView custom_head;
     @Bind(R.id.csiv)
     ClipSquareImageView csiv;
     private Uri uri;
@@ -63,14 +66,13 @@ public class ImageCropActivity extends BaseActivity {
             uri = intent.getParcelableExtra(ImageCropActivity.class.getSimpleName());
         }
 
-        if (intent.hasExtra(UserCenterActivity.class.getSimpleName())){
-            page=intent.getStringExtra(UserCenterActivity.class.getSimpleName());
+        if (intent.hasExtra(ImageCropActivity.class.getName())){
+            page=intent.getStringExtra(ImageCropActivity.class.getName());
         }
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "裁剪图片");
         if (uri == null) return;
         csiv.setImageURI(uri);
     }
@@ -80,22 +82,19 @@ public class ImageCropActivity extends BaseActivity {
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.bt_cancel:
+                NetworkManager.getInstance().cancel(NetworkConstance.UPLOAD_BG_URL);
                 finish();
                 break;
             case R.id.bt_clip:
                 Bitmap bitmap=csiv.clip();
-                if (TextUtils.isEmpty(page)){
+                if (TextUtils.isEmpty(page)){//认证图片
                     if (listener!=null){
                         listener.onClipComplete(bitmap);
                         finish();
                     }
-//                    ByteArrayOutputStream out=new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
-//                    Intent intent = new Intent();
-//                    intent.putExtra(Bitmap.class.getSimpleName(),out.toByteArray());
-//                    setResult(RESULT_OK,intent);
-//                    activity.finish();
-                }else {//上传背景封面
+                }else if (TextUtils.equals(EditUserInfoActivity.class.getSimpleName(),page) || TextUtils.equals(CompleteUserInfoActivity.class.getSimpleName(),page)){//上传头像
+                    uploadUserAvatar(bitmap);
+                } else {//上传背景封面
                     uploadFile(bitmap);
                 }
                 break;
@@ -115,15 +114,13 @@ public class ImageCropActivity extends BaseActivity {
             ClientDiscoverAPI.uploadBgImg(imgStr, new RequestCallBack<String>() {
                 @Override
                 public void onStart() {
-                    bt_clip.setEnabled(false);
-                    csiv.setEnabled(false);
+                    setViewEnable(false);
                     if (progress_bar!=null) progress_bar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
-                    bt_clip.setEnabled(true);
-                    csiv.setEnabled(true);
+                    setViewEnable(true);
                     progress_bar.setVisibility(View.GONE);
                     if (responseInfo == null) {
                         return;
@@ -134,14 +131,7 @@ public class ImageCropActivity extends BaseActivity {
                     LogUtil.e(TAG, responseInfo.result);
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()) {
-//                        ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
-//                        });
-//                        if (!TextUtils.isEmpty(imgUploadBean.head_pic_url)) {
-//                            new Intent()
-//                            activity.setResult(UserCenterActivity.REQUEST_CODE_IMAGE_URL,);
-//                            ImageLoader.getInstance().displayImage(imgUploadBean.head_pic_url,iv_bg);
-//                        }
-                        Util.makeToast("图片上传成功");
+                        Util.makeToast("背景图片上传成功");
                         activity.finish();
                         return;
                     }
@@ -150,8 +140,7 @@ public class ImageCropActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(HttpException e, String s) {
-                    bt_clip.setEnabled(true);
-                    csiv.setEnabled(true);
+                    setViewEnable(true);
                     progress_bar.setVisibility(View.GONE);
                     Util.makeToast(s);
                 }
@@ -159,16 +148,67 @@ public class ImageCropActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            bt_clip.setEnabled(true);
-            csiv.setEnabled(true);
+            if (bitmap!=null) bitmap.recycle();
+            setViewEnable(true);
             progress_bar.setVisibility(View.GONE);
-//            if (uri != null)
-//                if (UserCenterActivity.imageUri.equals(uri)){//是拍照
-//                    LogUtil.e("删除拍照","删除拍照");
-//                    getContentResolver().delete(UserCenterActivity.imageUri, null, null);
-//                }
         }
 
+    }
+
+    private void setViewEnable(boolean enable){
+        bt_clip.setEnabled(enable);
+        csiv.setEnabled(enable);
+    }
+
+    private void uploadUserAvatar(final Bitmap bitmap){
+        if (bitmap==null)  return;
+        String type="3"; //上传头像
+        String imgStr=Util.saveBitmap2Base64Str(bitmap);
+        try {
+            ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
+                @Override
+                public void onStart() {
+                    if (progress_bar!=null) progress_bar.setVisibility(View.VISIBLE);
+                    setViewEnable(false);
+                }
+
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    progress_bar.setVisibility(View.GONE);
+                    setViewEnable(true);
+                    if (responseInfo==null){
+                        return;
+                    }
+                    if (TextUtils.isEmpty(responseInfo.result)){
+                        return;
+                    }
+
+                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                    if (response.isSuccess()){
+                        if (listener!=null){
+                            listener.onClipComplete(bitmap);
+                        }
+                        finish();
+                        Util.makeToast("头像上传成功");
+                        return;
+                    }
+                    Util.makeToast(response.getMessage());
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    progress_bar.setVisibility(View.GONE);
+                    setViewEnable(true);
+                    Util.makeToast(s);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (bitmap!=null) bitmap.recycle();
+            setViewEnable(true);
+            progress_bar.setVisibility(View.GONE);
+        }
     }
 
 }

@@ -51,7 +51,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -587,7 +587,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
                 startActivity(intent);
                 break;
             case R.id.popup_scene_detail_more_share:
@@ -698,7 +698,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_grid:
                 Log.e("<<<点击用户头像", "user-id=" + headList.get(position).getUser().getUser_id());
                 Intent intent1 = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
+                intent1.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
                 startActivity(intent1);
                 break;
             case R.id.activity_scenedetails_commentlistview:

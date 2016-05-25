@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dp100"
-    android:layout_height="@dimen/dp50"
-    android:background="@android:color/white"
+    android:layout_width="154dp"
+    android:layout_height="@dimen/dp45"
+    android:background="@mipmap/info_window"
     >
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="@dimen/dp50"
-        android:layout_height="@dimen/dp50"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
         android:scaleType="centerCrop"
+        android:layout_marginTop="@dimen/dp05"
+        android:layout_marginLeft="@dimen/dp05"
          />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/iv"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="@dimen/dp5"
+        android:layout_marginLeft="@dimen/dp2"
+        android:layout_marginTop="@dimen/dp2"
         >
         <TextView
             android:id="@+id/tv_desc"
@@ -24,6 +26,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp12"
             android:textColor="@color/color_333"
+            android:text="fdsfd"
             />
         <TextView
             android:id="@+id/tv_location"
@@ -31,6 +34,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp10"
             android:textColor="@color/color_999"
+            android:text="fasdf"
            />
     </LinearLayout>
 </RelativeLayout>

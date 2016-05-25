@@ -100,7 +100,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 
     private void move2CurrentLocation(){
         MapStatus.Builder builder = new MapStatus.Builder();
-        builder.target(ll).zoom(16);
+        builder.target(ll).zoom(18);
         mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 

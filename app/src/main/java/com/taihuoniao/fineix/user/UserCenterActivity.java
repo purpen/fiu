@@ -1,14 +1,13 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -114,8 +113,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             which = intent.getIntExtra(MineFragment.class.getSimpleName(), MineFragment.REQUEST_CJ);
         }
 
-        if (intent.hasExtra(FocusFansActivity.USER_ID_EXTRA)) {
-            userId = intent.getLongExtra(FocusFansActivity.USER_ID_EXTRA, LoginInfo.getUserId());
+        if (intent.hasExtra(FocusActivity.USER_ID_EXTRA)) {
+            userId = intent.getLongExtra(FocusActivity.USER_ID_EXTRA, LoginInfo.getUserId());
         }
     }
 
@@ -413,7 +412,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 tv_tag.setText(String.format("%s | ", user.label));
             } else {
                 tv_tag.setText(String.format("%s | ", user.label));
-                tv_tag.setBackgroundColor(Color.GREEN);
+//                tv_tag.setBackgroundColor(Color.GREEN);
             }
         }
         tv_rank.setText(String.format("V%s", user.rank_id));
@@ -529,15 +528,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.ll_focus:
-                intent = new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FOCUS_TYPE);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, userId);
+                intent = new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FOCUS_TYPE);
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, userId);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent = new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, userId);
+                intent = new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, userId);
                 startActivity(intent);
                 break;
             case R.id.bt_msg:
@@ -681,7 +680,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private void toCropActivity(Uri uri) {
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
-        intent.putExtra(TAG, TAG);
+        intent.putExtra(ImageCropActivity.class.getName(),TAG);
         startActivity(intent);
     }
 

@@ -2,17 +2,15 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommentsBean;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.Util;
 
@@ -59,7 +57,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(activity, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA,item.user_id);
+                intent.putExtra(FocusActivity.USER_ID_EXTRA,item.user_id);
                 activity.startActivity(intent);
             }
         });

@@ -20,7 +20,7 @@ import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -107,7 +107,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, UserCenterActivity.class);
-                intent.putExtra(FocusFansActivity.USER_ID_EXTRA, item._id);//userID
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, item._id);//userID
                 activity.startActivity(intent);
             }
         });

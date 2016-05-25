@@ -105,7 +105,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     private void move2CurrentLocation() {
         MapStatus.Builder builder = new MapStatus.Builder();
-        builder.target(ll).zoom(16);
+        builder.target(ll).zoom(18);
         mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
@@ -249,6 +249,10 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                     }
                 }
 
+                if (which==-1){
+                    return true;
+                }
+
                 SceneListBean item = list.get(which);
                 if (item == null) {
                     return true;
@@ -272,7 +276,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)), options);
         ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());
         ((TextView) view.findViewById(R.id.tv_location)).setText(item.getAddress());
-        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -50, infoWindowClickListener);
+        InfoWindow mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(view), ll, -80, infoWindowClickListener);
         mBDMap.showInfoWindow(mInfoWindow);
     }
 

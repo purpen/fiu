@@ -32,7 +32,7 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/4/22 17:05
  */
-public class FocusFansActivity extends BaseActivity {
+public class FocusActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.lv)
@@ -49,7 +49,7 @@ public class FocusFansActivity extends BaseActivity {
     public static final String USER_ID_EXTRA="USER_ID_EXTRA";
     private long userId= LoginInfo.getUserId();
     private WaittingDialog dialog;
-    public FocusFansActivity() {
+    public FocusActivity() {
         super(R.layout.activity_focus_fans);
     }
 

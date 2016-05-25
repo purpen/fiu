@@ -11,6 +11,8 @@ import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
+import cn.sharesdk.framework.statistics.NewAppReceiver;
+
 /**
  * Created by android on 2015/12/27.
  * 参数设置
@@ -816,7 +818,8 @@ public class ClientDiscoverAPI {
     public static void uploadBgImg(String tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("tmp", tmp);
-        MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
+        HttpHandler<String> handler = MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
+        NetworkManager.getInstance().add(NetworkConstance.UPLOAD_BG_URL, handler);
     }
 
     /**

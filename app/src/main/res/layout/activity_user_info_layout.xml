@@ -30,20 +30,19 @@
         android:id="@+id/custom_signature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp10"
         />
 
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/custom_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
         />
 
    <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/custom_user_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       android:layout_marginTop="@dimen/dp10"
         />
 
 

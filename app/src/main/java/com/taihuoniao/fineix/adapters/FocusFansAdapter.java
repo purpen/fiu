@@ -16,14 +16,13 @@ import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.Bind;
@@ -65,7 +64,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
         holder.tv_desc.setText(item.follows.summary);
 
         //关注界面
-        if (TextUtils.equals(FocusFansActivity.FOCUS_TYPE,pageType)){
+        if (TextUtils.equals(FocusActivity.FOCUS_TYPE,pageType)){
             if (userId==LoginInfo.getUserId()){ //是自己
                 if (item.focus_flag){
                     holder.btn.setText("关注");
@@ -115,7 +114,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
         }
 
         //粉丝界面
-        if (TextUtils.equals(FocusFansActivity.FANS_TYPE,pageType)){
+        if (TextUtils.equals(FocusActivity.FANS_TYPE,pageType)){
             if (userId==LoginInfo.getUserId()) { //是自己
                 switch (item.type) {
                     case TYPE1:  //仅当粉丝关注我
@@ -171,7 +170,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                 break;
             case R.id.tv_album:
                 view.setEnabled(false);
-                if (TextUtils.equals(FocusFansActivity.FOCUS_TYPE,pageType)){
+                if (TextUtils.equals(FocusActivity.FOCUS_TYPE,pageType)){
                     final FocusFansItem item =(FocusFansItem)view.getTag();
                     if (userId==LoginInfo.getUserId()){ //关注列表做取消关注操作
                         if (item==null) return;
@@ -234,7 +233,7 @@ public class FocusFansAdapter extends CommonBaseAdapter<FocusFansItem> implement
                     }
                 }
 
-                if (TextUtils.equals(FocusFansActivity.FANS_TYPE,pageType)){
+                if (TextUtils.equals(FocusActivity.FANS_TYPE,pageType)){
                     final FocusFansItem item =(FocusFansItem)view.getTag();
                     if (userId==LoginInfo.getUserId()){
 

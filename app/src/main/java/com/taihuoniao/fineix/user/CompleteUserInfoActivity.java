@@ -63,12 +63,11 @@ public class CompleteUserInfoActivity extends BaseActivity {
     private static final String SECRET = "0";
     private static final String MALE = "1";
     private static final String FEMALE = "2";
-    private static final int PICK_FROM_FILE = 0;
-    private static final int PICK_FROM_CAMERA = 1;
-    private static final int CROP_FROM_CAMERA = 2;
+    private static final int REQUEST_CODE_PICK_IMAGE = 100;
+    private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
+    public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private static final String TYPE = "3";
-    private Uri mImageUri;
-
+    private Bitmap bitmap;
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -109,23 +108,11 @@ public class CompleteUserInfoActivity extends BaseActivity {
             switch (v.getId()) {
                 case R.id.tv_take_photo:
                     PopupWindowUtil.dismiss();
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    mImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                            "tmp_avatar" + ".jpg"));
-
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                    try {
-                        intent.putExtra("return-data", true);
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    getImageFromCamera();
                     break;
                 case R.id.tv_album:
-                    intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    activity.startActivityForResult(Intent.createChooser(intent, "请选择要使用的应用"), PICK_FROM_FILE);//Intent.createChooser(intent, "选择要使用的应用")
                     PopupWindowUtil.dismiss();
+                    getImageFromAlbum();
                     break;
                 case R.id.tv_cancel:
                 default:
@@ -206,128 +193,58 @@ public class CompleteUserInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            File file = null;
             switch (requestCode) {
-                case PICK_FROM_CAMERA:
-                    doCrop();
+                case REQUEST_CODE_PICK_IMAGE:
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        toCropActivity(uri);
+                    } else {
+                        Util.makeToast("抱歉，从相册获取图片失败");
+                    }
                     break;
-                case PICK_FROM_FILE:
-                    mImageUri = data.getData();
-                    doCrop();
-                    break;
-                case CROP_FROM_CAMERA:
-                    Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        Bitmap photo = extras.getParcelable("data");
-                        if (photo != null) {
-//                            file = Util.saveBitmapToFile(photo);
-                            uploadFile(photo);
-                        } else {
-                            Util.makeToast(activity, "截取头像失败");
-                            return;
-                        }
+                case REQUEST_CODE_CAPTURE_CAMERA:
+                    if (imageUri != null) {
+                        toCropActivity(imageUri);
                     }
                     break;
             }
         }
     }
 
-    private void uploadFile(final Bitmap bitmap) {
-        if (bitmap == null) return;
-        String imgStr=Util.saveBitmap2Base64Str(bitmap);
-        bitmap.recycle();
-        try {
-            ClientDiscoverAPI.uploadImg(imgStr, TYPE, new RequestCallBack<String>() {
-                @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
-                    if (responseInfo == null) {
-                        return;
-                    }
-                    if (TextUtils.isEmpty(responseInfo.result)) {
-                        return;
-                    }
-
-                    HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                    if (response.isSuccess()) {
-                        ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
-                        });
-                        if (!TextUtils.isEmpty(imgUploadBean.file_url)) {
-                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, riv);
-                        }
-                        Util.makeToast(response.getMessage());
-                        return;
-                    }
-                    Util.makeToast(response.getMessage());
-                }
-
-                @Override
-                public void onFailure(HttpException e, String s) {
-                    Util.makeToast(s);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (bitmap != null) bitmap.recycle();
-        }
+    protected void getImageFromAlbum() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");//相片类型
+        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
-    private void doCrop() {
-        final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-        int size = list.size();
-        if (size == 0) {
-            Util.makeToast(this, "找不到图片裁剪应用");
-            return;
+    protected void getImageFromCamera() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
-            intent.setData(mImageUri);
-            intent.putExtra("noFaceDetection", true);
-            intent.putExtra("outputX", 250);
-            intent.putExtra("outputY", 250);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", true);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            if (size == 1) {
-                Intent i = new Intent(intent);
-                ResolveInfo res = list.get(0);
-                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                startActivityForResult(i, CROP_FROM_CAMERA);
-            } else {
-                for (ResolveInfo res : list) {
-                    final CropOption co = new CropOption();
-                    co.title = getPackageManager().getApplicationLabel(res.activityInfo.applicationInfo);
-                    co.icon = getPackageManager().getApplicationIcon(res.activityInfo.applicationInfo);
-                    co.appIntent = new Intent(intent);
-                    co.appIntent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    cropOptions.add(co);
-                }
-                CropOptionAdapter adapter = new CropOptionAdapter(getApplicationContext(), cropOptions);
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("选择要使用的应用");
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        startActivityForResult(cropOptions.get(item).appIntent, CROP_FROM_CAMERA);
-                    }
-                });
-
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-
-                        if (mImageUri != null) {
-                            getContentResolver().delete(mImageUri, null, null);
-                            mImageUri = null;
-                        }
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
+            Util.makeToast("请确认已经插入SD卡");
         }
+    }
+
+    private void toCropActivity(Uri uri) {
+        ImageCropActivity.setOnClipCompleteListener(new ImageCropActivity.OnClipCompleteListener() {
+            @Override
+            public void onClipComplete(Bitmap bitmap) {
+                CompleteUserInfoActivity.this.bitmap=bitmap;
+                riv.setImageBitmap(CompleteUserInfoActivity.this.bitmap);
+            }
+        });
+        Intent intent = new Intent(activity, ImageCropActivity.class);
+        intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
+        intent.putExtra(ImageCropActivity.class.getName(),TAG);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (bitmap!=null) bitmap.recycle();
+        super.onDestroy();
     }
 }

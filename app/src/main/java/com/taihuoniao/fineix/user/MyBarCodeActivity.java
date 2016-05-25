@@ -139,8 +139,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
-                    params.setTitle(title);
-                    params.setTitleUrl(titleUrl);
+//                    params.setTitle(title);
+//                    params.setTitleUrl(titleUrl);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(MyBarCodeActivity.this);
                     wechat.share(params);
@@ -149,16 +149,17 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
-                    params.setTitle(title);
-                    params.setTitleUrl(titleUrl);
+//                    params.setTitle(title);
+//                    params.setTitleUrl(titleUrl);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(MyBarCodeActivity.this);
                     wechatMoments.share(params);
                     break;
                 case 2: //新浪微博
                     params = new Platform.ShareParams();
-                    params.setText(title);
-                    params.setTitleUrl(titleUrl);
+                    params.setShareType(Platform.SHARE_IMAGE);
+//                    params.setText(title);
+//                    params.setTitleUrl(titleUrl);
                     params.setImagePath(imgPath);
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
@@ -169,8 +170,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
 //                    params.setTitle("有Fiu的生活");
-                    params.setText(title);
-                    params.setTitleUrl(titleUrl); // 标题的超链接
+//                    params.setText(title);
+//                    params.setTitleUrl(titleUrl); // 标题的超链接
 //                    params.setSite("");
 //                    params.setSiteUrl("http://www.taihuoniao.com/");
                     Platform qzone = ShareSDK.getPlatform(QZone.NAME);
