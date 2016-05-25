@@ -17,14 +17,13 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
-import com.taihuoniao.fineix.main.MainActivity;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -329,22 +328,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                             updateUserIdentity();
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         }else {
-                            switch (MainApplication.which_activity) {
-                                case DataConstants.QingjingDetailActivity:
-                                    sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                                    break;
-                                case DataConstants.SceneDetailActivity:
-                                    sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                                    break;
-                                case DataConstants.ElseActivity:
-                                    //其他不需要刷新界面的activity
-                                    break;
-                                default:
-//                                    THNMainActivity.instance.finish();
-                                    Intent intent = new Intent(ToRegisterActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    break;
-                            }
+                            LoginCompleteUtils.goFrom(ToRegisterActivity.this);
                         }
 
                         if (ToRegisterActivity.instance != null) {

@@ -48,37 +48,40 @@ public class FirstInAppUtils {
 //        Button btn = (Button) popView.findViewById(R.id.pop_first_in_btn);
         final View popView = View.inflate(activity, R.layout.popup_first, null);
         final ImageView img = (ImageView) popView.findViewById(R.id.popup_first_img);
-        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        img.setScaleType(ImageView.ScaleType.FIT_XY);
         switch (type) {
-            case QING:
-                img.setImageResource(R.mipmap.first_in_index);
-                img.setTag(1);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ((int) (v.getTag()) == 1) {
-                            img.setImageResource(R.mipmap.first_in_index2);
-                            img.setTag(2);
-                        } else if ((int) (v.getTag()) == 2) {
-                            img.setImageResource(R.mipmap.first_in_index3);
-                            img.setTag(3);
-                        } else if ((int) (v.getTag()) == 3) {
-                            popupWindow.dismiss();
-                        }
-                    }
-                });
-                break;
-            case JING:
-                img.setImageResource(R.mipmap.first_in_find);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
-                });
-                break;
+//            case QING:
+//                img.setImageResource(R.mipmap.first_in_index);
+//                img.setTag(1);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if ((int) (v.getTag()) == 1) {
+//                            img.setImageResource(R.mipmap.first_in_index2);
+//                            img.setTag(2);
+//                        } else if ((int) (v.getTag()) == 2) {
+//                            popupWindow.dismiss();
+//                        }
+//                    }
+//                });
+//                break;
+//            case JING:
+//                img.setImageResource(R.mipmap.first_in_find);
+//                img.setTag(9);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if ((int) (v.getTag()) == 9) {
+//                            img.setImageResource(R.mipmap.first_in_fiu);
+//                            img.setTag(10);
+//                        } else if ((int) (v.getTag()) == 10) {
+//                            popupWindow.dismiss();
+//                        }
+//                    }
+//                });
+//                break;
             case FIU:
-                img.setImageResource(R.mipmap.first_in_fiu);
+                img.setImageResource(R.mipmap.first_in_index3);
                 img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -86,39 +89,39 @@ public class FirstInAppUtils {
                     }
                 });
                 break;
-            case PIN:
-                img.setImageResource(R.mipmap.first_in_wellgood);
-                img.setTag(4);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ((int) (v.getTag()) == 4) {
-                            img.setImageResource(R.mipmap.first_in_wellgood2);
-                            img.setTag(5);
-                        } else if ((int) (v.getTag()) == 5) {
-                            img.setImageResource(R.mipmap.first_in_wellgood3);
-                            img.setTag(6);
-                        } else if ((int) (v.getTag()) == 6) {
-                            popupWindow.dismiss();
-                        }
-                    }
-                });
-                break;
-            case WO:
-                img.setImageResource(R.mipmap.first_in_mine);
-                img.setTag(7);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ((int) (v.getTag()) == 7) {
-                            img.setImageResource(R.mipmap.first_in_mine2);
-                            img.setTag(8);
-                        } else if ((int) (v.getTag()) == 8) {
-                            popupWindow.dismiss();
-                        }
-                    }
-                });
-                break;
+//            case PIN:
+//                img.setImageResource(R.mipmap.first_in_wellgood);
+//                img.setTag(4);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if ((int) (v.getTag()) == 4) {
+//                            img.setImageResource(R.mipmap.first_in_wellgood2);
+//                            img.setTag(5);
+//                        } else if ((int) (v.getTag()) == 5) {
+//                            img.setImageResource(R.mipmap.first_in_wellgood3);
+//                            img.setTag(6);
+//                        } else if ((int) (v.getTag()) == 6) {
+//                            popupWindow.dismiss();
+//                        }
+//                    }
+//                });
+//                break;
+//            case WO:
+//                img.setImageResource(R.mipmap.first_in_mine);
+//                img.setTag(7);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if ((int) (v.getTag()) == 7) {
+//                            img.setImageResource(R.mipmap.first_in_mine2);
+//                            img.setTag(8);
+//                        } else if ((int) (v.getTag()) == 8) {
+//                            popupWindow.dismiss();
+//                        }
+//                    }
+//                });
+//                break;
             case CREATE:
                 img.setImageResource(R.mipmap.first_in_create);
                 img.setOnClickListener(new View.OnClickListener() {

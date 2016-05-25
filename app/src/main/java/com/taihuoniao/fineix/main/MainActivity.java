@@ -339,9 +339,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstImg.setImageResource(R.mipmap.first_in_index2);
                                 firstImg.setTag(2);
                             } else if ((int) (v.getTag()) == 2) {
-                                firstImg.setImageResource(R.mipmap.first_in_index3);
-                                firstImg.setTag(3);
-                            } else if ((int) (v.getTag()) == 3) {
                                 firstImg.setVisibility(View.GONE);
                             }
                         }

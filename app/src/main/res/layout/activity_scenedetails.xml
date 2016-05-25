@@ -70,15 +70,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
                     android:background="@drawable/jianbian_scenelist"
                     android:orientation="vertical"
+                    android:paddingBottom="5dp"
                     >
+
                     <FrameLayout
-                        android:layout_marginLeft="20dp"
                         android:id="@+id/activity_scenedetails_framelayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="7dp">
 
                         <ImageView
@@ -91,12 +92,14 @@
                             android:id="@+id/activity_scenedetails_changjing_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="40sp"
+                            android:lineSpacingExtra="-5dp"
+                            android:maxLines="2"
                             android:maxWidth="300dp"
                             android:text="详见的小路"
-                            android:maxLines="2"
-                            android:textColor="@color/white"/>
+                            android:textColor="@color/white"
+                            android:textSize="40sp"/>
                     </FrameLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

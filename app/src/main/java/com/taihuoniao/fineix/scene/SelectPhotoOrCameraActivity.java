@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.fragments.CameraFragment;
 import com.taihuoniao.fineix.scene.fragments.PhotoFragment;
+import com.taihuoniao.fineix.utils.FirstInAppUtils;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -114,5 +118,19 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
                 break;
         }
     }
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+            //判断是不是第一次进入Fiu界面
+            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
+            if (isFirstIn) {
+                FirstInAppUtils.showPop(SelectPhotoOrCameraActivity.this, FirstInAppUtils.FIU, activityView);
+                SharedPreferences.Editor editor = firstInSp.edit();
+                editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
+                editor.apply();
+            }
+        }
+    }
 }

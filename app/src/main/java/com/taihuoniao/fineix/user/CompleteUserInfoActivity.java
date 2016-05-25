@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -28,13 +27,10 @@ import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CropOption;
 import com.taihuoniao.fineix.beans.ImgUploadBean;
-import com.taihuoniao.fineix.beans.User;
-import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -42,7 +38,6 @@ import com.taihuoniao.fineix.view.SegmentedGroup;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,14 +85,14 @@ public class CompleteUserInfoActivity extends BaseActivity {
                 submitData(v);
                 break;
             case R.id.riv:
-                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar,"上传头像"));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传头像"));
                 break;
         }
     }
 
-    private View initPopView(int layout,String title) {
+    private View initPopView(int layout, String title) {
         View view = Util.inflateView(this, layout, null);
-        ((TextView)view.findViewById(R.id.tv_title)).setText(title);
+        ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
         View iv_close = view.findViewById(R.id.tv_cancel);
@@ -187,7 +182,10 @@ public class CompleteUserInfoActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()) {
-                    startActivity(new Intent(activity, MainActivity.class));
+                    LoginCompleteUtils.goFrom(CompleteUserInfoActivity.this);
+                    if (OrderInterestQJActivity.instance != null) {
+                        OrderInterestQJActivity.instance.finish();
+                    }
                     finish();
                     Util.makeToast(response.getMessage());
                     return;
@@ -254,7 +252,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
                         ImgUploadBean imgUploadBean = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ImgUploadBean>>() {
                         });
                         if (!TextUtils.isEmpty(imgUploadBean.file_url)) {
-                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url,riv);
+                            ImageLoader.getInstance().displayImage(imgUploadBean.file_url, riv);
                         }
                         Util.makeToast(response.getMessage());
                         return;
@@ -270,7 +268,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (bitmap!=null) bitmap.recycle();
+            if (bitmap != null) bitmap.recycle();
         }
     }
 

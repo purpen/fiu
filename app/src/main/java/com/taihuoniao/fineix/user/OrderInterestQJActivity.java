@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,7 +13,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderInterestSlidingAdapter;
-import com.taihuoniao.fineix.adapters.SlidingFocusAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -51,6 +48,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     private static final String EVENT = "subscription";
     private WaittingDialog dialog;
     private OrderInterestSlidingAdapter adapter;
+    public static OrderInterestQJActivity instance;
 
     public OrderInterestQJActivity() {
         super(R.layout.activity_order_interest_qj);
@@ -58,6 +56,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
 
     @Override
     protected void initView() {
+        instance = OrderInterestQJActivity.this;
         custom_head.setHeadCenterTxtShow(true, "订阅的情景");
         dialog = new WaittingDialog(this);
     }

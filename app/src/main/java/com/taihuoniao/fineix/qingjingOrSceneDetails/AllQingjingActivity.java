@@ -19,7 +19,6 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
@@ -182,9 +181,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_all_qingjing_search:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("t", "8");
-                startActivity(intent);
+                onBackPressed();
                 break;
             case R.id.activity_all_qingjing_createqinjing:
                 MainApplication.tag = 2;

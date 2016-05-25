@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@mipmap/head_search"/>
+            android:src="@mipmap/back_black"/>
 
         <ImageView
             android:id="@+id/activity_all_qingjing_createqinjing"

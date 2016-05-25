@@ -56,6 +56,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -488,37 +489,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     };
 
     private void setTitleWidth() {
-        double leng = changjingTitle.getText().length();
-        for (char c : changjingTitle.getText().toString().toCharArray()) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-                leng -= 0.5;
-            }
-        }
-        int l = 0;
-        if (leng * 10 % 10 != 0) {
-            l = 1 + (int) leng;
-        } else {
-            l = (int) leng;
-        }
-//            遍历所有字符判断是否含有英文字符。有的话算半个
-        if (l < 8) {
-            changjingTitle.setTextSize(40);
-        } else {
-            changjingTitle.setTextSize(20);
-        }
-//        动态改变宽高
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) frameLayout.getLayoutParams();
-        if (l * changjingTitle.getTextSize() < DensityUtils.dp2px(SceneDetailActivity.this, 300)) {
-            lp.width = (int) (changjingTitle.getTextSize() * l);
-        } else {
-            lp.width = DensityUtils.dp2px(SceneDetailActivity.this, 300);
-        }
-        if (changjingTitle.getTextSize() < DensityUtils.sp2px(SceneDetailActivity.this, 30) && lp.width <= DensityUtils.dp2px(SceneDetailActivity.this, 300)) {
-            lp.height = DensityUtils.dp2px(SceneDetailActivity.this, 28);
-        } else {
-            lp.height = DensityUtils.dp2px(SceneDetailActivity.this, 55);
-        }
-        frameLayout.setLayoutParams(lp);
+        SceneTitleSetUtils.setTitle(changjingTitle,frameLayout,42,21);
     }
 
     //获取相近产品
@@ -798,6 +769,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                startP.y = event.getY();
 //                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) loveRelative.getLayoutParams();
 //                cha = startP.y + lpd.bottomMargin;
+////                return false;
 //                break;
 //            case MotionEvent.ACTION_MOVE:
 //                nowP.x = event.getX();

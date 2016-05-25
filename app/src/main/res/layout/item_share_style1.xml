@@ -61,6 +61,7 @@
             android:id="@+id/activity_share_scene_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:lineSpacingExtra="-5dp"
             android:maxLines="2"
             android:maxWidth="300dp"
             android:text="详见的小路"

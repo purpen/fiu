@@ -33,7 +33,6 @@
                 android:id="@+id/item_scenelist_user_headimg"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/ic_launcher"
                 />
 
             <RelativeLayout
@@ -115,6 +114,7 @@
                 android:id="@+id/item_scenelist_scene_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lineSpacingExtra="-5dp"
                 android:textSize="40sp"
                 android:maxWidth="300dp"
                 android:text="详见的小路"
