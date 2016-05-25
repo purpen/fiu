@@ -236,8 +236,6 @@ public class Util {
 			bao.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
-			bitmap.recycle();
 		}
 		return imgStr;
 	}

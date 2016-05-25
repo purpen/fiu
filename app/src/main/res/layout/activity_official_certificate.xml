@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:autolabel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,8 +11,10 @@
         android:layout_height="wrap_content" />
 
     <ScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_head">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
                 android:background="@android:color/white">
+
                 <TextView
                     android:id="@+id/tv_tag"
                     android:layout_width="wrap_content"
@@ -75,14 +78,14 @@
 
                 <com.taihuoniao.fineix.view.labelview.AutoLabelUI
                     android:id="@+id/label_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     autolabel:label_background_res="@drawable/tags_gray"
                     autolabel:label_clickable="true"
                     autolabel:label_padding="0dp"
                     autolabel:show_cross="false"
                     autolabel:text_color="@color/color_666"
-                    autolabel:text_size="@dimen/label_title_size"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    autolabel:text_size="@dimen/label_title_size" />
             </LinearLayout>
 
             <TextView
@@ -200,6 +203,7 @@
 
             <Button
                 android:id="@+id/btn"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -213,4 +217,12 @@
                 android:textSize="@dimen/sp16" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+</RelativeLayout>

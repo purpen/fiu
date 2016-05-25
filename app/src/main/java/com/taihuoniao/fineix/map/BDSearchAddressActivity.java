@@ -6,11 +6,16 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -23,6 +28,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.BDAddressListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -46,8 +52,10 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     ImageButton ibtn;
     private ArrayList<PoiInfo> list;
     private BDAddressListAdapter adapter;
+    private boolean isFirstLoc = true;
     private int radius = 1000;    //默认半径
     private int pageCapacity = 10; //默认分页大小
+    private int pageNum=0;
     private PoiSortType sortType = PoiSortType.distance_from_near_to_far; //默认排序类型
     private LatLng latLng;
     //当前位置的市和区
@@ -69,10 +77,23 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (latLng == null) {
-            //TODO 获取当前位置
-            latLng = new LatLng(39.990605, 116.505045);
+            MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
+                @Override
+                public void onReceiveLocation(BDLocation bdLocation) {
+                    if (bdLocation == null) {
+                        return;
+                    }
+                    if (isFirstLoc) {
+                        isFirstLoc = false;
+                        latLng = new LatLng(bdLocation.getLatitude(),
+                                bdLocation.getLongitude());
+                        loadAndshowGeoCoderResult(latLng);
+                    }
+                }
+            });
+        }else {
+            loadAndshowGeoCoderResult(latLng);
         }
-        loadAndshowGeoCoderResult(latLng);
     }
 
     private void loadAndshowGeoCoderResult(LatLng latLng) {
@@ -87,7 +108,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
                 city = result.getAddressDetail().city;
                 district = result.getAddressDetail().district;
                 if (list == null) {
-                    list = new ArrayList<PoiInfo>();
+                    list = new ArrayList<>();
                 } else {
                     list.clear();
                 }
@@ -103,11 +124,8 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
                     Util.makeToast(activity, "抱歉,没有检索到结果！");
                 }
             }
-
             @Override
-            public void onGetGeoCodeResult(GeoCodeResult result) {
-
-            }
+            public void onGetGeoCodeResult(GeoCodeResult result) {}
         });
     }
 
@@ -122,6 +140,22 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     @Override
     protected void installListener() {
         et.addTextChangedListener(tw);
+        ll.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
+                    if (absListView.getLastVisiblePosition() == list.size()) {
+                        LogUtil.e("pageNum==", pageNum + "");
+                        loadAndshowPoiResult(et.getText().toString().trim(),latLng);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
         ll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -161,7 +195,8 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
         public void onTextChanged(CharSequence cs, int start, int before, int count) {
             String keyWord = cs.toString().trim();
             if (!TextUtils.isEmpty(keyWord)) {
-                loadAndshowPoiResult(keyWord, latLng);
+                pageNum=0;
+                loadAndshowPoiResult(keyWord,latLng);
             } else {
 //                if (searchPoiList != null) {
 //                    searchPoiList.clear();
@@ -180,14 +215,15 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     };
 
     private void loadAndshowPoiResult(String keyWord, LatLng latLng) {
-        MapUtil.getPoiNearbyByKeyWord(keyWord, latLng, radius, pageCapacity, sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
+        MapUtil.getPoiNearbyByKeyWord(keyWord,latLng,radius,pageNum,pageCapacity,sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
                 if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                     return;
                 }
+                pageNum++;
                 if (list == null) {
-                    list = new ArrayList<PoiInfo>();
+                    list = new ArrayList<>();
                 } else {
                     list.clear();
                 }
@@ -210,6 +246,8 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
+
 
     @Override
     protected void refreshUI() {

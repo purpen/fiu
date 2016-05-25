@@ -201,10 +201,9 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 //wechat
                 params = new Platform.ShareParams();
                 params.setShareType(Platform.SHARE_WEBPAGE);
-                params.setUrl("http://www.taihuoniao.com");
+                params.setUrl("http://m.taihuoniao.com/guide/fiu");
                 params.setTitle("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
                 params.setText("有Fiu才有意思");
-                params.setImageUrl(LoginInfo.getHeadPicUrl());
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 wechat.setPlatformActionListener(this);
                 wechat.share(params);
@@ -214,7 +213,6 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 params = new Platform.ShareParams();
                 params.setTitle("有Fiu才有意思！");
                 params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                params.setImageUrl(LoginInfo.getHeadPicUrl());
                 Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 weibo.setPlatformActionListener(this); // 设置分享事件回调
                 weibo.share(params);

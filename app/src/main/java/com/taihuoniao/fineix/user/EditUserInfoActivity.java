@@ -490,8 +490,10 @@ public class EditUserInfoActivity extends BaseActivity {
     private void uploadFile(final Bitmap bitmap) {
         if (bitmap==null)  return;
         String type="3";
+        String imgStr=Util.saveBitmap2Base64Str(bitmap);
+        bitmap.recycle();
         try {
-            ClientDiscoverAPI.uploadImg(Util.saveBitmap2Base64Str(bitmap), type, new RequestCallBack<String>() {
+            ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     if (responseInfo==null){

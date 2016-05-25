@@ -49,9 +49,9 @@ public class HotCitiesAdapter extends RecyclerView.Adapter<HotCitiesAdapter.View
         this.activity = activity;
         this.list = list;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
@@ -85,13 +85,15 @@ public class HotCitiesAdapter extends RecyclerView.Adapter<HotCitiesAdapter.View
             });
         }
         LogUtil.e("onBindViewHolder",position+"");
-//        if (position==0){
+        if (position==0){
 //            holder.sv.setVisibility(View.VISIBLE);
-//        }else {
-            holder.sv.setVisibility(View.GONE);
+            holder.tv.setText("当前位置："+city.name);
+            holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.cur_city,0,0,0);
+        }else {
             holder.tv.setText(city.name);
-            ImageLoader.getInstance().displayImage(city.image_url,holder.iv,options);
-//        }
+            holder.tv.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        }
+        ImageLoader.getInstance().displayImage(city.image_url,holder.iv,options);
     }
 
     @Override

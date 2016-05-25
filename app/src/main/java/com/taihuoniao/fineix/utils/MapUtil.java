@@ -113,11 +113,11 @@ public class MapUtil {
      * @param keyword
      * @param listener
      */
-    public static void getPoiNearbyByKeyWord(String keyword, LatLng ll,int radius,int pageCapacity,PoiSortType sortType,final MyOnGetPoiSearchResultListener listener) {
+    public static void getPoiNearbyByKeyWord(String keyword, LatLng ll,int radius,int pageNum,int pageCapacity,PoiSortType sortType,final MyOnGetPoiSearchResultListener listener) {
         if (mPoiSearch==null){
             mPoiSearch = PoiSearch.newInstance();
         }
-        mPoiSearch.searchNearby(new PoiNearbySearchOption().keyword(keyword).location(ll).radius(radius).pageCapacity(pageCapacity).sortType(sortType));
+        mPoiSearch.searchNearby(new PoiNearbySearchOption().keyword(keyword).location(ll).radius(radius).pageNum(pageNum).pageCapacity(pageCapacity).sortType(sortType));
         mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {

@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
@@ -373,7 +374,7 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
             case R.id.btn:
-                startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                startActivity(new Intent(activity, BDSearchAddressActivity.class));
         }
     }
 
