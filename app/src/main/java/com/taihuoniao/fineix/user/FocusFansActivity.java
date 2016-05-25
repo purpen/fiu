@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
+import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -37,6 +37,8 @@ public class FocusFansActivity extends BaseActivity {
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
+    @Bind(R.id.tv_tips)
+    TextView tv_tips;
     private int curPage = 1;
     private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FOCUS_TYPE = "1";  //关注列表
@@ -134,10 +136,17 @@ public class FocusFansActivity extends BaseActivity {
 
     @Override
     protected void refreshUI() {
+
         if (list == null) {
             return;
         }
         if (list.size()==0){
+            tv_tips.setVisibility(View.VISIBLE);
+            if (TextUtils.equals(FOCUS_TYPE,pageType)){
+                tv_tips.setText(R.string.focus_tips);
+            }else {
+                tv_tips.setText(R.string.fans_tips);
+            }
             return;
         }
 

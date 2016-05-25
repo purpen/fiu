@@ -122,8 +122,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onRestart() {
         super.onRestart();
-        isFirstLoad=true;
+        resetData();
         requestNet();
+    }
+
+    private void resetData(){
+        isFirstLoad=true;
+        curPage=1;
+        mQJList.clear();
+        mSceneList.clear();
+        tv_tips.setVisibility(View.GONE);
     }
 
     @Override
@@ -608,23 +616,19 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     private void showCj() {
+        resetData();
         lv_cj.setVisibility(View.VISIBLE);
         lv_qj.setVisibility(View.GONE);
         which = MineFragment.REQUEST_CJ;
-        isFirstLoad = true;
-        curPage = 1;
-        mSceneList.clear();
         adapterCJ = null;
         loadCJData();
     }
 
     private void showQJ() {
+        resetData();
         lv_qj.setVisibility(View.VISIBLE);
         lv_cj.setVisibility(View.GONE);
         which = MineFragment.REQUEST_QJ;
-        isFirstLoad = true;
-        curPage = 1;
-        mQJList.clear();
         adapterQJ = null;
         loadQJData();
     }
