@@ -25,7 +25,6 @@
         android:layout_height="@dimen/dp40"
         app:riv_corner_radius="@dimen/dp100"
         android:layout_below="@+id/tv_time"
-        android:src="@mipmap/ic_launcher"
         android:layout_alignParentLeft="true"
         />
     <TextView
@@ -37,7 +36,6 @@
         android:textSize="@dimen/sp14"
         android:lineSpacingMultiplier="1.1"
         android:gravity="left|center"
-        android:background="@drawable/comment"
         android:layout_alignTop="@+id/iv"
         android:text="别人聊天记录"
         android:textColor="@color/color_333"

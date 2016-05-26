@@ -37,7 +37,6 @@
         android:gravity="right|center"
         android:lineSpacingMultiplier="1.1"
         android:textSize="@dimen/sp14"
-        android:background="@drawable/msg_to"
         android:text="我的聊天记录"
         android:layout_alignTop="@+id/iv"
         android:textColor="@color/color_333"
