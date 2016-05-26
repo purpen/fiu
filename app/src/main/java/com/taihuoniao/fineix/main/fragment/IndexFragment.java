@@ -86,7 +86,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     getCurrentLocation();
                     return;
                 }
-                DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                dialog.show();
+                DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -94,7 +95,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         });
         sceneList = new ArrayList<>();
@@ -112,7 +113,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
-                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });

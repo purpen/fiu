@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="211dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        />
 
     <TextView
         android:id="@+id/header_brand_detail_zhezhao"
@@ -37,5 +37,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-22dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        />
 </RelativeLayout>

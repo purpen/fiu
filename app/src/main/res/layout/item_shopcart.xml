@@ -22,7 +22,7 @@
         android:layout_width="90dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:src="@mipmap/ic_launcher"/>
+        />
 
     <LinearLayout
         android:id="@+id/linear_item_right"

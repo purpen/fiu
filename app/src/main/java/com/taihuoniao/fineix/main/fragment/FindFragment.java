@@ -30,7 +30,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.JingQingjingRecyclerAdapter;
@@ -66,6 +65,7 @@ import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -215,7 +215,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
     }
 
 
@@ -473,7 +473,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     continue;
                 }
                 for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
-                    ImageView img1 = (ImageView) absoluteLayout.getChildAt(j);
+                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
                     RandomImg randomImg1 = (RandomImg) img1.getTag();
                     if (randomImg1 == null) {
                         continue;
@@ -489,10 +489,12 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             if (randomImg.x == 0 && randomImg.y == 0) {
                 continue;
             }
-            ImageView img = new ImageView(getActivity());
+            RoundedImageView img = new RoundedImageView(getActivity());
+            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
             img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
                     randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
+            img.setCornerRadiusDimen(R.dimen.dp100);
             img.setTag(randomImg);
             img.setOnClickListener(new View.OnClickListener() {
                 @Override

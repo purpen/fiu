@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+       />
 
     <TextView
         android:id="@+id/item_albumlist_number"

@@ -114,7 +114,13 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         commentList = new ArrayList<>();
         commentsListAdapter = new CommentsListAdapter(CommentListActivity.this, commentList);
         listView.setAdapter(commentsListAdapter);
-        pullToRefreshLayout.setPullToRefreshEnabled(false);
+        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                currentPage=1;
+                requestNet();
+            }
+        });
 //        pullToRefreshLayout.setEmptyView(nothingTv);
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
@@ -155,7 +161,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     reply_id = null;
                     reply_user_id = null;
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘
-                    return true;
+//                    return true;
                 }
                 return false;
             }
@@ -251,10 +257,12 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.COMMENTS_LIST:
                     dialog.dismiss();
+                    pullToRefreshLayout.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     CommentsBean netCommentsBean = (CommentsBean) msg.obj;
                     currentUserId = netCommentsBean.getCurrent_user_id();
                     if (netCommentsBean.isSuccess()) {
+                        pullToRefreshLayout.setLoadingTime();
                         if (currentPage == 1) {
                             pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
                             pullToRefreshLayout.lastTotalItem = -1;
@@ -272,6 +280,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
+                    pullToRefreshLayout.onRefreshComplete();
                     Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
