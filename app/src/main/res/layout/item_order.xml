@@ -103,12 +103,12 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/bt_right_order"
-            android:background="@drawable/black_corner_white"
+            android:background="@drawable/yellow_corner_white"
             android:gravity="center"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
             android:text="删除订单"
-            android:textColor="@color/black333333"
+            android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
 
         <TextView
@@ -118,12 +118,12 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/black_corner_white"
+            android:background="@drawable/yellow_corner_white"
             android:gravity="center"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
             android:text="发表评价"
-            android:textColor="@color/black333333"
+            android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
     </RelativeLayout>
 </LinearLayout>

@@ -218,7 +218,7 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingBottom="13dp"
-                android:paddingLeft="15dp"
+                android:paddingLeft="20dp"
                 android:paddingRight="15dp"
                 android:paddingTop="18dp">
 
