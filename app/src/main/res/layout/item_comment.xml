@@ -9,7 +9,7 @@
         android:id="@+id/item_comment_head"
         android:layout_width="31dp"
         android:layout_height="31dp"
-        android:src="@mipmap/ic_launcher"/>
+        />
 
     <RelativeLayout
         android:id="@+id/item_comment_relative"

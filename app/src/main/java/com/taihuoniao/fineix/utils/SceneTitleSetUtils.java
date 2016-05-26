@@ -35,12 +35,12 @@ public class SceneTitleSetUtils {
         sceneTitle.setLayoutParams(slp);
 //        动态改变宽高
         ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
-
+        Log.e("<<<最大", DensityUtils.dp2px(sceneTitle.getContext(), 245) + "," + (8 * sceneTitle.getTextSize()));
         Log.e("<<<动态改变宽高", "scale=" + sceneTitle.getTextScaleX() + ",size=" + sceneTitle.getTextSize() + ",l=" + l + ",全部字数宽度=" + (l * sceneTitle.getTextSize()) + ",300dp=" + (DensityUtils.dp2px(sceneTitle.getContext(), 300)));
-        if (l * sceneTitle.getTextSize() + l <= DensityUtils.dp2px(sceneTitle.getContext(), 245)) {
-            lp.width = (int) (sceneTitle.getTextSize() * l);
+        if (l <= 12) {
+            lp.width = (int) (sceneTitle.getTextSize() * l + l);
         } else {
-            lp.width = DensityUtils.dp2px(sceneTitle.getContext(), 245);
+            lp.width = (int) (sceneTitle.getTextSize() * 12 );
         }
         if (sceneTitle.getTextSize() < DensityUtils.sp2px(sceneTitle.getContext(), 30)) {
             if (l * sceneTitle.getTextSize() <= DensityUtils.dp2px(sceneTitle.getContext(), 245)) {

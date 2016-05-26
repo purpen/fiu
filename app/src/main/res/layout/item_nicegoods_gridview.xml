@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="43yuan"
-                android:textColor="@color/red"
+                android:textColor="@color/yellow_bd8913"
                 android:textSize="14sp"/>
 
             <TextView

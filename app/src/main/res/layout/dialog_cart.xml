@@ -81,7 +81,7 @@
                 android:layout_toLeftOf="@id/dialog_cart_cancelimg"
                 android:layout_toRightOf="@id/dialog_cart_productimg"
                 android:singleLine="true"
-                android:textColor="@color/red"
+                android:textColor="@color/yellow_bd8913"
                 android:textSize="13sp"/>
 
             <LinearLayout

@@ -188,7 +188,7 @@
                         android:layout_width="71dp"
                         android:layout_height="71dp"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher"/>
+                        />
 
                     <ImageView
                         android:id="@+id/arrow"

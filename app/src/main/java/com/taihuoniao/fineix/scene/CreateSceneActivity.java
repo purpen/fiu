@@ -30,7 +30,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingItem;
@@ -507,10 +506,21 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case DataConstants.CREATE_QINGJING:
                     dialog.dismiss();
-                    NetBean netBean1 = (NetBean) msg.obj;
+                    AddProductBean netBean1 = (AddProductBean) msg.obj;
                     if (netBean1.isSuccess()) {
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CreateSceneActivity.this, MainActivity.class));
+                        Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
+                        in.putExtra("id", netBean1.getData().getId());
+                        startActivity(in);
+                        if (SelectPhotoOrCameraActivity.instance != null) {
+                            SelectPhotoOrCameraActivity.instance.finish();
+                        }
+                        if (CropPictureActivity.instance != null) {
+                            CropPictureActivity.instance.finish();
+                        }
+                        if (EditPictureActivity.instance != null) {
+                            EditPictureActivity.instance.finish();
+                        }
                         CreateSceneActivity.this.finish();
                     } else {
                         Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -532,6 +542,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
                         intent.putExtra("id", netBean.getData().getId());
                         startActivity(intent);
+                        if (SelectPhotoOrCameraActivity.instance != null) {
+                            SelectPhotoOrCameraActivity.instance.finish();
+                        }
+                        if (CropPictureActivity.instance != null) {
+                            CropPictureActivity.instance.finish();
+                        }
+                        if (EditPictureActivity.instance != null) {
+                            EditPictureActivity.instance.finish();
+                        }
                         CreateSceneActivity.this.finish();
                     } else {
                         Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
