@@ -70,7 +70,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         }else {
             holder.tv_desc.setVisibility(View.INVISIBLE);
         }
-        if (item.is_love==FocusFansAdapter.NOT_LOVE){
+        if (item.is_love==FansAdapter.NOT_LOVE){
             holder.btn.setText("关注");
             holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
             holder.btn.setBackgroundResource(R.drawable.border_radius5);
@@ -119,7 +119,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             @Override
             public void onClick(View view) {
                 button.setEnabled(false);
-                if (item.is_love == FocusFansAdapter.NOT_LOVE){
+                if (item.is_love == FansAdapter.NOT_LOVE){
                     ClientDiscoverAPI.focusOperate(String.valueOf(item._id), new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -129,7 +129,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             LogUtil.e("focusOperate",responseInfo.result);
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
-                                item.is_love=FocusFansAdapter.LOVE;
+                                item.is_love=FansAdapter.LOVE;
                                 button.setText("已关注");
                                 button.setTextColor(activity.getResources().getColor(android.R.color.white));
                                 button.setBackgroundResource(R.drawable.border_radius5_pressed);
@@ -157,7 +157,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             LogUtil.e("cancelFocusOperate",responseInfo.result);
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()){
-                                item.is_love=FocusFansAdapter.NOT_LOVE;
+                                item.is_love=FansAdapter.NOT_LOVE;
                                 button.setText("关注");
                                 button.setTextColor(activity.getResources().getColor(R.color.color_333));
                                 button.setBackgroundResource(R.drawable.border_radius5);

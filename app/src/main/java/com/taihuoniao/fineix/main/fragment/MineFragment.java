@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
+import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -350,12 +351,10 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.ll_focus:
                 intent = new Intent(activity, FocusActivity.class);
-                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FOCUS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent = new Intent(activity, FocusActivity.class);
-                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
+                intent = new Intent(activity, FansActivity.class);
                 startActivity(intent);
                 break;
             case R.id.iv_detail:
@@ -379,7 +378,7 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
-                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                startActivity(new Intent(activity, FansActivity.class));
         }
     }
 

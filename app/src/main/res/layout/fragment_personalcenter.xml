@@ -15,7 +15,7 @@
             android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp300">
+                android:layout_height="280dp">
                 <ImageView
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
@@ -272,7 +272,6 @@
                 android:id="@+id/btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
-                android:visibility="gone"
                 />
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"

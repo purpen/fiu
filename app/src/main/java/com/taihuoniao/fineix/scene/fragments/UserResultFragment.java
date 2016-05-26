@@ -258,7 +258,7 @@ public class UserResultFragment extends MyBaseFragment {
                 break;
             case R.id.ll_fans:
                 intent= new Intent(activity, FocusActivity.class);
-                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
+//                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.iv_detail:

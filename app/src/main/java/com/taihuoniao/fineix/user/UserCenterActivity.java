@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,7 +22,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.FocusFansAdapter;
+import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.adapters.UserCJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -101,7 +99,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Bind(R.id.tv_tips)
     TextView tv_tips;
     private boolean isFirstLoad = true;
-
+    private String flag;
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -375,7 +373,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             return;
         }
         LogUtil.e(TAG, "refreshUI===" + user._id);
-        if (user.is_love == FocusFansAdapter.NOT_LOVE) {
+        if (user.is_love == FansAdapter.NOT_LOVE) {
             bt_focus.setText("关注");
         } else {
             bt_focus.setText("已关注");
@@ -447,6 +445,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ibtn.setOnClickListener(this);
         ll_cj.setOnClickListener(this);
         ll_qj.setOnClickListener(this);
+        riv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (LoginInfo.getUserId() != userId) return;
+                flag=EditUserInfoActivity.class.getSimpleName();
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换头像"));
+            }
+        });
 
         lv_cj.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -522,6 +528,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
+                flag=UserCenterActivity.class.getSimpleName();
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换背景封面"));
                 break;
             case R.id.iv_right:
@@ -532,13 +539,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.ll_focus:
                 intent = new Intent(activity, FocusActivity.class);
-                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FOCUS_TYPE);
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, userId);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent = new Intent(activity, FocusActivity.class);
-                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
+                intent = new Intent(activity, FansActivity.class);
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, userId);
                 startActivity(intent);
                 break;
@@ -549,7 +554,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.bt_focus:
                 bt_focus.setEnabled(false);
-                if (user.is_love == FocusFansAdapter.NOT_LOVE) {
+                if (user.is_love == FansAdapter.NOT_LOVE) {
                     ClientDiscoverAPI.focusOperate(userId + "", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -559,7 +564,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             LogUtil.e("focusOperate", responseInfo.result);
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
-                                user.is_love = FocusFansAdapter.LOVE;
+                                user.is_love = FansAdapter.LOVE;
                                 bt_focus.setText("已关注");
                                 Util.makeToast(response.getMessage());
                                 return;
@@ -585,7 +590,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             LogUtil.e("cancelFocusOperate", responseInfo.result);
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
-                                user.is_love = FocusFansAdapter.NOT_LOVE;
+                                user.is_love = FansAdapter.NOT_LOVE;
                                 bt_focus.setText("关注");
                                 Util.makeToast(response.getMessage());
                                 return;
@@ -683,7 +688,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private void toCropActivity(Uri uri) {
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
-        intent.putExtra(ImageCropActivity.class.getName(),TAG);
+        intent.putExtra(ImageCropActivity.class.getName(),flag);
         startActivity(intent);
     }
 

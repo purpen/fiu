@@ -1,38 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:autolabel="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_f7f7f7"
-    >
+    android:orientation="vertical">
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/head_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp16"
+        android:gravity="center_vertical"
+        android:textColor="@color/color_333"
+        android:text="个性标签"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16"
+        android:paddingTop="@dimen/dp16">
+        <com.taihuoniao.fineix.view.labelview.AutoLabelUI
+            android:id="@+id/label_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            autolabel:label_background_res="@drawable/tags_gray"
+            autolabel:label_clickable="true"
+            autolabel:label_padding="0dp"
+            autolabel:show_cross="false"
+            autolabel:text_color="@color/color_666"
+            autolabel:text_size="@dimen/label_title_size" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginLeft="@dimen/dp16"
+        android:gravity="center_vertical"
+        android:textColor="@color/color_333"
+        android:text="个性签名"
+        />
     <EditText
         android:id="@+id/et_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/head_view"
         android:padding="@dimen/dp16"
-        android:hint="请输入个性签名"
+        android:hint="15个字以内的个性签名"
         android:gravity="left|top"
         android:textColorHint="@color/color_999"
-        android:minHeight="@dimen/dp100"
         android:textSize="@dimen/sp14"
         android:textColor="@color/color_333"
-        android:maxLines="5"
-        android:minLines="5"
-        android:maxLength="30"
+        android:maxLength="15"
         android:background="@android:color/white"
         />
-    <TextView
-        android:layout_below="@+id/et_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="30个字以内的个性签名"
-        android:layout_marginLeft="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp10"
-        android:textSize="@dimen/sp12"
-        android:textColor="@color/color_999"
-        />
-</RelativeLayout>
+</LinearLayout>

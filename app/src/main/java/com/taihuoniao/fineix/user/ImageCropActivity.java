@@ -66,7 +66,7 @@ public class ImageCropActivity extends BaseActivity {
             uri = intent.getParcelableExtra(ImageCropActivity.class.getSimpleName());
         }
 
-        if (intent.hasExtra(ImageCropActivity.class.getName())){
+        if (intent.hasExtra(ImageCropActivity.class.getName())){//区分界面
             page=intent.getStringExtra(ImageCropActivity.class.getName());
         }
     }

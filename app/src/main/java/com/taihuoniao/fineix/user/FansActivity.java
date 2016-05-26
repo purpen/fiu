@@ -12,7 +12,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.FocusFansAdapter;
+import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FocusFansData;
 import com.taihuoniao.fineix.beans.FocusFansItem;
@@ -42,14 +42,13 @@ public class FansActivity extends BaseActivity {
     TextView tv_tips;
     private int curPage = 1;
     private static final String PAGE_SIZE = "9999";  //分页大小
-    public static final String FOCUS_TYPE = "1";  //关注列表
     public static final String FANS_TYPE = "2";  //粉丝列表
     private ArrayList<FocusFansItem> list;
-    private FocusFansAdapter adapter;
-    private String pageType=FOCUS_TYPE;
-    public static final String USER_ID_EXTRA="USER_ID_EXTRA";
-    private long userId= LoginInfo.getUserId();
+    private FansAdapter adapter;
+    public static final String USER_ID_EXTRA = "USER_ID_EXTRA";
+    private long userId = LoginInfo.getUserId();
     private WaittingDialog dialog;
+
     public FansActivity() {
         super(R.layout.activity_focus_fans);
     }
@@ -57,19 +56,15 @@ public class FansActivity extends BaseActivity {
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
-        if (intent.hasExtra(getClass().getSimpleName())){
-            pageType=intent.getStringExtra(getClass().getSimpleName());
-        }
-
-        if (intent.hasExtra(USER_ID_EXTRA)){
-            userId=intent.getLongExtra(USER_ID_EXTRA,-1);
+        if (intent.hasExtra(USER_ID_EXTRA)) {
+            userId = intent.getLongExtra(USER_ID_EXTRA, -1);
         }
 
     }
 
     @Override
     protected void onResume() {
-        if(LoginInfo.getUserId()==userId){
+        if (LoginInfo.getUserId() == userId) {
             requestNet();
         }
         super.onResume();
@@ -77,12 +72,8 @@ public class FansActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        if (TextUtils.equals(FOCUS_TYPE,pageType)){
-            custom_head.setHeadCenterTxtShow(true, "关注");
-        }else {
-            custom_head.setHeadCenterTxtShow(true, "粉丝");
-        }
-        dialog=new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, "粉丝");
+        dialog = new WaittingDialog(this);
     }
 
     @Override
@@ -91,8 +82,8 @@ public class FansActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FocusFansItem focusFansItem = list.get(i);
-                Intent intent = new Intent(activity,UserCenterActivity.class);
-                intent.putExtra(USER_ID_EXTRA,focusFansItem.follows.user_id);
+                Intent intent = new Intent(activity, UserCenterActivity.class);
+                intent.putExtra(USER_ID_EXTRA, focusFansItem.follows.user_id);
                 startActivity(intent);
             }
         });
@@ -100,9 +91,9 @@ public class FansActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        LogUtil.e(TAG,"requestNet=="+userId);
+        LogUtil.e(TAG, "requestNet==" + userId);
         dialog.show();
-        ClientDiscoverAPI.getFocusFansList(userId+"",String.valueOf(curPage), PAGE_SIZE,pageType, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -114,7 +105,7 @@ public class FansActivity extends BaseActivity {
                     return;
                 }
 
-                LogUtil.e(TAG,responseInfo.result);
+                LogUtil.e(TAG, responseInfo.result);
                 FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
                 });
 
@@ -122,7 +113,7 @@ public class FansActivity extends BaseActivity {
                     return;
                 }
 
-                list=data.rows;
+                list = data.rows;
                 refreshUI();
             }
 
@@ -141,20 +132,16 @@ public class FansActivity extends BaseActivity {
         if (list == null) {
             return;
         }
-        if (list.size()==0){
+        if (list.size() == 0) {
             tv_tips.setVisibility(View.VISIBLE);
-            if (TextUtils.equals(FOCUS_TYPE,pageType)){
-                tv_tips.setText(R.string.focus_tips);
-            }else {
-                tv_tips.setText(R.string.fans_tips);
-            }
+            tv_tips.setText(R.string.fans_tips);
             return;
         }
 
-        if (adapter==null){
-            adapter=new FocusFansAdapter(list,activity,pageType,userId);
+        if (adapter == null) {
+            adapter = new FansAdapter(list, activity,userId);
             lv.setAdapter(adapter);
-        }else {
+        } else {
             adapter.notifyDataSetChanged();
         }
     }

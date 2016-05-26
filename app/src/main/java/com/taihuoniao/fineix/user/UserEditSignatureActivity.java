@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 
 import java.util.HashMap;
 
@@ -33,6 +34,9 @@ public class UserEditSignatureActivity extends BaseActivity{
     @Bind(R.id.et_nickname)
     EditText et_nickname;
     private User user;
+    @Bind(R.id.label_view)
+    AutoLabelUI label_view;
+
     public UserEditSignatureActivity(){
         super(R.layout.activity_edit_signatrue);
     }
