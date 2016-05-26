@@ -27,7 +27,8 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initView() {
         titleLayout.setTitleVisible(false);
-        titleLayout.setRightTv(R.string.complete,getResources().getColor(R.color.white),this);
+        titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
+        titleLayout.setBackgroundResource(R.color.black_touming);
         byte[] bytes = getIntent().getByteArrayExtra("bytes");
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         imageView.setImageBitmap(bitmap);
