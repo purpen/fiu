@@ -36,11 +36,8 @@ public class SceneTitleSetUtils {
 //        动态改变宽高
         ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
         Log.e("<<<动态改变宽高", "scale=" + sceneTitle.getTextScaleX() + ",size=" + sceneTitle.getTextSize() + ",l=" + l + ",全部字数宽度=" + (l * sceneTitle.getTextSize()) + ",300dp=" + (DensityUtils.dp2px(sceneTitle.getContext(), 300)));
-        if (l * sceneTitle.getTextSize() < DensityUtils.dp2px(sceneTitle.getContext(), 245)) {
+        if (l * sceneTitle.getTextSize() + l <= DensityUtils.dp2px(sceneTitle.getContext(), 245)) {
             lp.width = (int) (sceneTitle.getTextSize() * l);
-            if (minTitleSize == maxTitleSize) {
-                lp.width = lp.width + l;
-            }
         } else {
             lp.width = DensityUtils.dp2px(sceneTitle.getContext(), 245);
         }
