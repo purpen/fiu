@@ -37,6 +37,9 @@
         android:lineSpacingMultiplier="1.1"
         android:gravity="left|center"
         android:layout_alignTop="@+id/iv"
+        android:background="@drawable/msg_from"
+        android:paddingLeft="@dimen/dp15"
+        android:paddingRight="@dimen/dp10"
         android:text="别人聊天记录"
         android:textColor="@color/color_333"
         />

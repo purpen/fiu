@@ -246,7 +246,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 
     private void showInfoWindow(LatLng ll,QingJingItem item){
         View view = Util.inflateView(activity, R.layout.info_window_layout, null);
-        LogUtil.e("huge", item.cover_url);
+        LogUtil.e(TAG, item.cover_url);
         ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)),options);
         ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);
         ((TextView) view.findViewById(R.id.tv_location)).setText(item.address);
