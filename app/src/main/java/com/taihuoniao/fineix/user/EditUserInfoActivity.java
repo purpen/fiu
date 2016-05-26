@@ -161,7 +161,14 @@ public class EditUserInfoActivity extends BaseActivity {
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_gender_layout, R.string.select_gender, Arrays.asList(getResources().getStringArray(R.array.user_gender))));
                 break;
             case R.id.custom_code:
-                startActivity(new Intent(activity, MyBarCodeActivity.class));
+                intent= new Intent(activity, MyBarCodeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url",user.medium_avatar_url);
+                bundle.putString("nickName",user.nickname);
+                bundle.putString("sex",user.sex+"");
+                bundle.putSerializable("areas",user.areas);
+                intent.putExtra(MyBarCodeActivity.class.getSimpleName(),bundle);
+                startActivity(intent);
                 break;
             case R.id.custom_auth:
                 startActivity(new Intent(activity,RankTagActivity.class));

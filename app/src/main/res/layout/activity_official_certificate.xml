@@ -3,7 +3,10 @@
     xmlns:autolabel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    >
 
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
@@ -145,7 +148,7 @@
             <RelativeLayout
                 android:id="@+id/rl_id"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp200"
+                android:layout_height="@dimen/dp240"
                 android:layout_marginBottom="@dimen/dp16"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
@@ -180,7 +183,7 @@
             <RelativeLayout
                 android:id="@+id/rl_card"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp200"
+                android:layout_height="@dimen/dp240"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
                 android:background="@android:color/white">

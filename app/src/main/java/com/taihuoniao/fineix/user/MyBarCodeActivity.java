@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -61,26 +63,53 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     RelativeLayout rl;
     @Bind(R.id.rl_box)
     RelativeLayout rl_box;
+    private String url;
+    private String nickName;
+    private String sex;
+    private ArrayList<String> areas;
+
     public MyBarCodeActivity() {
         super(R.layout.activity_bar_code);
+    }
+
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(MyBarCodeActivity.class.getSimpleName())) {
+            Bundle bundle = intent.getBundleExtra(MyBarCodeActivity.class.getSimpleName());
+            url = bundle.getString("url");
+            nickName = bundle.getString("nickName");
+            sex = bundle.getString("sex");
+            areas = (ArrayList<String>) bundle.getSerializable("areas");
+        }else {
+            LoginInfo loginInfo = LoginInfo.getLoginInfo();
+            if (loginInfo==null) return;
+            url=loginInfo.getMedium_avatar_url();
+            nickName=loginInfo.getNickname();
+            sex=loginInfo.getSex();
+            areas=loginInfo.areas;
+        }
     }
 
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "二维码");
         custom_head.setRightImgBtnShow(true);
-        LoginInfo loginInfo = LoginInfo.getLoginInfo();
-        if (loginInfo != null) {
-            ImageLoader.getInstance().displayImage(loginInfo.getMedium_avatar_url(), riv);
-            tv_name.setText(loginInfo.getNickname());
-            if (TextUtils.equals(loginInfo.getSex(), "1")) {
-                tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.male, 0);
-            } else {
-                tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.female, 0);
-            }
-            if (loginInfo.areas != null && loginInfo.areas.size() == 2) {
-                tv_address.setText(String.format("%s %s", loginInfo.areas.get(0), loginInfo.areas.get(1)));
-            }
+        if (!TextUtils.isEmpty(url)) {
+            ImageLoader.getInstance().displayImage(url, riv);
+        }
+
+        if (!TextUtils.isEmpty(nickName)) {
+            tv_name.setText(nickName);
+        }
+        if (TextUtils.equals(sex, "1")) {
+            tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.male, 0);
+        } else {
+            tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.female, 0);
+        }
+        if (areas != null && areas.size() == 2) {
+            tv_address.setText(String.format("%s %s", areas.get(0), areas.get(1)));
         }
 
         try {
@@ -105,20 +134,20 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
 
     private View initPopView(int layout) {
         View view = Util.inflateView(this, layout, null);
-        GridView gv = (GridView)view.findViewById(R.id.gv);
+        GridView gv = (GridView) view.findViewById(R.id.gv);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
         View iv_close = view.findViewById(R.id.tv_cancel);
-        int[] image={R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.sina,R.mipmap.qqzone,};
-        String[] name={"微信好友","微信朋友圈","新浪微博","QQ空间"};
-        List<HashMap<String, Object>> shareList=new ArrayList<HashMap<String,Object>>();
-        for(int i=0;i<image.length;i++){
+        int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone,};
+        String[] name = {"微信好友", "微信朋友圈", "新浪微博", "QQ空间"};
+        List<HashMap<String, Object>> shareList = new ArrayList<HashMap<String, Object>>();
+        for (int i = 0; i < image.length; i++) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("image", image[i]);
             map.put("text", name[i]);
             shareList.add(map);
         }
-        SimpleAdapter adapter=new SimpleAdapter(activity, shareList, R.layout.share_item_layout,new String[] {"image","text"}, new int[] {R.id.iv_plat_logo,R.id.tv_plat_name});
+        SimpleAdapter adapter = new SimpleAdapter(activity, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
         gv.setAdapter(adapter);
         gv.setOnItemClickListener(itemClicklistener);
         iv_take_photo.setOnClickListener(this);
@@ -126,15 +155,16 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         iv_close.setOnClickListener(this);
         return view;
     }
-    private AdapterView.OnItemClickListener itemClicklistener=new AdapterView.OnItemClickListener() {
+
+    private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            String title="有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://m.taihuoniao.com/guide/fiu?infoType=13&infoId="+LoginInfo.getUserId();
-            String titleUrl="http://m.taihuoniao.com/guide/fiu?infoType=13&infoId="+LoginInfo.getUserId();
-            String imgPath=FileUtils.getSavePath("Fiu") + "/share.png";
-            FileUtils.bitmapToFile(ImageUtils.convertViewToBitmap(rl_box),imgPath);
+            String title = "有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
+            String titleUrl = "http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
+            String imgPath = FileUtils.getSavePath("Fiu") + "/share.png";
+            FileUtils.bitmapToFile(ImageUtils.convertViewToBitmap(rl_box), imgPath);
             Platform.ShareParams params = null;
-            switch (i){ //微信好友
+            switch (i) { //微信好友
                 case 0:
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_IMAGE);

@@ -177,6 +177,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void requestNet() {
+        resetData();
         if (userId <= 0) {
             LogUtil.e(TAG, "userId<=0");
             return;
@@ -465,6 +466,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     if (absListView.getLastVisiblePosition() == mSceneList.size()) {
                         LogUtil.e("curPage==", curPage + "");
+                        isFirstLoad=false;
                         loadCJData();
                     }
                 }
@@ -481,6 +483,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     LogUtil.e("getLastVisiblePosition", absListView.getLastVisiblePosition() + "");
                     LogUtil.e("mQJList.size", mQJList.size() + "");
+                    isFirstLoad=false;
                     if (mQJList.size() % 2 == 0) {
                         if (absListView.getLastVisiblePosition() == mQJList.size() / 2) {
                             LogUtil.e("curPage==偶数", curPage + "");

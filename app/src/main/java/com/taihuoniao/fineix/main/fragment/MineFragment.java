@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -364,7 +365,11 @@ public class MineFragment extends MyBaseFragment {
                 Util.makeToast("认证");
                 break;
             case R.id.item_about_us:
-                startActivity(new Intent(activity, AboutUsActivity.class));
+                String url="http://m.taihuoniao.com/app/api/view/about";
+                intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
+                intent.putExtra(AboutUsActivity.class.getName(),"关于我们");
+                startActivity(intent);
                 break;
             case R.id.item_feedback:
                 startActivity(new Intent(activity, FeedbackActivity.class));
@@ -394,8 +399,15 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(new Intent(activity, OrderQJActivity.class));
                         break;
                     case 3:
-                        Intent intent = new Intent(getActivity(), HasLoveActivity.class);
+                        Intent intent = new Intent(activity, HasLoveActivity.class);
                         intent.putExtra("user", user);
+                        startActivity(intent);
+                        break;
+                    case 4:
+                        String url="http://m.taihuoniao.com/app/api/view/fiu_point?uuid="+ MainApplication.uuid+"&from_to=2";
+                        intent = new Intent(activity, AboutUsActivity.class);
+                        intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
+                        intent.putExtra(AboutUsActivity.class.getName(),"积分");
                         startActivity(intent);
                         break;
                     case 8:

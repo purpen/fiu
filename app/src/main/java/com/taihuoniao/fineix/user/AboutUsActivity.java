@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -21,14 +22,27 @@ public class AboutUsActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     private ProgressDialog mDialog;
-
+    private String url;
+    private String title;
     public AboutUsActivity(){
         super(R.layout.activity_about_us);
     }
 
     @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(AboutUsActivity.class.getSimpleName())){
+            url=intent.getStringExtra(AboutUsActivity.class.getSimpleName());
+        }
+
+        if (intent.hasExtra(AboutUsActivity.class.getName())){
+            title=intent.getStringExtra(AboutUsActivity.class.getName());
+        }
+    }
+
+    @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"关于我们");
+        custom_head.setHeadCenterTxtShow(true,title);
         mDialog = new ProgressDialog(this);
         mDialog.setMessage("正为您拼命加载...");
         mDialog.show();
@@ -81,8 +95,8 @@ public class AboutUsActivity extends BaseActivity {
                 return true;
             }
         });
-
-        mWebAbout.loadUrl("http://m.taihuoniao.com/guide/about");
+//        "http://m.taihuoniao.com/app/api/view/about"
+        mWebAbout.loadUrl(url);
     }
 
 }
