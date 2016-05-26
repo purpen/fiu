@@ -25,18 +25,18 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
+import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
-import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
-import com.taihuoniao.fineix.user.RankTagActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
@@ -290,7 +290,7 @@ public class MineFragment extends MyBaseFragment {
                 tv_tag.setText(String.format("%s | ", user.label));
             } else {
                 tv_tag.setText(String.format("%s | ", user.label));
-                tv_tag.setBackgroundColor(Color.GREEN);
+//                tv_tag.setBackgroundColor(Color.GREEN);
             }
         }
 
@@ -348,13 +348,13 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(intent);
                 break;
             case R.id.ll_focus:
-                intent = new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FOCUS_TYPE);
+                intent = new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FOCUS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent = new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(), FocusFansActivity.FANS_TYPE);
+                intent = new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.iv_detail:
@@ -373,7 +373,8 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
             case R.id.btn:
-                startActivity(new Intent(activity, OrderInterestQJActivity.class));
+//                startActivity(new Intent(activity, BDSearchAddressActivity.class));
+                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
         }
     }
 

@@ -11,8 +11,13 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -58,8 +63,16 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     EditText et_info;
     @Bind(R.id.et_contacts)
     EditText et_contacts;
+    @Bind(R.id.rl_card)
+    RelativeLayout rl_card;
+    @Bind(R.id.rl_id)
+    RelativeLayout rl_id;
     private Bitmap bitmap_id;
     private Bitmap bitmap_card;
+    @Bind(R.id.progress_bar)
+    ProgressBar progress_bar;
+    @Bind(R.id.btn)
+    Button btn;
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
@@ -151,7 +164,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 
         String contacts = et_contacts.getText().toString().trim();
         if (TextUtils.isEmpty(contacts)) {
-            Util.makeToast("请填写认证信息");
+            Util.makeToast("请填写联系方式");
             return;
         }
 
@@ -163,40 +176,28 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             Util.makeToast("请先选择名片");
             return;
         }
-
-        final ProgressDialog dialog = new ProgressDialog(activity);
-        dialog.setTitle("认证信息上传中...");
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setButton(ProgressDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-//                Util.makeToast("取消");
-                NetworkManager.getInstance().cancel(NetworkConstance.UPDATE_USER_IDENTIFY);
-            }
-        });
+        setViewsEnable(false);
         ClientDiscoverAPI.uploadIdentityInfo(info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
-
             @Override
             public void onStart() {
-                if (dialog != null && !activity.isFinishing()) dialog.show();
-            }
-
-            @Override
-            public void onLoading(long total, long current, boolean isUploading) {
-                super.onLoading(total, current, isUploading);
-                dialog.setMax((int) total);
-                dialog.setProgress((int) current);
+                if (progress_bar != null) progress_bar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog != null) dialog.dismiss();
+                if (bitmap_id != null) bitmap_id.recycle();
+                if (bitmap_card != null) bitmap_card.recycle();
+                setViewsEnable(true);
+                if (progress_bar != null) progress_bar.setVisibility(View.GONE);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
                     Util.makeToast("您的认证信息已提交成功,我们会尽快给予审核！");
+                    finish();
+                    if (RankTagActivity.instance!=null){
+                        RankTagActivity.instance.finish();
+                    }
                     return;
                 }
                 Util.makeToast(response.getMessage());
@@ -204,11 +205,21 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog != null) dialog.dismiss();
+                setViewsEnable(true);
+                if (progress_bar != null) progress_bar.setVisibility(View.GONE);
                 Util.makeToast("网络异常，请确保网络畅通");
             }
         });
 
+    }
+
+    private void setViewsEnable(boolean enable) {
+        label_view.setEnabled(enable);
+        et_info.setEnabled(enable);
+        et_contacts.setEnabled(enable);
+        rl_card.setEnabled(enable);
+        rl_id.setEnabled(enable);
+        btn.setEnabled(enable);
     }
 
     @Override
@@ -279,7 +290,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     @Override
     protected void onDestroy() {
         if (bitmap_id != null) bitmap_id.recycle();
-        if (bitmap_card!=null) bitmap_card.recycle();
+        if (bitmap_card != null) bitmap_card.recycle();
         super.onDestroy();
     }
 }

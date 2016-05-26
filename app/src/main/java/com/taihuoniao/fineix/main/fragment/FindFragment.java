@@ -56,7 +56,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -499,7 +499,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 public void onClick(View v) {
                     RandomImg randomImg1 = (RandomImg) v.getTag();
                     Intent intent = new Intent(getActivity(), UserCenterActivity.class);
-                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA, Long.parseLong(randomImg1.id));
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(randomImg1.id));
                     startActivity(intent);
                 }
             });

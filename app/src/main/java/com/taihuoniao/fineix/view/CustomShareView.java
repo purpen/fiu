@@ -60,8 +60,8 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         View view = Util.inflateView(context, R.layout.share_layout, this);
         gv_share = (GridView) view.findViewById(R.id.gv_share);
         tv_cancel = view.findViewById(R.id.tv_cancel);
-        int[] image={R.mipmap.qq,R.mipmap.qqzone,R.mipmap.sina,R.mipmap.wechat,R.mipmap.wechatmoment};
-        String[] name={"QQ","QQ空间","新浪微博","微信好友","微信朋友圈"};
+        int[] image={R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.sina,R.mipmap.qqzone};
+        String[] name={"微信好友","微信朋友圈","新浪微博","QQ空间",};
         List<HashMap<String, Object>> shareList=new ArrayList<HashMap<String,Object>>();
         for(int i=0;i<image.length;i++){
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -85,26 +85,27 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params=null;
             switch (position){
-                case 0:
-                    //qq
-                    params=new Platform.ShareParams();
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                    params.setTitleUrl("http://www.taihuoniao.com/");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    Platform qq = ShareSDK.getPlatform(QQ.NAME);
-                    qq.setPlatformActionListener(CustomShareView.this);
-                    qq.share(params);
-                    break;
-                case 1:
+//                case 0:
+//                    //qq
+//                    params=new Platform.ShareParams();
+////                    params.setTitle(getResources().getString(R.string.share_title_url));
+//                    params.setText(getResources().getString(R.string.share_title_url));
+////                    params.setTitleUrl("http://www.taihuoniao.com/");
+////                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+//                    Platform qq = ShareSDK.getPlatform(QQ.NAME);
+//                    qq.setPlatformActionListener(CustomShareView.this);
+//                    qq.share(params);
+//                    break;
+                case 3:
                     //qqzong
                     params= new Platform.ShareParams();
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                    params.setTitleUrl("http://www.taihuoniao.com/"); // 标题的超链接
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
-                    params.setSite(context.getString(R.string.app_name));
-                    params.setSiteUrl("http://www.taihuoniao.com/");
+                    params.setText(getResources().getString(R.string.share_title_url));
+//                    params.setTitle(getResources().getString(R.string.share_title_url));
+//                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
+//                    params.setTitleUrl("http://www.taihuoniao.com/"); // 标题的超链接
+//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+//                    params.setSite(context.getString(R.string.app_name));
+//                    params.setSiteUrl("http://www.taihuoniao.com/");
                     Platform qzone = ShareSDK.getPlatform (QZone.NAME);
                     qzone.setPlatformActionListener (CustomShareView.this); // 设置分享事件回调
                     qzone.share(params);
@@ -112,33 +113,32 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 2:
                     //sina
                     params = new Platform.ShareParams();
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+//                    params.setTitle(getResources().getString(R.string.share_title_url));
+                    params.setText(getResources().getString(R.string.share_title_url));
+//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     weibo.share(params);
                     break;
-                case 3:
+                case 0:
                     //wechat
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("http://www.taihuoniao.com/");
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+                    params.setShareType(Platform.SHARE_TEXT);
+//                params.setUrl("http://m.taihuoniao.com/guide/fiu");
+//                params.setTitle(getResources().getString(R.string.share_title_url));
+                    params.setText(getResources().getString(R.string.share_title_url));
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(CustomShareView.this);
                     wechat.share(params);
                     break;
-                case 4:
+                case 1:
                     //wechatmoment
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setUrl("http://www.taihuoniao.com/");
-                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com/");
-                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+                    params.setShareType(Platform.SHARE_TEXT);
+//                    params.setUrl("http://www.taihuoniao.com/");
+//                    params.setTitle(getResources().getString(R.string.share_title_url));
+                    params.setText(getResources().getString(R.string.share_title_url));
+//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(CustomShareView.this);
                     wechatMoments.share(params);

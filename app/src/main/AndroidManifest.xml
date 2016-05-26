@@ -248,7 +248,12 @@
             android:theme="@style/AppTheme"/>
 
         <activity
-            android:name=".user.FocusFansActivity"
+            android:name=".user.FocusActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".user.FansActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 
@@ -286,6 +291,7 @@
         <activity
             android:name=".user.RankTagActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:theme="@style/AppTheme"/>
 
         <activity
@@ -408,14 +414,14 @@
         </service>
 
         <!--此处为测试value，线上版本务必更换-->
-        <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="muQDLN6lCST6qMDvTAydAilM"/>
+        <!--<meta-data-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
 
         <!--百度地图线上API_KEY-->
-        <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

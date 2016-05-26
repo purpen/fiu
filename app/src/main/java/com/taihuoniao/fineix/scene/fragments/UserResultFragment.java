@@ -26,8 +26,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.user.FocusFansActivity;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -253,13 +252,13 @@ public class UserResultFragment extends MyBaseFragment {
                 Util.makeToast("我创建的场景");
                 break;
             case R.id.ll_focus:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FOCUS_TYPE);
+                intent= new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FOCUS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.ll_fans:
-                intent= new Intent(activity, FocusFansActivity.class);
-                intent.putExtra(FocusFansActivity.class.getSimpleName(),FocusFansActivity.FANS_TYPE);
+                intent= new Intent(activity, FocusActivity.class);
+                intent.putExtra(FocusActivity.class.getSimpleName(), FocusActivity.FANS_TYPE);
                 startActivity(intent);
                 break;
             case R.id.iv_detail:

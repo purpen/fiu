@@ -1,13 +1,11 @@
 package com.taihuoniao.fineix.map;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -28,7 +26,9 @@ import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 
@@ -48,15 +48,20 @@ public class HotCitiesActivity extends BaseActivity<City> {
     TextView tv_location;
     private ArrayList<City> cities;
     private HotCitiesAdapter adapter = null;
+    private WaittingDialog dialog;
     public HotCitiesActivity() {
         super(R.layout.activity_hotcities_layout);
     }
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, R.string.select_city);
+        custom_head.setHeadRightTxtShow(true,"全部城市");
+        custom_head.getHeadRightTV().setCompoundDrawablesWithIntrinsicBounds(R.mipmap.all_city,0,0,0);
+        custom_head.getHeadRightTV().setTextColor(Color.parseColor("#af8323"));
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
         recycler_view.setItemAnimator(new DefaultItemAnimator());
+        dialog=new WaittingDialog(this);
     }
 
     public void setCurrentCity(BDLocation location) {
@@ -108,12 +113,12 @@ public class HotCitiesActivity extends BaseActivity<City> {
         httpUtils.send(HttpRequest.HttpMethod.POST, NetworkConstance.HOT_CITIES, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                //TODO 弹出加载框
+                if (!activity.isFinishing()&&dialog!=null) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                //TODO 关闭加载框
+                if (dialog!=null) dialog.dismiss();
                 if (responseInfo!=null && responseInfo.result!=null){
                    cities = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<ArrayList<City>>>() {});
                     refreshUI();
@@ -122,8 +127,8 @@ public class HotCitiesActivity extends BaseActivity<City> {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                //TODO 关闭加载框
-                LogUtil.e(TAG,s);
+                if (dialog!=null) dialog.dismiss();
+                Util.makeToast("网络异常,请确保网络畅通");
             }
         });
 

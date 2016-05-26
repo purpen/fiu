@@ -129,6 +129,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private AdapterView.OnItemClickListener itemClicklistener=new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            String title="有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://m.taihuoniao.com/guide/fiu?infoType=13&infoId="+LoginInfo.getUserId();
+            String titleUrl="http://m.taihuoniao.com/guide/fiu?infoType=13&infoId="+LoginInfo.getUserId();
             String imgPath=FileUtils.getSavePath("Fiu") + "/share.png";
             FileUtils.bitmapToFile(ImageUtils.convertViewToBitmap(rl_box),imgPath);
             Platform.ShareParams params = null;
@@ -137,7 +139,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
-                    params.setTitle("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com");
+//                    params.setTitle(title);
+//                    params.setTitleUrl(titleUrl);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(MyBarCodeActivity.this);
                     wechat.share(params);
@@ -146,14 +149,17 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
-                    params.setTitle("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com");
+//                    params.setTitle(title);
+//                    params.setTitleUrl(titleUrl);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(MyBarCodeActivity.this);
                     wechatMoments.share(params);
                     break;
                 case 2: //新浪微博
                     params = new Platform.ShareParams();
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://www.taihuoniao.com");
+                    params.setShareType(Platform.SHARE_IMAGE);
+//                    params.setText(title);
+//                    params.setTitleUrl(titleUrl);
                     params.setImagePath(imgPath);
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(MyBarCodeActivity.this); // 设置分享事件回调
@@ -164,8 +170,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
 //                    params.setTitle("有Fiu的生活");
-                    params.setText("有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>");
-                    params.setTitleUrl("http://www.taihuoniao.com"); // 标题的超链接
+//                    params.setText(title);
+//                    params.setTitleUrl(titleUrl); // 标题的超链接
 //                    params.setSite("");
 //                    params.setSiteUrl("http://www.taihuoniao.com/");
                     Platform qzone = ShareSDK.getPlatform(QZone.NAME);

@@ -31,11 +31,13 @@
         <ImageButton
             android:id="@+id/ibtn"
             android:layout_width="@dimen/dp15"
-            android:layout_height="@dimen/dp15"
-            android:src="@mipmap/clear"
+            android:layout_height="match_parent"
+            android:src="@mipmap/x"
             android:background="@null"
-            android:layout_marginRight="@dimen/dp16"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp16"
             android:layout_centerVertical="true"
             />
     </RelativeLayout>

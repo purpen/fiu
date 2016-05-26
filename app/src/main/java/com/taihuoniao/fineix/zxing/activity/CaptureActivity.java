@@ -43,12 +43,11 @@ import com.taihuoniao.fineix.beans.BarCode;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.user.FocusFansActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.StringUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
@@ -267,7 +266,7 @@ public final class CaptureActivity extends BaseActivity implements
                 }
                 if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
                     intent=new Intent(CaptureActivity.this, UserCenterActivity.class);
-                    intent.putExtra(FocusFansActivity.USER_ID_EXTRA,infoId);
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA,infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
                     intent = new Intent(CaptureActivity.this, QingjingDetailActivity.class);
