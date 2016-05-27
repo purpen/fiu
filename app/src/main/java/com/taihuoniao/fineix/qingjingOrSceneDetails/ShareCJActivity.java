@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -156,7 +157,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         }
         super.onDestroy();
     }
+
     private int imgWidth = 0;
+
     //动态设置container和imgview的宽高
     private void setImgParams() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) img.getLayoutParams();
@@ -231,8 +234,18 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
             container.removeView(view);
         }
         double width = MainApplication.getContext().getScreenWidth();
-      double bi = ((double)imgWidth/width);
-        view = ShareCJUtils.selectStyle(container, position, netScene,bi);
+        double bi = ((double) imgWidth / width);
+        setImgParams();
+        if (position == 4) {
+            ViewGroup.LayoutParams lp = img.getLayoutParams();
+            lp.width = (int) (lp.width * 0.8);
+            lp.height = (int) (lp.height * 0.8);
+        } else if (position == 5 || position == 6) {
+            ViewGroup.LayoutParams lp = img.getLayoutParams();
+            lp.width = (int) (lp.width * 0.8);
+            lp.height = (int) (lp.height * 0.8);
+        }
+        view = ShareCJUtils.selectStyle(container, position, netScene, bi);
         container.addView(view);
         currentPosition = position;
     }
