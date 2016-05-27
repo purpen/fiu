@@ -3,7 +3,9 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -17,6 +19,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
+import com.taihuoniao.fineix.view.labelview.Label;
 
 import java.util.HashMap;
 
@@ -36,7 +39,8 @@ public class UserEditSignatureActivity extends BaseActivity{
     private User user;
     @Bind(R.id.label_view)
     AutoLabelUI label_view;
-
+    @Bind(R.id.tv_tag)
+    TextView tv_tag;
     public UserEditSignatureActivity(){
         super(R.layout.activity_edit_signatrue);
     }
@@ -55,9 +59,24 @@ public class UserEditSignatureActivity extends BaseActivity{
     protected void initView() {
         head_view.setHeadCenterTxtShow(true,"个性签名");
         head_view.setHeadRightTxtShow(true, R.string.save);
+        String[] stringArray = getResources().getStringArray(R.array.user_tags);
+        for (int i = 0; i < stringArray.length; i++) {
+            label_view.addLabel(stringArray[i]);
+        }
         if (user!=null){
             et_nickname.setText(user.summary);
         }
+    }
+
+    @Override
+    protected void installListener() {
+        label_view.setOnLabelClickListener(new AutoLabelUI.OnLabelClickListener() {
+            @Override
+            public void onClickLabel(Label labelClicked) {
+                tv_tag.setVisibility(View.VISIBLE);
+                tv_tag.setText(labelClicked.getText());
+            }
+        });
     }
 
     @OnClick(R.id.tv_head_right)

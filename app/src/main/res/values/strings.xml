@@ -155,6 +155,16 @@
         <item>特殊人物</item>
         <item>老炮儿</item>
         <item>特种兵</item>
+        <item>孤独癖</item>
+        <item>夜猫子</item>
+        <item>party animal</item>
+        <item>玻璃心</item>
+        <item>专治不服</item>
+        <item>帅到爆炸</item>
+        <item>德艺双馨</item>
+        <item>少女萌妹子</item>
+        <item>铲屎猫奴</item>
+        <item>素人</item>
     </string-array>
     <string name="select_tag_tip">选择一个标签或输入15字以内的描述</string>
     <string-array name="official_tags">
@@ -171,6 +181,5 @@
     <string name="user_center_cj_tip">你还没有发表过新场景哦，快来Fiu一下嘛</string>
     <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
     <string name="fans_tips">给你一首歌的时间就回来哦，粉丝们还等着你的新动态呢</string>
-    <string name="share_title_url">我喜欢用图片梳理情绪，个性滤镜搭配细腻文字、还能一站购齐好设计！Fiu有一百种方式让你创新生活体验，快来让分享变成生产力。http://m.taihuoniao.com/guide/fiu
-</string>
+    <string name="share_title_url">我喜欢用图片梳理情绪，个性滤镜搭配细腻文字、还能一站购齐好设计！Fiu有一百种方式让你创新生活体验，快来让分享变成生产力。http://m.taihuoniao.com/guide/fiu</string>
 </resources>
