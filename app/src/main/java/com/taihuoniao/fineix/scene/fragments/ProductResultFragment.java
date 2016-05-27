@@ -81,7 +81,7 @@ public class ProductResultFragment extends BaseFragment {
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "","tag", handler);
+                DataPaser.search(q, t, page + "","tag",null, handler);
             }
         });
         list = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ProductResultFragment extends BaseFragment {
             return;
         }
         dialog.show();
-        DataPaser.search(q, t, page + "","tag", handler);
+        DataPaser.search(q, t, page + "","tag",null, handler);
     }
 
     public void refreshData(String q, String t) {

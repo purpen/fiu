@@ -17,7 +17,6 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -81,9 +80,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                 startActivity(intent1);
                 break;
             case R.id.activity_good_list_search:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("t", "10");
-                startActivity(intent);
+                onBackPressed();
                 break;
         }
     }

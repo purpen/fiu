@@ -4,7 +4,6 @@
                 android:layout_height="match_parent"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:padding="22dp">
-
     <LinearLayout
         android:id="@+id/activity_share_user_linear"
         android:layout_marginTop="10dp"
@@ -23,6 +22,7 @@
             />
 
         <RelativeLayout
+            android:id="@+id/activity_share_user_right_relative"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
@@ -68,7 +68,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:maxWidth="300dp"
             android:text="详见的小路"
             android:textColor="@color/white"
             android:textSize="40sp"/>
@@ -84,6 +83,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/activity_share_location_img"
             android:layout_width="wrap_content"
             android:layout_height="11dp"
             android:src="@mipmap/location_white_width_16px"/>
@@ -127,6 +127,7 @@
             android:textSize="10sp"/>
 
         <TextView
+            android:id="@+id/activity_share_scene_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/activity_share_scene_des"
@@ -152,11 +153,13 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/activity_share_fiu_img"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:src="@mipmap/logo"/>
 
         <TextView
+            android:id="@+id/activity_share_fiu_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

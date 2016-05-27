@@ -11,8 +11,6 @@ import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
-import cn.sharesdk.framework.statistics.NewAppReceiver;
-
 /**
  * Created by android on 2015/12/27.
  * 参数设置
@@ -421,13 +419,14 @@ public class ClientDiscoverAPI {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page, String evt, RequestCallBack<String> callBack) {
+    public static void search(String q, String t, String page, String evt, String sort, RequestCallBack<String> callBack) {
         String url = NetworkConstance.search;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", t);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("evt", evt);
+        params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("size", 8 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
@@ -1214,7 +1213,14 @@ public class ClientDiscoverAPI {
     public static void tixingFahuo(String rid, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/shopping/alert_send_goods";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("rid", rid);
+        params.addQueryStringParameter("rid", rid);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //分享场景语境次数
+    public static void commitShareCJ(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.BASE_URL+"/scene_sight/add_share_context_num";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id",id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

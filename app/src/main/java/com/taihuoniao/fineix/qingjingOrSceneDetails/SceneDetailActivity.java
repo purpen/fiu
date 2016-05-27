@@ -552,7 +552,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     };
 
     private void setTitleWidth() {
-        SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21);
+        SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21,1);
     }
 
     //获取相近产品
@@ -660,6 +660,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent4);
                 break;
             case R.id.popup_scene_detail_more_jubao:
+                if(!LoginInfo.isUserLogin()){
+                    Toast.makeText(SceneDetailActivity.this,"请先登录",Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.SceneDetailActivity;
+                    LoginCompleteUtils.id = id;
+                    startActivity(new Intent(SceneDetailActivity.this,OptRegisterLoginActivity.class));
+                    return;
+                }
                 Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
                 intent1.putExtra("target_id", id);
                 intent1.putExtra("type", 4 + "");

@@ -127,12 +127,37 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/activity_main_first_img"
+
+    <RelativeLayout
+        android:id="@+id/activity_main_first_relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        android:src="@mipmap/first_in_index2"
-       />
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/activity_main_first_right_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="3dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/activity_main_first_left_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/activity_main_first_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+
 </RelativeLayout>

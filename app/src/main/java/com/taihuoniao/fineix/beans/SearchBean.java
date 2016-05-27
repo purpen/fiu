@@ -31,7 +31,7 @@ public class SearchBean extends NetBean {
         }
     }
 
-    public static class SearchItem implements Serializable{
+    public static class SearchItem implements Serializable {
         private boolean isSelect;
         private String _id;
         private String cover_url;
@@ -46,6 +46,33 @@ public class SearchBean extends NetBean {
         private String sale_price;
         private String market_price;
         private String attrbute;
+        private String content;
+        private String oid;
+        private String des;
+
+        public String getDes() {
+            return des;
+        }
+
+        public void setDes(String des) {
+            this.des = des;
+        }
+
+        public String getOid() {
+            return oid;
+        }
+
+        public void setOid(String oid) {
+            this.oid = oid;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
 
         public String getMarket_price() {
             return market_price;

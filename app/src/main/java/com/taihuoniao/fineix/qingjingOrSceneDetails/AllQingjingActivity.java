@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -24,7 +25,6 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -46,6 +46,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     private PullToRefreshGridView pullToRefreshView;
     private GridView qingjingGrid;
     private List<QingJingListBean.QingJingItem> qingjingList;
+    private RelativeLayout firstRelative;//第一次进入app会用到
     //适配器
     private AllQingjingGridAdapter allQingjingGridAdapter;
     private ProgressBar progressBar;
@@ -69,6 +70,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         pullToRefreshView = (PullToRefreshGridView) findViewById(R.id.activity_all_qingjing_pullrefreshview);
         qingjingGrid = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) findViewById(R.id.activity_all_qingjing_progress);
+        firstRelative = (RelativeLayout) findViewById(R.id.activity_all_qingjing_first);
         dialog = new WaittingDialog(AllQingjingActivity.this);
     }
 
@@ -207,7 +209,13 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
             //判断是不是第一次进入Fiu界面
             boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
             if (isFirstIn) {
-                FirstInAppUtils.showPop(AllQingjingActivity.this, FirstInAppUtils.ALL, activity_view);
+                firstRelative.setVisibility(View.VISIBLE);
+                firstRelative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        firstRelative.setVisibility(View.GONE);
+                    }
+                });
                 SharedPreferences.Editor editor = firstInSp.edit();
                 editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
                 editor.apply();

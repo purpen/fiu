@@ -169,7 +169,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21);
+        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21,1);
         return convertView;
     }
 

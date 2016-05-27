@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -90,7 +93,10 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         if (list != null) {
             ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
             holder.addressTv.setText(list.get(position).getAddress());
-            holder.title.setText(list.get(position).getTitle());
+            SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).getTitle());
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
+            style.setSpan(backgroundColorSpan, 0, list.get(position).getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            holder.title.setText(style);
             if (list.get(position).isSelect()) {
                 holder.selectImg.setVisibility(View.VISIBLE);
             } else {
@@ -99,13 +105,17 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         } else if (searchList != null) {
             ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options);
             holder.addressTv.setText(searchList.get(position).getAddress());
-            holder.title.setText(searchList.get(position).getTitle());
+            SpannableStringBuilder style=new SpannableStringBuilder(searchList.get(position).getTitle());
+            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
+            style.setSpan(backgroundColorSpan, 0, searchList.get(position).getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            holder.title.setText(style);
             if (searchList.get(position).isSelect()) {
                 holder.selectImg.setVisibility(View.VISIBLE);
             } else {
                 holder.selectImg.setVisibility(View.GONE);
             }
         }
+
         return convertView;
     }
 

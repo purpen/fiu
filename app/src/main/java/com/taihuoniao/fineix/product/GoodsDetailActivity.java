@@ -39,6 +39,7 @@ import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     ImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
-    //    @Bind(R.id.activity_goods_detail_product_des)
+    //        @Bind(R.id.activity_goods_detail_product_des)
 //    TextView productDes;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
     RecyclerView changjingRecycler;
@@ -100,7 +101,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private int currentTime = 1;
     //圆图
     private DisplayImageOptions option;
-
+    private DecimalFormat df;
 
     public GoodsDetailActivity() {
         super(R.layout.activity_goods_detail);
@@ -109,7 +110,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
-//        Log.e("<<<", "商品id=" + id);
+        Log.e("<<<", "商品id=" + id);
         if (id == null) {
             Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
             finish();
@@ -118,6 +119,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
 
     @Override
     protected void initView() {
+        df = new DecimalFormat("######0.00");
         WindowUtils.chenjin(GoodsDetailActivity.this);
         dialog = new WaittingDialog(GoodsDetailActivity.this);
         backImg.setOnClickListener(this);
@@ -282,7 +284,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         netGood = netGoodsDetailBean;
                         ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
                         name.setText(netGoodsDetailBean.getData().getTitle());
-                        price.setText(String.format("¥ %s", netGoodsDetailBean.getData().getSale_price()));
+                        price.setText("¥ " + df.format(Double.valueOf(netGoodsDetailBean.getData().getSale_price())));
                         if (netGoodsDetailBean.getData().getBrand() != null) {
                             ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
                             brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());

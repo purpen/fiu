@@ -2,12 +2,13 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/20.
  */
-public class SceneDetails extends NetBean {
+public class SceneDetails extends NetBean implements Serializable {
     private String _id;
     private String title;
     private String user_id;
@@ -31,6 +32,15 @@ public class SceneDetails extends NetBean {
     private UserInfo user_info;
     private int is_love;
     private String[] location;
+    private String oid;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public String[] getLocation() {
         return location;
@@ -162,7 +172,7 @@ public class SceneDetails extends NetBean {
         this.view_count = view_count;
     }
 
-    public static class UserInfo {
+    public static class UserInfo implements Serializable {
         private String user_id;
         private String account;
         private String nickname;
@@ -254,7 +264,7 @@ public class SceneDetails extends NetBean {
         }
     }
 
-    public static class Product {
+    public static class Product implements Serializable {
         private String id;
         private String title;
         private String price;

@@ -75,7 +75,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     protected void requestNet() {
         progressBar.setVisibility(View.VISIBLE);
         if (search) {
-            DataPaser.search(q, "10", currentPage + "", null, handler);
+            DataPaser.search(q, "10", currentPage + "", null,null, handler);
         } else {
             if (position == -1) {
                 DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
@@ -193,7 +193,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
                 progressBar.setVisibility(View.VISIBLE);
-                DataPaser.search(q, "10", currentPage + "", null, handler);
+                DataPaser.search(q, "10", currentPage + "", null,null, handler);
             } else if (search && !intent.getBooleanExtra("search", true)) {
                 search = false;
                 currentPage = 1;

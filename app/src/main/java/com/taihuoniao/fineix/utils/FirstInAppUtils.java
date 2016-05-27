@@ -32,16 +32,16 @@ public class FirstInAppUtils {
         activity = activity1;
         type = type1;
         initPop();
-        WindowManager.LayoutParams params = activity1.getWindow().getAttributes();
-        params.alpha = 0.4f;
-        activity1.getWindow().setAttributes(params);
+//        WindowManager.LayoutParams params = activity1.getWindow().getAttributes();
+//        params.alpha = 0.4f;
+//        activity1.getWindow().setAttributes(params);
 //        activity1.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
         popupWindow.showAtLocation(activity_view, Gravity.TOP, 0, 0);
     }
 
 
     private static void initPop() {
-        WindowManager windowManager = activity.getWindowManager();
+//        WindowManager windowManager = activity.getWindowManager();
 //        final View popView = View.inflate(activity, R.layout.pop_first_in, null);
 //        TextView titleTv = (TextView) popView.findViewById(R.id.pop_first_in_title);
 //        TextView desTv = (TextView) popView.findViewById(R.id.pop_first_in_des);
@@ -158,16 +158,16 @@ public class FirstInAppUtils {
 //        });
         popupWindow = new PopupWindow(popView, MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), true);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams params = activity.getWindow().getAttributes();
-                params.alpha = 1f;
-//                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                activity.getWindow().setAttributes(params);
+//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+//                params.alpha = 1f;
+////                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//                activity.getWindow().setAttributes(params);
 
-            }
-        });
+//            }
+//        });
         popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(activity,
                 R.color.nothing));
 //        popupWindow.setTouchInterceptor(new View.OnTouchListener() {

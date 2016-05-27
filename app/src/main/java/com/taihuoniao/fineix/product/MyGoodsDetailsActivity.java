@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -67,7 +68,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     //界面中的控件
     private View activity_view;
     private MyGlobalTitleLayout titleLayout;
-//    private RelativeLayout loveRelative, shareRelative;
+    //    private RelativeLayout loveRelative, shareRelative;
 //    private ImageView loveImg;
     private TextView cartTv;
     private TextView buyTv;
@@ -153,6 +154,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private void setData() {
         MainApplication.which_activity = DataConstants.MyGoodsDetailsActivity;
         id = getIntent().getStringExtra("id");
+        Log.e("<<<自营商品id", "id=" + id);
         if (id == null) {
             Toast.makeText(MyGoodsDetailsActivity.this, "暂无此商品", Toast.LENGTH_SHORT).show();
             finish();
@@ -421,10 +423,10 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
             if (position == i) {
                 img.setImageBitmap(pointY);
             } else {
-                if(img==null){
+                if (img == null) {
                     return;
                 }
-                if(pointN==null){
+                if (pointN == null) {
                     return;
                 }
                 img.setImageBitmap(pointN);
