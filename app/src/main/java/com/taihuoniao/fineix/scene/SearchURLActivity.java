@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.scene;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -33,7 +32,7 @@ import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 /**
  * Created by taihuoniao on 2016/3/24.
@@ -53,7 +52,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private String market_price;
     private String sale_price;
     private String link;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //popupwindow下的控件
     private PopupWindow popupWindow;
     private ImageView productsImg;
@@ -169,13 +168,13 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         });
 
         findBtn.setOnClickListener(this);
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                webView.stopLoading();
-                cancelNet();
-            }
-        });
+//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                webView.stopLoading();
+//                cancelNet();
+//            }
+//        });
     }
 
     @Override
@@ -185,7 +184,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         webView = (WebView) findViewById(R.id.activity_search_url_webview);
         findRelative = (RelativeLayout) findViewById(R.id.activity_search_url_findrelative);
         findBtn = (Button) findViewById(R.id.activity_search_url_find);
-        dialog = new WaittingDialog(SearchURLActivity.this);
+        dialog = new SVProgressHUD(SearchURLActivity.this);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)

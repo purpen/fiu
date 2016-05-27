@@ -53,7 +53,7 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private ImageView love;
     private TextView loveTv;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private com.taihuoniao.fineix.beans.QingjingDetailBean.UserInfo netUserInfo;
     private String[] locaiton = null;//服务器返回经纬度
     //图片加载
@@ -164,7 +164,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
-        dialog = new WaittingDialog(QingjingDetailActivity.this);
+        dialog = new SVProgressHUD(QingjingDetailActivity.this);
     }
 
     @Override

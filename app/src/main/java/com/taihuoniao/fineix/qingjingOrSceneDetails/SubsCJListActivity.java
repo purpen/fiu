@@ -19,9 +19,9 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
     @Bind(R.id.activity_subs_cjlist_progress)
     ProgressBar progressBar;
     private ListView listView;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //网络请求返回数据
     //场景列表
     private int page = 1;
@@ -57,7 +57,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setTitle(R.string.subs, getResources().getColor(R.color.black333333));
         listView = pullToRefreshView.getRefreshableView();
-        dialog = new WaittingDialog(SubsCJListActivity.this);
+        dialog = new SVProgressHUD(SubsCJListActivity.this);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {

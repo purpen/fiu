@@ -13,7 +13,7 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -37,7 +37,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
     TextView adCheatTv;
     @Bind(R.id.activity_report_success)
     TextView successTv;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     @Override
     protected void getIntentData() {
@@ -59,7 +59,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         titleLayout.setBackImgVisible(false);
         titleLayout.setTitle(R.string.report, getResources().getColor(R.color.black333333));
         titleLayout.setRightTv(R.string.cancel, getResources().getColor(R.color.black333333), ReportActivity.this);
-        dialog = new WaittingDialog(ReportActivity.this);
+        dialog = new SVProgressHUD(ReportActivity.this);
     }
 
     @OnClick({R.id.activity_report_sexual_violence, R.id.activity_report_steal_picture, R.id.activity_report_advertising_cheat})

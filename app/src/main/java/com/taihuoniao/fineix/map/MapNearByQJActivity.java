@@ -3,12 +3,9 @@ package com.taihuoniao.fineix.map;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -18,7 +15,6 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -27,19 +23,17 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.NearByQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingData;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +59,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     private static final String STICK_SELECT = "1"; //精选情境
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
-    private WaittingDialog waittingDialog;
+    private SVProgressHUD waittingDialog;
     private LatLng ll;
     private String address;
     public MapNearByQJActivity() {
@@ -89,7 +83,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
         if (!TextUtils.isEmpty(address)){
             custom_head.setHeadCenterTxtShow(true,address);
         }
-        waittingDialog = new WaittingDialog(this);
+        waittingDialog = new SVProgressHUD(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);

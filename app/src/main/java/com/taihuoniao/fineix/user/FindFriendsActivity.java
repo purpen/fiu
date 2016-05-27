@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,9 +16,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -27,8 +23,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSubItemLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -66,14 +62,14 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
     private FindFriendAdapter adapter;
     private List<FindFriendData.User> mList=new ArrayList();
     private ListView lv;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     public FindFriendsActivity(){
         super(R.layout.activity_find_freinds);
     }
 
     @Override
     protected void initView() {
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
         custom_head.setHeadCenterTxtShow(true,"发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);

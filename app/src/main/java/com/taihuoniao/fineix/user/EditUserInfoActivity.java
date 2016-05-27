@@ -1,11 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,16 +17,11 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CropOption;
-import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -41,6 +31,17 @@ import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
+import com.taihuoniao.fineix.view.wheelview.WheelView;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.OnClick;
+
 //import com.zcjcn.beans.HttpResponse;
 //import com.zcjcn.beans.UserLogin;
 //import com.zcjcn.http.HttpRequestData;
@@ -51,20 +52,6 @@ import com.taihuoniao.fineix.view.CustomItemLayout;
 //import com.zcjcn.utils.LogUtil;
 //import com.zcjcn.utils.LoginUtil;
 //import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
-import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
-import com.taihuoniao.fineix.view.wheelview.WheelView;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * @author lilin
@@ -108,7 +95,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private String key;
     private String value;
     public static boolean isSubmitAddress=false;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     public EditUserInfoActivity() {
         super(R.layout.activity_user_info_layout);
     }
@@ -116,7 +103,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
         custom_user_avatar.setUserAvatar(null);
         custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333);
         custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333);

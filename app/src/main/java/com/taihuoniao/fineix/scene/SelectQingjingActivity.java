@@ -50,7 +50,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomListView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.HeaderGridView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +83,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     private int radius = 5000; //搜索半径
     private static final String STICK_ALL = "0"; //所有情境
     //    private GridView qingjingGrid;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //情景列表
     private int page = 1;
     private double distance = 5000;
@@ -106,7 +106,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
 
     @Override
     protected void initView() {
-        dialog = new WaittingDialog(SelectQingjingActivity.this);
+        dialog = new SVProgressHUD(SelectQingjingActivity.this);
         titleLayout.setBackgroundResource(R.color.white);
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setTitle(R.string.select_qingjing, getResources().getColor(R.color.black333333));

@@ -25,9 +25,9 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     private List<ProductListBean> productList;
     private GoodListAdapter goodListAdapter;
     //网络请求工具类
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     public static GoodListFragment newInstance(int position, CategoryBean categoryBean) {
 
@@ -84,7 +84,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_good_list_progress);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_good_list_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

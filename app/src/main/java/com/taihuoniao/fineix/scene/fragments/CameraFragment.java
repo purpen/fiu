@@ -28,7 +28,7 @@ import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private RelativeLayout bottomRelative;
     private Button takePicture;
     private View focus;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //相机工具
     private Camera cameraInst;
     private Camera.Parameters parameters;
@@ -100,7 +100,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         surfaceView.setFocusable(true);
         surfaceView.setBackgroundColor(android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
         surfaceView.getHolder().addCallback(new SurfaceCallback());
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

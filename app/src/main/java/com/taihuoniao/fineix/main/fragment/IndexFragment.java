@@ -29,9 +29,9 @@ import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     //当前位置经纬度
     private double[] location = null;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
 
     @Override
@@ -129,7 +129,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) fragment_view.findViewById(R.id.fragment_index_progress);
         listView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return fragment_view;
     }
 

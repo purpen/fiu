@@ -31,7 +31,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
     private EditText mPhone;
@@ -39,7 +39,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     private Button mBind;
     private TextView mLoginNow;
     public static BindPhoneActivity instance = null;
-    private WaittingDialog mDialog = null;
+    private SVProgressHUD mDialog = null;
     private String avatarUrl, nickName, sex, token;
     private String type;//来源: 1.微信；2.微博；3.ＱＱ
     private String mPhoneNumber, mPassWordNumber;
@@ -102,7 +102,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initView() {
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         mPhone = (EditText) findViewById(R.id.et_phone_bindPhone);
         mPassWord = (EditText) findViewById(R.id.et_password_bindPhone);
         mBind = (Button) findViewById(R.id.bt_bindPhone);

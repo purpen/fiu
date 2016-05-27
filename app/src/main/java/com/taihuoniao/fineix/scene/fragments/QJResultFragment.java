@@ -21,9 +21,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
     private int page = 1;
     private List<SearchBean.SearchItem> list;
     private AllQingjingGridAdapter allQingjingGridAdapter;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     public static QJResultFragment newInstance(String q, String t) {
 
@@ -70,7 +70,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         gridView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_qjresult_progress);
         emptyView = (TextView) view.findViewById(R.id.fragment_qjresult_emptyview);
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

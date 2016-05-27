@@ -26,7 +26,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class PublishEvaluateActivity extends Activity {
     private View mView;
     private LinearLayout mLinear;
     private String mEditContent;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -102,7 +102,7 @@ public class PublishEvaluateActivity extends Activity {
                 mHashMap = hashMap;
             }
         });
-        dialog = new WaittingDialog(PublishEvaluateActivity.this);
+        dialog = new SVProgressHUD(PublishEvaluateActivity.this);
         mCommit = (TextView) findViewById(R.id.tv_commit_evaluate);
         mCommit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,7 +26,7 @@ import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     //加载圆图
     private DisplayImageOptions option,options750_422;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //商品列表
     private int page = 1;
     private List<ProductListBean> productList;
@@ -74,7 +74,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         brandImg = (ImageView) header.findViewById(R.id.header_brand_detail_titleimg);
         desTv = (TextView) header.findViewById(R.id.header_brand_detail_des);
         listView.addHeaderView(header);
-        dialog = new WaittingDialog(BrandDetailActivity.this);
+        dialog = new SVProgressHUD(BrandDetailActivity.this);
         option = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)

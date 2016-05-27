@@ -23,9 +23,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     GridView gridView;
     @Bind(R.id.activity_select_allqj_progress)
     ProgressBar progressBar;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //情景列表
     private int page = 1;
     private double distance = 5000;//搜索范围
@@ -134,7 +134,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         }
         gridView.setAdapter(allQingjingGridAdapter);
         gridView.setOnItemClickListener(this);
-        dialog = new WaittingDialog(SelectAllQingjingActivity.this);
+        dialog = new SVProgressHUD(SelectAllQingjingActivity.this);
     }
 
     @Override

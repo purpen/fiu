@@ -20,8 +20,8 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     private SelectAddressListViewAdapter listViewAdapter;
     //网络请求
     private int currentPage = 1;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
 
@@ -87,7 +87,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 //        listView.setEmptyView(emptyView);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this, mHandler, dialog);
+        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this, mHandler);
         listView.setAdapter(listViewAdapter);
         pullToRefresh.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -117,7 +117,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
         listView = pullToRefresh.getRefreshableView();
         //listivew侧滑删除效果的实现
-        dialog = new WaittingDialog(SelectAddressActivity.this);
+        dialog = new SVProgressHUD(SelectAddressActivity.this);
     }
 
     @Override

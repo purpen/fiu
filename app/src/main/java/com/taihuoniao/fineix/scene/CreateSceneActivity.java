@@ -50,7 +50,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //图片上存储的地址信息
     private double[] location;
     //工具
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //从选择标签界面返回的用户选择的标签
     private List<UsedLabelBean> selectList;
     //地址列表数据
@@ -124,7 +124,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         if (MainApplication.tag == 2) {
             qingjingRelative.setVisibility(View.GONE);
         }
-        dialog = new WaittingDialog(CreateSceneActivity.this);
+        dialog = new SVProgressHUD(CreateSceneActivity.this);
     }
 
     @Override

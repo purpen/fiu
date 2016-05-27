@@ -17,7 +17,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PrivateMessageItemAdapter;
-import com.taihuoniao.fineix.adapters.PrivateMessageListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
@@ -25,10 +24,9 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +52,7 @@ public class PrivateMessageActivity extends BaseActivity{
     private static final String PAGE_SIZE="10";
     private static final String TYPE_USER="1"; //与某个用户的记录
     private User user; //对方
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private List<MessageDetailData.MessageItem> mList =new ArrayList<>();
     private PrivateMessageItemAdapter adapter;
     public PrivateMessageActivity(){
@@ -71,7 +69,7 @@ public class PrivateMessageActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
         lv.requestFocus();
         if (user!=null){
             if (TextUtils.isEmpty(user.nickname)){

@@ -47,7 +47,7 @@
                         android:id="@+id/activity_scenedetails_framelayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="7dp">
 
                         <ImageView
@@ -70,7 +70,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -121,7 +121,7 @@
                             android:id="@+id/activity_scenedetails_locationimg"
                             android:layout_width="wrap_content"
                             android:layout_height="11dp"
-                            android:layout_marginLeft="14dp"
+                            android:layout_marginLeft="9dp"
                             android:src="@mipmap/location_white_width_16px"/>
 
                         <TextView
@@ -152,7 +152,7 @@
                             android:background="@mipmap/white_label_left"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingLeft="20dp">
+                            android:paddingLeft="15dp">
 
                             <ImageView
                                 android:id="@+id/activity_scenedetails_userhead"
@@ -217,7 +217,7 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingBottom="13dp"
-                android:paddingLeft="20dp"
+                android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="18dp">
 
@@ -272,7 +272,7 @@
                     android:layout_toLeftOf="@id/activity_scenedetails_more"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp">
+                    android:paddingLeft="16dp">
 
                     <ImageView
                         android:layout_width="23dp"

@@ -18,10 +18,9 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     private int curPage=1;
     private static final String PAGE_SIZE="9999";
     private static final String TYPE_ALL="0"; //与全部用户私信列表
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private PrivateMessageListAdapter adapter;
     private List<PrivateMessageListData.RowItem> mList=new ArrayList<>();
     public PrivateMessageListActivity(){
@@ -50,7 +49,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"私信");
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
     }
 
     @Override

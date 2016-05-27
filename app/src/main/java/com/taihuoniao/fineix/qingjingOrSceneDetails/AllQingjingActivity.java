@@ -26,9 +26,9 @@ import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     private int page = 1;//页码
     private double distance = 5000;//列表范围
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     public AllQingjingActivity() {
         super(0);
@@ -71,7 +71,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         qingjingGrid = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) findViewById(R.id.activity_all_qingjing_progress);
         firstRelative = (RelativeLayout) findViewById(R.id.activity_all_qingjing_first);
-        dialog = new WaittingDialog(AllQingjingActivity.this);
+        dialog = new SVProgressHUD(AllQingjingActivity.this);
     }
 
     @Override

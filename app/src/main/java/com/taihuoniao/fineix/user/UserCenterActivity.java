@@ -39,8 +39,8 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     @Bind(R.id.lv_cj)
     ListView lv_cj;
@@ -157,7 +157,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_cj = ButterKnife.findById(headView, R.id.ll_cj);
         ll_qj = ButterKnife.findById(headView, R.id.ll_qj);
 
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
 
         lv_cj.addHeaderView(headView);
         lv_qj.addHeaderView(headView);

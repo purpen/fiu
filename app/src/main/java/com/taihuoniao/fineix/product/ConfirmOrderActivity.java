@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.product;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,11 +21,11 @@ import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
-import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
+import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.text.DecimalFormat;
 
@@ -60,7 +59,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private TextView payPriceTv;
     private Button payBtn;
     //网络请求dialog
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //网络请求返回值
     private AddressBean addressBean;
     //收货地址界面选择的返回值
@@ -128,12 +127,12 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         addressRelative.setFocusable(true);
         addressRelative.setFocusableInTouchMode(true);
         addressRelative.requestFocus();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                cancelNet();
-            }
-        });
+//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                cancelNet();
+//            }
+//        });
     }
 
     private void initView() {
@@ -159,7 +158,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         saveMoneyTv = (TextView) findViewById(R.id.activity_confirmorder_savemoney);
         payPriceTv = (TextView) findViewById(R.id.activity_confirmorder_payprice);
         payBtn = (Button) findViewById(R.id.activity_confirmorder_paybtn);
-        dialog = new WaittingDialog(ConfirmOrderActivity.this);
+        dialog = new SVProgressHUD(ConfirmOrderActivity.this);
 
     }
 

@@ -30,7 +30,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private TextView findPassword;
@@ -40,7 +40,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ImageView mClose;
     private ImageView mBack;
     public static LoginActivity instance = null;
-    private WaittingDialog mDialog = null;
+    private SVProgressHUD mDialog = null;
 
     public LoginActivity() {
         super(R.layout.activity_login);
@@ -165,7 +165,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 //        phoneNum.addTextChangedListener(textWatcher);
 //        et_password.addTextChangedListener(textWatcher);
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         findPassword = (TextView) findViewById(R.id.tv_findpassword);
         findPassword.setOnClickListener(new View.OnClickListener() {
             @Override

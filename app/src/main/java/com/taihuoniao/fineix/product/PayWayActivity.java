@@ -27,7 +27,6 @@ import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.wxapi.WXPayEntryActivity;
 
 import java.io.BufferedInputStream;
@@ -57,7 +56,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private String mPayway = NetworkConstance.ALI_PAY;
     private TextView mPayMoney;
     private Button mPayNow;
-    private WaittingDialog mWaittingDialog = null;
+//    private WaittingDialog mWaittingDialog = null;
     private CustomDialogForPay mDialog;
     private boolean mBack = true;//判断是否让返回键生效
     private DecimalFormat df = null;
@@ -215,7 +214,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_pay_way);
         mDialog = new CustomDialogForPay(this);
         ActivityUtil.getInstance().addActivity(this);
-        mWaittingDialog = new WaittingDialog(this);
+//        mWaittingDialog = new WaittingDialog(this);
 //        regToWx();
         getIntentData();
         initData();

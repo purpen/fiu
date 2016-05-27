@@ -120,6 +120,7 @@
             />
         <activity
             android:name=".scene.SearchActivity"
+            android:theme="@style/AnimActivityTheme"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".product.WebActivity"

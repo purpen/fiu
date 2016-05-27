@@ -1,10 +1,8 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,7 +55,7 @@ public class ShareCJUtils {
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
         context = container.getContext();
-        Log.e("<<<选择样式","bi="+bi);
+        Log.e("<<<选择样式", "bi=" + bi);
         bi = b;
         selectStyle(position);
         View view = View.inflate(context, layout, null);
@@ -75,7 +73,9 @@ public class ShareCJUtils {
         desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
         fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
         fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
-//        setSize(view);
+        if (position == 4 || position ==5 || position == 6) {
+            setSize(view, position);
+        }
         ImageLoader.getInstance().displayImage(sceneDetails.getUser_info().getAvatar_url(), userHeadImg, options500_500);
         userName.setText(sceneDetails.getUser_info().getNickname());
         userInfo.setText(sceneDetails.getUser_info().getSummary());
@@ -105,50 +105,58 @@ public class ShareCJUtils {
         }
     }
 
-    private static void setSize(View view) {
-        int padding = DensityUtils.dp2px(context, 22);
-        view.setPadding((int) (padding * bi), (int) (padding * bi), (int) (padding * bi), (int) (padding * bi));
-        ViewGroup.LayoutParams headLp = userHeadImg.getLayoutParams();
-        headLp.width = (int) (DensityUtils.dp2px(context, 30) * bi);
-        headLp.height = headLp.width;
-        userHeadImg.setLayoutParams(headLp);
-        LinearLayout.LayoutParams reLp = (LinearLayout.LayoutParams) userRightRelative.getLayoutParams();
-        reLp.height = (int) (DensityUtils.dp2px(context, 30) * bi);
-        reLp.leftMargin = (int) (DensityUtils.dp2px(context, 8) * bi);
-        userRightRelative.setLayoutParams(reLp);
-        userName.setTextSize((float) (DensityUtils.sp2px(context, 11) * bi));
-        userInfo.setTextSize((float) (DensityUtils.sp2px(context, 10) * bi));
-        RelativeLayout.LayoutParams lLp = (RelativeLayout.LayoutParams) locationLinear.getLayoutParams();
-        lLp.topMargin = (int) (DensityUtils.dp2px(context, 10) * bi);
-        locationLinear.setLayoutParams(lLp);
-        locationImg.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 11) * bi);
-        LinearLayout.LayoutParams locationLp = (LinearLayout.LayoutParams) locationTv.getLayoutParams();
-        locationLp.leftMargin = (int) (DensityUtils.dp2px(context, 8) * bi);
-        locationTv.setLayoutParams(locationLp);
-        locationTv.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
-        erweima.getLayoutParams().width = (int) (DensityUtils.dp2px(context, 62) * bi);
-        erweima.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 62) * bi);
-        RelativeLayout.LayoutParams desLp = (RelativeLayout.LayoutParams) desTv.getLayoutParams();
-        desLp.setMargins(0, (int) (DensityUtils.dp2px(context, 10) * bi), (int) (DensityUtils.dp2px(context, 15) * bi), 0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            desLp.setMarginEnd((int) (DensityUtils.dp2px(context, 15) * bi));
-        }
-        desTv.setLayoutParams(desLp);
-        desTv.setTextSize((float) (DensityUtils.sp2px(context, 10) * bi));
-        RelativeLayout.LayoutParams lineLp = (RelativeLayout.LayoutParams) line.getLayoutParams();
-        lineLp.setMargins(0, (int) (DensityUtils.dp2px(context, 10) * bi), (int) (DensityUtils.dp2px(context, 15) * bi), 0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            lineLp.setMarginEnd((int) (DensityUtils.dp2px(context, 15) * bi));
-        }
-        line.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
-        RelativeLayout.LayoutParams frameLp = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
-        frameLp.topMargin = (int) (DensityUtils.dp2px(context, 7) * bi);
-        frameLayout.setLayoutParams(frameLp);
-        fiuImg.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 20) * bi);
-        LinearLayout.LayoutParams fiuLp = (LinearLayout.LayoutParams) fiuTv.getLayoutParams();
-        fiuLp.topMargin = (int) (DensityUtils.dp2px(context, 10) * bi);
-        fiuTv.setLayoutParams(fiuLp);
-        fiuTv.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
+    private static void setSize(View view, int position) {
+
+            userName.setTextColor(context.getResources().getColor(R.color.black));
+            userInfo.setTextColor(context.getResources().getColor(R.color.black));
+            locationTv.setTextColor(context.getResources().getColor(R.color.black));
+            locationImg.setImageResource(R.mipmap.location_height_22px);
+            desTv.setTextColor(context.getResources().getColor(R.color.black));
+            line.setTextColor(context.getResources().getColor(R.color.black));
+
+//        int padding = DensityUtils.dp2px(context, 22);
+//        view.setPadding((int) (padding * bi), (int) (padding * bi), (int) (padding * bi), (int) (padding * bi));
+//        ViewGroup.LayoutParams headLp = userHeadImg.getLayoutParams();
+//        headLp.width = (int) (DensityUtils.dp2px(context, 30) * bi);
+//        headLp.height = headLp.width;
+//        userHeadImg.setLayoutParams(headLp);
+//        LinearLayout.LayoutParams reLp = (LinearLayout.LayoutParams) userRightRelative.getLayoutParams();
+//        reLp.height = (int) (DensityUtils.dp2px(context, 30) * bi);
+//        reLp.leftMargin = (int) (DensityUtils.dp2px(context, 8) * bi);
+//        userRightRelative.setLayoutParams(reLp);
+//        userName.setTextSize((float) (DensityUtils.sp2px(context, 11) * bi));
+//        userInfo.setTextSize((float) (DensityUtils.sp2px(context, 10) * bi));
+//        RelativeLayout.LayoutParams lLp = (RelativeLayout.LayoutParams) locationLinear.getLayoutParams();
+//        lLp.topMargin = (int) (DensityUtils.dp2px(context, 10) * bi);
+//        locationLinear.setLayoutParams(lLp);
+//        locationImg.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 11) * bi);
+//        LinearLayout.LayoutParams locationLp = (LinearLayout.LayoutParams) locationTv.getLayoutParams();
+//        locationLp.leftMargin = (int) (DensityUtils.dp2px(context, 8) * bi);
+//        locationTv.setLayoutParams(locationLp);
+//        locationTv.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
+//        erweima.getLayoutParams().width = (int) (DensityUtils.dp2px(context, 62) * bi);
+//        erweima.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 62) * bi);
+//        RelativeLayout.LayoutParams desLp = (RelativeLayout.LayoutParams) desTv.getLayoutParams();
+//        desLp.setMargins(0, (int) (DensityUtils.dp2px(context, 10) * bi), (int) (DensityUtils.dp2px(context, 15) * bi), 0);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            desLp.setMarginEnd((int) (DensityUtils.dp2px(context, 15) * bi));
+//        }
+//        desTv.setLayoutParams(desLp);
+//        desTv.setTextSize((float) (DensityUtils.sp2px(context, 10) * bi));
+//        RelativeLayout.LayoutParams lineLp = (RelativeLayout.LayoutParams) line.getLayoutParams();
+//        lineLp.setMargins(0, (int) (DensityUtils.dp2px(context, 10) * bi), (int) (DensityUtils.dp2px(context, 15) * bi), 0);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            lineLp.setMarginEnd((int) (DensityUtils.dp2px(context, 15) * bi));
+//        }
+//        line.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
+//        RelativeLayout.LayoutParams frameLp = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+//        frameLp.topMargin = (int) (DensityUtils.dp2px(context, 7) * bi);
+//        frameLayout.setLayoutParams(frameLp);
+//        fiuImg.getLayoutParams().height = (int) (DensityUtils.dp2px(context, 20) * bi);
+//        LinearLayout.LayoutParams fiuLp = (LinearLayout.LayoutParams) fiuTv.getLayoutParams();
+//        fiuLp.topMargin = (int) (DensityUtils.dp2px(context, 10) * bi);
+//        fiuTv.setLayoutParams(fiuLp);
+//        fiuTv.setTextSize((float) (DensityUtils.sp2px(context, 9) * bi));
     }
 
     private static void selectTitleSize(int position) {

@@ -13,13 +13,12 @@ import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShopOrderListActivity extends FragmentActivity implements TabLayout.OnTabSelectedListener {
-    private WaittingDialog mDialog;
+//    private WaittingDialog mDialog;
     private ViewPager mPager;
     private TabLayout.Tab mAllTab, mPayTab, mDeliverTab, mCriticalTab, mReceiverTab;
     private MyGlobalTitleLayout title;

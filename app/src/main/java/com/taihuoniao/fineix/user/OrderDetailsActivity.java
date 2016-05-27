@@ -39,7 +39,7 @@ import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private TextView mLogisticsNumber, mLogisticsCompany;
 
     private BitmapUtils mBitmapUtils;
-    private WaittingDialog mDialog;
+    private SVProgressHUD mDialog;
     private AlertDialog.Builder alertDialog;
 
     private Handler mHander = new Handler() {
@@ -524,7 +524,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         alertDialog = new AlertDialog.Builder(this);
         mLogisticsCompany = (TextView) findViewById(R.id.tv_logistics_company_number_order_details);
         mLogisticsNumber = (TextView) findViewById(R.id.tv_logistics_number_order_details);

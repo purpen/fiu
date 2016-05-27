@@ -21,7 +21,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class OrderQJActivity  extends BaseActivity{
     public static final String PAGE_TYPE="scene";
     public static final String PAGE_EVENT="subscription";
     private List<QingJingListBean.QingJingItem> mList=new ArrayList<>();
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private OrderedQJAdapter adapter;
     public OrderQJActivity(){
         super(R.layout.activity_order_qj);
@@ -52,7 +52,7 @@ public class OrderQJActivity  extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"订阅的情景");
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
         pull_gv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 

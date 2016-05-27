@@ -24,7 +24,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 /**
  * Created by taihuoniao on 2016/3/22.
@@ -37,7 +37,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout search;
     private EditText editText;
     private TextView cancelTv;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private int searchPage = 1;
     //viewpager当前页面
 //    private int pos = 0;
@@ -79,7 +79,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.product;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -53,7 +52,7 @@ import com.taihuoniao.fineix.view.CustomScrollView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private TextView buyTv;
     private CustomScrollView scrollView;
     private PopupWindow popupWindow;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //topview下的控件
     private ViewPager viewPager;
     private List<ImageView> imgList;
@@ -174,12 +173,12 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         titleLayout.setFocusable(true);
         titleLayout.setFocusableInTouchMode(true);
         titleLayout.requestFocus();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                cancelNet();
-            }
-        });
+//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                cancelNet();
+//            }
+//        });
     }
 
     private void iniView() {
@@ -197,7 +196,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         scrollView = (CustomScrollView) findViewById(R.id.activity_goodsdetails_scrollview);
         View topView = View.inflate(MyGoodsDetailsActivity.this, R.layout.item_goods_details_toplinear, null);
         scrollView.addToToplinear(topView);
-        dialog = new WaittingDialog(MyGoodsDetailsActivity.this);
+        dialog = new SVProgressHUD(MyGoodsDetailsActivity.this);
         //topview下的控件
         viewPager = (ViewPager) topView.findViewById(R.id.activity_goodsdetails_viewpager);
         imgList = new ArrayList<>();

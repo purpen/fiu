@@ -13,7 +13,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
@@ -26,10 +25,9 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -46,7 +44,7 @@ public class SystemNoticeActivity extends BaseActivity {
     private SystemNoticeAdapter adapter;
     private static final String PAGE_SIZE = "9999";
     private int curPage = 1;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private ArrayList<SystemNoticeData.SystemNoticeItem> list;
     private int unread_count;
     public SystemNoticeActivity() {
@@ -67,7 +65,7 @@ public class SystemNoticeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
         custom_head.setHeadCenterTxtShow(true, "系统通知");
 //        custom_head.setHeadRightTxtShow(true,R.string.clear);
     }

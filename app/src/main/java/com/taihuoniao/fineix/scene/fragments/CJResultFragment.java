@@ -20,9 +20,9 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private TextView emptyView;
     //场景列表
     private int page = 1;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private List<SearchBean.SearchItem> list;
     private SceneListViewAdapter sceneListViewAdapter;
 
@@ -69,7 +69,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_index_progress);
         emptyView = (TextView) view.findViewById(R.id.fragment_index_emptyview);
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

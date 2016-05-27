@@ -9,21 +9,17 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
-import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -43,7 +39,7 @@ public class MessageActivity extends BaseActivity {
     CustomItemLayout item_to_comment;
     @Bind(R.id.item_notice)
     CustomItemLayout item_notice;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private User user;
 
     public MessageActivity() {
@@ -59,7 +55,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "消息");
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
         item_push_setting.setTVStyle(R.mipmap.sys_msg, "系统通知", R.color.color_333);
         item_clear_cache.setTVStyle(R.mipmap.icon_comment, "评论", R.color.color_333);
         item_to_comment.setTVStyle(R.mipmap.private_msg, "私信", R.color.color_333);

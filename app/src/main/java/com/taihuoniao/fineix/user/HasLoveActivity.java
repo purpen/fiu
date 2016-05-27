@@ -23,9 +23,9 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     ProgressBar progressBar;
     private ListView listView;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //当前用户的user_id
     private long user_id;
     //场景列表
@@ -75,7 +75,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
         listView = pullToRefreshView.getRefreshableView();
         listView.setDividerHeight(DensityUtils.dp2px(HasLoveActivity.this,5));
-        dialog = new WaittingDialog(HasLoveActivity.this);
+        dialog = new SVProgressHUD(HasLoveActivity.this);
     }
 
     @Override
