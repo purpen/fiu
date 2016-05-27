@@ -109,8 +109,9 @@
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
                 android:background="@drawable/shape_radius_white"
-                android:hint="输入认证信息 如:我是商量好的"
+                android:hint="如:太火鸟创始人"
                 android:paddingLeft="@dimen/dp10"
+                android:maxLength="100"
                 android:textColorHint="@color/color_999"
                 android:textSize="@dimen/sp12" />
 
@@ -132,6 +133,7 @@
                 android:layout_marginRight="@dimen/dp16"
                 android:background="@drawable/shape_radius_white"
                 android:hint="手机/QQ/邮箱"
+                android:maxLength="100"
                 android:paddingLeft="@dimen/dp10"
                 android:textColorHint="@color/color_999"
                 android:textSize="@dimen/sp12" />

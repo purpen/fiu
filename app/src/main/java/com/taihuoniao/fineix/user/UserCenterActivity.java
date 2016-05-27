@@ -76,7 +76,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private Button bt_msg;
     private ImageButton ibtn;
     private ImageView iv_bg;
-    private TextView tv_tag;
+    private TextView tv_label;
+    private TextView tv_lv;
+    private TextView tv_auth;
     @Bind(R.id.iv_detail)
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
@@ -100,6 +102,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     private boolean isFirstLoad = true;
     private String flag;
+
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -123,9 +126,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         requestNet();
     }
 
-    private void resetData(){
-        isFirstLoad=true;
-        curPage=1;
+    private void resetData() {
+        isFirstLoad = true;
+        curPage = 1;
         mQJList.clear();
         mSceneList.clear();
         tv_tips.setVisibility(View.GONE);
@@ -136,11 +139,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
 //        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
-        tv_tag = ButterKnife.findById(headView, R.id.tv_tag);
+        tv_label = ButterKnife.findById(headView, R.id.tv_label);
         riv = ButterKnife.findById(headView, R.id.riv);
         tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
         tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
+        tv_lv = ButterKnife.findById(headView, R.id.tv_lv);
+        tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
 //        tv_title = ButterKnife.findById(headView, R.id.tv_title);
         ibtn = ButterKnife.findById(headView, R.id.ibtn);
         ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
@@ -379,12 +384,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             bt_focus.setText("已关注");
         }
         if (!TextUtils.isEmpty(user.nickname)) {
-            if (LoginInfo.getUserId() != userId) {
-                tv_title.setVisibility(View.VISIBLE);
-                tv_title.setText(user.nickname);
-            } else {
-                tv_title.setVisibility(View.GONE);
-            }
+            tv_title.setText(user.nickname);
         }
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
@@ -396,7 +396,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (TextUtils.isEmpty(user.summary)) {
             tv_real.setVisibility(View.GONE);
         } else {
-            tv_real.setText(user.summary);
+            tv_real.setText(String.format(" | %s", user.summary));
         }
 
 
@@ -407,14 +407,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         if (!TextUtils.isEmpty(user.label)) {
-            if (user.identify.is_expert == 0) {
-                tv_tag.setText(String.format("%s | ", user.label));
-            } else {
-                tv_tag.setText(String.format("%s | ", user.label));
-//                tv_tag.setBackgroundColor(Color.GREEN);
-            }
+            tv_label.setText(String.format(" %s", user.label));
         }
-        tv_rank.setText(String.format("V%s", user.rank_id));
+
+        if (TextUtils.isEmpty(user.expert_info)) {
+            tv_auth.setText(user.expert_info);
+        }
+
+        tv_lv.setText(String.format("LV %s", user.rank_id));
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));
@@ -449,7 +449,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onClick(View view) {
                 if (LoginInfo.getUserId() != userId) return;
-                flag=EditUserInfoActivity.class.getSimpleName();
+                flag = EditUserInfoActivity.class.getSimpleName();
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换头像"));
             }
         });
@@ -472,7 +472,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     if (absListView.getLastVisiblePosition() == mSceneList.size()) {
                         LogUtil.e("curPage==", curPage + "");
-                        isFirstLoad=false;
+                        isFirstLoad = false;
                         loadCJData();
                     }
                 }
@@ -489,7 +489,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     LogUtil.e("getLastVisiblePosition", absListView.getLastVisiblePosition() + "");
                     LogUtil.e("mQJList.size", mQJList.size() + "");
-                    isFirstLoad=false;
+                    isFirstLoad = false;
                     if (mQJList.size() % 2 == 0) {
                         if (absListView.getLastVisiblePosition() == mQJList.size() / 2) {
                             LogUtil.e("curPage==偶数", curPage + "");
@@ -528,7 +528,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
-                flag=UserCenterActivity.class.getSimpleName();
+                flag = UserCenterActivity.class.getSimpleName();
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换背景封面"));
                 break;
             case R.id.iv_right:
@@ -688,7 +688,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private void toCropActivity(Uri uri) {
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
-        intent.putExtra(ImageCropActivity.class.getName(),flag);
+        intent.putExtra(ImageCropActivity.class.getName(), flag);
         startActivity(intent);
     }
 

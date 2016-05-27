@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
 
-import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -33,7 +32,6 @@ import butterknife.OnClick;
 public class UserEditSignatureActivity extends BaseActivity{
     @Bind(R.id.head_view)
     CustomHeadView head_view;
-    private HashMap hashMap;
     @Bind(R.id.et_nickname)
     EditText et_nickname;
     private User user;
@@ -41,7 +39,7 @@ public class UserEditSignatureActivity extends BaseActivity{
     AutoLabelUI label_view;
     @Bind(R.id.tv_tag)
     TextView tv_tag;
-    public UserEditSignatureActivity(){
+    public UserEditSignatureActivity() {
         super(R.layout.activity_edit_signatrue);
     }
 

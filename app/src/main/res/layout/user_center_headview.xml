@@ -4,101 +4,156 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="280dp">
+
         <ImageView
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/person_center_bg"
             android:scaleType="centerCrop"
-            />
+            android:src="@mipmap/person_center_bg" />
+
         <LinearLayout
             android:id="@+id/ll_box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical"
-            android:background="#1a000000"
-            >
+            android:orientation="vertical">
+
             <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                 android:id="@+id/riv"
-                app:riv_corner_radius="@dimen/dp100"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="@dimen/dp60"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp90"
+                android:src="@mipmap/ic_launcher"
                 app:riv_border_color="@android:color/white"
                 app:riv_border_width="@dimen/dp1"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/dp5"
-                android:layout_marginTop="@dimen/dp90"
-                android:src="@mipmap/ic_launcher" />
+                app:riv_corner_radius="@dimen/dp100" />
 
             <TextView
                 android:id="@+id/tv_nick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dp5"
                 android:text="boc747"
-                android:layout_marginBottom="@dimen/dp5"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp14"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tv_real"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/dp5"
-                android:text="追寻风在北漂"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp12" />
+                android:layout_marginTop="@dimen/dp5"
+                android:background="#10000000"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/dana"
+                        android:layout_gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_auth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp5"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp12"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp12" />
+
+                    <TextView
+                        android:id="@+id/tv_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp12" />
+
+                    <TextView
+                        android:id="@+id/tv_real"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="15"
+                        android:ellipsize="end"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp12" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:visibility="gone"
                 >
+
                 <TextView
                     android:id="@+id/tv_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp12"
-                    />
+                    android:textSize="@dimen/sp12" />
+
                 <TextView
                     android:id="@+id/tv_rank"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp12"
-                    />
+                    android:textSize="@dimen/sp12" />
             </LinearLayout>
         </LinearLayout>
+
         <ImageButton
             android:id="@+id/ibtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@null"
             android:src="@mipmap/authentication"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/ll_btn_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/dp15"
             android:layout_marginTop="@dimen/dp10"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/bt_focus"
@@ -126,8 +181,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:layout_marginTop="@dimen/dp5"
         android:layout_marginBottom="@dimen/dp5"
+        android:layout_marginTop="@dimen/dp5"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -153,9 +208,11 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />
         </LinearLayout>
+
         <View
             android:layout_width="@dimen/dp5"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:id="@+id/ll_qj"
             android:layout_width="match_parent"
@@ -179,9 +236,11 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />
         </LinearLayout>
+
         <View
             android:layout_width="@dimen/dp5"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:id="@+id/ll_focus"
             android:layout_width="match_parent"
@@ -205,9 +264,11 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12" />
         </LinearLayout>
+
         <View
             android:layout_width="@dimen/dp5"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:id="@+id/ll_fans"
             android:layout_width="match_parent"
@@ -232,10 +293,4 @@
                 android:textSize="@dimen/sp12" />
         </LinearLayout>
     </LinearLayout>
-    <!--<RelativeLayout
-        android:id="@+id/fl_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </RelativeLayout>-->
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
@@ -43,6 +44,7 @@ import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -69,8 +71,8 @@ public class MineFragment extends MyBaseFragment {
     CustomItemLayout item_feedback;
     @Bind(R.id.item_partner)
     CustomItemLayout item_partner;
-    @Bind(R.id.ll)
-    LinearLayout ll;
+    @Bind(R.id.rl)
+    RelativeLayout rl;
     @Bind(R.id.ll_box)
     LinearLayout ll_box;
     @Bind(R.id.riv)
@@ -232,7 +234,9 @@ public class MineFragment extends MyBaseFragment {
     protected void initViews() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-            ll_box.setPadding(0, getStatusBarHeight(), 0, 0);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
+            params.setMargins(0,getStatusBarHeight(),0,0);
+            rl.setLayoutParams(params);
         }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);

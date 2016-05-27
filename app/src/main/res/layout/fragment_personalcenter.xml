@@ -1,90 +1,54 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
-        android:fitsSystemWindows="true"
-        android:clipToPadding="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true">
+
         <LinearLayout
             android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="280dp">
+
                 <ImageView
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/person_center_bg"
-                    />
+                    android:src="@mipmap/person_center_bg" />
+
                 <LinearLayout
                     android:id="@+id/ll_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp30"
-                        android:gravity="center_vertical">
-
-                        <ImageButton
-                            android:id="@+id/iv_detail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:background="@null"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:src="@mipmap/personal_detail" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:src="@mipmap/head_logo"
-                            />
-
-                        <ImageView
-                            android:id="@+id/iv_calendar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:paddingBottom="@dimen/dp10"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
-                            android:paddingTop="@dimen/dp10"
-                            android:src="@mipmap/calendar"
-                            android:visibility="gone" />
-                    </RelativeLayout>
-
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="@dimen/dp60"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/dp5"
+                        android:layout_marginTop="@dimen/dp90"
+                        android:src="@mipmap/ic_launcher"
                         app:riv_border_color="@android:color/white"
                         app:riv_border_width="@dimen/dp1"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_marginBottom="@dimen/dp5"
-                        android:layout_marginTop="@dimen/dp50"
                         app:riv_corner_radius="@dimen/dp100" />
-                        <TextView
-                            android:id="@+id/tv_nick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="@dimen/dp5"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp14" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#10000000"
+                        >
                         <TextView
                             android:id="@+id/tv_real"
                             android:layout_width="wrap_content"
@@ -92,39 +56,47 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="@dimen/dp5"
                             android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp12" />
+                            android:textSize="@dimen/sp12"
+                            android:text="@string/app_name"
+                            />
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            >
+                            android:layout_gravity="center_horizontal">
+
                             <TextView
                                 android:id="@+id/tv_tag"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp12"
+                                android:text="@string/app_name"
                                 />
+
                             <TextView
                                 android:id="@+id/tv_rank"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp12"
+                                android:text="@string/app_name"
                                 />
                         </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
+
                 <ImageButton
                     android:id="@+id/ibtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:background="@null"
-                    android:visibility="gone"
-                    android:src="@mipmap/authentication" />
+                    android:src="@mipmap/authentication"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -156,9 +128,11 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="@dimen/dp5"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <LinearLayout
                     android:id="@+id/ll_qj"
                     android:layout_width="match_parent"
@@ -182,9 +156,11 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="@dimen/dp5"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <LinearLayout
                     android:id="@+id/ll_focus"
                     android:layout_width="match_parent"
@@ -208,9 +184,11 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="@dimen/dp5"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <LinearLayout
                     android:id="@+id/ll_fans"
                     android:layout_width="match_parent"
@@ -262,23 +240,23 @@
                 android:id="@+id/item_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/btn"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp40"
-                />
+                android:layout_height="@dimen/dp40" />
+
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/ll"
@@ -290,4 +268,52 @@
             </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+    <!--android:background="#1a000000"-->
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_alignParentTop="true"
+        >
+
+        <ImageButton
+            android:id="@+id/iv_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:src="@mipmap/personal_detail" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/head_logo"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/dp5"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
+
+        <ImageView
+            android:id="@+id/iv_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="@dimen/dp10"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp10"
+            android:src="@mipmap/calendar"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>
