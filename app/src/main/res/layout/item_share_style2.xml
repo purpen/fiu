@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="22dp">
+                android:padding="16dp">
 
     <LinearLayout
         android:id="@+id/activity_share_user_linear"
@@ -14,17 +14,18 @@
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/activity_share_user_headimg"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             app:riv_border_color="@color/black969696"
             app:riv_border_width="1dp"
             app:riv_corner_radius="100dp"
             />
 
         <RelativeLayout
+            android:id="@+id/activity_share_user_right_relative"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginLeft="8dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="6dp"
             android:gravity="center_vertical">
 
             <TextView
@@ -34,7 +35,7 @@
                 android:singleLine="true"
                 android:text="狗蛋"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="8sp"/>
 
             <TextView
                 android:id="@+id/activity_share_user_info"
@@ -44,7 +45,7 @@
                 android:singleLine="true"
                 android:text="描述"
                 android:textColor="@color/white"
-                android:textSize="10sp"/>
+                android:textSize="7sp"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -54,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/activity_share_location_linear"
-        android:layout_marginTop="7dp">
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -67,10 +68,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:maxWidth="300dp"
             android:text="详见的小路"
             android:textColor="@color/white"
-            android:textSize="40sp"/>
+            android:textSize="29sp"/>
     </FrameLayout>
 
     <LinearLayout
@@ -78,23 +78,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/activity_share_erweima_relative"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/activity_share_location_img"
             android:layout_width="wrap_content"
-            android:layout_height="11dp"
+            android:layout_height="8dp"
             android:src="@mipmap/location_white_width_16px"/>
 
         <TextView
             android:id="@+id/activity_share_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="6dp"
             android:singleLine="true"
             android:textColor="@color/white"
-            android:textSize="9sp"/>
+            android:textSize="7sp"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -106,8 +107,8 @@
 
         <ImageView
             android:id="@+id/erweima"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:src="@mipmap/share_erweima"/>
 
@@ -115,30 +116,31 @@
             android:id="@+id/activity_share_scene_des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="7dp"
             android:layout_toLeftOf="@id/erweima"
             android:layout_toStartOf="@id/erweima"
             android:maxLines="2"
             android:text="a手里的看法加拉塞克大家flak涉及到法律框架啊手动阀手动阀手动阀"
             android:textColor="@color/white"
-            android:textSize="10sp"/>
+            android:textSize="7sp"/>
 
         <TextView
+            android:id="@+id/activity_share_scene_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/activity_share_scene_des"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="7dp"
             android:layout_toLeftOf="@id/erweima"
             android:layout_toStartOf="@id/erweima"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text="Fiu | 创新产品情景式购物平台"
             android:textColor="@color/white"
-            android:textSize="9sp"/>
+            android:textSize="7sp"/>
 
 
     </RelativeLayout>
@@ -151,16 +153,18 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/activity_share_fiu_img"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:src="@mipmap/logo"/>
 
         <TextView
+            android:id="@+id/activity_share_fiu_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:text="有Fiu才购"
             android:textColor="#000000"
-            android:textSize="9sp"/>
+            android:textSize="7sp"/>
     </LinearLayout>
 </RelativeLayout>

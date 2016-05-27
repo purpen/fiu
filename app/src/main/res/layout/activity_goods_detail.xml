@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="¥ 799.00"
-                    android:textColor="#ff3366"
+                    android:textColor="@color/yellow_bd8913"
                     android:textSize="11sp"/>
 
 

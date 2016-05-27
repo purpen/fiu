@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import com.taihuoniao.fineix.utils.ShareCJUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,6 +115,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
+        img.setOnClickListener(this);
     }
 
     @Override
@@ -134,13 +135,6 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                         ShareCJActivity.this.netScene = netScene;
                         setImgParams();
                         ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
-//                        ImageLoader.getInstance().displayImage(netScene.getUser_info().getAvatar_url(), userHeadImg, options500_500);
-//                        userName.setText(netScene.getUser_info().getNickname());
-//                        userInfo.setText(netScene.getUser_info().getSummary());
-//                        locationTv.setText(netScene.getAddress());
-//                        sceneTitle.setText(netScene.getTitle());
-//                        changeTitleParams();
-//                        desTv.setText(netScene.getDes());
                         recyclerView.setVisibility(View.VISIBLE);
                         click(0);
                     } else {
@@ -164,11 +158,14 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         super.onDestroy();
     }
 
+    private int imgWidth = 0;
+
     //动态设置container和imgview的宽高
     private void setImgParams() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) img.getLayoutParams();
         layoutParams.height = relativeLayout.getHeight();
         layoutParams.width = layoutParams.height * 9 / 16;
+        imgWidth = layoutParams.width;
         img.setLayoutParams(layoutParams);
         RelativeLayout.LayoutParams cLp = (RelativeLayout.LayoutParams) container.getLayoutParams();
         cLp.height = layoutParams.height;
@@ -194,21 +191,30 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.title_continue:
-//                比例0.73472222
-//                    引导图只需要白色部分就行。不需要背景色
+            case R.id.activity_share_img:
+                if (netScene == null) {
+                    requestNet();
+                    return;
+                }
                 dialog.show();
-                Bitmap scBit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
-                Canvas canvas = new Canvas(scBit);//创建空图片变成画布
-                double bi = MainApplication.getContext().getScreenWidth() / container.getWidth();
+                Bitmap bit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
+                Canvas canvas = new Canvas(bit);//创建空图片变成画布
                 container.draw(canvas);
                 canvas.save();
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                scBit.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                MainApplication.shareBitmap = bit;
                 Intent intent = new Intent(ShareCJActivity.this, ShareCJSelectActivity.class);
-                intent.putExtra("bytes", os.toByteArray());
+                intent.putExtra("scene", netScene);
                 dialog.dismiss();
-                startActivity(intent);
+                startActivityForResult(intent, 1);
+                break;
+            case R.id.title_continue:
+                if (netScene.getOid() != null) {
+                    DataPaser.commitShareCJ(netScene.getOid(), handler);
+                }
+
+//                比例0.73472222
+//                    引导图只需要白色部分就行。不需要背景色
+
 //                container.removeView(view);
 //                img.setImageBitmap(scBit);
                 break;
@@ -227,7 +233,35 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         if (view != null) {
             container.removeView(view);
         }
-        view = ShareCJUtils.selectStyle(container, position, netScene);
+        double width = MainApplication.getContext().getScreenWidth();
+        double bi = ((double) imgWidth / width);
+        setImgParams();
+        if (position == 4) {
+            ViewGroup.LayoutParams lp = img.getLayoutParams();
+            lp.width = (int) (lp.width * 0.8);
+            lp.height = (int) (lp.height * 0.8);
+        } else if (position == 5 || position == 6) {
+            ViewGroup.LayoutParams lp = img.getLayoutParams();
+            lp.width = (int) (lp.width * 0.8);
+            lp.height = (int) (lp.height * 0.8);
+        }
+        view = ShareCJUtils.selectStyle(container, position, netScene, bi);
         container.addView(view);
+        currentPosition = position;
+    }
+
+    private int currentPosition = 0;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        switch (resultCode) {
+            case 2:
+                netScene = (SceneDetails) data.getSerializableExtra("scene");
+                click(currentPosition);
+                break;
+        }
     }
 }

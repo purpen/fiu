@@ -162,6 +162,8 @@ public class DataConstants {
     public static final String BroadSearchFragment = "com.taihuoniao.fiu.searchProduct";
     //删除评论
     public static final int DELETE_COMMENT = 17;
+    //分享场景语境次数
+    public static final int SHARECJ = 16;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

@@ -2,6 +2,9 @@ package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,7 +62,10 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
         lp.width = lp.height * 9 / 16;
         holder.backgroundImg.setLayoutParams(lp);
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
-        holder.title.setText(list.get(position).getTitle());
+        SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).getTitle());
+        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
+        style.setSpan(backgroundColorSpan, 0, list.get(position).getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        holder.title.setText(style);
         holder.addressTv.setText(list.get(position).getAddress());
     }
 

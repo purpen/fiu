@@ -1302,12 +1302,12 @@ public class DataPaser {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page, String evt, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, page, evt, new RequestCallBack<String>() {
+    public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
+        ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<sousuo", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<搜索", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
@@ -2452,5 +2452,30 @@ public class DataPaser {
         });
     }
 
+    //场景分享语境次数接口
+    public static void commitShareCJ(String id, final Handler handler) {
+        ClientDiscoverAPI.commitShareCJ(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.SHARECJ;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<场景分享语境", "数据解析异常");
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
 
 }

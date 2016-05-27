@@ -81,7 +81,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                DataPaser.search(q, t, page + "", "tag", handler);
+                DataPaser.search(q, t, page + "", "tag",null, handler);
             }
         });
         list = new ArrayList<>();
@@ -97,7 +97,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             return;
         }
         dialog.show();
-        DataPaser.search(q, t, page + "", "tag", handler);
+        DataPaser.search(q, t, page + "", "tag",null, handler);
     }
 
     public void refreshData(String q, String t) {

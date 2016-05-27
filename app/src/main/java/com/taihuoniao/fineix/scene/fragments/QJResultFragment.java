@@ -82,7 +82,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "","tag", handler);
+                DataPaser.search(q, t, page + "","tag",null, handler);
             }
         });
         gridView.setNumColumns(2);
@@ -102,7 +102,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
             return;
         }
         dialog.show();
-        DataPaser.search(q, t, page + "","tag", handler);
+        DataPaser.search(q, t, page + "","tag",null, handler);
     }
 
     public void refreshData(String q, String t) {

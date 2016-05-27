@@ -68,6 +68,8 @@ public class MainApplication extends Application {
     public static QingjingDetailBean whichQingjing = null;
     //上传图片的时候的最大限制
     public static final int MAXPIC = 1024 * 1024;
+    //分享场景时编辑的图片Bitmap
+    public static Bitmap shareBitmap = null;
     // SharedPreference 中保存的手机号
     public static final String THN_MOBILE = "mobile";
     // SharedPreference 中保存的密码
