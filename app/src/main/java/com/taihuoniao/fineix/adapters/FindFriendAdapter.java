@@ -133,7 +133,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                                 button.setText("已关注");
                                 button.setTextColor(activity.getResources().getColor(android.R.color.white));
                                 button.setBackgroundResource(R.drawable.border_radius5_pressed);
-                                Util.makeToast(response.getMessage());
+//                                Util.makeToast(response.getMessage());
                                 return;
                             }
 
@@ -161,7 +161,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                                 button.setText("关注");
                                 button.setTextColor(activity.getResources().getColor(R.color.color_333));
                                 button.setBackgroundResource(R.drawable.border_radius5);
-                                Util.makeToast(response.getMessage());
+//                                Util.makeToast(response.getMessage());
                                 return;
                             }
 

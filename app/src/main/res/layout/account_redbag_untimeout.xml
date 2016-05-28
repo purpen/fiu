@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="太火鸟红包"
+                android:text="Fiu红包"
                 android:layout_marginTop="@dimen/dp5"
                 android:textColor="@color/color_af8323"
                 android:textSize="14sp" />

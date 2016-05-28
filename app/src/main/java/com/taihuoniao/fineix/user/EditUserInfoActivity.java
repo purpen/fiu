@@ -1,11 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,16 +17,14 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CropOption;
-import com.taihuoniao.fineix.beans.ImgUploadBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.ProvinceCityData;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.gallary.ImageLoaderEngine;
+import com.taihuoniao.fineix.gallary.Picker;
+import com.taihuoniao.fineix.gallary.PicturePickerUtils;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -41,30 +34,17 @@ import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
-//import com.zcjcn.beans.HttpResponse;
-//import com.zcjcn.beans.UserLogin;
-//import com.zcjcn.http.HttpRequestData;
-//import com.zcjcn.interfaces.ICallback4Http;
-//import com.zcjcn.ui.customview.CustomBirthdaySelectView;
-//import com.zcjcn.ui.wheelview.StringWheelAdapter;
-//import com.zcjcn.ui.wheelview.WheelView;
-//import com.zcjcn.utils.LogUtil;
-//import com.zcjcn.utils.LoginUtil;
-//import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.http.RequestParams;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 /**
  * @author lilin
@@ -109,6 +89,8 @@ public class EditUserInfoActivity extends BaseActivity {
     private String value;
     public static boolean isSubmitAddress=false;
     private WaittingDialog dialog;
+    private List<Uri> mSelected;
+
     public EditUserInfoActivity() {
         super(R.layout.activity_user_info_layout);
     }
@@ -460,12 +442,16 @@ public class EditUserInfoActivity extends BaseActivity {
                     custom_signature.setTvArrowLeftStyle(true,user.summary,R.color.color_333);
                     break;
                 case REQUEST_CODE_PICK_IMAGE:
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        toCropActivity(uri);
-                    } else {
-                        Util.makeToast("抱歉，从相册获取图片失败");
-                    }
+                    mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected==null) return;
+                    if (mSelected.size()==0) return;
+                    toCropActivity(mSelected.get(0));
+//                    Uri uri = data.getData();
+//                    if (uri != null) {
+//                        toCropActivity(uri);
+//                    } else {
+//                        Util.makeToast("抱歉，从相册获取图片失败");
+//                    }
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
                     if (imageUri != null) {
@@ -478,9 +464,15 @@ public class EditUserInfoActivity extends BaseActivity {
 
 
     protected void getImageFromAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");//相片类型
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .singleChoice()
+                .setEngine(new ImageLoaderEngine())
+                .forResult(REQUEST_CODE_PICK_IMAGE);
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType("image/*");//相片类型
+//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
     protected void getImageFromCamera() {
@@ -499,7 +491,7 @@ public class EditUserInfoActivity extends BaseActivity {
             @Override
             public void onClipComplete(Bitmap bitmap) {
                 EditUserInfoActivity.this.bitmap=bitmap;
-                custom_user_avatar.getAvatarIV().setImageBitmap(EditUserInfoActivity.this.bitmap);
+                custom_user_avatar.getAvatarIV().setImageBitmap(bitmap);
             }
         });
         Intent intent = new Intent(activity, ImageCropActivity.class);

@@ -299,6 +299,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
+            android:name=".gallary.ImageSelectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".user.UnUsableRedPacketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>

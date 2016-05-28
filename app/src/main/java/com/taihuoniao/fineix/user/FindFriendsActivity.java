@@ -14,12 +14,10 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -33,9 +31,11 @@ import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -45,49 +45,54 @@ import cn.sharesdk.wechat.friends.Wechat;
 
 /**
  * @author lilin
- * created at 2016/4/26 16:06
+ *         created at 2016/4/26 16:06
  */
-public class FindFriendsActivity extends BaseActivity implements PlatformActionListener {
+public class FindFriendsActivity extends BaseActivity<FindFriendData.User> implements PlatformActionListener, View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    @Bind(R.id.item_wx)
     CustomSubItemLayout item_wx;
-    @Bind(R.id.item_sina)
     CustomSubItemLayout item_sina;
-    @Bind(R.id.item_contacts)
     CustomSubItemLayout item_contacts;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pull_lv;
     private int curPage = 1;
     private boolean isLoadMore = false;
     private static final String PAGE_SIZE = "10";
-    private static final String SORT="1";  //随机排序
-    private static final String HAS_SCENE="1";
+    private static final String SORT = "1";  //随机排序
+    private static final String HAS_SCENE = "1";
     private FindFriendAdapter adapter;
-    private List<FindFriendData.User> mList=new ArrayList();
+    private List<FindFriendData.User> mList = new ArrayList();
     private ListView lv;
     private WaittingDialog dialog;
-    public FindFriendsActivity(){
+
+    public FindFriendsActivity() {
         super(R.layout.activity_find_freinds);
     }
 
     @Override
     protected void initView() {
-        dialog=new WaittingDialog(this);
-        custom_head.setHeadCenterTxtShow(true,"发现好友");
+        dialog = new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, "发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
+        View view = Util.inflateView(activity, R.layout.headview_findfriend, null);
+        item_wx = ButterKnife.findById(view, R.id.item_wx);
         item_wx.setImg(R.mipmap.wechat);
         item_wx.setTitle("邀请微信好友");
         item_wx.setSubTitle("分享给好友");
+
+        item_sina = ButterKnife.findById(view, R.id.item_sina);
         item_sina.setImg(R.mipmap.sina);
         item_sina.setTitle("连接微博");
         item_sina.setSubTitle("分享给微博好友");
+
+        item_contacts = ButterKnife.findById(view, R.id.item_contacts);
         item_contacts.setImg(R.mipmap.icon_head);
         item_contacts.setTitle("连接通讯录");
         item_contacts.setSubTitle("关注你认识的好友");
         lv = pull_lv.getRefreshableView();
         lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
+        pull_lv.getRefreshableView().addHeaderView(view);
         pull_lv.setPullToRefreshEnabled(false);
     }
 
@@ -96,11 +101,13 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
         pull_lv.setOnLastItemVisibleListener(new com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-                isLoadMore = true;
-                requestNet();
+//                isLoadMore = true;
+//                requestNet();
             }
         });
-
+        item_wx.setOnClickListener(this);
+        item_sina.setOnClickListener(this);
+        item_contacts.setOnClickListener(this);
 //        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -112,11 +119,11 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
 
     @Override
     protected void requestNet() {
-        String sight_count="5";
-        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE,sight_count,SORT,new RequestCallBack<String>() {
+        String sight_count = "5";
+        ClientDiscoverAPI.findFriends(String.valueOf(curPage), PAGE_SIZE, sight_count, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null){
+                if (dialog != null) {
                     if (curPage == 1) dialog.show();
                 }
             }
@@ -127,7 +134,8 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
-                HttpResponse<FindFriendData> response = JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<FindFriendData>>(){});
+                HttpResponse<FindFriendData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<FindFriendData>>() {
+                });
                 if (response.isSuccess()) {
                     FindFriendData data = response.getData();
                     List list = data.users;
@@ -147,7 +155,7 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
     }
 
     @Override
-    protected void refreshUI(List list) {
+    protected void refreshUI(List<FindFriendData.User> list) {
         if (list == null) return;
         if (list.size() == 0) {
             if (isLoadMore) {
@@ -160,9 +168,17 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
 
         curPage++;
 
+        Iterator<FindFriendData.User> iterator = list.iterator();
+        while (iterator.hasNext()){
+            FindFriendData.User user = iterator.next();
+            if (user.is_love==FansAdapter.LOVE){
+                iterator.remove();
+            }
+        }
+
         if (adapter == null) {
             mList.addAll(list);
-            adapter = new FindFriendAdapter(list,activity);
+            adapter = new FindFriendAdapter(mList, activity);
             lv.setAdapter(adapter);
         } else {
             mList.addAll(list);
@@ -173,10 +189,10 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
             pull_lv.onRefreshComplete();
     }
 
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 3:
                     Util.makeToast("对不起，分享出错");
                     break;
@@ -190,15 +206,11 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
         }
     };
 
-    @OnClick({R.id.head_view_shop,R.id.item_wx,R.id.item_sina,R.id.item_contacts})
-    void onClick(View v){
-        Platform.ShareParams params=null;
-        switch (v.getId()){
-            case R.id.head_view_shop:
-                startActivity(new Intent(activity, CaptureActivity.class));
-                break;
+    @Override
+    public void onClick(View view) {
+        Platform.ShareParams params = null;
+        switch (view.getId()) {
             case R.id.item_wx:
-                //wechat
                 params = new Platform.ShareParams();
                 params.setShareType(Platform.SHARE_TEXT);
 //                params.setUrl("http://m.taihuoniao.com/guide/fiu");
@@ -209,7 +221,6 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 wechat.share(params);
                 break;
             case R.id.item_sina:
-                //sina
                 params = new Platform.ShareParams();
                 params.setShareType(Platform.SHARE_TEXT);
 //                params.setTitle("有Fiu才有意思！");
@@ -220,10 +231,19 @@ public class FindFriendsActivity extends BaseActivity implements PlatformActionL
                 break;
             case R.id.item_contacts:
                 Uri sms = Uri.parse("smsto:");
-                Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
-                sendIntent.putExtra( "sms_body",getResources().getString(R.string.share_title_url));
-                sendIntent.setType("vnd.android-dir/mms-sms" );
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW, sms);
+                sendIntent.putExtra("sms_body", getResources().getString(R.string.share_title_url));
+                sendIntent.setType("vnd.android-dir/mms-sms");
                 startActivity(sendIntent);
+                break;
+        }
+    }
+
+    @OnClick({R.id.head_view_shop})
+    void performClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_view_shop:
+                startActivity(new Intent(activity, CaptureActivity.class));
                 break;
         }
     }

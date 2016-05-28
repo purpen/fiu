@@ -148,7 +148,6 @@ public class ImageCropActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (bitmap!=null) bitmap.recycle();
             setViewEnable(true);
             progress_bar.setVisibility(View.GONE);
         }
@@ -205,7 +204,6 @@ public class ImageCropActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            if (bitmap!=null) bitmap.recycle();
             setViewEnable(true);
             progress_bar.setVisibility(View.GONE);
         }

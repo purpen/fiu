@@ -57,11 +57,7 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(getClass().getSimpleName())){
-            String count = intent.getStringExtra(getClass().getSimpleName());
-            if (TextUtils.isEmpty(count)) return;
-            if (TextUtils.isDigitsOnly(count)){
-                unread_count=Integer.valueOf(intent.getStringExtra(getClass().getSimpleName()));
-            }
+            unread_count = intent.getIntExtra(getClass().getSimpleName(),0);
         }
     }
 

@@ -74,15 +74,15 @@ public class MessageActivity extends BaseActivity {
                 intent=new Intent(activity, SystemNoticeActivity.class);
                 if (user!=null){
                     intent.putExtra(SystemNoticeActivity.class.getSimpleName(),user.counter.fiu_notice_count);
+                    startActivity(intent);
                 }
-                startActivity(intent);
                 break;
             case R.id.item_clear_cache: //评论列表
                 intent=new Intent(activity, UserCommentsActivity.class);
                 if (user!=null){
                     intent.putExtra(UserCommentsActivity.class.getSimpleName(),user.counter.fiu_comment_count);
+                    startActivity(intent);
                 }
-                startActivity(intent);
                 break;
             case R.id.item_to_comment: //评论列表
                 startActivity(new Intent(activity,PrivateMessageListActivity.class));
@@ -109,9 +109,11 @@ public class MessageActivity extends BaseActivity {
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
-                    });
-                    refreshUI();
+                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
+                    if (response.isSuccess()){
+                        user=response.getData();
+                        refreshUI();
+                    }
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");

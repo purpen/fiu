@@ -107,7 +107,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                         if (response.isSuccess()) {
                             item.focus_flag = false;
                             notifyDataSetChanged();
-                            Util.makeToast(response.getMessage());
+//                            Util.makeToast(response.getMessage());
                             return;
                         }
                         Util.makeToast(response.getMessage());
@@ -165,7 +165,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                                 if (response.isSuccess()) {
                                     item.focus_flag = false;
                                     notifyDataSetChanged();
-                                    Util.makeToast(response.getMessage());
+//                                    Util.makeToast(response.getMessage());
                                     return;
                                 }
                                 Util.makeToast(response.getMessage());
@@ -191,7 +191,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 //                                    list.remove(item);
                                     item.focus_flag = true;  //变为可关注
                                     notifyDataSetChanged();
-                                    Util.makeToast(response.getMessage());
+//                                    Util.makeToast(response.getMessage());
                                     return;
                                 }
 
@@ -259,7 +259,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     if (response.isSuccess()) {
                         item.follows.is_love = LOVE;
                         notifyDataSetChanged();
-                        Util.makeToast(response.getMessage());
+//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     Util.makeToast(response.getMessage());
@@ -285,7 +285,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();
-                        Util.makeToast(response.getMessage());
+//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     Util.makeToast(response.getMessage());

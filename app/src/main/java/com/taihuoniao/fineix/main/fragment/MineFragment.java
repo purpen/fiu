@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -26,13 +24,14 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.gallary.ImageLoaderEngine;
+import com.taihuoniao.fineix.gallary.ImageSelectActivity;
+import com.taihuoniao.fineix.gallary.Picker;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.map.BDSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
-import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
@@ -44,7 +43,6 @@ import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -382,7 +380,6 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
-                startActivity(new Intent(activity, FansActivity.class));
         }
     }
 
@@ -407,7 +404,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(intent);
                         break;
                     case 4:
-                        String url="http://m.taihuoniao.com/app/api/view/fiu_point?uuid="+ MainApplication.uuid+"&from_to=2";
+                        String url="http://m.taihuoniao.com/app/api/view/fiu_point?uuid="+ MainApplication.uuid+"&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
                         intent.putExtra(AboutUsActivity.class.getName(),"积分");

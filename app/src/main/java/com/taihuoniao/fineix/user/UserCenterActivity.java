@@ -31,6 +31,9 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
+import com.taihuoniao.fineix.gallary.ImageLoaderEngine;
+import com.taihuoniao.fineix.gallary.Picker;
+import com.taihuoniao.fineix.gallary.PicturePickerUtils;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -88,6 +91,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private LinearLayout ll_qj;
     private LinearLayout ll_cj;
     private User user;
+    private List<Uri> mSelected;
     private int which = MineFragment.REQUEST_CJ;
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
@@ -566,7 +570,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.LOVE;
                                 bt_focus.setText("已关注");
-                                Util.makeToast(response.getMessage());
+//                                Util.makeToast(response.getMessage());
                                 return;
                             }
 
@@ -592,7 +596,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
                                 bt_focus.setText("关注");
-                                Util.makeToast(response.getMessage());
+//                                Util.makeToast(response.getMessage());
                                 return;
                             }
 
@@ -641,9 +645,20 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     protected void getImageFromAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");//相片类型
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .singleChoice()
+                    .setEngine(new ImageLoaderEngine())
+                    .forResult(REQUEST_CODE_PICK_IMAGE);
+        }else {
+            Util.makeToast("请确认已经插入SD卡");
+        }
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType("image/*");//相片类型
+//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
     protected void getImageFromCamera() {
@@ -661,18 +676,19 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Intent intent = null;
-            File file = null;
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
-                    Uri uri = data.getData();
-                    if (uri != null) {
+//                    Uri uri = data.getData();
+                    mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected==null) return;
+                    if (mSelected.size()==0) return;
+//                    if (uri != null) {
 //                        Bitmap bitmap = ImageUtils.decodeUriAsBitmap(uri);
 //                        mClipImageLayout.setImageBitmap(bitmap);
-                        toCropActivity(uri);
-                    } else {
-                        Util.makeToast("抱歉，从相册获取图片失败");
-                    }
+                        toCropActivity(mSelected.get(0));
+//                    } else {
+//                        Util.makeToast("抱歉，从相册获取图片失败");
+//                    }
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
 //                    Bitmap bitmap =ImageUtils.decodeUriAsBitmap(imageUri);

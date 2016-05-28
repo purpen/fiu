@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +10,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.MessageDetailData;
-import com.taihuoniao.fineix.beans.PrivateMessageListData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;

@@ -109,7 +109,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (response.isSuccess()) {
                         item.type = TYPE2;
                         notifyDataSetChanged();
-                        Util.makeToast(response.getMessage());
+//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     Util.makeToast(response.getMessage());
@@ -166,7 +166,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                             if (response.isSuccess()) {
                                 item.type = TYPE1;
                                 notifyDataSetChanged();
-                                Util.makeToast(response.getMessage());
+//                                Util.makeToast(response.getMessage());
                                 return;
                             }
                             Util.makeToast(response.getMessage());
@@ -233,7 +233,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (response.isSuccess()) {
                         item.follows.is_love = LOVE;
                         notifyDataSetChanged();
-                        Util.makeToast(response.getMessage());
+//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     Util.makeToast(response.getMessage());
@@ -259,7 +259,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();
-                        Util.makeToast(response.getMessage());
+//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     Util.makeToast(response.getMessage());

@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp40"
         android:background="@android:color/white">
-
         <TextView
             android:id="@+id/tv_tag"
             android:layout_width="wrap_content"
@@ -34,7 +33,13 @@
             android:paddingRight="@dimen/dp15"
             android:textSize="@dimen/sp12"
             android:visibility="gone" />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择一个个性标签"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_centerVertical="true"
+            />
         <ImageButton
             android:id="@+id/iv_clear"
             android:layout_width="wrap_content"
@@ -82,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp16"
-        android:hint="15个字以内的个性签名"
+        android:hint="输入15个字以内的个性签名"
         android:gravity="left|top"
         android:textColorHint="@color/color_999"
         android:textSize="@dimen/sp14"

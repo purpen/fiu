@@ -31,6 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv"
                         android:layout_width="@dimen/dp60"
@@ -46,19 +47,29 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:background="#10000000"
-                        >
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tv_nick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="@dimen/dp5"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp12"
+                            android:layout_marginTop="@dimen/dp5"
+                            android:text="fiu"
+                            />
                         <TextView
                             android:id="@+id/tv_real"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="@dimen/dp5"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp12"
                             android:text="@string/app_name"
-                            />
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp12" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -69,19 +80,17 @@
                                 android:id="@+id/tv_tag"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"
                                 android:text="@string/app_name"
-                                />
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/sp12" />
 
                             <TextView
                                 android:id="@+id/tv_rank"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"
                                 android:text="@string/app_name"
-                                />
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/sp12" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -250,7 +259,8 @@
             <Button
                 android:id="@+id/btn"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp40" />
+                android:layout_height="@dimen/dp40"
+                 />
 
             <HorizontalScrollView
                 android:id="@+id/horizontal_scroll_view"
@@ -268,13 +278,12 @@
             </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
-    <!--android:background="#1a000000"-->
+
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true">
 
         <ImageButton
             android:id="@+id/iv_detail"
@@ -291,18 +300,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/head_logo"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_nick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dp5"
-            android:textColor="@color/color_333"
-            android:textSize="@dimen/sp14" />
+            android:src="@mipmap/head_logo" />
 
         <ImageView
             android:id="@+id/iv_calendar"

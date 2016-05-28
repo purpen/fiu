@@ -1,14 +1,7 @@
 package com.taihuoniao.fineix.user;
-
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -16,17 +9,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.CropOptionAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CropOption;
-import com.taihuoniao.fineix.beans.ImgUploadBean;
+import com.taihuoniao.fineix.gallary.ImageLoaderEngine;
+import com.taihuoniao.fineix.gallary.Picker;
+import com.taihuoniao.fineix.gallary.PicturePickerUtils;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -38,7 +28,6 @@ import com.taihuoniao.fineix.view.SegmentedGroup;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -68,6 +57,8 @@ public class CompleteUserInfoActivity extends BaseActivity {
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private static final String TYPE = "3";
     private Bitmap bitmap;
+    private List<Uri> mSelected;
+
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -195,12 +186,16 @@ public class CompleteUserInfoActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        toCropActivity(uri);
-                    } else {
-                        Util.makeToast("抱歉，从相册获取图片失败");
-                    }
+                    mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected==null) return;
+                    if (mSelected.size()==0) return;
+                    toCropActivity(mSelected.get(0));
+//                    Uri uri = data.getData();
+//                    if (uri != null) {
+//                        toCropActivity(uri);
+//                    } else {
+//                        Util.makeToast("抱歉，从相册获取图片失败");
+//                    }
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
                     if (imageUri != null) {
@@ -212,9 +207,15 @@ public class CompleteUserInfoActivity extends BaseActivity {
     }
 
     protected void getImageFromAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");//相片类型
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType("image/*");//相片类型
+//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .singleChoice()
+                .setEngine(new ImageLoaderEngine())
+                .forResult(REQUEST_CODE_PICK_IMAGE);
     }
 
     protected void getImageFromCamera() {
@@ -233,7 +234,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
             @Override
             public void onClipComplete(Bitmap bitmap) {
                 CompleteUserInfoActivity.this.bitmap=bitmap;
-                riv.setImageBitmap(CompleteUserInfoActivity.this.bitmap);
+                riv.setImageBitmap(bitmap);
             }
         });
         Intent intent = new Intent(activity, ImageCropActivity.class);
