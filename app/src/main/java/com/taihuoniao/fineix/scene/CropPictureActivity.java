@@ -14,7 +14,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
     private Uri imageUri;//上个界面获取的图片位置uri
     private GlobalTitleLayout titleLayout;
     private ClipImageLayout clipImageLayout;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     public static CropPictureActivity instance = null;
 
 
@@ -55,7 +55,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_crop_titlelayout);
 //        获取状态栏的高度
         clipImageLayout = (ClipImageLayout) findViewById(R.id.activity_crop_cliplayout);
-        dialog = new WaittingDialog(CropPictureActivity.this);
+        dialog = new SVProgressHUD(CropPictureActivity.this);
     }
 
     @Override

@@ -33,7 +33,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
     private View mView;
     public BitmapUtils bitmapUtils_listview = null;
     private AlertDialog.Builder alertDialog;
-    private WaittingDialog mdialog;
+    private SVProgressHUD mdialog;
 
     public ShopOrderListAdapter(List<OrderEntity> list, Context context, String optFragmentFlag) {
         super(list, context);
@@ -72,7 +72,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 .configThreadPoolSize(5)
                 .configDefaultImageLoadAnimation(
                         AnimationUtils.loadAnimation(context, R.anim.fade_in));
-        mdialog = new WaittingDialog(context);
+        mdialog = new SVProgressHUD(context);
 
     }
 

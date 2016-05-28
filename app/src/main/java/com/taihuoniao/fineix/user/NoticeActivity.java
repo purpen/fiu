@@ -22,7 +22,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class NoticeActivity extends BaseActivity{
     private List<NoticeData.NoticeItem> list;
     private static final String pageSize="9999";
     private static final String COMMENT_TYPE="12";
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private NoticeAdapter adapter;
 
 
@@ -52,7 +52,7 @@ public class NoticeActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"提醒");
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
     }
 
     @Override

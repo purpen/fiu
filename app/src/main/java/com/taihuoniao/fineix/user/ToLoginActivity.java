@@ -27,7 +27,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.HashMap;
 
@@ -58,7 +58,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     private String loginType = LOGIN_TYPE_WX;//1.微信；2.微博；3.ＱＱ
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToLoginActivity instance = null;
-    private WaittingDialog mDialog;
+    private SVProgressHUD mDialog;
     public ToLoginActivity() {
         super(R.layout.activity_to_login);
     }
@@ -147,7 +147,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         ShareSDK.initSDK(this);//必须先在程序入口处初始化SDK
         instance = this;
         ActivityUtil.getInstance().addActivity(this);
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         mPhone = (TextView) findViewById(R.id.tv_phone_number_tologin);
         mPhone.setOnClickListener(this);
         mClose = (ImageView) findViewById(R.id.image_close_tologin);

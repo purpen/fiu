@@ -29,9 +29,9 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class UsableRedPacketActivity extends BaseActivity {
     private int total_rows;
     private boolean mLookClick = false;
     private String mRid;//订单号
-    private WaittingDialog mDialog;
+    private SVProgressHUD mDialog;
     private UsableRedPacketAdapter adapter;
     private View footerView;
 
@@ -188,7 +188,7 @@ public class UsableRedPacketActivity extends BaseActivity {
         mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
 //        mLook = (TextView) findViewById(R.id.tv_look_redbag);
 //        mLinearLook = (LinearLayout) findViewById(R.id.linear_look_redbag);
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         mRid = getIntent().getStringExtra("rid");
 
         //未过期未使用

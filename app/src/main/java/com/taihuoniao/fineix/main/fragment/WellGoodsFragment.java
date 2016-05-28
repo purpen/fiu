@@ -61,8 +61,8 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private AbsoluteLayout absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private static final String PAGE_NAME = "app_fiu_product_index_slide";
     //标签列表
     private List<HotLabel.HotLabelBean> hotLabelList;
@@ -122,7 +122,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_label_recycler);
         recyclerView = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_recycler);
         listView.addHeaderView(header);
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

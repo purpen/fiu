@@ -24,6 +24,8 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     private int layoutResID;
     protected DisplayImageOptions options;
 
+
+
     public BaseActivity(int layoutResID) {
         this.layoutResID = layoutResID;
         options = new DisplayImageOptions.Builder()

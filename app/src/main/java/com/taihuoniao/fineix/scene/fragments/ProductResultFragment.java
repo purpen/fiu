@@ -17,9 +17,9 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class ProductResultFragment extends BaseFragment {
     private ListView listView;
     private ProgressBar progressBar;
     private TextView emptyView;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //产品列表
     private int page = 1;
     private List<SearchBean.SearchItem> list;
@@ -69,7 +69,7 @@ public class ProductResultFragment extends BaseFragment {
         listView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_product_result_progressBar);
         emptyView = (TextView) view.findViewById(R.id.fragment_product_result_emptyview);
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

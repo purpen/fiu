@@ -32,7 +32,7 @@ import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.PullRefreshLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class ShopCarActivity extends Activity implements View.OnClickListener, PullRefreshLayout.OnPullListener, PullRefreshLayout.OnPullStateListener {
     private ListViewForScrollView mShopCartListView;
-    private WaittingDialog mDialog = null;
+    private SVProgressHUD mDialog = null;
     private List<ShopCart> mList = new ArrayList<>();
     private List<Map<String, Object>> totalList = new ArrayList<Map<String, Object>>();
     private List<Map<String, Object>> list_delete = new ArrayList<Map<String, Object>>();
@@ -190,7 +190,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     }
 
     private void initView() {
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         if (!mDialog.isShowing()) {
             mDialog.show();
         }

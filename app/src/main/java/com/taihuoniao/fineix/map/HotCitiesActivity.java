@@ -28,7 +28,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 
@@ -48,20 +48,20 @@ public class HotCitiesActivity extends BaseActivity<City> {
     TextView tv_location;
     private ArrayList<City> cities;
     private HotCitiesAdapter adapter = null;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     public HotCitiesActivity() {
         super(R.layout.activity_hotcities_layout);
     }
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, R.string.select_city);
-        custom_head.setHeadRightTxtShow(true,"全部城市");
-        custom_head.getHeadRightTV().setCompoundDrawablesWithIntrinsicBounds(R.mipmap.all_city,0,0,0);
+        custom_head.setHeadRightTxtShow(true, "全部城市");
+        custom_head.getHeadRightTV().setCompoundDrawablesWithIntrinsicBounds(R.mipmap.all_city, 0, 0, 0);
         custom_head.getHeadRightTV().setTextColor(Color.parseColor("#af8323"));
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
         recycler_view.setItemAnimator(new DefaultItemAnimator());
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
     }
 
     public void setCurrentCity(BDLocation location) {

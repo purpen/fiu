@@ -57,7 +57,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -115,7 +115,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //添加链接装载链接的容器
     private List<LabelView> labels = new ArrayList<LabelView>();
     //工具类
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //编辑好的图片存储名称
     private String picName;
     public static EditPictureActivity instance = null;
@@ -256,7 +256,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
         chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
-        dialog = new WaittingDialog(EditPictureActivity.this);
+        dialog = new SVProgressHUD(EditPictureActivity.this);
         imageLoader = ImageLoader.getInstance();
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)

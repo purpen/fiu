@@ -8,15 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UserCJListAdapter;
-import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -25,8 +26,8 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class UserCJFragment extends MyBaseFragment {
     private int curPage = 1;
     private boolean isLoadMore = false;
     public static final String PAGE_SIZE = "10";
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private UserCJListAdapter adapter;
     private ListView listView;
     private List<SceneListBean> mList = new ArrayList<>();
@@ -72,7 +73,7 @@ public class UserCJFragment extends MyBaseFragment {
     @Override
     protected void initParams() {
         if (dialog == null)
-            dialog = new WaittingDialog(activity);
+            dialog = new SVProgressHUD(activity);
     }
 
     @Override

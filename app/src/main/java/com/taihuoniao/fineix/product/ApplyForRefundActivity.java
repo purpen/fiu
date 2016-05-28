@@ -25,14 +25,14 @@ import com.taihuoniao.fineix.beans.OrderDetails;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ApplyForRefundActivity extends Activity implements View.OnClickListener {
-    private WaittingDialog mDialog = null;
+    private SVProgressHUD mDialog = null;
     private TextView mReason;
     private TextView mMoney;
     private EditText mEditTextReason;
@@ -90,7 +90,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
 //        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_apply_for_refund);
-        mDialog = new WaittingDialog(this);
+        mDialog = new SVProgressHUD(this);
         initView();
         initPopwindow();
         initData();

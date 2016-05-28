@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
@@ -24,7 +25,7 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class UserQJFragment extends MyBaseFragment {
     private int curPage = 1;
     private boolean isLoadMore = false;
     public static final String PAGE_SIZE = "10";
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private OrderedQJAdapter adapter;
     private List<QingJingListBean.QingJingItem> mList = new ArrayList<>();
     private String userId=String.valueOf(LoginInfo.getUserId());
@@ -69,7 +70,7 @@ public class UserQJFragment extends MyBaseFragment {
     @Override
     protected void initParams() {
         if (dialog == null)
-            dialog = new WaittingDialog(activity);
+            dialog = new SVProgressHUD(activity);
     }
 
     @Override

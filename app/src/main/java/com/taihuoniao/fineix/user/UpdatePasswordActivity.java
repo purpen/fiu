@@ -10,13 +10,12 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -32,7 +31,7 @@ public class UpdatePasswordActivity extends BaseActivity {
     EditText et_old;
     @Bind(R.id.et_new)
     EditText et_new;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     public UpdatePasswordActivity() {
         super(R.layout.activity_update_password);
@@ -40,7 +39,7 @@ public class UpdatePasswordActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
         custom_head.setHeadCenterTxtShow(true, "修改密码");
         custom_head.setHeadRightTxtShow(true, R.string.complete);
     }

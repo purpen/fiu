@@ -44,8 +44,16 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
+import com.taihuoniao.fineix.view.wheelview.WheelView;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 /**
  * @author lilin
  *         created at 2016/4/26 18:50
@@ -88,6 +96,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private String key;
     private String value;
     public static boolean isSubmitAddress=false;
+    private SVProgressHUD dialog;
     private WaittingDialog dialog;
     private List<Uri> mSelected;
 
@@ -98,7 +107,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
         custom_user_avatar.setUserAvatar(null);
         custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333);
         custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333);

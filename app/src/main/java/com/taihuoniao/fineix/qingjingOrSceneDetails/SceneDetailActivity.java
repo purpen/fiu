@@ -62,7 +62,7 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyScrollView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView jubaoTv;
     private TextView cancelTv;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //图片加载
     private DisplayImageOptions options, options750_1334;
     //图片上的商品
@@ -188,7 +188,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
-        dialog = new WaittingDialog(SceneDetailActivity.this);
+        dialog = new SVProgressHUD(SceneDetailActivity.this);
         initPopupWindow();
     }
 

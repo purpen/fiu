@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -25,8 +24,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSubItemLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -66,6 +65,8 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     private WaittingDialog dialog;
 
     public FindFriendsActivity() {
+    private SVProgressHUD dialog;
+    public FindFriendsActivity(){
         super(R.layout.activity_find_freinds);
     }
 
@@ -73,6 +74,8 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     protected void initView() {
         dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "发现好友");
+        dialog=new SVProgressHUD(this);
+        custom_head.setHeadCenterTxtShow(true,"发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
         View view = Util.inflateView(activity, R.layout.headview_findfriend, null);

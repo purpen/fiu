@@ -62,10 +62,10 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private RecyclerView labelRecycler;
     private AbsoluteLayout absoluteLayout;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     //listview分页加载
 //    private int lastSavedFirstVisibleItem = -1;
 //    private int lastTotalItem = -1;
@@ -125,7 +125,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
         absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
-        dialog = new WaittingDialog(getActivity());
+        dialog = new SVProgressHUD(getActivity());
         return view;
     }
 

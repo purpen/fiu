@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -22,12 +23,13 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
 public class PayDetailsActivity extends BaseActivity {
-    private WaittingDialog mDialog;
+    private SVProgressHUD mDialog;
     private TextView mSuccessOrFailed;
     private ImageView mImage;
     private TextView mOrderNum;
@@ -175,8 +177,8 @@ public class PayDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"订单支付详情");
-        custom_head.setHeadRightTxtShow(true,"完成");
-        mDialog = new WaittingDialog(this);
+        custom_head.setHeadRightTxtShow(true, "完成");
+        mDialog = new SVProgressHUD(this);
 
         mSuccessOrFailed = (TextView) findViewById(R.id.tv_success_or_failed_pay_detail);
         mImage = (ImageView) findViewById(R.id.image_paydetails);

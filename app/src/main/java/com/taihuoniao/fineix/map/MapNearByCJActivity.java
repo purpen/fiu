@@ -26,7 +26,6 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -36,7 +35,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
     private BitmapDescriptor curDescripter;
-    private WaittingDialog waittingDialog;
+    private SVProgressHUD waittingDialog;
     private LatLng ll;
     private String address;
 
@@ -93,7 +92,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
         if (!TextUtils.isEmpty(address)) {
             custom_head.setHeadCenterTxtShow(true, address);
         }
-        waittingDialog = new WaittingDialog(this);
+        waittingDialog = new SVProgressHUD(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
 //        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));

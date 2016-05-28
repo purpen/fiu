@@ -20,7 +20,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     private static final String PAGE_SIZE = "10";
     private static final String TYPE_SCENE = "scene";
     private static final String EVENT = "subscription";
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private OrderInterestSlidingAdapter adapter;
     public static OrderInterestQJActivity instance;
 
@@ -58,7 +58,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     protected void initView() {
         instance = OrderInterestQJActivity.this;
         custom_head.setHeadCenterTxtShow(true, "订阅的情景");
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
     }
 
     @Override

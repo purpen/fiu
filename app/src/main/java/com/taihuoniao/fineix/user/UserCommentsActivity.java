@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -19,7 +20,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class UserCommentsActivity extends BaseActivity{
     private List<CommentsBean.CommentItem> list;
     private static final String pageSize="9999";
     private static final String COMMENT_TYPE="12";
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private UserCommentsAdapter adapter;
     public UserCommentsActivity(){
         super(R.layout.activity_user_comments);
@@ -54,7 +55,7 @@ public class UserCommentsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"评论");
-        dialog=new WaittingDialog(this);
+        dialog=new SVProgressHUD(this);
     }
 
     @Override

@@ -28,10 +28,6 @@
             android:layout_marginBottom="8dp"
             android:maxLines="2"
             android:maxEms="6"
-            android:paddingBottom="3dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="3dp"
-            android:paddingTop="4dp"
             android:text="哈哈哈哈哈哈哈噶"
             android:textColor="@color/white"
             android:textSize="13sp"/>

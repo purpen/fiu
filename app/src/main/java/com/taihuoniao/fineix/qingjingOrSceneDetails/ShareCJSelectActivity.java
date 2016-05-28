@@ -21,7 +21,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.activity_share_select_progress)
     ProgressBar progressBar;
     //    private ListView listView;
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private int currentPage = 1;
     private List<SearchBean.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
@@ -73,7 +73,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         imageView.setImageBitmap(MainApplication.shareBitmap);
         titleTv.setText("默认标题：" + scene.getTitle());
         desTv.setText("默认描述：" + scene.getDes());
-        dialog = new WaittingDialog(ShareCJSelectActivity.this);
+        dialog = new SVProgressHUD(ShareCJSelectActivity.this);
         listView.setOnScrollListener(this);
 //        listView = pullToRefreshView.getRefreshableView();
 //        pullToRefreshView.setPullToRefreshEnabled(false);

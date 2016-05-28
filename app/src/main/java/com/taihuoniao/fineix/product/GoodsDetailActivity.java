@@ -37,7 +37,7 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -87,7 +87,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private String attrbute = "0";// 1.官网；2.淘宝；3.天猫；4.京东
     private String url = null;
     //网络请求对话框
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private GoodsDetailBean netGood;//网络请求返回值
     //所属场景列表
     private int page = 1;
@@ -121,7 +121,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     protected void initView() {
         df = new DecimalFormat("######0.00");
         WindowUtils.chenjin(GoodsDetailActivity.this);
-        dialog = new WaittingDialog(GoodsDetailActivity.this);
+        dialog = new SVProgressHUD(GoodsDetailActivity.this);
         backImg.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();

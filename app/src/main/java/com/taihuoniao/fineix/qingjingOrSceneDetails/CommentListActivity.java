@@ -34,9 +34,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private TextView deleteTv;
     private TextView cancelTv;
     //网络请求
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
     private String currentUserId = null;//网络获取的当前用户id
     //评论列表页码
     private int currentPage = 1;
@@ -89,7 +89,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         listView.setSelector(R.color.nothing);
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
-        dialog = new WaittingDialog(this);
+        dialog = new SVProgressHUD(this);
         initPopupWindow();
     }
 

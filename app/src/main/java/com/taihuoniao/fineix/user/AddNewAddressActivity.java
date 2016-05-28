@@ -29,7 +29,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import com.taihuoniao.fineix.view.wheelview.ArrayWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.OnWheelChangedListener;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
@@ -70,7 +70,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 //    private boolean isEnd = false;
 
     //网络请求
-    private WaittingDialog dialog;
+    private SVProgressHUD dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,12 +171,12 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
         provinceList = new ArrayList<>();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                cancelNet();
-            }
-        });
+//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                cancelNet();
+//            }
+//        });
     }
 
     private void initView() {
@@ -192,7 +192,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         cityTv = (TextView) findViewById(R.id.activity_addnewaddress_city);
         detailsAddressEdt = (EditText) findViewById(R.id.activity_addnewaddress_addressdetails);
         isDefaultImg = (ImageView) findViewById(R.id.activity_addnewaddress_isdefault);
-        dialog = new WaittingDialog(AddNewAddressActivity.this);
+        dialog = new SVProgressHUD(AddNewAddressActivity.this);
     }
 
     @Override
