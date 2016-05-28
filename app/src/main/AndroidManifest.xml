@@ -299,7 +299,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".gallary.ImageSelectActivity"
+            android:name=".album.ImageSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity

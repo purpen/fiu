@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.taihuoniao.fineix.gallary;
+package com.taihuoniao.fineix.album;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

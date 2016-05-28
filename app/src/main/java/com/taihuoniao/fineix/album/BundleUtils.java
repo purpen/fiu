@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.gallary;
+package com.taihuoniao.fineix.album;
 
 /**
  * Created by zaiyong on 2015/6/6.

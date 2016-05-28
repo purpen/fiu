@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.gallary;
+package com.taihuoniao.fineix.album;
 
 import android.app.Activity;
 import android.content.ContentResolver;

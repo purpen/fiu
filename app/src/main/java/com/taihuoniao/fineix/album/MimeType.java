@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.taihuoniao.fineix.gallary;
+package com.taihuoniao.fineix.album;
 
 import android.content.ContentResolver;
 import android.net.Uri;
