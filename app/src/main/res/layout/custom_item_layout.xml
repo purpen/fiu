@@ -87,7 +87,7 @@
         android:layout_toLeftOf="@id/iv_more_arrow"
         android:layout_marginRight="@dimen/dp10"
         android:ellipsize="end"
-        android:maxLength="15"
+        android:maxLength="40"
         android:text="@string/app_name"
         android:textColor="@color/color_999"
         android:textSize="@dimen/sp14"

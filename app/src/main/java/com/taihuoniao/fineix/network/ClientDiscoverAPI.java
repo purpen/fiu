@@ -786,6 +786,18 @@ public class ClientDiscoverAPI {
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
+    /**
+     * 更新签名和label
+     * @param label
+     * @param summary
+     * @param callBack
+     */
+    public static void updateSignatrueLabel(String label, String summary,RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("label", label);
+        params.addQueryStringParameter("summary", summary);
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
 
     /**
      * 获取所有城市

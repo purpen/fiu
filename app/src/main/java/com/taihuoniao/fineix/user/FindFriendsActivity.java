@@ -62,9 +62,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     private FindFriendAdapter adapter;
     private List<FindFriendData.User> mList = new ArrayList();
     private ListView lv;
-    private WaittingDialog dialog;
 
-    public FindFriendsActivity() {
     private SVProgressHUD dialog;
     public FindFriendsActivity(){
         super(R.layout.activity_find_freinds);
@@ -72,7 +70,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
     @Override
     protected void initView() {
-        dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "发现好友");
         dialog=new SVProgressHUD(this);
         custom_head.setHeadCenterTxtShow(true,"发现好友");

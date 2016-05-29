@@ -34,7 +34,6 @@ import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
@@ -45,15 +44,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
-import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
-import com.taihuoniao.fineix.view.wheelview.WheelView;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.OnClick;
 /**
  * @author lilin
  *         created at 2016/4/26 18:50
@@ -97,7 +87,6 @@ public class EditUserInfoActivity extends BaseActivity {
     private String value;
     public static boolean isSubmitAddress=false;
     private SVProgressHUD dialog;
-    private WaittingDialog dialog;
     private List<Uri> mSelected;
 
     public EditUserInfoActivity() {
@@ -410,9 +399,8 @@ public class EditUserInfoActivity extends BaseActivity {
                 custom_nick_name.setTvArrowLeftStyle(true, user.nickname, R.color.color_333);
             }
 
-            if (!TextUtils.isEmpty(user.summary)) {
-                custom_signature.setTvArrowLeftStyle(true, user.summary, R.color.color_333);
-            }
+            setLabelSignatrue();
+
             if (user.areas.size()>0) {
                 custom_area.setTvArrowLeftStyle(true,String.format("%s %s",user.areas.get(0),user.areas.get(1)), R.color.color_333);
             }
@@ -436,6 +424,18 @@ public class EditUserInfoActivity extends BaseActivity {
         }
     }
 
+    private void setLabelSignatrue(){
+        if (TextUtils.isEmpty(user.label) && !TextUtils.isEmpty(user.summary)){
+            custom_signature.setTvArrowLeftStyle(true, user.summary, R.color.color_333);
+        }else if (!TextUtils.isEmpty(user.label)&&TextUtils.isEmpty(user.summary)){
+            custom_signature.setTvArrowLeftStyle(true, user.label, R.color.color_333);
+        }else if (!TextUtils.isEmpty(user.label)&&!TextUtils.isEmpty(user.summary)){
+            String str=String.format("%s | %s",user.label,user.summary);
+            LogUtil.e("setLabelSignatrue",str);
+            custom_signature.setTvArrowLeftStyle(true,str, R.color.color_333);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -448,7 +448,8 @@ public class EditUserInfoActivity extends BaseActivity {
                     break;
                 case REQUEST_SIGNATURE:
                     user=(User)data.getSerializableExtra(User.class.getSimpleName());
-                    custom_signature.setTvArrowLeftStyle(true,user.summary,R.color.color_333);
+//                    custom_signature.setTvArrowLeftStyle(true,user.summary,R.color.color_333);
+                    setLabelSignatrue();
                     break;
                 case REQUEST_CODE_PICK_IMAGE:
                     mSelected = PicturePickerUtils.obtainResult(data);

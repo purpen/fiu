@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -39,6 +40,10 @@ public class UserEditSignatureActivity extends BaseActivity{
     AutoLabelUI label_view;
     @Bind(R.id.tv_tag)
     TextView tv_tag;
+    @Bind(R.id.tv_hint)
+    TextView tv_hint;
+    @Bind(R.id.iv_clear)
+    ImageButton iv_clear;
     public UserEditSignatureActivity() {
         super(R.layout.activity_edit_signatrue);
     }
@@ -63,6 +68,14 @@ public class UserEditSignatureActivity extends BaseActivity{
         }
         if (user!=null){
             et_nickname.setText(user.summary);
+            if (!TextUtils.isEmpty(user.label)){
+                tv_tag.setText(user.label);
+                tv_tag.setVisibility(View.VISIBLE);
+                tv_hint.setVisibility(View.GONE);
+                iv_clear.setVisibility(View.VISIBLE);
+            }else {
+                tv_hint.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -73,46 +86,47 @@ public class UserEditSignatureActivity extends BaseActivity{
             public void onClickLabel(Label labelClicked) {
                 tv_tag.setVisibility(View.VISIBLE);
                 tv_tag.setText(labelClicked.getText());
+                tv_hint.setVisibility(View.GONE);
+                iv_clear.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    @OnClick(R.id.tv_head_right)
-    protected void submit(){
-        if (!TextUtils.isEmpty(et_nickname.getText().toString().trim())){
-            submitData();
-        }else {
-            Util.makeToast("请先填写个性签名");
+    @OnClick({R.id.tv_head_right,R.id.iv_clear})
+    void performClick(View view){
+        switch (view.getId()){
+            case R.id.tv_head_right:
+                submitData();
+                break;
+            case R.id.iv_clear:
+                tv_tag.setVisibility(View.GONE);
+                tv_tag.setText("");
+                iv_clear.setVisibility(View.GONE);
+                break;
         }
     }
 
 
     protected void submitData() {
-        final String summary=et_nickname.getText().toString();
-        EditUserInfoActivity.isSubmitAddress=false;
-        ClientDiscoverAPI.updateUserInfo("summary",summary, new RequestCallBack<String>() {
+        final String label=tv_tag.getText().toString().trim();
+        final String summary=et_nickname.getText().toString().trim();
+        ClientDiscoverAPI.updateSignatrueLabel(label,summary, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo==null){
-                    return;
-                }
-
-                if (TextUtils.isEmpty(responseInfo.result)){
-                    return;
-                }
-
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()){
                     Util.makeToast(response.getMessage());
                     Intent intent = new Intent();
                     user.summary=summary;
+                    user.label=label;
                     intent.putExtra(User.class.getSimpleName(),user);
                     setResult(RESULT_OK,intent);
                     finish();
                     return;
                 }
-
                 Util.makeToast(response.getMessage());
             }
 
