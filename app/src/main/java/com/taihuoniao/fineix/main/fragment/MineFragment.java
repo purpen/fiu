@@ -29,6 +29,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
+import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
@@ -49,6 +50,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -76,8 +78,6 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_real;
     @Bind(R.id.tv_nick)
     TextView tv_nick;
-    @Bind(R.id.tv_rank)
-    TextView tv_rank;
     @Bind(R.id.tv_qj)
     TextView tv_qj;
     @Bind(R.id.tv_cj)
@@ -88,9 +88,16 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_fans;
     @Bind(R.id.iv_bg)
     ImageView iv_bg;
-    @Bind(R.id.tv_tag)
-    TextView tv_tag;
-
+    @Bind(R.id.iv_label)
+    ImageView iv_label;
+    @Bind(R.id.tv_auth)
+    TextView tv_auth;
+    @Bind(R.id.tv_lv)
+    TextView tv_lv;
+    @Bind(R.id.tv_label)
+    TextView tv_label;
+    @Bind(R.id.riv_auth)
+    RoundedImageView riv_auth;
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
     public static final int REQUEST_FOCUS = 2;
@@ -104,7 +111,9 @@ public class MineFragment extends MyBaseFragment {
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
+    private HashMap<String,Integer> labelMap=new HashMap<>();
     private SVProgressHUD dialog;
+
 
     public MineFragment() {
 
@@ -129,6 +138,11 @@ public class MineFragment extends MyBaseFragment {
                 item.txt = imgTxt[i];
                 gvList.add(item);
             }
+        }
+
+        String[] labels = getResources().getStringArray(R.array.official_tags);
+        for (int i=0;i<labels.length;i++){
+            labelMap.put(labels[i],UserCenterActivity.labelsImg[i]);
         }
 
 //        if (partnerLogos.length == partnerName.length) {
@@ -280,19 +294,32 @@ public class MineFragment extends MyBaseFragment {
 //            Bitmap bitmap = ImageLoader.getInstance().loadImageSync(user.head_pic_url);
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
+
+        if (user.identify.is_expert==1){
+            riv_auth.setVisibility(View.VISIBLE);
+        }else {
+            riv_auth.setVisibility(View.GONE);
+        }
+
         if (TextUtils.isEmpty(user.summary)) {
             tv_real.setVisibility(View.GONE);
         } else {
-            tv_real.setText(user.summary);
+            tv_real.setText(String.format(" | %s", user.summary));
         }
 
-        if (!TextUtils.isEmpty(user.label)) {
-            if (user.identify.is_expert == 0) {
-                tv_tag.setText(String.format("%s | ", user.label));
-            } else {
-                tv_tag.setText(String.format("%s | ", user.label));
-//                tv_tag.setBackgroundColor(Color.GREEN);
+        if (!TextUtils.isEmpty(user.expert_label)){
+            if (labelMap.containsKey(user.expert_label)){
+                iv_label.setImageResource(labelMap.get(user.expert_label));
             }
+        }
+
+        if (!TextUtils.isEmpty(user.expert_info)){
+            tv_auth.setText(user.expert_info);
+        }
+
+
+        if (!TextUtils.isEmpty(user.label)) {
+            tv_label.setText(String.format(" %s", user.label));
         }
 
         if (TextUtils.isEmpty(user.nickname)) {
@@ -301,7 +328,7 @@ public class MineFragment extends MyBaseFragment {
             tv_nick.setText(user.nickname);
         }
 
-        tv_rank.setText(String.format("V%s", user.rank_id));
+        tv_lv.setText(String.format("Lv%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));
@@ -330,7 +357,7 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.ibtn, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -359,9 +386,6 @@ public class MineFragment extends MyBaseFragment {
             case R.id.iv_detail:
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
-            case R.id.ibtn:
-                Util.makeToast("认证");
-                break;
             case R.id.item_about_us:
                 String url="http://m.taihuoniao.com/app/api/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
@@ -377,6 +401,7 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
+                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
         }
     }
 

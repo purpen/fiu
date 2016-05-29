@@ -399,6 +399,12 @@ public class EditUserInfoActivity extends BaseActivity {
                 custom_nick_name.setTvArrowLeftStyle(true, user.nickname, R.color.color_333);
             }
 
+            if (TextUtils.isEmpty(user.expert_info)){
+                custom_auth.setTvArrowLeftStyle(true,"未认证",R.color.color_333);
+            }else {
+                custom_auth.setTvArrowLeftStyle(true,user.expert_info,R.color.color_333);
+            }
+
             setLabelSignatrue();
 
             if (user.areas.size()>0) {

@@ -1229,10 +1229,16 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
     //分享场景语境次数
-    public static void commitShareCJ(String id,RequestCallBack<String>callBack){
+    public static void commitShareCJ(String id,RequestCallBack<String> callBack){
         String url = NetworkConstance.BASE_URL+"/scene_sight/add_share_context_num";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id",id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    public static void getAuthStatus(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL+"/my/fetch_talent";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params,url, callBack);
     }
 }

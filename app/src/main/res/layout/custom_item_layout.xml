@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:drawablePadding="@dimen/dp10"
             android:text="@string/app_name"
-            android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp12" />
         <EditText
             android:id="@+id/et_right"
             android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
         android:maxLength="40"
         android:text="@string/app_name"
         android:textColor="@color/color_999"
-        android:textSize="@dimen/sp14"
+        android:textSize="@dimen/sp12"
         android:visibility="gone"
         />
     <TextView

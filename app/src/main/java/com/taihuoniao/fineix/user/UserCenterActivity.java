@@ -47,6 +47,7 @@ import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -68,6 +69,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Bind(R.id.tv_title)
     TextView tv_title;
     private RoundedImageView riv;
+    private RoundedImageView riv_auth;
     private TextView tv_real;
     private TextView tv_nick;
     private TextView tv_rank;
@@ -82,6 +84,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private TextView tv_label;
     private TextView tv_lv;
     private TextView tv_auth;
+    private ImageView iv_label;
     @Bind(R.id.iv_detail)
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
@@ -106,7 +109,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     private boolean isFirstLoad = true;
     private String flag;
-
+    private HashMap<String,Integer> labelMap=new HashMap<>();
+    public static final int[] labelsImg={R.mipmap.dana,R.mipmap.hj,R.mipmap.xingshe,R.mipmap.yishufan,R.mipmap.shouyiren,R.mipmap.renlaifeng,R.mipmap.shuhui,R.mipmap.buyer};
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -149,6 +153,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
         tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
         tv_lv = ButterKnife.findById(headView, R.id.tv_lv);
+        iv_label = ButterKnife.findById(headView, R.id.iv_label);
         tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
 //        tv_title = ButterKnife.findById(headView, R.id.tv_title);
         ibtn = ButterKnife.findById(headView, R.id.ibtn);
@@ -165,6 +170,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_fans = ButterKnife.findById(headView, R.id.ll_fans);
         ll_cj = ButterKnife.findById(headView, R.id.ll_cj);
         ll_qj = ButterKnife.findById(headView, R.id.ll_qj);
+        riv_auth = ButterKnife.findById(headView, R.id.riv_auth);
 
         dialog = new SVProgressHUD(this);
 
@@ -179,6 +185,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
 //            ibtn.setVisibility(View.GONE);
+        }
+        String[] labels = getResources().getStringArray(R.array.official_tags);
+        for (int i=0;i<labels.length;i++){
+            labelMap.put(labels[i],labelsImg[i]);
         }
     }
 
@@ -209,13 +219,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
-                    });
+                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
+                    refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     Util.makeToast("对不起,数据异常");
                 }
-                refreshUI();
             }
 
             @Override
@@ -397,12 +406,27 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
         }
 
+        if (user.identify.is_expert==1){
+            riv_auth.setVisibility(View.VISIBLE);
+        }else {
+            riv_auth.setVisibility(View.GONE);
+        }
+
         if (TextUtils.isEmpty(user.summary)) {
             tv_real.setVisibility(View.GONE);
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }
 
+        if (!TextUtils.isEmpty(user.expert_label)){
+            if (labelMap.containsKey(user.expert_label)){
+                iv_label.setImageResource(labelMap.get(user.expert_label));
+            }
+        }
+
+        if (!TextUtils.isEmpty(user.expert_info)){
+            tv_auth.setText(user.expert_info);
+        }
 
         if (TextUtils.isEmpty(user.nickname) || LoginInfo.getUserId() != userId) {
             tv_nick.setVisibility(View.GONE);
@@ -418,7 +442,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             tv_auth.setText(user.expert_info);
         }
 
-        tv_lv.setText(String.format("LV %s", user.rank_id));
+        tv_lv.setText(String.format("Lv%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.scene_count));
         tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));

@@ -1,38 +1,31 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.album.ImageLoaderEngine;
+import com.taihuoniao.fineix.album.Picker;
+import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.network.NetworkConstance;
-import com.taihuoniao.fineix.network.NetworkManager;
-import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -40,6 +33,7 @@ import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -71,11 +65,14 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private Bitmap bitmap_card;
     @Bind(R.id.progress_bar)
     ProgressBar progress_bar;
+    @Bind(R.id.iv_clear)
+    ImageButton iv_clear;
     @Bind(R.id.btn)
     Button btn;
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
+    private List<Uri> mSelected;
 
     public OfficialCertificateActivity() {
         super(R.layout.activity_official_certificate);
@@ -83,7 +80,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "官方认证");
+        custom_head.setHeadCenterTxtShow(true,"官方认证");
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
         for (int i = 0; i < stringArray.length; i++) {
             label_view.addLabel(stringArray[i]);
@@ -97,6 +94,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             public void onClickLabel(Label labelClicked) {
                 tv_tag.setVisibility(View.VISIBLE);
                 tv_tag.setText(labelClicked.getText());
+                iv_clear.setVisibility(View.VISIBLE);
             }
         });
 
@@ -133,6 +131,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             case R.id.iv_clear:
                 tv_tag.setText("");
                 tv_tag.setVisibility(View.GONE);
+                iv_clear.setVisibility(View.GONE);
                 break;
         }
     }
@@ -241,9 +240,15 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     }
 
     protected void getImageFromAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");//相片类型
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType("image/*");//相片类型
+//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .singleChoice()
+                .setEngine(new ImageLoaderEngine())
+                .forResult(REQUEST_CODE_PICK_IMAGE);
     }
 
     protected void getImageFromCamera() {
@@ -265,12 +270,16 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             File file = null;
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        toCropActivity(uri);
-                    } else {
-                        Util.makeToast("抱歉，从相册获取图片失败");
-                    }
+//                    Uri uri = data.getData();
+//                    if (uri != null) {
+//                        toCropActivity(uri);
+//                    } else {
+//                        Util.makeToast("抱歉，从相册获取图片失败");
+//                    }
+                    mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected==null) return;
+                    if (mSelected.size()==0) return;
+                    toCropActivity(mSelected.get(0));
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
                     if (imageUri != null) {

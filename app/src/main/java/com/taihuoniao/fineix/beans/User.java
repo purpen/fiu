@@ -42,6 +42,7 @@ public class User implements Serializable {
     public int rank_id;
     public String rank_title;
     public String expert_info;
+    public String expert_label;
     public int bird_coin;
     public long current_user_id;
     public String summary;

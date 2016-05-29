@@ -2,24 +2,22 @@ package com.taihuoniao.fineix.user;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -28,7 +26,6 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -49,7 +46,10 @@ public class RankTagActivity extends BaseActivity{
     ImageButton iv_clear;
     @Bind(R.id.ll)
     LinearLayout ll;
+    @Bind(R.id.btn)
+    Button btn;
     public static Activity instance;
+    private AuthData authData;
     public RankTagActivity(){
         super(R.layout.activity_rank_tag);
     }
@@ -108,7 +108,44 @@ public class RankTagActivity extends BaseActivity{
 
     }
 
+    @Override
+    protected void requestNet() {
+        ClientDiscoverAPI.getAuthStatus(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e("getAuthStatus",responseInfo.result);
+                HttpResponse<AuthData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<AuthData>>() {});
+                if (response.isSuccess()){
+                    authData = response.getData();
+                    refreshUI();
+                    return;
+                }
+                Util.makeToast(response.getMessage());
+            }
 
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Util.makeToast("网络异常，请保持网络畅通");
+            }
+        });
+    }
+
+    @Override
+    protected void refreshUI() {
+       switch (authData.verified){
+           case 0:
+               btn.setText("审核中...");
+               break;
+           case 1:
+                btn.setText("审核未通过");
+               break;
+           case 2:
+               btn.setText("审核通过");
+               break;
+       }
+    }
 
     @OnClick({R.id.btn,R.id.iv_clear,R.id.et})
     void performClick(View view){

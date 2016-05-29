@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -102,6 +101,7 @@ public class UserEditSignatureActivity extends BaseActivity{
                 tv_tag.setVisibility(View.GONE);
                 tv_tag.setText("");
                 iv_clear.setVisibility(View.GONE);
+                tv_hint.setVisibility(View.VISIBLE);
                 break;
         }
     }

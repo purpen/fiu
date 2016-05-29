@@ -63,7 +63,9 @@
                     android:background="@null"
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
-                    android:src="@mipmap/x" />
+                    android:src="@mipmap/x"
+                    android:visibility="gone"
+                    />
             </RelativeLayout>
 
             <View
@@ -150,7 +152,7 @@
             <RelativeLayout
                 android:id="@+id/rl_id"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp240"
+                android:layout_height="@dimen/dp200"
                 android:layout_marginBottom="@dimen/dp16"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
@@ -185,7 +187,7 @@
             <RelativeLayout
                 android:id="@+id/rl_card"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp240"
+                android:layout_height="@dimen/dp200"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginRight="@dimen/dp16"
                 android:background="@android:color/white">
