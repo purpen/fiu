@@ -31,6 +31,7 @@
                     android:id="@+id/activity_scenedetails_background"
                     android:layout_width="match_parent"
                     android:layout_height="640dp"
+                    android:background="@mipmap/default_background_750_1334"
                     android:scaleType="centerCrop"
                     />
 

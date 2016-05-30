@@ -90,6 +90,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+//        改变选中的样式
         if (list != null) {
             ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
             holder.addressTv.setText(list.get(position).getAddress());

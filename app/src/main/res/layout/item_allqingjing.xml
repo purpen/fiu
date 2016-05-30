@@ -64,7 +64,8 @@
         android:id="@+id/item_allqingjing_selectbackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/select_qj_background"
-        android:visibility="gone"/>
+        android:background="#66000000"
+        android:scaleType="centerInside"
+        android:src="@mipmap/select_qj"
+        android:visibility="visible"/>
 </RelativeLayout>

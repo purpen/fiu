@@ -17,7 +17,8 @@ import com.taihuoniao.fineix.R;
  * 默认的SVProgress效果
  */
 public class SVProgressDefaultView extends LinearLayout {
-    private int resBigLoading = R.drawable.ic_svstatus_loading;
+//    private int resBigLoading = R.drawable.ic_svstatus_loading;
+    private int resBigLoading = R.drawable.ic_sv_loading;
     private int resInfo = R.drawable.ic_svstatus_info;
     private int resSuccess = R.drawable.ic_svstatus_success;
     private int resError = R.drawable.ic_svstatus_error;
@@ -53,9 +54,8 @@ public class SVProgressDefaultView extends LinearLayout {
     public void show() {
         clearAnimations();
         ivBigLoading.setImageResource(resBigLoading);
-        ivSmallLoading.setImageResource(resBigLoading);
-        ivBigLoading.setVisibility(View.GONE);
-        ivSmallLoading.setVisibility(View.VISIBLE);
+        ivBigLoading.setVisibility(View.VISIBLE);
+        ivSmallLoading.setVisibility(View.GONE);
         circleProgressBar.setVisibility(View.GONE);
         tvMsg.setVisibility(View.GONE);
         //开启旋转动画

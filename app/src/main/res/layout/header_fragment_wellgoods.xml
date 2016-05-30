@@ -21,7 +21,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/pin_brand"/>
+            android:src="@mipmap/fiu_brand"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
             android:text="最Fiu品牌"
-            android:textColor="#666666"
+            android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
         <TextView
@@ -86,7 +86,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/jing_scene"/>
+            android:src="@mipmap/fiu_chanpin"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
             android:text="最Fiu商品"
-            android:textColor="#666666"
+            android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
         <TextView

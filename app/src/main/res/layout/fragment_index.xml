@@ -7,6 +7,7 @@
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/fragment_index_pullrefreshview"
         android:layout_width="match_parent"
+        android:divider="@null"
         android:layout_height="match_parent"/>
 
     <RelativeLayout

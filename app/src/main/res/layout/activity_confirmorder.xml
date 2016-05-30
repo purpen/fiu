@@ -273,7 +273,14 @@
                     android:textColor="#000000"
                     android:textSize="14sp"/>
             </RelativeLayout>
-
+            <TextView
+                android:id="@+id/activity_confirmorder_redbag_cannot_cancel"
+                android:layout_width="match_parent"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:visibility="gone"
+                android:text="您使用了一张5元红包，下单后将不可恢复"
+                android:layout_height="wrap_content"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

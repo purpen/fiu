@@ -73,6 +73,7 @@ import java.util.List;
 public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnTouchListener {
     //上个界面传递过来的场景id
     private String id;
+    private boolean isCreate;//判断是不是从创建界面跳转过来的
     //界面下的控件
     private View activity_view;
     //    private ListView nearListView;
@@ -198,9 +199,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         id = getIntent().getStringExtra("id");
+        isCreate = getIntent().getBooleanExtra("create",false);
         if (id == null) {
             Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
+        }
+        if(isCreate){
+            backImg.setImageResource(R.mipmap.cancel_black);
         }
         scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override

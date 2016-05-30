@@ -2,6 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/activity_main_container"
                 tools:context="com.taihuoniao.fineix.main.MainActivity">
 
     <!--<com.taihuoniao.fineix.view.CustomHeadView-->
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/custom_head"
-        android:layout_marginBottom="50dp"/>
+        />
 
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"

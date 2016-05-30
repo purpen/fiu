@@ -59,6 +59,7 @@ public class ShareCJUtils {
         bi = b;
         selectStyle(position);
         View view = View.inflate(context, layout, null);
+//        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);
@@ -73,7 +74,7 @@ public class ShareCJUtils {
         desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
         fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
         fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
-        if (position == 4 || position ==5 || position == 6) {
+        if (position == 2||position==3) {
             setSize(view, position);
         }
         ImageLoader.getInstance().displayImage(sceneDetails.getUser_info().getAvatar_url(), userHeadImg, options500_500);
@@ -88,15 +89,13 @@ public class ShareCJUtils {
 
     private static void selectStyle(int position) {
         switch (position) {
-            case 2:
-            case 3:
+            case 1:
                 layout = R.layout.item_share_style2;
                 break;
-            case 4:
+            case 2:
                 layout = R.layout.item_share_style3;
                 break;
-            case 5:
-            case 6:
+            case 3:
                 layout = R.layout.item_share_style4;
                 break;
             default:

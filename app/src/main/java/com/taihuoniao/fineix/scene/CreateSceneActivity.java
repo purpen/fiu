@@ -511,6 +511,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
                         Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
                         in.putExtra("id", netBean1.getData().getId());
+                        in.putExtra("create",true);
                         startActivity(in);
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();
@@ -531,16 +532,18 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     AddProductBean netBean = (AddProductBean) msg.obj;
                     if (netBean.isSuccess()) {
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
-                        if (MainApplication.whichQingjing != null) {
-                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                            Intent intent = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
-                            intent.putExtra("id", MainApplication.whichQingjing.getData().get_id());
-                            MainApplication.whichQingjing = null;
-                            startActivity(intent);
-                        }
+//                        if (MainApplication.whichQingjing != null) {
+//                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+//                            Intent intent = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
+//                            intent.putExtra("id", MainApplication.whichQingjing.getData().get_id());
+//                            MainApplication.whichQingjing = null;
+//                            startActivity(intent);
+//                        }
+                        MainApplication.whichQingjing = null;
                         MainApplication.tagInfoList = null;
                         Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
                         intent.putExtra("id", netBean.getData().getId());
+                        intent.putExtra("create",true);
                         startActivity(intent);
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();

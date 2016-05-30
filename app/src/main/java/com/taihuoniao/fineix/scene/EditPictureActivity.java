@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -156,7 +157,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
                 if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
                     int containerHeight = gpuRelative.getHeight();
-                    int systemHeight = MainApplication.getContext().getScreenHeight();
+                    int systemHeight = MainApplication.getContext().getScreenHeight() - getNavigationBarHeight();
                     lp.height = containerHeight > 0 ? containerHeight : systemHeight;
                     lp.width = lp.height * 9 / 16;
                 } else {
@@ -180,11 +181,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         recyclerView.setLayoutManager(layoutManager);
         EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(EditPictureActivity.this, new GPUImageFilterTools.OnGpuImageFilterChosenListener() {
             @Override
-            public void onGpuImageFilterChosenListener(GPUImageFilter filter,int position) {
+            public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
 //                currentFilter = filter;
                 gpuImageView.setFilter(filter);
                 GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
-                switch (position){
+                switch (position) {
                     case 1:
                         filterAdjuster.adjust(97);
                         break;
@@ -229,6 +230,17 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         productsRelative.setOnClickListener(this);
         chainingRelative.setOnClickListener(this);
         filterRelative.setOnClickListener(this);
+    }
+
+    private int getNavigationBarHeight() {
+        int height = 0;
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = resources.getDimensionPixelSize(resourceId);
+        }
+        Log.e("<<<", "工具栏 height:" + height);
+        return height;
     }
 
     @Override
@@ -656,7 +668,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus&&MainApplication.tag==1) {
+        if (hasFocus && MainApplication.tag == 1) {
             SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
             //判断是不是第一次进入Fiu界面
             boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_CREATE, true);
