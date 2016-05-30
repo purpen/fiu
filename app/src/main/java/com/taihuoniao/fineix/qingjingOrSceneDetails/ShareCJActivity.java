@@ -84,7 +84,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     //网络请求对话框
     private SVProgressHUD dialog;
     private DisplayImageOptions options750_1334, options500_500;
-    private int[] shareImgs = {R.mipmap.share1, R.mipmap.share2, R.mipmap.share3, R.mipmap.share4, R.mipmap.share5, R.mipmap.share6, R.mipmap.share7};
+    private int[] shareImgs = {R.mipmap.share1, R.mipmap.share4, R.mipmap.share5, R.mipmap.share7};
     private List<ShareDemoBean> shareList;
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
     private SceneDetails netScene;
@@ -320,9 +320,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         setImgParams();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) img.getLayoutParams();
         int padding = DensityUtils.dp2px(ShareCJActivity.this, 20);
-        if (position == 4 || position == 5 || position == 6) {
+        if (position == 2 || position == 3) {
             lp.width = (int) (lp.width * 0.88);
-            lp.height = (int) (lp.height * 0.6);
+            lp.height = (int) (lp.height * 0.7);
 
             container.setPadding(padding, padding, padding, padding);
         } else {
@@ -335,11 +335,11 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
             rlp.addRule(RelativeLayout.CENTER_HORIZONTAL);
             lp = rlp;
         }
-        if (position == 5 || position == 6) {
+        if (position == 3) {
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         }
         view = ShareCJUtils.selectStyle(container, position, netScene, bi);
-        if (position == 0 || position == 1 || position == 2 || position == 3) {
+        if (position == 0 || position == 1) {
             view.setPadding(padding, padding, padding, padding);
         }
         container.addView(view);
@@ -366,49 +366,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params = null;
             String imgPath = MainApplication.systemPhotoPath + File.separator + "fiu" + System.currentTimeMillis() + ".png";
-//            dialog.show();
-//            Bitmap bit = Bitmap.createBitmap(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9, Bitmap.Config.ARGB_4444);
-//            Bitmap bitmap = Bitmap.createBitmap(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight()).copy(Bitmap.Config.ARGB_8888, true);
-////            Bitmap bitmap = Bitmap.createBitmap(loadImg.getWidth(),loadImg.getHeight(), Bitmap.Config.ARGB_4444);
-//            Canvas canvas = new Canvas(bitmap);
-//////            .draw(canvas);
-//            RelativeLayout relativeLayout = new RelativeLayout(ShareCJActivity.this);
-//            relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(loadImg.getWidth(), loadImg.getHeight()));
-//            View view1 = ShareCJUtils.selectStyle(relativeLayout, currentPosition, netScene, 1);
-//
-////            relativeLayout.draw(canvas);
-//          view1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-////            relativeLayout.addView(view1);
-//            //启用绘图缓存
-//                  view1.setDrawingCacheEnabled(true);
-//              //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
-//                view1.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//                 //这个方法也非常重要，设置布局的尺寸和位置
-//                    view1.layout(0, 0, relativeLayout.getWidth(),relativeLayout.getHeight());
-//                  //获得绘图缓存中的Bitmap
-//               view1.buildDrawingCache();
-//               Bitmap returnedBitmap = view1.getDrawingCache();
-//                view1.setDrawingCacheEnabled(false);
-//            canvas.drawBitmap(returnedBitmap, 0, 0, new Paint());
-//            canvas.save();
-//            View view2 = View.inflate(ShareCJActivity.this,R.layout.view_share,null);
-//            RelativeLayout relative = (RelativeLayout) view2.findViewById(R.id.view_share_relative);
-//            ImageView img = (ImageView) view2.findViewById(R.id.view_share_img);
-//            RelativeLayout re = (RelativeLayout) view2.findViewById(R.id.view_share_container);
-//            img.setLayoutParams(new RelativeLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9));
-//            img.setImageBitmap(loadImg);
-////            图片正常，文字小
-//            relative.addView(ShareCJUtils.selectStyle(relative,currentPosition,netScene,1));
-//            relative.setDrawingCacheEnabled(true);
-//            relative.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//            relative.layout(0, 0, relative.getMeasuredWidth(), relative.getMeasuredHeight());
-//            relative.buildDrawingCache();
-//            Bitmap bitmap = relative.getDrawingCache();
             Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
-            container.draw(canvas);//scrollview绘制画布上
+            container.draw(canvas);//绘制画布上
             canvas.save();
             boolean isSuccess = FileUtils.bitmapToFile(bitmap, imgPath);
 //            relative.setDrawingCacheEnabled(false);

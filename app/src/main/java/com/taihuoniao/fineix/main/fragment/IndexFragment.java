@@ -1,14 +1,12 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.graphics.PointF;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -32,7 +30,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -41,7 +38,7 @@ import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, AbsListView.OnScrollListener {
+public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, AbsListView.OnScrollListener, View.OnTouchListener {
     private View fragment_view;
     private RelativeLayout titlelayout;
     private ImageView searchImg;
@@ -107,7 +104,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
-        listView.setOnScrollListener(this);
+//        listView.setOnScrollListener(this);
+        listView.setOnTouchListener(this);
         getCurrentLocation();
     }
 
@@ -134,7 +132,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) fragment_view.findViewById(R.id.fragment_index_progress);
-        listView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
+        listView.setDividerHeight(0);
         dialog = new SVProgressHUD(getActivity());
         return fragment_view;
     }
@@ -213,29 +211,76 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        Log.e("<<<滑动状态", "state=" + scrollState);
-        ViewPager viewPager = new ViewPager(getActivity());
-        viewPager.setAdapter(new FragmentStatePagerAdapter() {
-            @Override
-            public int getCount() {
-                return 0;
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return false;
-            }
-        });
+//        Log.e("<<<滑动状态", "state=" + scrollState);
+//        if (scrollState == SCROLL_STATE_FLING) {
+//            //划过多少个整个的item
+//
+//        }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Log.e("<<<首页滑动",
-                "first=" + firstVisibleItem + ",visible=" + visibleItemCount + ",total=" + totalItemCount);
+//        Log.e("<<<首页滑动",
+//                "scrollY=" + getScrollY());
     }
+
+    public int getScrollY() {
+        View c = listView.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        int firstVisiblePosition = listView.getFirstVisiblePosition();
+        int top = c.getTop();
+        return -top + firstVisiblePosition * c.getHeight();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startP = new PointF(event.getX(), event.getY());
+                Log.e("<<<按下坐标", "x=" + startP.x + ",y=" + startP.y);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                nowP = new PointF(event.getX(), event.getY());
+                Log.e("<<<移动的坐标", "x=" + nowP.x + ",y=" + nowP.y);
+
+                break;
+            case MotionEvent.ACTION_UP:
+//                int i = getScrollY() / (listView.getChildAt(0).getHeight());
+                //firstvisibleitem的偏移量
+                int s = getScrollY() % (listView.getChildAt(0).getHeight());
+                if (nowP.y < startP.y && s > 0.4 * listView.getChildAt(0).getHeight()) {
+                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+                    cancelChenjin();
+                } else if (nowP.y < startP.y) {
+                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+                    chenjin();
+                } else if (nowP.y > startP.y && s < 0.6 * listView.getChildAt(0).getHeight()) {
+                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+                    chenjin();
+                } else {
+                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+                    cancelChenjin();
+                }
+                break;
+        }
+        return false;
+    }
+
+    private void cancelChenjin() {
+        Intent intent = new Intent();
+        intent.putExtra("index", 1);
+        intent.setAction(DataConstants.BroadShopCart);
+        getActivity().sendBroadcast(intent);
+    }
+
+    private void chenjin() {
+        Intent intent = new Intent();
+        intent.putExtra("index", 2);
+        intent.setAction(DataConstants.BroadShopCart);
+        getActivity().sendBroadcast(intent);
+    }
+
+    private PointF startP, nowP;
 }

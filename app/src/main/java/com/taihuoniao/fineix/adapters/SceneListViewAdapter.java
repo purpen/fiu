@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -46,7 +45,7 @@ public class SceneListViewAdapter extends BaseAdapter {
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -121,7 +120,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         if (list != null) {
 //            holder.backgroundImg.setTag(list.get(position).getCover_url());
 //            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options750_1334);
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
@@ -133,7 +132,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(list.get(position).getAddress());
             holder.time.setText(list.get(position).getCreated_at());
         } else if (loveList != null) {
-            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
@@ -145,7 +144,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
@@ -157,7 +156,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(searchList.get(position).getAddress());
             holder.time.setText(searchList.get(position).getCreated_at());
         } else if (subsList != null) {
-            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg);
+            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());

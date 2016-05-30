@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.main;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +41,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
+    @Bind(R.id.activity_main_container)
+    RelativeLayout container;
     @Bind(R.id.ll_nav0)
     LinearLayout ll_nav0;
     @Bind(R.id.ll_nav1)
@@ -51,6 +55,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout ll_nav4;
     @Bind(R.id.activity_main_fragment_group)
     FrameLayout fragmetnContainer;
+    @Bind(R.id.activity_main_bottomlinear)
+    LinearLayout bottomLinear;
 //    @Bind(R.id.custom_head)
 //    CustomHeadView custom_head;
 
@@ -233,16 +239,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.ll_nav1: //景
 //                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(FindFragment.class);
+                onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
 //                custom_head.setVisibility(View.GONE);
                 Log.e("<<<", "点击切换");
                 switchFragmentandImg(WellGoodsFragment.class);
+                onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav4: //个人中心
 //                custom_head.setVisibility(View.GONE);
                 if (LoginInfo.isUserLogin()) {
                     switchFragmentandImg(MineFragment.class);
+                    onWindowFocusChanged(true);
                 } else {
                     MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();
@@ -438,7 +447,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstRelative.setTag(9);
                             } else if ((int) (v.getTag()) == 9) {
                                 firstLeftImg.setVisibility(View.GONE);
-                                firstRightImg.setPadding(0,0, DensityUtils.dp2px(MainActivity.this,6),0);
+                                firstRightImg.setPadding(0, 0, DensityUtils.dp2px(MainActivity.this, 6), 0);
                                 firstRightImg.setImageResource(R.mipmap.wellgoods3);
                                 firstRightImg.setVisibility(View.VISIBLE);
                                 firstRelative.setTag(10);
@@ -447,7 +456,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstRightImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.nothing);
                                 firstRelative.setPadding(0, 0, 0, 0);
-                                firstRightImg.setPadding(0,0,0,0);
+                                firstRightImg.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -494,7 +503,70 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("<<<", "接收到广播");
-            onClick(ll_nav3);
+            if (1 == intent.getIntExtra("index", -1)) {
+                if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.KITKAT){
+                    container.setSystemUiVisibility(View.INVISIBLE);
+                }
+//                WindowUtils.cancelChenjin(MainActivity.this);
+                ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(500);
+                downAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 2;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                if (animFlag == 0) {
+                    downAnimator.start();
+                }
+            } else if (2 == intent.getIntExtra("index", -1)) {
+//                WindowUtils.chenjin(MainActivity.this);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+                ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(500);
+                upAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 0;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                if (animFlag == 2) {
+                    upAnimator.start();
+                }
+            } else {
+                onClick(ll_nav3);
+            }
         }
     };
+    private int animFlag = 0;
 }
