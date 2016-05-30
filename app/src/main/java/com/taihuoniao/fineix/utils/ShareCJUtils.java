@@ -59,6 +59,7 @@ public class ShareCJUtils {
         bi = b;
         selectStyle(position);
         View view = View.inflate(context, layout, null);
+//        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);

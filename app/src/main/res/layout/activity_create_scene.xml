@@ -32,9 +32,26 @@
             android:orientation="vertical"
             android:paddingBottom="172dp">
 
+            <EditText
+                android:id="@+id/activity_create_scene_titleedt"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:hint="添加标题"
+                android:paddingLeft="15dp"
+                android:textColorHint="#999999"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#e2e2e2"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="183dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -65,22 +82,6 @@
                 android:layout_height="1px"
                 android:background="#e0e0e0"/>
 
-            <EditText
-                android:id="@+id/activity_create_scene_titleedt"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:hint="添加标题"
-                android:paddingLeft="15dp"
-                android:textColorHint="#999999"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#e2e2e2"/>
 
             <RelativeLayout
                 android:id="@+id/activity_create_scene_add_addresslinear"
@@ -107,8 +108,8 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/cancel_gray"/>
+                    android:src="@mipmap/cancel_gray"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/activity_create_scene_location"
@@ -131,10 +132,10 @@
                 android:id="@+id/activity_create_scene_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:visibility="gone"
                 android:background="@color/white"
                 android:paddingLeft="12dp"
-                android:paddingRight="12dp"/>
+                android:paddingRight="12dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -177,8 +178,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@color/white"
-                android:visibility="gone"
-                android:scrollbars="none">
+                android:scrollbars="none"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/activity_create_scene_labellinear"
@@ -230,8 +231,8 @@
                 android:layout_height="45dp"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:paddingLeft="15dp">
+                android:paddingLeft="15dp"
+                android:visibility="gone">
 
             </LinearLayout>
 

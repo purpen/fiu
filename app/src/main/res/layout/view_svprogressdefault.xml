@@ -20,7 +20,9 @@
             android:layout_width="@dimen/size_image_bigloading"
             android:layout_height="@dimen/size_image_bigloading"
             android:scaleType="fitCenter"
-            android:visibility="gone" />
+            android:padding="15dp"
+            android:src="@drawable/ic_svstatus_loading"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/ivSmallLoading"

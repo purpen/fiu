@@ -19,8 +19,8 @@
             android:id="@+id/fragment_wellgoods_search"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
             android:src="@mipmap/head_search"/>
 
         <RelativeLayout

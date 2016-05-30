@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -28,10 +30,10 @@ import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ShareCJUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
@@ -164,6 +166,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         DataPaser.sceneDetails(id, handler);
     }
 
+    private Bitmap loadImg = null;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -174,7 +177,30 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     if (netScene.isSuccess()) {
                         ShareCJActivity.this.netScene = netScene;
                         setImgParams();
-                        ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
+//                        ImageSize imageSize = new ImageSize(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9);
+                        ImageLoader.getInstance().loadImage(netScene.getCover_url(), options750_1334, new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                loadImg = loadedImage;
+                                img.setImageBitmap(loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+
+                            }
+                        });
+//                        ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
                         recyclerView.setVisibility(View.VISIBLE);
                         click(0);
                     } else {
@@ -187,13 +213,16 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     finish();
                     break;
                 case 3:
-                    Util.makeToast(ShareCJActivity.this, "对不起，分享出错");
+                    dialog.dismiss();
+                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
-                    Util.makeToast(ShareCJActivity.this, "您取消了分享");
+                    dialog.dismiss();
+                    dialog.showErrorWithStatus("您取消了分享");
                     break;
                 case 1:
-                    Util.makeToast(ShareCJActivity.this, "分享成功");
+                    dialog.dismiss();
+                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }
@@ -246,8 +275,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     return;
                 }
                 dialog.show();
-                Bitmap bit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
+                Bitmap bit = Bitmap.createBitmap(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bit);//创建空图片变成画布
+//                img.draw(canvas);
                 container.draw(canvas);
                 canvas.save();
                 MainApplication.shareBitmap = bit;
@@ -289,9 +319,14 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         double bi = ((double) imgWidth / width);
         setImgParams();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) img.getLayoutParams();
+        int padding = DensityUtils.dp2px(ShareCJActivity.this, 20);
         if (position == 4 || position == 5 || position == 6) {
             lp.width = (int) (lp.width * 0.88);
-            lp.height = (int) (lp.height * 0.74);
+            lp.height = (int) (lp.height * 0.6);
+
+            container.setPadding(padding, padding, padding, padding);
+        } else {
+            container.setPadding(0, 0, 0, 0);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             lp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -304,6 +339,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
             lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         }
         view = ShareCJUtils.selectStyle(container, position, netScene, bi);
+        if (position == 0 || position == 1 || position == 2 || position == 3) {
+            view.setPadding(padding, padding, padding, padding);
+        }
         container.addView(view);
         currentPosition = position;
     }
@@ -328,14 +366,57 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params = null;
             String imgPath = MainApplication.systemPhotoPath + File.separator + "fiu" + System.currentTimeMillis() + ".png";
-            dialog.show();
-            Bitmap bit = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_4444);
-            Canvas canvas = new Canvas(bit);//创建空图片变成画布
-            container.draw(canvas);
+//            dialog.show();
+//            Bitmap bit = Bitmap.createBitmap(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9, Bitmap.Config.ARGB_4444);
+//            Bitmap bitmap = Bitmap.createBitmap(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight()).copy(Bitmap.Config.ARGB_8888, true);
+////            Bitmap bitmap = Bitmap.createBitmap(loadImg.getWidth(),loadImg.getHeight(), Bitmap.Config.ARGB_4444);
+//            Canvas canvas = new Canvas(bitmap);
+//////            .draw(canvas);
+//            RelativeLayout relativeLayout = new RelativeLayout(ShareCJActivity.this);
+//            relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(loadImg.getWidth(), loadImg.getHeight()));
+//            View view1 = ShareCJUtils.selectStyle(relativeLayout, currentPosition, netScene, 1);
+//
+////            relativeLayout.draw(canvas);
+//          view1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+////            relativeLayout.addView(view1);
+//            //启用绘图缓存
+//                  view1.setDrawingCacheEnabled(true);
+//              //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
+//                view1.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//                 //这个方法也非常重要，设置布局的尺寸和位置
+//                    view1.layout(0, 0, relativeLayout.getWidth(),relativeLayout.getHeight());
+//                  //获得绘图缓存中的Bitmap
+//               view1.buildDrawingCache();
+//               Bitmap returnedBitmap = view1.getDrawingCache();
+//                view1.setDrawingCacheEnabled(false);
+//            canvas.drawBitmap(returnedBitmap, 0, 0, new Paint());
+//            canvas.save();
+//            View view2 = View.inflate(ShareCJActivity.this,R.layout.view_share,null);
+//            RelativeLayout relative = (RelativeLayout) view2.findViewById(R.id.view_share_relative);
+//            ImageView img = (ImageView) view2.findViewById(R.id.view_share_img);
+//            RelativeLayout re = (RelativeLayout) view2.findViewById(R.id.view_share_container);
+//            img.setLayoutParams(new RelativeLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9));
+//            img.setImageBitmap(loadImg);
+////            图片正常，文字小
+//            relative.addView(ShareCJUtils.selectStyle(relative,currentPosition,netScene,1));
+//            relative.setDrawingCacheEnabled(true);
+//            relative.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//            relative.layout(0, 0, relative.getMeasuredWidth(), relative.getMeasuredHeight());
+//            relative.buildDrawingCache();
+//            Bitmap bitmap = relative.getDrawingCache();
+            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
+            container.draw(canvas);//scrollview绘制画布上
             canvas.save();
-            boolean isSuccess = FileUtils.bitmapToFile(bit, imgPath);
+            boolean isSuccess = FileUtils.bitmapToFile(bitmap, imgPath);
+//            relative.setDrawingCacheEnabled(false);
+//            Bitmap bitmap1 = Bitmap.createBitmap(bitmap, 0, 0, relative.getMeasuredWidth(), relative.getMeasuredHeight());
+
             if (!isSuccess) {
-                Toast.makeText(ShareCJActivity.this, "图片保存失败", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                dialog.showErrorWithStatus("图片保存失败");
                 return;
             }
             switch (position) {

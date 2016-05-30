@@ -4,8 +4,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,7 +41,7 @@ import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, AbsListView.OnScrollListener {
     private View fragment_view;
     private RelativeLayout titlelayout;
     private ImageView searchImg;
@@ -87,7 +92,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     return;
                 }
                 dialog.show();
-                DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -95,25 +100,26 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
             }
         });
         sceneList = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(this);
         getCurrentLocation();
     }
 
     private void getCurrentLocation() {
+        dialog.show();
         MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
-                    dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
-                    DataPaser.getSceneList(currentPage + "", 8+"", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -133,45 +139,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return fragment_view;
     }
 
-    //    @OnClick({R.id.location_btn, R.id.poi_btn,R.id.share_btn,R.id.sliding_tab_btn,R.id.geo,R.id.select_search_qj,R.id.focus})
-//    protected void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.location_btn:
-//                activity.startActivity(new Intent(activity, HotCitiesActivity.class));
-//                break;
-//            case R.id.poi_btn:
-//                activity.startActivity(new Intent(activity, POIListActivity.class));
-//                break;
-//            case R.id.share_btn:
-//                //TODO 调用所有分享
-////                Intent intent = new Intent();
-////                intent.setAction(Intent.ACTION_SEND);
-////                intent.putExtra(intent.EXTRA_TEXT,"我是分享内容。。。。http://www.baidu.com/");
-////                intent.setType("*/*");
-////                startActivity(Intent.createChooser(intent, "分享到"));
-//
-//                //TODO 通过短信分享
-//                String content="我是分享内容....";
-//                Uri sms = Uri.parse("smsto:");
-//                Intent sendIntent =  new  Intent(Intent.ACTION_VIEW, sms);
-//                //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
-//                sendIntent.putExtra( "sms_body",content);
-//                sendIntent.setType("vnd.android-dir/mms-sms" );
-//                startActivity(sendIntent);
-//                break;
-//            case R.id.sliding_tab_btn:
-////                activity.startActivity(new Intent(activity, OrderListActivity.class));
-//                activity.startActivity(new Intent(activity, SearchResultActivity.class));
-//                break;
-//            case R.id.geo:
-//                activity.startActivity(new Intent(activity, BDSearchAddressActivity.class));
-//                break;
-//            case R.id.select_search_qj:
-//                activity.startActivity(new Intent(activity, SelectOrSearchQJActivity.class));
-//                break;
-//            case R.id.focus:
-//                activity.startActivity(new Intent(activity, CaptureActivity.class));
-//                break;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -242,5 +209,33 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        Log.e("<<<滑动状态", "state=" + scrollState);
+        ViewPager viewPager = new ViewPager(getActivity());
+        viewPager.setAdapter(new FragmentStatePagerAdapter() {
+            @Override
+            public int getCount() {
+                return 0;
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        Log.e("<<<首页滑动",
+                "first=" + firstVisibleItem + ",visible=" + visibleItemCount + ",total=" + totalItemCount);
     }
 }

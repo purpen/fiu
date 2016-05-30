@@ -371,9 +371,10 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 //TODO 关闭加载框
                 if (responseInfo == null) {
+                    mapRelative.setVisibility(View.GONE);
                     return;
                 }
-                if (responseInfo.result == null) {
+                if (responseInfo.result == null) {mapRelative.setVisibility(View.GONE);
                     return;
                 }
                 LogUtil.e("附近情境", responseInfo.result);
@@ -382,9 +383,11 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                     qingJingData = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<QingJingData>>() {
                     });
                 } catch (JsonSyntaxException e) {//TODO log
+                    mapRelative.setVisibility(View.GONE);
                     Util.makeToast(activity, "对不起,数据异常");
                 }
                 if (qingJingData == null) {
+                    mapRelative.setVisibility(View.GONE);
                     return;
                 }
                 refreshUI(qingJingData.rows);
@@ -393,6 +396,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             @Override
             public void onFailure(HttpException e, String s) {
                 //TODO 关闭加载框
+                mapRelative.setVisibility(View.GONE);
                 LogUtil.e(TAG, s);
             }
         });
@@ -403,11 +407,13 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     @Override
     protected void refreshUI(List<QingJingItem> list) {
         if (list == null) {
+            mapRelative.setVisibility(View.GONE);
 //            Util.makeToast(activity, "数据异常");
             return;
         }
 
         if (list.size() == 0) {
+            mapRelative.setVisibility(View.GONE);
 //            Util.makeToast(activity, "暂无数据");
             return;
         }

@@ -21,7 +21,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/friends"/>
+            android:src="@mipmap/fiu_huoban"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
             android:text="最Fiu伙伴"
-            android:textColor="#666666"
+            android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
         <TextView
@@ -92,7 +92,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/jing_scene"/>
+                android:src="@mipmap/fiu_qj"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
                 android:text="最Fiu情景"
-                android:textColor="#666666"
+                android:textColor="#222222"
                 android:textSize="13sp"/>
             <!-- 999999 -->
             <TextView
@@ -129,7 +129,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@mipmap/jing_scene"/>
+            android:src="@mipmap/fiu_cj"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
             android:text="最Fiu场景"
-            android:textColor="#666666"
+            android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
         <TextView

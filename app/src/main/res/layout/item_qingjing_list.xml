@@ -27,8 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:maxLines="2"
-            android:maxEms="6"
-            android:text="哈哈哈哈哈哈哈噶"
+            android:layout_marginRight="10dp"
+            android:text="哈哈哈哈哈哈哈噶asdfsdfasdfsadf"
             android:textColor="@color/white"
             android:textSize="13sp"/>
 
@@ -58,9 +58,10 @@
 
     <ImageView
         android:id="@+id/item_allqingjing_selectbackground"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/select_qj_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:background="#66000000"
+        android:src="@mipmap/select_qj"
         android:visibility="gone"/>
 </RelativeLayout>

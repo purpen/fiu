@@ -53,6 +53,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private TextView timeTv;
     private RelativeLayout redBagRelative;
     private TextView redBagTv;
+    private TextView redBagCancelTv;
     private EditText editText;
     private TextView saveTv;
     private TextView saveMoneyTv;
@@ -159,6 +160,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         payPriceTv = (TextView) findViewById(R.id.activity_confirmorder_payprice);
         payBtn = (Button) findViewById(R.id.activity_confirmorder_paybtn);
         dialog = new SVProgressHUD(ConfirmOrderActivity.this);
+        redBagCancelTv = (TextView) findViewById(R.id.activity_confirmorder_redbag_cannot_cancel);
 
     }
 
@@ -211,6 +213,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     saveTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setText("¥ " + df.format(Double.valueOf(money)));
+                    redBagTv.setText("使用了"+money+"元红包");
+                    redBagCancelTv.setText("您使用了一张"+money+"元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
                         double nowPrice = Double.valueOf(nowBuyBean.getPay_money())-Double.valueOf(money);
                         if(nowPrice<=0){

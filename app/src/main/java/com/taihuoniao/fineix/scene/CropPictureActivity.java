@@ -2,9 +2,11 @@ package com.taihuoniao.fineix.scene;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -45,7 +47,18 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
-        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenHeight() * 9 / 16, MainApplication.getContext().getScreenHeight(), false));
+        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), (MainApplication.getContext().getScreenHeight() - getNavigationBarHeight()) * 9 / 16, MainApplication.getContext().getScreenHeight() - getNavigationBarHeight(), false));
+    }
+
+    private int getNavigationBarHeight() {
+        int height = 0;
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = resources.getDimensionPixelSize(resourceId);
+        }
+        Log.e("<<<", "工具栏 height:" + height);
+        return height;
     }
 
     @Override

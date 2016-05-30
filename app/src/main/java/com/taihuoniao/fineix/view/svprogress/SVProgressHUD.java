@@ -112,7 +112,7 @@ public class SVProgressHUD {
     }
 
     public void showWithStatus(String string) {
-        setMaskType(SVProgressHUDMaskType.Clear);
+        setMaskType(SVProgressHUDMaskType.Black);
         mSharedView.showWithStatus(string);
         svShow();
     }
@@ -124,7 +124,7 @@ public class SVProgressHUD {
     }
 
     public void showInfoWithStatus(String string) {
-        setMaskType(SVProgressHUDMaskType.Clear);
+        setMaskType(SVProgressHUDMaskType.Black);
         mSharedView.showInfoWithStatus(string);
         svShow();
         scheduleDismiss();

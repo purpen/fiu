@@ -64,6 +64,7 @@ import java.util.List;
 public class QingjingDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, View.OnTouchListener {
     //上个界面传递过来的情景id
     private String id;
+    private boolean isCreate;//判断是不是从创建页面跳转过来
     //界面下的控件
     private ProgressBar progressBar;
     private ImageView backImg;
@@ -171,6 +172,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     protected void initList() {
         MainApplication.which_activity = DataConstants.QingjingDetailActivity;
         id = getIntent().getStringExtra("id");
+        isCreate = getIntent().getBooleanExtra("create",false);
+        if(isCreate){
+            backImg.setImageResource(R.mipmap.cancel_black);
+        }
         if (id == null) {
             Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();

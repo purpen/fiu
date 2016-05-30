@@ -121,7 +121,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         if (list != null) {
 //            holder.backgroundImg.setTag(list.get(position).getCover_url());
 //            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg, options750_1334);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
@@ -133,7 +133,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(list.get(position).getAddress());
             holder.time.setText(list.get(position).getCreated_at());
         } else if (loveList != null) {
-            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
+            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
@@ -145,7 +145,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
@@ -157,7 +157,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(searchList.get(position).getAddress());
             holder.time.setText(searchList.get(position).getCreated_at());
         } else if (subsList != null) {
-            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
+            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());
