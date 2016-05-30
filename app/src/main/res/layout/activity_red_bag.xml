@@ -18,4 +18,6 @@
         android:divider="@null"
         android:layout_weight="1"
         />
+    <include
+        layout="@layout/redpacket_foot_layout"/>
 </LinearLayout>

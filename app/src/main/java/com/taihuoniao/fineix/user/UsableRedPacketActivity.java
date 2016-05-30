@@ -6,6 +6,9 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +30,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -44,6 +48,8 @@ public class UsableRedPacketActivity extends BaseActivity {
     CustomHeadView custom_head;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pull_lv;
+    @Bind(R.id.foot_view)
+    LinearLayout foot_view;
     private static final String PAGE_SIZE = "10";
     private int curPage = 1;
     private boolean mInLoading = false;
@@ -68,7 +74,7 @@ public class UsableRedPacketActivity extends BaseActivity {
     private String mRid;//订单号
     private SVProgressHUD mDialog;
     private UsableRedPacketAdapter adapter;
-    private View footerView;
+//    private View footerView;
 
     public UsableRedPacketActivity() {
         super(R.layout.activity_red_bag);
@@ -182,7 +188,8 @@ public class UsableRedPacketActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "我的红包");
-        footerView = Util.inflateView(activity, R.layout.redpacket_foot_layout, null);
+        foot_view.setVisibility(View.VISIBLE);
+//        footerView = Util.inflateView(activity, R.layout.redpacket_foot_layout, null);
         lv = pull_lv.getRefreshableView();
         mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
         mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
@@ -245,12 +252,13 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     @Override
     protected void installListener() {
-        footerView.setOnClickListener(new View.OnClickListener() {
+        foot_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(activity, UnUsableRedPacketActivity.class));
             }
         });
+
         pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -263,11 +271,81 @@ public class UsableRedPacketActivity extends BaseActivity {
             public void onRefresh() {
                 curPage = 1;
                 mList.clear();
-                if (footerView != null && lv.getFooterViewsCount() > 0) {
-                    lv.removeFooterView(footerView);
-                }
+//                if (footerView != null && lv.getFooterViewsCount() > 0) {
+//                    lv.removeFooterView(footerView);
+//                }
                 requestNet();
             }
+        });
+
+
+        pull_lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int currentPage;
+
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+            }
+
+            //            @Override
+//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+//                if (i==currentPage) return;
+//                if (i>currentPage){//上滑显示
+//                    if (foot_view.getVisibility()==View.GONE){
+//                        showFootView();
+////                        foot_view.setVisibility(View.VISIBLE);
+//                    }
+//                }else if(i<currentPage){//下滑隐藏
+//                    if (foot_view.getVisibility()==View.VISIBLE){
+//                        hideFootView();
+////                        foot_view.setVisibility(View.GONE);
+//                    }
+//                }
+//                currentPage=i;
+//            }
+            private int mListViewFirstItem = 0;
+            //listView中第一项的在屏幕中的位置
+            private int mScreenY = 0;
+            //是否向上滚动
+            private boolean mIsScrollToUp = false;
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (lv.getChildCount() > 0) {
+                    boolean isScrollToUp = false;
+                    View childAt = lv.getAdapter().getView(firstVisibleItem, null, null);
+                    int[] location = new int[2];
+                    childAt.getLocationOnScreen(location);
+                    LogUtil.e("onScroll", "firstVisibleItem= " + firstVisibleItem + " , y=" + location[1]);
+
+                    if (firstVisibleItem != mListViewFirstItem) {
+                        if (firstVisibleItem > mListViewFirstItem) {
+                            LogUtil.e("--->", "向上滑动");
+                            isScrollToUp = true;
+                        } else {
+                            LogUtil.e("--->", "向下滑动");
+                            isScrollToUp = false;
+                        }
+                        mListViewFirstItem = firstVisibleItem;
+                        mScreenY = location[1];
+                    } else {
+                        if (mScreenY > location[1]) {
+                            LogUtil.e("--->", "->向上滑动");
+                            isScrollToUp = true;
+                        } else if (mScreenY < location[1]) {
+                            LogUtil.e("--->", "->向下滑动");
+                            isScrollToUp = false;
+                        }
+                        mScreenY = location[1];
+                    }
+
+                    if (mIsScrollToUp != isScrollToUp) {
+                        onScrollDirectionChanged(mIsScrollToUp);
+                    }
+
+                }
+            }
+
         });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -284,6 +362,52 @@ public class UsableRedPacketActivity extends BaseActivity {
         });
     }
 
+    private void onScrollDirectionChanged(boolean isScrollUp) {
+//        if (isScrollUp) {
+//            showFootView();
+//        } else {
+//            hideFootView();
+//        }
+    }
+
+    private void showFootView() {
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.listview_up);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                foot_view.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        foot_view.startAnimation(animation);
+    }
+
+    private void hideFootView() {
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.listview_down);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                foot_view.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        foot_view.startAnimation(animation);
+    }
+
     private void dataLoadFinished() {
         if (mInLoading) {
             mInLoading = false;
@@ -293,10 +417,14 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     @Override
     protected void refreshUI(List list) {
-        if (lv.getFooterViewsCount() == 0 && mList.size() == total_rows) {
-            lv.addFooterView(footerView);
-        }
+//        if (lv.getFooterViewsCount() == 0 && mList.size() == total_rows) {
+//            lv.addFooterView(footerView);
+//        }
         curPage++;
+        if (pull_lv != null) {
+            pull_lv.onRefreshComplete();
+            pull_lv.setLoadingTime();
+        }
         if (list == null) return;
         if (list.size() == 0) return;
         mList.addAll(list);
@@ -305,10 +433,6 @@ public class UsableRedPacketActivity extends BaseActivity {
             lv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
-        }
-        if (pull_lv != null) {
-            pull_lv.onRefreshComplete();
-            pull_lv.setLoadingTime();
         }
     }
 }

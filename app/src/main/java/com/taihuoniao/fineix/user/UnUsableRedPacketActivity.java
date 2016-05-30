@@ -175,27 +175,8 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"过期红包");
         lv = pull_lv.getRefreshableView();
-//        mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
-//        mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
         mDialog = new SVProgressHUD(this);
         mRid = getIntent().getStringExtra("rid");
-
-        //未过期未使用
-//        DataPaser.unTimeoutParser( UNUSED, UNTIMEOUT, mHandler);
-
-
-
-//        mLook.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDialog.show();
-//                //已过期、使没使用全有
-//                mLookClick = true;
-////                DataParser.unTimeoutParser(ALLUSED, TIMEOUT, mHandler);
-//                DataPaser.unTimeoutParser(ALLUSED, UNTIMEOUT, mHandler);
-//            }
-//        });
-
     }
 
     @Override
@@ -257,6 +238,10 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     @Override
     protected void refreshUI(List list) {
         curPage++;
+        if (pull_lv!=null){
+            pull_lv.onRefreshComplete();
+            pull_lv.setLoadingTime();
+        }
         if (list==null) return;
         if (list.size()==0) return;
         mList.addAll(list);
@@ -265,10 +250,6 @@ public class UnUsableRedPacketActivity extends BaseActivity{
             lv.setAdapter(adapter);
         }else {
             adapter.notifyDataSetChanged();
-        }
-        if (pull_lv!=null){
-            pull_lv.onRefreshComplete();
-            pull_lv.setLoadingTime();
         }
     }
 }
