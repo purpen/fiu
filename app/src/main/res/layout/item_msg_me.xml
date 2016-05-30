@@ -27,7 +27,7 @@
         android:src="@mipmap/ic_launcher"
         android:layout_below="@+id/tv_time"
         android:layout_alignParentRight="true"
-        app:riv_border_color="@color/color_999"
+        app:riv_border_color="@color/color_ddd"
         app:riv_border_width="@dimen/dp05"
         />
     <TextView
@@ -40,7 +40,7 @@
         android:lineSpacingMultiplier="1.1"
         android:textSize="@dimen/sp14"
         android:paddingLeft="@dimen/dp10"
-        android:paddingRight="@dimen/dp15"
+        android:paddingRight="@dimen/dp10"
         android:text="我的聊天记录"
         android:background="@drawable/msg_to"
         android:layout_alignTop="@+id/iv"

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -45,6 +48,17 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_focus_head)
+                .showImageForEmptyUri(R.mipmap.default_focus_head)
+                .showImageOnFail(R.mipmap.default_focus_head)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .delayBeforeLoading(0)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -59,7 +73,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
             holder = (ViewHolder) convertView.getTag();
         }
 
-        imageLoader.displayImage(item.follows.avatar_url, holder.riv, options);
+        imageLoader.displayImage(item.follows.avatar_url, holder.riv);
         holder.tv_name.setText(item.follows.nickname);
         holder.tv_desc.setText(item.follows.summary);
 

@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -9,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -26,10 +30,22 @@ import butterknife.ButterKnife;
  */
 public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
     private ImageLoader imageLoader;
+    private DisplayImageOptions options_head;
 
     public UserCJListAdapter(List<SceneListBean> list, Activity activity) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
+        options_head = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_head_cj)
+                .showImageForEmptyUri(R.mipmap.default_head_cj)
+                .showImageOnFail(R.mipmap.default_head_cj)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .delayBeforeLoading(0)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -45,7 +61,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         }
 
         imageLoader.displayImage(item.getCover_url(), holder.iv_bg, options);
-        imageLoader.displayImage(item.getUser_info().getAvatar_url(), holder.iv_avatar, options);
+        imageLoader.displayImage(item.getUser_info().getAvatar_url(), holder.iv_avatar, options_head);
         holder.tv_name.setText(item.getUser_info().getNickname());
         holder.tv_info.setText(item.getUser_info().getSummary());
         holder.tv_view_count.setText(item.getView_count());
@@ -92,7 +108,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         @Bind(R.id.item_scenelist_backgroundimg)
         ImageView iv_bg;
         @Bind(R.id.item_scenelist_user_headimg)
-        ImageView iv_avatar;
+        RoundedImageView iv_avatar;
         @Bind(R.id.item_scenelist_user_name)
         TextView tv_name;
 

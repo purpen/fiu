@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/dp5"
     android:paddingBottom="@dimen/dp5"
     android:background="@android:color/white">
+
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
@@ -27,7 +28,7 @@
         android:layout_below="@+id/tv_time"
         android:layout_alignParentLeft="true"
         app:riv_border_width="@dimen/dp05"
-        app:riv_border_color="@color/color_999"
+        app:riv_border_color="@color/color_ddd"
         />
     <TextView
         android:id="@+id/tv_msg"
@@ -37,12 +38,12 @@
         android:layout_marginLeft="@dimen/dp10"
         android:textSize="@dimen/sp14"
         android:lineSpacingMultiplier="1.1"
-        android:gravity="left|center"
+        android:gravity="center"
         android:layout_alignTop="@+id/iv"
         android:background="@drawable/msg_from"
-        android:paddingLeft="@dimen/dp15"
+        android:paddingLeft="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
-        android:text="别人聊天记录"
+        android:text="别"
         android:textColor="@color/color_333"
         />
 </RelativeLayout>

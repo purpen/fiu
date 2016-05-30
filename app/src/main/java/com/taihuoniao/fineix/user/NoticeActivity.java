@@ -64,10 +64,10 @@ public class NoticeActivity extends BaseActivity{
                 Intent intent =null;
                 if (item.kind==12){ //情景
                     intent = new Intent(activity, QingjingDetailActivity.class);
-                    intent.putExtra("id",item.related_id);
+                    intent.putExtra("id",String.valueOf(item.related_id));
                 }else {
                     intent = new Intent(activity, SceneDetailActivity.class);
-                    intent.putExtra("id",item.related_id);
+                    intent.putExtra("id",String.valueOf(item.related_id));
                 }
                 startActivity(intent);
             }
