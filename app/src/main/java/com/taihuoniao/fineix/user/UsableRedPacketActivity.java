@@ -338,9 +338,9 @@ public class UsableRedPacketActivity extends BaseActivity {
                         }
                         mScreenY = location[1];
                     }
-
-                    if (mIsScrollToUp != isScrollToUp) {
-                        onScrollDirectionChanged(mIsScrollToUp);
+                    if (mIsScrollToUp!=isScrollToUp){
+                        onScrollDirectionChanged(isScrollToUp);
+                        mIsScrollToUp=isScrollToUp;
                     }
 
                 }
@@ -363,11 +363,13 @@ public class UsableRedPacketActivity extends BaseActivity {
     }
 
     private void onScrollDirectionChanged(boolean isScrollUp) {
-//        if (isScrollUp) {
+        if (isScrollUp) {
 //            showFootView();
-//        } else {
+//            foot_view.setVisibility(View.VISIBLE);
+        } else {
 //            hideFootView();
-//        }
+//            foot_view.setVisibility(View.GONE);
+        }
     }
 
     private void showFootView() {

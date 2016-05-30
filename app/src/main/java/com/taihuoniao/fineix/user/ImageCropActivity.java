@@ -3,10 +3,12 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +16,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.ImgUploadBean;
@@ -21,6 +24,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -28,6 +32,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -51,7 +56,6 @@ public class ImageCropActivity extends BaseActivity {
     @Bind(R.id.progress_bar)
     ProgressBar progress_bar;
     private String page;
-
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
     }
@@ -74,7 +78,8 @@ public class ImageCropActivity extends BaseActivity {
     @Override
     protected void initView() {
         if (uri == null) return;
-        csiv.setImageURI(uri);
+        String path = FileUtils.getRealFilePath(activity, uri);
+        ImageLoader.getInstance().displayImage("file:///"+path,csiv,options);
     }
 
 
