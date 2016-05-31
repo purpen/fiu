@@ -4,8 +4,7 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp">
+              android:padding="10dp">
 
     <ImageView
         android:id="@+id/item_fragment_pin_recycler_img"

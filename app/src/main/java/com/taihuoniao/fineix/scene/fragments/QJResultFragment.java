@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
@@ -101,7 +100,8 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-        dialog.show();
+//        dialog.show();
+        progressBar.setVisibility(View.VISIBLE);
         DataPaser.search(q, t, page + "","tag",null, handler);
     }
 
@@ -117,7 +117,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
                     if (netSearch.isSuccess()) {
@@ -134,9 +134,10 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

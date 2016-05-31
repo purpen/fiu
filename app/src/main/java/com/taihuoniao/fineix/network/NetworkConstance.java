@@ -14,7 +14,7 @@ public class NetworkConstance {
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
-    public static final String STATUS_NEED_LOGIN="4008";
+    public static final String STATUS_NEED_LOGIN = "4008";
     //产品
     //统计用户想购买的数量
     public static final String want_buy = BASE_URL + "/scene_product/sight_click_stat";
@@ -64,6 +64,10 @@ public class NetworkConstance {
     public static final String used_label_list = BASE_URL + "/my/my_recent_tags";
     //标签列表
     public static final String label_list = BASE_URL + "/scene_tags/getlist";
+    //场景页热门标签
+    public static final String cj_hot_label = BASE_URL + "/gateway/get_fiu_hot_sight_tags";
+    //产品页热门标签
+    public static final String product_hot_label = BASE_URL + "/gateway/get_fiu_hot_product_tags";
     //热门标签
     public static final String hot_label_list = BASE_URL + "/scene_tags/hotlist";
     //收货地址

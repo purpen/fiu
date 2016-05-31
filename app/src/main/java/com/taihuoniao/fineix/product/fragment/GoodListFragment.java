@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.product.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +26,6 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +51,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     private List<ProductListBean> productList;
     private GoodListAdapter goodListAdapter;
     //网络请求工具类
-    private SVProgressHUD dialog;
+//    private SVProgressHUD dialog;
 
     public static GoodListFragment newInstance(int position, CategoryBean categoryBean) {
 
@@ -65,7 +63,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         return fragment;
     }
 
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = initView();
@@ -78,16 +76,17 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     protected View initView() {
         categoryBean = (CategoryBean) getArguments().getSerializable("categoryBean");
         position = getArguments().getInt("position", 0);
-        tag_id = categoryBean == null ? "0" : categoryBean.getList().get(position).getTag_id();
+        Log.e("<<<产品分类",position+"");
+        if (position >= 0)
+            tag_id = categoryBean == null ? "0" : categoryBean.getList().get(position).getTag_id();
         View view = View.inflate(getActivity(), R.layout.fragment_good_list, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_good_list_recycler);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_good_list_progress);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_good_list_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
-        dialog = new SVProgressHUD(getActivity());
+//        dialog = new SVProgressHUD(getActivity());
         return view;
     }
-
 
 
     protected void initList() {
@@ -104,6 +103,10 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
+                if (position == -1) {
+                    DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
+                    return;
+                }
                 if (tag_id.equals("0")) {
                     DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
                 } else {
@@ -121,12 +124,19 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     }
 
     protected void requestNet() {
+
+//        progressBar.setVisibility(View.VISIBLE);
+//        dialog.show();
+        Log.e("<<<", "tag_id = " + tag_id);
+        progressBar.setVisibility(View.VISIBLE);
+        if (position == -1) {
+            recyclerView.setVisibility(View.GONE);
+            DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
+            return;
+        }
         if (tag_id == null) {
             return;
         }
-        dialog.show();
-        Log.e("<<<", "tag_id = " + tag_id);
-        progressBar.setVisibility(View.VISIBLE);
         DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
         if (tag_id.equals("0")) {
             recyclerView.setVisibility(View.GONE);
@@ -141,7 +151,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.ADD_PRODUCT_LIST:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
 //                    listview适配器
                     ProductBean netProductBean = (ProductBean) msg.obj;
@@ -151,8 +161,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
                     }
                     break;
                 case DataConstants.CATEGORY_LABEL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
                     CategoryLabelListBean netCategory = (CategoryLabelListBean) msg.obj;
                     if (netCategory.isSuccess()) {
                         recyclerList.clear();
@@ -164,7 +174,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     break;
             }
@@ -176,13 +186,13 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         //cancelNet();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
-            handler = null;
         }
         super.onDestroy();
     }
 
     @Override
     public void click(int postion) {
+        progressBar.setVisibility(View.VISIBLE);
         for (int i = 0; i < recyclerList.size(); i++) {
             if (i == postion) {
                 recyclerList.get(postion).setIsSelect(true);
@@ -195,7 +205,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         page = 1;
         productList.clear();
         goodListAdapter.notifyDataSetChanged();
-        dialog.show();
+//        dialog.show();
+
         Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
         DataPaser.getProductList(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null, handler);
     }

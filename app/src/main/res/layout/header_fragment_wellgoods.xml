@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="最Fiu品牌"
+            android:text="牛Brands"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[越喜欢头像越大]"
+            android:text="[尖货这里找]"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>
@@ -66,9 +66,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_wellgoods_recycler"
         android:layout_width="match_parent"
-        android:layout_height="104dp"
+        android:layout_height="200dp"
         android:background="@color/white"
-        android:paddingTop="15dp"
         />
 
     <TextView
@@ -93,7 +92,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="最Fiu商品"
+            android:text="Fiu东西"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -102,7 +101,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[生活有你才购美]"
+            android:text="[东西不少，牌子不小]"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>

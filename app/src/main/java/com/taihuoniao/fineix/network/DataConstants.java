@@ -164,6 +164,8 @@ public class DataConstants {
     public static final int DELETE_COMMENT = 17;
     //分享场景语境次数
     public static final int SHARECJ = 16;
+    //场景热门标签
+    public static final int CJ_HOTLABEL = 15;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

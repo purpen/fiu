@@ -2,22 +2,20 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.City;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.ImageUtils;
-import com.taihuoniao.fineix.utils.LogUtil;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -83,7 +81,11 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         }
 
         imageLoader.displayImage(item.cover_url,holder.iv,options);
-        holder.title.setText(item.title);
+        SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).title);
+        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(activity.getResources().getColor(R.color.black));
+        style.setSpan(backgroundColorSpan, 0, list.get(position).title.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        holder.title.setText(style);
+//        holder.title.setText(item.title);
         holder.address.setText(item.address);
     }
 

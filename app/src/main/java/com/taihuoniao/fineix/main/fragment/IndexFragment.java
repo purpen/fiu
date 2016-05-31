@@ -250,18 +250,18 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                int i = getScrollY() / (listView.getChildAt(0).getHeight());
                 //firstvisibleitem的偏移量
                 int s = getScrollY() % (listView.getChildAt(0).getHeight());
-                if (nowP.y < startP.y && s > 0.4 * listView.getChildAt(0).getHeight()) {
+                if (nowP.y < startP.y && s > 0.3 * listView.getChildAt(0).getHeight()) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
                     cancelChenjin();
                 } else if (nowP.y < startP.y) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
-                    chenjin();
-                } else if (nowP.y > startP.y && s < 0.6 * listView.getChildAt(0).getHeight()) {
+//                    chenjin();
+                } else if (nowP.y > startP.y && s < 0.7 * listView.getChildAt(0).getHeight()) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
                     chenjin();
                 } else {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
-                    cancelChenjin();
+//                    cancelChenjin();
                 }
                 break;
         }
@@ -269,6 +269,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
     private void cancelChenjin() {
+        searchImg.setVisibility(View.GONE);
+        subsImg.setVisibility(View.GONE);
         Intent intent = new Intent();
         intent.putExtra("index", 1);
         intent.setAction(DataConstants.BroadShopCart);
@@ -276,6 +278,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
     private void chenjin() {
+        searchImg.setVisibility(View.VISIBLE);
+        subsImg.setVisibility(View.VISIBLE);
         Intent intent = new Intent();
         intent.putExtra("index", 2);
         intent.setAction(DataConstants.BroadShopCart);

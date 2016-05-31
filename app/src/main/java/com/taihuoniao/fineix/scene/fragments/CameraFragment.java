@@ -28,6 +28,7 @@ import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.ByteArrayInputStream;
@@ -54,7 +55,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private RelativeLayout bottomRelative;
     private Button takePicture;
     private View focus;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //相机工具
     private Camera cameraInst;
     private Camera.Parameters parameters;
@@ -100,7 +101,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         surfaceView.setFocusable(true);
         surfaceView.setBackgroundColor(android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
         surfaceView.getHolder().addCallback(new SurfaceCallback());
-        dialog = new SVProgressHUD(getActivity());
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -130,7 +131,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                             bundle = new Bundle();
                             bundle.putByteArray("bytes", data); //将图片字节数据保存在bundle当中，实现数据交换
                             new SavePicTask(data).execute();
-                            camera.startPreview(); // 拍完照后，重新开始预览
+//                            camera.startPreview(); // 拍完照后，重新开始预览
                         }
                     });
                 } catch (Throwable t) {
@@ -220,10 +221,10 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) surfaceView.getLayoutParams();
             if (previewSize.width != 0) {
                 lp.width = surfaceView.getWidth();
-                lp.height = lp.width*previewSize.width/previewSize.height;
-                    surfaceView.setLayoutParams(lp);
-                    Log.e("<<<最终的预览参数", "width=" + previewSize.width + ",height=" + previewSize.height + ",surface.width="
-                            + surfaceView.getWidth() + ",surface.height=" + surfaceView.getHeight());
+                lp.height = lp.width * previewSize.width / previewSize.height;
+                surfaceView.setLayoutParams(lp);
+                Log.e("<<<最终的预览参数", "width=" + previewSize.width + ",height=" + previewSize.height + ",surface.width="
+                        + surfaceView.getWidth() + ",surface.height=" + surfaceView.getHeight());
             }
         }
 
@@ -338,7 +339,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         for (Camera.Size size : supportedPreviewResolutions) {
             //获得当前size的宽高比
             double sizeB = ((double) size.width) / ((double) size.height);
-            if (Math.abs(sizeB - surfaceB) < minCha) {
+
+            if (size.height <= currentHeight && Math.abs(sizeB - surfaceB) < minCha) {
                 minCha = Math.abs(sizeB - surfaceB);
                 nowSize = size;
             }
@@ -524,7 +526,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
     private Bitmap decodeRegionCrop(byte[] data, Rect rect) {
         InputStream is = null;
-        System.gc();
+//        System.gc();
         Bitmap croppedImage = null;
         try {
             is = new ByteArrayInputStream(data);
@@ -546,7 +548,15 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
         Matrix m = new Matrix();
         m.setRotate(90, options.outWidth, options.outHeight);
-        Bitmap rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, options.outWidth, options.outHeight, m, true);
+        Log.e("<<<图片大小", "图片=" + data.length);
+        Bitmap rotatedImage = null;
+        try {
+            rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, options.outWidth, options.outHeight, m, true);
+        } catch (OutOfMemoryError e) {
+            System.gc();
+            Log.e("<<<内存溢出", e.toString());
+        }
+
         if (rotatedImage != croppedImage && croppedImage != null)
             croppedImage.recycle();
         return rotatedImage;
@@ -619,12 +629,12 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
+            dialog.dismiss();
             if (result != null) {
-                dialog.dismiss();
                 ImageUtils.processPhotoItem(getActivity(), new PhotoItem(result, System.currentTimeMillis()));
             } else {
-                Toast.makeText(getActivity(), "拍照失败！", Toast.LENGTH_SHORT).show();
+                new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败");
+                cameraInst.startPreview();
             }
         }
     }

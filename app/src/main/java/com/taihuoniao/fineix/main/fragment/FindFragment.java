@@ -19,10 +19,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -39,8 +37,8 @@ import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
+import com.taihuoniao.fineix.beans.CJHotLabelBean;
 import com.taihuoniao.fineix.beans.FiuUserListBean;
-import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.SceneList;
@@ -67,7 +65,6 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -75,7 +72,7 @@ import java.util.Random;
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
     private static final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
-    private List<HotLabel.HotLabelBean> hotLabelList;
+    private List<String> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //图片加载
@@ -185,7 +182,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             @Override
             public void click(int postion) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("q", hotLabelList.get(postion).getTitle_cn());
+                intent.putExtra("q", hotLabelList.get(postion));
                 intent.putExtra("t", "8");
                 startActivity(intent);
             }
@@ -201,7 +198,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
-                    dialog.show();
+//                    dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
 //                    MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
@@ -265,30 +262,31 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 Util.makeToast(s);
             }
         });
-
+        //场景页热门标签
+        DataPaser.cjHotLabel(true,handler);
         //热门标签
-        ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.HOT_LABEL_LIST;
-                msg.obj = new HotLabel();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<HotLabel>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
-            }
-        });
+//        ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.HOT_LABEL_LIST;
+//                msg.obj = new HotLabel();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<HotLabel>() {
+//                    }.getType();
+//                    msg.obj = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
+//                }
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+//            }
+//        });
     }
     private FiuUserListBean netUsers;
     private Handler handler = new Handler() {
@@ -296,7 +294,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.FIU_USER:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
                     netUsers = netUser;
@@ -321,6 +319,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         };
                         thread.start();
 
+                    }else {
+                        dialog.showErrorWithStatus(netUser.getMessage());
                     }
                     break;
                 case -10:
@@ -328,7 +328,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     addImgToAbsolute(netUsers.getData().getUsers());
                     break;
                 case DataConstants.QINGJING_LIST:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
                     if (netQingjingListBean.isSuccess()) {
@@ -336,18 +336,31 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
 //                        Toast.makeText(getActivity(), "测试，情景数据个数=" + qingjingList.size(), Toast.LENGTH_SHORT).show();
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
+                    }else {
+                        dialog.showErrorWithStatus(netQingjingListBean.getMessage());
                     }
                     break;
-                case DataConstants.HOT_LABEL_LIST:
-                    dialog.dismiss();
+                case DataConstants.CJ_HOTLABEL:
                     pullToRefreshView.onRefreshComplete();
-                    HotLabel netHotLabel = (HotLabel) msg.obj;
-                    if (netHotLabel.isSuccess()) {
+                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
+                    if(netHot.isSuccess()){
                         hotLabelList.clear();
-                        hotLabelList.addAll(netHotLabel.getData().getRows());
+                        hotLabelList.addAll(netHot.getData().getTags());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
+                    }else{
+                        dialog.showErrorWithStatus(netHot.getMessage());
                     }
                     break;
+//                case DataConstants.HOT_LABEL_LIST:
+////                    dialog.dismiss();
+//                    pullToRefreshView.onRefreshComplete();
+//                    HotLabel netHotLabel = (HotLabel) msg.obj;
+//                    if (netHotLabel.isSuccess()) {
+//                        hotLabelList.clear();
+//                        hotLabelList.addAll(netHotLabel.getData().getRows());
+//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
                 case DataConstants.SCENE_LIST:
                     dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
@@ -363,13 +376,15 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         sceneList.addAll(netSceneList.getSceneListBeanList());
 //                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
                         sceneListViewAdapter.notifyDataSetChanged();
+                    }else{
+                        dialog.showErrorWithStatus(netSceneList.getMessage());
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }

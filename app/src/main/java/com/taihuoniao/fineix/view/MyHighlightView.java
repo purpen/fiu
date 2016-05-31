@@ -2,7 +2,10 @@ package com.taihuoniao.fineix.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.Point2D;
 import com.taihuoniao.fineix.utils.UIUtils;
 import com.taihuoniao.fineix.view.imageViewTouch.ImageViewTouch;
@@ -200,7 +204,15 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
                 final int right = (int) (mTempRect.right);
                 final int top = (int) (mTempRect.top);
                 final int bottom = (int) (mTempRect.bottom);
-
+//在这里画矩形
+                Paint p = new Paint();
+//                p.setColor(Color.BLACK);
+                p.setARGB(255, 66, 66, 66);
+                p.setStrokeWidth(DensityUtils.dp2px(MainApplication.getContext(), 1));
+                p.setStyle(Paint.Style.STROKE);
+                PathEffect effects = new DashPathEffect(new float[]{2, 2}, 1);
+                p.setPathEffect(effects);
+                canvas.drawRect(left, top, right, bottom, p);
                 if (mAnchorRotate != null) {
                     mAnchorRotate.setBounds(right - mAnchorRotateWidth, bottom - mAnchorRotateHeight,
                             right + mAnchorRotateWidth, bottom + mAnchorRotateHeight);
@@ -212,6 +224,7 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
                             left + mAnchorDeleteWidth, top + mAnchorDeleteHeight);
                     mAnchorDelete.draw(canvas);
                 }
+
 //                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 //                paint.setStyle(Paint.Style.STROKE);
 //                paint.setColor(Color.rgb(66, 66, 66));

@@ -96,7 +96,8 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-        dialog.show();
+//        dialog.show();
+        progressBar.setVisibility(View.VISIBLE);
         DataPaser.search(q, t, page + "", "tag",null, handler);
     }
 
@@ -112,7 +113,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
                     if (netSearch.isSuccess()) {
@@ -129,8 +130,9 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
+                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }
