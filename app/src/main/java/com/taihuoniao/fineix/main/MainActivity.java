@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -308,10 +309,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (TabItem tabItem : tabList) {
             if (tabItem.clazz.equals(clazz)) {
                 tabItem.imageView.setImageResource(tabItem.selId);
-                tabItem.tv.setTextColor(getResources().getColor(R.color.color_af8323));
+                tabItem.tv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
             } else {
                 tabItem.imageView.setImageResource(tabItem.unselId);
-                tabItem.tv.setTextColor(getResources().getColor(R.color.color_333));
+                tabItem.tv.setTextColor(getResources().getColor(R.color.color_999));
             }
         }
     }
@@ -357,11 +358,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return result;
     }
 
-    private boolean isMove() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return true;
+    private int getNavigationBarHeight() {
+        int height = 0;
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = resources.getDimensionPixelSize(resourceId);
         }
-        return false;
+//        Log.e("<<<", "工具栏 height:" + height);
+        return height;
+    }
+
+    private boolean isMove() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
     @Override
@@ -374,7 +383,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstImg.setImageResource(R.mipmap.first_in_index);
                     firstImg.setVisibility(View.VISIBLE);
                     firstRelative.setTag(1);
@@ -383,15 +392,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 1) {
                                 firstImg.setImageResource(R.mipmap.first_in_find);
+//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_find));
                                 firstRelative.setTag(2);
                             } else if ((int) (v.getTag()) == 2) {
                                 firstImg.setImageResource(R.mipmap.first_in_fiu);
+//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_fiu));
                                 firstRelative.setTag(3);
                             } else if ((int) (v.getTag()) == 3) {
                                 firstImg.setImageResource(R.mipmap.first_in_wellgood);
+//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_wellgood));
                                 firstRelative.setTag(4);
                             } else if ((int) (v.getTag()) == 4) {
                                 firstImg.setImageResource(R.mipmap.first_in_mine);
+//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_mine));
                                 firstRelative.setTag(5);
                             } else if ((int) (v.getTag()) == 5) {
                                 firstImg.setVisibility(View.GONE);
@@ -418,7 +431,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstImg.setImageResource(R.mipmap.first_in_find);
                     firstRelative.setTag(7);
                     firstImg.setVisibility(View.VISIBLE);
@@ -438,6 +451,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof WellGoodsFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
                 if (isFirstIn) {
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_wellgood);
                     firstImg.setVisibility(View.VISIBLE);
@@ -476,6 +490,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof MineFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
                 if (isFirstIn) {
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_mine);
                     firstImg.setVisibility(View.VISIBLE);
@@ -508,12 +523,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
     private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("<<<", "接收到广播");
             if (1 == intent.getIntExtra("index", -1)) {
-                if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.KITKAT){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     container.setSystemUiVisibility(View.INVISIBLE);
                 }
 //                WindowUtils.cancelChenjin(MainActivity.this);

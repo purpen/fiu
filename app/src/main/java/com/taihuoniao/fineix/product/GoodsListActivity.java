@@ -68,7 +68,9 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         DataPaser.categoryList(1 + "", 10 + "", handler);
     }
 

@@ -532,13 +532,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     AddProductBean netBean = (AddProductBean) msg.obj;
                     if (netBean.isSuccess()) {
                         Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
-//                        if (MainApplication.whichQingjing != null) {
-//                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-//                            Intent intent = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
-//                            intent.putExtra("id", MainApplication.whichQingjing.getData().get_id());
-//                            MainApplication.whichQingjing = null;
-//                            startActivity(intent);
-//                        }
+                        if (MainApplication.whichQingjing != null) {
+                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                        }
                         MainApplication.whichQingjing = null;
                         MainApplication.tagInfoList = null;
                         Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);

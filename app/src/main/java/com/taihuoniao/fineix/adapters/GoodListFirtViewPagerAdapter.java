@@ -25,18 +25,24 @@ public class GoodListFirtViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return categoryBean.getList().get(position).getTitle();
+        if (position == 0) {
+            return "全部";
+        }
+        return categoryBean.getList().get(position - 1).getTitle();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return GoodListFragment.newInstance(position,categoryBean
-        );
+        if (position == 0) {
+            return GoodListFragment.newInstance(-1, categoryBean);
+        }
+        return GoodListFragment.newInstance(position - 1, categoryBean);
     }
+
 
     @Override
     public int getCount() {
-        return categoryBean.getList().size();
+        return categoryBean.getList().size() + 1;
     }
 
 //    @Override

@@ -47,9 +47,10 @@
     </style>
 
     <style name="custom_progress_dialog" parent="@style/CustomDialog">
-        <item name="android:windowBackground">@drawable/corner_black</item>
+        <!--<item name="android:windowBackground">@drawable/corner_black</item>-->
         <item name="android:windowNoTitle">true</item>
     </style>
+
 
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@null</item>

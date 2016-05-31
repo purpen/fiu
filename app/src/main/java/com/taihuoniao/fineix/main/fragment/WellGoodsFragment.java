@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -39,9 +38,9 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.BrandListBean;
+import com.taihuoniao.fineix.beans.CJHotLabelBean;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
-import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
@@ -64,7 +63,6 @@ import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -85,7 +83,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private SVProgressHUD dialog;
     private static final String PAGE_NAME = "app_fiu_product_index_slide";
     //标签列表
-    private List<HotLabel.HotLabelBean> hotLabelList;
+    private List<String> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //分类列表
@@ -170,28 +168,29 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //        DataPaser.hotLabelList(labelPage + "", handler);
         DataPaser.categoryList(1 + "", 10 + "", handler);
         //热门标签
-        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.HOT_LABEL_LIST;
-                msg.obj = new HotLabel();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<HotLabel>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
-            }
-        });
+        DataPaser.cjHotLabel(false,handler);
+//        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.HOT_LABEL_LIST;
+//                msg.obj = new HotLabel();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<HotLabel>() {
+//                    }.getType();
+//                    msg.obj = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
+//                }
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+//            }
+//        });
 //品牌列表
         DataPaser.brandList(1, 50, handler);
     }
@@ -225,7 +224,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             @Override
             public void click(int postion) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("q", hotLabelList.get(postion).getTitle_cn());
+                intent.putExtra("q", hotLabelList.get(postion));
                 intent.putExtra("t", "10");
                 startActivity(intent);
             }
@@ -234,8 +233,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         list = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),5);
         recyclerView.setLayoutManager(layoutManager);
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
@@ -271,6 +269,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     }
                     break;
                 case DataConstants.ADD_PRODUCT_LIST:
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     ProductBean netProduct = (ProductBean) msg.obj;
                     if (netProduct.isSuccess()) {
@@ -311,16 +310,26 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 case -10:
                     addImgToAbsolute(brandItemList);
                     break;
-                case DataConstants.HOT_LABEL_LIST:
-                    dialog.dismiss();
-                    HotLabel netHotLabel = (HotLabel) msg.obj;
-                    if (netHotLabel.isSuccess()) {
-                        hotLabelList.addAll(netHotLabel.getData().getRows());
+                case DataConstants.CJ_HOTLABEL:
+//                    dialog.dismiss();
+                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
+                    if(netHot.isSuccess()){
+                        hotLabelList.addAll(netHot.getData().getTags());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
+                    }else{
+                        dialog.showErrorWithStatus(netHot.getMessage());
                     }
                     break;
+//                case DataConstants.HOT_LABEL_LIST:
+//                    dialog.dismiss();
+//                    HotLabel netHotLabel = (HotLabel) msg.obj;
+//                    if (netHotLabel.isSuccess()) {
+//                        hotLabelList.addAll(netHotLabel.getData().getRows());
+//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
                 case DataConstants.CATEGORY_LIST:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
                         list.addAll(netCategoryBean.getList());

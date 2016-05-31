@@ -312,6 +312,19 @@ public class ClientDiscoverAPI {
     }
 
     //标签
+    //场景页热门标签
+    public static void cjHotLabel(boolean isCJ, RequestCallBack<String> callBack) {
+        String url;
+        if (isCJ) {
+            url = NetworkConstance.cj_hot_label;
+        } else {
+            url = NetworkConstance.product_hot_label;
+        }
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //标签
     //热门标签
     public static void hotLabelList(String page, RequestCallBack<String> callBack) {
         String url = NetworkConstance.hot_label_list;

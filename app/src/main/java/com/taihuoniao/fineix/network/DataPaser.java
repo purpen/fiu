@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.beans.ApplyForRefund;
 import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.BrandListBean;
+import com.taihuoniao.fineix.beans.CJHotLabelBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.CartDoOrderBonus;
@@ -977,6 +978,33 @@ public class DataPaser {
             @Override
             public void onFailure(HttpException error, String msg) {
                 Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //标签
+    //场景页热门标签
+    public static void cjHotLabel(boolean isCJ,final Handler handler) {
+        ClientDiscoverAPI.cjHotLabel(isCJ,new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.CJ_HOTLABEL;
+                msg.obj = new CJHotLabelBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CJHotLabelBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<场景热门标签", "数据解析异常");
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });

@@ -27,26 +27,28 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/ll_nav0"
             style="@style/MainButtonStyle">
 
             <ImageView
                 android:id="@+id/activity_main_homepagebtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="19.5dp"
                 android:src="@mipmap/home_gray"/>
 
             <TextView
                 android:id="@+id/tv_nav0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/qing"
-                android:textSize="@dimen/sp12"/>
+                android:textSize="10sp"/>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:id="@+id/ll_nav1"
             style="@style/MainButtonStyle">
 
@@ -60,10 +62,10 @@
                 android:id="@+id/tv_nav1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginTop="7dp"
                 android:gravity="center_horizontal"
                 android:text="@string/jing"
-                android:textSize="@dimen/sp12"/>
+                android:textSize="10sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -80,11 +82,11 @@
                 android:id="@+id/tv_nav2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginTop="3dp"
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
-                android:textColor="@color/color_333"
-                android:textSize="@dimen/sp12"/>
+                android:textColor="#999999"
+                android:textSize="10sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -101,10 +103,10 @@
                 android:id="@+id/tv_nav3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/pin"
-                android:textSize="@dimen/sp12"/>
+                android:textSize="10sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -133,10 +135,10 @@
                 android:id="@+id/tv_nav4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
+                android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/mine"
-                android:textSize="@dimen/sp12"/>
+                android:textSize="10sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -145,7 +147,7 @@
         android:id="@+id/activity_main_first_relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/activity_main_first_right_img"
@@ -167,8 +169,9 @@
         <ImageView
             android:id="@+id/activity_main_first_img"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="-7dp"
             android:visibility="gone"
             />
     </RelativeLayout>

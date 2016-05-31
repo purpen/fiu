@@ -47,7 +47,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
-        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), (MainApplication.getContext().getScreenHeight() - getNavigationBarHeight()) * 9 / 16, MainApplication.getContext().getScreenHeight() - getNavigationBarHeight(), false));
+        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), false));
     }
 
     private int getNavigationBarHeight() {

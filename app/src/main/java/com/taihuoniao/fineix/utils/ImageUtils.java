@@ -52,22 +52,6 @@ public class ImageUtils {
                 mkdir(fileFolder);
             }
             jpgFile = new File(fileFolder, filename);
-//            new ExifInterface(jpgFile.getAbsolutePath())
-            //存储用户的当前位置信息
-//            try {
-//                exifInterface = new ExifInterface(imageUri.getPath());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            if (exifInterface != null) {
-//                exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, "100/1,0/1,0/1");
-//                exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE, "200/1,0/1,0/1");
-//                try {
-//                    exifInterface.saveAttributes();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         } else {
             jpgFile = new File(fileFolderStr);
             Log.e("<<<", "jpgfile.path = " + jpgFile.getAbsolutePath());
@@ -90,29 +74,6 @@ public class ImageUtils {
         return file.mkdir();
     }
 
-    //向图片中存储位置信息
-//    public static void writeLocation(double[] location, String fileName) {
-//        Log.e("<<<", "setLocation.fileName = " + fileName);
-//        if (location == null) {
-//            return;
-//        }
-//        ExifInterface exifInterface = null;
-//        try {
-//            exifInterface = new ExifInterface(fileName);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (exifInterface == null) {
-//            return;
-//        }
-//        exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE, location[1] + "/1,0/1,0/1");
-//        exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, location[0] + "/1,0/1,0/1");
-//        try {
-//            exifInterface.saveAttributes();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     //获取图片的位置信息
     public static double[] picLocation(String fileName) {
@@ -127,11 +88,7 @@ public class ImageUtils {
             return null;
         }
         String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-//        String latitude_pre = exifInterface.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF);
         String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-//        String longitude_pre = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
-//        Log.e("<<<", "维度 = " + latitude + ",维度参考 = " + latitude_pre + ",精度 = " + longa + ",经度参考 = " + longa_pre);
-        //维度 = 39/1,58/1,59433599/1000000,维度参考 = 1,精度 = 116/1,29/1,32794799/1000000,经度参考 = E
         if (latitude != null && longitude != null) {
             String[] latitudes = latitude.split(",");
             double du = Integer.parseInt(latitudes[0].substring(0, latitudes[0].indexOf("/")));
@@ -184,7 +141,7 @@ public class ImageUtils {
     public static Bitmap decodeBitmapWithSize(String pathName, int width, int height,
                                               boolean useBigger) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;//加载不消耗内存
+        options.inJustDecodeBounds = true;//只加载宽高
         options.inInputShareable = true;//用于图片清空之后恢复
         options.inPurgeable = true;//当内存不足时可以清楚
         BitmapFactory.decodeFile(pathName, options);
@@ -192,9 +149,9 @@ public class ImageUtils {
             options.inSampleSize = (int) Math.min(((float) options.outWidth / width),
                     ((float) options.outHeight / height));
         } else {
-            float scale = Math.max(((float) options.outWidth / width),
+            float scale = Math.min(((float) options.outWidth / width),
                     ((float) options.outHeight / height));
-            if (scale * 10 % 10 != 0) {
+            if ((int) (scale * 10) % 10 != 0) {
                 options.inSampleSize = (int) scale + 1;
             } else {
                 options.inSampleSize = (int) scale;
@@ -203,7 +160,7 @@ public class ImageUtils {
 
         }
         options.inJustDecodeBounds = false;
-        Bitmap sourceBm = BitmapFactory.decodeFile(pathName,options);
+        Bitmap sourceBm = BitmapFactory.decodeFile(pathName, options);
         return sourceBm;
     }
 
@@ -322,7 +279,7 @@ public class ImageUtils {
 
     }
 
-    public static Bitmap convertViewToBitmap(View view){
+    public static Bitmap convertViewToBitmap(View view) {
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 //        view.layout(view.getLeft(),view.getTop(), view.getLeft()+view.getMeasuredWidth(),view.getTop()+view.getMeasuredHeight());
         view.buildDrawingCache();

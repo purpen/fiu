@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="最Fiu伙伴"
+            android:text="热Fiuer"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[越喜欢头像越大]"
+            android:text="[有Bigger不低调]"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="最Fiu情景"
+                android:text="新Land"
                 android:textColor="#222222"
                 android:textSize="13sp"/>
             <!-- 999999 -->
@@ -108,7 +108,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="[我的地盘我收益]"
+                android:text="[圈地有收益]"
                 android:textColor="#999999"
                 android:textSize="11sp"/>
         </LinearLayout>
@@ -136,7 +136,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="最Fiu场景"
+            android:text="High场景"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -145,7 +145,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[发现不一样]"
+            android:text="[谁用谁上瘾]"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>
