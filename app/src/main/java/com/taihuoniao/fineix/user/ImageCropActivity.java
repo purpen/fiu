@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;

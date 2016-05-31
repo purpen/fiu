@@ -442,7 +442,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(intent);
                         break;
                     case 4:
-                        String url="http://m.taihuoniao.com/app/api/view/fiu_point?uuid="+ MainApplication.uuid+"&from_to=2&app_type=2";
+                        String url="http://t.taihuoniao.com/app/api/view/fiu_point?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
                         intent.putExtra(AboutUsActivity.class.getName(),"积分");
