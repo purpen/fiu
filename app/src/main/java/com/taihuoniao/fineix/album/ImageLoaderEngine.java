@@ -80,7 +80,7 @@ public class ImageLoaderEngine implements LoadEngine {
                     .showImageForEmptyUri(img_camera)
                     .showImageOnFail(img_camera)
                     .cacheInMemory(true)
-                    .cacheOnDisk(true)
+                    .cacheOnDisk(false)
                     .considerExifParams(true)
                     .build();
         return cameraOptions;
