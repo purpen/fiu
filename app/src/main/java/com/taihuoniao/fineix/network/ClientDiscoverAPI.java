@@ -1225,8 +1225,9 @@ public class ClientDiscoverAPI {
     }
 
 
-    public static void uploadIdentityInfo(String info, String label, String contact, String id_card_a_tmp, String business_card_tmp, RequestCallBack<String> callBack) {
+    public static void uploadIdentityInfo(String id, String info, String label, String contact, String id_card_a_tmp, String business_card_tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("info", info);
         params.addQueryStringParameter("label", label);
         params.addQueryStringParameter("contact", contact);
@@ -1251,6 +1252,11 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    /**
+     * 获得认证信息
+     *
+     * @param callBack
+     */
     public static void getAuthStatus(RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/my/fetch_talent";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);

@@ -56,6 +56,13 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MineFragment extends MyBaseFragment {
+    public interface onMessageCountChangeListener{
+        void onMessageCountChange(int count);
+    }
+    private static onMessageCountChangeListener listener;
+    public static void setOnMessageCountChangeListener(onMessageCountChangeListener listener){
+        MineFragment.listener=listener;
+    }
     @Bind(R.id.gv)
     CustomGridView gv;
     @Bind(R.id.iv_detail)
@@ -125,6 +132,13 @@ public class MineFragment extends MyBaseFragment {
         initData();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            loadData();
+        }
+    }
 
     private void initData() {
 //        partnerName = activity.getResources().getStringArray(R.array.partner_name);
@@ -243,9 +257,10 @@ public class MineFragment extends MyBaseFragment {
     protected void initViews() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
-            params.setMargins(0,getStatusBarHeight(),0,0);
-            rl.setLayoutParams(params);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
+//            params.setMargins(0,getStatusBarHeight(),0,0);
+//            rl.setLayoutParams(params);
+            rl.setPadding(0,getStatusBarHeight(),0,0);
         }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
@@ -277,6 +292,7 @@ public class MineFragment extends MyBaseFragment {
                             break;
                         case 1:
                             gvList.get(i).count = user.counter.message_total_count;
+                            if (listener!=null) listener.onMessageCountChange(user.counter.message_total_count);
                             break;
                     }
 

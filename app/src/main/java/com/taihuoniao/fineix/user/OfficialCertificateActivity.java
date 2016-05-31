@@ -18,11 +18,13 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.AuthData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -73,9 +75,17 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private List<Uri> mSelected;
-
+    private AuthData authData;
     public OfficialCertificateActivity() {
         super(R.layout.activity_official_certificate);
+    }
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(AuthData.class.getSimpleName())){
+            authData=(AuthData) intent.getSerializableExtra(AuthData.class.getSimpleName());
+        }
     }
 
     @Override
@@ -84,6 +94,17 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
         for (int i = 0; i < stringArray.length; i++) {
             label_view.addLabel(stringArray[i]);
+        }
+        if (authData!=null){
+            tv_tag.setVisibility(View.VISIBLE);
+            tv_tag.setText(authData.label);
+            iv_clear.setVisibility(View.VISIBLE);
+            et_info.setText(authData.info);
+            et_contacts.setText(authData.contact);
+            iv_id.setVisibility(View.VISIBLE);
+            iv_card.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance().displayImage(authData.id_card_cover_url,iv_id,options);
+            ImageLoader.getInstance().displayImage(authData.business_card_cover_url,iv_card,options);
         }
     }
 
@@ -166,17 +187,24 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             Util.makeToast("请填写联系方式");
             return;
         }
+        if (authData==null){//如果是首次认证身份证和名片必传
+            if (bitmap_id == null) {
+                Util.makeToast("请先选择身份证");
+                return;
+            }
+            if (bitmap_card == null) {
+                Util.makeToast("请先选择名片");
+                return;
+            }
+        }
+        String id=null;
+        if (authData!=null){ //非首次上传_id有值
+            id=authData._id;
+        }
 
-        if (bitmap_id == null) {
-            Util.makeToast("请先选择身份证");
-            return;
-        }
-        if (bitmap_card == null) {
-            Util.makeToast("请先选择名片");
-            return;
-        }
         setViewsEnable(false);
-        ClientDiscoverAPI.uploadIdentityInfo(info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
+
+        ClientDiscoverAPI.uploadIdentityInfo(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (progress_bar != null) progress_bar.setVisibility(View.VISIBLE);

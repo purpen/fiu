@@ -38,6 +38,7 @@ import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -90,6 +91,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     ImageView firstLeftImg;
     @Bind(R.id.activity_main_first_right_img)
     ImageView firstRightImg;
+    @Bind(R.id.tv_msg_indicator)
+    TextView tv_msg_indicator;
     private FragmentManager fm;
     private ArrayList<TabItem> tabList;
     private ArrayList<Fragment> fragments;
@@ -135,14 +138,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (savedInstanceState != null) {
             recoverAllState(savedInstanceState);
         } else {
-//            if (TextUtils.equals(IndexFragment.class.getSimpleName(),which)){
-//                switchFragmentandImg(IndexFragment.class);
-//            }
             which2Switch();
         }
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
-//        WindowUtils.immerseStatusBar(MainActivity.this);
         WindowUtils.chenjin(MainActivity.this);
     }
 
@@ -182,32 +181,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_nav2.setOnClickListener(this);
         ll_nav3.setOnClickListener(this);
         ll_nav4.setOnClickListener(this);
+        MineFragment.setOnMessageCountChangeListener(new MineFragment.onMessageCountChangeListener() {
+            @Override
+            public void onMessageCountChange(int count) {
+                if (count>0){
+                    tv_msg_indicator.setVisibility(View.VISIBLE);
+                }else {
+                    tv_msg_indicator.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
     protected void initView() {
-//        custom_head.setHeadGoBackShow(false);
-//        custom_head.setHeadLogoShow(true);
         if (tabList != null) {
             tabList.clear();
         } else {
-            tabList = new ArrayList<TabItem>();
+            tabList = new ArrayList<>();
         }
-//        homepageImg = (ImageView) findViewById(R.id.activity_main_homepagebtn);
         initTabItem(homepageImg, tv_nav0, IndexFragment.class, R.mipmap.home_red, R.mipmap.home_gray);
 
-//        findImg = (ImageView) findViewById(R.id.activity_main_findbtn);
         initTabItem(findImg, tv_nav1, FindFragment.class, R.mipmap.find_red, R.mipmap.find_gray);
 
-//        sceneImg = (ImageView) findViewById(R.id.activity_main_scenebtn);
-
-//        shopImg = (ImageView) findViewById(R.id.activity_main_shopbtn);
         initTabItem(shopImg, tv_nav3, WellGoodsFragment.class, R.mipmap.shop_red, R.mipmap.shop_gray);
 
-//        mineImg = (ImageView) findViewById(R.id.activity_main_minebtn);
         initTabItem(mineImg, tv_nav4, MineFragment.class, R.mipmap.mine_red, R.mipmap.mine_gray);
-
-
     }
 
 
@@ -234,22 +233,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.ll_nav0://情
-//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(IndexFragment.class);
                 break;
             case R.id.ll_nav1: //景
-//                custom_head.setVisibility(View.GONE);
                 switchFragmentandImg(FindFragment.class);
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
-//                custom_head.setVisibility(View.GONE);
                 Log.e("<<<", "点击切换");
                 switchFragmentandImg(WellGoodsFragment.class);
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav4: //个人中心
-//                custom_head.setVisibility(View.GONE);
+                if (getVisibleFragment() instanceof MineFragment) return;
                 if (LoginInfo.isUserLogin()) {
                     switchFragmentandImg(MineFragment.class);
                     onWindowFocusChanged(true);
@@ -293,6 +289,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LogUtil.e(TAG, fragments.size() + "<<<<<<");
     }
 
+
+
     private void resetUI() {
         if (fragments == null) {
             return;
@@ -304,6 +302,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (Fragment fragment : fragments) {
             fm.beginTransaction().hide(fragment).commitAllowingStateLoss();
         }
+
     }
 
     private void switchImgAndTxtStyle(Class clazz) {
@@ -332,6 +331,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onSaveInstanceState(outState);
     }
 
+
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for(Fragment fragment : fragments){
+            if(fragment != null && fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
 
     @Override
     protected void onDestroy() {

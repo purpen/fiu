@@ -223,6 +223,7 @@ public class Util {
 	}
 
 	public static String saveBitmap2Base64Str(Bitmap bitmap) {
+		if (bitmap==null) return null;
 		String imgStr=null;
 		try {
 			ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
