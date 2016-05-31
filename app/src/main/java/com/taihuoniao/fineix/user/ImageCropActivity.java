@@ -78,7 +78,8 @@ public class ImageCropActivity extends BaseActivity {
     @Override
     protected void initView() {
         if (uri == null) return;
-        String path = FileUtils.getRealFilePath(activity, uri);
+        String path = FileUtils.getRealFilePath(getApplicationContext(), uri);
+//        LogUtil.e("path",path);
         ImageLoader.getInstance().displayImage("file:///"+path,csiv,options);
     }
 

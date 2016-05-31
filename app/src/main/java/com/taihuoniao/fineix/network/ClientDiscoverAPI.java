@@ -788,11 +788,12 @@ public class ClientDiscoverAPI {
 
     /**
      * 更新签名和label
+     *
      * @param label
      * @param summary
      * @param callBack
      */
-    public static void updateSignatrueLabel(String label, String summary,RequestCallBack<String> callBack) {
+    public static void updateSignatrueLabel(String label, String summary, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("label", label);
         params.addQueryStringParameter("summary", summary);
@@ -1211,8 +1212,9 @@ public class ClientDiscoverAPI {
     }
 
 
-    public static void uploadIdentityInfo(String info, String label, String contact, String id_card_a_tmp, String business_card_tmp, RequestCallBack<String> callBack) {
+    public static void uploadIdentityInfo(String id, String info, String label, String contact, String id_card_a_tmp, String business_card_tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("info", info);
         params.addQueryStringParameter("label", label);
         params.addQueryStringParameter("contact", contact);
@@ -1228,17 +1230,23 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("rid", rid);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //分享场景语境次数
-    public static void commitShareCJ(String id,RequestCallBack<String> callBack){
-        String url = NetworkConstance.BASE_URL+"/scene_sight/add_share_context_num";
+    public static void commitShareCJ(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_sight/add_share_context_num";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("id",id);
+        params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+    /**
+     * 获得认证信息
+     *
+     * @param callBack
+     */
     public static void getAuthStatus(RequestCallBack<String> callBack) {
-        String url = NetworkConstance.BASE_URL+"/my/fetch_talent";
+        String url = NetworkConstance.BASE_URL + "/my/fetch_talent";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params,url, callBack);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

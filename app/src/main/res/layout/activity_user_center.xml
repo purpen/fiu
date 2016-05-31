@@ -20,7 +20,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:background="@drawable/jianbian_scenelist"
+        android:background="@drawable/jianbian_head"
         >
         <ImageButton
             android:id="@+id/iv_detail"

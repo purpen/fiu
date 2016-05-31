@@ -56,6 +56,7 @@ public class AlbumCollection implements LoaderManager.LoaderCallbacks<Cursor>, A
             return;
         }
         albumAdapter.swapCursor(data);
+        if (data==null) return;
         HandlerUtils.getMainHandler().post(new Runnable() {
             @Override
             public void run() {

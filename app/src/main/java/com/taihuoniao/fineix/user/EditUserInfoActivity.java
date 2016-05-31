@@ -151,7 +151,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.custom_auth:
-                startActivity(new Intent(activity,RankTagActivity.class));
+                startActivity(new Intent(activity,CertificateStatusActivity.class));
                 break;
         }
     }

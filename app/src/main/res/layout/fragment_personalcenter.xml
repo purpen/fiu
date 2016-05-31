@@ -13,7 +13,9 @@
             android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dp50"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -54,6 +56,7 @@
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentRight="true"
                             android:src="@mipmap/v"
+                            android:visibility="gone"
                             />
                     </RelativeLayout>
                     <LinearLayout
@@ -270,7 +273,8 @@
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_feedback"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
@@ -305,15 +309,15 @@
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp45"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/jianbian_scenelist"
+        android:background="@drawable/jianbian_head"
         >
 
         <ImageButton
             android:id="@+id/iv_detail"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dp45"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:background="@null"
@@ -323,14 +327,14 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dp45"
             android:layout_centerInParent="true"
             android:src="@mipmap/head_logo" />
 
         <ImageView
             android:id="@+id/iv_calendar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp45"
             android:layout_alignParentRight="true"
             android:paddingBottom="@dimen/dp10"
             android:paddingLeft="@dimen/dp16"

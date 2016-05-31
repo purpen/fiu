@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .delayBeforeLoading(0)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)

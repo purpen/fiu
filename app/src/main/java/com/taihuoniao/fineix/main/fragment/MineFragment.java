@@ -243,9 +243,10 @@ public class MineFragment extends MyBaseFragment {
     protected void initViews() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
-            params.setMargins(0,getStatusBarHeight(),0,0);
-            rl.setLayoutParams(params);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
+//            params.setMargins(0,getStatusBarHeight(),0,0);
+//            rl.setLayoutParams(params);
+            rl.setPadding(0,getStatusBarHeight(),0,0);
         }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
