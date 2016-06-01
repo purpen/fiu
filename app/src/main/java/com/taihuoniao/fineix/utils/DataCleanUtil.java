@@ -10,57 +10,82 @@ import java.math.BigDecimal;
  * Created by android on 2016/2/27.
  */
 public class DataCleanUtil {
+    private static final int RATE = 1024;
+
     public static String getTotalCacheSize(Context context) throws Exception {
-        long cacheSize = getFolderSize(context.getCacheDir());//+getFolderSize(context.getFilesDir());
+        long cacheSize = getFolderSize(context.getCacheDir());
+        cacheSize += getFolderSize(context.getFilesDir());
+        cacheSize += getFolderSize(FileUtils.getSaveFolder(context.getPackageName()));
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             cacheSize += getFolderSize(context.getExternalCacheDir());
         }
         return getFormatSize(cacheSize);
     }
 
-    public static String clearAllCache(Context context) {
-        deleteFileSafely(context.getCacheDir());
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            deleteFileSafely(context.getExternalCacheDir());
+    public static void cleanAppData(Context context, String... filepath) {
+        cleanInternalCache(context);
+        cleanExternalCache(context);
+        cleanFiles(context);
+        if (filepath == null) {
+            return;
         }
-        return null;
+        for (String filePath : filepath) {
+            cleanCustomCache(filePath);
+        }
     }
 
-    private static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
+    public static void cleanInternalCache(Context context) {
+        deleteFolderFile(context.getCacheDir(), true);
+    }
+
+    public static void cleanFiles(Context context) {
+        deleteFolderFile(context.getFilesDir(), true);
+    }
+
+    public static void cleanExternalCache(Context context) {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            deleteFolderFile(context.getExternalCacheDir(), true);
+        }
+    }
+
+    public static void deleteFolderFile(File file, boolean deleteThisPath) {
+        if (file == null) return;
+        try {
+            if (file.isDirectory()) {// 如果下面还有文件
+                File files[] = file.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    deleteFolderFile(files[i], true);
                 }
             }
+            if (deleteThisPath) {
+                if (!file.isDirectory()) {// 如果是文件，删除
+                    file.delete();
+                } else {// 目录
+                    if (file.listFiles().length == 0) {// 目录下没有文件或者目录，删除
+                        file.delete();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return dir.delete();
     }
-    //安全删除文件
-    public static boolean deleteFileSafely(File file) {
-        if (file != null) {
-            String tmpPath = file.getParent() + File.separator + System.currentTimeMillis();
-            File tmp = new File(tmpPath);
-            file.renameTo(tmp);
-            return tmp.delete();
-        }
-        return false;
+
+    public static void cleanCustomCache(String filePath) {
+        deleteFolderFile(new File(filePath), true);
     }
-    // 获取文件
-    //Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
-    //Context.getExternalCacheDir() --> SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
+
+
     public static long getFolderSize(File file) throws Exception {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
             for (int i = 0; i < fileList.length; i++) {
-                // 如果下面还有文件
                 if (fileList[i].isDirectory()) {
-                    size = size + getFolderSize(fileList[i]);
+                    size += getFolderSize(fileList[i]);
                 } else {
-                    size = size + fileList[i].length();
+                    size += fileList[i].length();
                 }
             }
         } catch (Exception e) {
@@ -69,38 +94,30 @@ public class DataCleanUtil {
         return size;
     }
 
-    /**
-     * 格式化单位
-     * @param size
-     */
     public static String getFormatSize(double size) {
-        double kiloByte = size / 1024;
-        if (kiloByte < 1) {
-            return size + "Byte";
-        }
-
-        double megaByte = kiloByte / 1024;
-        if (megaByte < 1) {
-            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
-            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
+        BigDecimal result;
+        size = size / (RATE * RATE);
+        if (size < RATE) {
+            result = new BigDecimal(Double.toString(size));
+            return result.setScale(2, BigDecimal.ROUND_HALF_UP)
                     .toPlainString() + "KB";
         }
 
-        double gigaByte = megaByte / 1024;
-        if (gigaByte < 1) {
-            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
-            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+        size = size / RATE;
+        if (size < RATE) {
+            result = new BigDecimal(Double.toString(size));
+            return result.setScale(2, BigDecimal.ROUND_HALF_UP)
                     .toPlainString() + "MB";
         }
 
-        double teraBytes = gigaByte / 1024;
-        if (teraBytes < 1) {
-            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
-            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+        size = size / RATE;
+        if (size < RATE) {
+            result = new BigDecimal(Double.toString(size));
+            return result.setScale(2, BigDecimal.ROUND_HALF_UP)
                     .toPlainString() + "GB";
         }
-        BigDecimal result4 = new BigDecimal(teraBytes);
-        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+        result = new BigDecimal(size);
+        return result.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
                 + "TB";
     }
 }

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.ViewGroup;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -60,8 +61,10 @@ public class AboutUsActivity extends BaseActivity {
             }
         });
         WebSettings webSettings = mWebAbout.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setBuiltInZoomControls(true);
+        webSettings.setJavaScriptEnabled(false);
+        webSettings.setBuiltInZoomControls(false);
+        webSettings.setAppCacheEnabled(true);
+
         // 为了让javascript中的alert()执行，必须设置以下语句
         mWebAbout.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -93,4 +96,10 @@ public class AboutUsActivity extends BaseActivity {
         mWebAbout.loadUrl(url);
     }
 
+    @Override
+    protected void onDestroy() {
+        ViewGroup view = (ViewGroup) getWindow().getDecorView();
+        view.removeAllViews();
+        super.onDestroy();
+    }
 }

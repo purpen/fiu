@@ -161,7 +161,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             String title = "有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
             String titleUrl = "http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
-            String imgPath = FileUtils.getSavePath("Fiu") + "/share.png";
+            String imgPath = FileUtils.getSavePath(getPackageName()) + "/share.png";
             FileUtils.bitmapToFile(ImageUtils.convertViewToBitmap(rl_box), imgPath);
             Platform.ShareParams params = null;
             switch (i) { //微信好友
@@ -218,8 +218,8 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
 
         switch (v.getId()) {
             case R.id.tv_take_photo:
-                if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath("Fiu") + "/bar_code.png")) {
-                    Util.makeToast("二维码已保存到Fiu文件夹下");
+                if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath(getPackageName()) + "/bar_code.png")) {
+                    Util.makeToast("二维码已保存到"+getPackageName()+"文件夹下");
                 } else {
                     Util.makeToast("SD卡不可写，二维码保存失败");
                 }

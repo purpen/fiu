@@ -26,7 +26,6 @@ import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
@@ -128,7 +127,7 @@ public class HotCitiesActivity extends BaseActivity<City> {
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
-                Util.makeToast("网络异常,请确保网络畅通");
+                dialog.showErrorWithStatus("网络异常,请确保网络畅通");
             }
         });
 

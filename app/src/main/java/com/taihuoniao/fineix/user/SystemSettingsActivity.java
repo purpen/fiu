@@ -12,6 +12,7 @@ import android.view.View;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
@@ -21,6 +22,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
+import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -29,6 +31,8 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.CustomShareView;
+import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -56,7 +60,7 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
-    private String cacheSize;
+    private SVProgressHUD svProgressHUD;
     public SystemSettingsActivity(){
         super(R.layout.activity_system_settings);
     }
@@ -64,6 +68,7 @@ public class SystemSettingsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"系统设置");
+        svProgressHUD=new SVProgressHUD(this);
         item_update_psd.setTVStyle(0,"修改密码", R.color.color_333);
         item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
         item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
@@ -73,27 +78,12 @@ public class SystemSettingsActivity extends BaseActivity{
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
         setCacheSize();
-//        getAppPemission();
+//        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
+//        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
+//        LogUtil.e("getExternalCacheDir",getExternalCacheDir().getAbsolutePath());
+//        LogUtil.e("getExternalCacheDirLen",getExternalCacheDir().length()+"");
+//        LogUtil.e("ImageLoaderCache",ImageLoader.getInstance().getDiskCache().getDirectory().getAbsolutePath());
     }
-
-//    public void getAppPemission() {
-//        PackageManager pm = this.getPackageManager();
-//        PackageInfo info;
-//        try {
-//            info = pm.getPackageInfo(getPackageName(),PackageManager.GET_PERMISSIONS);
-//            String[] packagePermissions = info.requestedPermissions;
-//            LogUtil.e("AppPemission",info.packageName);
-//            if (packagePermissions != null) {
-//                for (int i = 0; i < packagePermissions.length; i++) {
-//                    LogUtil.e("result", packagePermissions[i]);
-//                }
-//            } else {
-//                LogUtil.e("name", info.packageName + ": no permissions");
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @OnClick({R.id.item_update_psd,R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
     void onClick(View view){
@@ -106,7 +96,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 logout();
                 break;
             case R.id.item_clear_cache:
-                myAsyncTask.execute();
+                new MyAsyncTask().execute();
                 break;
             case R.id.item_to_comment:
                 Uri uri = Uri.parse("market://details?id="+getPackageName());
@@ -144,9 +134,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()){//   退出成功跳转首页
-                    Util.makeToast("退出成功");
-                }else {
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showSuccessWithStatus("退出成功");
                 }
                 SPUtil.remove(activity,DataConstants.LOGIN_INFO);
                 Intent intent=new Intent(activity,MainActivity.class);
@@ -157,12 +145,12 @@ public class SystemSettingsActivity extends BaseActivity{
 
             @Override
             public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG,"网络异常,退出登录失败");
+                LogUtil.e(TAG,s);
             }
         });
     }
 
-    private AsyncTask myAsyncTask=new AsyncTask() {
+    private class MyAsyncTask extends AsyncTask{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -171,8 +159,7 @@ public class SystemSettingsActivity extends BaseActivity{
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                DataCleanUtil.clearAllCache(activity);
-                cacheSize = DataCleanUtil.getTotalCacheSize(activity);
+                DataCleanUtil.cleanAppData(activity, FileUtils.getSavePath(getPackageName()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -183,9 +170,9 @@ public class SystemSettingsActivity extends BaseActivity{
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
             setCacheSize();
-            Util.makeToast("缓存清理完毕");
+            svProgressHUD.showSuccessWithStatus("清理完成");
         }
-    };
+    }
 
     private void setCacheSize(){
         try {
