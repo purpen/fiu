@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -26,6 +24,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
@@ -47,9 +46,9 @@ public class ImageCropActivity extends BaseActivity {
     Button bt_cancel;
     @Bind(R.id.bt_clip)
     Button bt_clip;
-    @Bind(R.id.progress_bar)
-    ProgressBar progress_bar;
     private String page;
+    private WaittingDialog dialog;
+    private SVProgressHUD svProgressHUD;
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
         options = new DisplayImageOptions.Builder()
@@ -83,6 +82,8 @@ public class ImageCropActivity extends BaseActivity {
     @Override
     protected void initView() {
         if (uri == null) return;
+        dialog=new WaittingDialog(this);
+        svProgressHUD=new SVProgressHUD(this);
         String path = FileUtils.getRealFilePath(getApplicationContext(), uri);
 //        LogUtil.e("path",path);
         ImageLoader.getInstance().displayImage("file:///"+path,csiv,options);
@@ -126,13 +127,13 @@ public class ImageCropActivity extends BaseActivity {
                 @Override
                 public void onStart() {
                     setViewEnable(false);
-                    if (progress_bar!=null) progress_bar.setVisibility(View.VISIBLE);
+                    if (dialog!=null && !activity.isFinishing()) dialog.show();
                 }
 
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     setViewEnable(true);
-                    progress_bar.setVisibility(View.GONE);
+                    if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     if (responseInfo == null) {
                         return;
                     }
@@ -142,25 +143,25 @@ public class ImageCropActivity extends BaseActivity {
                     LogUtil.e(TAG, responseInfo.result);
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()) {
-                        Util.makeToast("背景图片上传成功");
+                        svProgressHUD.showSuccessWithStatus("背景图上传成功");
                         activity.finish();
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     setViewEnable(true);
-                    progress_bar.setVisibility(View.GONE);
-                    Util.makeToast(s);
+                    if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
+                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             setViewEnable(true);
-            progress_bar.setVisibility(View.GONE);
+            if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
         }
 
     }
@@ -178,13 +179,13 @@ public class ImageCropActivity extends BaseActivity {
             ClientDiscoverAPI.uploadImg(imgStr,type, new RequestCallBack<String>() {
                 @Override
                 public void onStart() {
-                    if (progress_bar!=null) progress_bar.setVisibility(View.VISIBLE);
+                    if (dialog!=null && !activity.isFinishing()) dialog.show();
                     setViewEnable(false);
                 }
 
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
-                    progress_bar.setVisibility(View.GONE);
+                    if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
                     if (responseInfo==null){
                         return;
@@ -195,28 +196,28 @@ public class ImageCropActivity extends BaseActivity {
 
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()){
+                        svProgressHUD.showSuccessWithStatus("头像上传成功");
                         if (listener!=null){
                             listener.onClipComplete(bitmap);
                         }
                         finish();
-                        Util.makeToast("头像上传成功");
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
-                    progress_bar.setVisibility(View.GONE);
+                    if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
-                    Util.makeToast(s);
+                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
             setViewEnable(true);
-            progress_bar.setVisibility(View.GONE);
+            if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
         }
     }
 

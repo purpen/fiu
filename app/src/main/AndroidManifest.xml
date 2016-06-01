@@ -35,7 +35,9 @@
         <activity
             android:name=".user.UserGuideActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

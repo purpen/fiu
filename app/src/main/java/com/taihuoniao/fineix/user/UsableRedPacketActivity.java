@@ -220,7 +220,7 @@ public class UsableRedPacketActivity extends BaseActivity {
         ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage), PAGE_SIZE, UNUSED, UNTIMEOUT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing() && mDialog != null) mDialog.show();
+                if (!activity.isFinishing() && mDialog != null&& isFirstLoad) mDialog.show();
             }
 
             @Override

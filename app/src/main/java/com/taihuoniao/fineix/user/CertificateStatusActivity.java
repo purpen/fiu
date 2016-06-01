@@ -86,13 +86,13 @@ public class CertificateStatusActivity extends BaseActivity{
                 }else { //首次参加认证
                     ll_first_auth.setVisibility(View.VISIBLE);
                 }
-                Util.makeToast(response.getMessage());
+//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
-                Util.makeToast("网络异常，请保持网络畅通");
+                dialog.showErrorWithStatus("网络异常，请保持网络畅通");
             }
         });
     }

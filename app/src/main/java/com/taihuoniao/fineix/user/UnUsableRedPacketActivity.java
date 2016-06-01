@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -66,6 +67,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     private String mRid;//订单号
     private SVProgressHUD mDialog;
     private UnUsableRedPacketAdapter adapter;
+    private boolean isFirstLoad=true;
     public UnUsableRedPacketActivity(){
         super(R.layout.activity_red_bag);
     }
@@ -184,7 +186,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
         ClientDiscoverAPI.myRedBagNet(String.valueOf(curPage),PAGE_SIZE,ALLUSED,TIMEOUT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&&mDialog!=null) mDialog.show();
+                if (!activity.isFinishing()&&mDialog!=null&& isFirstLoad) mDialog.show();
             }
 
             @Override
@@ -214,6 +216,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
         pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
+                isFirstLoad=false;
                 requestNet();
             }
         });
@@ -221,6 +224,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
         pull_lv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isFirstLoad=false;
                 curPage=1;
                 mList.clear();
                 requestNet();

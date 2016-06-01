@@ -15,6 +15,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     protected DisplayImageOptions options;
     private int size;
     private boolean isInfiniteLoop;
-
+    private SVProgressHUD svProgressHUD;
     public int getSize(){
         return size;
     }
@@ -33,6 +34,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         this.activity = activity;
         this.imageList = imageList;
         this.size = imageList.size();
+        this.svProgressHUD=new SVProgressHUD(activity);
         isInfiniteLoop = false;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.ic_launcher)
@@ -75,12 +77,13 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         final T content = imageList.get(getPosition(position));
 
         if (content instanceof Integer){
-            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView,options);
+            holder.imageView.setImageResource((Integer) content);
+//            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView,options);
         }
 
         if (content instanceof String){
             if (TextUtils.isEmpty((String)content)){
-                Util.makeToast("图片链接为空");
+                svProgressHUD.showErrorWithStatus("图片链接为空");
             }else {
                 ImageLoader.getInstance().displayImage((String) content,holder.imageView);
             }

@@ -218,12 +218,16 @@ public class EditUserInfoActivity extends BaseActivity {
     };
     @Override
     protected void requestNet() {
-        dialog.show();
         ProvinceUtil.init();
         ClientDiscoverAPI.getMineInfo(LoginInfo.getUserId()+"",new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (!activity.isFinishing()&&dialog!=null) dialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -237,17 +241,17 @@ public class EditUserInfoActivity extends BaseActivity {
                     });
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    Util.makeToast("对不起,数据异常");
+                    if (!activity.isFinishing()&&dialog!=null) dialog.showErrorWithStatus("对不起,数据异常");
                 }
                 refreshUI();
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
+                if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
-                Util.makeToast("对不起,网络请求失败");
+                dialog.showErrorWithStatus("对不起,网络请求失败");
             }
         });
     }
@@ -366,17 +370,17 @@ public class EditUserInfoActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()){
-                    Util.makeToast(response.getMessage());
+                    dialog.showSuccessWithStatus(response.getMessage());
                     return;
                 }
 
-                Util.makeToast(response.getMessage());
+                dialog.showErrorWithStatus(response.getMessage());
 
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
 

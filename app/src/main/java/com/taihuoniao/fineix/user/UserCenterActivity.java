@@ -223,16 +223,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    Util.makeToast("对不起,数据异常");
+                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(s))
-                    LogUtil.e(TAG, s);
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
 
@@ -277,14 +275,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshCJUI(list);
                     return;
                 }
-                Util.makeToast(response.getMessage());
+                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -345,14 +342,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshQJUI(list);
                     return;
                 }
-                Util.makeToast(listBean.getMessage());
+                dialog.showErrorWithStatus(listBean.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -598,13 +594,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
 
-                            Util.makeToast(response.getMessage());
+                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
-                            Util.makeToast(s);
+                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 } else {
@@ -624,14 +620,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
 
-                            Util.makeToast(response.getMessage());
+                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            Util.makeToast(s);
+                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 }
@@ -678,7 +674,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     .setEngine(new ImageLoaderEngine())
                     .forResult(REQUEST_CODE_PICK_IMAGE);
         }else {
-            Util.makeToast("请确认已经插入SD卡");
+            dialog.showErrorWithStatus("未检测到SD卡");
         }
 //        Intent intent = new Intent(Intent.ACTION_PICK);
 //        intent.setType("image/*");//相片类型
@@ -692,7 +688,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
-            Util.makeToast("请确认已经插入SD卡");
+            dialog.showErrorWithStatus("未检测到SD卡");
         }
     }
 

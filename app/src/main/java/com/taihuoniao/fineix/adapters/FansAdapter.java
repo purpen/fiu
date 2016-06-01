@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -43,16 +44,17 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
-
+    private SVProgressHUD svProgressHUD;
     public FansAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
+        this.svProgressHUD=new SVProgressHUD(activity);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)
                 .showImageForEmptyUri(R.mipmap.default_focus_head)
                 .showImageOnFail(R.mipmap.default_focus_head)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
@@ -126,7 +128,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 //                        Util.makeToast(response.getMessage());
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showErrorWithStatus(response.getMessage());
 
                 }
 
@@ -134,7 +136,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    Util.makeToast(s);
+                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } else {
@@ -181,16 +183,17 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                                 item.type = TYPE1;
                                 notifyDataSetChanged();
 //                                Util.makeToast(response.getMessage());
+                                svProgressHUD.showSuccessWithStatus("已取消关注");
                                 return;
                             }
-                            Util.makeToast(response.getMessage());
+                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             view.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            Util.makeToast(s);
+                            svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 } else { //处理别人粉丝列表的关注和取消关注操作
@@ -250,7 +253,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 //                        Util.makeToast(response.getMessage());
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showErrorWithStatus(response.getMessage());
 
                 }
 
@@ -258,7 +261,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    Util.makeToast(s);
+                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } else if (item.follows.is_love == LOVE) {//取消关注
@@ -274,16 +277,17 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();
 //                        Util.makeToast(response.getMessage());
+                        svProgressHUD.showSuccessWithStatus("已取消关注");
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    svProgressHUD.showErrorWithStatus(response.getMessage());;
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    Util.makeToast(s);
+                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         }

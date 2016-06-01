@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.SegmentedGroup;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.List;
@@ -58,7 +59,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     private static final String TYPE = "3";
     private Bitmap bitmap;
     private List<Uri> mSelected;
-
+    private SVProgressHUD svProgressHUD;
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -66,6 +67,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "完善个人资料");
+        svProgressHUD=new SVProgressHUD(this);
     }
 
     @OnClick({R.id.btn, R.id.riv})
@@ -137,18 +139,25 @@ public class CompleteUserInfoActivity extends BaseActivity {
         String nickname = et_nickname.getText().toString().trim();
         String sign = et_sign.getText().toString().trim();
         if (TextUtils.isEmpty(nickname)) {
-            Util.makeToast("请填写昵称");
+            svProgressHUD.showErrorWithStatus("请填写昵称");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
-            Util.makeToast("请填写个性签名");
+            svProgressHUD.showErrorWithStatus("请填写个性签名");
             return;
         }
 
         ClientDiscoverAPI.updateNickNameSummary(nickname, sign, gender, new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                super.onStart();
+                if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.dismiss();
                 if (responseInfo == null) {
                     return;
                 }
@@ -164,18 +173,18 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     if (OrderInterestQJActivity.instance != null) {
                         OrderInterestQJActivity.instance.finish();
                     }
+                    if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.showSuccessWithStatus(response.getMessage());
                     finish();
-                    Util.makeToast(response.getMessage());
                     return;
                 }
-
-                Util.makeToast(response.getMessage());
+                svProgressHUD.showErrorWithStatus(response.getMessage());
 
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                Util.makeToast(s);
+                if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.dismiss();
+                svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
@@ -225,7 +234,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
-            Util.makeToast("请确认已经插入SD卡");
+            svProgressHUD.showErrorWithStatus("未检测到SD卡");
         }
     }
 

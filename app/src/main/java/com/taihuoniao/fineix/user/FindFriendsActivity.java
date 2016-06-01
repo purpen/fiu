@@ -142,14 +142,13 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                     refreshUI(list);
                     return;
                 }
-                Util.makeToast(response.getMessage());
+                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
@@ -194,13 +193,13 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 3:
-                    Util.makeToast("对不起，分享出错");
+                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
-                    Util.makeToast("您取消了分享");
+//                    dialog.showErrorWithStatus("您取消了分享");
                     break;
                 case 1:
-                    Util.makeToast("分享成功");
+                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }

@@ -3,9 +3,10 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -14,16 +15,13 @@ import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.view.CustomAutoScrollViewPager;
 import com.taihuoniao.fineix.view.ScrollableView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * @author lilin
@@ -94,7 +92,7 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.guide1);
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
-        scrollableView.setAdapter(new ViewPagerAdapter<Integer>(activity, list));
+        scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
         scrollableView.showIndicators();
     }
 

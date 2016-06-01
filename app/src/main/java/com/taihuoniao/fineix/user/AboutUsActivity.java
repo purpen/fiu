@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 
@@ -21,7 +22,7 @@ public class AboutUsActivity extends BaseActivity {
     private WebView mWebAbout;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    private ProgressDialog mDialog;
+    private WaittingDialog dialog;
     private String url;
     private String title;
     public AboutUsActivity(){
@@ -43,26 +44,19 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,title);
-        mDialog = new ProgressDialog(this);
-        mDialog.setMessage("正为您拼命加载...");
-        mDialog.show();
-
+        dialog = new WaittingDialog(this);
         mWebAbout = (WebView) findViewById(R.id.webView_about);
         mWebAbout.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if(!mDialog.isShowing()){
-                    mDialog.show();
-                }
+                if (!activity.isFinishing() && dialog!=null) dialog.show();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(mDialog.isShowing()){
-                    mDialog.dismiss();
-                }
+                if (!activity.isFinishing() && dialog!=null) dialog.dismiss();
             }
         });
         WebSettings webSettings = mWebAbout.getSettings();

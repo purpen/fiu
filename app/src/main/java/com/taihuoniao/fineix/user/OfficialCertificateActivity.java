@@ -31,8 +31,10 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.List;
@@ -65,8 +67,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     RelativeLayout rl_id;
     private Bitmap bitmap_id;
     private Bitmap bitmap_card;
-    @Bind(R.id.progress_bar)
-    ProgressBar progress_bar;
+    private WaittingDialog dialog;
+    private SVProgressHUD svProgressHUD;
     @Bind(R.id.iv_clear)
     ImageButton iv_clear;
     @Bind(R.id.btn)
@@ -91,6 +93,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"官方认证");
+        dialog=new WaittingDialog(this);
+        svProgressHUD=new SVProgressHUD(this);
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
         for (int i = 0; i < stringArray.length; i++) {
             label_view.addLabel(stringArray[i]);
@@ -172,28 +176,28 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private void submitData() {
         String label = tv_tag.getText().toString().trim();
         if (TextUtils.isEmpty(label)) {
-            Util.makeToast("请选择认证身份");
+            svProgressHUD.showErrorWithStatus("请选择认证身份");
             return;
         }
 
         String info = et_info.getText().toString().trim();
         if (TextUtils.isEmpty(info)) {
-            Util.makeToast("请填写认证信息");
+            svProgressHUD.showErrorWithStatus("请填写认证信息");
             return;
         }
 
         String contacts = et_contacts.getText().toString().trim();
         if (TextUtils.isEmpty(contacts)) {
-            Util.makeToast("请填写联系方式");
+            svProgressHUD.showErrorWithStatus("请填写联系方式");
             return;
         }
         if (authData==null){//如果是首次认证身份证和名片必传
             if (bitmap_id == null) {
-                Util.makeToast("请先选择身份证");
+                svProgressHUD.showErrorWithStatus("请先选择身份证");
                 return;
             }
             if (bitmap_card == null) {
-                Util.makeToast("请先选择名片");
+                svProgressHUD.showErrorWithStatus("请先选择名片");
                 return;
             }
         }
@@ -207,7 +211,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         ClientDiscoverAPI.uploadIdentityInfo(id,info, label, contacts, Util.saveBitmap2Base64Str(bitmap_id), Util.saveBitmap2Base64Str(bitmap_card), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (progress_bar != null) progress_bar.setVisibility(View.VISIBLE);
+                if (!activity.isFinishing()&&dialog != null) dialog.show();
             }
 
             @Override
@@ -215,26 +219,26 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 if (bitmap_id != null) bitmap_id.recycle();
                 if (bitmap_card != null) bitmap_card.recycle();
                 setViewsEnable(true);
-                if (progress_bar != null) progress_bar.setVisibility(View.GONE);
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
-                    Util.makeToast("您的认证信息已提交成功,我们会尽快给予审核！");
+                    svProgressHUD.showSuccessWithStatus("认证信息提交成功");
                     finish();
                     if (RankTagActivity.instance!=null){
                         RankTagActivity.instance.finish();
                     }
                     return;
                 }
-                Util.makeToast(response.getMessage());
+                svProgressHUD.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 setViewsEnable(true);
-                if (progress_bar != null) progress_bar.setVisibility(View.GONE);
-                Util.makeToast("网络异常，请确保网络畅通");
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                svProgressHUD.showErrorWithStatus("网络异常，请确保网络畅通");
             }
         });
 
