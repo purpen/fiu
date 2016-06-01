@@ -331,8 +331,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     public Fragment getVisibleFragment(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
+        List<Fragment> fragments = fm.getFragments();
         for(Fragment fragment : fragments){
             if(fragment != null && fragment.isVisible())
                 return fragment;
