@@ -87,8 +87,10 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     private void initGuide() {
-        isGuide=true;
-        list = new ArrayList<Integer>();
+        if (TextUtils.isEmpty(fromPage)){
+            isGuide=true;
+        }
+        list = new ArrayList<>();
         list.add(R.mipmap.guide1);
         list.add(R.mipmap.login_or_regist);
         list.add(R.mipmap.login_or_regist);
