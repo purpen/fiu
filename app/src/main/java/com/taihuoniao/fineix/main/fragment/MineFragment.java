@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -236,8 +237,9 @@ public class MineFragment extends MyBaseFragment {
             if (isInitLoad) {
                 isInitLoad = false;
             } else {
-                LogUtil.e("非首次onResume", "加载");
-                loadData();
+                if (((MainActivity)activity).getVisibleFragment() instanceof MineFragment){
+                    loadData();
+                }
             }
         } else {
 //            rl.setVisibility(View.VISIBLE);

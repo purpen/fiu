@@ -33,6 +33,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
                 .showImageOnFail(R.mipmap.default_background_500_500)
+                .resetViewBeforeLoading(true)
                 .delayBeforeLoading(0)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)

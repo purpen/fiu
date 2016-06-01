@@ -1,5 +1,4 @@
 package com.taihuoniao.fineix.main;
-
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;

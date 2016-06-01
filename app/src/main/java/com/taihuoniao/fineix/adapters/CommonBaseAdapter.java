@@ -26,6 +26,7 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
                 .showImageOnFail(R.mipmap.default_background_500_500)
+                .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
