@@ -23,7 +23,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.IsLogin;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
@@ -92,11 +91,6 @@ public class MainApplication extends Application {
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
-    }
-
-    // 这里是获取IsLogin这个对象的实例
-    public static IsLogin getIsLoginInfo() {
-        return IsLogin.getInstance();
     }
 
     public int getScreenHeight() {

@@ -56,14 +56,26 @@
             android:padding="@dimen/dp16"
             android:src="@mipmap/edit_info" />
     </RelativeLayout>
-    <TextView
-        android:id="@+id/tv_tips"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_tips"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="380dp"
-        android:textSize="@dimen/sp12"
-        android:textColor="@color/color_333"
-        android:visibility="gone"
-        />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="390dp"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@mipmap/default_cjqj"
+            />
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp12"
+            android:textColor="@color/color_333"
+            android:layout_marginTop="@dimen/dp5"
+            />
+    </LinearLayout>
 </RelativeLayout>

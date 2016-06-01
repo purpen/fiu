@@ -325,17 +325,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
-            android:name=".map.POIListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity
             android:name=".scene.CropPictureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".map.BaiDuLBSActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
         <activity
             android:name=".scene.EditPictureActivity"
             android:screenOrientation="portrait"
@@ -391,10 +383,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"
             />
-        <activity
-            android:name=".order.OrderListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".map.BDSearchAddressActivity"

@@ -68,6 +68,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private LinearLayout ll_btn_box;
     @Bind(R.id.tv_title)
     TextView tv_title;
+    @Bind(R.id.ll_tips)
+    LinearLayout ll_tips;
     private RoundedImageView riv;
     private RoundedImageView riv_auth;
     private TextView tv_real;
@@ -139,7 +141,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         curPage = 1;
         mQJList.clear();
         mSceneList.clear();
-        tv_tips.setVisibility(View.GONE);
+        ll_tips.setVisibility(View.GONE);
     }
 
     @Override
@@ -297,10 +299,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (list.size() == 0) {
             if (isFirstLoad) {
                 isFirstLoad = false;
-                tv_tips.setVisibility(View.VISIBLE);
+                ll_tips.setVisibility(View.VISIBLE);
                 tv_tips.setText(R.string.user_center_cj_tip);
             } else {
-                tv_tips.setVisibility(View.GONE);
+                ll_tips.setVisibility(View.GONE);
             }
             return;
         }
@@ -360,10 +362,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (list.size() == 0) {
             if (isFirstLoad) {
                 isFirstLoad = false;
-                tv_tips.setVisibility(View.VISIBLE);
+                ll_tips.setVisibility(View.VISIBLE);
                 tv_tips.setText(R.string.user_center_qj_tip);
             } else {
-                tv_tips.setVisibility(View.GONE);
+                ll_tips.setVisibility(View.GONE);
             }
             return;
         }

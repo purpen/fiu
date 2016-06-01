@@ -97,7 +97,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     startActivity(intent);
                                     break;
                             }
-                            MainApplication.getIsLoginInfo().setIs_login("1");
                             mDialog.dismiss();
                             if (ToRegisterActivity.instance != null) {
                                 ToRegisterActivity.instance.finish();

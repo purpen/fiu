@@ -1,16 +1,9 @@
 package com.taihuoniao.fineix.utils;
 import android.app.Activity;
-import android.util.Log;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
@@ -62,14 +55,6 @@ public class MapUtil {
         mGeoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
             public void onGetGeoCodeResult(GeoCodeResult result) {
-//                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-//                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
-//                    return;
-//                }
-//                String strInfo = String.format("纬度：%f 经度：%f",
-//                        result.getLocation().latitude, result.getLocation().longitude);
-////                Toast.makeText(activity, strInfo, Toast.LENGTH_LONG).show();
-//                LogUtil.e("onGetReverseGeoCodeResult",strInfo+"strInfo");
                 if (listener!=null){
                     listener.onGetGeoCodeResult(result);
                 }
@@ -77,18 +62,9 @@ public class MapUtil {
 
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-//                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-//                    LogUtil.e("onGetReverseGeoCodeResult","抱歉，未能找到结果");
-//                }
                 if (listener!=null){
                     listener.onGetReverseGeoCodeResult(result);
                 }
-
-//                LogUtil.e("onGetReverseGeoCodeResult",result.getAddress()+"getAddress");
-//                List<PoiInfo> list = result.getPoiList();
-//                for (PoiInfo info: list) {
-//                    LogUtil.e("address",info.address);
-//                }
             }
         });
         mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption()
@@ -121,20 +97,12 @@ public class MapUtil {
         mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
-//                if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
-//                    LogUtil.e("onGetPoiResult","未找到结果");
-//                }
                 if (listener!=null){
                     listener.onGetPoiResult(result);
                 }
             }
             @Override
             public void onGetPoiDetailResult(PoiDetailResult result) {
-//                if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-//                    LogUtil.e("onGetPoiDetailResult", "抱歉，未找到结果");
-//                } else {
-//                    LogUtil.e("onGetPoiDetailResult",result.getName() + ": " + result.getAddress());
-//                }
                 if (listener!=null){
                     listener.onGetPoiDetailResult(result);
                 }

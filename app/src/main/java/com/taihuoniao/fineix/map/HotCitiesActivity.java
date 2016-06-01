@@ -79,14 +79,6 @@ public class HotCitiesActivity extends BaseActivity<City> {
         super.installListener();
     }
 
-//    private AdapterView.OnItemClickListener itemClickListener=new AdapterView.OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//            Intent intent=new Intent(activity,BaiDuLBSActivity.class);
-//            intent.putExtra(TAG,cities.get(i));
-//            startActivity(intent);
-//        }
-//    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
