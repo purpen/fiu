@@ -46,7 +46,6 @@ public class UserGuideActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!isTaskRoot()){
-            intent=getIntent();
             if (intent.hasCategory(Intent.CATEGORY_LAUNCHER)&&TextUtils.equals(Intent.ACTION_MAIN,intent.getAction())){
                 finish();
                 return;

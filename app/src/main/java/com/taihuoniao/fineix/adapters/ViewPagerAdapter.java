@@ -98,6 +98,8 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             public void onClick(View v) {
                                 if (TextUtils.isEmpty(UserGuideActivity.fromPage)){
                                     activity.startActivity(new Intent(activity,MainActivity.class));
+                                }else {
+                                    UserGuideActivity.fromPage=null;
                                 }
                                 activity.finish();
                             }
