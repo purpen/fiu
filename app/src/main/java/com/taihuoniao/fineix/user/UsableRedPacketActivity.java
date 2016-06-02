@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -52,14 +57,6 @@ public class UsableRedPacketActivity extends BaseActivity {
     LinearLayout foot_view;
     private static final String PAGE_SIZE = "10";
     private int curPage = 1;
-    private boolean mInLoading = false;
-    private List<RedBagUntimeout> mUntimeoutList = new ArrayList<>();
-    private View mUntimeoutView;
-    private View mTimeoutView;
-    private LinearLayout mUntimeoutLinear;
-    private LinearLayout mTimeoutLinear;
-    private TextView mLook;
-    private LinearLayout mLinearLook;
     private List<RedPacketData.RedPacketItem> mList = new ArrayList<>();
     private ListView lv;
     public static final String UNUSED = "1";//未使用过红包
@@ -69,13 +66,14 @@ public class UsableRedPacketActivity extends BaseActivity {
     public static final String UNTIMEOUT = "1";//未过期
 
     public static final String TIMEOUT = "2";//已过期
-    private int total_rows;
-    private boolean mLookClick = false;
     private String mRid;//订单号
     private SVProgressHUD mDialog;
     private UsableRedPacketAdapter adapter;
-//    private View footerView;
-
+    private int mCurrentScrollState;
+    private boolean bIsMoved = false;
+    private boolean bIsDown = false;
+    private int mDeltaY;
+    private float mMotionY;
     public UsableRedPacketActivity() {
         super(R.layout.activity_red_bag);
     }
@@ -85,9 +83,6 @@ public class UsableRedPacketActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DataConstants.CUSTOM_PULLTOREFRESH_HOME:
-                    dataLoadFinished();
-                    break;
                 case DataConstants.PARSER_CHECK_REDBAG_USABLE:
                     mDialog.dismiss();
                     if (msg.obj != null) {
@@ -108,79 +103,6 @@ public class UsableRedPacketActivity extends BaseActivity {
                         }
                     }
                     break;
-                case DataConstants.PARSER_MY_REDBAG_UNTIMEOUT:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof List) {
-                            mUntimeoutList.clear();
-                            mUntimeoutList.addAll((List<RedBagUntimeout>) msg.obj);
-                            if (mUntimeoutLinear != null) {
-                                mUntimeoutLinear.removeAllViews();
-                            }
-                            for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mUntimeoutView = LayoutInflater.from(UsableRedPacketActivity.this).inflate(R.layout.account_redbag_untimeout, null);
-
-                                TextView mRedbagCode = (TextView) mUntimeoutView
-                                        .findViewById(R.id.tv_redbag_code);
-                                TextView mMinMoney = (TextView) mUntimeoutView
-                                        .findViewById(R.id.tv_min_money);
-                                TextView mRedbagMoney = (TextView) mUntimeoutView
-                                        .findViewById(R.id.tv_money);
-
-                                mRedbagCode
-                                        .setText("红包码：" + mUntimeoutList.get(i).getCode());
-                                mMinMoney
-                                        .setText("最低使用限额：" + mUntimeoutList.get(i).getMin_amount() + "");
-                                mRedbagMoney.setText(mUntimeoutList.get(i).getAmount() + "");
-                                final int j = i;
-                                mUntimeoutView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (mRid != null) {
-//                                            验证红包是否可用
-                                            DataPaser.checkRedbagUsableParser(mRid, mUntimeoutList.get(j).getCode(), mHandler);
-                                        }
-                                    }
-                                });
-                                mUntimeoutLinear.addView(mUntimeoutView);
-                            }
-                            mDialog.dismiss();
-                        }
-                    }
-                    break;
-                case DataConstants.PARSER_MY_REDBAG_TIMEOUT:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof List) {
-                            mUntimeoutList.clear();
-                            mUntimeoutList.addAll((List<RedBagUntimeout>) msg.obj);
-                            mLinearLook.setVisibility(View.GONE);
-                            if (mTimeoutLinear != null) {
-                                mTimeoutLinear.removeAllViews();
-                            }
-                            for (int i = 0; i < mUntimeoutList.size(); i++) {
-                                mTimeoutView = LayoutInflater.from(UsableRedPacketActivity.this).inflate(R.layout.account_redbag_timeout, null);
-                                TextView mRedbagCode = (TextView) mTimeoutView
-                                        .findViewById(R.id.tv_redbag_code);
-                                TextView mMinMoney = (TextView) mTimeoutView
-                                        .findViewById(R.id.tv_min_money);
-                                TextView mRedbagMoney = (TextView) mTimeoutView
-                                        .findViewById(R.id.tv_money);
-                                TextView mThnRedbag = (TextView) mTimeoutView.findViewById(R.id.tv_thn_redbag);
-                                TextView mMoneySign = (TextView) mTimeoutView.findViewById(R.id.tv_money_sign);
-                                mThnRedbag.setTextColor(getResources().getColor(R.color.color_333));
-                                mMoneySign.setTextColor(getResources().getColor(R.color.color_333));
-                                mRedbagCode.setText("红包码：" + mUntimeoutList.get(i).getCode());
-                                mRedbagCode.setTextColor(getResources().getColor(R.color.color_333));
-                                mMinMoney.setText("最低使用限额：" + mUntimeoutList.get(i).getMin_amount() + "");
-                                mMinMoney.setTextColor(getResources().getColor(R.color.color_333));
-                                mRedbagMoney.setText(mUntimeoutList.get(i).getAmount() + "");
-                                mRedbagMoney.setTextColor(getResources().getColor(R.color.color_333));
-
-                                mTimeoutLinear.addView(mTimeoutView);
-                            }
-                            mDialog.dismiss();
-                        }
-                    }
-                    break;
             }
         }
     };
@@ -189,30 +111,9 @@ public class UsableRedPacketActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "我的红包");
         foot_view.setVisibility(View.VISIBLE);
-//        footerView = Util.inflateView(activity, R.layout.redpacket_foot_layout, null);
         lv = pull_lv.getRefreshableView();
-        mUntimeoutLinear = (LinearLayout) findViewById(R.id.linear_no_timeout);
-        mTimeoutLinear = (LinearLayout) findViewById(R.id.linear_timeout);
-//        mLook = (TextView) findViewById(R.id.tv_look_redbag);
-//        mLinearLook = (LinearLayout) findViewById(R.id.linear_look_redbag);
         mDialog = new SVProgressHUD(this);
         mRid = getIntent().getStringExtra("rid");
-
-        //未过期未使用
-//        DataPaser.unTimeoutParser( UNUSED, UNTIMEOUT, mHandler);
-
-
-//        mLook.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDialog.show();
-//                //已过期、使没使用全有
-//                mLookClick = true;
-////                DataParser.unTimeoutParser(ALLUSED, TIMEOUT, mHandler);
-//                DataPaser.unTimeoutParser(ALLUSED, UNTIMEOUT, mHandler);
-//            }
-//        });
-
     }
 
     @Override
@@ -233,7 +134,6 @@ public class UsableRedPacketActivity extends BaseActivity {
                 if (response.isSuccess()) {
                     if (isFirstLoad) {
                         isFirstLoad = false;
-                        total_rows = response.getData().total_rows;
                     }
                     List<RedPacketData.RedPacketItem> rows = response.getData().rows;
                     refreshUI(rows);
@@ -271,82 +171,11 @@ public class UsableRedPacketActivity extends BaseActivity {
             public void onRefresh() {
                 curPage = 1;
                 mList.clear();
-//                if (footerView != null && lv.getFooterViewsCount() > 0) {
-//                    lv.removeFooterView(footerView);
-//                }
                 requestNet();
             }
         });
 
 
-        pull_lv.setOnScrollListener(new AbsListView.OnScrollListener() {
-            private int currentPage;
-
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-            }
-
-            //            @Override
-//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-//                if (i==currentPage) return;
-//                if (i>currentPage){//上滑显示
-//                    if (foot_view.getVisibility()==View.GONE){
-//                        showFootView();
-////                        foot_view.setVisibility(View.VISIBLE);
-//                    }
-//                }else if(i<currentPage){//下滑隐藏
-//                    if (foot_view.getVisibility()==View.VISIBLE){
-//                        hideFootView();
-////                        foot_view.setVisibility(View.GONE);
-//                    }
-//                }
-//                currentPage=i;
-//            }
-            private int mListViewFirstItem = 0;
-            //listView中第一项的在屏幕中的位置
-            private int mScreenY = 0;
-            //是否向上滚动
-            private boolean mIsScrollToUp = false;
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if (lv.getChildCount() > 0) {
-                    boolean isScrollToUp = false;
-                    View childAt = lv.getAdapter().getView(firstVisibleItem, null, null);
-                    int[] location = new int[2];
-                    childAt.getLocationOnScreen(location);
-                    LogUtil.e("onScroll", "firstVisibleItem= " + firstVisibleItem + " , y=" + location[1]);
-
-                    if (firstVisibleItem != mListViewFirstItem) {
-                        if (firstVisibleItem > mListViewFirstItem) {
-                            LogUtil.e("--->", "向上滑动");
-                            isScrollToUp = true;
-                        } else {
-                            LogUtil.e("--->", "向下滑动");
-                            isScrollToUp = false;
-                        }
-                        mListViewFirstItem = firstVisibleItem;
-                        mScreenY = location[1];
-                    } else {
-                        if (mScreenY > location[1]) {
-                            LogUtil.e("--->", "->向上滑动");
-                            isScrollToUp = true;
-                        } else if (mScreenY < location[1]) {
-                            LogUtil.e("--->", "->向下滑动");
-                            isScrollToUp = false;
-                        }
-                        mScreenY = location[1];
-                    }
-                    if (mIsScrollToUp!=isScrollToUp){
-                        onScrollDirectionChanged(isScrollToUp);
-                        mIsScrollToUp=isScrollToUp;
-                    }
-
-                }
-            }
-
-        });
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -360,68 +189,125 @@ public class UsableRedPacketActivity extends BaseActivity {
                 }
             }
         });
+
+        pull_lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {//firstVisibleItem, visibleItemCount, totalItemCount
+                showBottomViewOnBottom(totalItemCount);
+            }
+        });
+
+        lv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                float y = motionEvent.getY();
+                float x = motionEvent.getX();
+                int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        action_down(y);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mDeltaY = (int) (y - mMotionY);
+                        bIsMoved = true;
+                        //移动的时候，要移除掉显示bottomView的消息
+                        //补齐action_down事件，因为有的时候，action_down 事件没有执行
+                        action_down(y);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        bIsMoved = false;
+                        bIsDown = false;
+                        if (!bIsMoved && !bIsDown) {
+                            //没有动作,则过1000ms后显示foot_view
+                            mHandler.postDelayed(showBottomBarRunnable, 1000);
+                        }
+                        if (mDeltaY < 0) { //下滑隐藏
+                            hideBottomBar();
+                        } else {  //上滑显示
+                            showBottomBar();
+                        }
+                        break;
+
+                }
+
+                return false;
+            }
+        });
     }
 
-    private void onScrollDirectionChanged(boolean isScrollUp) {
-        if (isScrollUp) {
-//            showFootView();
-//            foot_view.setVisibility(View.VISIBLE);
-        } else {
-//            hideFootView();
-//            foot_view.setVisibility(View.GONE);
+    private void action_down(float y){
+        mMotionY = y;
+        bIsDown = true;
+        mHandler.removeCallbacks(showBottomBarRunnable);
+    }
+
+    private void showBottomViewOnBottom(int totalItemCount) {
+
+        if(lv.getLastVisiblePosition() ==   totalItemCount -1){
+            showBottomBar();
         }
     }
 
-    private void showFootView() {
-        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.listview_up);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+    private Runnable showBottomBarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            showBottomBar();
+        }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                foot_view.setVisibility(View.VISIBLE);
-            }
+    };
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        foot_view.startAnimation(animation);
+    public void showBottomBar() {
+        if (foot_view != null && foot_view.getVisibility() == View.GONE) {
+            Animation translateAnimation = new TranslateAnimation(foot_view.getLeft(), foot_view.getLeft(),foot_view.getHeight(), 0);
+            translateAnimation.setDuration(300);
+            translateAnimation.setInterpolator(new OvershootInterpolator(0.6f));
+            foot_view.startAnimation(translateAnimation);
+            translateAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    foot_view.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
-    private void hideFootView() {
-        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.listview_down);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+    private void hideBottomBar() {
+        if (foot_view != null && foot_view.getVisibility() == View.VISIBLE) {
+            Animation translateAnimation = new TranslateAnimation(foot_view.getLeft(), foot_view.getLeft(), 0, foot_view.getHeight());
+            translateAnimation.setDuration(300);
+            translateAnimation.setInterpolator(new OvershootInterpolator(0.6f));
+            foot_view.startAnimation(translateAnimation);
+            translateAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                foot_view.setVisibility(View.GONE);
-            }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        foot_view.startAnimation(animation);
-    }
-
-    private void dataLoadFinished() {
-        if (mInLoading) {
-            mInLoading = false;
-
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    foot_view.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
     @Override
     protected void refreshUI(List list) {
-//        if (lv.getFooterViewsCount() == 0 && mList.size() == total_rows) {
-//            lv.addFooterView(footerView);
-//        }
         curPage++;
         if (pull_lv != null) {
             pull_lv.onRefreshComplete();
