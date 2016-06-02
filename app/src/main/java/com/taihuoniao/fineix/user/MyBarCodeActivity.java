@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private String nickName;
     private String sex;
     private ArrayList<String> areas;
-
+    private SVProgressHUD svProgressHUD;
     public MyBarCodeActivity() {
         super(R.layout.activity_bar_code);
     }
@@ -95,6 +96,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "二维码");
+        svProgressHUD=new SVProgressHUD(this);
         custom_head.setRightImgBtnShow(true);
         if (!TextUtils.isEmpty(url)) {
             ImageLoader.getInstance().displayImage(url, riv);
@@ -219,9 +221,9 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         switch (v.getId()) {
             case R.id.tv_take_photo:
                 if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath(getPackageName()) + "/bar_code.png")) {
-                    Util.makeToast("二维码已保存到"+getPackageName()+"文件夹下");
+                    svProgressHUD.showSuccessWithStatus("二维码已保存到"+getPackageName()+"文件夹下");
                 } else {
-                    Util.makeToast("SD卡不可写，二维码保存失败");
+                    svProgressHUD.showErrorWithStatus("SD卡不可写，二维码保存失败");
                 }
                 PopupWindowUtil.dismiss();
                 break;
@@ -256,13 +258,13 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 3:
-                    Util.makeToast("对不起，分享出错");
+                    svProgressHUD.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
-                    Util.makeToast("您取消了分享");
+//                    Util.makeToast("您取消了分享");
                     break;
                 case 1:
-                    Util.makeToast("分享成功");
+                    svProgressHUD.showSuccessWithStatus("分享成功");
                     break;
             }
         }
