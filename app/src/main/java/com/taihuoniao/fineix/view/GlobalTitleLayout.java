@@ -18,6 +18,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     private Context context;
     private View view;
     private ImageView backImg;
+    private ImageView shareImg;
     private ImageView cancelImg;//默认隐藏
     private LinearLayout titleLinear;
     private TextView titleName;
@@ -41,6 +42,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         view = View.inflate(context, R.layout.title, GlobalTitleLayout.this);
         view.setBackgroundResource(R.color.title_black);
         backImg = (ImageView) view.findViewById(R.id.title_back);
+        shareImg = (ImageView) view.findViewById(R.id.title_share);
         cancelImg = (ImageView) view.findViewById(R.id.title_cancel);
         titleLinear = (LinearLayout) view.findViewById(R.id.title_linear);
         titleName = (TextView) view.findViewById(R.id.title_name);
@@ -60,6 +62,16 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
             cancelImg.setVisibility(VISIBLE);
         else
             cancelImg.setVisibility(GONE);
+    }
+
+    //设置分享按钮的显示隐藏
+    public void setShareImgVisible(boolean visible, OnClickListener onClickListener) {
+        if (visible) {
+            shareImg.setVisibility(VISIBLE);
+        } else {
+            shareImg.setVisibility(GONE);
+        }
+        shareImg.setOnClickListener(onClickListener);
     }
 
     //设置取消按钮的图片

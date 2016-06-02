@@ -21,7 +21,7 @@
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
+        android:layout_height="59dp"
         android:layout_alignParentBottom="true"
         android:background="@mipmap/main_nav_bg"
         android:orientation="horizontal">
@@ -34,7 +34,7 @@
             <ImageView
                 android:id="@+id/activity_main_homepagebtn"
                 android:layout_width="wrap_content"
-                android:layout_height="19.5dp"
+                android:layout_height="19dp"
                 android:src="@mipmap/home_gray"/>
 
             <TextView
@@ -82,11 +82,11 @@
                 android:id="@+id/tv_nav2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
                 android:textColor="#999999"
-                android:textSize="10sp"/>
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -147,7 +147,7 @@
         android:id="@+id/activity_main_first_relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/activity_main_first_right_img"
@@ -171,7 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-7dp"
+            android:layout_marginBottom="-8dp"
             android:visibility="gone"
             />
     </RelativeLayout>

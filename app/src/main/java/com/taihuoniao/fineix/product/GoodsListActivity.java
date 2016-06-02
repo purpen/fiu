@@ -114,7 +114,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                         goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         firstViewPager.setAdapter(goodListFirtViewPagerAdapter);
                         firstSliding.setViewPager(firstViewPager);
-                        firstViewPager.setCurrentItem(position, true);
+                        firstViewPager.setCurrentItem(position+1, true);
                     }
                     break;
                 case DataConstants.CART_NUM:

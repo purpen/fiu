@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
@@ -24,8 +23,10 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     private GoodListAdapter goodListAdapter;
     //网络请求工具类
 //    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
     public static GoodListFragment newInstance(int position, CategoryBean categoryBean) {
 
@@ -85,6 +87,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_good_list_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
 //        dialog = new SVProgressHUD(getActivity());
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -126,15 +129,16 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     protected void requestNet() {
 
 //        progressBar.setVisibility(View.VISIBLE);
-//        dialog.show();
+        dialog.show();
         Log.e("<<<", "tag_id = " + tag_id);
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         if (position == -1) {
             recyclerView.setVisibility(View.GONE);
             DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
             return;
         }
         if (tag_id == null) {
+            dialog.dismiss();
             return;
         }
         DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
@@ -151,7 +155,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.ADD_PRODUCT_LIST:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
 //                    listview适配器
                     ProductBean netProductBean = (ProductBean) msg.obj;
@@ -161,8 +165,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
                     }
                     break;
                 case DataConstants.CATEGORY_LABEL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
+                    dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     CategoryLabelListBean netCategory = (CategoryLabelListBean) msg.obj;
                     if (netCategory.isSuccess()) {
                         recyclerList.clear();
@@ -170,11 +174,12 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //                        click(0);
                         goodListFragmentRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
+                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
+//                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     break;
             }
@@ -192,7 +197,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 
     @Override
     public void click(int postion) {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
+        dialog.show();
         for (int i = 0; i < recyclerList.size(); i++) {
             if (i == postion) {
                 recyclerList.get(postion).setIsSelect(true);

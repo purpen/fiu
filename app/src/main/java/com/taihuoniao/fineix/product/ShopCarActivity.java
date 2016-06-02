@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -25,6 +24,7 @@ import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -159,7 +159,8 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                 if (mDialog.isShowing()) {
                                     mDialog.dismiss();
                                 }
-                                Toast.makeText(ShopCarActivity.this, doOrderList.get(0).getMessage(), Toast.LENGTH_LONG).show();
+                                new SVProgressHUD(ShopCarActivity.this).showErrorWithStatus(doOrderList.get(0).getMessage());
+//                                Toast.makeText(ShopCarActivity.this, doOrderList.get(0).getMessage(), Toast.LENGTH_LONG).show();
                             } else {
                                 Intent intent = new Intent(ShopCarActivity.this, ConfirmOrderActivity.class);
                                 intent.putExtra("cartBean", doOrderList.get(0));
@@ -365,10 +366,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         switch (v.getId()) {
             case R.id.bt_stroll_shopcart_empty://购物车为空时，去逛逛
 //                onBackPressed();
-                Intent broadIntent = new Intent();
-                broadIntent.setAction(DataConstants.BroadShopCart);
-                sendBroadcast(broadIntent);
+//                Intent broadIntent = new Intent();
+//                broadIntent.setAction(DataConstants.BroadShopCart);
+//                sendBroadcast(broadIntent);
                 Intent intent = new Intent(ShopCarActivity.this, MainActivity.class);
+                intent.putExtra(WellGoodsFragment.class.getSimpleName(), false);
                 startActivity(intent);
                 break;
             case R.id.checkbox_choice_all_shopcart_item://全选
@@ -425,7 +427,8 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
-                            Toast.makeText(ShopCarActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                            new SVProgressHUD(ShopCarActivity.this).showSuccessWithStatus("删除成功");
+//                            Toast.makeText(ShopCarActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                             if (mAllCheck.isChecked()) {
                                 mAllCheck.setChecked(false);
                             }

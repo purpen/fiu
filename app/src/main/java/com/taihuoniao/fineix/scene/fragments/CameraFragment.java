@@ -20,7 +20,6 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -136,7 +135,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     });
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getActivity(), "拍照失败，请返回重试！", Toast.LENGTH_SHORT).show();
+                    new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败，请返回重试!");
+//                    Toast.makeText(getActivity(), "拍照失败，请返回重试！", Toast.LENGTH_SHORT).show();
                     try {
                         cameraInst.startPreview();
                     } catch (Throwable e) {

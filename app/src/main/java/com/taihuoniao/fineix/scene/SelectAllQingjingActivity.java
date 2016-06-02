@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.baidu.mapapi.model.LatLng;
 import com.taihuoniao.fineix.R;
@@ -68,7 +67,8 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
             isSearch = "0";
         }
         if (latLng == null) {
-            Toast.makeText(SelectAllQingjingActivity.this, "无法获得您当前位置信息", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("无法获得您当前位置信息");
+//            Toast.makeText(SelectAllQingjingActivity.this, "无法获得您当前位置信息", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -243,7 +243,8 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

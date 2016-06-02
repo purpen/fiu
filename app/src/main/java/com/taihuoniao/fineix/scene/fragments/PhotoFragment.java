@@ -12,7 +12,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AlbumGridAdapter;
@@ -26,6 +25,7 @@ import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.TopAndBottomLinear;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,7 +145,8 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.title_continue:
                 if(photoItem==null){
-                    Toast.makeText(getActivity(),"请选择一张图片",Toast.LENGTH_SHORT).show();
+                    new SVProgressHUD(getActivity()).showErrorWithStatus("请选择一张照片");
+//                    Toast.makeText(getActivity(),"请选择一张图片",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 ImageUtils.processPhotoItem(getActivity(), photoItem);

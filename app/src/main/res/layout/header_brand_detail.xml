@@ -24,6 +24,7 @@
         android:layout_below="@id/header_brand_detail_backgroundimg"
         android:paddingBottom="14dp"
         android:paddingLeft="15dp"
+        android:lineSpacingExtra="5dp"
         android:paddingRight="25dp"
         android:paddingTop="34dp"
         android:textColor="#333333"

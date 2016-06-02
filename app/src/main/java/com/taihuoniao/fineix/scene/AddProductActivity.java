@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     private ViewPager viewPager;
     private RelativeLayout search;
     private EditText editText;
+    private ImageView deleteImg;
     private TextView cancelTv;
     private SVProgressHUD dialog;
     private int searchPage = 1;
@@ -78,6 +80,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
         search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
+        deleteImg = (ImageView) findViewById(R.id.activity_add_product_delete);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
         dialog = new SVProgressHUD(this);
     }
@@ -93,9 +96,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    cancelTv.setVisibility(View.VISIBLE);
+                    deleteImg.setVisibility(View.VISIBLE);
                 } else {
-                    cancelTv.setVisibility(View.GONE);
+                    deleteImg.setVisibility(View.GONE);
                 }
             }
 
@@ -139,11 +142,13 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 editText.setText("");
             }
         });
+        deleteImg.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.activity_add_product_delete:
             case R.id.activity_add_product_cancel:
 //                isSearch = false;
 //                Intent intent = new Intent(DataConstants.BroadSearchFragment);
@@ -176,7 +181,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         }
     };
 
-    public interface CancelSearch{
+    public interface CancelSearch {
         void cancelSearch();
     }
 

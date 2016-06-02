@@ -3,7 +3,13 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_background_750_1334"/>
 
     <LinearLayout
         android:id="@+id/activity_share_user_linear"
@@ -64,6 +70,8 @@
             android:id="@+id/activity_share_scene_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:maxEms="11"
             android:maxLines="2"
             android:text="详见的小路"
             android:textColor="@color/white"

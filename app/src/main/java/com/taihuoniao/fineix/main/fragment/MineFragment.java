@@ -1,10 +1,8 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -257,13 +256,9 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.dp45));
-//            params.setMargins(0,getStatusBarHeight(),0,0);
-//            rl.setLayoutParams(params);
-            rl.setPadding(0,getStatusBarHeight(),0,0);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            rl.setPadding(0,getStatusBarHeight(),0,0);
+//        }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);

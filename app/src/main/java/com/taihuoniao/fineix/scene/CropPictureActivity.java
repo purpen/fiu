@@ -1,15 +1,16 @@
 package com.taihuoniao.fineix.scene;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -29,6 +30,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
     private ClipImageLayout clipImageLayout;
     private SVProgressHUD dialog;
     public static CropPictureActivity instance = null;
+    private DisplayImageOptions options;
 
 
     public CropPictureActivity() {
@@ -47,7 +49,30 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
-        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), false));
+//        这里可以改为ImageLoader了，图片会自动缩小至相应大小
+//        https://github.com/yaoguang/AndroidChoseHeadImage
+        ImageLoader.getInstance().loadImage(imageUri.toString(), options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                clipImageLayout.setImage(loadedImage);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+            }
+        });
+//        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), false));
     }
 
     private int getNavigationBarHeight() {
@@ -69,6 +94,13 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 //        获取状态栏的高度
         clipImageLayout = (ClipImageLayout) findViewById(R.id.activity_crop_cliplayout);
         dialog = new SVProgressHUD(CropPictureActivity.this);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(false)
+                .cacheOnDisk(false).considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -79,30 +111,19 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
                 Bitmap bitmap = clipImageLayout.clip();
                 try {
                     ImageUtils.saveToFile(MainApplication.cropPicPath, false, bitmap);
-                    Intent intent = new Intent(CropPictureActivity.this, EditPictureActivity.class);
+                    Intent intent;
+                    if (MainApplication.tag == 1) {
+                        intent = new Intent(CropPictureActivity.this, EditPictureActivity.class);
+                    } else {
+                        intent = new Intent(CropPictureActivity.this, FilterActivity.class);
+                    }
                     intent.setData(Uri.parse("file://" + MainApplication.cropPicPath));
-//                    ImageUtils.writeLocation(ImageUtils.picLocation(imageUri.getPath()), MainApplication.cropPicPath);
                     dialog.dismiss();
                     startActivity(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
                     dialog.dismiss();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CropPictureActivity.this);
-                    builder.setMessage("图片处理错误，请清理缓存后重试");
-                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Toast.makeText(CropPictureActivity.this, "清理缓存", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.create().show();
+                    dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
                 }
                 break;
         }

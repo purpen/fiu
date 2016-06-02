@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -137,10 +136,10 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void initList() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+//            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
+//        }
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {

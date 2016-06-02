@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -36,6 +37,8 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     private SceneDetails scene;
     @Bind(R.id.activity_share_select_titlelayout)
     GlobalTitleLayout titleLayout;
+    @Bind(R.id.activity_share_select_search)
+    LinearLayout searchLinear;
     @Bind(R.id.activity_share_select_img)
     ImageView imageView;
     @Bind(R.id.activity_share_select_title)
@@ -67,12 +70,14 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
         scene = (SceneDetails) getIntent().getSerializableExtra("scene");
         if (MainApplication.shareBitmap == null || scene == null) {
-            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
+//            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
             finish();
         }
-        imageView.setImageBitmap(MainApplication.shareBitmap);
-        titleTv.setText("默认标题：" + scene.getTitle());
-        desTv.setText("默认描述：" + scene.getDes());
+        ImageLoader.getInstance().displayImage(scene.getCover_url(), imageView);
+//        imageView.setImageBitmap(MainApplication.shareBitmap);
+        titleTv.setText(scene.getTitle());
+        desTv.setText(scene.getDes());
         dialog = new SVProgressHUD(ShareCJSelectActivity.this);
         listView.setOnScrollListener(this);
 //        listView = pullToRefreshView.getRefreshableView();
@@ -91,6 +96,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         shareCJSelectListAdapter = new ShareCJSelectListAdapter(this, list);
         listView.setAdapter(shareCJSelectListAdapter);
         listView.setOnItemClickListener(this);
+        searchLinear.setOnClickListener(this);
     }
 
     private String searchStr;
@@ -113,9 +119,14 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_share_select_search:
+                Intent intent1 = new Intent(this, ShareSearchActivity.class);
+                intent1.putExtra("scene", scene);
+                startActivityForResult(intent1, 111);
+                break;
             case R.id.title_continue:
                 if (!isSelect) {
-                   onBackPressed();
+                    onBackPressed();
                 } else {
 //                    DataPaser.commitShareCJ(oid,handler);
                     Intent intent = new Intent();
@@ -124,6 +135,24 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                     finish();
                     MainApplication.shareBitmap = null;
                 }
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        switch (resultCode) {
+            case 222:
+                SceneDetails resultScene = (SceneDetails) data.getSerializableExtra("scene");
+                scene = resultScene;
+                Intent intent = new Intent();
+                intent.putExtra("scene", scene);
+                setResult(2, intent);
+                finish();
+                MainApplication.shareBitmap = null;
                 break;
         }
     }
@@ -151,11 +180,13 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                         list.addAll(netSearch.getData().getRows());
                         shareCJSelectListAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(ShareCJSelectActivity.this, netSearch.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netSearch.getMessage());
+//                        Toast.makeText(ShareCJSelectActivity.this, netSearch.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    Toast.makeText(ShareCJSelectActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(ShareCJSelectActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }
         }

@@ -18,6 +18,7 @@
     <string name="crop_picture">剪切图片</string>
     <!-- EditPictureActivity -->
     <string name="tools">工具</string>
+    <string name="filter">滤镜</string>
     <string name="failed_loading">图片加载失败</string>
     <string name="more_three_products">您最多可以添加三个商品</string>
     <string name="more_three_chaining">您最多可以添加三个链接</string>

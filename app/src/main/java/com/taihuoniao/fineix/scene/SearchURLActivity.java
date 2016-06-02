@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -264,7 +263,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         if (banners_url.length() > 3) {
                             banners_url.delete(0, 2);
                         } else {
-                            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("数据异常");
+//                            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         DataPaser.addProduct(attrbute, netJingDong.getData().getRows().get(0).getOid(), null, netJingDong.getData().getRows().get(0).getTitle(),
@@ -304,7 +304,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         DataPaser.getTBProductData(handler, id);
                         break;
                     case DataConstants.YAMAXUN:
-                        Toast.makeText(SearchURLActivity.this, "亚马逊搜索无接口", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SearchURLActivity.this, "亚马逊搜索无接口", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         break;
                 }
@@ -329,7 +329,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         if (banners_url.length() > 3) {
             banners_url.delete(0, 2);
         } else {
-            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("数据异常");
+//            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
             return;
         }
         DataPaser.addProduct(attrbute, netTaoBao.getData().getRows().get(0).getOid(), null, netTaoBao.getData().getRows().get(0).getTitle(),
@@ -367,7 +368,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         popupWindow.dismiss();
                         finish();
                     } else {
-                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netAdd.getMessage());
+//                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.JINGDONG:
@@ -386,7 +388,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         sku_id = null;
                         showPopup();
                     } else {
-                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netJD.getMessage());
+//                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.TAOBAO:
@@ -396,12 +399,14 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         try {
                             item = netTB.getData().getRows().get(0);
                         } catch (IndexOutOfBoundsException e) {
-                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("产品无效");
+//                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
                             popupWindow.dismiss();
                             return;
                         }
                         if (item == null) {
-                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("产品无效");
+//                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
                             popupWindow.dismiss();
                             return;
                         }
@@ -417,7 +422,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         sku_id = null;
                         showPopup();
                     } else {
-                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netTB.getMessage());
+//                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.YAMAXUN:
@@ -439,7 +445,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    private void cancelNet() {
-        Toast.makeText(SearchURLActivity.this, "取消网络请求未做", Toast.LENGTH_SHORT).show();
-    }
+//    private void cancelNet() {
+//        Toast.makeText(SearchURLActivity.this, "取消网络请求未做", Toast.LENGTH_SHORT).show();
+//    }
 }

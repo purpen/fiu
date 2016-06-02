@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 /**
  * @author tongqian.ni
  */
-public class LabelView extends LinearLayout  {
+public class LabelView extends LinearLayout implements View.OnFocusChangeListener {
     //贴纸
     private MyImageViewTouch mImageView;
     //容器
@@ -43,7 +43,7 @@ public class LabelView extends LinearLayout  {
     public TextView nameLeft;
     private TextView priceRight;
     private ImageView pointRight;
-//    private ImageView deleteImg;
+    private ImageView deleteImg;
 //    private TextView labelTxtRight;
 //    private TextView priceTxtRight;
 
@@ -65,8 +65,9 @@ public class LabelView extends LinearLayout  {
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
-//        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-//        this.setOnFocusChangeListener(this);
+        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
+//        deleteImg.setOnClickListener(this);
+        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -85,8 +86,9 @@ public class LabelView extends LinearLayout  {
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
-//        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-//        this.setOnFocusChangeListener(this);
+        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
+//        deleteImg.setOnClickListener(this);
+        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -101,6 +103,7 @@ public class LabelView extends LinearLayout  {
 //        priceLeft.setText(tagItem.getPrice());
         priceRight.setText(tagItem.getPrice());
     }
+
 
     /**
      * 将标签放置于对应RelativeLayout的对应位置，考虑引入postion作为参数？？
@@ -138,9 +141,9 @@ public class LabelView extends LinearLayout  {
      * @param top
      */
     public void addTo(OnClickListener deleteListener, final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
-//        if (deleteListener != null) {
-//            deleteImg.setOnClickListener(deleteListener);
-//        }
+        if (deleteListener != null) {
+            deleteImg.setOnClickListener(deleteListener);
+        }
 //        if (left > parent.getWidth() / 2) {
 //            tagInfo.setLeft(false);
 //        }
@@ -183,17 +186,6 @@ public class LabelView extends LinearLayout  {
 //            relativeLeft.setVisibility(View.GONE);
         setupLocation(left, top);
         parent.addView(LabelView.this);
-//            post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    //因为商品名称的控件宽度不定。所以需要等布局完成才能加载
-//                    //点到左边缘的位置,不是整个控件
-//                    int toLeft = left - nameLeft.getWidth() + DensityUtils.dp2px(getContext(), 15) + DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
-//                    setupLocation(toLeft, top);
-//                    relativeRight.setVisibility(View.VISIBLE);
-//                }
-//            });
-//        }
 
     }
 
@@ -294,6 +286,7 @@ public class LabelView extends LinearLayout  {
 //            nameRight.setVisibility(GONE);
 //            pointLeft.setVisibility(GONE);
 //            priceLeft.setVisibility(GONE);
+        deleteImg.setVisibility(GONE);
         if (showAll) {
             relativeRight.setVisibility(VISIBLE);
             priceRight.setVisibility(VISIBLE);
@@ -313,12 +306,11 @@ public class LabelView extends LinearLayout  {
         ScaleAnimation sa = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(ANIMATIONEACHOFFSET * 3);
-//        sa.setRepeatCount(10);// 设置循环
         AlphaAnimation aniAlp = new AlphaAnimation(1, 0.1f);
-//        aniAlp.setRepeatCount(10);// 设置循环
         as.setDuration(ANIMATIONEACHOFFSET * 3);
         as.addAnimation(sa);
         as.addAnimation(aniAlp);
+
         as.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -360,5 +352,14 @@ public class LabelView extends LinearLayout  {
         wave();
     }
 
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            deleteImg.setVisibility(VISIBLE);
+        } else {
+            deleteImg.setVisibility(GONE);
+        }
+    }
 
 }

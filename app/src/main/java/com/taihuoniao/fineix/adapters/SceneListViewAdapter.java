@@ -1,12 +1,14 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -110,7 +112,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             lp.height = lp.width * 16 / 9;
             holder.backgroundImg.setLayoutParams(lp);
             holder.bottomLinear = (LinearLayout) convertView.findViewById(R.id.item_scenedetails_bottomlinear);
-            ViewGroup.LayoutParams bLp = holder.bottomLinear.getLayoutParams();
+            RelativeLayout.LayoutParams bLp = (RelativeLayout.LayoutParams) holder.bottomLinear.getLayoutParams();
             bLp.height = lp.height / 2;
             holder.bottomLinear.setLayoutParams(bLp);
             convertView.setTag(holder);
@@ -120,7 +122,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         if (list != null) {
 //            holder.backgroundImg.setTag(list.get(position).getCover_url());
 //            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options750_1334);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg, options750_1334);
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
@@ -132,7 +134,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(list.get(position).getAddress());
             holder.time.setText(list.get(position).getCreated_at());
         } else if (loveList != null) {
-            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
+            ImageLoader.getInstance().displayImage(loveList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
@@ -144,7 +146,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(loveList.get(position).getAddress());
             holder.time.setText(loveList.get(position).getCreated_at());
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
@@ -156,7 +158,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(searchList.get(position).getAddress());
             holder.time.setText(searchList.get(position).getCreated_at());
         } else if (subsList != null) {
-            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg,options750_1334);
+            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());
@@ -168,7 +170,8 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21,1);
+        Log.e("<<<首页动画", "getView...position=" + position);
+        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21, 1);
         return convertView;
     }
 
@@ -184,7 +187,7 @@ public class SceneListViewAdapter extends BaseAdapter {
         }
     }
 
-    static class ViewHolder {
+    public static class ViewHolder {
         ImageView backgroundImg;
         ImageView userHeadImg;
         TextView userName;
@@ -196,6 +199,6 @@ public class SceneListViewAdapter extends BaseAdapter {
         TextView suoshuQingjing;
         TextView location;
         TextView time;
-        LinearLayout bottomLinear;
+        public LinearLayout bottomLinear;
     }
 }

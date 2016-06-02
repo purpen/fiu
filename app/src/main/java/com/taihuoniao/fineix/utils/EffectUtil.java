@@ -146,6 +146,7 @@ public class EffectUtil {
 
     public static void removeLabelEditable(MyImageViewTouch overlay, ViewGroup container,
                                            LabelView label) {
+        label.stopAnim();
         container.removeView(label);
         overlay.removeLabel(label);
     }

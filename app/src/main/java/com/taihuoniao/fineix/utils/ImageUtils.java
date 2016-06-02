@@ -22,7 +22,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.CropPictureActivity;
-import com.taihuoniao.fineix.scene.EditPictureActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -110,15 +109,15 @@ public class ImageUtils {
         location = picLocation(photo.getImageUri());
         Uri uri = photo.getImageUri().startsWith("file:") ? Uri.parse(photo
                 .getImageUri()) : Uri.parse("file://" + photo.getImageUri());
-        if (isFourToThree(photo.getImageUri())) {
-            Intent intent = new Intent(activity, EditPictureActivity.class);
-            intent.setData(uri);
-            activity.startActivity(intent);
-        } else {
-            Intent intent = new Intent(activity, CropPictureActivity.class);
-            intent.setData(uri);
-            activity.startActivity(intent);
-        }
+//        if (isFourToThree(photo.getImageUri())) {
+//            Intent intent = new Intent(activity, EditPictureActivity.class);
+//            intent.setData(uri);
+//            activity.startActivity(intent);
+//        } else {
+        Intent intent = new Intent(activity, CropPictureActivity.class);
+        intent.setData(uri);
+        activity.startActivity(intent);
+//        }
     }
 
     //判断图片是不是16:9
@@ -146,11 +145,11 @@ public class ImageUtils {
         options.inPurgeable = true;//当内存不足时可以清楚
         BitmapFactory.decodeFile(pathName, options);
         if (useBigger) {
-            options.inSampleSize = (int) Math.min(((float) options.outWidth / width),
-                    ((float) options.outHeight / height));
+            options.inSampleSize = (int) Math.min(((double) options.outWidth / width),
+                    ((double) options.outHeight / height));
         } else {
-            float scale = Math.min(((float) options.outWidth / width),
-                    ((float) options.outHeight / height));
+            double scale = Math.max(((double) options.outWidth / width),
+                    ((double) options.outHeight / height));
             if ((int) (scale * 10) % 10 != 0) {
                 options.inSampleSize = (int) scale + 1;
             } else {
@@ -159,6 +158,7 @@ public class ImageUtils {
 
 
         }
+        Log.e("<<<压缩图片", "图片width=" + options.outWidth + ",height=" + options.outHeight + ",要求width=" + width + ",height=" + height+",压缩值="+options.inSampleSize);
         options.inJustDecodeBounds = false;
         Bitmap sourceBm = BitmapFactory.decodeFile(pathName, options);
         return sourceBm;

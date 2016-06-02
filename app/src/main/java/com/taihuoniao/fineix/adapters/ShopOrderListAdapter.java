@@ -14,7 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -216,16 +215,20 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                     Log.e("<<<提醒发货", "数据解析异常");
                                 }
                                 if (netBean.isSuccess()) {
-                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+                                    mdialog.showSuccessWithStatus("提醒发货成功!");
                                 } else {
-                                    Toast.makeText(context, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                                    mdialog.showErrorWithStatus(netBean.getMessage());
+                                    mdialog.showInfoWithStatus(netBean.getMessage());
+//                                    Toast.makeText(context, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(HttpException error, String msg) {
                                 mdialog.dismiss();
-                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+                                mdialog.showErrorWithStatus("网络错误");
+//                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -239,7 +242,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                     @Override
                     public void onClick(View v) {
                         alertDialog.setTitle("您确定要删除订单吗？");
-                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+                        alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

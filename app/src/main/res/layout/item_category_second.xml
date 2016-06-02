@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+    >
+
+    <TextView
+        android:id="@+id/view_labellist_item_tv"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/background_corner_black"
+        android:gravity="center"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:text="清晨"
+        android:textColor="@color/black333333"
+        android:textSize="12sp">
+
+    </TextView>
+</RelativeLayout>

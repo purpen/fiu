@@ -11,7 +11,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
@@ -190,7 +189,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 break;
             case R.id.activity_all_qingjing_createqinjing:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(this, OptRegisterLoginActivity.class));
                     return;

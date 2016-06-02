@@ -5,7 +5,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -44,7 +43,8 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         target_id = getIntent().getStringExtra("target_id");
         type = getIntent().getStringExtra("type");
         if (target_id == null || type == null) {
-            Toast.makeText(ReportActivity.this, "暂不可举报", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showErrorWithStatus("暂不可举报");
+//            Toast.makeText(ReportActivity.this, "暂不可举报", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

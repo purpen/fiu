@@ -13,7 +13,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lidroid.xutils.BitmapUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -167,7 +166,7 @@ public class ShopCartAdapter extends BaseAdapter {
                         number = Integer.parseInt(finalMHolder.mText.getText().toString());
                         if (number <= 1) {
                             number = 1;
-                            Toast.makeText(shopCarActivity, "我这么可爱，您一个都不买真的好吗", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(shopCarActivity, "我这么可爱，您一个都不买真的好吗", Toast.LENGTH_SHORT).show();
                         } else {
                             number--;
                         }
@@ -185,7 +184,7 @@ public class ShopCartAdapter extends BaseAdapter {
                             return;
                         if (number >= maxNumber) {
                             number = maxNumber;
-                            Toast.makeText(shopCarActivity, "货不够了，再加程序猿就要疯掉了", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(shopCarActivity, "货不够了，再加程序猿就要疯掉了", Toast.LENGTH_SHORT).show();
                         } else {
                             number++;
                         }

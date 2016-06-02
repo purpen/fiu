@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -112,7 +111,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         id = getIntent().getStringExtra("id");
         Log.e("<<<", "商品id=" + id);
         if (id == null) {
-            Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("产品不存在");
+//            Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -171,7 +171,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         dialog.show();
         DataPaser.goodsDetail(id, handler);
         DataPaser.productAndScene(page + "", 8 + "", null, id, handler);
-        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", id, null, null, null, handler);
+        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", null, id, null, null, handler);
+//        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
 
 
@@ -198,8 +199,13 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         DataPaser.goodsDetail(id, handler);
                         break;
                     case "1":
+                        if (netGood == null) {
+                            dialog.show();
+                            DataPaser.goodsDetail(id, handler);
+                            return;
+                        }
                         Intent intent2 = new Intent(GoodsDetailActivity.this, MyGoodsDetailsActivity.class);
-                        intent2.putExtra("id", id);
+                        intent2.putExtra("id", netGood.getData().getOid());
                         startActivity(intent2);
                         break;
                     default:
@@ -212,7 +218,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         webView.getSettings().setJavaScriptEnabled(true);
                         Log.e("<<<商品url", "url=" + url);
                         webView.loadUrl(url);
-                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
+                        dialog.showInfoWithStatus("正在跳转，请稍等");
+//                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
 //                        intent.putExtra("url", url);
 //                        startActivity(intent);
@@ -233,35 +240,16 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.ADD_PRODUCT_LIST:
+                    dialog.dismiss();
                     ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess() && currentTime == 1) {
-                        if (netProductBean.getList().size() <= 0) {
-                            return;
-                        }
-                        StringBuilder tags = new StringBuilder();
-                        for (int i = 0; i < netProductBean.getList().size(); i++) {
-                            List<String> categoryList = netProductBean.getList().get(i).getCategory_tags();
-                            if (categoryList != null && categoryList.size() > 0) {
-                                for (int j = 0; j < categoryList.size(); j++) {
-                                    tags.append(",").append(netProductBean.getList().get(i).getCategory_tags().get(j));
-                                }
-                                if (tags.length() > 0) {
-                                    tags.deleteCharAt(0);
-                                }
-                            }
-                        }
-                        currentTime++;
-                        DataPaser.getProductList(null, null, null, recommendPage + "", 8 + "", null, tags.toString(), null, null, handler);
-                    } else if (netProductBean.isSuccess() && currentTime == 2) {
-                        dialog.dismiss();
+                   if (netProductBean.isSuccess()) {
                         if (recommendPage == 1) {
                             recommendList.clear();
                         }
                         recommendList.addAll(netProductBean.getList());
                         recommendRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                        dialog.dismiss();
-                        Toast.makeText(GoodsDetailActivity.this, netProductBean.getMessage(), Toast.LENGTH_SHORT).show();
+                       dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.PRODUCT_AND_SCENE:
@@ -274,7 +262,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         changjingList.addAll(netProductSceneBean.getData().getRows());
                         changjingAdaper.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(GoodsDetailActivity.this, netProductSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netProductSceneBean.getMessage());
+//                        Toast.makeText(GoodsDetailActivity.this, netProductSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.GOODS_DETAIL:
@@ -297,13 +286,14 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         url = netGoodsDetailBean.getData().getLink();
                         refreshUI(banner);
                     } else {
-                        Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netGoodsDetailBean.getMessage());
                         finish();
                     }
                     break;
                 case DataConstants.CART_NUM:
                     CartBean netCartBean = (CartBean) msg.obj;
-                    if (netCartBean.isSuccess()) {
+                    if (netCartBean.isSuccess() && netCartBean.getData().getCount() > 0) {
                         cartNum.setVisibility(View.VISIBLE);
                         cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
                     } else {
@@ -312,7 +302,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
-                    Toast.makeText(GoodsDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }

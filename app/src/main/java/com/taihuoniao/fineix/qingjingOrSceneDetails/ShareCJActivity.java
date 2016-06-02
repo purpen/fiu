@@ -14,7 +14,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -97,7 +96,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
         if (id == null) {
-            Toast.makeText(ShareCJActivity.this, "场景id为空", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("数据异常");
             finish();
         }
     }
@@ -105,7 +104,11 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     @Override
     protected void initView() {
         titleLayout.setTitleVisible(false);
-        titleLayout.setRightTv(R.string.share, getResources().getColor(R.color.white), this);
+        titleLayout.setShareImgVisible(true, this);
+        titleLayout.setBackImgVisible(false);
+        titleLayout.setContinueTvVisible(false);
+        titleLayout.setCancelImgVisible(true);
+//        titleLayout.setRightTv(R.string.share, getResources().getColor(R.color.white), this);
         dialog = new SVProgressHUD(ShareCJActivity.this);
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
@@ -204,12 +207,14 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                         recyclerView.setVisibility(View.VISIBLE);
                         click(0);
                     } else {
-                        Toast.makeText(ShareCJActivity.this, netScene.getMessage(), Toast.LENGTH_SHORT).show();
+                        new SVProgressHUD(ShareCJActivity.this).showErrorWithStatus(netScene.getMessage());
+//                        Toast.makeText(ShareCJActivity.this, netScene.getMessage(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    Toast.makeText(ShareCJActivity.this, "网络错误,请重试", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误，请重试");
+//                    Toast.makeText(ShareCJActivity.this, "网络错误,请重试", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
                 case 3:
@@ -286,18 +291,11 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                 dialog.dismiss();
                 startActivityForResult(intent, 1);
                 break;
-            case R.id.title_continue:
+            case R.id.title_share:
                 if (netScene.getOid() != null) {
                     DataPaser.commitShareCJ(netScene.getOid(), handler);
                 }
-
-//                ShareCJActivity.this.bit1 = bit1;
                 PopupWindowUtil.show(ShareCJActivity.this, initPop());
-//                比例0.73472222
-//                    引导图只需要白色部分就行。不需要背景色
-
-//                container.removeView(view);
-//                img.setImageBitmap(scBit);
                 break;
         }
     }

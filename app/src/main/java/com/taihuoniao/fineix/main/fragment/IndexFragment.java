@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -164,7 +165,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     pullToRefreshLayout.onRefreshComplete();
-                    dialog.showErrorWithStatus("网络异常,请确认网络畅通");
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -194,7 +196,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         switch (v.getId()) {
             case R.id.fragment_index_subs:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
@@ -234,34 +236,43 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return -top + firstVisiblePosition * c.getHeight();
     }
 
+    private boolean isMove = false;//判断手指在屏幕上是否移动过
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (listView == null || listView.getChildAt(0) == null) {
+            return false;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startP = new PointF(event.getX(), event.getY());
-                Log.e("<<<按下坐标", "x=" + startP.x + ",y=" + startP.y);
+                isMove = false;
+//                Log.e("<<<按下坐标", "x=" + startP.x + ",y=" + startP.y);
                 break;
             case MotionEvent.ACTION_MOVE:
                 nowP = new PointF(event.getX(), event.getY());
-                Log.e("<<<移动的坐标", "x=" + nowP.x + ",y=" + nowP.y);
-
+//                Log.e("<<<移动的坐标", "x=" + nowP.x + ",y=" + nowP.y);
+                isMove = true;
                 break;
             case MotionEvent.ACTION_UP:
+                if (nowP == null || startP == null) {
+                    return false;
+                }
 //                int i = getScrollY() / (listView.getChildAt(0).getHeight());
+                double move = Math.sqrt((nowP.x - startP.x) * (nowP.x - startP.x) + (nowP.y - startP.y) * (nowP.y - startP.y));
                 //firstvisibleitem的偏移量
                 int s = getScrollY() % (listView.getChildAt(0).getHeight());
                 if (nowP.y < startP.y && s > 0.3 * listView.getChildAt(0).getHeight()) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
                     cancelChenjin();
-                } else if (nowP.y < startP.y) {
+
+                } else if (nowP.y < startP.y && isMove && move > DensityUtils.dp2px(getActivity(), 12)) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
-//                    chenjin();
-                } else if (nowP.y > startP.y && s < 0.7 * listView.getChildAt(0).getHeight()) {
+                } else if (nowP.y > startP.y && s < 0.7 * listView.getChildAt(0).getHeight() && s > 0) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
                     chenjin();
-                } else {
+                } else if (nowP.y > startP.y && isMove && move > DensityUtils.dp2px(getActivity(), 12)) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
-//                    cancelChenjin();
                 }
                 break;
         }
@@ -269,8 +280,10 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
     private void cancelChenjin() {
-        searchImg.setVisibility(View.GONE);
-        subsImg.setVisibility(View.GONE);
+        searchImg.setVisibility(View.INVISIBLE);
+        subsImg.setVisibility(View.INVISIBLE);
+        searchImg.setEnabled(false);
+        subsImg.setEnabled(false);
         Intent intent = new Intent();
         intent.putExtra("index", 1);
         intent.setAction(DataConstants.BroadShopCart);
@@ -278,6 +291,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
     private void chenjin() {
+        searchImg.setEnabled(true);
+        searchImg.setEnabled(true);
         searchImg.setVisibility(View.VISIBLE);
         subsImg.setVisibility(View.VISIBLE);
         Intent intent = new Intent();

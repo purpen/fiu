@@ -1,10 +1,10 @@
 package com.taihuoniao.fineix.product;
 
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 
@@ -22,7 +22,8 @@ public class WebActivity extends BaseActivity {
     protected void getIntentData() {
         url = getIntent().getStringExtra("url");
         if (url == null) {
-            Toast.makeText(WebActivity.this, "购买链接已失效", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showErrorWithStatus("购买链接已失效");
+//            Toast.makeText(WebActivity.this, "购买链接已失效", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -58,7 +57,8 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         user_id = LoginInfo.getUserId();//用户id
 //        Log.e("<<<", "logininfo.userid=" + user_id);
         if (user_id == -1 || user_id == 0) {
-            Toast.makeText(HasLoveActivity.this, "用户信息为空", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showErrorWithStatus("用户信息为空");
+//            Toast.makeText(HasLoveActivity.this, "用户信息为空", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -126,7 +126,8 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
                         list.addAll(loveSceneBean.getData().getRows());
                         sceneListViewAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(HasLoveActivity.this, loveSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(loveSceneBean.getMessage());
+//                        Toast.makeText(HasLoveActivity.this, loveSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
