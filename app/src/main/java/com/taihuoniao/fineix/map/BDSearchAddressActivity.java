@@ -32,6 +32,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 
@@ -58,6 +60,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     private int pageNum=0;
     private PoiSortType sortType = PoiSortType.distance_from_near_to_far; //默认排序类型
     private LatLng latLng;
+    private SVProgressHUD dialog;
     //当前位置的市和区
     private String city, district;
 
@@ -99,9 +102,11 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     private void loadAndshowGeoCoderResult(LatLng latLng) {
         if (latLng == null)
             return;
+        if (!activity.isFinishing() &&dialog!=null) dialog.show();
         MapUtil.getAddressByCoordinate(latLng, new MapUtil.MyOnGetGeoCoderResultListener() {
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                if (!activity.isFinishing() &&dialog!=null) dialog.dismiss();
                 if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                     return;
                 }
@@ -121,7 +126,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
                         adapter.notifyDataSetChanged();
                     }
                 } else {
-                    Util.makeToast(activity, "抱歉,没有检索到结果！");
+                    dialog.showErrorWithStatus("抱歉,没有检索到结果！");
                 }
             }
             @Override
@@ -132,6 +137,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "位置");
+        dialog=new SVProgressHUD(this);
         custom_head.setHeadGoBackShow(false);
         custom_head.setIvLeft(R.mipmap.current_location);
         custom_head.setHeadRightTxtShow(true, R.string.cancel);
@@ -218,9 +224,11 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     };
 
     private void loadAndshowPoiResult(String keyWord, LatLng latLng) {
+        if (!activity.isFinishing() &&dialog!=null) dialog.show();
         MapUtil.getPoiNearbyByKeyWord(keyWord,latLng,radius,pageNum,pageCapacity,sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
+                if (!activity.isFinishing() &&dialog!=null) dialog.dismiss();
                 if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                     return;
                 }
