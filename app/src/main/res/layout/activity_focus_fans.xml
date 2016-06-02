@@ -13,14 +13,29 @@
         android:layout_height="wrap_content"
         android:dividerHeight="@dimen/dp05"
         />
-    <TextView
-        android:id="@+id/tv_tips"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_tips"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_333"
+        android:orientation="vertical"
         android:layout_marginTop="@dimen/dp200"
-        android:layout_centerHorizontal="true"
-        android:textSize="@dimen/sp12"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:visibility="gone"
-        />
+        >
+        <ImageView
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@mipmap/default_focus_head"
+            />
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_333"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp5"
+            android:textSize="@dimen/sp12"
+            />
+    </LinearLayout>
 </RelativeLayout>

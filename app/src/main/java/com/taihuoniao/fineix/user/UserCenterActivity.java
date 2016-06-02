@@ -411,7 +411,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         if (TextUtils.isEmpty(user.summary)) {
-            tv_real.setVisibility(View.GONE);
+            tv_real.setText(String.format(" | %s", "还没有个性签名！"));
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }

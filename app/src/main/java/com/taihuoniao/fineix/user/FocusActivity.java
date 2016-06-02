@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +41,8 @@ public class FocusActivity extends BaseActivity {
     ListView lv;
     @Bind(R.id.tv_tips)
     TextView tv_tips;
+    @Bind(R.id.ll_tips)
+    LinearLayout ll_tips;
     private int curPage = 1;
     private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FOCUS_TYPE = "1";  //关注列表
@@ -134,7 +137,7 @@ public class FocusActivity extends BaseActivity {
             return;
         }
         if (list.size() == 0) {
-            tv_tips.setVisibility(View.VISIBLE);
+            ll_tips.setVisibility(View.VISIBLE);
             tv_tips.setText(R.string.focus_tips);
             return;
         }

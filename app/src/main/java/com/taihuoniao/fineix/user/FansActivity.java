@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.imageViewTouch.easing.Linear;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class FansActivity extends BaseActivity {
     ListView lv;
     @Bind(R.id.tv_tips)
     TextView tv_tips;
+    @Bind(R.id.ll_tips)
+    LinearLayout ll_tips;
     private int curPage = 1;
     private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FANS_TYPE = "2";  //粉丝列表
@@ -133,7 +137,7 @@ public class FansActivity extends BaseActivity {
             return;
         }
         if (list.size() == 0) {
-            tv_tips.setVisibility(View.VISIBLE);
+            ll_tips.setVisibility(View.VISIBLE);
             tv_tips.setText(R.string.fans_tips);
             return;
         }

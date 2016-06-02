@@ -28,7 +28,7 @@
         android:layout_below="@+id/tv_time"
         android:layout_alignParentLeft="true"
         app:riv_border_width="@dimen/dp05"
-        app:riv_border_color="@color/color_ddd"
+        app:riv_border_color="@color/color_eee"
         />
     <TextView
         android:id="@+id/tv_msg"
