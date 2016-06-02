@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -109,7 +108,8 @@ public class PublishEvaluateActivity extends Activity {
             public void onClick(View v) {
                 for (int j = 0; j < mHashMap.size(); j++) {
                     if (mHashMap.get(j) == null) {
-                        Toast.makeText(PublishEvaluateActivity.this, "评价内容不能为空！", Toast.LENGTH_LONG).show();
+                        dialog.showErrorWithStatus("评论内容不能为空!");
+//                        Toast.makeText(PublishEvaluateActivity.this, "评价内容不能为空！", Toast.LENGTH_LONG).show();
                     } else {
                         dialog.show();
                         StringBuilder builder = new StringBuilder();
@@ -137,9 +137,12 @@ public class PublishEvaluateActivity extends Activity {
                                     Log.e("<<<", "数据解析异常" + e.toString());
                                 }
                                 dialog.dismiss();
-                                Toast.makeText(PublishEvaluateActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(PublishEvaluateActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 if (netBean.isSuccess()) {
+                                    dialog.showSuccessWithStatus(netBean.getMessage());
                                     onBackPressed();
+                                }else{
+                                    dialog.showErrorWithStatus(netBean.getMessage());
                                 }
                             }
 

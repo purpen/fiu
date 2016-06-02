@@ -1,14 +1,12 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -19,7 +17,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -206,10 +203,10 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     protected void initList() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
+//            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
+//        }
         searchImg.setOnClickListener(this);
 //        cartImg.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
@@ -494,7 +491,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 break;
             case R.id.fragment_wellgoods_cart_relative:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;

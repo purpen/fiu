@@ -56,6 +56,7 @@ public class MainApplication extends Application {
     //剪切好的图片存储路径
     public static String cropPicPath = null;
     public static String editPicPath = null;//编辑好的图片存储路径
+    public static String filterPicPath = null;//加完滤镜的图片
     public static String uuid = null;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
@@ -91,6 +92,7 @@ public class MainApplication extends Application {
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
+        filterPicPath = getCacheDirPath() + "/filter";
     }
 
     public int getScreenHeight() {

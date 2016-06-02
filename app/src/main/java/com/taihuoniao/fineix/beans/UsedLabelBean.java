@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by taihuoniao on 2016/4/11.
  */
-public class UsedLabelBean implements Serializable{
+public class UsedLabelBean implements Serializable {
     private String _id;
     private String title_cn;
     private String parent_id;
@@ -22,6 +22,15 @@ public class UsedLabelBean implements Serializable{
     private String created_on;
     private String updated_on;
     public int line = 3;
+    private boolean isSelect;
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean isSelect) {
+        this.isSelect = isSelect;
+    }
 
     public UsedLabelBean() {
     }

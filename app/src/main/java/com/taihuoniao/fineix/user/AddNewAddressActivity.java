@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.ProvinceBean;
@@ -228,19 +229,23 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
             return;
         }
         if (nameEdt.getText().toString().isEmpty()) {
-            Toast.makeText(AddNewAddressActivity.this, "收货人不能为空！", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("收货人不能为空!");
+//            Toast.makeText(AddNewAddressActivity.this, "收货人不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (phoneEdt.getText().toString().isEmpty()) {
-            Toast.makeText(AddNewAddressActivity.this, "手机号码不能为空！", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("手机号码不能为空!");
+//            Toast.makeText(AddNewAddressActivity.this, "手机号码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (detailsAddressEdt.getText().toString().isEmpty()) {
-            Toast.makeText(AddNewAddressActivity.this, "详细地址不能为空！", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("详细地址不能为空!");
+//            Toast.makeText(AddNewAddressActivity.this, "详细地址不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (postcodeEdt.getText().toString().isEmpty()) {
-            Toast.makeText(AddNewAddressActivity.this, "邮政编码不能为空！", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("邮政编码不能为空!");
+//            Toast.makeText(AddNewAddressActivity.this, "邮政编码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         cityId = provinceList.get(provinceView.getCurrentItem()).getCityList().get(cityView.getCurrentItem()).get_id();
@@ -266,7 +271,8 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                     dialog.dismiss();
                     boolean success = (boolean) msg.obj;
                     if (success) {
-                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        dialog.showSuccessWithStatus("删除成功");
+//                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
                         intent.putExtra("address", 1);
                         setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
@@ -275,12 +281,17 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                     break;
                 case DataConstants.COMMIT_NEW_ADDRESS:
                     dialog.dismiss();
-                    String result = (String) msg.obj;
-                    Toast.makeText(AddNewAddressActivity.this, result, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    intent.putExtra("address", 1);
-                    setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-                    finish();
+                    NetBean netBean = (NetBean) msg.obj;
+                    if (netBean.isSuccess()) {
+                        dialog.showSuccessWithStatus(netBean.getMessage());
+                        Intent intent = new Intent();
+                        intent.putExtra("address", 1);
+                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+                        finish();
+                    } else {
+                        dialog.showErrorWithStatus(netBean.getMessage());
+                    }
+
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();

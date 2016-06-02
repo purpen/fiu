@@ -53,7 +53,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initView() {
-        overridePendingTransition(R.anim.in_from_left,R.anim.abc_fade_out);
+//        overridePendingTransition(R.anim.in_from_left,R.anim.abc_fade_out);
         setContentView(R.layout.activity_search);
         backImg = (ImageView) findViewById(R.id.activity_search_back);
         editText = (EditText) findViewById(R.id.activity_search_edittext);
@@ -174,11 +174,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0,R.anim.out_from_left);
-    }
 
     private void selectFragment() {
         if (t == null) {

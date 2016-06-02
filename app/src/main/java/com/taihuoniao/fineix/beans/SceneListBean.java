@@ -25,6 +25,16 @@ public class SceneListBean {
     private User user_info;
     private String cover_url;
     public Location location;
+    private boolean startAnim;
+
+    public boolean isStartAnim() {
+        return startAnim;
+    }
+
+    public void setStartAnim(boolean startAnim) {
+        this.startAnim = startAnim;
+    }
+
     public String getScene_title() {
         return scene_title;
     }
@@ -168,7 +178,7 @@ public class SceneListBean {
         private String nickname;
         private String avatar_url;
         private String summary;
-//        private String counter;
+        //        private String counter;
         private String follow_count;
         private String fans_count;
         private String love_count;

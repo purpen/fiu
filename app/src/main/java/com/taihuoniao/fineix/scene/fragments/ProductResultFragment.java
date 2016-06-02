@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
@@ -127,7 +126,8 @@ public class ProductResultFragment extends BaseFragment {
                         }
                         goodListAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), netSearch.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netSearch.getMessage());
+//                        Toast.makeText(getActivity(), netSearch.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:

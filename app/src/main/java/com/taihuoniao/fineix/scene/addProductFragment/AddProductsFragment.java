@@ -14,19 +14,30 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +61,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     private String q = "";//搜索关键字
     private boolean search = false;//判断是不是搜索
     private List<SearchBean.SearchItem> searchList;
+    private WaittingDialog dialog;
 
 
     public static AddProductsFragment newInstance(int position, CategoryBean categoryBean) {
@@ -73,9 +85,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     protected void requestNet() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         if (search) {
-            DataPaser.search(q, "10", currentPage + "", null,null, handler);
+            DataPaser.search(q, "10", currentPage + "", null, null, handler);
         } else {
             if (position == -1) {
                 DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
@@ -101,6 +113,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onRefresh() {
                 currentPage = 1;
+                dialog.show();
                 requestNet();
             }
         });
@@ -116,6 +129,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         addProductGridAdapter = new AddProductGridAdapter(getActivity(), productList, searchList);
         grid.setAdapter(addProductGridAdapter);
         grid.setOnItemClickListener(this);
+        dialog.show();
     }
 
     @Override
@@ -124,6 +138,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         pullToRefreshView = (PullToRefreshGridView) view.findViewById(R.id.view_addproduct_fragment_refresh);
         nothingTv = (TextView) view.findViewById(R.id.view_addproduct_fragment_nothingtv);
         progressBar = (ProgressBar) view.findViewById(R.id.view_addproduct_fragment_progress);
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -132,6 +147,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
+                    dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
@@ -153,6 +169,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
                     break;
                 case DataConstants.ADD_PRODUCT_LIST:
+                    dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     ProductBean netProductBean = (ProductBean) msg.obj;
@@ -175,6 +192,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
                     break;
                 case DataConstants.NET_FAIL:
+                    dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
                     break;
@@ -192,11 +210,12 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             if (q != null && intent.getBooleanExtra("search", false) && pos - 1 == position) {
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
-                progressBar.setVisibility(View.VISIBLE);
-                DataPaser.search(q, "10", currentPage + "", null,null, handler);
+                dialog.show();
+                DataPaser.search(q, "10", currentPage + "", null, null, handler);
             } else if (search && !intent.getBooleanExtra("search", true)) {
                 search = false;
                 currentPage = 1;
+                dialog.show();
                 requestNet();
             }
 
@@ -216,10 +235,34 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        Intent intent = new Intent();
-        intent.putExtra("product", productList.get(position));
-        getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
-        getActivity().finish();
+        dialog.show();
+        ClientDiscoverAPI.goodsDetails(productList.get(position).get_id(), new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<商品详情",responseInfo.result);
+                GoodsDetailBean netGood = new GoodsDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<GoodsDetailBean>() {
+                    }.getType();
+                    netGood = gson.fromJson(responseInfo.result, type);
+                    Intent intent = new Intent();
+                    intent.putExtra("product", netGood);
+                    getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
+                    getActivity().finish();
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+            }
+        });
+
     }
 
 

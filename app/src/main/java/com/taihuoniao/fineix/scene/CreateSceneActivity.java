@@ -9,7 +9,9 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -26,6 +28,10 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddressRecycleAdapter;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
@@ -95,6 +101,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private double lng, lat;
     //创建场景时所属情景
     private String scene_id;
+    private DisplayImageOptions options;
 
 
     public CreateSceneActivity() {
@@ -125,6 +132,13 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             qingjingRelative.setVisibility(View.GONE);
         }
         dialog = new SVProgressHUD(CreateSceneActivity.this);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(false)
+                .cacheOnDisk(false).considerExifParams(true)
+                .build();
     }
 
     @Override
@@ -138,18 +152,79 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setBackListener(this);
         titleLayout.setTitle(R.string.create_scene, getResources().getColor(R.color.black333333));
         titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.yellow_bd8913), this);
+        titleEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length() > 20) {
+                    titleEdt.setText(s.toString().substring(0, 20));
+                    titleEdt.setSelection(20);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         if (MainApplication.tag == 2) {
             titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.black333333), this);
             titleLayout.setTitle(R.string.create_qingjing, getResources().getColor(R.color.black333333));
+            contentEdt.setHint("请输入140以内的描述");
+            contentEdt.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.toString().length() > 140) {
+                        titleEdt.setText(s.toString().substring(0, 140));
+                        titleEdt.setSelection(140);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         }
-        ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+        ImageLoader.getInstance().loadImage(imageUri.toString(), options, new ImageLoadingListener() {
             @Override
-            public void callback(Bitmap result) {
-                sceneBitmap = result;
-                sceneImg.setImageBitmap(result);
-//                sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                sceneBitmap = loadedImage;
+                sceneImg.setImageBitmap(loadedImage);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
+//        ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+//            @Override
+//            public void callback(Bitmap result) {
+//                sceneBitmap = result;
+//                sceneImg.setImageBitmap(result);
+////                sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
+//            }
+//        });
         addAddressLinear.setOnClickListener(this);
 //        addressRelative.setOnClickListener(this);
         locationImg.setOnClickListener(this);
@@ -256,7 +331,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_create_scene_labelrelative:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
                     return;
@@ -266,28 +341,30 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.title_continue:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
                 if (TextUtils.isEmpty(titleEdt.getText())) {
-                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景标题", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景标题");
+//                    Toast.makeText(CreateSceneActivity.this, , Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(contentEdt.getText())) {
-                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(contentEdt.getText())) {dialog.showErrorWithStatus("请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述");
+//                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (selectList == null || selectList.size() == 0) {
-                    Toast.makeText(CreateSceneActivity.this, "请添加标签", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("请添加标签");
+//                    Toast.makeText(CreateSceneActivity.this, "请添加标签", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!TextUtils.isEmpty(locationTv.getText()) && locationTv.getText().toString().equals("添加地点")) {
-                    Toast.makeText(CreateSceneActivity.this, "请选择地址", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("请添加地点");
                     return;
                 }
-                dialog.show();
+                dialog.showWithMaskType(SVProgressHUD.SVProgressHUDMaskType.Black);
                 StringBuilder tags = new StringBuilder();
                 for (UsedLabelBean each : selectList) {
                     tags.append(",").append(each.get_id());
@@ -299,7 +376,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 if (MainApplication.tag == 1) {
                     if (scene_id == null) {
                         dialog.dismiss();
-                        Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus("请选择所属情景");
+//                        Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     StringBuilder product_id = new StringBuilder();
@@ -341,11 +419,12 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (sapleSize > 100 || sapleSize <= 0) {
                             dialog.dismiss();
-                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("图片过大");
+//                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
-                        Log.e("<<<", "图片大小=" + stream.size());
+//                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createScene(null, tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
@@ -365,11 +444,12 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (sapleSize > 100 || sapleSize <= 0) {
                             dialog.dismiss();
-                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("图片过大");
+//                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
-                        Log.e("<<<", "图片大小=" + stream.size());
+//                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
                     DataPaser.createQingjing(null, titleEdt.getText().toString(), contentEdt.getText().toString(),
@@ -508,10 +588,10 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     AddProductBean netBean1 = (AddProductBean) msg.obj;
                     if (netBean1.isSuccess()) {
-                        Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
+                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
                         Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
                         in.putExtra("id", netBean1.getData().getId());
-                        in.putExtra("create",true);
+                        in.putExtra("create", true);
                         startActivity(in);
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();
@@ -522,6 +602,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         if (EditPictureActivity.instance != null) {
                             EditPictureActivity.instance.finish();
                         }
+                        if (FilterActivity.instance != null) {
+                            FilterActivity.instance.finish();
+                        }
                         CreateSceneActivity.this.finish();
                     } else {
                         Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -531,7 +614,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     AddProductBean netBean = (AddProductBean) msg.obj;
                     if (netBean.isSuccess()) {
-                        Toast.makeText(CreateSceneActivity.this, "您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦", Toast.LENGTH_SHORT).show();
+                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
                         if (MainApplication.whichQingjing != null) {
                             sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
                         }
@@ -539,7 +622,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         MainApplication.tagInfoList = null;
                         Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
                         intent.putExtra("id", netBean.getData().getId());
-                        intent.putExtra("create",true);
+                        intent.putExtra("create", true);
                         startActivity(intent);
                         if (SelectPhotoOrCameraActivity.instance != null) {
                             SelectPhotoOrCameraActivity.instance.finish();
@@ -549,6 +632,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (EditPictureActivity.instance != null) {
                             EditPictureActivity.instance.finish();
+                        }
+                        if (FilterActivity.instance != null) {
+                            FilterActivity.instance.finish();
                         }
                         CreateSceneActivity.this.finish();
                     } else {

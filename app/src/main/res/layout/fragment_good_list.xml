@@ -8,6 +8,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_good_list_recycler"
         android:layout_width="match_parent"
+        android:paddingTop="8dp"
         android:layout_height="44dp"
         />
 

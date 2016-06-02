@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,7 +21,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.mapapi.model.LatLng;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -61,7 +58,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/25.
  */
-public class QingjingDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, View.OnTouchListener {
+public class QingjingDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     //上个界面传递过来的情景id
     private String id;
     private boolean isCreate;//判断是不是从创建页面跳转过来
@@ -81,6 +78,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView subscriptionCount;
     private TextView desTv;
     private LinearLayout labelLinear;
+    private RelativeLayout headRelative;
     private TextView viewCount;
     private TextView loveCountTv;
     private ImageView commentImg;
@@ -95,8 +93,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private ListView changjingListView;
     private List<SceneListBean> sceneList;
     private SceneListViewAdapter sceneListViewAdapter;
-    private LinearLayout subLinear;
-    private ImageView subsImg;
+    //    private LinearLayout subLinear;
+//    private ImageView subsImg;
     private LinearLayout addressLinear;
     //    private TextView subsTv;
     private List<CommentsBean.CommentItem> commentList;
@@ -129,8 +127,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         createImg = (ImageView) findViewById(R.id.activity_qingjingdetail_create);
         changjingListView = (ListView) findViewById(R.id.activity_qingjingdetail_listview);
         progressBar = (ProgressBar) findViewById(R.id.activity_qingjingdetail_progress);
-        subLinear = (LinearLayout) findViewById(R.id.activity_qingjingdetail_sublinear);
-        subsImg = (ImageView) findViewById(R.id.activity_qingjingdetail_subsimg);
+//        subLinear = (LinearLayout) findViewById(R.id.activity_qingjingdetail_sublinear);
+//        subsImg = (ImageView) findViewById(R.id.activity_qingjingdetail_subsimg);
 //        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
         //headerView中的控件
         View header = View.inflate(QingjingDetailActivity.this, R.layout.header_qingjing_detail, null);
@@ -144,6 +142,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         userName = (TextView) header.findViewById(R.id.activity_qingjingdetail_username);
         userInfo = (TextView) header.findViewById(R.id.activity_qingjingdetail_userinfo);
         subscriptionCount = (TextView) header.findViewById(R.id.activity_qingjingdetail_subsnum);
+        headRelative = (RelativeLayout) header.findViewById(R.id.header_qingjing_detail_head_relative);
         desTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_des);
         labelLinear = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_labellinear);
         userHeadGrid = (GridViewForScrollView) header.findViewById(R.id.activity_qingjingdetail_grid);
@@ -172,12 +171,13 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     protected void initList() {
         MainApplication.which_activity = DataConstants.QingjingDetailActivity;
         id = getIntent().getStringExtra("id");
-        isCreate = getIntent().getBooleanExtra("create",false);
-        if(isCreate){
+        isCreate = getIntent().getBooleanExtra("create", false);
+        if (isCreate) {
             backImg.setImageResource(R.mipmap.cancel_black);
         }
         if (id == null) {
-            Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showErrorWithStatus("没有这个情景");
+//            Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();
         }
         backImg.setOnClickListener(this);
@@ -201,9 +201,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         sceneListViewAdapter = new SceneListViewAdapter(QingjingDetailActivity.this, sceneList, null, null, null);
         changjingListView.setAdapter(sceneListViewAdapter);
         changjingListView.setOnScrollListener(this);
-        changjingListView.setOnTouchListener(this);
+//        changjingListView.setOnTouchListener(this);
         changjingListView.setOnItemClickListener(this);
-        subLinear.setOnClickListener(this);
+//        subLinear.setOnClickListener(this);
+        subscriptionCount.setOnClickListener(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadQingjingDetail);
         registerReceiver(qingjingReceiver, filter);
@@ -227,7 +228,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubs.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 0;
-                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+                        subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+//                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
                         if (netQingjingSubs.getData().getSubscription_count() > 14) {
@@ -237,7 +239,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         }
                     } else {
                         dialog.dismiss();
-                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
+//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.SUBS_QINGJING:
@@ -245,7 +248,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netQingjingSubsBean.isSuccess()) {
                         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
                         is_subscript = 1;
-                        subsImg.setImageResource(R.mipmap.subs_yes);
+                        subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+//                        subsImg.setImageResource(R.mipmap.subs_yes);
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
                         if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
@@ -255,7 +259,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         }
                     } else {
                         dialog.dismiss();
-                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
+//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.SCENE_LIST:
@@ -283,7 +288,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     if (netCommonBean.isSuccess()) {
                         headList.clear();
                         headList.addAll(netCommonBean.getData().getRows());
-
+                        if (headList.size() <= 0) {
+                            headRelative.setVisibility(View.GONE);
+                        } else {
+                            headRelative.setVisibility(View.VISIBLE);
+                        }
                         sceneDetailUserHeadAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -294,9 +303,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 //                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
                         QingjingDetailBean = netQingjingDetailBean;
                         ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
-                        SpannableStringBuilder style=new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
+                        SpannableStringBuilder style = new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
                         BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getResources().getColor(R.color.black));
-                        style.setSpan(backgroundColorSpan,0,netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        style.setSpan(backgroundColorSpan, 0, netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                         qingjingTitle.setText(style);
                         locationTv.setText(netQingjingDetailBean.getData().getAddress());
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
@@ -314,13 +323,20 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         is_subscript = netQingjingDetailBean.getData().getIs_subscript();
                         switch (is_subscript) {
                             case 1:
-                                subsImg.setImageResource(R.mipmap.subs_yes);
+                                subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+//                                subsImg.setImageResource(R.mipmap.subs_yes);
 //                                subsTv.setText("取消订阅");
                                 break;
                             default:
-                                subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+                                subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+//                                subsImg.setImageResource(R.mipmap.subscribe_height_49px);
 //                                subsTv.setText("+订阅此情景");
                                 break;
+                        }
+                        if (netQingjingDetailBean.getData().getSubscription_count() <= 0) {
+                            headRelative.setVisibility(View.GONE);
+                        } else {
+                            headRelative.setVisibility(View.VISIBLE);
                         }
                         if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
                             moreUser.setVisibility(View.VISIBLE);
@@ -328,7 +344,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
-                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
+//                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:
@@ -429,9 +446,10 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 MainApplication.tag = 1;
                 startActivity(new Intent(QingjingDetailActivity.this, SelectPhotoOrCameraActivity.class));
                 break;
-            case R.id.activity_qingjingdetail_sublinear:
+            case R.id.activity_qingjingdetail_subsnum:
+//            case R.id.activity_qingjingdetail_sublinear:
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.QingjingDetailActivity;
                     LoginCompleteUtils.id = id;
                     startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
@@ -496,41 +514,41 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
     };
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startP.x = event.getX();
-                startP.y = event.getY();
-                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
-                cha = startP.y + lpd.bottomMargin;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                nowP.x = event.getX();
-                nowP.y = event.getY();
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
-                lp.bottomMargin = (int) (cha - nowP.y);
-                if (nowP.y > startP.y) {
-                    backImg.setVisibility(View.VISIBLE);
-                    createImg.setVisibility(View.VISIBLE);
-                } else if (nowP.y < startP.y) {
-                    backImg.setVisibility(View.GONE);
-                    createImg.setVisibility(View.GONE);
-                }
-                if (lp.bottomMargin > 0) {
-                    lp.bottomMargin = 0;
-                    cha = nowP.y + lp.bottomMargin;
-                } else if (lp.bottomMargin < -subLinear.getMeasuredHeight()) {
-                    lp.bottomMargin = -subLinear.getMeasuredHeight();
-                    cha = nowP.y + lp.bottomMargin;
-                }
-                subLinear.setLayoutParams(lp);
-                break;
-        }
-        return false;
-    }
-
-    private double cha;//手指按下的时候，y与bottomMargin的差值
-    private PointF startP = new PointF();
-    private PointF nowP = new PointF();
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                startP.x = event.getX();
+//                startP.y = event.getY();
+//                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
+//                cha = startP.y + lpd.bottomMargin;
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                nowP.x = event.getX();
+//                nowP.y = event.getY();
+//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
+//                lp.bottomMargin = (int) (cha - nowP.y);
+//                if (nowP.y > startP.y) {
+//                    backImg.setVisibility(View.VISIBLE);
+//                    createImg.setVisibility(View.VISIBLE);
+//                } else if (nowP.y < startP.y) {
+//                    backImg.setVisibility(View.GONE);
+//                    createImg.setVisibility(View.GONE);
+//                }
+//                if (lp.bottomMargin > 0) {
+//                    lp.bottomMargin = 0;
+//                    cha = nowP.y + lp.bottomMargin;
+//                } else if (lp.bottomMargin < -subLinear.getMeasuredHeight()) {
+//                    lp.bottomMargin = -subLinear.getMeasuredHeight();
+//                    cha = nowP.y + lp.bottomMargin;
+//                }
+//                subLinear.setLayoutParams(lp);
+//                break;
+//        }
+//        return false;
+//    }
+//
+//    private double cha;//手指按下的时候，y与bottomMargin的差值
+//    private PointF startP = new PointF();
+//    private PointF nowP = new PointF();
 }

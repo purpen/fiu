@@ -2,12 +2,13 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/5/3.
  */
-public class GoodsDetailBean extends NetBean {
+public class GoodsDetailBean extends NetBean implements Serializable{
     private Data data;
 
     public Data getData() {
@@ -18,7 +19,7 @@ public class GoodsDetailBean extends NetBean {
         this.data = data;
     }
 
-    public static class Data {
+    public static class Data implements Serializable{
         private String _id;
         private String title;
         private String short_title;
@@ -52,7 +53,7 @@ public class GoodsDetailBean extends NetBean {
         private String is_favorite;
         private String is_love;
         private List<String> banner_asset;
-        private List<String> png_asset;
+        private List<PNG> png_asset;
 
         public String get_id() {
             return _id;
@@ -238,11 +239,11 @@ public class GoodsDetailBean extends NetBean {
             this.oid = oid;
         }
 
-        public List<String> getPng_asset() {
+        public List<PNG> getPng_asset() {
             return png_asset;
         }
 
-        public void setPng_asset(List<String> png_asset) {
+        public void setPng_asset(List<PNG> png_asset) {
             this.png_asset = png_asset;
         }
 
@@ -327,7 +328,37 @@ public class GoodsDetailBean extends NetBean {
         }
     }
 
-    public static class Brand {
+    public static class PNG implements Serializable{
+        private String url;
+        private String width;
+        private String height;
+
+        public String getHeight() {
+            return height;
+        }
+
+        public void setHeight(String height) {
+            this.height = height;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getWidth() {
+            return width;
+        }
+
+        public void setWidth(String width) {
+            this.width = width;
+        }
+    }
+
+    public static class Brand implements Serializable{
         private String cover_url;
         private String _id;
         private String title;

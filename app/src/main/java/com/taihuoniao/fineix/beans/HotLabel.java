@@ -34,6 +34,15 @@ public class HotLabel extends NetBean {
     public static class HotLabelBean implements Serializable {
         private String _id;
         private String title_cn;
+        private boolean isSelect;
+
+        public boolean isSelect() {
+            return isSelect;
+        }
+
+        public void setIsSelect(boolean isSelect) {
+            this.isSelect = isSelect;
+        }
 
         public HotLabelBean() {
         }

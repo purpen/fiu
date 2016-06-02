@@ -5,12 +5,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 /**
  * Created by taihuoniao on 2016/3/23.
@@ -63,7 +63,8 @@ public class SelectStoreActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (TextUtils.isEmpty(editText.getText().toString())) {
-            Toast.makeText(SelectStoreActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
+            new SVProgressHUD(this).showInfoWithStatus("请输入搜索关键字");
+//            Toast.makeText(SelectStoreActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(SelectStoreActivity.this, SearchURLActivity.class);

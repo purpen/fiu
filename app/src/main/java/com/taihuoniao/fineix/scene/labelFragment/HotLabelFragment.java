@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 public class HotLabelFragment extends Fragment implements AdapterView.OnItemClickListener {
     private int pos;
     private static Label label;
+    private UsedAndHotLabelAdapter usedAndHotLabelAdapter;
 
     public static HotLabelFragment newInstance(int position, Label label) {
 
@@ -37,7 +38,8 @@ public class HotLabelFragment extends Fragment implements AdapterView.OnItemClic
         label = (Label) getArguments().getSerializable("label");
         View view = View.inflate(getActivity(), R.layout.view_label_gridview, null);
         GridViewForScrollView gridView = (GridViewForScrollView) view.findViewById(R.id.view_label_gridview_grid);
-        gridView.setAdapter(new UsedAndHotLabelAdapter(pos,label));
+        usedAndHotLabelAdapter = new UsedAndHotLabelAdapter(pos, label);
+        gridView.setAdapter(usedAndHotLabelAdapter);
         gridView.setOnItemClickListener(this);
         return view;
     }
@@ -46,13 +48,37 @@ public class HotLabelFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(DataConstants.BroadLabelActivity);
         if (label.getUsedLabelList().size() == 0) {
+            for (int i = 0; i < label.getHotLabelList().size(); i++) {
+                if (i == position) {
+                    label.getHotLabelList().get(position).setIsSelect(true);
+                } else {
+                    label.getHotLabelList().get(i).setIsSelect(false);
+                }
+            }
+            usedAndHotLabelAdapter.notifyDataSetChanged();
             intent.putExtra("flag", -1);
             intent.putExtra("label", label.getHotLabelList().get(position));
         } else {
             if (pos == 0) {
+                for (int i = 0; i < label.getUsedLabelList().size(); i++) {
+                    if (i == position) {
+                        label.getUsedLabelList().get(position).setIsSelect(true);
+                    } else {
+                        label.getUsedLabelList().get(i).setIsSelect(false);
+                    }
+                }
+                usedAndHotLabelAdapter.notifyDataSetChanged();
                 intent.putExtra("flag", -2);
                 intent.putExtra("label", label.getUsedLabelList().get(position));
             } else {
+                for (int i = 0; i < label.getHotLabelList().size(); i++) {
+                    if (i == position) {
+                        label.getHotLabelList().get(position).setIsSelect(true);
+                    } else {
+                        label.getHotLabelList().get(i).setIsSelect(false);
+                    }
+                }
+                usedAndHotLabelAdapter.notifyDataSetChanged();
                 intent.putExtra("flag", -1);
                 intent.putExtra("label", label.getHotLabelList().get(position));
             }

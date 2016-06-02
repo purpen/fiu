@@ -8,6 +8,7 @@ import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -57,10 +58,10 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
                 itemClick.click(position);
             }
         });
-        ViewGroup.LayoutParams lp = holder.backgroundImg.getLayoutParams();
+        ViewGroup.LayoutParams lp = holder.container.getLayoutParams();
         lp.height = parentHeight;
         lp.width = lp.height * 9 / 16;
-        holder.backgroundImg.setLayoutParams(lp);
+        holder.container.setLayoutParams(lp);
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
         SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).getTitle());
         BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
@@ -76,12 +77,14 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
     }
 
     static class VH extends RecyclerView.ViewHolder {
+        RelativeLayout container;
         ImageView backgroundImg;
         TextView addressTv;
         TextView title;
 
         public VH(View itemView) {
             super(itemView);
+            container = (RelativeLayout) itemView.findViewById(R.id.item_qingjing_list_container);
             backgroundImg = (ImageView) itemView.findViewById(R.id.item_qingjing_list_background);
             addressTv = (TextView) itemView.findViewById(R.id.item_qingjing_list_address);
             title = (TextView) itemView.findViewById(R.id.item_qingjing_list_title);

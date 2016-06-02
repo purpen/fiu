@@ -5,7 +5,6 @@
     >
 
 
-
     <com.taihuoniao.fineix.view.MyScrollView
         android:id="@+id/activity_scenedetails_scrollview"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingBottom="50dp"
             >
 
             <RelativeLayout
@@ -61,6 +59,7 @@
                             android:id="@+id/activity_scenedetails_changjing_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
                             android:maxLines="2"
                             android:maxWidth="300dp"
                             android:text="详见的小路"
@@ -325,6 +324,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/activity_scenedetails_head_relative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f0f0f0"
@@ -479,38 +479,38 @@
             android:paddingRight="17dp"
             android:src="@mipmap/share"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/activity_scenedetails_loverelative"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="-50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        >
-        <TextView
-            android:id="@+id/line6"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#e2e2e2"/>
-        <ImageView
-            android:id="@+id/activity_scenedetails_love"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/like_height_43px"/>
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/activity_scenedetails_loverelative"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginBottom="-50dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:background="@color/white"-->
+    <!-->-->
+    <!--<TextView-->
+    <!--android:id="@+id/line6"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="#e2e2e2"/>-->
+    <!--<ImageView-->
+    <!--android:id="@+id/activity_scenedetails_love"-->
+    <!--android:layout_width="25dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:src="@mipmap/like_height_43px"/>-->
 
-        <TextView
-            android:id="@+id/activity_scenedetails_lovetv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@id/activity_scenedetails_love"
-            android:text="赞"
-            android:textColor="@color/yellow_bd8913"
-            android:textSize="14sp"/>
-    </RelativeLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/activity_scenedetails_lovetv"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="7dp"-->
+    <!--android:layout_toRightOf="@id/activity_scenedetails_love"-->
+    <!--android:text="赞"-->
+    <!--android:textColor="@color/yellow_bd8913"-->
+    <!--android:textSize="14sp"/>-->
+    <!--</RelativeLayout>-->
 
 
 </RelativeLayout>

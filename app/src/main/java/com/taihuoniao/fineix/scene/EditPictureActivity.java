@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -11,7 +10,6 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -29,7 +27,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -45,7 +42,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -61,9 +58,7 @@ import com.taihuoniao.fineix.view.MyImageViewTouch;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -105,8 +100,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private TextView priceTv;
     //    private Button editBtn;
     private Button deleteBtn;
-    //当前图片的bitmap
-    private Bitmap currentBitmap;
     //当前点击的labelview
     private LabelView labelView;
     //当前filter
@@ -123,7 +116,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private ImageLoader imageLoader;
     //图片加载完毕之后的宽高
     private int picWidth, picHeight;
-    private DisplayImageOptions options500_500;
+    private DisplayImageOptions options500_500, options750_1334;
 
     public EditPictureActivity() {
         super(0);
@@ -149,11 +142,20 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
         EffectUtil.clear();
-        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+        ImageLoader.getInstance().loadImage(imageUri.toString(), options750_1334, new ImageLoadingListener() {
             @Override
-            public void callback(Bitmap result) {
-                currentBitmap = result;
-                gpuImageView.setImage(result);
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                gpuImageView.setImage(loadedImage);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
                 if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
                     int containerHeight = gpuRelative.getHeight();
@@ -171,9 +173,37 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
                 initEditView();
+            }
 
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
+//        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
+//            @Override
+//            public void callback(Bitmap result) {
+//                gpuImageView.setImage(result);
+//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
+//                if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
+//                    int containerHeight = gpuRelative.getHeight();
+//                    int systemHeight = MainApplication.getContext().getScreenHeight() - getNavigationBarHeight();
+//                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
+//                    lp.width = lp.height * 9 / 16;
+//                } else {
+//                    int containerWidth = gpuRelative.getWidth();
+//                    int systemWidth = MainApplication.getContext().getScreenWidth();
+//                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
+//                    lp.height = lp.width * 16 / 9;
+//                }
+////                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//                picWidth = lp.width;
+//                picHeight = lp.height;
+//                gpuImageView.setLayoutParams(lp);
+//                initEditView();
+//
+//            }
+//        });
         //设置布局大小一样
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -239,7 +269,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         if (resourceId > 0) {
             height = resources.getDimensionPixelSize(resourceId);
         }
-        Log.e("<<<", "工具栏 height:" + height);
+//        Log.e("<<<", "工具栏 height:" + height);
         return height;
     }
 
@@ -257,10 +287,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         backBtn = (Button) findViewById(R.id.activity_edit_back);
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
-        if (MainApplication.tag == 2) {
-            productsRelative.setVisibility(View.GONE);
-            chainingRelative.setVisibility(View.GONE);
-        }
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
         productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
         chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
@@ -277,7 +303,15 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
+        options750_1334 = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .cacheInMemory(false)
+                .cacheOnDisk(false).considerExifParams(true)
+                .build();
         initPopupWindow();
+        filterRelative.setVisibility(View.GONE);
     }
 
     private void initPopupWindow() {
@@ -355,8 +389,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onMove(MyHighlightView view) {
-                RectF rectF = view.getDrawRect();
-//                mImageView.setCurrentLabel(label,rectF.centerX(), rectF.centerY());
             }
 
             @Override
@@ -369,10 +401,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 labelView = label;
                 TagItem tagItem = label.getTagInfo();
                 if (tagItem.getType() == 1) {
-                    name.setVisibility(View.GONE);
-                    price.setVisibility(View.GONE);
-                    nameTv.setVisibility(View.VISIBLE);
-                    priceTv.setVisibility(View.VISIBLE);
+                    return;
                 }
                 ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg, options500_500);
                 name.setText(tagItem.getName());
@@ -393,7 +422,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //添加标签
     private void addLabel(TagItem tagItem) {
         if (labels.size() >= 3) {
-            Toast.makeText(EditPictureActivity.this, R.string.more_three_chaining, Toast.LENGTH_SHORT).show();
+            dialog.showInfoWithStatus("您最多可以添加三个链接");
+//            Toast.makeText(EditPictureActivity.this, R.string.more_three_chaining, Toast.LENGTH_SHORT).show();
             return;
         }
         //链接的默认位置
@@ -405,7 +435,14 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         }
         final LabelView label = new LabelView(EditPictureActivity.this);
         label.init(tagItem);
-        EffectUtil.addLabelEditable(null, mImageView, gpuRelative, label, left, top);
+        EffectUtil.addLabelEditable(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                labelView = label;
+                EditPictureActivity.this.onClick(deleteBtn);
+            }
+        }, mImageView, gpuRelative, label, left, top);
         labels.add(label);
     }
 
@@ -418,6 +455,12 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 savePicture();
                 break;
             case R.id.pop_edit_delete:
+                if (labelView.getTagInfo().getType() == 1) {
+                    EffectUtil.removeLabelEditable(mImageView, gpuRelative, labelView);
+                    labels.remove(labelView);
+//                    popupWindow.dismiss();
+                    return;
+                }
                 dialog.show();
                 ClientDiscoverAPI.deleteProduct(labelView.getTagInfo().getId(), new RequestCallBack<String>() {
                     @Override
@@ -437,14 +480,16 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                             labels.remove(labelView);
                             popupWindow.dismiss();
                         } else {
-                            Toast.makeText(EditPictureActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus(netBean.getMessage());
+//                            Toast.makeText(EditPictureActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
                         dialog.dismiss();
-                        Toast.makeText(EditPictureActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus("删除失败");
+//                        Toast.makeText(EditPictureActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -468,8 +513,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 backBtn.setVisibility(View.GONE);
                 break;
             case R.id.activity_edit_products_relative:
-                if (EffectUtil.size() >= 3) {
-                    Toast.makeText(EditPictureActivity.this, R.string.more_three_products, Toast.LENGTH_SHORT).show();
+                if (labels.size() >= 3) {
+                    dialog.showInfoWithStatus("您最多可以添加三个产品");
+//                    Toast.makeText(EditPictureActivity.this, R.string.more_three_products, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(EditPictureActivity.this, AddProductActivity.class);
@@ -511,7 +557,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             cv.drawBitmap(gpuImageView.capture(), null, dst, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Toast.makeText(EditPictureActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("图片处理异常，请重试");
+//            Toast.makeText(EditPictureActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
             return;
             //出现异常存储的是未加滤镜效果的图片
 //            cv.drawBitmap(currentBitmap, null, dst, null);
@@ -535,7 +582,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             String fileName = null;
             try {
                 bitmap = params[0];
-                picName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+//                picName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                 fileName = ImageUtils.saveToFile(MainApplication.editPicPath, false, bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -550,22 +597,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             dialog.dismiss();
             if (TextUtils.isEmpty(fileName)) {
                 //出现问题是因为缓存目录中产生了与规定文件名称一样的文件夹，清理即可以使用
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditPictureActivity.this);
-                builder.setMessage("图片处理错误，请清理缓存后重试");
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Toast.makeText(EditPictureActivity.this, "清理缓存", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
+                dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
 //                Toast.makeText(EditPictureActivity.this, "图片处理错误，请清理缓存后重试", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -573,13 +605,12 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             List<TagItem> tagInfoList = new ArrayList<TagItem>();
             for (LabelView label : labels) {
                 tagInfoList.add(label.getTagInfo());
-                Log.e("<<<", label.getTagInfo().getX() + "," + label.getTagInfo().getY());
             }
             MainApplication.tagInfoList = tagInfoList;
             //向图片中存储位置信息
 //            ImageUtils.writeLocation(ImageUtils.picLocation(imageUri.getPath()), fileName);
             //传递数据
-            Intent intent = new Intent(EditPictureActivity.this, CreateSceneActivity.class);
+            Intent intent = new Intent(EditPictureActivity.this, FilterActivity.class);
             intent.setData(Uri.parse("file://" + fileName));
             startActivity(intent);
         }
@@ -626,8 +657,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     }
                     break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
-                    final ProductListBean productListBean = (ProductListBean) data.getSerializableExtra("product");
-                    String url = productListBean.getCover_url();
+                    final GoodsDetailBean productListBean = (GoodsDetailBean) data.getSerializableExtra("product");
+                    String url = productListBean.getData().getPng_asset().get(0).getUrl();
 
                     imageLoader.loadImage(url, new ImageLoadingListener() {
                         @Override
@@ -638,16 +669,17 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                             dialog.dismiss();
-                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("图片加载失败");
+//                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                             dialog.dismiss();
                             //是自动添加标签还是后添加
-                            TagItem tag = new TagItem(productListBean.getTitle(), productListBean.getSale_price());
-                            tag.setId(productListBean.get_id());
-                            tag.setImagePath(productListBean.getCover_url());
+                            TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price());
+                            tag.setId(productListBean.getData().get_id());
+                            tag.setImagePath(productListBean.getData().getPng_asset().get(0).getUrl());
                             tag.setType(1);
                             addLabel(tag);
                             EffectUtil.addStickerImage(mImageView, EditPictureActivity.this, loadedImage);
@@ -657,12 +689,21 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         public void onLoadingCancelled(String imageUri, View view) {
                             dialog.dismiss();
 //                            Toast.makeText(EditPictureActivity.this,"加载取消",Toast.LENGTH_SHORT).show();
-                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("图片加载失败");
+//                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        for (LabelView labelView : labels) {
+            labelView.stopAnim();
+        }
+        super.onDestroy();
     }
 
     @Override

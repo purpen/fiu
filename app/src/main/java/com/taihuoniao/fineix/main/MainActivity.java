@@ -33,7 +33,6 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
-import com.taihuoniao.fineix.utils.WindowUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +104,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onNewIntent(Intent intent) {
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
+        }else if(intent.hasExtra(WellGoodsFragment.class.getSimpleName())){
+            which = WellGoodsFragment.class.getSimpleName();
         }
         which2Switch();
         super.onNewIntent(intent);
@@ -115,6 +116,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(IndexFragment.class);
         } else if (TextUtils.equals(MineFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(MineFragment.class);
+        }else if(TextUtils.equals(WellGoodsFragment.class.getSimpleName(),which)){
+            switchFragmentandImg(WellGoodsFragment.class);
         }
     }
 
@@ -123,6 +126,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = getIntent();
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
+        }else if(intent.hasExtra(WellGoodsFragment.class.getSimpleName())){
+            which = WellGoodsFragment.class.getSimpleName();
         }
     }
 
@@ -140,7 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
-        WindowUtils.chenjin(MainActivity.this);
+//        WindowUtils.chenjin(MainActivity.this);
     }
 
     private void recoverAllState(Bundle savedInstanceState) {
@@ -524,7 +529,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("<<<", "接收到广播");
+//            Log.e("<<<", "接收到广播");
             if (1 == intent.getIntExtra("index", -1)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     container.setSystemUiVisibility(View.INVISIBLE);
@@ -585,9 +590,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (animFlag == 2) {
                     upAnimator.start();
                 }
-            } else {
+            } /*else {
                 onClick(ll_nav3);
-            }
+            }*/
         }
     };
     private int animFlag = 0;

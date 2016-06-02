@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -72,13 +71,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     if (mDialog!=null) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(ToLoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
+                    new SVProgressHUD(ToLoginActivity.this).showInfoWithStatus("取消授权");
+//                    Toast.makeText(ToLoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_ERROR:
                     if (mDialog!=null) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
+                    new SVProgressHUD(ToLoginActivity.this).showErrorWithStatus("授权失败");
+//                    Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN:
 //                    if (msg.obj != null) {

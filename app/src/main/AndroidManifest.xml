@@ -137,7 +137,12 @@
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"
             />
+        <activity
+            android:name=".scene.FilterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".zxing.activity.CaptureActivity"
             android:launchMode="singleTask"
@@ -384,6 +389,7 @@
             android:theme="@style/NoTitleFullscreen"
             />
 
+
         <activity
             android:name=".map.BDSearchAddressActivity"
             android:screenOrientation="portrait"
@@ -397,6 +403,10 @@
             android:name=".map.DisplayOverlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".qingjingOrSceneDetails.ShareSearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".map.MapNearByCJActivity"
             android:screenOrientation="portrait"

@@ -75,6 +75,13 @@ public class AllLabelGridViewAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
+        if (allLabelBean.getChildren().get(position).isSelect()) {
+            hold.textView.setBackgroundResource(R.drawable.yellow_corner_white);
+            hold.textView.setTextColor(parent.getResources().getColor(R.color.yellow_bd8913));
+        } else {
+            hold.textView.setBackgroundResource(R.drawable.background_corner_black);
+            hold.textView.setTextColor(parent.getResources().getColor(R.color.black333333));
+        }
 //        hold.textView.setText(allLabelList.get(position).getTitle_cn());
         hold.textView.setText(allLabelBean.getChildren().get(position).getTitle_cn());
         return convertView;

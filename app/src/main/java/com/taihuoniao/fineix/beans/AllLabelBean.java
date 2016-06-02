@@ -23,7 +23,16 @@ public class AllLabelBean implements Serializable {
     private int children_count;
     private String type_str;
     private String level;
+    private boolean isSelect;
     private List<AllLabelBean> children = new ArrayList<>();
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean isSelect) {
+        this.isSelect = isSelect;
+    }
 
     public int getPage() {
         return page;

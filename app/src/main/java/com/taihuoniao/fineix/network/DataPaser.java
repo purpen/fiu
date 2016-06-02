@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.network;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -73,7 +72,6 @@ import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.beans.UserListBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
@@ -432,7 +430,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -461,7 +459,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -706,7 +704,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -735,7 +733,7 @@ public class DataPaser {
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -1150,10 +1148,12 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMIT_NEW_ADDRESS;
+                msg.obj= new NetBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    msg.obj = job.optString("message");
-                } catch (JSONException e) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
                 handler.sendMessage(msg);
@@ -1432,7 +1432,7 @@ public class DataPaser {
                     NetBean netBean = gson.fromJson(responseInfo.result, type);
                     msg.obj = netBean;
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -2136,11 +2136,12 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_TO_CART;
+                msg.obj = new NetBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    String result = job.optString("message");
-                    msg.obj = result;
-                } catch (JSONException e) {
+                    Gson gson = new Gson();
+                    Type type1 = new TypeToken<NetBean>(){}.getType();
+                    msg.obj = gson.fromJson(responseInfo.result,type1);
+                } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
                 handler.sendMessage(msg);

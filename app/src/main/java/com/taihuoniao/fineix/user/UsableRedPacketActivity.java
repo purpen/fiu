@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -98,7 +97,8 @@ public class UsableRedPacketActivity extends BaseActivity {
                                 finish();
                             } else {
                                 //红包不可用
-                                Toast.makeText(UsableRedPacketActivity.this, "这个红包不可用", Toast.LENGTH_LONG).show();
+                                new SVProgressHUD(UsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
+//                                Toast.makeText(UsableRedPacketActivity.this, "这个红包不可用", Toast.LENGTH_LONG).show();
                             }
                         }
                     }

@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
@@ -99,7 +98,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");
         if (target_id == null || type == null || target_user_id == null) {
-            Toast.makeText(CommentListActivity.this, "数据错误", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("数据错误");
             if (dialog != null) {
                 if (dialog.isShowing()) {
                     dialog.dismiss();
@@ -117,7 +116,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                currentPage=1;
+                currentPage = 1;
                 requestNet();
             }
         });
@@ -140,14 +139,15 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 //                Log.e("<<<评论布局改变", "left=" + left + ",top=" + top + ",right=" + right + ",bottom=" + bottom + ",oldLeft=" + oldLeft
 //                        + ",oldTop=" + oldTop + ",oldRight=" + oldRight + ",oldBottom=" + oldBottom);
                 if (oldRight != 0 && oldBottom != 0) {
-                    if (bottom < oldBottom) {
+                    if (oldBottom - bottom > getStatusBarHeight()) {
 //                        Log.e("<<<", "弹起");
                         isOpen = true;
-                    } else if (bottom > oldBottom) {
+                    } else if (bottom - oldBottom > getStatusBarHeight()) {
 //                        Log.e("<<<", "键盘隐藏");
                         isOpen = false;
                     }
                 }
+                Log.e("<<<布局", isOpen + "");
             }
         });
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -161,11 +161,20 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     reply_id = null;
                     reply_user_id = null;
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘
-//                    return true;
+                    return true;
                 }
                 return false;
             }
         });
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
@@ -228,17 +237,18 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.DELETE_COMMENT:
                     popupWindow.dismiss();
                     NetBean netBean1 = (NetBean) msg.obj;
-                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean1.isSuccess()) {
                         currentPage = 1;
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
+                        dialog.showErrorWithStatus(netBean1.getMessage());
                     }
                     break;
                 case DataConstants.SEND_COMMENT:
                     NetBean netBean = (NetBean) msg.obj;
-                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netBean.isSuccess()) {
                         editText.setHint("评论一下");
                         is_reply = 0 + "";
@@ -249,6 +259,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
+                        dialog.showErrorWithStatus(netBean.getMessage());
                         if ("0".equals(netBean.getCurrent_user_id())) {
                             MainApplication.which_activity = DataConstants.ElseActivity;
                             startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
@@ -281,7 +292,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     pullToRefreshLayout.onRefreshComplete();
-                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -316,7 +328,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 if (!LoginInfo.isUserLogin()) {
-                    Toast.makeText(CommentListActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CommentListActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
                     return;
@@ -326,7 +338,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     case "1":
                         if (reply_id == null || reply_user_id == null) {
                             dialog.dismiss();
-                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
+                            dialog.showErrorWithStatus("请选择回复评论");
+//                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id, handler);
@@ -352,6 +365,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         }
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //获取状态信息
+        Log.e("<<<点击", isOpen + "");
         if (!isOpen) {
             String name = commentList.get(position).getUser().getNickname();
             editText.setHint("回复  " + name + ":");

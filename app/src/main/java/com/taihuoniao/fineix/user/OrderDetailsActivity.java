@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -216,16 +215,19 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                                                             Log.e("<<<提醒发货", "数据解析异常");
                                                         }
                                                         if (netBean.isSuccess()) {
-                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+                                                            new SVProgressHUD(OrderDetailsActivity.this).showSuccessWithStatus("提醒发货成功!");
+//                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
                                                         } else {
-                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            new SVProgressHUD(OrderDetailsActivity.this).showInfoWithStatus(netBean.getMessage());
+//                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(HttpException error, String msg) {
                                                         mDialog.dismiss();
-                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                                                        mDialog.showErrorWithStatus("网络错误");
+//                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }

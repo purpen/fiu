@@ -10,11 +10,11 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -53,6 +53,7 @@ import java.util.List;
 public class AddLabelActivity extends BaseActivity implements View.OnClickListener, HotLabelViewPagerAdapter.LabelClick, AllLabelListViewAdapter.MoreClick {
     //控件
     private GlobalTitleLayout titleLayout;
+    private HorizontalScrollView horizontalScrollView;
     private LinearLayout horizontalLinear;
     private ImageView deleteImg;
     private RelativeLayout usedLabelRelative;
@@ -89,6 +90,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     protected void initView() {
         setContentView(R.layout.activity_add_label);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_label_titlelayout);
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.activity_add_label_horizontalscroll);
         horizontalLinear = (LinearLayout) findViewById(R.id.activity_add_label_horizontallinear);
         deleteImg = (ImageView) findViewById(R.id.activity_add_label_cancel);
         usedLabelRelative = (RelativeLayout) findViewById(R.id.activity_add_label_usedlabelrelative);
@@ -185,7 +187,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                     }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Toast.makeText(AddLabelActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AddLabelActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                 }
                 handler.sendMessage(msg);
             }
@@ -227,7 +229,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 return;
             }
         }
-        View view = View.inflate(AddLabelActivity.this, R.layout.view_horizontal_label_item, null);
+        final View view = View.inflate(AddLabelActivity.this, R.layout.view_horizontal_label_item, null);
         TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
         textView.setText(str);
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -236,11 +238,26 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         view.setLayoutParams(lp);
         view.setTag(_id);
         horizontalLinear.addView(view);
-        selectList.add(new UsedLabelBean(_id + "", str));
-        View focusView = horizontalLinear.getChildAt(horizontalLinear.getChildCount() - 1);
-        focusView.setFocusable(true);
-        focusView.setFocusableInTouchMode(true);
-        focusView.requestFocus();
+        final UsedLabelBean usedLabelBean = new UsedLabelBean(_id + "", str);
+        selectList.add(usedLabelBean);
+//        horizontalScrollView.smoothScrollTo(horizontalLinear.getMeasuredWidth(), 0);
+//        View focusView = horizontalLinear.getChildAt(horizontalLinear.getChildCount() - 1);
+//        focusView.setFocusable(true);
+//        focusView.setFocusableInTouchMode(true);
+//        focusView.requestFocus();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                horizontalScrollView.fullScroll(View.FOCUS_RIGHT);
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                horizontalLinear.removeView(view);
+                selectList.remove(usedLabelBean);
+            }
+        });
     }
 
     @Override
@@ -259,15 +276,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 if (horizontalLinear.getChildCount() <= 0) {
                     return;
                 }
-                horizontalLinear.removeViewAt(horizontalLinear.getChildCount() - 1);
-                selectList.remove(selectList.size() - 1);
-                View focusView = horizontalLinear.getChildAt(horizontalLinear.getChildCount() - 1);
-                if (focusView == null) {
-                    return;
-                }
-                focusView.setFocusable(true);
-                focusView.setFocusableInTouchMode(true);
-                focusView.requestFocus();
+                horizontalLinear.removeAllViews();
+                selectList.clear();
                 break;
             case R.id.title_continue:
                 MainApplication.selectList = selectList;

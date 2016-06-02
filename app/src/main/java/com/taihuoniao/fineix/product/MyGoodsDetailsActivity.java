@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailsGridViewAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailsViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.GoodsDetailsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NowBuyBean;
@@ -155,7 +156,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         id = getIntent().getStringExtra("id");
         Log.e("<<<自营商品id", "id=" + id);
         if (id == null) {
-            Toast.makeText(MyGoodsDetailsActivity.this, "暂无此商品", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("暂无此商品");
+//            Toast.makeText(MyGoodsDetailsActivity.this, "暂无此商品", Toast.LENGTH_SHORT).show();
             finish();
         }
         titleLayout.setTitle("产品详情");
@@ -262,8 +264,11 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart = null;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if (numberCart.isSuccess()) {
+                            if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
+                                titleLayout.setRightShopCartButton(true);
                                 titleLayout.setShopCartCountertext(numberCart.getCount() + "");
+                            }else{
+                                titleLayout.setRightShopCartButton(false);
                             }
                         }
                     }
@@ -276,14 +281,19 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                         intent.putExtra("NowBuyBean", netNowBuy);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(MyGoodsDetailsActivity.this, netNowBuy.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netNowBuy.getMessage());
+//                        Toast.makeText(MyGoodsDetailsActivity.this, netNowBuy.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     popupWindow.dismiss();
                     break;
                 case DataConstants.ADD_TO_CART:
                     dialog.dismiss();
-                    String netResult = (String) msg.obj;
-                    Toast.makeText(MyGoodsDetailsActivity.this, netResult, Toast.LENGTH_SHORT).show();
+                    NetBean netBean = (NetBean) msg.obj;
+                    if(netBean.isSuccess()){
+                        dialog.showSuccessWithStatus(netBean.getMessage());
+                    }else{
+                        dialog.showErrorWithStatus(netBean.getMessage());
+                    }
                     popupWindow.dismiss();
                     DataPaser.shopCartNumberParser(mHandler);
                     break;
@@ -357,7 +367,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    Toast.makeText(MyGoodsDetailsActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(MyGoodsDetailsActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -480,7 +491,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 if (LoginInfo.isUserLogin()) {
                     showPopupWindow();
                 } else {
-                    Toast.makeText(MyGoodsDetailsActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MyGoodsDetailsActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     //在此跳转到登录界面
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     Intent in = new Intent(MyGoodsDetailsActivity.this, OptRegisterLoginActivity.class);
@@ -530,7 +541,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
                     if (which == -1) {
-                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus("请选择颜色/分类");
+//                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();
                         DataPaser.addToCart(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString(), mHandler);
@@ -551,7 +563,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
                     if (which == -1) {
-                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus("请选择颜色/分类");
+//                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();
                         DataPaser.buyNow(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString(), mHandler);

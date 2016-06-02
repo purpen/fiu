@@ -95,7 +95,7 @@ public class AddProductGridAdapter extends BaseAdapter {
             mHolder.item_nicegoods_currentprice
                     .setText("¥" + list.get(position).getSale_price());
             mHolder.item_nicegoods_currentprice
-                    .setTextColor(context.getResources().getColor(R.color.red));
+                    .setTextColor(context.getResources().getColor(R.color.yellow_bd8913));
 
             SpannableString ss = new SpannableString("¥" + list.get(position).getMarket_price());
             ss.setSpan(new StrikethroughSpan(), 0, ss.length(),
@@ -111,7 +111,7 @@ public class AddProductGridAdapter extends BaseAdapter {
             mHolder.item_nicegoods_currentprice
                     .setText("¥" + searchList.get(position).getSale_price());
             mHolder.item_nicegoods_currentprice
-                    .setTextColor(context.getResources().getColor(R.color.red));
+                    .setTextColor(context.getResources().getColor(R.color.yellow_bd8913));
 
             SpannableString ss = new SpannableString("¥" + searchList.get(position).getMarket_price());
             ss.setSpan(new StrikethroughSpan(), 0, ss.length(),

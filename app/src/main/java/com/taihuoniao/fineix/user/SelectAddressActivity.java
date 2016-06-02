@@ -11,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
@@ -168,7 +167,8 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                 case DataConstants.DELETE_ADDRESS:
                     boolean success = (boolean) msg.obj;
                     if (success) {
-                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        dialog.showSuccessWithStatus("删除成功");
+//                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         list.clear();
                         currentPage = 1;
                         dialog.show();
@@ -179,7 +179,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     dialog.dismiss();
                     List<AddressBean> list1 = (List<AddressBean>) msg.obj;
                     list.addAll(list1);
-                    if(list1.size()<=0){
+                    if(list.size()<=0){
                         emptyView.setVisibility(View.VISIBLE);
                     }else{
                         emptyView.setVisibility(View.GONE);
@@ -188,7 +188,8 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }
         }

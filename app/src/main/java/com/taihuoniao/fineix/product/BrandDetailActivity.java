@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -100,7 +99,8 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         id = getIntent().getStringExtra("id");
         if (id == null) {
-            Toast.makeText(BrandDetailActivity.this, "暂无此品牌详细信息", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("暂无此品牌详细信息");
+//            Toast.makeText(BrandDetailActivity.this, "暂无此品牌详细信息", Toast.LENGTH_SHORT).show();
             finish();
         }
         backImg.setOnClickListener(this);
@@ -143,11 +143,11 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         productList.addAll(netProductBean.getList());
                         goodListAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(BrandDetailActivity.this, netProductBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.BRAND_DETAIL:
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     BrandDetailBean netBrandDetail = (BrandDetailBean) msg.obj;
                     if (netBrandDetail.isSuccess()) {
                         titleTv.setText(netBrandDetail.getData().getTitle());
@@ -155,7 +155,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         desTv.setText(netBrandDetail.getData().getDes());
                         ImageLoader.getInstance().displayImage(netBrandDetail.getData().getBanner_url(),backgroundImg,options750_422);
                     } else {
-                        Toast.makeText(BrandDetailActivity.this, netBrandDetail.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus(netBrandDetail.getMessage());
                     }
                     break;
                 case DataConstants.NET_FAIL:

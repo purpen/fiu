@@ -19,13 +19,13 @@
 
         <TextView
             android:id="@+id/activity_search_cancel"
-            android:layout_width="65dp"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:text="取消"
-            android:textColor="#4a494a"
-            android:textSize="16sp"/>
+            android:textColor="#666666"
+            android:textSize="14sp"/>
 
         <RelativeLayout
             android:layout_marginLeft="15dp"
@@ -51,8 +51,8 @@
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:src="@mipmap/cancel_gray"
                 android:visibility="gone"/>
 

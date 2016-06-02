@@ -70,8 +70,22 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
         }
         hold.nameTv.setText(allLabelList.get(position).getTitle_cn());
         final AllLabelGridViewAdapter allLabelGridViewAdapter = new AllLabelGridViewAdapter(context, allLabelList.get(position));
+        final int pos = position;
         hold.gridView.setAdapter(allLabelGridViewAdapter);
-        hold.gridView.setOnItemClickListener(this);
+        hold.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < allLabelList.get(pos).getChildren().size(); i++) {
+                    if (i == position) {
+                        allLabelList.get(pos).getChildren().get(i).setIsSelect(true);
+                    } else {
+                        allLabelList.get(pos).getChildren().get(i).setIsSelect(false);
+                    }
+                }
+                allLabelGridViewAdapter.notifyDataSetChanged();
+                labelClick.click(allLabelList.get((Integer) parent.getTag()).getChildren().get(position));
+            }
+        });
         hold.gridView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -94,9 +108,9 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
         hold.moreRelative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allLabelGridViewAdapter.getPage()==1){
+                if (allLabelGridViewAdapter.getPage() == 1) {
                     allLabelGridViewAdapter.setPage(10);
-                }else{
+                } else {
                     allLabelGridViewAdapter.setPage(1);
                 }
                 allLabelGridViewAdapter.notifyDataSetChanged();
@@ -116,9 +130,9 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
         hold.moreImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allLabelGridViewAdapter.getPage()==1){
+                if (allLabelGridViewAdapter.getPage() == 1) {
                     allLabelGridViewAdapter.setPage(10);
-                }else{
+                } else {
                     allLabelGridViewAdapter.setPage(1);
                 }
                 allLabelGridViewAdapter.notifyDataSetChanged();
@@ -141,7 +155,7 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        labelClick.click(allLabelList.get((Integer) parent.getTag()).getChildren().get(position));
+
     }
 
     public interface MoreClick {

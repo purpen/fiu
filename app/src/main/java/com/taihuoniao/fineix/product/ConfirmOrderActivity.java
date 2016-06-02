@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
@@ -95,7 +94,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         nowBuyBean = (NowBuyBean) getIntent().getSerializableExtra("NowBuyBean");
         cartBean = (CartDoOrder) getIntent().getSerializableExtra("cartBean");
         if (nowBuyBean == null && cartBean == null) {
-            Toast.makeText(ConfirmOrderActivity.this, "数据异常，请重试", Toast.LENGTH_SHORT).show();
+            dialog.showErrorWithStatus("数据异常，请重试");
+//            Toast.makeText(ConfirmOrderActivity.this, "数据异常，请重试", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -190,7 +190,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 dialog.show();
                 if (address == null && addressBean == null) {
                     dialog.dismiss();
-                    Toast.makeText(ConfirmOrderActivity.this, "请选择收货地址...", Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("请选择收货地址!");
+//                    Toast.makeText(ConfirmOrderActivity.this, "请选择收货地址...", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (nowBuyBean != null)
@@ -273,14 +274,17 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 case DataConstants.NOW_CONFIRM_ORDER:
                     dialog.dismiss();
                     NowConfirmBean netConfirmBean = (NowConfirmBean) msg.obj;
-                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netConfirmBean.isSuccess()) {
+                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
 //                        netConfirmBean.getRid();     //订单rid
                         Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
                         intent.putExtra("paymoney", netConfirmBean.getPay_money());
                         intent.putExtra("orderId", netConfirmBean.getRid());
                         startActivity(intent);
                         finish();
+                    }else {
+                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
                     }
                     break;
                 case DataConstants.DEFAULT_ADDRESS:
@@ -291,12 +295,14 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                         addressBean = netAddress;
                         setAddressData(addressBean);
                     } else {
-                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
+                        dialog.showErrorWithStatus("默认地址不存在!");
+//                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }
         }

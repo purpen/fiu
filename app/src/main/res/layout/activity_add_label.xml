@@ -95,7 +95,7 @@
                     <TextView
                         android:id="@+id/activity_add_label_usedlabelline"
                         android:layout_width="wrap_content"
-                        android:layout_height="5dp"
+                        android:layout_height="2dp"
                         android:layout_alignLeft="@id/activity_add_label_usedlabel"
                         android:layout_alignParentBottom="true"
                         android:layout_alignRight="@id/activity_add_label_usedlabel"
@@ -121,7 +121,7 @@
                     <TextView
                         android:id="@+id/activity_add_label_hotlabelline"
                         android:layout_width="wrap_content"
-                        android:layout_height="5dp"
+                        android:layout_height="2dp"
                         android:layout_alignLeft="@id/activity_add_label_hotlabel"
                         android:layout_alignParentBottom="true"
                         android:layout_alignRight="@id/activity_add_label_hotlabel"
@@ -200,7 +200,7 @@
                 android:background="@color/white"
                 app:paddingEnd="25dp"
                 app:paddingStart="25dp"
-                app:pstsIndicatorHeight="4dp"
+                app:pstsIndicatorHeight="2dp"
                 app:pstsTabPaddingLeftRight="30dp"
                 app:pstsUnderlineHeight="0dp"/>
 

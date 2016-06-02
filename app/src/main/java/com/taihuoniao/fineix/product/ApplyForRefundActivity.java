@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ApplyForRefund;
@@ -72,9 +71,12 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                     if (msg.obj != null) {
                         if (msg.obj instanceof ApplyForRefund) {
                             ApplyForRefund refund = (ApplyForRefund) msg.obj;
-                            Toast.makeText(ApplyForRefundActivity.this, refund.getMessage() + "", Toast.LENGTH_LONG).show();
+
                             if ("true".equals(refund.getSuccess())) {
+                                new SVProgressHUD(ApplyForRefundActivity.this).showSuccessWithStatus(refund.getMessage());
                                 onBackPressed();
+                            } else {
+                                new SVProgressHUD(ApplyForRefundActivity.this).showErrorWithStatus(refund.getMessage());
                             }
                         }
                     }
