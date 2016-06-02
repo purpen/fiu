@@ -181,6 +181,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
         switch (view.getId()) {
             case R.id.ibtn:
                 et.getText().clear();
+                ibtn.setVisibility(View.GONE);
                 break;
             case R.id.tv_head_right:
                 finish();
@@ -195,6 +196,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
         public void onTextChanged(CharSequence cs, int start, int before, int count) {
             String keyWord = cs.toString().trim();
             if (!TextUtils.isEmpty(keyWord)) {
+                ibtn.setVisibility(View.VISIBLE);
                 pageNum=0;
                 loadAndshowPoiResult(keyWord,latLng);
             } else {
@@ -202,6 +204,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
 //                    searchPoiList.clear();
 //                }
 //                hideSoftinput();
+                ibtn.setVisibility(View.GONE);
             }
         }
 
