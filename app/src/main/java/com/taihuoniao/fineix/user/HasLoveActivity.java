@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -30,6 +31,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+
 /**
  * Created by taihuoniao on 2016/4/30.
  * 已经点赞的场景
@@ -37,10 +40,12 @@ import java.util.List;
  */
 public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
-    GlobalTitleLayout titleLayout;
-
+//    GlobalTitleLayout titleLayout;
+    @Bind(R.id.custom_head)
+    CustomHeadView custom_head;
+    @Bind(R.id.activity_has_love_pulltorefreshview)
     PullToRefreshListView pullToRefreshView;
-
+    @Bind(R.id.activity_has_love_progress)
     ProgressBar progressBar;
     private ListView listView;
     private SVProgressHUD dialog;
@@ -64,15 +69,15 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
     }
 
     public HasLoveActivity() {
-        super(0);
+        super(R.layout.activity_has_love);
     }
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_has_love);
-        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_has_love_titlelayout);
-        pullToRefreshView = (PullToRefreshListView) findViewById(R.id.activity_has_love_pulltorefreshview);
-        progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
+//        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_has_love_titlelayout);
+        custom_head.setHeadCenterTxtShow(true,R.string.has_love);
+//        pullToRefreshView = (PullToRefreshListView) findViewById(R.id.activity_has_love_pulltorefreshview);
+//        progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
         listView = pullToRefreshView.getRefreshableView();
         listView.setDividerHeight(DensityUtils.dp2px(HasLoveActivity.this,5));
         dialog = new SVProgressHUD(HasLoveActivity.this);
@@ -80,10 +85,10 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     protected void initList() {
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setBackImg(R.mipmap.back_black);
-        titleLayout.setContinueTvVisible(false);
-        titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
+//        titleLayout.setBackgroundResource(R.color.white);
+//        titleLayout.setBackImg(R.mipmap.back_black);
+//        titleLayout.setContinueTvVisible(false);
+//        titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
         list = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list,null,null);
         listView.setAdapter(sceneListViewAdapter);

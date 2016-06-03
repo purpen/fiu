@@ -133,7 +133,7 @@ public class OrderQJActivity  extends BaseActivity{
             if (isLoadMore){
 //                Util.makeToast("没有更多数据哦！");
             }else {
-                Util.makeToast("暂无数据！");
+//                Util.makeToast("暂无数据！");
             }
             return;
         }

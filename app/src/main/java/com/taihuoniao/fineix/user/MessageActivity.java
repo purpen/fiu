@@ -123,16 +123,14 @@ public class MessageActivity extends BaseActivity {
                     }
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    Util.makeToast("对不起,数据异常");
+                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                LogUtil.e(TAG, s);
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }

@@ -140,10 +140,10 @@ public class SystemNoticeActivity extends BaseActivity {
                         refreshUI();
                         return;
                     }
-                    Util.makeToast(response.getMessage());
+                    dialog.showErrorWithStatus(response.getMessage());
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    Util.makeToast("对不起,数据异常");
+                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
 
             }
@@ -151,7 +151,7 @@ public class SystemNoticeActivity extends BaseActivity {
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -160,7 +160,7 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void refreshUI() {
         if (list==null) return;
         if (list.size()==0){
-            if (!activity.isFinishing()&&dialog!=null) dialog.showWithStatus("暂无评论");
+//            if (!activity.isFinishing()&&dialog!=null) dialog.showWithStatus("暂无评论");
             return;
         }
 

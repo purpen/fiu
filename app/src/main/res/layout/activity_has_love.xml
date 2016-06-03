@@ -3,8 +3,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.taihuoniao.fineix.view.GlobalTitleLayout
+    <!--<com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_has_love_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -12,7 +16,7 @@
         android:id="@+id/activity_has_love_pulltorefreshview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/activity_has_love_titlelayout"/>
+        android:layout_below="@id/custom_head"/>
 
     <ProgressBar
         android:id="@+id/activity_has_love_progress"

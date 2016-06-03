@@ -98,14 +98,13 @@ public class UserCommentsActivity extends BaseActivity{
                     list=commentsBean.getData().getRows();
                     refreshUI();
                 }else {
-                    Util.makeToast(commentsBean.getMessage());
+                    dialog.showErrorWithStatus(commentsBean.getMessage());
                 }
             }
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -114,7 +113,7 @@ public class UserCommentsActivity extends BaseActivity{
     protected void refreshUI() {
         if (list==null) return;
         if (list.size()==0) {
-            Util.makeToast("暂无评论");
+//            Util.makeToast("暂无评论");
             return;
         }
 

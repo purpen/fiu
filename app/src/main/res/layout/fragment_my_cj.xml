@@ -9,5 +9,5 @@
         android:id="@+id/pull_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/activity_has_love_titlelayout" />
+        />
 </LinearLayout>

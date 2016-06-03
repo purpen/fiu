@@ -96,14 +96,13 @@ public class NoticeActivity extends BaseActivity{
                     list=response.getData().rows;
                     refreshUI();
                 }else {
-                    Util.makeToast(response.getMessage());
+                    dialog.showErrorWithStatus(response.getMessage());
                 }
             }
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -112,7 +111,7 @@ public class NoticeActivity extends BaseActivity{
     protected void refreshUI() {
         if (list==null) return;
         if (list.size()==0) {
-            Util.makeToast("暂无提醒");
+//            Util.makeToast("暂无提醒");
             return;
         }
         if (adapter==null){

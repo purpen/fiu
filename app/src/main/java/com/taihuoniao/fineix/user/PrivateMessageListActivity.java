@@ -103,13 +103,13 @@ public class PrivateMessageListActivity extends BaseActivity{
                     refreshUI(list);
                     return;
                 }
-                Util.makeToast(response.getMessage());
+                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                Util.makeToast(s);
+                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -118,7 +118,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     protected void refreshUI(List list) {
         if (list==null) return;
         if (list.size()==0){
-            Util.makeToast("暂无数据");
+//            Util.makeToast("暂无数据");
             return;
         }
 
