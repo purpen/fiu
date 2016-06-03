@@ -1,4 +1,5 @@
 package com.taihuoniao.fineix.main;
+
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -28,6 +30,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -104,7 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onNewIntent(Intent intent) {
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
-        }else if(intent.hasExtra(WellGoodsFragment.class.getSimpleName())){
+        } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
         }
         which2Switch();
@@ -116,7 +119,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(IndexFragment.class);
         } else if (TextUtils.equals(MineFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(MineFragment.class);
-        }else if(TextUtils.equals(WellGoodsFragment.class.getSimpleName(),which)){
+        } else if (TextUtils.equals(WellGoodsFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(WellGoodsFragment.class);
         }
     }
@@ -126,7 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = getIntent();
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
-        }else if(intent.hasExtra(WellGoodsFragment.class.getSimpleName())){
+        } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
         }
     }
@@ -143,7 +146,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             which2Switch();
         }
-        IntentFilter intentFilter = new IntentFilter(DataConstants.BroadShopCart);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DataConstants.BroadShopCart);
+        intentFilter.addAction(DataConstants.BroadDeleteScene);
         registerReceiver(mainReceiver, intentFilter);
 //        WindowUtils.chenjin(MainActivity.this);
     }
@@ -187,9 +192,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         MineFragment.setOnMessageCountChangeListener(new MineFragment.onMessageCountChangeListener() {
             @Override
             public void onMessageCountChange(int count) {
-                if (count>0){
+                if (count > 0) {
                     tv_msg_indicator.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     tv_msg_indicator.setVisibility(View.GONE);
                 }
             }
@@ -293,7 +298,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     private void resetUI() {
         if (fragments == null) {
             return;
@@ -335,10 +339,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    public Fragment getVisibleFragment(){
+    public Fragment getVisibleFragment() {
         List<Fragment> fragments = fm.getFragments();
-        for(Fragment fragment : fragments){
-            if(fragment != null && fragment.isVisible())
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible())
                 return fragment;
         }
         return null;
@@ -372,7 +376,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private boolean isMove() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        return false;
+//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
     @Override
@@ -590,9 +595,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (animFlag == 2) {
                     upAnimator.start();
                 }
-            } /*else {
-                onClick(ll_nav3);
-            }*/
+            } else if (intent.hasExtra(SceneDetailActivity.class.getSimpleName())) {
+                if(IndexFragment.instance!=null){
+                    IndexFragment.instance.refreshSceneList();
+                }
+                if(FindFragment.instance!=null){
+                    FindFragment.instance.refreshSceneList();
+                }
+            }
         }
     };
     private int animFlag = 0;

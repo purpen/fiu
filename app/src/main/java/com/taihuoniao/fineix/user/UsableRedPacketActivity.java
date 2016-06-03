@@ -4,20 +4,15 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -27,19 +22,18 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
-import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +60,7 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     public static final String TIMEOUT = "2";//已过期
     private String mRid;//订单号
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private UsableRedPacketAdapter adapter;
     private int mCurrentScrollState;
     private boolean bIsMoved = false;
@@ -97,7 +91,8 @@ public class UsableRedPacketActivity extends BaseActivity {
                                 finish();
                             } else {
                                 //红包不可用
-                                new SVProgressHUD(UsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
+                                ToastUtils.showError("这个红包不可用");
+//                                new SVProgressHUD(UsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
 //                                Toast.makeText(UsableRedPacketActivity.this, "这个红包不可用", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -112,7 +107,7 @@ public class UsableRedPacketActivity extends BaseActivity {
         custom_head.setHeadCenterTxtShow(true, "我的红包");
         foot_view.setVisibility(View.VISIBLE);
         lv = pull_lv.getRefreshableView();
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");
     }
 

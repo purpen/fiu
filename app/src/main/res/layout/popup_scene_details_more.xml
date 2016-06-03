@@ -4,14 +4,26 @@
               android:layout_height="wrap_content"
               android:background="@color/white"
               android:orientation="vertical">
+    <TextView
+        android:id="@+id/popup_scene_detail_more_pinglun"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="评论"
+        android:textColor="@color/black333333"
+        android:textSize="13sp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e2e2e2"/>
     <TextView
         android:id="@+id/popup_scene_detail_more_jubao"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:gravity="center"
         android:text="举报"
-        android:textColor="@color/red"
+        android:textColor="@color/black333333"
         android:textSize="13sp"/>
 
     <TextView

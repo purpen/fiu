@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AlbumGridAdapter;
 import com.taihuoniao.fineix.adapters.AlbumListAdapter;
@@ -23,9 +25,9 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.TopAndBottomLinear;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +57,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     private List<String> albumPaths;
     private boolean isUp = true;//相册列表界面的动画控制
     private PhotoItem photoItem;//当前显示的photo
+    private DisplayImageOptions options500_500;
 
 
     @Override
@@ -99,6 +102,11 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         lp.topMargin = MainApplication.getContext().getScreenHeight();
         lp.height = MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(getActivity(), 106);
         albumListView = (ListView) view.findViewById(R.id.fragment_photo_albmlist);
+        options500_500 = new DisplayImageOptions.Builder()
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
+                .considerExifParams(true)
+                .build();
         addViewToLinear();
         return view;
     }
@@ -144,8 +152,9 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 }
                 break;
             case R.id.title_continue:
-                if(photoItem==null){
-                    new SVProgressHUD(getActivity()).showErrorWithStatus("请选择一张照片");
+                if (photoItem == null) {
+                    ToastUtils.showError("请选择一张照片");
+//                    new SVProgressHUD(getActivity()).showErrorWithStatus("请选择一张照片");
 //                    Toast.makeText(getActivity(),"请选择一张图片",Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -162,12 +171,14 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,//指定所要查询的字段
                 MediaStore.Images.Media.SIZE + ">?",//查询条件
-                new String[]{"100000"}, //查询条件中问号对应的值
+                new String[]{"1"}, //查询条件中问号对应的值
                 MediaStore.Images.Media.DATE_ADDED + " desc");
-
+        Map<String, AlbumBean> galleries = new HashMap<String, AlbumBean>();
+        if(cursor==null){
+            return galleries;
+        }
         cursor.moveToFirst();
         //文件夹照片
-        Map<String, AlbumBean> galleries = new HashMap<String, AlbumBean>();
         while (cursor.moveToNext()) {
             String data = cursor.getString(1);
             if (data.lastIndexOf("/") < 1) {
@@ -182,8 +193,6 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 }
                 galleries.put(sub, new AlbumBean(name, sub, new ArrayList<PhotoItem>()));
             }
-
-
             galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
         }
         //系统相机照片
@@ -194,6 +203,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             galleries.remove(MainApplication.systemPhotoPath);
             albumPaths.remove(MainApplication.systemPhotoPath);
         }
+        cursor.close();
         return galleries;
     }
 
@@ -224,7 +234,8 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             photoItem = (PhotoItem) albumGridAdapter.getItem(position);
             Uri uri = photoItem.getImageUri().startsWith("file:") ? Uri.parse(photoItem
                     .getImageUri()) : Uri.parse("file://" + photoItem.getImageUri());
-            photoImg.setImageBitmap(ImageUtils.decodeBitmapWithSize(uri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth(), true));
+            ImageLoader.getInstance().displayImage(uri.toString(), photoImg, options500_500);
+//            photoImg.setImageBitmap(ImageUtils.decodeBitmapWithSize(uri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth(), true));
             gridView.smoothScrollToPositionFromTop(position, 0);
         }
     }

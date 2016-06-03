@@ -57,18 +57,20 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
+    public static FindFragment instance;
     private static final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
     private List<String> hotLabelList;
@@ -99,7 +101,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private RecyclerView labelRecycler;
     private AbsoluteLayout absoluteLayout;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //listview分页加载
 //    private int lastSavedFirstVisibleItem = -1;
 //    private int lastTotalItem = -1;
@@ -107,6 +109,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected View initView() {
+        instance = FindFragment.this;
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
         titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
         searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
@@ -121,7 +124,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
         absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
-        dialog = new SVProgressHUD(getActivity());
+        sceneListView.setDivider(null);
+        sceneListView.setDividerHeight(0);
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -146,7 +151,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 currentPage = 1;
                 location = null;
                 requestNet();
-                absoluteLayout.removeAllViews();
+//                absoluteLayout.removeAllViews();
                 DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
             }
         });
@@ -212,6 +217,12 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
+    }
+
+    //外界调用刷新场景列表的方法
+    public void refreshSceneList(){
+        currentPage = 1;
+        requestNet();
     }
 
 
@@ -319,7 +330,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         thread.start();
 
                     }else {
-                        dialog.showErrorWithStatus(netUser.getMessage());
+                        ToastUtils.showError(netUser.getMessage());
+//                        dialog.showErrorWithStatus(netUser.getMessage());
                     }
                     break;
                 case -10:
@@ -336,7 +348,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //                        Toast.makeText(getActivity(), "测试，情景数据个数=" + qingjingList.size(), Toast.LENGTH_SHORT).show();
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
                     }else {
-                        dialog.showErrorWithStatus(netQingjingListBean.getMessage());
+                        ToastUtils.showError(netQingjingListBean.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingListBean.getMessage());
                     }
                     break;
                 case DataConstants.CJ_HOTLABEL:
@@ -347,7 +360,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         hotLabelList.addAll(netHot.getData().getTags());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
                     }else{
-                        dialog.showErrorWithStatus(netHot.getMessage());
+                        ToastUtils.showError(netHot.getMessage());
+//                        dialog.showErrorWithStatus(netHot.getMessage());
                     }
                     break;
 //                case DataConstants.HOT_LABEL_LIST:
@@ -376,14 +390,16 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
                         sceneListViewAdapter.notifyDataSetChanged();
                     }else{
-                        dialog.showErrorWithStatus(netSceneList.getMessage());
+                        ToastUtils.showError(netSceneList.getMessage());
+//                        dialog.showErrorWithStatus(netSceneList.getMessage());
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     pullToRefreshView.onRefreshComplete();
                     progressBar.setVisibility(View.GONE);
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }

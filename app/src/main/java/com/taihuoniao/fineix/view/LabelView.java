@@ -43,6 +43,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
     public TextView nameLeft;
     private TextView priceRight;
     private ImageView pointRight;
+    private ImageView animPoint;
     private ImageView deleteImg;
 //    private TextView labelTxtRight;
 //    private TextView priceTxtRight;
@@ -65,6 +66,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
+        animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
         deleteImg = (ImageView) findViewById(R.id.view_label_delete);
 //        deleteImg.setOnClickListener(this);
         this.setOnFocusChangeListener(this);
@@ -86,6 +88,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
+        animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
         deleteImg = (ImageView) findViewById(R.id.view_label_delete);
 //        deleteImg.setOnClickListener(this);
         this.setOnFocusChangeListener(this);
@@ -303,15 +306,24 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 
     public void wave() {
         final AnimationSet as = new AnimationSet(true);
-        ScaleAnimation sa = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, ScaleAnimation.RELATIVE_TO_SELF,
+        ScaleAnimation sa = new ScaleAnimation(1f, 3f, 1f, 3f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(ANIMATIONEACHOFFSET * 3);
         AlphaAnimation aniAlp = new AlphaAnimation(1, 0.1f);
         as.setDuration(ANIMATIONEACHOFFSET * 3);
         as.addAnimation(sa);
         as.addAnimation(aniAlp);
+        final AnimationSet as1 = new AnimationSet(true);
+        ScaleAnimation sa1 = new ScaleAnimation(1f, 6f, 1f, 6f, ScaleAnimation.RELATIVE_TO_SELF,
+                0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        sa1.setDuration(ANIMATIONEACHOFFSET * 3);
+        AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0.1f);
+        as1.setDuration(ANIMATIONEACHOFFSET * 3);
+        as1.addAnimation(sa1);
+        as1.addAnimation(aniAlp1);
+//        as1.setStartOffset(1800);
 
-        as.setAnimationListener(new Animation.AnimationListener() {
+        as1.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -324,6 +336,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 //                }
 //                if (pointRight.getVisibility() == VISIBLE) {
                 pointRight.startAnimation(as);
+                animPoint.startAnimation(as1);
 //                }
             }
 
@@ -336,7 +349,10 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 //            pointLeft.startAnimation(as);
 //        }
 //        if (pointRight.getVisibility() == VISIBLE) {
+        animPoint.setVisibility(VISIBLE);
         pointRight.startAnimation(as);
+        animPoint.startAnimation(as1);
+
 //        }
     }
 

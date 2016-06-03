@@ -21,7 +21,7 @@ import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.AddNewAddressActivity;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
     private List<AddressBean> list;
     private Activity activity;
     private Handler mHandler;
-    private SVProgressHUD waittingDialog;
+    private WaittingDialog waittingDialog;
 
     public SelectAddressListViewAdapter(Context context, List<AddressBean> list, int mScreentWidth, Activity activity, Handler mHandler) {
         this.context = context;
@@ -43,7 +43,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         this.mScreentWidth = mScreentWidth;
         this.activity = activity;
         this.mHandler = mHandler;
-        this.waittingDialog = new SVProgressHUD(context);
+        this.waittingDialog = new WaittingDialog(context);
     }
 
     @Override

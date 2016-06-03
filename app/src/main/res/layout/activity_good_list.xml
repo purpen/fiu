@@ -57,7 +57,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/cart_num_bg"
+                android:background="@drawable/yellow_circle"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="10sp"

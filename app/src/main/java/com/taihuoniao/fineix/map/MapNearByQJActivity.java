@@ -33,7 +33,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
     private static final String STICK_SELECT = "1"; //精选情境
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
-    private SVProgressHUD waittingDialog;
+    private WaittingDialog waittingDialog;
     private LatLng ll;
     private String address;
     public MapNearByQJActivity() {
@@ -83,7 +83,7 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
         if (!TextUtils.isEmpty(address)){
             custom_head.setHeadCenterTxtShow(true,address);
         }
-        waittingDialog = new SVProgressHUD(this);
+        waittingDialog = new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
 //        mBDMap.getUiSettings().setAllGesturesEnabled(false);

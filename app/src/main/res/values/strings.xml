@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Fiu</string>
-    <string name="qing">情</string>
-    <string name="jing">景</string>
-    <string name="fiu">Fiu</string>
-    <string name="pin">品</string>
-    <string name="mine">我</string>
+    <string name="qing">精选</string>
+    <string name="jing">发现</string>
+    <string name="fiu">Fiuing</string>
+    <string name="pin">好货</string>
+    <string name="mine">个人</string>
     <string name="about_us">关于我们</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>

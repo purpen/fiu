@@ -29,13 +29,13 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +80,6 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
     private TextView priceTv;
     //    private Button editBtn;
     private Button deleteBtn;
-    //当前图片的bitmap
-    private Bitmap currentBitmap;
     //当前点击的labelview
     private LabelView labelView;
     //当前filter
@@ -91,7 +89,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
     //添加链接装载链接的容器
     private List<LabelView> labels = new ArrayList<LabelView>();
     //工具类
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //编辑好的图片存储名称
     private String picName;
     public static FilterActivity instance = null;
@@ -123,7 +121,6 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         titleLayout.setTitle(R.string.filter);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
-        EffectUtil.clear();
         ImageLoader.getInstance().loadImage(imageUri.toString(), options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -132,12 +129,12 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                currentBitmap = loadedImage;
                 gpuImageView.setImage(loadedImage);
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
                 if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
@@ -159,7 +156,8 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
 //        ImageUtils.asyncLoadImage(FilterActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
@@ -279,7 +277,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
         chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
-        dialog = new SVProgressHUD(FilterActivity.this);
+        dialog = new WaittingDialog(FilterActivity.this);
         imageLoader = ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
@@ -316,7 +314,8 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
             cv.drawBitmap(gpuImageView.capture(), null, dst, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            dialog.showErrorWithStatus("图片处理异常，请重试");
+            ToastUtils.showError("图片处理异常，请重试");
+//            dialog.showErrorWithStatus("图片处理异常，请重试");
 //            Toast.makeText(FilterActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -354,7 +353,8 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
             dialog.dismiss();
             if (TextUtils.isEmpty(fileName)) {
                 //出现问题是因为缓存目录中产生了与规定文件名称一样的文件夹，清理即可以使用
-                dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
+                ToastUtils.showError("图片处理错误,请清理缓存后重试");
+//                dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
                 return;
             }
             //传递数据

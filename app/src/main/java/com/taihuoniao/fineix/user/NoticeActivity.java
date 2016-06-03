@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,15 +17,17 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.NoticeData;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -41,7 +46,7 @@ public class NoticeActivity extends BaseActivity{
     private List<NoticeData.NoticeItem> list;
     private static final String pageSize="9999";
     private static final String COMMENT_TYPE="12";
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private NoticeAdapter adapter;
 
 
@@ -52,7 +57,10 @@ public class NoticeActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"提醒");
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DataConstants.BroadDeleteScene);
+        registerReceiver(noticeReceiver,intentFilter);
     }
 
     @Override
@@ -96,13 +104,15 @@ public class NoticeActivity extends BaseActivity{
                     list=response.getData().rows;
                     refreshUI();
                 }else {
-                    dialog.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    dialog.showErrorWithStatus(response.getMessage());
                 }
             }
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -121,4 +131,19 @@ public class NoticeActivity extends BaseActivity{
             adapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(noticeReceiver);
+        super.onDestroy();
+    }
+
+    private BroadcastReceiver noticeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
+//                刷新场景列表
+            }
+        }
+    };
 }

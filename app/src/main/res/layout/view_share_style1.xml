@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="22dp">
+
+    <LinearLayout
+        android:id="@+id/activity_share_user_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/activity_share_user_headimg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:riv_border_color="@color/white"
+            app:riv_border_width="1dp"
+            app:riv_corner_radius="100dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/activity_share_user_right_relative"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/activity_share_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="11sp"/>
+
+            <TextView
+                android:id="@+id/activity_share_user_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_share_user_name"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="10sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/activity_share_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_share_user_linear"
+        android:layout_marginTop="7dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix"
+            android:src="@mipmap/scene_title_background"/>
+
+        <TextView
+            android:id="@+id/activity_share_scene_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:text="详见的小路"
+            android:textColor="@color/white"
+            android:textSize="40sp"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_share_location_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_share_frame"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/activity_share_location_img"
+            android:layout_width="wrap_content"
+            android:layout_height="11dp"
+            android:src="@mipmap/location_white_width_16px"/>
+
+        <TextView
+            android:id="@+id/activity_share_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="9sp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_share_location_linear"
+        >
+
+        <ImageView
+            android:id="@+id/erweima"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/share_erweima"/>
+
+        <TextView
+            android:id="@+id/activity_share_scene_des"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@id/erweima"
+            android:layout_toStartOf="@id/erweima"
+            android:maxLines="2"
+            android:text="a手里的看法加拉塞克大家flak涉及到法律框架啊手动阀手动阀手动阀"
+            android:textColor="@color/white"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_share_scene_des"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@id/erweima"
+            android:layout_toStartOf="@id/erweima"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="Fiu | 创新产品情景式购物平台"
+            android:textColor="@color/white"
+            android:textSize="9sp"/>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:src="@mipmap/logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="有Fiu才购"
+            android:textColor="#000000"
+            android:textSize="9sp"/>
+    </LinearLayout>
+</RelativeLayout>

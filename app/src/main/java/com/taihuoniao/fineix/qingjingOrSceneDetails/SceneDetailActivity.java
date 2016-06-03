@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailProductListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -53,11 +54,12 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyScrollView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,11 +117,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ListViewForScrollView nearProductListView;
     private PopupWindow popupWindow;
     //popupwindow下的控件
+    private TextView pinglunTv;
     private TextView shareTv;
     private TextView jubaoTv;
     private TextView cancelTv;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //图片加载
     private DisplayImageOptions options, options750_1334;
     //图片上的商品
@@ -186,7 +189,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
-        dialog = new SVProgressHUD(SceneDetailActivity.this);
+        dialog = new WaittingDialog(SceneDetailActivity.this);
         initPopupWindow();
     }
 
@@ -198,7 +201,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         id = getIntent().getStringExtra("id");
         isCreate = getIntent().getBooleanExtra("create", false);
         if (id == null) {
-            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
+            ToastUtils.showError("没有这个场景");
+//            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
 //            Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -275,6 +279,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
 //        关联列表数据异常
         DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
+//        ToastUtils.showSuccess("测试数据");
     }
 
 
@@ -282,6 +287,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
+        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
         shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
@@ -289,6 +295,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        pinglunTv.setOnClickListener(this);
         shareTv.setOnClickListener(this);
         jubaoTv.setOnClickListener(this);
         cancelTv.setOnClickListener(this);
@@ -329,6 +336,31 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.DELETE_SCENE:
+                    dialog.dismiss();
+                    NetBean netBean = (NetBean) msg.obj;
+                    if (netBean.isSuccess()) {
+                        ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
+//                        Intent intent = new Intent(DataConstants.BroadDeleteScene);
+//                        intent.putExtra(SceneDetailActivity.class.getSimpleName(), true);
+//                        sendBroadcast(intent);
+//                        if (CJResultFragment.instance != null) {
+//                            CJResultFragment.instance.refreshList();
+//                        }
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+//                        finish();
+//                        刷新列表
+                    } else {
+                        ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                    }
+                    break;
                 case DataConstants.ADD_PRODUCT_LIST:
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
@@ -338,7 +370,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         goodListAdapter.notifyDataSetChanged();
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                        ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.PRODUCT_AND_SCENE:
@@ -368,7 +401,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+                        ToastUtils.showError(netSceneLoveBean1.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -390,7 +424,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+                        ToastUtils.showError(netSceneLoveBean.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -473,13 +508,23 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                         location = netSceneDetails.getLocation();
                     } else {
-                        dialog.showErrorWithStatus(netSceneDetails.getMessage());
+//                        Toast toast = new Toast(SceneDetailActivity.this);
+//                        toast.setView();
+//                        dialog.showErrorWithStatus(netSceneDetails.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneDetails.getMessage(), Toast.LENGTH_SHORT).show();
+                        ToastUtils.showError(netSceneDetails.getMessage());
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Log.e("<<<", "请求失败 ");
                     break;
             }
@@ -602,6 +647,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
+                if (netScene == null) {
+                    dialog.show();
+                    DataPaser.sceneDetails(id, handler);
+                    return;
+                }
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getUser_info().getUser_id())) {
+                    popupWindow.dismiss();
+                    dialog.show();
+                    DataPaser.deleteScene(id, handler);
+                    return;
+                }
                 Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
                 intent1.putExtra("target_id", id);
                 intent1.putExtra("type", 4 + "");
@@ -670,10 +726,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
 //            case R.id.activity_scenedetails_commentlinear:
+            case R.id.popup_scene_detail_more_pinglun:
             case R.id.activity_scenedetails_commentimg:
             case R.id.activity_scenedetails_commentcount:
             case R.id.activity_scenedetails_allcomment:
             case R.id.activity_scenedetails_morecomment:
+                popupWindow.dismiss();
 //                Log.e("<<<点击", "点击评论");
                 if (netScene == null) {
                     dialog.show();
@@ -689,6 +747,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_moreuser:
                 break;
             case R.id.activity_scenedetails_more:
+                if (netScene == null) {
+                    dialog.show();
+                    DataPaser.sceneDetails(id + "", handler);
+                    return;
+                }
+//                if(netScene.getUser_info().getUser_id().equals(netScene.getCurrent_user_id()))
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getUser_info().getUser_id())) {
+                    jubaoTv.setText("删除");
+                }
                 showPopup();
                 break;
         }

@@ -26,8 +26,9 @@ import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public class HotCitiesActivity extends BaseActivity<City> {
     TextView tv_location;
     private ArrayList<City> cities;
     private HotCitiesAdapter adapter = null;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     public HotCitiesActivity() {
         super(R.layout.activity_hotcities_layout);
     }
@@ -60,7 +61,7 @@ public class HotCitiesActivity extends BaseActivity<City> {
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
         recycler_view.setItemAnimator(new DefaultItemAnimator());
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
     }
 
     public void setCurrentCity(BDLocation location) {
@@ -119,7 +120,8 @@ public class HotCitiesActivity extends BaseActivity<City> {
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常,请确保网络畅通");
+                ToastUtils.showError("网络异常,请确保网络畅通");
+//                dialog.showErrorWithStatus("网络异常,请确保网络畅通");
             }
         });
 

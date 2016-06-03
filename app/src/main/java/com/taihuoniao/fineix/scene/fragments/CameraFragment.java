@@ -26,9 +26,9 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -135,7 +135,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     });
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败，请返回重试!");
+                    ToastUtils.showError("拍照失败，请返回重试!");
+//                    new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败，请返回重试!");
 //                    Toast.makeText(getActivity(), "拍照失败，请返回重试！", Toast.LENGTH_SHORT).show();
                     try {
                         cameraInst.startPreview();
@@ -633,7 +634,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             if (result != null) {
                 ImageUtils.processPhotoItem(getActivity(), new PhotoItem(result, System.currentTimeMillis()));
             } else {
-                new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败");
+                ToastUtils.showError("拍照失败");
+//                new SVProgressHUD(getActivity()).showErrorWithStatus("拍照失败");
                 cameraInst.startPreview();
             }
         }

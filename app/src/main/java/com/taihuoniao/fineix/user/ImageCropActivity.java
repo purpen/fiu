@@ -22,6 +22,7 @@ import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -143,18 +144,21 @@ public class ImageCropActivity extends BaseActivity {
                     LogUtil.e(TAG, responseInfo.result);
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()) {
-                        svProgressHUD.showSuccessWithStatus("背景图上传成功");
+                        ToastUtils.showSuccess("背景图上传成功");
+//                        svProgressHUD.showSuccessWithStatus("背景图上传成功");
                         activity.finish();
                         return;
                     }
-                    svProgressHUD.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     setViewEnable(true);
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
-                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError("网络异常，请确认网络畅通");
+//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } catch (Exception e) {
@@ -196,21 +200,24 @@ public class ImageCropActivity extends BaseActivity {
 
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()){
-                        svProgressHUD.showSuccessWithStatus("头像上传成功");
+                        ToastUtils.showSuccess("头像上传成功");
+//                        svProgressHUD.showSuccessWithStatus("头像上传成功");
                         if (listener!=null){
                             listener.onClipComplete(bitmap);
                         }
                         finish();
                         return;
                     }
-                    svProgressHUD.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
-                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError("网络异常，请确认网络畅通");
+//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } catch (Exception e) {

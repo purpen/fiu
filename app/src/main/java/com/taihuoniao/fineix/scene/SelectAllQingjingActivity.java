@@ -21,10 +21,11 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     GridView gridView;
     @Bind(R.id.activity_select_allqj_progress)
     ProgressBar progressBar;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //情景列表
     private int page = 1;
     private double distance = 5000;//搜索范围
@@ -67,7 +68,8 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
             isSearch = "0";
         }
         if (latLng == null) {
-            dialog.showErrorWithStatus("无法获得您当前位置信息");
+            ToastUtils.showError("无法获得您当前位置信息");
+//            dialog.showErrorWithStatus("无法获得您当前位置信息");
 //            Toast.makeText(SelectAllQingjingActivity.this, "无法获得您当前位置信息", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -134,7 +136,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         }
         gridView.setAdapter(allQingjingGridAdapter);
         gridView.setOnItemClickListener(this);
-        dialog = new SVProgressHUD(SelectAllQingjingActivity.this);
+        dialog = new WaittingDialog(SelectAllQingjingActivity.this);
     }
 
     @Override
@@ -238,12 +240,15 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                         }
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
                         allQingjingGridAdapter.notifyDataSetChanged();
+                    }else{
+                        ToastUtils.showError(netQingjingListBean.getMessage());
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
                     break;
             }

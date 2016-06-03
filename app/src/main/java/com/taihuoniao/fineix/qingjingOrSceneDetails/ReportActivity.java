@@ -11,8 +11,9 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -36,14 +37,15 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
     TextView adCheatTv;
     @Bind(R.id.activity_report_success)
     TextView successTv;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
     @Override
     protected void getIntentData() {
         target_id = getIntent().getStringExtra("target_id");
         type = getIntent().getStringExtra("type");
         if (target_id == null || type == null) {
-            new SVProgressHUD(this).showErrorWithStatus("暂不可举报");
+            ToastUtils.showError("暂不可举报");
+//            new SVProgressHUD(this).showErrorWithStatus("暂不可举报");
 //            Toast.makeText(ReportActivity.this, "暂不可举报", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -59,7 +61,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         titleLayout.setBackImgVisible(false);
         titleLayout.setTitle(R.string.report, getResources().getColor(R.color.black333333));
         titleLayout.setRightTv(R.string.cancel, getResources().getColor(R.color.black333333), ReportActivity.this);
-        dialog = new SVProgressHUD(ReportActivity.this);
+        dialog = new WaittingDialog(ReportActivity.this);
     }
 
     @OnClick({R.id.activity_report_sexual_violence, R.id.activity_report_steal_picture, R.id.activity_report_advertising_cheat})

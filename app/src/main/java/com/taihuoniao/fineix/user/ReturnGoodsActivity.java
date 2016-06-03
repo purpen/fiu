@@ -16,9 +16,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class ReturnGoodsActivity extends Activity {
     private ShopOrderListAdapter mAdapter;
     private List<OrderEntity> mList = new ArrayList<>();
     private String status = "8";
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private int curPage = 1;
     private int size = 10;
 
@@ -90,7 +90,7 @@ public class ReturnGoodsActivity extends Activity {
         title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         if (curPage == 1) {
             mDialog.show();
         }

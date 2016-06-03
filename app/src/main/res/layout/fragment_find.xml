@@ -32,7 +32,7 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:paddingRight="17dp"
             android:src="@mipmap/location_39"/>
     </RelativeLayout>
@@ -41,7 +41,7 @@
         android:id="@+id/fragment_find_scenelistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="5dp"
+        android:dividerHeight="0dp"
         android:layout_below="@id/fragment_find_titlelayout"/>
 
     <ProgressBar

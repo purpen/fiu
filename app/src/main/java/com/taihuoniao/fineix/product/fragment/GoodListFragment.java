@@ -23,10 +23,10 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +176,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //                        click(0);
                         goodListFragmentRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
+                        ToastUtils.showError(netCategory.getMessage());
+//                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
 //                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;

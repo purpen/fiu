@@ -25,7 +25,7 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserQJFragment extends MyBaseFragment {
     private int curPage = 1;
     private boolean isLoadMore = false;
     public static final String PAGE_SIZE = "10";
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private OrderedQJAdapter adapter;
     private List<QingJingListBean.QingJingItem> mList = new ArrayList<>();
     private String userId=String.valueOf(LoginInfo.getUserId());
@@ -70,7 +70,7 @@ public class UserQJFragment extends MyBaseFragment {
     @Override
     protected void initParams() {
         if (dialog == null)
-            dialog = new SVProgressHUD(activity);
+            dialog = new WaittingDialog(activity);
     }
 
     @Override

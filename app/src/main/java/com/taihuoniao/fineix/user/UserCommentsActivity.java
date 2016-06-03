@@ -20,9 +20,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class UserCommentsActivity extends BaseActivity{
     private List<CommentsBean.CommentItem> list;
     private static final String pageSize="9999";
     private static final String COMMENT_TYPE="12";
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private UserCommentsAdapter adapter;
     public UserCommentsActivity(){
         super(R.layout.activity_user_comments);
@@ -57,7 +57,7 @@ public class UserCommentsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"评论");
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
     }
 
     @Override
@@ -98,13 +98,15 @@ public class UserCommentsActivity extends BaseActivity{
                     list=commentsBean.getData().getRows();
                     refreshUI();
                 }else {
-                    dialog.showErrorWithStatus(commentsBean.getMessage());
+                    ToastUtils.showError(commentsBean.getMessage());
+//                    dialog.showErrorWithStatus(commentsBean.getMessage());
                 }
             }
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }

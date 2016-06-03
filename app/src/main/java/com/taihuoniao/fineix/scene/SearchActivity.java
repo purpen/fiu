@@ -255,4 +255,5 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
         ft.commit();
     }
+
 }

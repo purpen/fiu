@@ -17,9 +17,9 @@ import com.taihuoniao.fineix.adapters.ShopOrderListAdapter;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class ShopOrderFragment extends Fragment {
     private ShopOrderListAdapter mAdapter;
     private List<OrderEntity> mList = new ArrayList<>();
     private String status;//根据不同状态值获取订单中不同状态的列表数据
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private int curPage = 1;
     private int size = 10;
     private ListView listView_show = null;
@@ -89,7 +89,7 @@ public class ShopOrderFragment extends Fragment {
         if (!isVisibleToUser) {
             mHandler.removeCallbacks(mLoadData);
         } else if (isVisibleToUser) {
-            mDialog = new SVProgressHUD(getActivity());
+            mDialog = new WaittingDialog(getActivity());
             if (curPage == 1) {
                 mDialog.show();
             }

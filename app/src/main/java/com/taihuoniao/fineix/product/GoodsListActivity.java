@@ -18,7 +18,7 @@ import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 
@@ -40,7 +40,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.activity_good_list_first_viewpager)
     ViewPager firstViewPager;//关联slidingtab的时候，设置监听应该是他关联的slidingtab
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //第一层分类列表适配器
     private GoodListFirtViewPagerAdapter goodListFirtViewPagerAdapter;
 
@@ -56,7 +56,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void initView() {
-        dialog = new SVProgressHUD(GoodsListActivity.this);
+        dialog = new WaittingDialog(GoodsListActivity.this);
         searchImg.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
         firstSliding.setIndicatorColor(getResources().getColor(R.color.yellow_bd8913));

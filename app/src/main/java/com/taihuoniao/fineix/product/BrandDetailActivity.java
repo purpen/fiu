@@ -25,7 +25,8 @@ import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     //加载圆图
     private DisplayImageOptions option,options750_422;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //商品列表
     private int page = 1;
     private List<ProductListBean> productList;
@@ -73,7 +74,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         brandImg = (ImageView) header.findViewById(R.id.header_brand_detail_titleimg);
         desTv = (TextView) header.findViewById(R.id.header_brand_detail_des);
         listView.addHeaderView(header);
-        dialog = new SVProgressHUD(BrandDetailActivity.this);
+        dialog = new WaittingDialog(BrandDetailActivity.this);
         option = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
@@ -99,7 +100,8 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initList() {
         id = getIntent().getStringExtra("id");
         if (id == null) {
-            dialog.showErrorWithStatus("暂无此品牌详细信息");
+            ToastUtils.showError("暂无此品牌详细信息");
+//            dialog.showErrorWithStatus("暂无此品牌详细信息");
 //            Toast.makeText(BrandDetailActivity.this, "暂无此品牌详细信息", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -143,7 +145,8 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         productList.addAll(netProductBean.getList());
                         goodListAdapter.notifyDataSetChanged();
                     } else {
-                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                        ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.BRAND_DETAIL:
@@ -155,12 +158,14 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         desTv.setText(netBrandDetail.getData().getDes());
                         ImageLoader.getInstance().displayImage(netBrandDetail.getData().getBanner_url(),backgroundImg,options750_422);
                     } else {
-                        dialog.showErrorWithStatus(netBrandDetail.getMessage());
+                        ToastUtils.showError(netBrandDetail.getMessage());
+//                        dialog.showErrorWithStatus(netBrandDetail.getMessage());
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
+                    ToastUtils.showError("网络错误");
                     break;
             }
         }

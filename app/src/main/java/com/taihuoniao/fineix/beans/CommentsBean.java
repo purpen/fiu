@@ -40,6 +40,16 @@ public class CommentsBean extends NetBean {
         private String reply_user_nickname;
         public String target_small_cover_url;
         public boolean is_unread;
+        private ReplyComment reply_comment;
+
+        public ReplyComment getReply_comment() {
+            return reply_comment;
+        }
+
+        public void setReply_comment(ReplyComment reply_comment) {
+            this.reply_comment = reply_comment;
+        }
+
         public String getReply_user_nickname() {
             return reply_user_nickname;
         }
@@ -71,6 +81,18 @@ public class CommentsBean extends NetBean {
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
         }
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+    }
+
+    public static class ReplyComment{
+        private User user;
 
         public User getUser() {
             return user;

@@ -18,10 +18,10 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -41,7 +41,7 @@ public class MessageActivity extends BaseActivity {
     CustomItemLayout item_to_comment;
     @Bind(R.id.item_notice)
     CustomItemLayout item_notice;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private User user;
 
     public MessageActivity() {
@@ -57,7 +57,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "消息");
-        dialog = new SVProgressHUD(this);
+        dialog = new WaittingDialog(this);
         item_push_setting.setTVStyle(R.mipmap.sys_msg, "系统通知", R.color.color_333);
         item_clear_cache.setTVStyle(R.mipmap.icon_comment, "评论", R.color.color_333);
         item_to_comment.setTVStyle(R.mipmap.private_msg, "私信", R.color.color_333);
@@ -123,14 +123,16 @@ public class MessageActivity extends BaseActivity {
                     }
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    dialog.showErrorWithStatus("对不起,数据异常");
+                    ToastUtils.showError("对不起，数据异常");
+//                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }

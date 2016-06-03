@@ -70,8 +70,8 @@ public class CommentsListAdapter extends BaseAdapter {
         holder.name.setText(list.get(position).getUser().getNickname());
 
         holder.time.setText(list.get(position).getCreated_at());
-        if (list.get(position).getReply_user_nickname() != null) {
-            holder.content.setText("回复 " + list.get(position).getReply_user_nickname() + ": " + list.get(position).getContent());
+        if (list.get(position).getReply_comment()!=null) {
+            holder.content.setText("回复 " + list.get(position).getReply_comment().getUser().getNickname() + ": " + list.get(position).getContent());
         } else {
             holder.content.setText(list.get(position).getContent());
         }

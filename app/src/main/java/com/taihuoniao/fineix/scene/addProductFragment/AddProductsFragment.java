@@ -32,10 +32,10 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -259,7 +259,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
-                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+                ToastUtils.showError("网络错误");
+//                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
             }
         });
 

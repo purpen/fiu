@@ -28,9 +28,9 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -104,7 +104,8 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                     //开始搜索
                     searchStr = editText.getText().toString();
                     if (TextUtils.isEmpty(searchStr)) {
-                        new SVProgressHUD(ShareSearchActivity.this).showInfoWithStatus("请输入搜索关键字");
+                        ToastUtils.showInfo("请输入搜索关键字");
+//                        new SVProgressHUD(ShareSearchActivity.this).showInfoWithStatus("请输入搜索关键字");
                         return false;
                     }
                     page = 1;
@@ -149,7 +150,8 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                     list.addAll(netSearch.getData().getRows());
                     shareCJSelectListAdapter.notifyDataSetChanged();
                 } else {
-                    new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus(netSearch.getMessage());
+                    ToastUtils.showError(netSearch.getMessage());
+//                    new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus(netSearch.getMessage());
                 }
             }
 
@@ -157,7 +159,8 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus("网络错误");
+                ToastUtils.showError("网络错误");
+//                new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus("网络错误");
             }
         });
     }

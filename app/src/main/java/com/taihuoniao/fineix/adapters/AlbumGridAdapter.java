@@ -34,8 +34,8 @@ public class AlbumGridAdapter extends BaseAdapter {
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
                 .showImageOnFail(R.mipmap.default_background_500_500)
-                .cacheInMemory(true)
                 .cacheOnDisk(true)
+                .cacheInMemory(true)
                 .considerExifParams(true)
                 .build();
     }
@@ -57,7 +57,7 @@ public class AlbumGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-         ViewHolder hold;
+        ViewHolder hold;
         int width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 6)) / 4;
         int height = width;
         if (convertView == null) {
@@ -71,7 +71,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img,options);
+        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img, options);
         if (photoList.get(position).isChecked()) {
             hold.tv.setBackgroundResource(R.drawable.yellow_album_ground);
         } else {
@@ -91,7 +91,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-   static class ViewHolder {
+    static class ViewHolder {
         private ImageView img;
         private TextView tv;
     }

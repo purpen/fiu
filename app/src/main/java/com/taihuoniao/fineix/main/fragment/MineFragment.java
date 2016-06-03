@@ -48,8 +48,8 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,7 +121,7 @@ public class MineFragment extends MyBaseFragment {
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
     private HashMap<String,Integer> labelMap=new HashMap<>();
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
 
     public MineFragment() {
@@ -182,7 +182,7 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initParams() {
-        dialog = new SVProgressHUD(activity);
+        dialog = new WaittingDialog(activity);
     }
 
     @Override

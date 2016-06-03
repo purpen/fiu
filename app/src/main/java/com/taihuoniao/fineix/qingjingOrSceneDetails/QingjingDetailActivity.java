@@ -39,6 +39,7 @@ import com.taihuoniao.fineix.beans.QingjingSubsBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByQJActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -49,8 +50,9 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +106,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private ImageView love;
     private TextView loveTv;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private com.taihuoniao.fineix.beans.QingjingDetailBean.UserInfo netUserInfo;
     private String[] locaiton = null;//服务器返回经纬度
     //图片加载
@@ -164,7 +166,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
-        dialog = new SVProgressHUD(QingjingDetailActivity.this);
+        dialog = new WaittingDialog(QingjingDetailActivity.this);
     }
 
     @Override
@@ -176,7 +178,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             backImg.setImageResource(R.mipmap.cancel_black);
         }
         if (id == null) {
-            new SVProgressHUD(this).showErrorWithStatus("没有这个情景");
+            ToastUtils.showError("没有这个情景");
+//            new SVProgressHUD(this).showErrorWithStatus("没有这个情景");
 //            Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -207,6 +210,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         subscriptionCount.setOnClickListener(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadQingjingDetail);
+        filter.addAction(DataConstants.BroadDeleteScene);
         registerReceiver(qingjingReceiver, filter);
     }
 
@@ -239,7 +243,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
+                        ToastUtils.showError(netQingjingSubs.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
 //                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -259,7 +264,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
+                        ToastUtils.showError(netQingjingSubsBean.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
 //                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -344,7 +350,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             moreUser.setVisibility(View.GONE);
                         }
                     } else {
-                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
+                        ToastUtils.showError(netQingjingDetailBean.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
 //                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -507,10 +514,16 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private BroadcastReceiver qingjingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            dialog.show();
-            DataPaser.qingjingDetails(id, handler);
-            currentPage = 1;
-            DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+            if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
+                dialog.show();
+                currentPage = 1;
+                DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+            } else {
+                dialog.show();
+                DataPaser.qingjingDetails(id, handler);
+                currentPage = 1;
+                DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+            }
         }
     };
 

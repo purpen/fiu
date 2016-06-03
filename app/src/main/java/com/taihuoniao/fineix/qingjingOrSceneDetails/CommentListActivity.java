@@ -32,10 +32,11 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private TextView deleteTv;
     private TextView cancelTv;
     //网络请求
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private String currentUserId = null;//网络获取的当前用户id
     //评论列表页码
     private int currentPage = 1;
@@ -88,7 +89,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         listView.setSelector(R.color.nothing);
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
-        dialog = new SVProgressHUD(this);
+        dialog = new WaittingDialog(this);
         initPopupWindow();
     }
 
@@ -98,7 +99,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");
         if (target_id == null || type == null || target_user_id == null) {
-            dialog.showErrorWithStatus("数据错误");
+            ToastUtils.showError("数据错误");
+//            dialog.showErrorWithStatus("数据错误");
             if (dialog != null) {
                 if (dialog.isShowing()) {
                     dialog.dismiss();
@@ -243,7 +245,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netBean1.getMessage());
+                        ToastUtils.showError(netBean1.getMessage());
+//                        dialog.showErrorWithStatus(netBean1.getMessage());
                     }
                     break;
                 case DataConstants.SEND_COMMENT:
@@ -259,7 +262,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netBean.getMessage());
+                        ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
                         if ("0".equals(netBean.getCurrent_user_id())) {
                             MainApplication.which_activity = DataConstants.ElseActivity;
                             startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
@@ -292,7 +296,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     pullToRefreshLayout.onRefreshComplete();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -338,7 +343,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     case "1":
                         if (reply_id == null || reply_user_id == null) {
                             dialog.dismiss();
-                            dialog.showErrorWithStatus("请选择回复评论");
+                            ToastUtils.showError("请选择回复评论");
+//                            dialog.showErrorWithStatus("请选择回复评论");
 //                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }

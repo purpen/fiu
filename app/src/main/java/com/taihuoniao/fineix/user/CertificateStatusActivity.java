@@ -18,9 +18,9 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
 
@@ -48,7 +48,7 @@ public class CertificateStatusActivity extends BaseActivity{
     LinearLayout ll_first_auth;
     private AuthData authData;
     private HashMap<String,Integer> labelMap=new HashMap<>();
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     public static CertificateStatusActivity instance;
     public static final int[] labelsImg={R.mipmap.dana,R.mipmap.hj,R.mipmap.xingshe,R.mipmap.yishufan,R.mipmap.shouyiren,R.mipmap.renlaifeng,R.mipmap.shuhui,R.mipmap.buyer};
     public CertificateStatusActivity(){
@@ -59,7 +59,7 @@ public class CertificateStatusActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"官方认证");
         instance=this;
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
         String[] labels = getResources().getStringArray(R.array.official_tags);
         for (int i=0;i<labels.length;i++){
             labelMap.put(labels[i],labelsImg[i]);
@@ -94,7 +94,8 @@ public class CertificateStatusActivity extends BaseActivity{
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请保持网络畅通");
+                ToastUtils.showError("网络异常，请保持网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请保持网络畅通");
             }
         });
     }

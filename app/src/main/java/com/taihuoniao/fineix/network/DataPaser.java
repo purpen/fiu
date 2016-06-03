@@ -607,7 +607,8 @@ public class DataPaser {
                             JSONObject jsonObject = new JSONObject(responseInfo.result);
                             sceneDetails.setSuccess(jsonObject.optBoolean("success"));
                             sceneDetails.setMessage(jsonObject.optString("message"));
-//                            sceneDetails.setStatus(jsonObject.optString("status"));
+                            sceneDetails.setCurrent_user_id(jsonObject.optString("current_user_id"));
+                            sceneDetails.setStatus(jsonObject.optString("status"));
                             if (sceneDetails.isSuccess()) {
                                 JSONObject data = jsonObject.getJSONObject("data");
                                 sceneDetails.set_id(data.optString("_id"));
@@ -686,6 +687,33 @@ public class DataPaser {
                 }
 
         );
+    }
+
+    //场景
+    //删除场景
+    public static void deleteScene(String id, final Handler handler) {
+        ClientDiscoverAPI.deleteScene(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DELETE_SCENE;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除场景", "数据解析异常");
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
     }
 
     //场景
@@ -983,8 +1011,8 @@ public class DataPaser {
 
     //标签
     //场景页热门标签
-    public static void cjHotLabel(boolean isCJ,final Handler handler) {
-        ClientDiscoverAPI.cjHotLabel(isCJ,new RequestCallBack<String>() {
+    public static void cjHotLabel(boolean isCJ, final Handler handler) {
+        ClientDiscoverAPI.cjHotLabel(isCJ, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
@@ -1148,10 +1176,11 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMIT_NEW_ADDRESS;
-                msg.obj= new NetBean();
+                msg.obj = new NetBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>(){}.getType();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
                     msg.obj = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
@@ -1175,9 +1204,12 @@ public class DataPaser {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.DELETE_ADDRESS;
                 try {
-                    JSONObject ojb = new JSONObject(responseInfo.result);
-                    msg.obj = ojb.optBoolean("success");
-                } catch (JSONException e) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    msg.obj = gson.fromJson(responseInfo.result,type);
+//                    JSONObject ojb = new JSONObject(responseInfo.result);
+//                    msg.obj = ojb.optBoolean("success");
+                } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
                 handler.sendMessage(msg);
@@ -1451,8 +1483,8 @@ public class DataPaser {
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<pinglun", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<评论", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
                 msg.obj = new CommentsBean();
@@ -2139,8 +2171,9 @@ public class DataPaser {
                 msg.obj = new NetBean();
                 try {
                     Gson gson = new Gson();
-                    Type type1 = new TypeToken<NetBean>(){}.getType();
-                    msg.obj = gson.fromJson(responseInfo.result,type1);
+                    Type type1 = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type1);
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }

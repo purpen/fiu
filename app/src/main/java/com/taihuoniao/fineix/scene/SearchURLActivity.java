@@ -30,8 +30,9 @@ import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 /**
  * Created by taihuoniao on 2016/3/24.
@@ -51,7 +52,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
     private String market_price;
     private String sale_price;
     private String link;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //popupwindow下的控件
     private PopupWindow popupWindow;
     private ImageView productsImg;
@@ -183,7 +184,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         webView = (WebView) findViewById(R.id.activity_search_url_webview);
         findRelative = (RelativeLayout) findViewById(R.id.activity_search_url_findrelative);
         findBtn = (Button) findViewById(R.id.activity_search_url_find);
-        dialog = new SVProgressHUD(SearchURLActivity.this);
+        dialog = new WaittingDialog(SearchURLActivity.this);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
@@ -263,7 +264,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         if (banners_url.length() > 3) {
                             banners_url.delete(0, 2);
                         } else {
-                            dialog.showErrorWithStatus("数据异常");
+                            ToastUtils.showError("数据异常");
+//                            dialog.showErrorWithStatus("数据异常");
 //                            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -329,7 +331,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         if (banners_url.length() > 3) {
             banners_url.delete(0, 2);
         } else {
-            dialog.showErrorWithStatus("数据异常");
+            ToastUtils.showError("数据异常");
+//            dialog.showErrorWithStatus("数据异常");
 //            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -368,7 +371,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         popupWindow.dismiss();
                         finish();
                     } else {
-                        dialog.showErrorWithStatus(netAdd.getMessage());
+                        ToastUtils.showError(netAdd.getMessage());
+//                        dialog.showErrorWithStatus(netAdd.getMessage());
 //                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -388,7 +392,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         sku_id = null;
                         showPopup();
                     } else {
-                        dialog.showErrorWithStatus(netJD.getMessage());
+                        ToastUtils.showError(netJD.getMessage());
+//                        dialog.showErrorWithStatus(netJD.getMessage());
 //                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -399,13 +404,15 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         try {
                             item = netTB.getData().getRows().get(0);
                         } catch (IndexOutOfBoundsException e) {
-                            dialog.showErrorWithStatus("产品无效");
+                            ToastUtils.showError("产品无效");
+//                            dialog.showErrorWithStatus("产品无效");
 //                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
                             popupWindow.dismiss();
                             return;
                         }
                         if (item == null) {
-                            dialog.showErrorWithStatus("产品无效");
+                            ToastUtils.showError("产品无效");
+//                            dialog.showErrorWithStatus("产品无效");
 //                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
                             popupWindow.dismiss();
                             return;
@@ -422,7 +429,8 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         sku_id = null;
                         showPopup();
                     } else {
-                        dialog.showErrorWithStatus(netTB.getMessage());
+                        ToastUtils.showError(netTB.getMessage());
+//                        dialog.showErrorWithStatus(netTB.getMessage());
 //                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;

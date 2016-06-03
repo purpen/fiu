@@ -8,14 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
-import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     protected DisplayImageOptions options;
     private int size;
     private boolean isInfiniteLoop;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     public int getSize(){
         return size;
     }
@@ -34,7 +33,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         this.activity = activity;
         this.imageList = imageList;
         this.size = imageList.size();
-        this.svProgressHUD=new SVProgressHUD(activity);
+        this.svProgressHUD=new WaittingDialog(activity);
         isInfiniteLoop = false;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.ic_launcher)
@@ -83,7 +82,8 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
         if (content instanceof String){
             if (TextUtils.isEmpty((String)content)){
-                svProgressHUD.showErrorWithStatus("图片链接为空");
+                ToastUtils.showError("图片链接为空");
+//                svProgressHUD.showErrorWithStatus("图片链接为空");
             }else {
                 ImageLoader.getInstance().displayImage((String) content,holder.imageView);
             }

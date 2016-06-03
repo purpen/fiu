@@ -29,8 +29,9 @@ import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.ArrayWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.OnWheelChangedListener;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
@@ -71,7 +72,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 //    private boolean isEnd = false;
 
     //网络请求
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +194,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         cityTv = (TextView) findViewById(R.id.activity_addnewaddress_city);
         detailsAddressEdt = (EditText) findViewById(R.id.activity_addnewaddress_addressdetails);
         isDefaultImg = (ImageView) findViewById(R.id.activity_addnewaddress_isdefault);
-        dialog = new SVProgressHUD(AddNewAddressActivity.this);
+        dialog = new WaittingDialog(AddNewAddressActivity.this);
     }
 
     @Override
@@ -229,22 +230,26 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
             return;
         }
         if (nameEdt.getText().toString().isEmpty()) {
-            dialog.showErrorWithStatus("收货人不能为空!");
+            ToastUtils.showError("收货人不能为空!");
+//            dialog.showErrorWithStatus("收货人不能为空!");
 //            Toast.makeText(AddNewAddressActivity.this, "收货人不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (phoneEdt.getText().toString().isEmpty()) {
-            dialog.showErrorWithStatus("手机号码不能为空!");
+            ToastUtils.showError("手机号码不能为空!");
+//            dialog.showErrorWithStatus("手机号码不能为空!");
 //            Toast.makeText(AddNewAddressActivity.this, "手机号码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (detailsAddressEdt.getText().toString().isEmpty()) {
-            dialog.showErrorWithStatus("详细地址不能为空!");
+            ToastUtils.showError("详细地址不能为空!");
+//            dialog.showErrorWithStatus("详细地址不能为空!");
 //            Toast.makeText(AddNewAddressActivity.this, "详细地址不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (postcodeEdt.getText().toString().isEmpty()) {
-            dialog.showErrorWithStatus("邮政编码不能为空!");
+            ToastUtils.showError("邮政编码不能为空!");
+//            dialog.showErrorWithStatus("邮政编码不能为空!");
 //            Toast.makeText(AddNewAddressActivity.this, "邮政编码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -269,27 +274,33 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                     break;
                 case DataConstants.DELETE_ADDRESS:
                     dialog.dismiss();
-                    boolean success = (boolean) msg.obj;
-                    if (success) {
-                        dialog.showSuccessWithStatus("删除成功");
+                    NetBean netBean1 = (NetBean) msg.obj;
+                    if(netBean1.isSuccess()){
+                        ToastUtils.showSuccess("删除成功");
+//                        dialog.showSuccessWithStatus("删除成功");
 //                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
                         intent.putExtra("address", 1);
                         setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
                         finish();
+                    }else{
+                        ToastUtils.showError(netBean1.getMessage());
                     }
+
                     break;
                 case DataConstants.COMMIT_NEW_ADDRESS:
                     dialog.dismiss();
                     NetBean netBean = (NetBean) msg.obj;
                     if (netBean.isSuccess()) {
-                        dialog.showSuccessWithStatus(netBean.getMessage());
+                        ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
                         Intent intent = new Intent();
                         intent.putExtra("address", 1);
                         setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
                         finish();
                     } else {
-                        dialog.showErrorWithStatus(netBean.getMessage());
+                        ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
                     }
 
                     break;

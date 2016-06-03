@@ -55,6 +55,7 @@ import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
@@ -203,7 +204,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
 
             @Override
@@ -214,7 +216,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
 //        ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {

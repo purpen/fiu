@@ -20,13 +20,13 @@ import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.List;
 
@@ -44,12 +44,12 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     public FocusAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
-        this.svProgressHUD=new SVProgressHUD(activity);
+        this.svProgressHUD=new WaittingDialog(activity);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)
                 .showImageForEmptyUri(R.mipmap.default_focus_head)
@@ -126,7 +126,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 //                            Util.makeToast(response.getMessage());
                             return;
                         }
-                        svProgressHUD.showErrorWithStatus(response.getMessage());
+                        ToastUtils.showError(response.getMessage());
+//                        svProgressHUD.showErrorWithStatus(response.getMessage());
 
                     }
 
@@ -134,7 +135,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     public void onFailure(HttpException e, String s) {
                         view.setEnabled(true);
                         PopupWindowUtil.dismiss();
-                        svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                        ToastUtils.showError("网络异常，请确认网络畅通");
+//                        svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                     }
                 });
             }
@@ -184,14 +186,16 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 //                                    Util.makeToast(response.getMessage());
                                     return;
                                 }
-                                svProgressHUD.showErrorWithStatus(response.getMessage());
+                                ToastUtils.showError(response.getMessage());
+//                                svProgressHUD.showErrorWithStatus(response.getMessage());
                             }
 
                             @Override
                             public void onFailure(HttpException e, String s) {
                                 view.setEnabled(true);
                                 PopupWindowUtil.dismiss();
-                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                                ToastUtils.showError("网络异常，请确认网络畅通");
+//                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                             }
                         });
                     } else {
@@ -207,18 +211,20 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 //                                    list.remove(item);
                                     item.focus_flag = true;  //变为可关注
                                     notifyDataSetChanged();
-                                    svProgressHUD.showSuccessWithStatus("已取消关注");
+                                    ToastUtils.showSuccess("已取消关注");
+//                                    svProgressHUD.showSuccessWithStatus("已取消关注");
                                     return;
                                 }
-
-                                svProgressHUD.showErrorWithStatus(response.getMessage());
+                                ToastUtils.showError(response.getMessage());
+//                                svProgressHUD.showErrorWithStatus(response.getMessage());
                             }
 
                             @Override
                             public void onFailure(HttpException e, String s) {
                                 view.setEnabled(true);
                                 PopupWindowUtil.dismiss();
-                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                                ToastUtils.showError("网络异常，请确认网络畅通");
+//                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                             }
                         });
                     }
@@ -278,7 +284,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 //                        Util.makeToast(response.getMessage());
                         return;
                     }
-                    svProgressHUD.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    svProgressHUD.showErrorWithStatus(response.getMessage());
 
                 }
 
@@ -286,7 +293,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError("网络异常，请确认网络畅通");
+//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         } else if (item.follows.is_love == LOVE) {
@@ -301,17 +309,20 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();
-                        svProgressHUD.showSuccessWithStatus("已取消关注");
+                        ToastUtils.showSuccess("已取消关注");
+//                        svProgressHUD.showSuccessWithStatus("已取消关注");
                         return;
                     }
-                    svProgressHUD.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError("网络异常，请确认网络畅通");
+//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         }

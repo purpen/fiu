@@ -20,9 +20,10 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private String q;
     private String t;
     //控件
+    public static CJResultFragment instance;
     private RelativeLayout title;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
@@ -39,7 +41,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private TextView emptyView;
     //场景列表
     private int page = 1;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private List<SearchBean.SearchItem> list;
     private SceneListViewAdapter sceneListViewAdapter;
 
@@ -69,7 +71,8 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_index_progress);
         emptyView = (TextView) view.findViewById(R.id.fragment_index_emptyview);
-        dialog = new SVProgressHUD(getActivity());
+        dialog = new WaittingDialog(getActivity());
+        instance = CJResultFragment.this;
         return view;
     }
 
@@ -96,9 +99,9 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-//        dialog.show();
-        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "", "tag",null, handler);
+        dialog.show();
+//        progressBar.setVisibility(View.VISIBLE);
+        DataPaser.search(q, t, page + "", "tag", null, handler);
     }
 
     public void refreshData(String q, String t) {
@@ -108,12 +111,23 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         requestNet();
     }
 
+    //外界调用刷新场景列表
+    public void refreshList(){
+        if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
+            return;
+        }
+        page = 1;
+        dialog.show();
+//        progressBar.setVisibility(View.VISIBLE);
+        DataPaser.search(q, t, page + "", "tag",null, handler);
+    }
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
                     if (netSearch.isSuccess()) {
@@ -130,9 +144,11 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                     }
                     break;
                 case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }
