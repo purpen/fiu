@@ -416,6 +416,7 @@
                 android:id="@+id/activity_scenedetails_productlistview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:divider="@null"
                 android:dividerHeight="0dp"/>
 
             <LinearLayout
@@ -444,6 +445,7 @@
                 android:id="@+id/activity_scenedetails_nearproductlistview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:divider="@null"
                 android:dividerHeight="0dp"/>
 
 

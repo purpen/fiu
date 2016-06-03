@@ -32,6 +32,7 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
+            android:visibility="gone"
             android:paddingRight="17dp"
             android:src="@mipmap/location_39"/>
     </RelativeLayout>

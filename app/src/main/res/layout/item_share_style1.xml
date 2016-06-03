@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/default_background_750_1334"/>
+        />
 
     <LinearLayout
         android:id="@+id/activity_share_user_linear"

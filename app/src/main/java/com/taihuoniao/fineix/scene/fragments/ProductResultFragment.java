@@ -42,12 +42,12 @@ public class ProductResultFragment extends BaseFragment {
     private List<SearchBean.SearchItem> list;
     private GoodListAdapter goodListAdapter;
 
-    public static ProductResultFragment newInstance(String q, String t,boolean isSearch) {
+    public static ProductResultFragment newInstance(String q, String t, boolean isSearch) {
 
         Bundle args = new Bundle();
         args.putString("q", q);
         args.putString("t", t);
-        args.putBoolean("isSearch",isSearch);
+        args.putBoolean("isSearch", isSearch);
         ProductResultFragment fragment = new ProductResultFragment();
         fragment.setArguments(args);
         return fragment;
@@ -66,6 +66,8 @@ public class ProductResultFragment extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_product_result, null);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_product_result_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_product_result_progressBar);
         emptyView = (TextView) view.findViewById(R.id.fragment_product_result_emptyview);
         dialog = new SVProgressHUD(getActivity());
@@ -80,7 +82,7 @@ public class ProductResultFragment extends BaseFragment {
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "","tag",null, handler);
+                DataPaser.search(q, t, page + "", "tag", null, handler);
             }
         });
         list = new ArrayList<>();
@@ -96,7 +98,7 @@ public class ProductResultFragment extends BaseFragment {
         }
 //        dialog.show();
         progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "","tag",null, handler);
+        DataPaser.search(q, t, page + "", "tag", null, handler);
     }
 
     public void refreshData(String q, String t) {

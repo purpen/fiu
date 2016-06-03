@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
@@ -262,13 +261,13 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 double move = Math.sqrt((nowP.x - startP.x) * (nowP.x - startP.x) + (nowP.y - startP.y) * (nowP.y - startP.y));
                 //firstvisibleitem的偏移量
                 int s = getScrollY() % (listView.getChildAt(0).getHeight());
-                if (nowP.y < startP.y && s > 0.3 * listView.getChildAt(0).getHeight()) {
+                if (nowP.y < startP.y && s > 0.2 * listView.getChildAt(0).getHeight()) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
                     cancelChenjin();
 
                 } else if (nowP.y < startP.y && isMove && move > DensityUtils.dp2px(getActivity(), 12)) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
-                } else if (nowP.y > startP.y && s < 0.7 * listView.getChildAt(0).getHeight() && s > 0) {
+                } else if (nowP.y > startP.y && s < 0.8 * listView.getChildAt(0).getHeight() && s > 0) {
                     listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
                     chenjin();
                 } else if (nowP.y > startP.y && isMove && move > DensityUtils.dp2px(getActivity(), 12)) {
