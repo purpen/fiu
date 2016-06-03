@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -13,6 +14,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -91,11 +93,20 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     protected void requestNet() {
-        dialog.show();
         ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (!activity.isFinishing()&& dialog!=null)  dialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;

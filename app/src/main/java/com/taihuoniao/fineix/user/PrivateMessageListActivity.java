@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.PrivateMessageListData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
@@ -82,12 +84,17 @@ public class PrivateMessageListActivity extends BaseActivity{
         ClientDiscoverAPI.getPrivateMessageList(String.valueOf(curPage), PAGE_SIZE, TYPE_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (dialog!=null) dialog.show();
+                if (!activity.isFinishing()&&dialog!=null) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo==null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<PrivateMessageListData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<PrivateMessageListData>>() {});

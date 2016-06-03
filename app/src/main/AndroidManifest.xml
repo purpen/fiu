@@ -429,7 +429,7 @@
         android:value="muQDLN6lCST6qMDvTAydAilM"/>
 
         <!--百度地图线上API_KEY-->
-       <!-- <meta-data
+        <!--<meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.AuthData;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -224,11 +226,16 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
-                    svProgressHUD.showSuccessWithStatus("认证信息提交成功");
-                    finish();
-                    if (RankTagActivity.instance!=null){
-                        RankTagActivity.instance.finish();
-                    }
+                    new SVProgressHUD(activity).showSuccessWithStatus("认证信息提交成功");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (CertificateStatusActivity.instance!=null){
+                                CertificateStatusActivity.instance.finish();
+                            }
+                            finish();
+                        }
+                    },1000);
                     return;
                 }
                 svProgressHUD.showErrorWithStatus(response.getMessage());

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -72,11 +74,20 @@ public class UserCommentsActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        dialog.show();
         ClientDiscoverAPI.mycommentsList(String.valueOf(curPage),pageSize,null, LoginInfo.getUserId()+"", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (!activity.isFinishing()&& dialog!=null) dialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo==null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e(TAG,responseInfo.result);

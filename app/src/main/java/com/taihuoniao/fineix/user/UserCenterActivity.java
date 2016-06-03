@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -73,7 +75,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private RoundedImageView riv;
     private RoundedImageView riv_auth;
     private TextView tv_real;
-    private TextView tv_nick;
+//    private TextView tv_nick;
     private TextView tv_rank;
     private TextView tv_qj;
     private TextView tv_cj;
@@ -81,7 +83,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private TextView tv_fans;
     private Button bt_focus;
     private Button bt_msg;
-    private ImageButton ibtn;
     private ImageView iv_bg;
     private TextView tv_label;
     private TextView tv_lv;
@@ -151,14 +152,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
         tv_label = ButterKnife.findById(headView, R.id.tv_label);
         riv = ButterKnife.findById(headView, R.id.riv);
-        tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
+//        tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
-        tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
+//        tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
         tv_lv = ButterKnife.findById(headView, R.id.tv_lv);
         iv_label = ButterKnife.findById(headView, R.id.iv_label);
         tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
 //        tv_title = ButterKnife.findById(headView, R.id.tv_title);
-        ibtn = ButterKnife.findById(headView, R.id.ibtn);
         ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
         tv_cj = ButterKnife.findById(headView, R.id.tv_cj);
         tv_qj = ButterKnife.findById(headView, R.id.tv_qj);
@@ -182,11 +182,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_cj.setAdapter(adapterCJ);
         lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
-            ll_btn_box.setVisibility(View.GONE);
-//            ibtn.setVisibility(View.VISIBLE);
+            ll_btn_box.setVisibility(View.INVISIBLE);
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
-//            ibtn.setVisibility(View.GONE);
         }
         String[] labels = getResources().getStringArray(R.array.official_tags);
         for (int i=0;i<labels.length;i++){
@@ -210,7 +208,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog != null) dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -265,7 +268,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog != null) dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null) dialog.dismiss();
+                    }
+                },DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
@@ -333,7 +341,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (dialog != null) dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null) dialog.dismiss();
+                    }
+                },DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getQJList", responseInfo.result);
@@ -420,24 +433,32 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (labelMap.containsKey(user.expert_label)){
                 iv_label.setImageResource(labelMap.get(user.expert_label));
             }
+        }else {
+            iv_label.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.expert_info)){
             tv_auth.setText(user.expert_info);
+        }else {
+            tv_auth.setVisibility(View.GONE);
         }
 
-        if (TextUtils.isEmpty(user.nickname) || LoginInfo.getUserId() != userId) {
-            tv_nick.setVisibility(View.GONE);
-        } else {
-            tv_nick.setText(user.nickname);
-        }
+//        if (TextUtils.isEmpty(user.nickname) || LoginInfo.getUserId() != userId) {
+//            tv_nick.setVisibility(View.GONE);
+//        } else {
+//            tv_nick.setText(user.nickname);
+//        }
 
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
+        }else {
+            tv_label.setVisibility(View.GONE);
         }
 
-        if (TextUtils.isEmpty(user.expert_info)) {
+        if (!TextUtils.isEmpty(user.expert_info)) {
             tv_auth.setText(user.expert_info);
+        }else {
+            tv_auth.setVisibility(View.GONE);
         }
 
         tv_lv.setText(String.format("Lv%s", user.rank_id));
@@ -468,7 +489,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_focus.setOnClickListener(this);
         ll_fans.setOnClickListener(this);
         bt_msg.setOnClickListener(this);
-        ibtn.setOnClickListener(this);
         ll_cj.setOnClickListener(this);
         ll_qj.setOnClickListener(this);
         riv.setOnClickListener(new View.OnClickListener() {

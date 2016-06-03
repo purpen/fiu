@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
@@ -118,12 +120,17 @@ public class SystemNoticeActivity extends BaseActivity {
         ClientDiscoverAPI.getSystemNotice(String.valueOf(curPage), PAGE_SIZE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                dialog.show();
+                if (!activity.isFinishing()&& dialog!=null) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 try {
@@ -153,7 +160,7 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void refreshUI() {
         if (list==null) return;
         if (list.size()==0){
-            Util.makeToast("暂无数据！");
+            if (!activity.isFinishing()&&dialog!=null) dialog.showWithStatus("暂无评论");
             return;
         }
 

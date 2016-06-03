@@ -31,13 +31,14 @@
                     android:id="@+id/ll_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="bottom"
+                    >
                     <RelativeLayout
                         android:layout_width="@dimen/dp60"
                         android:layout_height="@dimen/dp60"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:layout_marginTop="@dimen/dp90"
                         >
                         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                             android:id="@+id/riv"
@@ -60,9 +61,11 @@
                     </RelativeLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/jianbian_scenelist"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/dp45"
+                        >
                         <TextView
                             android:id="@+id/tv_nick"
                             android:layout_width="wrap_content"

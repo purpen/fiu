@@ -214,4 +214,5 @@ public class DataConstants {
     public static final int PARSER_MY_REDBAG_UNTIMEOUT = 19;
     //帐户处我的红包已过期
     public static final int PARSER_MY_REDBAG_TIMEOUT = 20;
+    public static final int DIALOG_DELAY=400;
 }

@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
@@ -189,11 +191,21 @@ public class MineFragment extends MyBaseFragment {
             LogUtil.e(TAG, "isUserLogin()==false");
             return;
         }
-        dialog.show();
+
         ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
+            public void onStart() {
+                if (!activity.isFinishing()&&dialog!=null) dialog.show();
+            }
+
+            @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
                 if (responseInfo == null) {
                     return;
@@ -315,7 +327,7 @@ public class MineFragment extends MyBaseFragment {
         }
 
         if (TextUtils.isEmpty(user.summary)) {
-            tv_real.setVisibility(View.GONE);
+            tv_real.setText(String.format(" | %s","还没有个性签名！"));
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }
@@ -324,15 +336,21 @@ public class MineFragment extends MyBaseFragment {
             if (labelMap.containsKey(user.expert_label)){
                 iv_label.setImageResource(labelMap.get(user.expert_label));
             }
+        }else {
+            iv_label.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.expert_info)){
             tv_auth.setText(user.expert_info);
+        }else {
+            tv_auth.setVisibility(View.GONE);
         }
 
 
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
+        }else {
+            tv_label.setVisibility(View.GONE);
         }
 
         if (TextUtils.isEmpty(user.nickname)) {

@@ -49,6 +49,7 @@ public class CertificateStatusActivity extends BaseActivity{
     private AuthData authData;
     private HashMap<String,Integer> labelMap=new HashMap<>();
     private SVProgressHUD dialog;
+    public static CertificateStatusActivity instance;
     public static final int[] labelsImg={R.mipmap.dana,R.mipmap.hj,R.mipmap.xingshe,R.mipmap.yishufan,R.mipmap.shouyiren,R.mipmap.renlaifeng,R.mipmap.shuhui,R.mipmap.buyer};
     public CertificateStatusActivity(){
         super(R.layout.activity_certificate_status);
@@ -57,6 +58,7 @@ public class CertificateStatusActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"官方认证");
+        instance=this;
         dialog=new SVProgressHUD(this);
         String[] labels = getResources().getStringArray(R.array.official_tags);
         for (int i=0;i<labels.length;i++){
