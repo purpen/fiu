@@ -58,6 +58,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToRegisterActivity instance = null;
     private SVProgressHUD mDialog = null;
+    private boolean mDialogAppear = false;//判断对话框要不要出现
 
     public ToRegisterActivity() {
         super(R.layout.activity_to_register);
@@ -185,18 +186,27 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 startActivity(new Intent(activity, RegisterActivity.class));
                 break;
             case R.id.tv_qq_register:
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 loginType = LOGIN_TYPE_QQ;
                 //QQ
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
                 authorize(qq);
                 break;
             case R.id.tv_weibo_register:
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博
                 Platform sina = ShareSDK.getPlatform(SinaWeibo.NAME);
                 authorize(sina);
                 break;
             case R.id.tv_weixin_register:
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 loginType = LOGIN_TYPE_WX;
                 //微信登录
                 //测试时，需要打包签名；sample测试时，用项目里面的demokey.keystore
@@ -219,7 +229,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     //执行授权,获取用户信息
     //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
     private void authorize(Platform plat) {
-       if (!activity.isFinishing() && mDialog!=null) mDialog.show();
         if (plat == null) {
             return;
         }
@@ -239,12 +248,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!activity.isFinishing()&& mDialog!=null) mDialog.dismiss();
-            }
-        }, DataConstants.DIALOG_DELAY);
         //用户资源都保存到hashMap,通过打印hashMap数据看看有哪些数据是你想要的
         if (i == Platform.ACTION_USER_INFOR) {
             PlatformDb platDB = platform.getDb();//获取数平台数据DB

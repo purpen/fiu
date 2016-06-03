@@ -186,6 +186,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_qq_tologin: //QQ登录
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 mQq.setEnabled(false);
                 loginType = LOGIN_TYPE_QQ;
                 //QQ 不用打包签名即可测试
@@ -193,6 +196,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(qq);
                 break;
             case R.id.tv_weixin_tologin: //微信登录
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 mWeChat.setEnabled(false);
                 loginType = LOGIN_TYPE_WX;
                 //微信登录
@@ -202,6 +208,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(wechat);
                 break;
             case R.id.tv_weibo_tologin: //新浪微博登录
+                if (mDialog!=null) {
+                    mDialog.show();
+                }
                 mSinaWeiBo.setEnabled(false);
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博，测试时，需要打包签名
@@ -228,7 +237,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     //执行授权,获取用户信息
     //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
     private void authorize(Platform plat) {
-        if (!activity.isFinishing()&& mDialog!=null) mDialog.show();
         if (plat == null) {
             return;
         }
@@ -243,14 +251,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!activity.isFinishing()&& mDialog!=null) mDialog.dismiss();
-            }
-        }, DataConstants.DIALOG_DELAY);
-//        Message msg = new Message();
-//        msg.obj=hashMap;
         // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
         //用户资源都保存到hashMap，通过打印hashMap数据看看有哪些数据是你想要的
         if (i == Platform.ACTION_USER_INFOR) {

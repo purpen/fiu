@@ -65,8 +65,7 @@ public class UserGuideActivity extends BaseActivity {
     protected void initView() {
         if (TextUtils.isEmpty(fromPage)){
             iv_welcome.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage("drawable://"+R.mipmap.welcome,iv_welcome);
-//            iv_welcome.setImageResource(R.mipmap.login_or_regist);
+            iv_welcome.setImageResource(R.mipmap.welcome);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -90,11 +89,12 @@ public class UserGuideActivity extends BaseActivity {
             isGuide=true;
         }
         list = new ArrayList<>();
+        list.add(R.mipmap.guide0);
         list.add(R.mipmap.guide1);
-        list.add(R.mipmap.login_or_regist);
-        list.add(R.mipmap.login_or_regist);
+        list.add(R.mipmap.guide2);
+        list.add(R.mipmap.guide3);
         scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
-        scrollableView.showIndicators();
+//        scrollableView.showIndicators();
     }
 
     private void goMainPage(){
