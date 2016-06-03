@@ -40,8 +40,6 @@ public class UserGuideActivity extends BaseActivity {
         super(R.layout.activity_user_guide_layout);
     }
 
-    private Handler handler = new Handler();
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +64,10 @@ public class UserGuideActivity extends BaseActivity {
         if (TextUtils.isEmpty(fromPage)){
             iv_welcome.setVisibility(View.VISIBLE);
             iv_welcome.setImageResource(R.mipmap.welcome);
-            handler.postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
-                    iv_welcome.setImageResource(0);
                     if (TextUtils.isEmpty(SPUtil.read(activity,DataConstants.GUIDE_TAG))) {
                         SPUtil.write(activity,DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
                         initGuide();
