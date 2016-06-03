@@ -70,15 +70,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
                     if (mDialog!=null) {
                         mDialog.dismiss();
+                        mDialog.showInfoWithStatus("取消授权");
                     }
-                    new SVProgressHUD(ToLoginActivity.this).showInfoWithStatus("取消授权");
 //                    Toast.makeText(ToLoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_ERROR:
                     if (mDialog!=null) {
                         mDialog.dismiss();
+                        mDialog.showErrorWithStatus("授权失败");
                     }
-                    new SVProgressHUD(ToLoginActivity.this).showErrorWithStatus("授权失败");
 //                    Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN:
@@ -187,9 +187,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.tv_qq_tologin: //QQ登录
                 mQq.setEnabled(false);
-                if (mDialog!=null) {
-                    mDialog.show();
-                }
                 loginType = LOGIN_TYPE_QQ;
                 //QQ 不用打包签名即可测试
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
@@ -197,9 +194,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tv_weixin_tologin: //微信登录
                 mWeChat.setEnabled(false);
-                if (mDialog!=null) {
-                    mDialog.show();
-                }
                 loginType = LOGIN_TYPE_WX;
                 //微信登录
                 //测试时，需要打包签名；sample测试时，用项目里面的demokey.keystore
@@ -209,9 +203,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tv_weibo_tologin: //新浪微博登录
                 mSinaWeiBo.setEnabled(false);
-                if (mDialog!=null) {
-                    mDialog.show();
-                }
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博，测试时，需要打包签名
                 Platform sina = ShareSDK.getPlatform(SinaWeibo.NAME);
@@ -237,6 +228,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     //执行授权,获取用户信息
     //文档：http://wiki.mob.com/Android_%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%B5%84%E6%96%99
     private void authorize(Platform plat) {
+        if (!activity.isFinishing()&& mDialog!=null) mDialog.show();
         if (plat == null) {
             return;
         }
@@ -251,6 +243,12 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!activity.isFinishing()&& mDialog!=null) mDialog.dismiss();
+            }
+        }, DataConstants.DIALOG_DELAY);
 //        Message msg = new Message();
 //        msg.obj=hashMap;
         // 这个方法中不能放对话框、吐丝这些耗时的操作，否则会直接跳到onError()中执行
@@ -294,17 +292,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (mDialog!=null) mDialog.show();
+                if (!activity.isFinishing()&& mDialog!=null) mDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (!activity.isFinishing()&& mDialog!=null) mDialog.dismiss();
                 mQq.setEnabled(true);
                 mWeChat.setEnabled(true);
                 mSinaWeiBo.setEnabled(true);
-                if (mDialog!=null){
-                    mDialog.dismiss();
-                }
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
@@ -356,7 +352,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         finish();
                     }
                 } else {
-                    Util.makeToast(response.getMessage());
+                   mDialog.showErrorWithStatus(response.getMessage());
                 }
             }
 
@@ -368,7 +364,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 if (mDialog!=null){
                     mDialog.dismiss();
                 }
-                Util.makeToast("网络异常");
+                mDialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
