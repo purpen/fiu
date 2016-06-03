@@ -5,13 +5,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CommonBean;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class SceneDetailUserHeadAdapter extends BaseAdapter {
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
     }
 
     @Override
@@ -56,7 +55,7 @@ public class SceneDetailUserHeadAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_user_head, null);
             holder = new ViewHolder();
-            holder.headImg = (ImageView) convertView.findViewById(R.id.item_user_head_img);
+            holder.headImg = (RoundedImageView) convertView.findViewById(R.id.item_user_head_img);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,6 +69,6 @@ public class SceneDetailUserHeadAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView headImg;
+        RoundedImageView headImg;
     }
 }

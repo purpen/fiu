@@ -53,6 +53,7 @@ import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView locationTv;
     private TextView timeTv;
     private LinearLayout leftLabel;
-    private ImageView userHead;
+    private RoundedImageView userHead;
     private TextView userName;
     private TextView userInfo;
     private TextView subscriptionCount;
@@ -140,7 +141,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         addressLinear = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_addresslinear);
         timeTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_time);
         leftLabel = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_leftlabel);
-        userHead = (ImageView) header.findViewById(R.id.activity_qingjingdetail_userhead);
+        userHead = (RoundedImageView) header.findViewById(R.id.activity_qingjingdetail_userhead);
         userName = (TextView) header.findViewById(R.id.activity_qingjingdetail_username);
         userInfo = (TextView) header.findViewById(R.id.activity_qingjingdetail_userinfo);
         subscriptionCount = (TextView) header.findViewById(R.id.activity_qingjingdetail_subsnum);

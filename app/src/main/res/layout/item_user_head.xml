@@ -2,11 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
-    <ImageView
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
         android:id="@+id/item_user_head_img"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        app:riv_border_width="1dp"
+        app:riv_border_color="@color/black969696"
+        app:riv_corner_radius="100dp"
         />
 </LinearLayout>
