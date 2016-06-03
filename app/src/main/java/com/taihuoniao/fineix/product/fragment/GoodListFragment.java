@@ -86,6 +86,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_good_list_progress);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_good_list_pullrefreshview);
         listView = pullToRefreshView.getRefreshableView();
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
 //        dialog = new SVProgressHUD(getActivity());
         dialog = new WaittingDialog(getActivity());
         return view;

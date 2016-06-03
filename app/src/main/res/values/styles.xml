@@ -131,12 +131,12 @@
         <item name="android:background">@drawable/shape_bg_mainred_news_product</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">12dp</item>
         <item name="android:text">23</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">9sp</item>
-        <item name="android:visibility">invisible</item>
+        <item name="android:visibility">visible</item>
     </style>
     <!--帐户中待付款、待发货那一行的相对布局-->
     <style name="AccountCommingPayRelative">
