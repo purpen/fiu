@@ -27,8 +27,9 @@
         app:riv_corner_radius="@dimen/dp100"
         android:layout_below="@+id/tv_time"
         android:layout_alignParentLeft="true"
-        app:riv_border_width="@dimen/dp05"
+        app:riv_border_width="@dimen/dp1"
         app:riv_border_color="@color/color_eee"
+        android:src="@mipmap/default_head"
         />
     <TextView
         android:id="@+id/tv_msg"

@@ -91,7 +91,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         item_contacts.setTitle("连接通讯录");
         item_contacts.setSubTitle("关注你认识的好友");
         lv = pull_lv.getRefreshableView();
-        lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
+//        lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
         pull_lv.getRefreshableView().addHeaderView(view);
         pull_lv.setPullToRefreshEnabled(false);
     }
@@ -167,13 +167,13 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
         curPage++;
 
-        Iterator<FindFriendData.User> iterator = list.iterator();
-        while (iterator.hasNext()){
-            FindFriendData.User user = iterator.next();
-            if (user.is_love==FansAdapter.LOVE){
-                iterator.remove();
-            }
-        }
+//        Iterator<FindFriendData.User> iterator = list.iterator();
+//        while (iterator.hasNext()){
+//            FindFriendData.User user = iterator.next();
+//            if (user.is_love==FansAdapter.LOVE){
+//                iterator.remove();
+//            }
+//        }
 
         if (adapter == null) {
             mList.addAll(list);

@@ -308,7 +308,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (isFirstLoad) {
                 isFirstLoad = false;
                 ll_tips.setVisibility(View.VISIBLE);
-                tv_tips.setText(R.string.user_center_cj_tip);
+                if (LoginInfo.getUserId()==userId){
+                    tv_tips.setText(R.string.user_center_cj_tip);
+                }else {
+                    tv_tips.setText(R.string.user_center_cj_tip1);
+                }
             } else {
                 ll_tips.setVisibility(View.GONE);
             }
@@ -376,7 +380,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (isFirstLoad) {
                 isFirstLoad = false;
                 ll_tips.setVisibility(View.VISIBLE);
-                tv_tips.setText(R.string.user_center_qj_tip);
+                if (LoginInfo.getUserId()==userId){
+                    tv_tips.setText(R.string.user_center_qj_tip);
+                }else {
+                    tv_tips.setText(R.string.user_center_qj_tip1);
+                }
             } else {
                 ll_tips.setVisibility(View.GONE);
             }
@@ -424,7 +432,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         if (TextUtils.isEmpty(user.summary)) {
-            tv_real.setText(String.format(" | %s", "还没有个性签名！"));
+            if (LoginInfo.getUserId()==userId){
+                tv_real.setText(String.format(" | %s", "说说你是什么人，来自哪片山川湖海！"));
+            }else {
+                tv_real.setText(String.format(" | %s", "这人好神秘，什么都不说"));
+            }
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }

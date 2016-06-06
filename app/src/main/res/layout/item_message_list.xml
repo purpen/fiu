@@ -14,8 +14,11 @@
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
         android:layout_centerVertical="true"
-        android:src="@mipmap/ic_launcher"
-        app:riv_corner_radius="@dimen/dp100" />
+        android:src="@mipmap/default_head"
+        app:riv_corner_radius="@dimen/dp100"
+        app:riv_border_color="@color/color_eee"
+        app:riv_border_width="@dimen/dp1"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

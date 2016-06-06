@@ -26,7 +26,6 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     />
-
                 <LinearLayout
                     android:id="@+id/ll_box"
                     android:layout_width="match_parent"
@@ -34,31 +33,6 @@
                     android:orientation="vertical"
                     android:gravity="bottom"
                     >
-                    <RelativeLayout
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="@dimen/dp60"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/dp5"
-                        >
-                        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-                            android:id="@+id/riv"
-                            android:layout_width="@dimen/dp60"
-                            android:layout_height="@dimen/dp60"
-                            android:src="@mipmap/default_head"
-                            app:riv_border_color="@color/color_eee"
-                            app:riv_border_width="@dimen/dp05"
-                            app:riv_corner_radius="@dimen/dp100" />
-                        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-                            android:id="@+id/riv_auth"
-                            android:layout_width="@dimen/dp20"
-                            android:layout_height="@dimen/dp20"
-                            app:riv_corner_radius="@dimen/dp100"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentRight="true"
-                            android:src="@mipmap/v"
-                            android:visibility="gone"
-                            />
-                    </RelativeLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -66,6 +40,31 @@
                         android:orientation="vertical"
                         android:paddingBottom="@dimen/dp45"
                         >
+                        <RelativeLayout
+                            android:layout_width="@dimen/dp60"
+                            android:layout_height="@dimen/dp60"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="@dimen/dp5"
+                            >
+                            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                                android:id="@+id/riv"
+                                android:layout_width="@dimen/dp60"
+                                android:layout_height="@dimen/dp60"
+                                android:src="@mipmap/default_head"
+                                app:riv_border_color="@color/color_eee"
+                                app:riv_border_width="@dimen/dp1"
+                                app:riv_corner_radius="@dimen/dp100" />
+                            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                                android:id="@+id/riv_auth"
+                                android:layout_width="@dimen/dp20"
+                                android:layout_height="@dimen/dp20"
+                                app:riv_corner_radius="@dimen/dp100"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:src="@mipmap/v"
+                                android:visibility="gone"
+                                />
+                        </RelativeLayout>
                         <TextView
                             android:id="@+id/tv_nick"
                             android:layout_width="wrap_content"

@@ -180,9 +180,13 @@
         <item>职业buyer</item>
     </string-array>
     <string name="user_center_qj_tip">每个情景都有故事，来都来了，讲讲你的故事吧</string>
+    <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
     <string name="user_center_cj_tip">你还没有发表过新场景哦，快来Fiu一下嘛</string>
+    <string name="user_center_cj_tip1">关于TA的经历，你想知道的可能都在这里</string>
     <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
+    <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
     <string name="fans_tips">给你一首歌的时间就回来哦，粉丝们还等着你的新动态呢</string>
+    <string name="fans_tips1">众里寻他千百度，爱人之心不可无</string>
     <string name="share_title_url">我喜欢用图片梳理情绪，个性滤镜搭配细腻文字、还能一站购齐好设计！Fiu有一百种方式让你创新生活体验，快来让分享变成生产力。http://m.taihuoniao.com/guide/fiu</string>
 
     <string name="l_album_name_all">最近图片</string>

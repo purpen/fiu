@@ -57,8 +57,8 @@ public class ImageCropActivity extends BaseActivity {
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .delayBeforeLoading(0)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheInMemory(false)
-                .cacheOnDisk(false)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();

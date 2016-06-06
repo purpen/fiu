@@ -138,7 +138,11 @@ public class FansActivity extends BaseActivity {
         }
         if (list.size() == 0) {
             ll_tips.setVisibility(View.VISIBLE);
-            tv_tips.setText(R.string.fans_tips);
+            if (LoginInfo.getUserId()==userId){
+                tv_tips.setText(R.string.fans_tips);
+            }else {
+                tv_tips.setText(R.string.fans_tips1);
+            }
             return;
         }
 

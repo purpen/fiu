@@ -1173,6 +1173,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("type","1"); //过滤已关注
         params.addQueryStringParameter("sight_count", sight_count); //场景数量
         params.addQueryStringParameter("sort", sort); //0是最新 1是随机
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FIND_FRIENDS, callBack);
