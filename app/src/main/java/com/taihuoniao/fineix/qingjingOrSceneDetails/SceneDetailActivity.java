@@ -848,9 +848,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
-        container.setTranslationY(t / 4);
-        if (container.getTranslationY() >= container.getMeasuredHeight() / 4) {
-            container.setTranslationY(container.getMeasuredHeight() / 4);
+        container.setTranslationY(t / 3);
+        if (container.getTranslationY() >= container.getMeasuredHeight() / 5) {
+            container.setTranslationY(container.getMeasuredHeight() / 5);
         }
         if (container.getTranslationY() <= 0) {
             container.setTranslationY(0);

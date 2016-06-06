@@ -80,8 +80,8 @@
                 android:id="@+id/activity_all_order_daifahuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="待发货"
                 android:layout_centerInParent="true"
+                android:text="待发货"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -116,8 +116,8 @@
                 android:id="@+id/activity_all_order_daipingjia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="待评价"
                 android:layout_centerInParent="true"
+                android:text="待评价"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -134,8 +134,8 @@
                 android:id="@+id/activity_all_order_tuihuanhuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="退换货"
                 android:layout_centerInParent="true"
+                android:text="退换货"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -266,8 +266,8 @@
         android:id="@+id/activity_all_order_ymxrelative"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:visibility="gone"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/ymx"
@@ -299,4 +299,10 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e6e6e6"/>
+
+    <WebView
+        android:id="@+id/activity_all_order_webview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"/>
 </LinearLayout>

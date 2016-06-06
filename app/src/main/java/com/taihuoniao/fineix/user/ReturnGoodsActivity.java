@@ -90,6 +90,8 @@ public class ReturnGoodsActivity extends Activity {
         title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
+        title.setTitleColor(getResources().getColor(R.color.black333333));
+        title.setBackButtonVisibility(true);
         mDialog = new WaittingDialog(this);
         if (curPage == 1) {
             mDialog.show();

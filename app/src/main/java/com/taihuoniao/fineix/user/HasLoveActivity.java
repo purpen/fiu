@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,9 +18,7 @@ import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
@@ -88,9 +83,6 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         listView.setDividerHeight(0);
         listView.setDivider(null);
         dialog = new WaittingDialog(HasLoveActivity.this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(loveReceiver,intentFilter);
     }
 
     @Override
@@ -160,12 +152,6 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
     }
 
 
-    @Override
-    protected void onDestroy() {
-        //cancelNet();
-        unregisterReceiver(loveReceiver);
-        super.onDestroy();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -175,13 +161,4 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         startActivity(intent);
     }
 
-    private BroadcastReceiver loveReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
-                page = 1;
-                requestNet();
-            }
-        }
-    };
 }

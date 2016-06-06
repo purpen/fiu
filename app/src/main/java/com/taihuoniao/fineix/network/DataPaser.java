@@ -2370,7 +2370,7 @@ public class DataPaser {
         ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<",responseInfo.result);
+                Log.e("<<<个人信息",responseInfo.result);
                 UserInfo userInfo = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_USER_INFO;
