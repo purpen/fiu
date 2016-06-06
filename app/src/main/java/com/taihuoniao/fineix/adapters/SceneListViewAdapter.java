@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.adapters;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -91,13 +94,13 @@ public class SceneListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_scenelist, null);
             holder = new ViewHolder();
             holder.backgroundImg = (ImageView) convertView.findViewById(R.id.item_scenelist_backgroundimg);
-            holder.userHeadImg = (ImageView) convertView.findViewById(R.id.item_scenelist_user_headimg);
+            holder.userHeadImg = (RoundedImageView) convertView.findViewById(R.id.item_scenelist_user_headimg);
             holder.userName = (TextView) convertView.findViewById(R.id.item_scenelist_user_name);
             holder.userInfo = (TextView) convertView.findViewById(R.id.item_scenelist_user_info);
             holder.viewCount = (TextView) convertView.findViewById(R.id.item_scenelist_view_count);
@@ -172,6 +175,16 @@ public class SceneListViewAdapter extends BaseAdapter {
         }
         Log.e("<<<首页动画", "getView...position=" + position);
         SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21, 1);
+        if (list != null && list.get(position).isStartAnim()) {
+            holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    ObjectAnimator.ofFloat(holder.bottomLinear, "translationY", 0).setDuration(500).start();
+                    list.get(position).setStartAnim(false);
+                }
+            });
+        }
         return convertView;
     }
 
@@ -189,7 +202,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 
     public static class ViewHolder {
         ImageView backgroundImg;
-        ImageView userHeadImg;
+        RoundedImageView userHeadImg;
         TextView userName;
         TextView userInfo;
         TextView viewCount;

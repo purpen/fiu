@@ -20,9 +20,10 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
     private int page = 1;
     private List<SearchBean.SearchItem> list;
     private AllQingjingGridAdapter allQingjingGridAdapter;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
     public static QJResultFragment newInstance(String q, String t) {
 
@@ -69,7 +70,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         gridView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_qjresult_progress);
         emptyView = (TextView) view.findViewById(R.id.fragment_qjresult_emptyview);
-        dialog = new SVProgressHUD(getActivity());
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -100,8 +101,8 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-//        dialog.show();
-        progressBar.setVisibility(View.VISIBLE);
+        dialog.show();
+//        progressBar.setVisibility(View.VISIBLE);
         DataPaser.search(q, t, page + "","tag",null, handler);
     }
 
@@ -117,7 +118,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
                     if (netSearch.isSuccess()) {
@@ -134,9 +135,10 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
                     }
                     break;
                 case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
                     break;
             }

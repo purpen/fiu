@@ -20,9 +20,9 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     private int curPage=1;
     private static final String PAGE_SIZE="9999";
     private static final String TYPE_ALL="0"; //与全部用户私信列表
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private PrivateMessageListAdapter adapter;
     private List<PrivateMessageListData.RowItem> mList=new ArrayList<>();
     public PrivateMessageListActivity(){
@@ -51,7 +51,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"私信");
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
     }
 
     @Override
@@ -103,13 +103,15 @@ public class PrivateMessageListActivity extends BaseActivity{
                     refreshUI(list);
                     return;
                 }
-                dialog.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }

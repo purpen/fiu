@@ -17,23 +17,25 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
+import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ProvinceUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
@@ -43,7 +45,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 /**
  * @author lilin
  *         created at 2016/4/26 18:50
@@ -86,7 +87,7 @@ public class EditUserInfoActivity extends BaseActivity {
     private String key;
     private String value;
     public static boolean isSubmitAddress=false;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private List<Uri> mSelected;
 
     public EditUserInfoActivity() {
@@ -96,7 +97,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         head_view.setHeadCenterTxtShow(true, R.string.title_user_data);
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
         custom_user_avatar.setUserAvatar(null);
         custom_user_avatar.setTVStyle(0, R.string.user_avatar, R.color.color_333);
         custom_nick_name.setTVStyle(0, R.string.nick_name, R.color.color_333);
@@ -241,7 +242,9 @@ public class EditUserInfoActivity extends BaseActivity {
                     });
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    if (!activity.isFinishing()&&dialog!=null) dialog.showErrorWithStatus("对不起,数据异常");
+                    if (!activity.isFinishing()&&dialog!=null)
+                        ToastUtils.showError("对不起，数据异常");
+//                        dialog.showErrorWithStatus("对不起,数据异常");
                 }
                 refreshUI();
             }
@@ -251,7 +254,8 @@ public class EditUserInfoActivity extends BaseActivity {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
-                dialog.showErrorWithStatus("对不起,网络请求失败");
+                ToastUtils.showError("对不起，网路请求失败");
+//                dialog.showErrorWithStatus("对不起,网络请求失败");
             }
         });
     }
@@ -370,17 +374,20 @@ public class EditUserInfoActivity extends BaseActivity {
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
 
                 if (response.isSuccess()){
-                    dialog.showSuccessWithStatus(response.getMessage());
+                    ToastUtils.showSuccess(response.getMessage());
+//                    dialog.showSuccessWithStatus(response.getMessage());
                     return;
                 }
 
-                dialog.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                dialog.showErrorWithStatus(response.getMessage());
 
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
 

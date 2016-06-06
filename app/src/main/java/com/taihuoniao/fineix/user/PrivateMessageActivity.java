@@ -26,7 +26,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class PrivateMessageActivity extends BaseActivity{
     private static final String PAGE_SIZE="10";
     private static final String TYPE_USER="1"; //与某个用户的记录
     private User user; //对方
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private List<MessageDetailData.MessageItem> mList =new ArrayList<>();
     private PrivateMessageItemAdapter adapter;
     public PrivateMessageActivity(){
@@ -69,7 +69,7 @@ public class PrivateMessageActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
         lv.requestFocus();
         if (user!=null){
             if (TextUtils.isEmpty(user.nickname)){

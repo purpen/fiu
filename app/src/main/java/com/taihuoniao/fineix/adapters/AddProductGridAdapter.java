@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 
 import java.util.List;
@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class AddProductGridAdapter extends BaseAdapter {
     private Context context;
-    private List<ProductListBean> list;
+    private List<ProductBean.ProductListItem> list;
     private List<SearchBean.SearchItem> searchList;
     private DisplayImageOptions options_750_422;
 
-    public AddProductGridAdapter(Context context, List<ProductListBean> list, List<SearchBean.SearchItem> searchList) {
+    public AddProductGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.searchList = searchList;

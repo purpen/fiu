@@ -64,9 +64,9 @@ public class SceneDetailProductListAdapter extends BaseAdapter {
         holder.nameTv.setText(list.get(position).getProduct().getTitle());
         holder.priceTv.setText(String.format("¥%s", list.get(position).getProduct().getSale_price()));
         if (list.get(position).getProduct().getBanner_asset().size() > 0) {
-            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getProduct().getBanner_asset(), activity));
+            holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, null, list.get(position).getProduct().getBanner_asset(), activity));
+            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
         }
-        holder.slidingFocusImageView.setSelection(0);
         switch (list.get(position).getProduct().getAttrbute()) {
             case "1":
                 holder.img.setImageResource(R.mipmap.product_fiu);

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -32,12 +33,12 @@ import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailProductListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
@@ -53,11 +54,12 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyScrollView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/19.
  */
-public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MyScrollView.OnScrollListener {
     //上个界面传递过来的场景id
     private String id;
     private boolean isCreate;//判断是不是从创建界面跳转过来的
@@ -77,6 +79,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView backImg;
     private ImageView shareImg;
     private RelativeLayout imgRelative;
+    private RelativeLayout container;
     private ImageView backgroundImg;
     private LinearLayout titleLinear;
     private FrameLayout frameLayout;
@@ -91,6 +94,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView userInfo;
     //    private LinearLayout bottomLinear;
     private TextView loveCount;
+    private LinearLayout goneLayout;
     private TextView desTv;
     private LinearLayout labelLinear;
     private TextView viewCount;
@@ -115,11 +119,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ListViewForScrollView nearProductListView;
     private PopupWindow popupWindow;
     //popupwindow下的控件
+    private TextView pinglunTv;
     private TextView shareTv;
     private TextView jubaoTv;
     private TextView cancelTv;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //图片加载
     private DisplayImageOptions options, options750_1334;
     //图片上的商品
@@ -136,7 +141,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private SceneDetailProductListAdapter sceneProductAdapter;
     //相近产品
     private int currentTime = 1;
-    private List<ProductListBean> nearProductList;
+    private List<ProductBean.ProductListItem> nearProductList;
     private GoodListAdapter goodListAdapter;
 
     public SceneDetailActivity() {
@@ -154,6 +159,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
+        container = (RelativeLayout) findViewById(R.id.activity_scenedetails_container);
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
         titleLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_titlelinear);
         frameLayout = (FrameLayout) findViewById(R.id.activity_scenedetails_framelayout);
@@ -168,6 +174,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
 //        bottomLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_bottomlinear);
         loveCount = (TextView) findViewById(R.id.activity_scenedetails_lovecount);
+        goneLayout = (LinearLayout) findViewById(R.id.activity_scenedetails_gonelinear);
         desTv = (TextView) findViewById(R.id.activity_scenedetails_changjing_des);
         labelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_labellinear);
         viewCount = (TextView) findViewById(R.id.activity_scenedetails_viewcount);
@@ -186,7 +193,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
-        dialog = new SVProgressHUD(SceneDetailActivity.this);
+        dialog = new WaittingDialog(SceneDetailActivity.this);
         initPopupWindow();
     }
 
@@ -198,13 +205,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         id = getIntent().getStringExtra("id");
         isCreate = getIntent().getBooleanExtra("create", false);
         if (id == null) {
-            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
+            ToastUtils.showError("没有这个场景");
+//            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
 //            Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (isCreate) {
             backImg.setImageResource(R.mipmap.cancel_black);
         }
+        scrollView.setOnScrollListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
@@ -275,6 +284,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
 //        关联列表数据异常
         DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
+//        ToastUtils.showSuccess("测试数据");
     }
 
 
@@ -282,6 +292,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
+        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
         shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
@@ -289,6 +300,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        pinglunTv.setOnClickListener(this);
         shareTv.setOnClickListener(this);
         jubaoTv.setOnClickListener(this);
         cancelTv.setOnClickListener(this);
@@ -329,16 +341,42 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.DELETE_SCENE:
+                    dialog.dismiss();
+                    NetBean netBean = (NetBean) msg.obj;
+                    if (netBean.isSuccess()) {
+                        ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
+//                        Intent intent = new Intent(DataConstants.BroadDeleteScene);
+//                        intent.putExtra(SceneDetailActivity.class.getSimpleName(), true);
+//                        sendBroadcast(intent);
+//                        if (CJResultFragment.instance != null) {
+//                            CJResultFragment.instance.refreshList();
+//                        }
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+//                        finish();
+//                        刷新列表
+                    } else {
+                        ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                    }
+                    break;
                 case DataConstants.ADD_PRODUCT_LIST:
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
                         dialog.dismiss();
                         nearProductList.clear();
-                        nearProductList.addAll(netProductBean.getList());
+                        nearProductList.addAll(netProductBean.getData().getRows());
                         goodListAdapter.notifyDataSetChanged();
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                        ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.PRODUCT_AND_SCENE:
@@ -368,7 +406,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+                        ToastUtils.showError(netSceneLoveBean1.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -390,7 +429,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                     } else {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+                        ToastUtils.showError(netSceneLoveBean.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -473,13 +513,23 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                         location = netSceneDetails.getLocation();
                     } else {
-                        dialog.showErrorWithStatus(netSceneDetails.getMessage());
+//                        Toast toast = new Toast(SceneDetailActivity.this);
+//                        toast.setView();
+//                        dialog.showErrorWithStatus(netSceneDetails.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneDetails.getMessage(), Toast.LENGTH_SHORT).show();
+                        ToastUtils.showError(netSceneDetails.getMessage());
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Log.e("<<<", "请求失败 ");
                     break;
             }
@@ -522,7 +572,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
             labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
             labelView.setLayoutParams(labelLp);
-            imgRelative.addView(labelView);
+            container.addView(labelView);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -590,7 +640,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
-                Intent intent4 = new Intent(SceneDetailActivity.this, ShareCJActivity.class);
+                Intent intent4 = new Intent(SceneDetailActivity.this, TestShare.class);
                 intent4.putExtra("id", id);
                 startActivity(intent4);
                 break;
@@ -600,6 +650,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
                     LoginCompleteUtils.id = id;
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
+                    return;
+                }
+                if (netScene == null) {
+                    dialog.show();
+                    DataPaser.sceneDetails(id, handler);
+                    return;
+                }
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getUser_info().getUser_id())) {
+                    popupWindow.dismiss();
+                    dialog.show();
+                    DataPaser.deleteScene(id, handler);
                     return;
                 }
                 Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
@@ -637,8 +698,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_scenedetails_background:
                 isShowAll = !isShowAll;
-                for (int i = 0; i < imgRelative.getChildCount(); i++) {
-                    View view = imgRelative.getChildAt(i);
+                for (int i = 0; i < container.getChildCount(); i++) {
+                    View view = container.getChildAt(i);
                     if (view instanceof LabelView) {
                         LabelView labelView = (LabelView) view;
                         labelView.pointOrAll(false, isShowAll);
@@ -648,8 +709,20 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                Log.e("<<<动画", "height=" + titleLinear.getHeight() + ",bottomMargin=" + lp.bottomMargin);
                 if (isShowAll) {
                     ObjectAnimator.ofFloat(titleLinear, "translationY", titleLinear.getMeasuredHeight() + lp.bottomMargin).setDuration(300).start();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            goneLayout.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
                     ObjectAnimator.ofFloat(titleLinear, "translationY", 0).setDuration(300).start();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            goneLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
                 break;
             case R.id.activity_scenedetails_lovecount:
@@ -670,10 +743,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
 //            case R.id.activity_scenedetails_commentlinear:
+            case R.id.popup_scene_detail_more_pinglun:
             case R.id.activity_scenedetails_commentimg:
             case R.id.activity_scenedetails_commentcount:
             case R.id.activity_scenedetails_allcomment:
             case R.id.activity_scenedetails_morecomment:
+                popupWindow.dismiss();
 //                Log.e("<<<点击", "点击评论");
                 if (netScene == null) {
                     dialog.show();
@@ -689,6 +764,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_moreuser:
                 break;
             case R.id.activity_scenedetails_more:
+                if (netScene == null) {
+                    dialog.show();
+                    DataPaser.sceneDetails(id + "", handler);
+                    return;
+                }
+//                if(netScene.getUser_info().getUser_id().equals(netScene.getCurrent_user_id()))
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getUser_info().getUser_id())) {
+                    jubaoTv.setText("删除");
+                }
                 showPopup();
                 break;
         }
@@ -762,4 +846,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     };
 
+    @Override
+    public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
+        container.setTranslationY(t / 3);
+        if (container.getTranslationY() >= container.getMeasuredHeight() / 5) {
+            container.setTranslationY(container.getMeasuredHeight() / 5);
+        }
+        if (container.getTranslationY() <= 0) {
+            container.setTranslationY(0);
+        }
+    }
 }

@@ -11,179 +11,189 @@
         android:layout_height="640dp"
         android:scaleType="centerCrop"/>
 
-    <LinearLayout
-        android:id="@+id/item_scenedetails_bottomlinear"
+    <RelativeLayout
+        android:id="@+id/item_scenedetails_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/jianbian_scenelist"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:paddingBottom="80dp"
-        android:paddingLeft="20dp">
+        android:background="@drawable/jianbian_scenelist">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-                android:id="@+id/item_scenelist_user_headimg"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:riv_corner_radius="@dimen/dp100"/>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/item_scenelist_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="狗蛋"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"/>
-
-                <TextView
-                    android:id="@+id/item_scenelist_user_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/item_scenelist_user_name"
-                    android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"/>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="11dp"
-                android:src="@mipmap/eye_white"/>
-
-            <TextView
-                android:id="@+id/item_scenelist_view_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="8sp"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="11dp"
-                android:layout_marginLeft="13dp"
-                android:src="@mipmap/heart_white"/>
-
-            <TextView
-                android:id="@+id/item_scenelist_love_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="8sp"/>
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/item_scenelist_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="matrix"
-                android:src="@mipmap/scene_title_background"/>
-
-            <TextView
-                android:id="@+id/item_scenelist_scene_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:maxEms="11"
-                android:maxLines="2"
-                android:text="详见的小路阿三是的分厘卡似的地方浪费空间"
-                android:textColor="@color/white"
-                android:textSize="20sp"/>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="11dp"
-                android:src="@mipmap/star_white"/>
-
-            <TextView
-                android:id="@+id/item_scenelist_suoshuqingjing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="9sp"/>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical"
-                android:text="|"
-                android:textColor="@color/white"
-                android:textSize="9sp"/>
-
-            <TextView
-                android:id="@+id/item_scenelist_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="9sp"/>
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/item_scenedetails_bottomlinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="2dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="11dp"
-                android:src="@mipmap/location_white_width_16px"/>
 
-            <TextView
-                android:id="@+id/item_scenelist_location"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingBottom="80dp"
+            android:paddingLeft="20dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:textColor="@color/white"
-                android:textSize="9sp"/>
+                android:orientation="horizontal">
+
+                <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                    android:id="@+id/item_scenelist_user_headimg"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:riv_border_color="@color/black969696"
+                    app:riv_border_width="1dp"
+                    app:riv_corner_radius="@dimen/dp100"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/item_scenelist_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="狗蛋"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/item_scenelist_user_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/item_scenelist_user_name"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="11dp"
+                    android:src="@mipmap/eye_white"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_view_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="8sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="11dp"
+                    android:layout_marginLeft="13dp"
+                    android:src="@mipmap/heart_white"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_love_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="8sp"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/item_scenelist_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="matrix"
+                    android:src="@mipmap/scene_title_background"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_scene_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:maxEms="11"
+                    android:maxLines="2"
+                    android:text="详见的小路阿三是的分厘卡似的地方浪费空间"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="11dp"
+                    android:src="@mipmap/star_white"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_suoshuqingjing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="|"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="11dp"
+                    android:src="@mipmap/location_white_width_16px"/>
+
+                <TextView
+                    android:id="@+id/item_scenelist_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"/>
+            </LinearLayout>
+
         </LinearLayout>
+    </RelativeLayout>
 
-
-    </LinearLayout>
 
 </RelativeLayout>

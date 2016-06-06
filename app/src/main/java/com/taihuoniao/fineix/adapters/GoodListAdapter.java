@@ -11,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
 import java.util.List;
@@ -23,10 +24,10 @@ import java.util.List;
  */
 public class GoodListAdapter extends BaseAdapter {
     private Activity activity;
-    private List<ProductListBean> list;
+    private List<ProductBean.ProductListItem> list;
     private List<SearchBean.SearchItem> searchList;
 
-    public GoodListAdapter(Activity activity, List<ProductListBean> list, List<SearchBean.SearchItem> searchList) {
+    public GoodListAdapter(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
         this.activity = activity;
         this.list = list;
         this.searchList = searchList;
@@ -77,10 +78,15 @@ public class GoodListAdapter extends BaseAdapter {
         if (list != null) {
             holder.nameTv.setText(list.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
-            if (list.get(position).banner_asset.size() > 0) {
-                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).banner_asset, activity));
+            if (list.get(position).getBanner_asset().size() > 0) {
+                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
+                if (list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) {
+                    holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 + 1);
+                } else {
+                    holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
+                }
             }
-            holder.slidingFocusImageView.setSelection(0);
+//            holder.slidingFocusImageView.setSelection(0);
             switch (list.get(position).getAttrbute()) {
                 case "1":
                     holder.img.setImageResource(R.mipmap.product_fiu);
@@ -107,9 +113,9 @@ public class GoodListAdapter extends BaseAdapter {
             holder.nameTv.setText(searchList.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", searchList.get(position).getSale_price()));
             if (searchList.get(position).getBanners().size() > 0) {
-                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, searchList.get(position).getBanners(), activity));
+                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, null, searchList.get(position).getBanners(), activity));
+                holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
             }
-            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
             switch (searchList.get(position).getAttrbute()) {
                 case "1":
                     holder.img.setImageResource(R.mipmap.product_fiu);
@@ -139,10 +145,10 @@ public class GoodListAdapter extends BaseAdapter {
     static class ClickListener implements View.OnClickListener, AdapterView.OnItemClickListener {
         private Activity activity;
         private int position;
-        private List<ProductListBean> list;
+        private List<ProductBean.ProductListItem> list;
         private List<SearchBean.SearchItem> searchList;
 
-        public ClickListener(Activity activity, List<ProductListBean> list, List<SearchBean.SearchItem> searchList, int position) {
+        public ClickListener(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList, int position) {
             this.activity = activity;
             this.list = list;
             this.searchList = searchList;
@@ -162,9 +168,22 @@ public class GoodListAdapter extends BaseAdapter {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
             if (list != null) {
-                intent.putExtra("id", list.get(this.position).get_id());
+                if (list.get(this.position).getSights() != null && list.get(this.position).getSights().size() > 0 && list.get(this.position).getSights().get(0) != null) {
+                    if (position % (1 + list.get(this.position).getBanner_asset().size()) == list.get(this.position).getBanner_asset().size()) {
+                        Intent intent1 = new Intent(activity, SceneDetailActivity.class);
+                        intent1.putExtra("id", list.get(this.position).getSights().get(0).getId());
+                        activity.startActivity(intent1);
+                        return;
+                    } else {
+                        intent.putExtra("id", list.get(this.position).get_id());
+                    }
+                } else {
+                    intent.putExtra("id", list.get(this.position).get_id());
+                }
+
             } else if (searchList != null) {
                 intent.putExtra("id", searchList.get(this.position).get_id());
             }

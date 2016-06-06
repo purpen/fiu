@@ -25,12 +25,12 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     public static final String TIMEOUT = "2";//已过期
     private boolean mLookClick = false;
     private String mRid;//订单号
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private UnUsableRedPacketAdapter adapter;
     private boolean isFirstLoad=true;
     public UnUsableRedPacketActivity(){
@@ -90,7 +90,8 @@ public class UnUsableRedPacketActivity extends BaseActivity{
                                 finish();
                             }else {
                                 //红包不可用
-                                new SVProgressHUD(UnUsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
+                                ToastUtils.showError("这个红包不可用");
+//                                new SVProgressHUD(UnUsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
 //                                Toast.makeText(UnUsableRedPacketActivity.this,"这个红包不可用",Toast.LENGTH_LONG).show();
                             }
                         }
@@ -177,7 +178,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"过期红包");
         lv = pull_lv.getRefreshableView();
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");
     }
 

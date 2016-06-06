@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -17,6 +20,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -25,9 +29,10 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 
@@ -46,7 +51,7 @@ public class SystemNoticeActivity extends BaseActivity {
     private SystemNoticeAdapter adapter;
     private static final String PAGE_SIZE = "9999";
     private int curPage = 1;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private ArrayList<SystemNoticeData.SystemNoticeItem> list;
     private int unread_count;
     public SystemNoticeActivity() {
@@ -63,9 +68,12 @@ public class SystemNoticeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        dialog = new SVProgressHUD(this);
+        dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "系统通知");
 //        custom_head.setHeadRightTxtShow(true,R.string.clear);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DataConstants.BroadDeleteScene);
+        registerReceiver(systemReceiver,intentFilter);
     }
 
     @OnClick(R.id.tv_head_right)
@@ -140,10 +148,12 @@ public class SystemNoticeActivity extends BaseActivity {
                         refreshUI();
                         return;
                     }
-                    dialog.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    dialog.showErrorWithStatus(response.getMessage());
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    dialog.showErrorWithStatus("对不起,数据异常");
+                    ToastUtils.showError("对不起，数据异常");
+//                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
 
             }
@@ -151,7 +161,8 @@ public class SystemNoticeActivity extends BaseActivity {
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -175,4 +186,19 @@ public class SystemNoticeActivity extends BaseActivity {
             adapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(systemReceiver);
+        super.onDestroy();
+    }
+
+    private BroadcastReceiver systemReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
+                //
+            }
+        }
+    };
 }

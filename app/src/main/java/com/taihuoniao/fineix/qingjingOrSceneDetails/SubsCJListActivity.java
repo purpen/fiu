@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,14 +20,15 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +45,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
     @Bind(R.id.activity_subs_cjlist_progress)
     ProgressBar progressBar;
     private ListView listView;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //网络请求返回数据
     //场景列表
     private int page = 1;
@@ -58,23 +62,28 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setTitle(R.string.subs, getResources().getColor(R.color.black333333));
         listView = pullToRefreshView.getRefreshableView();
-        dialog = new SVProgressHUD(SubsCJListActivity.this);
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
+        dialog = new WaittingDialog(SubsCJListActivity.this);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                page = 1;
-//                dialog.show();
-//                requestNet();
+                page = 1;
+                dialog.show();
+                requestNet();
             }
         });
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-//                progressBar.setVisibility(View.VISIBLE);
-//                page++;
-//                requestNet();
+                progressBar.setVisibility(View.VISIBLE);
+                page++;
+                requestNet();
             }
         });
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DataConstants.BroadDeleteScene);
+        registerReceiver(subsListReceiver,intentFilter);
     }
 
     @Override
@@ -85,38 +94,14 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         listView.setOnItemClickListener(this);
         dialog.show();
     }
-    public final static String MD5(String s) {
-        char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F' };
-        try {
-            byte[] btInput = s.getBytes();
-            // 获得MD5摘要算法的 MessageDigest 对象
-            MessageDigest mdInst = MessageDigest.getInstance("MD5");
-            // 使用指定的字节更新摘要
-            mdInst.update(btInput);
-            // 获得密文
-            byte[] md = mdInst.digest();
-            // 把密文转换成十六进制的字符串形式
-            int j = md.length;
-            char str[] = new char[j * 2];
-            int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
-                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-                str[k++] = hexDigits[byte0 & 0xf];
-            }
-            return new String(str);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
     @Override
     protected void requestNet() {
 
         ClientDiscoverAPI.subsCJList(page + "", 8 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                pullToRefreshView.onRefreshComplete();
                 SubsCjListBean subsCjListBean = new SubsCjListBean();
                 try {
                     Gson gson = new Gson();
@@ -129,6 +114,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 if (subsCjListBean.isSuccess()) {
+                    pullToRefreshView.setLoadingTime();
                     if (page == 1) {
                         list.clear();
                         pullToRefreshView.lastSavedFirstVisibleItem = -1;
@@ -143,6 +129,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                pullToRefreshView.onRefreshComplete();
                 Log.e("<<<failure>>>", "请求失败" + error.toString());
             }
         });
@@ -157,4 +144,21 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
             startActivity(intent);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(subsListReceiver);
+        super.onDestroy();
+    }
+
+    private BroadcastReceiver subsListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
+                page = 1;
+                dialog.show();
+                requestNet();
+            }
+        }
+    };
 }

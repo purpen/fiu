@@ -24,7 +24,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public class FocusActivity extends BaseActivity {
     private FocusAdapter adapter;
     public static final String USER_ID_EXTRA = "USER_ID_EXTRA";
     private long userId = LoginInfo.getUserId();
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
 
     public FocusActivity() {
         super(R.layout.activity_focus_fans);
@@ -77,7 +77,7 @@ public class FocusActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "关注");
-        dialog = new SVProgressHUD(this);
+        dialog = new WaittingDialog(this);
     }
 
     @Override

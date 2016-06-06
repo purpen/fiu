@@ -22,9 +22,10 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.text.DecimalFormat;
 
@@ -59,7 +60,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private TextView payPriceTv;
     private Button payBtn;
     //网络请求dialog
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //网络请求返回值
     private AddressBean addressBean;
     //收货地址界面选择的返回值
@@ -94,7 +95,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         nowBuyBean = (NowBuyBean) getIntent().getSerializableExtra("NowBuyBean");
         cartBean = (CartDoOrder) getIntent().getSerializableExtra("cartBean");
         if (nowBuyBean == null && cartBean == null) {
-            dialog.showErrorWithStatus("数据异常，请重试");
+            ToastUtils.showError("数据异常，请重试");
+//            dialog.showErrorWithStatus("数据异常，请重试");
 //            Toast.makeText(ConfirmOrderActivity.this, "数据异常，请重试", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -159,7 +161,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         saveMoneyTv = (TextView) findViewById(R.id.activity_confirmorder_savemoney);
         payPriceTv = (TextView) findViewById(R.id.activity_confirmorder_payprice);
         payBtn = (Button) findViewById(R.id.activity_confirmorder_paybtn);
-        dialog = new SVProgressHUD(ConfirmOrderActivity.this);
+        dialog = new WaittingDialog(ConfirmOrderActivity.this);
         redBagCancelTv = (TextView) findViewById(R.id.activity_confirmorder_redbag_cannot_cancel);
 
     }
@@ -190,7 +192,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 dialog.show();
                 if (address == null && addressBean == null) {
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("请选择收货地址!");
+                    ToastUtils.showError("请选择收货地址!");
+//                    dialog.showErrorWithStatus("请选择收货地址!");
 //                    Toast.makeText(ConfirmOrderActivity.this, "请选择收货地址...", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -276,7 +279,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     NowConfirmBean netConfirmBean = (NowConfirmBean) msg.obj;
 //                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
                     if (netConfirmBean.isSuccess()) {
-                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
+                        ToastUtils.showSuccess(netConfirmBean.getMessage());
+//                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
 //                        netConfirmBean.getRid();     //订单rid
                         Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
                         intent.putExtra("paymoney", netConfirmBean.getPay_money());
@@ -284,7 +288,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                         startActivity(intent);
                         finish();
                     }else {
-                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
+                        ToastUtils.showError(netConfirmBean.getMessage());
+//                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
                     }
                     break;
                 case DataConstants.DEFAULT_ADDRESS:
@@ -295,13 +300,15 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                         addressBean = netAddress;
                         setAddressData(addressBean);
                     } else {
-                        dialog.showErrorWithStatus("默认地址不存在!");
+                        ToastUtils.showInfo("默认地址不存在!");
+//                        dialog.showErrorWithStatus("默认地址不存在!");
 //                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }

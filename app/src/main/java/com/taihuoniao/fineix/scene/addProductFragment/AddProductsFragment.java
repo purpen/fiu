@@ -26,16 +26,15 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //当前页码
     private int currentPage = 1;
     //网络请求返回数据商品列表
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private AddProductGridAdapter addProductGridAdapter;
     //商品搜索的时候数据
     private int pos = -1;
@@ -180,7 +179,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                             pullToRefreshView.lastTotalItem = -1;
                             pullToRefreshView.lastSavedFirstVisibleItem = -1;
                         }
-                        productList.addAll(netProductBean.getList());
+                        productList.addAll(netProductBean.getData().getRows());
                         if (productList.size() <= 0) {
                             nothingTv.setVisibility(View.VISIBLE);
                         } else {
@@ -259,7 +258,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
-                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+                ToastUtils.showError("网络错误");
+//                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
             }
         });
 

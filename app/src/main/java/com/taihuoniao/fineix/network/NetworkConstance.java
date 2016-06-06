@@ -48,6 +48,8 @@ public class NetworkConstance {
     //场景
     //新增场景
     public static final String create_scene = BASE_URL + "/scene_sight/save";
+    //删除场景
+    public static final String delete_scene = BASE_URL + "/scene_sight/delete";
     //场景点赞
     public static final String love_scene = BASE_URL + "/favorite/ajax_sight_love";
     //取消场景点赞

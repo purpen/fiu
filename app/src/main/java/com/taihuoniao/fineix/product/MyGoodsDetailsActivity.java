@@ -49,11 +49,12 @@ import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomScrollView;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private TextView buyTv;
     private CustomScrollView scrollView;
     private PopupWindow popupWindow;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //topview下的控件
     private ViewPager viewPager;
     private List<ImageView> imgList;
@@ -156,7 +157,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         id = getIntent().getStringExtra("id");
         Log.e("<<<自营商品id", "id=" + id);
         if (id == null) {
-            dialog.showErrorWithStatus("暂无此商品");
+            ToastUtils.showError("暂无此商品");
+//            dialog.showErrorWithStatus("暂无此商品");
 //            Toast.makeText(MyGoodsDetailsActivity.this, "暂无此商品", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -198,7 +200,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         scrollView = (CustomScrollView) findViewById(R.id.activity_goodsdetails_scrollview);
         View topView = View.inflate(MyGoodsDetailsActivity.this, R.layout.item_goods_details_toplinear, null);
         scrollView.addToToplinear(topView);
-        dialog = new SVProgressHUD(MyGoodsDetailsActivity.this);
+        dialog = new WaittingDialog(MyGoodsDetailsActivity.this);
         //topview下的控件
         viewPager = (ViewPager) topView.findViewById(R.id.activity_goodsdetails_viewpager);
         imgList = new ArrayList<>();
@@ -281,7 +283,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                         intent.putExtra("NowBuyBean", netNowBuy);
                         startActivity(intent);
                     } else {
-                        dialog.showErrorWithStatus(netNowBuy.getMessage());
+                        ToastUtils.showError(netNowBuy.getMessage());
+//                        dialog.showErrorWithStatus(netNowBuy.getMessage());
 //                        Toast.makeText(MyGoodsDetailsActivity.this, netNowBuy.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     popupWindow.dismiss();
@@ -290,9 +293,11 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     dialog.dismiss();
                     NetBean netBean = (NetBean) msg.obj;
                     if(netBean.isSuccess()){
-                        dialog.showSuccessWithStatus(netBean.getMessage());
+                        ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
                     }else{
-                        dialog.showErrorWithStatus(netBean.getMessage());
+                        ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
                     }
                     popupWindow.dismiss();
                     DataPaser.shopCartNumberParser(mHandler);
@@ -367,7 +372,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(MyGoodsDetailsActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -541,7 +547,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
                     if (which == -1) {
-                        dialog.showErrorWithStatus("请选择颜色/分类");
+                        ToastUtils.showError("请选择颜色/分类");
+//                        dialog.showErrorWithStatus("请选择颜色/分类");
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();
@@ -563,7 +570,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
                     if (which == -1) {
-                        dialog.showErrorWithStatus("请选择颜色/分类");
+                        ToastUtils.showError("请选择颜色/分类");
+//                        dialog.showErrorWithStatus("请选择颜色/分类");
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();

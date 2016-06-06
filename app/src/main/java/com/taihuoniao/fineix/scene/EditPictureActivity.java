@@ -51,11 +51,12 @@ import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.FirstInAppUtils;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //添加链接装载链接的容器
     private List<LabelView> labels = new ArrayList<LabelView>();
     //工具类
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //编辑好的图片存储名称
     private String picName;
     public static EditPictureActivity instance = null;
@@ -150,7 +151,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请重试");
             }
 
             @Override
@@ -177,7 +179,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
 //        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
@@ -294,7 +297,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
         chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
-        dialog = new SVProgressHUD(EditPictureActivity.this);
+        dialog = new WaittingDialog(EditPictureActivity.this);
         imageLoader = ImageLoader.getInstance();
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
@@ -422,7 +425,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //添加标签
     private void addLabel(TagItem tagItem) {
         if (labels.size() >= 3) {
-            dialog.showInfoWithStatus("您最多可以添加三个链接");
+            ToastUtils.showInfo("您最多可以添加三个链接");
+//            dialog.showInfoWithStatus("您最多可以添加三个链接");
 //            Toast.makeText(EditPictureActivity.this, R.string.more_three_chaining, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -480,7 +484,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                             labels.remove(labelView);
                             popupWindow.dismiss();
                         } else {
-                            dialog.showErrorWithStatus(netBean.getMessage());
+                            ToastUtils.showError(netBean.getMessage());
+//                            dialog.showErrorWithStatus(netBean.getMessage());
 //                            Toast.makeText(EditPictureActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -488,7 +493,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onFailure(HttpException error, String msg) {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus("删除失败");
+                        ToastUtils.showError("删除失败，请重试");
+//                        dialog.showErrorWithStatus("删除失败");
 //                        Toast.makeText(EditPictureActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -514,7 +520,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_edit_products_relative:
                 if (labels.size() >= 3) {
-                    dialog.showInfoWithStatus("您最多可以添加三个产品");
+                    ToastUtils.showInfo("您最多可以添加三个产品");
+//                    dialog.showInfoWithStatus("您最多可以添加三个产品");
 //                    Toast.makeText(EditPictureActivity.this, R.string.more_three_products, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -557,7 +564,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             cv.drawBitmap(gpuImageView.capture(), null, dst, null);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            dialog.showErrorWithStatus("图片处理异常，请重试");
+            ToastUtils.showError("图片处理异常，请重试");
+//            dialog.showErrorWithStatus("图片处理异常，请重试");
 //            Toast.makeText(EditPictureActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
             return;
             //出现异常存储的是未加滤镜效果的图片
@@ -597,7 +605,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             dialog.dismiss();
             if (TextUtils.isEmpty(fileName)) {
                 //出现问题是因为缓存目录中产生了与规定文件名称一样的文件夹，清理即可以使用
-                dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
+//                dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
+                ToastUtils.showError("图片处理错误，请清理缓存后重试");
 //                Toast.makeText(EditPictureActivity.this, "图片处理错误，请清理缓存后重试", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -669,7 +678,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                             dialog.dismiss();
-                            dialog.showErrorWithStatus("图片加载失败");
+                            ToastUtils.showError("图片加载失败");
+//                            dialog.showErrorWithStatus("图片加载失败");
 //                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
                         }
 
@@ -689,7 +699,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         public void onLoadingCancelled(String imageUri, View view) {
                             dialog.dismiss();
 //                            Toast.makeText(EditPictureActivity.this,"加载取消",Toast.LENGTH_SHORT).show();
-                            dialog.showErrorWithStatus("图片加载失败");
+                            ToastUtils.showError("图片加载失败");
+//                            dialog.showErrorWithStatus("图片加载失败");
 //                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();
                         }
                     });

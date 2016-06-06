@@ -1,23 +1,18 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
-import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -27,12 +22,11 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -60,7 +54,7 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     public SystemSettingsActivity(){
         super(R.layout.activity_system_settings);
     }
@@ -68,7 +62,7 @@ public class SystemSettingsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"系统设置");
-        svProgressHUD=new SVProgressHUD(this);
+        svProgressHUD=new WaittingDialog(this);
         item_update_psd.setTVStyle(0,"修改密码", R.color.color_333);
         item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
         item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
@@ -134,7 +128,8 @@ public class SystemSettingsActivity extends BaseActivity{
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()){//   退出成功跳转首页
-                    svProgressHUD.showSuccessWithStatus("退出成功");
+                    ToastUtils.showSuccess("退出成功");
+//                    svProgressHUD.showSuccessWithStatus("退出成功");
                 }
                 SPUtil.remove(activity,DataConstants.LOGIN_INFO);
                 Intent intent=new Intent(activity,MainActivity.class);
@@ -170,7 +165,8 @@ public class SystemSettingsActivity extends BaseActivity{
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
             setCacheSize();
-            svProgressHUD.showSuccessWithStatus("清理完成");
+            ToastUtils.showSuccess("清理完成");
+//            svProgressHUD.showSuccessWithStatus("清理完成");
         }
     }
 

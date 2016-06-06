@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.product;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,15 +31,16 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -86,7 +90,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private String attrbute = "0";// 1.官网；2.淘宝；3.天猫；4.京东
     private String url = null;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private GoodsDetailBean netGood;//网络请求返回值
     //所属场景列表
     private int page = 1;
@@ -94,7 +98,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private GoodsDetailSceneRecyclerAdapter changjingAdaper;
     //推荐列表
     private int recommendPage = 1;
-    private List<ProductListBean> recommendList;
+    private List<ProductBean.ProductListItem> recommendList;
     private GoodsDetailRecommendRecyclerAdapter recommendRecyclerAdapter;
     //由于需要请求两次数据，所以做个标记
     private int currentTime = 1;
@@ -111,7 +115,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         id = getIntent().getStringExtra("id");
         Log.e("<<<", "商品id=" + id);
         if (id == null) {
-            dialog.showErrorWithStatus("产品不存在");
+            ToastUtils.showError("产品不存在");
+//            dialog.showErrorWithStatus("产品不存在");
 //            Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -121,7 +126,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     protected void initView() {
         df = new DecimalFormat("######0.00");
         WindowUtils.chenjin(GoodsDetailActivity.this);
-        dialog = new SVProgressHUD(GoodsDetailActivity.this);
+        dialog = new WaittingDialog(GoodsDetailActivity.this);
         backImg.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
@@ -164,13 +169,16 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DataConstants.BroadDeleteScene);
+        registerReceiver(goodDetailReceiver,intentFilter);
     }
 
     @Override
     protected void requestNet() {
         dialog.show();
         DataPaser.goodsDetail(id, handler);
-        DataPaser.productAndScene(page + "", 8 + "", null, id, handler);
+        DataPaser.productAndScene(page + "",20+"", null, id, handler);
         DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", null, id, null, null, handler);
 //        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
@@ -218,7 +226,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         webView.getSettings().setJavaScriptEnabled(true);
                         Log.e("<<<商品url", "url=" + url);
                         webView.loadUrl(url);
-                        dialog.showInfoWithStatus("正在跳转，请稍等");
+                        ToastUtils.showInfo("正在跳转，请稍等");
+//                        dialog.showInfoWithStatus("正在跳转，请稍等");
 //                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
 //                        intent.putExtra("url", url);
@@ -246,10 +255,11 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         if (recommendPage == 1) {
                             recommendList.clear();
                         }
-                        recommendList.addAll(netProductBean.getList());
+                        recommendList.addAll(netProductBean.getData().getRows());
                         recommendRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                       dialog.showErrorWithStatus(netProductBean.getMessage());
+                       ToastUtils.showError(netProductBean.getMessage());
+//                       dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
                 case DataConstants.PRODUCT_AND_SCENE:
@@ -262,7 +272,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         changjingList.addAll(netProductSceneBean.getData().getRows());
                         changjingAdaper.notifyDataSetChanged();
                     } else {
-                        dialog.showErrorWithStatus(netProductSceneBean.getMessage());
+                        ToastUtils.showError(netProductSceneBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductSceneBean.getMessage());
 //                        Toast.makeText(GoodsDetailActivity.this, netProductSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -286,8 +297,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         url = netGoodsDetailBean.getData().getLink();
                         refreshUI(banner);
                     } else {
+                        ToastUtils.showError(netGoodsDetailBean.getMessage());
 //                        Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
-                        dialog.showErrorWithStatus(netGoodsDetailBean.getMessage());
+//                        dialog.showErrorWithStatus(netGoodsDetailBean.getMessage());
                         finish();
                     }
                     break;
@@ -302,7 +314,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     break;
                 case DataConstants.NET_FAIL:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }
@@ -348,6 +361,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     protected void onDestroy() {
         //cancelNet();
+        unregisterReceiver(goodDetailReceiver);
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
@@ -362,4 +376,15 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         intent.putExtra("id", changjingList.get(postion).getSight().get_id());
         startActivity(intent);
     }
+
+    private BroadcastReceiver goodDetailReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
+                page = 1;
+                dialog.show();
+                DataPaser.productAndScene(page + "", 20+"", null, id, handler);
+            }
+        }
+    };
 }

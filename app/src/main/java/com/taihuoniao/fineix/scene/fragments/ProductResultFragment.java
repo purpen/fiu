@@ -16,9 +16,10 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ProductResultFragment extends BaseFragment {
     private ListView listView;
     private ProgressBar progressBar;
     private TextView emptyView;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //产品列表
     private int page = 1;
     private List<SearchBean.SearchItem> list;
@@ -70,7 +71,7 @@ public class ProductResultFragment extends BaseFragment {
         listView.setDividerHeight(0);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_product_result_progressBar);
         emptyView = (TextView) view.findViewById(R.id.fragment_product_result_emptyview);
-        dialog = new SVProgressHUD(getActivity());
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -96,8 +97,8 @@ public class ProductResultFragment extends BaseFragment {
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-//        dialog.show();
-        progressBar.setVisibility(View.VISIBLE);
+        dialog.show();
+//        progressBar.setVisibility(View.VISIBLE);
         DataPaser.search(q, t, page + "", "tag", null, handler);
     }
 
@@ -113,7 +114,7 @@ public class ProductResultFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.SEARCH_LIST:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     SearchBean netSearch = (SearchBean) msg.obj;
                     if (netSearch.isSuccess()) {
@@ -128,14 +129,16 @@ public class ProductResultFragment extends BaseFragment {
                         }
                         goodListAdapter.notifyDataSetChanged();
                     } else {
-                        dialog.showErrorWithStatus(netSearch.getMessage());
+                        ToastUtils.showError(netSearch.getMessage());
+//                        dialog.showErrorWithStatus(netSearch.getMessage());
 //                        Toast.makeText(getActivity(), netSearch.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
                     break;
             }
         }

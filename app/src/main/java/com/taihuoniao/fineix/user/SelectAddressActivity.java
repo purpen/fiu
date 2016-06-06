@@ -14,13 +14,15 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     private SelectAddressListViewAdapter listViewAdapter;
     //网络请求
     private int currentPage = 1;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
 
@@ -116,7 +118,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
         listView = pullToRefresh.getRefreshableView();
         //listivew侧滑删除效果的实现
-        dialog = new SVProgressHUD(SelectAddressActivity.this);
+        dialog = new WaittingDialog(SelectAddressActivity.this);
     }
 
     @Override
@@ -165,14 +167,18 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DataConstants.DELETE_ADDRESS:
-                    boolean success = (boolean) msg.obj;
-                    if (success) {
-                        dialog.showSuccessWithStatus("删除成功");
+                    NetBean netBean = (NetBean) msg.obj;
+                    if(netBean.isSuccess()){
+                        ToastUtils.showSuccess("删除成功");
+//                        dialog.showSuccessWithStatus("删除成功");
 //                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         list.clear();
                         currentPage = 1;
                         dialog.show();
                         DataPaser.getAddressList(currentPage + "", mHandler);
+                    }
+                   else{
+                        ToastUtils.showError(netBean.getMessage());
                     }
                     break;
                 case DataConstants.GET_ADDRESS_LIST:
@@ -188,7 +194,8 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }

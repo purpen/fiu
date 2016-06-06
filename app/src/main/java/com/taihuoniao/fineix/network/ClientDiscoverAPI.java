@@ -213,7 +213,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("lng", lng);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
-
+//场景
+    //删除场景
+    public static void deleteScene(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.delete_scene;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
     //场景
     //场景点赞
     public static void loveScene(String id, RequestCallBack<String> callBack) {

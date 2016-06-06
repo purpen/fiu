@@ -13,9 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.baidu.location.BDLocation;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -30,10 +27,10 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 
@@ -60,7 +57,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     private int pageNum=0;
     private PoiSortType sortType = PoiSortType.distance_from_near_to_far; //默认排序类型
     private LatLng latLng;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //当前位置的市和区
     private String city, district;
 
@@ -126,7 +123,8 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
                         adapter.notifyDataSetChanged();
                     }
                 } else {
-                    dialog.showErrorWithStatus("抱歉,没有检索到结果！");
+                    ToastUtils.showError("抱歉,没有检索到结果!");
+//                    dialog.showErrorWithStatus("抱歉,没有检索到结果！");
                 }
             }
             @Override
@@ -137,7 +135,7 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "位置");
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
         custom_head.setHeadGoBackShow(false);
         custom_head.setIvLeft(R.mipmap.current_location);
         custom_head.setHeadRightTxtShow(true, R.string.cancel);

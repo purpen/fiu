@@ -23,15 +23,16 @@ import com.taihuoniao.fineix.beans.ApplyForRefund;
 import com.taihuoniao.fineix.beans.OrderDetails;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ApplyForRefundActivity extends Activity implements View.OnClickListener {
-    private SVProgressHUD mDialog = null;
+    private WaittingDialog mDialog = null;
     private TextView mReason;
     private TextView mMoney;
     private EditText mEditTextReason;
@@ -73,10 +74,12 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                             ApplyForRefund refund = (ApplyForRefund) msg.obj;
 
                             if ("true".equals(refund.getSuccess())) {
-                                new SVProgressHUD(ApplyForRefundActivity.this).showSuccessWithStatus(refund.getMessage());
+                                ToastUtils.showSuccess(refund.getMessage());
+//                                new SVProgressHUD(ApplyForRefundActivity.this).showSuccessWithStatus(refund.getMessage());
                                 onBackPressed();
                             } else {
-                                new SVProgressHUD(ApplyForRefundActivity.this).showErrorWithStatus(refund.getMessage());
+                                ToastUtils.showError(refund.getMessage());
+//                                new SVProgressHUD(ApplyForRefundActivity.this).showErrorWithStatus(refund.getMessage());
                             }
                         }
                     }
@@ -92,7 +95,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
 //        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_apply_for_refund);
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         initView();
         initPopwindow();
         initData();

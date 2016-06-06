@@ -21,11 +21,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSubItemLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     private List<FindFriendData.User> mList = new ArrayList();
     private ListView lv;
 
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     public FindFriendsActivity(){
         super(R.layout.activity_find_freinds);
     }
@@ -71,7 +72,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "发现好友");
-        dialog=new SVProgressHUD(this);
+        dialog=new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true,"发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
@@ -142,13 +143,15 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                     refreshUI(list);
                     return;
                 }
-                dialog.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
@@ -193,13 +196,15 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 3:
-                    dialog.showErrorWithStatus("对不起，分享出错");
+                    ToastUtils.showError("对不起，分享出错");
+//                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
 //                    dialog.showErrorWithStatus("您取消了分享");
                     break;
                 case 1:
-                    dialog.showSuccessWithStatus("分享成功");
+                    ToastUtils.showSuccess("分享成功");
+//                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }

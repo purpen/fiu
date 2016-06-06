@@ -37,8 +37,9 @@ import com.taihuoniao.fineix.product.ApplyForRefundActivity;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private TextView mLogisticsNumber, mLogisticsCompany;
 
     private BitmapUtils mBitmapUtils;
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private AlertDialog.Builder alertDialog;
 
     private Handler mHander = new Handler() {
@@ -215,10 +216,12 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                                                             Log.e("<<<提醒发货", "数据解析异常");
                                                         }
                                                         if (netBean.isSuccess()) {
-                                                            new SVProgressHUD(OrderDetailsActivity.this).showSuccessWithStatus("提醒发货成功!");
+                                                            ToastUtils.showSuccess("提醒发货成功!");
+//                                                            new SVProgressHUD(OrderDetailsActivity.this).showSuccessWithStatus("提醒发货成功!");
 //                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
                                                         } else {
-                                                            new SVProgressHUD(OrderDetailsActivity.this).showInfoWithStatus(netBean.getMessage());
+                                                            ToastUtils.showInfo(netBean.getMessage());
+//                                                            new SVProgressHUD(OrderDetailsActivity.this).showInfoWithStatus(netBean.getMessage());
 //                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
@@ -226,7 +229,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                                                     @Override
                                                     public void onFailure(HttpException error, String msg) {
                                                         mDialog.dismiss();
-                                                        mDialog.showErrorWithStatus("网络错误");
+                                                        ToastUtils.showError("网络错误");
+//                                                        mDialog.showErrorWithStatus("网络错误");
 //                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
@@ -526,7 +530,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         title.setBackImg(R.mipmap.back_black);
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         alertDialog = new AlertDialog.Builder(this);
         mLogisticsCompany = (TextView) findViewById(R.id.tv_logistics_company_number_order_details);
         mLogisticsNumber = (TextView) findViewById(R.id.tv_logistics_number_order_details);

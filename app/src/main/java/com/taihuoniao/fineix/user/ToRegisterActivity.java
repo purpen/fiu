@@ -25,8 +25,8 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
 
@@ -57,7 +57,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private String loginType = LOGIN_TYPE_WX;//1.微信；2.微博；3.ＱＱ
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToRegisterActivity instance = null;
-    private SVProgressHUD mDialog = null;
+    private WaittingDialog mDialog = null;
     private boolean mDialogAppear = false;//判断对话框要不要出现
 
     public ToRegisterActivity() {
@@ -144,7 +144,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         ShareSDK.initSDK(this);//必须先在程序入口处初始化SDK
         ActivityUtil.getInstance().addActivity(this);
         instance = this;
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
         mPhone = (TextView) findViewById(R.id.tv_phone_number_toregister);
         mPhone.setOnClickListener(this);
         mClose = (ImageView) findViewById(R.id.image_close_toregister);
@@ -345,7 +345,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                         finish();
                     }
                 } else {
-                    mDialog.showErrorWithStatus(response.getMessage());
+                    ToastUtils.showError(response.getMessage());
+//                    mDialog.showErrorWithStatus(response.getMessage());
                 }
             }
 
@@ -353,7 +354,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             public void onFailure(HttpException e, String s) {
                 if (mDialog!=null){
                     mDialog.dismiss();
-                    mDialog.showErrorWithStatus("网络异常,请确认网络畅通");
+                    ToastUtils.showError("网络异常，请确认网络畅通");
+//                    mDialog.showErrorWithStatus("网络异常,请确认网络畅通");
                 }
             }
         });
@@ -386,7 +388,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         if (i == Platform.ACTION_USER_INFOR) {
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
-                mDialog.showErrorWithStatus("对不起,授权失败");
+                ToastUtils.showError("对不起，授权失败");
+//                mDialog.showErrorWithStatus("对不起,授权失败");
             }
         }
         throwable.printStackTrace();
@@ -397,7 +400,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         if (i == Platform.ACTION_USER_INFOR) {
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
-                Util.makeToast("您取消了授权");
+                ToastUtils.showError("您取消了授权");
+//                Util.makeToast("您取消了授权");
             }
         }
     }

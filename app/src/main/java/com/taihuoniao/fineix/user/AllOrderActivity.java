@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 import butterknife.Bind;
@@ -51,6 +53,8 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
     RelativeLayout tmRelative;
     @Bind(R.id.activity_all_order_ymxrelative)
     RelativeLayout ymxRelative;
+    @Bind(R.id.activity_all_order_webview)
+    WebView webView;
 
     public AllOrderActivity() {
         super(R.layout.activity_all_order);
@@ -68,6 +72,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
 //        daishouhuoTv.setOnClickListener(this);
 //        daipingjiaTv.setOnClickListener(this);
 //        tuihuanhuoTv.setOnClickListener(this);
+
     }
 
     @Override
@@ -111,10 +116,19 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
                 startActivity(new Intent(AllOrderActivity.this, ReturnGoodsActivity.class));
                 break;
             case R.id.activity_all_order_jdrelative:
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("http://home.m.jd.com/newAllOrders/newAllOrders.action");
+                ToastUtils.showInfo("正在跳转，请稍等");
                 break;
             case R.id.activity_all_order_tbrelative:
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+                ToastUtils.showInfo("正在跳转，请稍等");
                 break;
             case R.id.activity_all_order_tmrelative:
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+                ToastUtils.showInfo("正在跳转，请稍等");
                 break;
             case R.id.activity_all_order_ymxrelative:
                 break;

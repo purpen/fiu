@@ -9,24 +9,26 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
+import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.SegmentedGroup;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.List;
@@ -59,7 +61,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     private static final String TYPE = "3";
     private Bitmap bitmap;
     private List<Uri> mSelected;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
     }
@@ -67,7 +69,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "完善个人资料");
-        svProgressHUD=new SVProgressHUD(this);
+        svProgressHUD=new WaittingDialog(this);
     }
 
     @OnClick({R.id.btn, R.id.riv})
@@ -139,12 +141,14 @@ public class CompleteUserInfoActivity extends BaseActivity {
         String nickname = et_nickname.getText().toString().trim();
         String sign = et_sign.getText().toString().trim();
         if (TextUtils.isEmpty(nickname)) {
-            svProgressHUD.showErrorWithStatus("请填写昵称");
+            ToastUtils.showError("请填写昵称");
+//            svProgressHUD.showErrorWithStatus("请填写昵称");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
-            svProgressHUD.showErrorWithStatus("请填写个性签名");
+            ToastUtils.showError("请填写个性签名");
+//            svProgressHUD.showErrorWithStatus("请填写个性签名");
             return;
         }
 
@@ -173,18 +177,22 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     if (OrderInterestQJActivity.instance != null) {
                         OrderInterestQJActivity.instance.finish();
                     }
-                    if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.showSuccessWithStatus(response.getMessage());
+                    if (!activity.isFinishing()&& svProgressHUD!=null)
+                        ToastUtils.showSuccess(response.getMessage());
+//                        svProgressHUD.showSuccessWithStatus(response.getMessage());
                     finish();
                     return;
                 }
-                svProgressHUD.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                svProgressHUD.showErrorWithStatus(response.getMessage());
 
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.dismiss();
-                svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
@@ -234,7 +242,8 @@ public class CompleteUserInfoActivity extends BaseActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
-            svProgressHUD.showErrorWithStatus("未检测到SD卡");
+            ToastUtils.showError("未检测到SD卡");
+//            svProgressHUD.showErrorWithStatus("未检测到SD卡");
         }
     }
 

@@ -1,16 +1,19 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 /**
  * Created by taihuoniao on 2016/3/23.
@@ -18,6 +21,7 @@ import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 public class SelectStoreActivity extends BaseActivity implements View.OnClickListener {
     private GlobalTitleLayout titleLayout;
     private EditText editText;
+    private ImageView deleteImg;
     private LinearLayout jingdongLinear, taobaoLinear, tianmaoLinear, yamaxunLinear;
 
     public static SelectStoreActivity instance;
@@ -54,17 +58,43 @@ public class SelectStoreActivity extends BaseActivity implements View.OnClickLis
 //        setContentView(R.layout.activity_select_store);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_select_store_title);
         editText = (EditText) findViewById(R.id.activity_select_store_edit);
+        deleteImg = (ImageView) findViewById(R.id.activity_select_store_delete);
         jingdongLinear = (LinearLayout) findViewById(R.id.activity_select_store_jingdong);
         taobaoLinear = (LinearLayout) findViewById(R.id.activity_select_store_taobao);
         tianmaoLinear = (LinearLayout) findViewById(R.id.activity_select_store_tianmao);
         yamaxunLinear = (LinearLayout) findViewById(R.id.activity_select_store_yamaxun);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    deleteImg.setVisibility(View.VISIBLE);
+                } else {
+                    deleteImg.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        deleteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         if (TextUtils.isEmpty(editText.getText().toString())) {
-            new SVProgressHUD(this).showInfoWithStatus("请输入搜索关键字");
-//            Toast.makeText(SelectStoreActivity.this, "请输入搜索关键字", Toast.LENGTH_SHORT).show();
+            ToastUtils.showInfo("请输入搜索关键字");
             return;
         }
         Intent intent = new Intent(SelectStoreActivity.this, SearchURLActivity.class);

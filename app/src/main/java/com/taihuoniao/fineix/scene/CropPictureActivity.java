@@ -15,9 +15,10 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.ImageUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.IOException;
 
@@ -28,7 +29,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
     private Uri imageUri;//上个界面获取的图片位置uri
     private GlobalTitleLayout titleLayout;
     private ClipImageLayout clipImageLayout;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     public static CropPictureActivity instance = null;
     private DisplayImageOptions options;
 
@@ -59,7 +60,8 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片挤在失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
 
             @Override
@@ -69,7 +71,8 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
+//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
 //        clipImageLayout.setImage(ImageUtils.decodeBitmapWithSize(imageUri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), false));
@@ -93,7 +96,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_crop_titlelayout);
 //        获取状态栏的高度
         clipImageLayout = (ClipImageLayout) findViewById(R.id.activity_crop_cliplayout);
-        dialog = new SVProgressHUD(CropPictureActivity.this);
+        dialog = new WaittingDialog(CropPictureActivity.this);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -123,7 +126,8 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
                 } catch (IOException e) {
                     e.printStackTrace();
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
+                    ToastUtils.showError("图片处理错误，请清理缓存后重试");
+//                    dialog.showErrorWithStatus("图片处理错误，请清理缓存后重试");
                 }
                 break;
         }

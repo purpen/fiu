@@ -52,7 +52,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <ListView
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/fragment_wellgoods_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

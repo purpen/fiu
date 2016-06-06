@@ -4,7 +4,6 @@
               android:layout_height="wrap_content"
               android:background="#E9E9E9"
               android:orientation="vertical"
-              android:paddingTop="10dp"
     >
 
     <LinearLayout
@@ -32,7 +31,6 @@
         android:id="@+id/btn_confirm"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="10dp"
         android:background="@color/yellow_bd8913"
         android:gravity="center"
         android:text="确定"

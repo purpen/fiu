@@ -36,10 +36,19 @@
 
         <ImageView
             android:id="@+id/view_label_right_point"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@id/view_label_right_price"
+            android:src="@mipmap/point01"/>
+
+        <ImageView
+            android:id="@+id/view_label_anim_point"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="7dp"
             android:layout_toLeftOf="@id/view_label_right_price"
             android:src="@mipmap/point01"/>
 

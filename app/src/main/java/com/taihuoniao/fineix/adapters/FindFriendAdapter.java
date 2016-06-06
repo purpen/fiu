@@ -25,8 +25,9 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -40,11 +41,11 @@ import butterknife.ButterKnife;
 public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
     private FindFriendRecycleViewAdapter adapter;
     private ImageLoader imageLoader;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     public FindFriendAdapter(List list, Activity activity){
         super(list,activity);
         this.imageLoader=ImageLoader.getInstance();
-        this.svProgressHUD=new SVProgressHUD(activity);
+        this.svProgressHUD=new WaittingDialog(activity);
     }
 
     @Override
@@ -139,14 +140,15 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
 //                                Util.makeToast(response.getMessage());
                                 return;
                             }
-
-                            svProgressHUD.showErrorWithStatus(response.getMessage());
+                            ToastUtils.showError(response.getMessage());
+//                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
-                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
+                            ToastUtils.showError("网络异常，请确认网络畅通");
+//                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
                         }
                     });
                 }else {
@@ -165,18 +167,20 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                                 button.setTextColor(activity.getResources().getColor(R.color.color_333));
                                 button.setBackgroundResource(R.drawable.border_radius5);
 //                                Util.makeToast(response.getMessage());
-                                svProgressHUD.showSuccessWithStatus("已取消关注");
+                                ToastUtils.showSuccess("已取消关注");
+//                                svProgressHUD.showSuccessWithStatus("已取消关注");
                                 return;
                             }
-
-                            svProgressHUD.showErrorWithStatus(response.getMessage());
+                            ToastUtils.showError(response.getMessage());
+//                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
+                            ToastUtils.showError("网络异常，请确认网络畅通");
+//                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
                         }
                     });
                 }

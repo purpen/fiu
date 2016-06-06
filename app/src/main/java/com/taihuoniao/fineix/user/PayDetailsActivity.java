@@ -23,13 +23,13 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
 public class PayDetailsActivity extends BaseActivity {
-    private SVProgressHUD mDialog;
+    private WaittingDialog mDialog;
     private TextView mSuccessOrFailed;
     private ImageView mImage;
     private TextView mOrderNum;
@@ -178,7 +178,7 @@ public class PayDetailsActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"订单支付详情");
         custom_head.setHeadRightTxtShow(true, "完成");
-        mDialog = new SVProgressHUD(this);
+        mDialog = new WaittingDialog(this);
 
         mSuccessOrFailed = (TextView) findViewById(R.id.tv_success_or_failed_pay_detail);
         mImage = (ImageView) findViewById(R.id.image_paydetails);

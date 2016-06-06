@@ -38,7 +38,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     private static final String STICK_NO = "2"; //非精选情境
     private BitmapDescriptor bitmapDescripter;
     private NearByQJAdapter nearByAdapter; //附近的情境
-    private SVProgressHUD waittingDialog;
+    private WaittingDialog waittingDialog;
     public DisplayOverlayerActivity() {
         super(R.layout.activity_display_overlayer);
     }
@@ -75,7 +75,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "附近所有情境");
-        waittingDialog=new SVProgressHUD(this);
+        waittingDialog=new WaittingDialog(this);
         mv.showZoomControls(false);
         mBDMap = mv.getMap();
 //        mBDMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));

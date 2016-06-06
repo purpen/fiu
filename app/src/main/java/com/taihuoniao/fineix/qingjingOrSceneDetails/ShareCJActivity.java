@@ -33,8 +33,9 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ShareCJUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
 //    @Bind(R.id.activity_share_scene_des)
 //    TextView desTv;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private DisplayImageOptions options750_1334, options500_500;
     private int[] shareImgs = {R.mipmap.share1, R.mipmap.share4, R.mipmap.share5, R.mipmap.share7};
     private List<ShareDemoBean> shareList;
@@ -96,7 +97,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
         if (id == null) {
-            dialog.showErrorWithStatus("数据异常");
+            ToastUtils.showError("数据异常");
+//            dialog.showErrorWithStatus("数据异常");
             finish();
         }
     }
@@ -109,7 +111,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         titleLayout.setContinueTvVisible(false);
         titleLayout.setCancelImgVisible(true);
 //        titleLayout.setRightTv(R.string.share, getResources().getColor(R.color.white), this);
-        dialog = new SVProgressHUD(ShareCJActivity.this);
+        dialog = new WaittingDialog(ShareCJActivity.this);
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -207,27 +209,32 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                         recyclerView.setVisibility(View.VISIBLE);
                         click(0);
                     } else {
-                        new SVProgressHUD(ShareCJActivity.this).showErrorWithStatus(netScene.getMessage());
+                        ToastUtils.showError(netScene.getMessage());
+//                        new SVProgressHUD(ShareCJActivity.this).showErrorWithStatus(netScene.getMessage());
 //                        Toast.makeText(ShareCJActivity.this, netScene.getMessage(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    dialog.showErrorWithStatus("网络错误，请重试");
+                    ToastUtils.showError("网络错误，请重试");
+//                    dialog.showErrorWithStatus("网络错误，请重试");
 //                    Toast.makeText(ShareCJActivity.this, "网络错误,请重试", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
                 case 3:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("对不起，分享出错");
+                    ToastUtils.showError("对不起，分享出错");
+//                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
                     dialog.dismiss();
-                    dialog.showErrorWithStatus("您取消了分享");
+                    ToastUtils.showInfo("您取消了分享");
+//                    dialog.showErrorWithStatus("您取消了分享");
                     break;
                 case 1:
                     dialog.dismiss();
-                    dialog.showSuccessWithStatus("分享成功");
+                    ToastUtils.showSuccess("分享成功");
+//                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }
@@ -279,16 +286,9 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     requestNet();
                     return;
                 }
-                dialog.show();
-                Bitmap bit = Bitmap.createBitmap(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bit);//创建空图片变成画布
-//                img.draw(canvas);
-                container.draw(canvas);
-                canvas.save();
-                MainApplication.shareBitmap = bit;
                 Intent intent = new Intent(ShareCJActivity.this, ShareCJSelectActivity.class);
                 intent.putExtra("scene", netScene);
-                dialog.dismiss();
+//                dialog.dismiss();
                 startActivityForResult(intent, 1);
                 break;
             case R.id.title_share:
@@ -317,10 +317,10 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         double bi = ((double) imgWidth / width);
         setImgParams();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) img.getLayoutParams();
-        int padding = DensityUtils.dp2px(ShareCJActivity.this, 20);
+        int padding = DensityUtils.dp2px(ShareCJActivity.this, 10);
         if (position == 2 || position == 3) {
-            lp.width = (int) (lp.width * 0.88);
-            lp.height = (int) (lp.height * 0.7);
+            lp.width = (int) (lp.width * 0.92);
+            lp.height = (int) (lp.height * 0.72);
 
             container.setPadding(padding, padding, padding, padding);
         } else {
@@ -374,7 +374,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
 
             if (!isSuccess) {
                 dialog.dismiss();
-                dialog.showErrorWithStatus("图片保存失败");
+                ToastUtils.showError("图片保存失败");
+//                dialog.showErrorWithStatus("图片保存失败");
                 return;
             }
             switch (position) {

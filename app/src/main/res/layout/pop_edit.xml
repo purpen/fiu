@@ -46,7 +46,7 @@
                 android:id="@+id/pop_edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:background="@drawable/black_corner_white"
+                android:background="@drawable/background_corner_gray"
                 android:gravity="center_vertical"
                 android:hint="@string/input_product_title"
                 android:paddingLeft="19dp"
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/black_corner_white"
+                android:background="@drawable/background_corner_gray"
                 android:orientation="horizontal"
                 android:paddingLeft="19dp"
                 >

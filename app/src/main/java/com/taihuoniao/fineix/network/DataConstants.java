@@ -160,12 +160,16 @@ public class DataConstants {
     public static final String BroadLabelActivity = "com.taihuoniao.fiu.label";
     //创建场景的添加产品页面的搜索广播
     public static final String BroadSearchFragment = "com.taihuoniao.fiu.searchProduct";
+    //删除场景后通知场景列表页面刷新
+    public static final String BroadDeleteScene = "com.taihuoniao.fiu.delete";
     //删除评论
     public static final int DELETE_COMMENT = 17;
     //分享场景语境次数
     public static final int SHARECJ = 16;
     //场景热门标签
     public static final int CJ_HOTLABEL = 15;
+    //删除场景
+    public static final int DELETE_SCENE = 14;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

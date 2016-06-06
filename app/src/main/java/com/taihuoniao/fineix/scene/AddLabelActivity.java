@@ -39,8 +39,8 @@ import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.WrapContentViewPager;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     //全部标签列表
     private List<AllLabelBean> allLabelList;
     //网络请求对话框
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     //用来存储用户选择的标签
     private List<UsedLabelBean> selectList;
 
@@ -103,7 +103,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_label_slidingtab);
 //        allLabelViewPager = (ViewPager) findViewById(R.id.activity_add_label_alllabelviewpager);
         allLabelViewPager = (WrapContentViewPager) findViewById(R.id.activity_add_label_alllabelviewpager);
-        dialog = new SVProgressHUD(AddLabelActivity.this);
+        dialog = new WaittingDialog(AddLabelActivity.this);
         IntentFilter filter = new IntentFilter(DataConstants.BroadLabelActivity);
         registerReceiver(labelReceiver, filter);
     }

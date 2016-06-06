@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,17 +25,16 @@ import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.AuthData;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.List;
@@ -70,7 +68,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private Bitmap bitmap_id;
     private Bitmap bitmap_card;
     private WaittingDialog dialog;
-    private SVProgressHUD svProgressHUD;
+    private WaittingDialog svProgressHUD;
     @Bind(R.id.iv_clear)
     ImageButton iv_clear;
     @Bind(R.id.btn)
@@ -96,7 +94,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"官方认证");
         dialog=new WaittingDialog(this);
-        svProgressHUD=new SVProgressHUD(this);
+        svProgressHUD=new WaittingDialog(this);
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
         for (int i = 0; i < stringArray.length; i++) {
             label_view.addLabel(stringArray[i]);
@@ -178,28 +176,33 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     private void submitData() {
         String label = tv_tag.getText().toString().trim();
         if (TextUtils.isEmpty(label)) {
-            svProgressHUD.showErrorWithStatus("请选择认证身份");
+            ToastUtils.showError("请选择认证身份");
+//            svProgressHUD.showErrorWithStatus("请选择认证身份");
             return;
         }
 
         String info = et_info.getText().toString().trim();
         if (TextUtils.isEmpty(info)) {
-            svProgressHUD.showErrorWithStatus("请填写认证信息");
+            ToastUtils.showError("请填写认证信息");
+//            svProgressHUD.showErrorWithStatus("请填写认证信息");
             return;
         }
 
         String contacts = et_contacts.getText().toString().trim();
         if (TextUtils.isEmpty(contacts)) {
-            svProgressHUD.showErrorWithStatus("请填写联系方式");
+            ToastUtils.showError("请填写联系方式");
+//            svProgressHUD.showErrorWithStatus("请填写联系方式");
             return;
         }
         if (authData==null){//如果是首次认证身份证和名片必传
             if (bitmap_id == null) {
-                svProgressHUD.showErrorWithStatus("请先选择身份证");
+                ToastUtils.showError("请先选择身份证");
+//                svProgressHUD.showErrorWithStatus("请先选择身份证");
                 return;
             }
             if (bitmap_card == null) {
-                svProgressHUD.showErrorWithStatus("请先选择名片");
+                ToastUtils.showError("请先选择名片");
+//                svProgressHUD.showErrorWithStatus("请先选择名片");
                 return;
             }
         }
@@ -226,7 +229,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
-                    new SVProgressHUD(activity).showSuccessWithStatus("认证信息提交成功");
+                    ToastUtils.showSuccess("认证信息提交成功");
+//                    new SVProgressHUD(activity).showSuccessWithStatus("认证信息提交成功");
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -238,14 +242,16 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                     },1000);
                     return;
                 }
-                svProgressHUD.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                svProgressHUD.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
-                svProgressHUD.showErrorWithStatus("网络异常，请确保网络畅通");
+                ToastUtils.showError("网络异常，请确保网络畅通");
+//                svProgressHUD.showErrorWithStatus("网络异常，请确保网络畅通");
             }
         });
 

@@ -26,15 +26,15 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.adapters.UserCJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
+import com.taihuoniao.fineix.album.ImageLoaderEngine;
+import com.taihuoniao.fineix.album.Picker;
+import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
-import com.taihuoniao.fineix.album.ImageLoaderEngine;
-import com.taihuoniao.fineix.album.Picker;
-import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -43,9 +43,10 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private long userId = LoginInfo.getUserId();
     private static final int REQUEST_CODE_PICK_IMAGE = 100;
     private static final int REQUEST_CODE_CAPTURE_CAMERA = 101;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     @Bind(R.id.lv_cj)
     ListView lv_cj;
@@ -174,7 +175,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_qj = ButterKnife.findById(headView, R.id.ll_qj);
         riv_auth = ButterKnife.findById(headView, R.id.riv_auth);
 
-        dialog = new SVProgressHUD(this);
+        dialog = new WaittingDialog(this);
 
         lv_cj.addHeaderView(headView);
         lv_qj.addHeaderView(headView);
@@ -228,14 +229,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    dialog.showErrorWithStatus("对不起,数据异常");
+                    ToastUtils.showError("对不起，数据异常");
+//                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
 
@@ -285,13 +288,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshCJUI(list);
                     return;
                 }
-                dialog.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
+//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -361,13 +366,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshQJUI(list);
                     return;
                 }
-                dialog.showErrorWithStatus(listBean.getMessage());
+                ToastUtils.showError(listBean.getMessage());
+//                dialog.showErrorWithStatus(listBean.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError("网络异常，请确认网络畅通");
+//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -627,14 +634,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 //                                Util.makeToast(response.getMessage());
                                 return;
                             }
-
-                            dialog.showErrorWithStatus(response.getMessage());
+                            ToastUtils.showError(response.getMessage());
+//                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
-                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                            ToastUtils.showError("网络异常，请确认网络畅通");
+//                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 } else {
@@ -653,15 +661,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 //                                Util.makeToast(response.getMessage());
                                 return;
                             }
-
-                            dialog.showErrorWithStatus(response.getMessage());
+                            ToastUtils.showError(response.getMessage());
+//                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                            ToastUtils.showError("网络异常，请确认网络畅通");
+//                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 }
@@ -708,7 +717,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     .setEngine(new ImageLoaderEngine())
                     .forResult(REQUEST_CODE_PICK_IMAGE);
         }else {
-            dialog.showErrorWithStatus("未检测到SD卡");
+            ToastUtils.showError("未检测到SD卡");
+//            dialog.showErrorWithStatus("未检测到SD卡");
         }
 //        Intent intent = new Intent(Intent.ACTION_PICK);
 //        intent.setType("image/*");//相片类型
@@ -722,7 +732,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
-            dialog.showErrorWithStatus("未检测到SD卡");
+            ToastUtils.showError("未检测到SD卡");
+//            dialog.showErrorWithStatus("未检测到SD卡");
         }
     }
 
@@ -761,5 +772,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         intent.putExtra(ImageCropActivity.class.getName(), flag);
         startActivity(intent);
     }
+
 
 }

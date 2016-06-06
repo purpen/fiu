@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -14,11 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lidroid.xutils.BitmapUtils;
-import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
@@ -55,24 +53,32 @@ public class ShopCartAdapter extends BaseAdapter {
     private ShopCarActivity shopCarActivity;
     private Context context;
     private DecimalFormat df = null;
-    public BitmapUtils bitmapUtils_listview = null;
+//    public BitmapUtils bitmapUtils_listview = null;
+    private DisplayImageOptions options;
 
     public ShopCartAdapter(List<Map<String, Object>> list, ShopCarActivity shopCarActivity, Context context) {
         this.shopCarActivity = shopCarActivity;
         this.list = list;
         this.context = context;
         inflater = (LayoutInflater) shopCarActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
-                .configMemoryCacheEnabled(true)
-                .configDefaultCacheExpiry(1024 * 1024 * 4)
-                .configDefaultBitmapMaxSize(300, 300)
-                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configDefaultLoadingImage(R.mipmap.default_shopcart)
-//                .configDefaultLoadFailedImage(R.mipmap.default_shopcart)
-                .configThreadPoolSize(5);
-//                .configDefaultImageLoadAnimation(
-//                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
+        options =  new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
+                .cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true)
+               .build();
+//        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
+//        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
+//                .configMemoryCacheEnabled(true)
+//                .configDefaultCacheExpiry(1024 * 1024 * 4)
+//                .configDefaultBitmapMaxSize(300, 300)
+//                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
+////                .configDefaultLoadingImage(R.mipmap.default_shopcart)
+////                .configDefaultLoadFailedImage(R.mipmap.default_shopcart)
+//                .configThreadPoolSize(5);
+////                .configDefaultImageLoadAnimation(
+////                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
     }
 
     @Override
@@ -196,7 +202,8 @@ public class ShopCartAdapter extends BaseAdapter {
                 break;
         }
         mHolder.mCheckBox.setChecked((Boolean) list.get(position).get("status"));
-        bitmapUtils_listview.display(mHolder.mImageGoods, list.get(position).get("keyImage") + "");
+        ImageLoader.getInstance().displayImage(list.get(position).get("keyImage") + "",mHolder.mImageGoods);
+//        bitmapUtils_listview.display(mHolder.mImageGoods, list.get(position).get("keyImage") + "");
         listener.onLetterCliced(hashMap);
 
         return convertView;

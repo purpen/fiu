@@ -18,11 +18,11 @@ import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.activity_share_select_progress)
     ProgressBar progressBar;
     //    private ListView listView;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private int currentPage = 1;
     private List<SearchBean.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
@@ -69,8 +69,9 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         titleLayout.setTitleVisible(false);
         titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
         scene = (SceneDetails) getIntent().getSerializableExtra("scene");
-        if (MainApplication.shareBitmap == null || scene == null) {
-            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
+        if ( scene == null) {
+            ToastUtils.showError("数据异常，请重试");
+//            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
 //            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -78,7 +79,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 //        imageView.setImageBitmap(MainApplication.shareBitmap);
         titleTv.setText(scene.getTitle());
         desTv.setText(scene.getDes());
-        dialog = new SVProgressHUD(ShareCJSelectActivity.this);
+        dialog = new WaittingDialog(ShareCJSelectActivity.this);
         listView.setOnScrollListener(this);
 //        listView = pullToRefreshView.getRefreshableView();
 //        pullToRefreshView.setPullToRefreshEnabled(false);
@@ -133,7 +134,6 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                     intent.putExtra("scene", scene);
                     setResult(2, intent);
                     finish();
-                    MainApplication.shareBitmap = null;
                 }
                 break;
         }
@@ -152,16 +152,10 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                 intent.putExtra("scene", scene);
                 setResult(2, intent);
                 finish();
-                MainApplication.shareBitmap = null;
                 break;
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        MainApplication.shareBitmap = null;
-        super.onBackPressed();
-    }
 
     private Handler handler = new Handler() {
         @Override
@@ -180,12 +174,14 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                         list.addAll(netSearch.getData().getRows());
                         shareCJSelectListAdapter.notifyDataSetChanged();
                     } else {
-                        dialog.showErrorWithStatus(netSearch.getMessage());
+                        ToastUtils.showError(netSearch.getMessage());
+//                        dialog.showErrorWithStatus(netSearch.getMessage());
 //                        Toast.makeText(ShareCJSelectActivity.this, netSearch.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.NET_FAIL:
-                    dialog.showErrorWithStatus("网络错误");
+                    ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
 //                    Toast.makeText(ShareCJSelectActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
                     break;
             }

@@ -20,13 +20,12 @@ import com.taihuoniao.fineix.adapters.GoodListFragmentRecyclerAdapter;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     private int pos = -1;//被点击的二级分类
     //商品列表
     private int page = 1;//列表页码
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private GoodListAdapter goodListAdapter;
     //网络请求工具类
 //    private SVProgressHUD dialog;
@@ -162,7 +161,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //                    listview适配器
                     ProductBean netProductBean = (ProductBean) msg.obj;
                     if (netProductBean.isSuccess()) {
-                        productList.addAll(netProductBean.getList());
+                        productList.addAll(netProductBean.getData().getRows());
                         goodListAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -176,7 +175,8 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //                        click(0);
                         goodListFragmentRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
+                        ToastUtils.showError(netCategory.getMessage());
+//                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
 //                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;

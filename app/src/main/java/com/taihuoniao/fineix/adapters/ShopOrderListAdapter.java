@@ -32,7 +32,8 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -50,7 +51,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
     private View mView;
     public BitmapUtils bitmapUtils_listview = null;
     private AlertDialog.Builder alertDialog;
-    private SVProgressHUD mdialog;
+    private WaittingDialog mdialog;
 
     public ShopOrderListAdapter(List<OrderEntity> list, Context context, String optFragmentFlag) {
         super(list, context);
@@ -71,7 +72,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 .configThreadPoolSize(5)
                 .configDefaultImageLoadAnimation(
                         AnimationUtils.loadAnimation(context, R.anim.fade_in));
-        mdialog = new SVProgressHUD(context);
+        mdialog = new WaittingDialog(context);
 
     }
 
@@ -216,10 +217,12 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                 }
                                 if (netBean.isSuccess()) {
 //                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
-                                    mdialog.showSuccessWithStatus("提醒发货成功!");
+                                    ToastUtils.showSuccess("提醒发货成功!");
+//                                    mdialog.showSuccessWithStatus("提醒发货成功!");
                                 } else {
 //                                    mdialog.showErrorWithStatus(netBean.getMessage());
-                                    mdialog.showInfoWithStatus(netBean.getMessage());
+                                    ToastUtils.showInfo(netBean.getMessage());
+//                                    mdialog.showInfoWithStatus(netBean.getMessage());
 //                                    Toast.makeText(context, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -227,7 +230,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             @Override
                             public void onFailure(HttpException error, String msg) {
                                 mdialog.dismiss();
-                                mdialog.showErrorWithStatus("网络错误");
+                                ToastUtils.showError("网络错误");
+//                                mdialog.showErrorWithStatus("网络错误");
 //                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
                             }
                         });

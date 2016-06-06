@@ -7,14 +7,14 @@
         android:id="@+id/activity_share_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#212121"/>
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_share_recycler"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_alignParentBottom="true"
-        android:background="#121212"
+        android:background="@color/title_black"
         android:visibility="invisible"/>
 
     <RelativeLayout
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/activity_share_recycler"
         android:layout_below="@id/activity_share_title"
-        android:background="#121212"
+        android:background="@color/title_black"
         >
 
         <RelativeLayout

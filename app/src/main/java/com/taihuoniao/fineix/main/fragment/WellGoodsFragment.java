@@ -40,7 +40,6 @@ import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -55,10 +54,13 @@ import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
+import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +73,14 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private RelativeLayout cartRelative;
     private TextView cartNumber;
     //    private ImageView cartImg;
+    private PullToRefreshListView pullToRefreshView;
     private ListView listView;
     private ProgressBar progressBar;
     //headerview下的控件
     private AbsoluteLayout absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
-    private SVProgressHUD dialog;
+    private WaittingDialog dialog;
     private static final String PAGE_NAME = "app_fiu_product_index_slide";
     //标签列表
     private List<String> hotLabelList;
@@ -93,7 +96,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private static final String PRODUCT_STATE = "1"; //表示正常在线
     //商品列表
     private int productPage = 1;
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private GoodListAdapter goodListAdapter;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
@@ -106,7 +109,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         cartRelative = (RelativeLayout) view.findViewById(R.id.fragment_wellgoods_cart_relative);
         cartNumber = (TextView) view.findViewById(R.id.fragment_wellgoods_cart_number);
 //        cartImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_cart);
-        listView = (ListView) view.findViewById(R.id.fragment_wellgoods_listview);
+        pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_wellgoods_listview);
+        listView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_wellgoods_progress);
         //headerview
         View header = View.inflate(getActivity(), R.layout.header_fragment_wellgoods, null);
@@ -117,7 +121,14 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_label_recycler);
         recyclerView = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_recycler);
         listView.addHeaderView(header);
-        dialog = new SVProgressHUD(getActivity());
+        pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                productPage = 1;
+                requestNet();
+            }
+        });
+        dialog = new WaittingDialog(getActivity());
         return view;
     }
 
@@ -165,7 +176,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //        DataPaser.hotLabelList(labelPage + "", handler);
         DataPaser.categoryList(1 + "", 10 + "", handler);
         //热门标签
-        DataPaser.cjHotLabel(false,handler);
+        DataPaser.cjHotLabel(false, handler);
 //        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
 //            @Override
 //            public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -230,7 +241,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         list = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),5);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 5);
         recyclerView.setLayoutManager(layoutManager);
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
@@ -266,6 +277,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     }
                     break;
                 case DataConstants.ADD_PRODUCT_LIST:
+                    pullToRefreshView.onRefreshComplete();
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     ProductBean netProduct = (ProductBean) msg.obj;
@@ -275,7 +287,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                             lastSavedFirstVisibleItem = -1;
                             lastTotalItem = -1;
                         }
-                        productList.addAll(netProduct.getList());
+
+                        productList.addAll(netProduct.getData().getRows());
                         goodListAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -310,11 +323,13 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 case DataConstants.CJ_HOTLABEL:
 //                    dialog.dismiss();
                     CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
-                    if(netHot.isSuccess()){
+                    if (netHot.isSuccess()) {
+                        hotLabelList.clear();
                         hotLabelList.addAll(netHot.getData().getTags());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
-                    }else{
-                        dialog.showErrorWithStatus(netHot.getMessage());
+                    } else {
+                        ToastUtils.showError(netHot.getMessage());
+//                        dialog.showErrorWithStatus(netHot.getMessage());
                     }
                     break;
 //                case DataConstants.HOT_LABEL_LIST:
@@ -329,11 +344,13 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //                    dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
+                        list.clear();
                         list.addAll(netCategoryBean.getList());
                         pinRecyclerAdapter.notifyDataSetChanged();
                     }
                     break;
                 case DataConstants.NET_FAIL:
+                    pullToRefreshView.onRefreshComplete();
                     dialog.dismiss();
                     progressBar.setVisibility(View.GONE);
                     break;
@@ -411,6 +428,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         if (list == null) {
             return;
         }
+        absoluteLayout.removeAllViews();
         int top = absoluteLayout.getTop();
         int bottom = absoluteLayout.getBottom();
         Random random = new Random();
