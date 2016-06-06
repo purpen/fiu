@@ -3,20 +3,55 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="20dp"
     >
 
+    <ImageView
+        android:id="@+id/activity_share_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/activity_share_frame"
+        android:layout_marginBottom="-15dp"
+        android:background="@mipmap/default_background_750_1334"
+        android:scaleType="centerCrop"/>
+
+    <FrameLayout
+        android:id="@+id/activity_share_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/activity_share_user_linear"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="matrix"
+            android:src="@mipmap/scene_title_background"/>
+
+        <TextView
+            android:id="@+id/activity_share_scene_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:text="详见的小路"
+            android:textColor="@color/white"
+            android:textSize="35sp"/>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/activity_share_user_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/activity_share_location_linear"
+        android:layout_marginTop="7dp"
         android:orientation="horizontal">
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/activity_share_user_headimg"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            app:riv_border_color="@color/white"
+            app:riv_border_color="@color/black969696"
             app:riv_border_width="1dp"
             app:riv_corner_radius="100dp"
             />
@@ -33,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
+                android:text="狗蛋"
                 android:textColor="@color/white"
                 android:textSize="8sp"/>
 
@@ -42,42 +78,18 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/activity_share_user_name"
                 android:singleLine="true"
+                android:text="描述"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
         </RelativeLayout>
     </LinearLayout>
 
 
-    <FrameLayout
-        android:id="@+id/activity_share_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/activity_share_user_linear"
-        android:layout_marginTop="5dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="matrix"
-            android:src="@mipmap/scene_title_background"/>
-
-        <TextView
-            android:id="@+id/activity_share_scene_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:maxEms="11"
-            android:maxLines="2"
-            android:text="详见的小路"
-            android:textColor="@color/white"
-            android:textSize="29sp"/>
-    </FrameLayout>
-
     <LinearLayout
         android:id="@+id/activity_share_location_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_share_frame"
+        android:layout_above="@+id/activity_share_erweima_relative"
         android:layout_marginTop="7dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -99,9 +111,10 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/activity_share_erweima_relative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_share_location_linear"
+        android:layout_alignParentBottom="true"
         >
 
         <ImageView
@@ -147,9 +160,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 

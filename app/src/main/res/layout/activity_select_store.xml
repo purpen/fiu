@@ -35,7 +35,8 @@
         <ImageView
             android:id="@+id/activity_select_store_delete"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/cancel_gray"

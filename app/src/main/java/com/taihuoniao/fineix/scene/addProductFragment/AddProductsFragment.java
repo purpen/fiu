@@ -26,7 +26,6 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -54,7 +53,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //当前页码
     private int currentPage = 1;
     //网络请求返回数据商品列表
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private AddProductGridAdapter addProductGridAdapter;
     //商品搜索的时候数据
     private int pos = -1;
@@ -180,7 +179,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                             pullToRefreshView.lastTotalItem = -1;
                             pullToRefreshView.lastSavedFirstVisibleItem = -1;
                         }
-                        productList.addAll(netProductBean.getList());
+                        productList.addAll(netProductBean.getData().getRows());
                         if (productList.size() <= 0) {
                             nothingTv.setVisibility(View.VISIBLE);
                         } else {

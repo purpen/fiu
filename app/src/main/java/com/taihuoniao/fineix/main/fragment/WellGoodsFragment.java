@@ -40,7 +40,6 @@ import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -97,7 +96,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private static final String PRODUCT_STATE = "1"; //表示正常在线
     //商品列表
     private int productPage = 1;
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private GoodListAdapter goodListAdapter;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
@@ -288,7 +287,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                             lastSavedFirstVisibleItem = -1;
                             lastTotalItem = -1;
                         }
-                        productList.addAll(netProduct.getList());
+
+                        productList.addAll(netProduct.getData().getRows());
                         goodListAdapter.notifyDataSetChanged();
                     }
                     break;

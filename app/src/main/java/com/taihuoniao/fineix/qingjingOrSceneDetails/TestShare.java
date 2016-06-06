@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,15 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -29,10 +24,9 @@ import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
-import com.taihuoniao.fineix.utils.ShareCJUtils;
+import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -54,7 +48,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 /**
  * Created by taihuoniao on 2016/5/24.
  */
-public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter.ItemClick, View.OnClickListener, PlatformActionListener {
+public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemClick, View.OnClickListener, PlatformActionListener {
     //上个界面传递过来的场景id
     private String id;
     @Bind(R.id.activity_share_title)
@@ -65,22 +59,6 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     RelativeLayout relativeLayout;
     @Bind(R.id.activity_share_container)
     RelativeLayout container;
-    @Bind(R.id.activity_share_img)
-    ImageView img;
-    //    @Bind(R.id.activity_share_user_headimg)
-//    ImageView userHeadImg;
-//    @Bind(R.id.activity_share_user_name)
-//    TextView userName;
-//    @Bind(R.id.activity_share_user_info)
-//    TextView userInfo;
-//    @Bind(R.id.activity_share_location)
-//    TextView locationTv;
-//    @Bind(R.id.activity_share_frame)
-//    FrameLayout frameLayout;
-//    @Bind(R.id.activity_share_scene_title)
-//    TextView sceneTitle;
-//    @Bind(R.id.activity_share_scene_des)
-//    TextView desTv;
     //网络请求对话框
     private WaittingDialog dialog;
     private DisplayImageOptions options750_1334, options500_500;
@@ -89,8 +67,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
     private SceneDetails netScene;
 
-    public ShareCJActivity() {
-        super(R.layout.activity_sharecj);
+    public TestShare() {
+        super(R.layout.activity_test_share);
     }
 
     @Override
@@ -111,7 +89,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         titleLayout.setContinueTvVisible(false);
         titleLayout.setCancelImgVisible(true);
 //        titleLayout.setRightTv(R.string.share, getResources().getColor(R.color.white), this);
-        dialog = new WaittingDialog(ShareCJActivity.this);
+        dialog = new WaittingDialog(TestShare.this);
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -131,17 +109,17 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
             ShareDemoBean shareDemoBean = new ShareDemoBean(imgId, false);
             shareList.add(shareDemoBean);
         }
-        shareCJRecyclerAdapter = new ShareCJRecyclerAdapter(shareList, ShareCJActivity.this);
+        shareCJRecyclerAdapter = new ShareCJRecyclerAdapter(shareList, TestShare.this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
-        img.setOnClickListener(this);
+//        img.setOnClickListener(this);
     }
 
     private View initPop() {
-        View view = View.inflate(ShareCJActivity.this, R.layout.share_layout, null);
+        View view = View.inflate(TestShare.this, R.layout.share_layout, null);
         GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
         View tv_cancel = view.findViewById(R.id.tv_cancel);
         int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone};
@@ -153,7 +131,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
             map.put("text", name[i]);
             shareList.add(map);
         }
-        SimpleAdapter adapter = new SimpleAdapter(ShareCJActivity.this, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
+        SimpleAdapter adapter = new SimpleAdapter(TestShare.this, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
         gv_share.setAdapter(adapter);
         gv_share.setOnItemClickListener(itemClicklistener);
         tv_cancel.setOnClickListener(new View.OnClickListener() {
@@ -180,61 +158,30 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                 case DataConstants.SCENE_DETAILS:
                     SceneDetails netScene = (SceneDetails) msg.obj;
                     if (netScene.isSuccess()) {
-                        ShareCJActivity.this.netScene = netScene;
+                        TestShare.this.netScene = netScene;
                         setImgParams();
-//                        ImageSize imageSize = new ImageSize(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9);
-                        ImageLoader.getInstance().loadImage(netScene.getCover_url(), options750_1334, new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                loadImg = loadedImage;
-                                img.setImageBitmap(loadedImage);
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-
-                            }
-                        });
-//                        ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
                         recyclerView.setVisibility(View.VISIBLE);
                         click(0);
                     } else {
                         ToastUtils.showError(netScene.getMessage());
-//                        new SVProgressHUD(ShareCJActivity.this).showErrorWithStatus(netScene.getMessage());
-//                        Toast.makeText(ShareCJActivity.this, netScene.getMessage(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                     break;
                 case DataConstants.NET_FAIL:
                     ToastUtils.showError("网络错误，请重试");
-//                    dialog.showErrorWithStatus("网络错误，请重试");
-//                    Toast.makeText(ShareCJActivity.this, "网络错误,请重试", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
                 case 3:
                     dialog.dismiss();
                     ToastUtils.showError("对不起，分享出错");
-//                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
                     dialog.dismiss();
                     ToastUtils.showInfo("您取消了分享");
-//                    dialog.showErrorWithStatus("您取消了分享");
                     break;
                 case 1:
                     dialog.dismiss();
                     ToastUtils.showSuccess("分享成功");
-//                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }
@@ -248,18 +195,12 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         super.onDestroy();
     }
 
-    private int imgWidth = 0;
 
     //动态设置container和imgview的宽高
     private void setImgParams() {
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) img.getLayoutParams();
-        layoutParams.height = relativeLayout.getHeight();
-        layoutParams.width = layoutParams.height * 9 / 16;
-        imgWidth = layoutParams.width;
-        img.setLayoutParams(layoutParams);
         RelativeLayout.LayoutParams cLp = (RelativeLayout.LayoutParams) container.getLayoutParams();
-        cLp.height = layoutParams.height;
-        cLp.width = layoutParams.width;
+        cLp.height = relativeLayout.getHeight();
+        cLp.width = cLp.height * 9 / 16;
         container.setLayoutParams(cLp);
     }
 
@@ -286,16 +227,15 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     requestNet();
                     return;
                 }
-                Intent intent = new Intent(ShareCJActivity.this, ShareCJSelectActivity.class);
+                Intent intent = new Intent(TestShare.this, ShareCJSelectActivity.class);
                 intent.putExtra("scene", netScene);
-//                dialog.dismiss();
                 startActivityForResult(intent, 1);
                 break;
             case R.id.title_share:
                 if (netScene.getOid() != null) {
                     DataPaser.commitShareCJ(netScene.getOid(), handler);
                 }
-                PopupWindowUtil.show(ShareCJActivity.this, initPop());
+                PopupWindowUtil.show(TestShare.this, initPop());
                 break;
         }
     }
@@ -313,33 +253,8 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         if (view != null) {
             container.removeView(view);
         }
-        double width = MainApplication.getContext().getScreenWidth();
-        double bi = ((double) imgWidth / width);
-        setImgParams();
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) img.getLayoutParams();
-        int padding = DensityUtils.dp2px(ShareCJActivity.this, 10);
-        if (position == 2 || position == 3) {
-            lp.width = (int) (lp.width * 0.92);
-            lp.height = (int) (lp.height * 0.72);
-
-            container.setPadding(padding, padding, padding, padding);
-        } else {
-            container.setPadding(0, 0, 0, 0);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            lp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        } else {
-            RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(lp.width, lp.height);
-            rlp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            lp = rlp;
-        }
-        if (position == 3) {
-            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        }
-        view = ShareCJUtils.selectStyle(container, position, netScene, bi);
-        if (position == 0 || position == 1) {
-            view.setPadding(padding, padding, padding, padding);
-        }
+        double b = (double)container.getWidth()/MainApplication.getContext().getScreenWidth();
+        view = TestShareUtils.selectStyle(container, position, netScene, b);
         container.addView(view);
         currentPosition = position;
     }
@@ -385,7 +300,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform qzone = ShareSDK.getPlatform(QZone.NAME);
-                    qzone.setPlatformActionListener(ShareCJActivity.this); // 设置分享事件回调
+                    qzone.setPlatformActionListener(TestShare.this); // 设置分享事件回调
                     qzone.share(params);
                     break;
                 case 2:
@@ -394,7 +309,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
-                    weibo.setPlatformActionListener(ShareCJActivity.this); // 设置分享事件回调
+                    weibo.setPlatformActionListener(TestShare.this); // 设置分享事件回调
                     weibo.share(params);
                     break;
                 case 0:
@@ -403,7 +318,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-                    wechat.setPlatformActionListener(ShareCJActivity.this);
+                    wechat.setPlatformActionListener(TestShare.this);
                     wechat.share(params);
                     break;
                 case 1:
@@ -412,7 +327,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-                    wechatMoments.setPlatformActionListener(ShareCJActivity.this);
+                    wechatMoments.setPlatformActionListener(TestShare.this);
                     wechatMoments.share(params);
                     break;
             }

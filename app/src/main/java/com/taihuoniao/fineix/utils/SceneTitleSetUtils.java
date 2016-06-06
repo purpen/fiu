@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.utils;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -31,20 +32,21 @@ public class SceneTitleSetUtils {
         } else {
             l = (int) leng;
         }
+        Log.e("<<<缩小倍数", b + "");
 //            遍历所有字符判断是否含有英文字符。有的话算半个
-        FrameLayout.LayoutParams slp = (FrameLayout.LayoutParams) sceneTitle.getLayoutParams();
+//        FrameLayout.LayoutParams slp = (FrameLayout.LayoutParams) sceneTitle.getLayoutParams();
         if (leng < 8) {
-            sceneTitle.setTextSize(35);
+            sceneTitle.setTextSize((float) (35 * b));
 //            slp.topMargin = DensityUtils.dp2px(sceneTitle.getContext(), maxTitleSize == minTitleSize ? -4 : -8);
         } else if (leng < 14) {
-            sceneTitle.setTextSize(25);
+            sceneTitle.setTextSize((float) (25 * b));
         } else {
-            sceneTitle.setTextSize(20);
+            sceneTitle.setTextSize((float) (20 * b));
 //            slp.topMargin = DensityUtils.dp2px(sceneTitle.getContext(), -4);
         }
 //        Log.e("<<<测量", "title=" + sceneTitle.getText().toString() + "leng=" + leng + ",l=" + l +
 //                ",size=" + sceneTitle.getTextSize() + "width=" + sceneTitle.getMeasuredWidth() + "height=" + sceneTitle.getMeasuredHeight());
-        sceneTitle.setLayoutParams(slp);
+//        sceneTitle.setLayoutParams(slp);
 //        动态改变宽高
         ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
 ////        Log.e("<<<最大", DensityUtils.dp2px(sceneTitle.getContext(), 245*bi) + "," + (8 * sceneTitle.getTextSize()));

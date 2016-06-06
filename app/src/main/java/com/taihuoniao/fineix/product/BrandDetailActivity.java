@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -52,7 +51,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private WaittingDialog dialog;
     //商品列表
     private int page = 1;
-    private List<ProductListBean> productList;
+    private List<ProductBean.ProductListItem> productList;
     private GoodListAdapter goodListAdapter;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
@@ -142,7 +141,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                             lastSavedFirstVisibleItem = -1;
                             lastTotalItem = -1;
                         }
-                        productList.addAll(netProductBean.getList());
+                        productList.addAll(netProductBean.getData().getRows());
                         goodListAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showError(netProductBean.getMessage());

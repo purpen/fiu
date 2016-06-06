@@ -18,7 +18,6 @@ import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -70,7 +69,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         titleLayout.setTitleVisible(false);
         titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
         scene = (SceneDetails) getIntent().getSerializableExtra("scene");
-        if (MainApplication.shareBitmap == null || scene == null) {
+        if ( scene == null) {
             ToastUtils.showError("数据异常，请重试");
 //            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
 //            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
@@ -135,7 +134,6 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                     intent.putExtra("scene", scene);
                     setResult(2, intent);
                     finish();
-                    MainApplication.shareBitmap = null;
                 }
                 break;
         }
@@ -154,16 +152,10 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
                 intent.putExtra("scene", scene);
                 setResult(2, intent);
                 finish();
-                MainApplication.shareBitmap = null;
                 break;
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        MainApplication.shareBitmap = null;
-        super.onBackPressed();
-    }
 
     private Handler handler = new Handler() {
         @Override

@@ -53,6 +53,10 @@
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".qingjingOrSceneDetails.TestShare"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
             android:name=".product.ApplyForRefundActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -304,8 +308,8 @@
         <activity
             android:name=".user.RankTagActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
 
         <activity
             android:name=".user.OfficialCertificateActivity"
@@ -425,8 +429,8 @@
 
         <!--此处为测试value，线上版本务必更换-->
         <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="muQDLN6lCST6qMDvTAydAilM"/>
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="muQDLN6lCST6qMDvTAydAilM"/>
 
         <!--百度地图线上API_KEY-->
         <!--<meta-data

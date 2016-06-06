@@ -31,7 +31,6 @@ import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.ProductListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -99,7 +98,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private GoodsDetailSceneRecyclerAdapter changjingAdaper;
     //推荐列表
     private int recommendPage = 1;
-    private List<ProductListBean> recommendList;
+    private List<ProductBean.ProductListItem> recommendList;
     private GoodsDetailRecommendRecyclerAdapter recommendRecyclerAdapter;
     //由于需要请求两次数据，所以做个标记
     private int currentTime = 1;
@@ -256,7 +255,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         if (recommendPage == 1) {
                             recommendList.clear();
                         }
-                        recommendList.addAll(netProductBean.getList());
+                        recommendList.addAll(netProductBean.getData().getRows());
                         recommendRecyclerAdapter.notifyDataSetChanged();
                     } else {
                        ToastUtils.showError(netProductBean.getMessage());

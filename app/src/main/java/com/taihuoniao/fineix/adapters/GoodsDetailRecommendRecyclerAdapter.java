@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ProductListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ import java.util.List;
  */
 public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<GoodsDetailRecommendRecyclerAdapter.VH> {
     private Context context;
-    private List<ProductListBean> list;
+    private List<ProductBean.ProductListItem> list;
     private EditRecyclerAdapter.ItemClick itemClick;
     private int itemHeight = 0;
     private DisplayImageOptions options;
 
-    public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductListBean> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductBean.ProductListItem> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.context = context;
         this.list = list;
         this.itemClick = itemClick;
