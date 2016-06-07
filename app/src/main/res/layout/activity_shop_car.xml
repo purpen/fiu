@@ -126,15 +126,15 @@
             android:drawablePadding="15dp"
             android:drawableTop="@mipmap/shopcart_grey"
             android:text="购物车又空啦，回“品”入点新货吧"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
 
         <Button
             android:id="@+id/bt_stroll_shopcart_empty"
-            android:layout_width="100dp"
+            android:layout_width="130dp"
             android:layout_height="44dp"
             android:layout_below="@+id/tv_center"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/shap_redbutton_commit"
             android:text="去逛逛"
             android:textColor="@color/white"

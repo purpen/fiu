@@ -101,10 +101,12 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart = null;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if (!numberCart.isSuccess()) {
-                                title.setTitle("购物车(0)");
+                            if (!numberCart.isSuccess() || "0".equals(numberCart.getCount())) {
+                                title.setTitle("购物车");
+                                title.setRightButtomVisible(false);
                             } else {
                                 title.setTitle("购物车(" + numberCart.getCount() + ")");
+                                title.setRightButtomVisible(true);
                             }
                         }
                     }
@@ -141,7 +143,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             if (!totalList.isEmpty()) {
                                 mEmptyLayout.setVisibility(View.GONE);
                                 mFullLayout.setVisibility(View.VISIBLE);
+                                title.setRightButtomVisible(false);
                             } else {
+                                title.setRightButtomVisible(true);
                                 mEmptyLayout.setVisibility(View.VISIBLE);
                                 mFullLayout.setVisibility(View.GONE);
                             }
@@ -223,7 +227,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         title.setTitleColor(getResources().getColor(R.color.black333333));
         title.setBackImg(R.mipmap.back_black);
         title.setRightColor(getResources().getColor(R.color.black333333));
-        title.setTitle("购物车（" + mCarNum + "）");
+        if (mCarNum > 0) {
+            title.setTitle("购物车（" + mCarNum + "）");
+        } else {
+            title.setTitle("购物车");
+        }
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
         title.setRightButton("编缉", new View.OnClickListener() {
@@ -336,6 +344,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 }
             }
         });
+        title.setRightButtomVisible(false);
         mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {

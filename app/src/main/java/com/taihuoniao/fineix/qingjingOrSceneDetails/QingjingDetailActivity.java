@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.baidu.mapapi.model.LatLng;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
@@ -159,7 +158,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -390,11 +389,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
-        if ("1".equals(isSpert) && (summary == null || "null".equals(summary))) {
+        if ("1".equals(isSpert) && summary == null) {
             userInfo.setText("达人");
         } else if ("1".equals(isSpert)) {
             userInfo.setText(String.format("%s | %s", "达人", summary));
-        } else if (summary == null || "null".equals(summary)) {
+        } else if (summary == null) {
             userInfo.setText("");
         } else {
             userInfo.setText(summary);

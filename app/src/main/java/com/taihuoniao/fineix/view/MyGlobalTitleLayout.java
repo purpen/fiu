@@ -132,7 +132,8 @@ public class MyGlobalTitleLayout extends RelativeLayout {
         }
 
     }
-    public void setTitleColor(int resid){
+
+    public void setTitleColor(int resid) {
         titleText.setTextColor(resid);
     }
 
@@ -146,12 +147,13 @@ public class MyGlobalTitleLayout extends RelativeLayout {
             CharSequence buttonText,
             OnClickListener onRightButtonClickListener) {
         if (onRightButtonClickListener != null && buttonText != null) {
-            rightButton.setVisibility(VISIBLE);
+//            rightButton.setVisibility(VISIBLE);
             rightButton.setText(buttonText);
             rightButton.setOnClickListener(onRightButtonClickListener);
         }
     }
-    public void setRightColor(int resid){
+
+    public void setRightColor(int resid) {
         rightButton.setTextColor(resid);
 
     }
@@ -160,6 +162,13 @@ public class MyGlobalTitleLayout extends RelativeLayout {
         if (title != null) {
             rightButton.setText(title);
         }
+    }
+
+    public void setRightButtomVisible(boolean visible) {
+        if (visible)
+            rightButton.setVisibility(VISIBLE);
+        else
+            rightButton.setVisibility(GONE);
     }
 
     /*对如下5个图标按钮的监听事件留到后面做到了搜索、购物车等相应页面的时候再考虑

@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.view.pulltorefresh;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +23,16 @@ import java.text.SimpleDateFormat;
 public class LoadingLayout extends FrameLayout {
 
     static final int DEFAULT_ROTATION_ANIMATION_DURATION = 150;
-
+    private final FrameLayout normalLayout;
+    private final ImageView animImg;
     private final ImageView headerImage;
     private final ProgressBar headerProgress;
     private final TextView headerText;
     private final TextView headerTime;
 
-    private String pullLabel;
-    private String refreshingLabel;
-    private String releaseLabel;
+    private String pullLabel;//下拉刷新
+    private String refreshingLabel;//正在加载
+    private String releaseLabel;//释放刷新
 
     private final Animation rotateAnimation, resetRotateAnimation;
 
@@ -38,6 +41,8 @@ public class LoadingLayout extends FrameLayout {
         super(context);
         ViewGroup header = (ViewGroup) LayoutInflater.from(context).inflate(
                 R.layout.pull_to_refresh_header, this);
+        normalLayout = (FrameLayout) header.findViewById(R.id.pull_to_refresh_normal);
+        animImg = (ImageView) header.findViewById(R.id.pull_to_refresh_anim);
         headerText = (TextView) header.findViewById(R.id.pull_to_refresh_text);
         headerTime = (TextView) header.findViewById(R.id.pull_to_refresh_time);
         headerImage = (ImageView) header
@@ -73,13 +78,20 @@ public class LoadingLayout extends FrameLayout {
                 headerImage.setImageResource(R.mipmap.goicon);
                 break;
         }
+//        animImg.setBackgroundResource(R.anim.pull_to_refresh_anim);
+        AnimationDrawable animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.anim.pull_to_refresh_anim);
+        animImg.setImageDrawable(animationDrawable);
     }
 
     //刷新完毕后显示刷新时间
     public void setLoadingTime() {
         headerTime.setText("上一次刷新：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
+    }
 
-
+    //首页下拉动画的改变
+    public void animLayout() {
+//        normalLayout.setVisibility(GONE);
+//        animImg.setVisibility(VISIBLE);
     }
 
     public void reset() {

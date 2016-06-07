@@ -7,13 +7,14 @@
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/fragment_index_pullrefreshview"
         android:layout_width="match_parent"
-        android:divider="@null"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:divider="@null"/>
 
     <RelativeLayout
         android:id="@+id/fragment_index_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -85,8 +86,8 @@
     <TextView
         android:id="@+id/fragment_index_emptyview"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="没找到？\n或许Fiu首页有你要查的东西"/>
+        android:text="没找到？\n\n或许Fiu首页有你要查的东西"
+        android:visibility="gone"/>
 </FrameLayout>
