@@ -107,8 +107,10 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         }
         if (TextUtils.equals(sex, "1")) {
             tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.male, 0);
-        } else {
+        } else if(TextUtils.equals(sex,"2")){
             tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.female, 0);
+        }else {
+            tv_name.setCompoundDrawablesWithIntrinsicBounds(0, 0,0, 0);
         }
         if (areas != null && areas.size() == 2) {
             tv_address.setText(String.format("%s %s", areas.get(0), areas.get(1)));

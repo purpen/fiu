@@ -13,7 +13,9 @@
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY"
+            android:src="@mipmap/user_center_bg"
+            />
 
         <LinearLayout
             android:id="@+id/ll_box"
@@ -162,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@mipmap/cj"
+            android:background="@color/color_666"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -190,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@mipmap/scene"
+            android:background="@color/color_666"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -218,7 +220,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@mipmap/focus"
+            android:background="@color/color_666"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -246,7 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@mipmap/favorites"
+            android:background="@color/color_666"
             android:gravity="center"
             android:orientation="vertical">
 

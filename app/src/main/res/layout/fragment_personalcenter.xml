@@ -136,16 +136,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="@dimen/dp5"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/ll_cj"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@mipmap/cj"
+                    android:background="@color/color_666"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -171,9 +171,9 @@
                 <LinearLayout
                     android:id="@+id/ll_qj"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@mipmap/scene"
+                    android:background="@color/color_666"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -199,9 +199,9 @@
                 <LinearLayout
                     android:id="@+id/ll_focus"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@mipmap/focus"
+                    android:background="@color/color_666"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -227,9 +227,9 @@
                 <LinearLayout
                     android:id="@+id/ll_fans"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@mipmap/favorites"
+                    android:background="@color/color_666"
                     android:gravity="center"
                     android:orientation="vertical">
 

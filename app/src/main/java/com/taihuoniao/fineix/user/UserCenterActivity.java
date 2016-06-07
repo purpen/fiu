@@ -76,8 +76,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private RoundedImageView riv;
     private RoundedImageView riv_auth;
     private TextView tv_real;
-//    private TextView tv_nick;
-    private TextView tv_rank;
     private TextView tv_qj;
     private TextView tv_cj;
     private TextView tv_focus;
@@ -149,17 +147,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initView() {
         View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
-//        iv_detail = ButterKnife.findById(headView, R.id.iv_detail);
+        if (LoginInfo.getUserId()!=userId){
+            iv_right.setVisibility(View.GONE);
+        }
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
         tv_label = ButterKnife.findById(headView, R.id.tv_label);
         riv = ButterKnife.findById(headView, R.id.riv);
-//        tv_nick = ButterKnife.findById(headView, R.id.tv_nick);
         tv_real = ButterKnife.findById(headView, R.id.tv_real);
-//        tv_rank = ButterKnife.findById(headView, R.id.tv_rank);
         tv_lv = ButterKnife.findById(headView, R.id.tv_lv);
         iv_label = ButterKnife.findById(headView, R.id.iv_label);
         tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
-//        tv_title = ButterKnife.findById(headView, R.id.tv_title);
         ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
         tv_cj = ButterKnife.findById(headView, R.id.tv_cj);
         tv_qj = ButterKnife.findById(headView, R.id.tv_qj);
@@ -168,7 +165,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         bt_focus = ButterKnife.findById(headView, R.id.bt_focus);
         bt_msg = ButterKnife.findById(headView, R.id.bt_msg);
         ll_box = ButterKnife.findById(headView, R.id.ll_box);
-//        iv_right = ButterKnife.findById(headView, R.id.iv_right);
         ll_focus = ButterKnife.findById(headView, R.id.ll_focus);
         ll_fans = ButterKnife.findById(headView, R.id.ll_fans);
         ll_cj = ButterKnife.findById(headView, R.id.ll_cj);
@@ -229,7 +225,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    ToastUtils.showError("对不起，数据异常");
 //                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }

@@ -370,9 +370,9 @@ public class EditUserInfoActivity extends BaseActivity {
                     return;
                 }
 
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-
+                HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result,new TypeToken<HttpResponse<User>>(){});
                 if (response.isSuccess()){
+                    user = response.getData();
                     ToastUtils.showSuccess(response.getMessage());
 //                    dialog.showSuccessWithStatus(response.getMessage());
                     return;
