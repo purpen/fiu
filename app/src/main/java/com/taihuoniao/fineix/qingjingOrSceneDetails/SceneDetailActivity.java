@@ -614,11 +614,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
-        if ("1".equals(isSpert) && (summary == null || "null".equals(summary))) {
+        if ("1".equals(isSpert) && summary == null) {
             userInfo.setText("达人");
         } else if ("1".equals(isSpert)) {
             userInfo.setText(String.format("%s | %s", "达人", summary));
-        } else if (summary == null || "null".equals(summary)) {
+        } else if (summary == null) {
             userInfo.setText("");
         } else {
             userInfo.setText(summary);

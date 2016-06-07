@@ -112,7 +112,6 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/yellow_bd8913"
-        android:onClick="clickButton"
         android:text="立即支付"
         android:textColor="@color/white"
         android:textSize="14sp"/>

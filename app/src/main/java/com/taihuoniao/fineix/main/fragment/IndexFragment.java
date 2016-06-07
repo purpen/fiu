@@ -140,6 +140,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         searchImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_search);
         subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
         pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
+        pullToRefreshLayout.animLayout();
         listView = pullToRefreshLayout.getRefreshableView();
         progressBar = (ProgressBar) fragment_view.findViewById(R.id.fragment_index_progress);
         listView.setDividerHeight(0);

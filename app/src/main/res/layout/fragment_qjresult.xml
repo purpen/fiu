@@ -21,6 +21,6 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:gravity="center"
-        android:text="没找到？\n或许Fiu首页有你要查的东西"/>
+        android:text="没找到？\n\n或许Fiu首页有你要查的东西"/>
 
 </RelativeLayout>

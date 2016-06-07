@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailRecommendRecyclerAdapter;
@@ -41,6 +40,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Bind(R.id.activity_goods_detail_brand_relative)
     RelativeLayout brandRelative;
     @Bind(R.id.activity_goods_detail_brand_img)
-    ImageView brandImg;
+    RoundedImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
     //        @Bind(R.id.activity_goods_detail_product_des)
@@ -164,7 +164,6 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360))
                 .build();
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);

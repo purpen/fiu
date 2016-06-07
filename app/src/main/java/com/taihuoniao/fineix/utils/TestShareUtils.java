@@ -39,7 +39,7 @@ public class TestShareUtils {
     static double bi = 1;
 
     //根据position动态改变控件的位置
-    public static View selectStyle(RelativeLayout container, int position, SceneDetails sceneDetails, double b) {
+    public static View selectStyle(Context context1, int position, SceneDetails sceneDetails, double b) {
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_500_500)
                 .showImageForEmptyUri(R.mipmap.default_background_500_500)
@@ -54,7 +54,7 @@ public class TestShareUtils {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
-        context = container.getContext();
+        context = context1;
         bi = b;
         selectStyle(position);
         View view = View.inflate(context, layout, null);

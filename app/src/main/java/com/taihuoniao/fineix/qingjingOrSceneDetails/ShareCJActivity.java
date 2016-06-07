@@ -364,6 +364,7 @@ public class ShareCJActivity extends BaseActivity implements EditRecyclerAdapter
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params = null;
             String imgPath = MainApplication.systemPhotoPath + File.separator + "fiu" + System.currentTimeMillis() + ".png";
+//
             Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
             container.draw(canvas);//绘制画布上

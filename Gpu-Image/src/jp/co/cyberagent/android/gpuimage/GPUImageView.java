@@ -411,9 +411,9 @@ public class GPUImageView extends FrameLayout {
         @Override
         protected Void doInBackground(final Void... params) {
             try {
-                Bitmap result = mWidth != 0 ? capture(mWidth, mHeight) : capture();
-                saveImage(mFolderName, mFileName, result);
-            } catch (InterruptedException e) {
+//                Bitmap result = mWidth != 0 ? capture(mWidth, mHeight) : capture();
+                saveImage(mFolderName, mFileName, null);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;

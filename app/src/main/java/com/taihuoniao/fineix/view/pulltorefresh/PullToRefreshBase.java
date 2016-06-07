@@ -461,6 +461,11 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
         headerLayout.setLoadingTime();
     }
 
+    //改变布局为首页加载动画的样式
+    public void animLayout() {
+        headerLayout.animLayout();
+    }
+
     protected final int getHeaderHeight() {
         return headerHeight;
     }

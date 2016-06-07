@@ -2,19 +2,24 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -26,10 +31,12 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,7 +110,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
         shareList = new ArrayList<>();
         for (int imgId : shareImgs) {
             ShareDemoBean shareDemoBean = new ShareDemoBean(imgId, false);
@@ -116,6 +123,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
 //        img.setOnClickListener(this);
+        container.setOnClickListener(this);
     }
 
     private View initPop() {
@@ -142,6 +150,8 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         });
         return view;
     }
+
+    private int imgWidth = 0, imgHeight = 0;
 
     @Override
     protected void requestNet() {
@@ -202,6 +212,29 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         cLp.height = relativeLayout.getHeight();
         cLp.width = cLp.height * 9 / 16;
         container.setLayoutParams(cLp);
+        ImageLoader.getInstance().loadImage(netScene.getCover_url(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                imgWidth = loadedImage.getWidth();
+                imgHeight = loadedImage.getHeight();
+//                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     @Override
@@ -222,7 +255,8 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_share_img:
+            case R.id.activity_share_container:
+                dialog.show();
                 if (netScene == null) {
                     requestNet();
                     return;
@@ -230,8 +264,17 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 Intent intent = new Intent(TestShare.this, ShareCJSelectActivity.class);
                 intent.putExtra("scene", netScene);
                 startActivityForResult(intent, 1);
+                dialog.dismiss();
                 break;
             case R.id.title_share:
+                if (imgHeight == 0 || imgWidth == 0) {
+                    if (netScene == null) {
+                        requestNet();
+                    } else {
+                        setImgParams();
+                    }
+                    return;
+                }
                 if (netScene.getOid() != null) {
                     DataPaser.commitShareCJ(netScene.getOid(), handler);
                 }
@@ -253,8 +296,8 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         if (view != null) {
             container.removeView(view);
         }
-        double b = (double)container.getWidth()/MainApplication.getContext().getScreenWidth();
-        view = TestShareUtils.selectStyle(container, position, netScene, b);
+        double b = (double) container.getWidth() / MainApplication.getContext().getScreenWidth();
+        view = TestShareUtils.selectStyle(this, position, netScene, b);
         container.addView(view);
         currentPosition = position;
     }
@@ -274,23 +317,98 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         }
     }
 
+
+    private Bitmap inflateView() {
+        int layout = R.layout.view_share_style1;
+        switch (currentPosition) {
+            case 1:
+                layout = R.layout.view_share_style2;
+                break;
+            case 2:
+                layout = R.layout.view_share_style3;
+                break;
+            case 3:
+                layout = R.layout.view_share_style4;
+                break;
+            default:
+                layout = R.layout.view_share_style1;
+                break;
+        }
+        View view = View.inflate(this, layout, null);
+        //启用绘图缓存
+        view.setDrawingCacheEnabled(true);
+        ImageView img = (ImageView) view.findViewById(R.id.activity_share_img);
+        ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
+        RoundedImageView userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
+        RelativeLayout userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
+        TextView userName = (TextView) view.findViewById(R.id.activity_share_user_name);
+        TextView userInfo = (TextView) view.findViewById(R.id.activity_share_user_info);
+        LinearLayout locationLinear = (LinearLayout) view.findViewById(R.id.activity_share_location_linear);
+        ImageView locationImg = (ImageView) view.findViewById(R.id.activity_share_location_img);
+        TextView locationTv = (TextView) view.findViewById(R.id.activity_share_location);
+        ImageView erweima = (ImageView) view.findViewById(R.id.erweima);
+        TextView line = (TextView) view.findViewById(R.id.activity_share_scene_line);
+        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
+        TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
+        TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        ImageView fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
+        TextView fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
+        if (currentPosition == 2 || currentPosition == 3) {
+            userName.setTextColor(getResources().getColor(R.color.black));
+            userInfo.setTextColor(getResources().getColor(R.color.black));
+            locationTv.setTextColor(getResources().getColor(R.color.black));
+            locationImg.setImageResource(R.mipmap.location_height_22px);
+            desTv.setTextColor(getResources().getColor(R.color.black));
+            line.setTextColor(getResources().getColor(R.color.black));
+        }
+        ImageLoader.getInstance().displayImage(netScene.getUser_info().getAvatar_url(), userHeadImg, options500_500);
+        userName.setText(netScene.getUser_info().getNickname());
+        userInfo.setText(netScene.getUser_info().getSummary());
+        locationTv.setText(netScene.getAddress());
+        sceneTitle.setText(netScene.getTitle());
+        desTv.setText(netScene.getDes());
+        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21, 1);
+
+        //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
+        view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
+        //这个方法也非常重要，设置布局的尺寸和位置
+        view.layout(0, 0, imgWidth, imgHeight);
+        Bitmap bitmap = view.getDrawingCache();
+        //获得绘图缓存中的Bitmap
+        view.buildDrawingCache();
+        return bitmap;
+    }
+
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params = null;
-            String imgPath = MainApplication.systemPhotoPath + File.separator + "fiu" + System.currentTimeMillis() + ".png";
-            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
-            container.draw(canvas);//绘制画布上
-            canvas.save();
-            boolean isSuccess = FileUtils.bitmapToFile(bitmap, imgPath);
-//            relative.setDrawingCacheEnabled(false);
-//            Bitmap bitmap1 = Bitmap.createBitmap(bitmap, 0, 0, relative.getMeasuredWidth(), relative.getMeasuredHeight());
-
+            String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
+            dialog.show();
+//            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
+//            Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
+//            container.draw(canvas);//绘制画布上
+//            canvas.save();
+            Bitmap returnedBitmap = inflateView();
+            if (returnedBitmap == null) {
+                dialog.dismiss();
+                ToastUtils.showError("获取图片失败,请重试");
+                imgWidth = MainApplication.getContext().getScreenWidth();
+                imgHeight = imgWidth * 16 / 9;
+                return;
+            }
+//            try {
+//                ImageUtils.saveToFile(imgPath, false, returnedBitmap);
+//            } catch (IOException e) {
+//                dialog.dismiss();
+//                ToastUtils.showError("图片保存失败");
+//                return;
+//            }
+            boolean isSuccess = FileUtils.bitmapToFile(returnedBitmap, imgPath);
             if (!isSuccess) {
                 dialog.dismiss();
                 ToastUtils.showError("图片保存失败");
-//                dialog.showErrorWithStatus("图片保存失败");
                 return;
             }
             switch (position) {
