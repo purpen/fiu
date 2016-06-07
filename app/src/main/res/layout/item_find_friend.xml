@@ -63,7 +63,7 @@
             android:id="@+id/btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="@dimen/dp30"
             android:layout_centerVertical="true"
             android:background="@drawable/border_radius5"
