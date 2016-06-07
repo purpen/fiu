@@ -41,11 +41,9 @@ import butterknife.ButterKnife;
 public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
     private FindFriendRecycleViewAdapter adapter;
     private ImageLoader imageLoader;
-    private WaittingDialog svProgressHUD;
     public FindFriendAdapter(List list, Activity activity){
         super(list,activity);
         this.imageLoader=ImageLoader.getInstance();
-        this.svProgressHUD=new WaittingDialog(activity);
     }
 
     @Override
@@ -62,15 +60,10 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
 
         imageLoader.displayImage(item.medium_avatar_url,holder.riv,options);
         holder.tv_name.setText(item.nickname);
-//        if (TextUtils.equals(item.sex,"1")){
-//            holder.tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.male,0);
-//        }else {
-//            holder.tv_name.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.female,0);
-//        }
 
-        if (item.areas!=null &&item.areas.size()>=2){
+        if (!TextUtils.isEmpty(item.summary)){
             holder.tv_desc.setVisibility(View.VISIBLE);
-            holder.tv_desc.setText(String.format("%s %s",item.areas.get(0),item.areas.get(1)));
+            holder.tv_desc.setText(item.summary);
         }else {
             holder.tv_desc.setVisibility(View.INVISIBLE);
         }
