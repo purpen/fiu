@@ -36,9 +36,9 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         options_head = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_head_cj)
-                .showImageForEmptyUri(R.mipmap.default_head_cj)
-                .showImageOnFail(R.mipmap.default_head_cj)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
