@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import com.taihuoniao.fineix.beans.FocusFansData;
 import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -100,7 +102,12 @@ public class FocusActivity extends BaseActivity {
         ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null) dialog.dismiss();
+                    }
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) {
                     return;
                 }

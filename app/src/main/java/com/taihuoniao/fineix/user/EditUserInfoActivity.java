@@ -80,7 +80,6 @@ public class EditUserInfoActivity extends BaseActivity {
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private static final int REQUEST_NICK_NAME = 3;
     private static final int REQUEST_SIGNATURE = 4;
-    private Uri mImageUri;
     private static final int SECRET = 0;
     private static final int MAN = 1;
     private static final int WOMAN = 2;
