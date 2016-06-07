@@ -44,9 +44,9 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         this.list = list;
         imageLoader=ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
+                .showImageOnLoading(R.mipmap.default_background_500_500)
+                .showImageForEmptyUri(R.mipmap.default_background_500_500)
+                .showImageOnFail(R.mipmap.default_background_500_500)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)

@@ -74,5 +74,6 @@
         android:background="@drawable/shap_redbutton_commit"
         android:onClick="onLogin"
         android:text="退出当前账户"
+        android:textSize="@dimen/sp12"
         android:textColor="@android:color/white" />
 </LinearLayout>

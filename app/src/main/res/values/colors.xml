@@ -25,6 +25,7 @@
     <!-- camerafragment -->
     <color name="blue">#2196F3</color>
     <color name="color_f7f7f7">#f7f7f7</color>
+    <color name="color_222">#222</color>
     <color name="color_333">#333</color>
     <color name="color_666">#666</color>
     <color name="color_999">#999</color>
