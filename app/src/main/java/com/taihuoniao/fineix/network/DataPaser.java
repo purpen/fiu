@@ -1336,8 +1336,7 @@ public class DataPaser {
         ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<搜索", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
