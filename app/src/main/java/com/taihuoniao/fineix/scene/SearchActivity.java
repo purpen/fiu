@@ -214,6 +214,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 productLine.setVisibility(View.VISIBLE);
                 break;
         }
+
         ft.commit();
     }
 
