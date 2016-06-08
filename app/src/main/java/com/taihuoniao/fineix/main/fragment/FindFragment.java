@@ -124,8 +124,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
         absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
-        sceneListView.setDivider(null);
-        sceneListView.setDividerHeight(0);
+//        sceneListView.setDivider(null);
+        sceneListView.setDividerHeight(DensityUtils.dp2px(getActivity(),5));
         dialog = new WaittingDialog(getActivity());
         return view;
     }

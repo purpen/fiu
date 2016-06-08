@@ -108,11 +108,11 @@ public class TestShareUtils {
     private static void setSize(View view, int position) {
 
         userName.setTextColor(context.getResources().getColor(R.color.black));
-        userInfo.setTextColor(context.getResources().getColor(R.color.black));
-        locationTv.setTextColor(context.getResources().getColor(R.color.black));
+        userInfo.setTextColor(context.getResources().getColor(R.color.black969696));
+        locationTv.setTextColor(context.getResources().getColor(R.color.black969696));
         locationImg.setImageResource(R.mipmap.location_height_22px);
-        desTv.setTextColor(context.getResources().getColor(R.color.black));
-        line.setTextColor(context.getResources().getColor(R.color.black));
+        desTv.setTextColor(context.getResources().getColor(R.color.black969696));
+        line.setTextColor(context.getResources().getColor(R.color.black969696));
 
     }
 

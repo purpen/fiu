@@ -139,6 +139,15 @@
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
 
+            <ImageView
+                android:id="@+id/logo_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/activity_share_scene_line"
+                android:layout_below="@id/activity_share_scene_des"
+                android:layout_marginTop="7dp"
+                android:src="@mipmap/logo_white"/>
+
             <TextView
                 android:id="@+id/activity_share_scene_line"
                 android:layout_width="match_parent"
@@ -148,10 +157,11 @@
                 android:layout_marginRight="11dp"
                 android:layout_marginTop="7dp"
                 android:layout_toLeftOf="@id/erweima"
+                android:layout_toRightOf="@id/logo_white"
                 android:layout_toStartOf="@id/erweima"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="Fiu | 创新产品情景式购物平台"
+                android:text="| 创新产品情景式购物平台"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
 
@@ -165,9 +175,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="15dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="15dp">
 
         <ImageView
             android:id="@+id/activity_share_fiu_img"

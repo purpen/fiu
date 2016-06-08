@@ -50,7 +50,6 @@
                         android:id="@+id/activity_scenedetails_titlelinear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:orientation="vertical"
                         >
 
@@ -475,6 +474,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/activity_scenedetails_title"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="5dp">

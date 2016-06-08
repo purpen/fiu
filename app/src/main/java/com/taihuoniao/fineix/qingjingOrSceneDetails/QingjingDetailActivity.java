@@ -134,6 +134,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 //        subsTv = (TextView) findViewById(R.id.activity_qingjingdetail_substv);
         //headerView中的控件
         View header = View.inflate(QingjingDetailActivity.this, R.layout.header_qingjing_detail, null);
+        imgRelative = (RelativeLayout) header.findViewById(R.id.activity_qingjingdetail_imgrelative);
         backgroundImg = (ImageView) header.findViewById(R.id.activity_qingjingdetail_background);
         qingjingTitle = (TextView) header.findViewById(R.id.activity_qingjingdetail_qingjing_title);
         locationTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_location);
@@ -187,11 +188,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         createImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
-        lp.height = lp.width * 16 / 9;
+        lp.height = MainApplication.getContext().getScreenHeight();
         backgroundImg.setLayoutParams(lp);
-        backgroundImg.setFocusable(true);
-        backgroundImg.setFocusableInTouchMode(true);
-        backgroundImg.requestFocus();
+//        backgroundImg.setFocusable(true);
+//        backgroundImg.setFocusableInTouchMode(true);
+//        backgroundImg.requestFocus();
         addressLinear.setOnClickListener(this);
         leftLabel.setOnClickListener(this);
         headList = new ArrayList<>();
@@ -509,6 +510,22 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             progressBar.setVisibility(View.VISIBLE);
             DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
         }
+        Log.e("<<<", "没进来" + getScrollY());
+        backgroundImg.setTranslationY(getScrollY() / 3);
+        if (backgroundImg.getTranslationY() >= backgroundImg.getMeasuredHeight() / 4) {
+            backgroundImg.setTranslationY(backgroundImg.getMeasuredHeight() / 4);
+        }
+        if (backgroundImg.getTranslationY() <= 0) {
+            backgroundImg.setTranslationY(0);
+        }
+    }
+
+    private int getScrollY() {
+        View c = changjingListView.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        return -c.getTop();
     }
 
     private BroadcastReceiver qingjingReceiver = new BroadcastReceiver() {
@@ -527,41 +544,4 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
     };
 
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                startP.x = event.getX();
-//                startP.y = event.getY();
-//                RelativeLayout.LayoutParams lpd = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
-//                cha = startP.y + lpd.bottomMargin;
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                nowP.x = event.getX();
-//                nowP.y = event.getY();
-//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) subLinear.getLayoutParams();
-//                lp.bottomMargin = (int) (cha - nowP.y);
-//                if (nowP.y > startP.y) {
-//                    backImg.setVisibility(View.VISIBLE);
-//                    createImg.setVisibility(View.VISIBLE);
-//                } else if (nowP.y < startP.y) {
-//                    backImg.setVisibility(View.GONE);
-//                    createImg.setVisibility(View.GONE);
-//                }
-//                if (lp.bottomMargin > 0) {
-//                    lp.bottomMargin = 0;
-//                    cha = nowP.y + lp.bottomMargin;
-//                } else if (lp.bottomMargin < -subLinear.getMeasuredHeight()) {
-//                    lp.bottomMargin = -subLinear.getMeasuredHeight();
-//                    cha = nowP.y + lp.bottomMargin;
-//                }
-//                subLinear.setLayoutParams(lp);
-//                break;
-//        }
-//        return false;
-//    }
-//
-//    private double cha;//手指按下的时候，y与bottomMargin的差值
-//    private PointF startP = new PointF();
-//    private PointF nowP = new PointF();
 }

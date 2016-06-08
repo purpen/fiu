@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -76,6 +77,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //    private ListView nearListView;
     private MyScrollView scrollView;
     //    private RelativeLayout loveRelative;
+    private RelativeLayout titleRelative;
     private ImageView backImg;
     private ImageView shareImg;
     private RelativeLayout imgRelative;
@@ -156,6 +158,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        View header = View.inflate(SceneDetailActivity.this,R.layout.header_scenedetails,null);
         scrollView = (MyScrollView) findViewById(R.id.activity_scenedetails_scrollview);
 //        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
+        titleRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_title);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
         imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
@@ -222,6 +225,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         rLp.width = lp.width;
         rLp.height = lp.height;
         imgRelative.setLayoutParams(rLp);
+//        imgRelative.setFocusable(true);
+//        imgRelative.setFocusableInTouchMode(true);
+//        imgRelative.requestFocus();
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
@@ -274,6 +280,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadSceneDetail);
         registerReceiver(sceneDetailReceiver, filter);
+//        Log.e("<<<高度差", lp.height - MainApplication.getContext().getScreenHeight() + "");
+//        scrollView.scrollTo(0, lp.height - MainApplication.getContext().getScreenHeight());
     }
 
     @Override
@@ -512,6 +520,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                             moreUser.setVisibility(View.GONE);
                         }
                         location = netSceneDetails.getLocation();
+                        scrollView.scrollTo(0,imgRelative.getMeasuredHeight()-MainApplication.getContext().getScreenHeight());
                     } else {
 //                        Toast toast = new Toast(SceneDetailActivity.this);
 //                        toast.setView();
@@ -855,5 +864,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         if (container.getTranslationY() <= 0) {
             container.setTranslationY(0);
         }
+        if (t > oldt) {
+            titleRelative.setVisibility(View.GONE);
+        } else if (t < oldt) {
+            titleRelative.setVisibility(View.VISIBLE);
+        }
+        Log.e("<<<滑动", imgRelative.getBottom() + "," + scrollView.getTop() + "," + t + "," + scrollView.getScrollY());
     }
 }

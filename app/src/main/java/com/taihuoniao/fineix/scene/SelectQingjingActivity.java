@@ -133,7 +133,6 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         searchLinear.setOnClickListener(this);
         allQingjingTv.setOnClickListener(this);
         int space = DensityUtils.dp2px(SelectQingjingActivity.this, 5);
-        qingjingGrid.setHorizontalSpacing(space);
         qingjingGrid.setVerticalSpacing(space);
         qingjingList = new ArrayList<>();
         allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, SelectQingjingActivity.this, space);
@@ -186,7 +185,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                     SelectQingjingActivity.this.ll = ll;
                     getNearByData(ll);
                     MapStatus.Builder builder = new MapStatus.Builder();
-                    builder.target(ll).zoom(14);
+                    builder.target(ll).zoom(18);
                     mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                     DataPaser.qingjingList(page + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
                 }

@@ -112,7 +112,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.time = (TextView) convertView.findViewById(R.id.item_scenelist_time);
             ViewGroup.LayoutParams lp = holder.backgroundImg.getLayoutParams();
             lp.width = MainApplication.getContext().getScreenWidth();
-            lp.height = lp.width * 16 / 9;
+            lp.height = MainApplication.getContext().getScreenHeight();
             holder.backgroundImg.setLayoutParams(lp);
             holder.bottomLinear = (LinearLayout) convertView.findViewById(R.id.item_scenedetails_bottomlinear);
             RelativeLayout.LayoutParams bLp = (RelativeLayout.LayoutParams) holder.bottomLinear.getLayoutParams();

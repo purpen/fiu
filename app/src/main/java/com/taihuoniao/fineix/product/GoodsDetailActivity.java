@@ -170,14 +170,14 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         scrollableView.requestFocus();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(goodDetailReceiver,intentFilter);
+        registerReceiver(goodDetailReceiver, intentFilter);
     }
 
     @Override
     protected void requestNet() {
         dialog.show();
         DataPaser.goodsDetail(id, handler);
-        DataPaser.productAndScene(page + "",20+"", null, id, handler);
+        DataPaser.productAndScene(page + "", 20 + "", null, id, handler);
         DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", null, id, null, null, handler);
 //        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
@@ -250,14 +250,14 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 case DataConstants.ADD_PRODUCT_LIST:
                     dialog.dismiss();
                     ProductBean netProductBean = (ProductBean) msg.obj;
-                   if (netProductBean.isSuccess()) {
+                    if (netProductBean.isSuccess()) {
                         if (recommendPage == 1) {
                             recommendList.clear();
                         }
                         recommendList.addAll(netProductBean.getData().getRows());
                         recommendRecyclerAdapter.notifyDataSetChanged();
                     } else {
-                       ToastUtils.showError(netProductBean.getMessage());
+                        ToastUtils.showError(netProductBean.getMessage());
 //                       dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
@@ -293,6 +293,21 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         }
 //                        productDes.setText(netGoodsDetailBean.getData().getSummary());
                         attrbute = netGoodsDetailBean.getData().getAttrbute();
+                        // 1.官网；2.淘宝；3.天猫；4.京东
+                        switch (attrbute) {
+                            case "1":
+                                buyNowBtn.setText("去购买");
+                                break;
+                            case "2":
+                                buyNowBtn.setText("去淘宝购买");
+                                break;
+                            case "3":
+                                buyNowBtn.setText("去天猫购买");
+                                break;
+                            case "4":
+                                buyNowBtn.setText("去京东购买");
+                                break;
+                        }
                         url = netGoodsDetailBean.getData().getLink();
                         refreshUI(banner);
                     } else {
@@ -379,10 +394,10 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     private BroadcastReceiver goodDetailReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
+            if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
                 page = 1;
                 dialog.show();
-                DataPaser.productAndScene(page + "", 20+"", null, id, handler);
+                DataPaser.productAndScene(page + "", 20 + "", null, id, handler);
             }
         }
     };

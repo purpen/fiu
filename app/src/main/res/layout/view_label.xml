@@ -66,7 +66,7 @@
             android:layout_height="18dp"
             android:layout_alignRight="@id/view_label_right_price"
             android:paddingLeft="4dp"
-            android:src="@mipmap/cancel_gray"/>
+            android:src="@drawable/delete"/>
     </RelativeLayout>
     <!--<RelativeLayout-->
     <!--android:id="@+id/view_label_left"-->

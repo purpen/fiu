@@ -62,8 +62,8 @@
                     android:id="@+id/activity_create_scene_img"
                     android:layout_width="86dp"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
                     android:background="@mipmap/default_background_750_1334"
+                    android:scaleType="centerCrop"
                     />
 
                 <EditText
@@ -98,9 +98,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@mipmap/location_34"/>
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="15dp"
+                    android:src="@mipmap/location_yellow"/>
 
                 <ImageView
                     android:id="@+id/activity_create_scene_deleteaddress"

@@ -110,7 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_shopcart"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/tv_center"
@@ -125,19 +125,19 @@
             android:layout_centerHorizontal="true"
             android:drawablePadding="15dp"
             android:drawableTop="@mipmap/shopcart_grey"
-            android:text="购物车又空啦，回“品”入点新货吧"
+            android:text="购物车又空啦，回“好货”入点新货吧"
             android:textSize="12sp"/>
 
         <Button
             android:id="@+id/bt_stroll_shopcart_empty"
-            android:layout_width="130dp"
-            android:layout_height="44dp"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/tv_center"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/shap_redbutton_commit"
             android:text="去逛逛"
             android:textColor="@color/white"
-            android:textSize="17sp"/>
+            android:textSize="14sp"/>
     </RelativeLayout>
 </RelativeLayout>

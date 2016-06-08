@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -15,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -70,37 +69,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         holder.tv_blong.setText(item.getScene_title());
         holder.tv_location.setText(item.getAddress());
         holder.time.setText(item.getCreated_at());
-        double leng = holder.tv_title.getText().length();
-        for (char c : holder.tv_title.getText().toString().toCharArray()) {
-            if (c >= 32 && c <= 126) {
-                leng -= 0.5;
-            }
-        }
-        int l = 0;
-        if (leng * 10 % 10 != 0) {
-            l = 1 + (int) leng;
-        } else {
-            l = (int) leng;
-        }
-//            遍历所有字符判断是否含有英文字符。有的话算半个
-        if (l < 8) {
-            holder.tv_title.setTextSize(40);
-        } else {
-            holder.tv_title.setTextSize(20);
-        }
-//        动态改变宽高
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.frameLayout.getLayoutParams();
-        if (l * holder.tv_title.getTextSize() < DensityUtils.dp2px(activity, 300)) {
-            lp.width = (int) (holder.tv_title.getTextSize() * l);
-        } else {
-            lp.width = DensityUtils.dp2px(activity, 300);
-        }
-        if (holder.tv_title.getTextSize() < DensityUtils.sp2px(activity, 30) && lp.width <= DensityUtils.dp2px(activity, 300)) {
-            lp.height = DensityUtils.dp2px(activity, 28);
-        } else {
-            lp.height = DensityUtils.dp2px(activity, 55);
-        }
-        holder.frameLayout.setLayoutParams(lp);
+        SceneTitleSetUtils.setTitle(holder.tv_title, holder.frameLayout, 0, 0, 1);
         return convertView;
     }
 

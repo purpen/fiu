@@ -3,14 +3,17 @@ package com.taihuoniao.fineix.scene;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.model.LatLng;
 import com.taihuoniao.fineix.R;
@@ -42,9 +45,11 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     @Bind(R.id.activity_select_allqj_titlelayout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_select_allqj_searchlinear)
-    LinearLayout searchLinear;
+    RelativeLayout searchLinear;
     @Bind(R.id.activity_select_allqj_edit)
     EditText editText;
+    @Bind(R.id.activity_select_allqj_cancel)
+    ImageView cancelImg;
     @Bind(R.id.activity_select_allqj_pullrefreshview)
     PullToRefreshGridView pullToRefreshView;
     GridView gridView;
@@ -93,6 +98,27 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 searchLinear.setVisibility(View.VISIBLE);
                 break;
         }
+        cancelImg.setOnClickListener(this);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    cancelImg.setVisibility(View.VISIBLE);
+                } else {
+                    cancelImg.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         editText.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -104,7 +130,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     q = editText.getText().toString().trim();
                     page = 1;
                     dialog.show();
-                    DataPaser.search(q, 8 + "", page + "","tag", null,handler);
+                    DataPaser.search(q, 8 + "", page + "", "tag", null, handler);
                 }
                 return false;
             }
@@ -119,13 +145,13 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 if (isSearch.equals("0")) {
                     DataPaser.qingjingList(page + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "", handler);
                 } else if (isSearch.equals("1")) {
-                    DataPaser.search(q, 8 + "", page + "","tag",null, handler);
+                    DataPaser.search(q, 8 + "", page + "", "tag", null, handler);
                 }
             }
         });
         gridView.setNumColumns(2);
         int space = DensityUtils.dp2px(SelectAllQingjingActivity.this, 5);
-        gridView.setHorizontalSpacing(space);
+//        gridView.setHorizontalSpacing(space);
         gridView.setVerticalSpacing(space);
         if (isSearch.equals("0")) {
             qingjingList = new ArrayList<>();
@@ -240,7 +266,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                         }
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
                         allQingjingGridAdapter.notifyDataSetChanged();
-                    }else{
+                    } else {
                         ToastUtils.showError(netQingjingListBean.getMessage());
                     }
                     break;
@@ -268,6 +294,9 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_select_allqj_cancel:
+                editText.setText("");
+                break;
             case R.id.title_continue:
                 if (isSearch.equals("0")) {
                     for (int i = 0; i < qingjingList.size(); i++) {

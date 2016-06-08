@@ -92,7 +92,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         }
 //        改变选中的样式
         if (list != null) {
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg,options);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg, options);
             holder.addressTv.setText(list.get(position).getAddress());
             SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).getTitle());
             BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
