@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/dp4"
     android:paddingRight="@dimen/dp4"
     android:paddingBottom="@dimen/dp4"
+    android:paddingTop="@dimen/dp5"
     >
     <RelativeLayout
         android:id="@+id/rl_left"

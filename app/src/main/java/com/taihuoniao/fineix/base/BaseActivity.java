@@ -30,9 +30,9 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     public BaseActivity(int layoutResID) {
         this.layoutResID = layoutResID;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_500_500)
-                .showImageForEmptyUri(R.mipmap.default_background_500_500)
-                .showImageOnFail(R.mipmap.default_background_500_500)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .resetViewBeforeLoading(true)
                 .delayBeforeLoading(0)
                 .imageScaleType(ImageScaleType.EXACTLY)

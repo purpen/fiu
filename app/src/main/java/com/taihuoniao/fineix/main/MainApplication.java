@@ -58,6 +58,7 @@ public class MainApplication extends Application {
     public static String editPicPath = null;//编辑好的图片存储路径
     public static String filterPicPath = null;//加完滤镜的图片
     public static String uuid = null;
+    public static boolean hasUser;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
     //用户选择的标签列表

@@ -186,9 +186,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         findBtn = (Button) findViewById(R.id.activity_search_url_find);
         dialog = new WaittingDialog(SearchURLActivity.this);
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_500_500)
-                .showImageForEmptyUri(R.mipmap.default_background_500_500)
-                .showImageOnFail(R.mipmap.default_background_500_500)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();

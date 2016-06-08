@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -50,7 +51,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
             convertView=Util.inflateView(activity,R.layout.item_order_interest,null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
-            holder.iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.iv.setScaleType(ImageView.ScaleType.FIT_XY);
         }else {
             holder= (ViewHolder)convertView.getTag();
         }
@@ -96,18 +97,17 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
                         if (response.isSuccess()){
                             itbn.setImageResource(R.mipmap.ordered_qj);
                             item.isOrdered=true;
-                            Util.makeToast("订阅成功");
+                            ToastUtils.showSuccess("订阅成功");
                             return;
                         }
-
-                        Util.makeToast(response.getMessage());
+                        ToastUtils.showInfo(response.getMessage());
                     }
 
                     @Override
                     public void onFailure(HttpException e, String s) {
                         progressBar.setVisibility(View.GONE);
                         view.setEnabled(true);
-                        Util.makeToast(s);
+                        ToastUtils.showError("网络异常，请确认网络畅通");
                     }
                 });
             }

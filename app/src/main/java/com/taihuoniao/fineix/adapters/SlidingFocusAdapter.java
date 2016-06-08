@@ -29,9 +29,9 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
         this.sights = sights;
         this.sfiv = sfiv;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_422)
-                .showImageForEmptyUri(R.mipmap.default_background_750_422)
-                .showImageOnFail(R.mipmap.default_background_750_422)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
