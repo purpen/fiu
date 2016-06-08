@@ -110,7 +110,7 @@
                 android:id="@+id/activity_goods_detail_scrollableView"
                 android:layout_width="match_parent"
                 android:layout_height="211dp"
-                android:background="@mipmap/default_background_750_422"
+                android:background="@mipmap/default_background_750_1334"
                 />
 
             <TextView
