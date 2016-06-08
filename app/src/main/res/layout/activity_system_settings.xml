@@ -66,7 +66,7 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp40"
         android:id="@+id/btn_logout"
         android:layout_centerHorizontal="true"
         style="?android:attr/borderlessButtonStyle"

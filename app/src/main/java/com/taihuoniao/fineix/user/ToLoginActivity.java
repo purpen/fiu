@@ -6,7 +6,11 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +21,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -26,10 +31,13 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
@@ -51,6 +59,17 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     private String sex;
     private String nickName;
     private String token;
+    @Bind(R.id.ll_login)
+    LinearLayout ll_login;
+    @Bind(R.id.ll_third)
+    LinearLayout ll_third;
+    @Bind(R.id.ll_phone)
+    LinearLayout ll_phone;
+    @Bind(R.id.et_phone)
+    EditText et_phone;
+    @Bind(R.id.et_password)
+    EditText et_password;
+
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
@@ -71,74 +90,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     if (mDialog!=null) {
                         mDialog.dismiss();
                         ToastUtils.showInfo("取消授权");
-//                        mDialog.showInfoWithStatus("取消授权");
                     }
-//                    Toast.makeText(ToLoginActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_ERROR:
                     if (mDialog!=null) {
                         mDialog.dismiss();
                         ToastUtils.showError("授权失败");
-//                        mDialog.showErrorWithStatus("授权失败");
                     }
-//                    Toast.makeText(ToLoginActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof ThirdLogin) {
-//                            ThirdLogin thirdLogin = (ThirdLogin) msg.obj;
-//                            if (mDialog.isShowing()) {
-//                                mDialog.dismiss();
-//                            }
-//                            if ("true".equals(thirdLogin.getSuccess())) {
-//                                Log.e(">>>", ">>>>>userId>>>" + userId);
-//                                Log.e(">>>", ">>>>>openidForWeChat>>>" + openidForWeChat);
-//                                //为0不存在，1是存在，不存在表示第一次用这个三方号登录本APP，那就去绑定界面，存在则直接进入APP
-//                                if ("0".equals(thirdLogin.getHas_user())) {
-//                                    Intent intent = new Intent(ToLoginActivity.this, BindPhoneActivity.class);
-//                                    intent.putExtra("oid", userId);
-//                                    intent.putExtra("oidForWeChat", openidForWeChat);
-//                                    intent.putExtra("token", token);
-//                                    intent.putExtra("avatarUrl", avatarUrl);
-//                                    intent.putExtra("nickName", nickName);
-//                                    intent.putExtra("type", type + "");
-//                                    intent.putExtra("sex", sex);
-//                                    startActivity(intent);
-//                                } else {
-//                                    switch (MainApplication.which_activity) {
-//                                        case DataConstants.SceneDetailActivity:
-//                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-//                                            break;
-//                                        case DataConstants.ElseActivity:
-//                                            break;
-//                                        default:
-////                                            THNMainActivity.instance.finish();
-//                                            Intent intent = new Intent(ToLoginActivity.this,
-//                                                    MainActivity.class);
-//                                            startActivity(intent);
-//                                            break;
-//                                    }
-//                                    MainApplication.getIsLoginInfo().setIs_login("1");
-//                                    mDialog.dismiss();
-//                                    if (OptRegisterLoginActivity.instance != null) {
-//                                        OptRegisterLoginActivity.instance.finish();
-//                                    }
-//                                    if (ToRegisterActivity.instance != null) {
-//                                        ToRegisterActivity.instance.finish();
-//                                    }
-//                                    mHandler.postDelayed(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            ToLoginActivity.this.finish();
-//                                        }
-//                                    }, 600);
-//                                }
-//                            } else {
-//                                Toast.makeText(ToLoginActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-
                     break;
             }
         }
@@ -184,6 +144,20 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    @OnClick({R.id.bt_login,R.id.tv_find_pass})
+    void performClick(View v){
+        switch (v.getId()){
+            case R.id.bt_login:
+                submitData(v);
+                break;
+            case R.id.tv_find_pass:
+                Intent intentFindPassword = new Intent(activity,
+                        FindPasswordActivity.class);
+                startActivity(intentFindPassword);
+                break;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -220,11 +194,21 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(sina);
                 break;
             case R.id.tv_phone_number_tologin:
-                Intent toLoginIntent = new Intent(ToLoginActivity.this, LoginActivity.class);
-                startActivity(toLoginIntent);
+//                Intent toLoginIntent = new Intent(ToLoginActivity.this, LoginActivity.class);
+//                startActivity(toLoginIntent);
+                ll_phone.setVisibility(View.GONE);
+                ll_third.setVisibility(View.GONE);
+                ll_login.setVisibility(View.VISIBLE);
+                ll_login.setAnimation(Util.fromBottom2Top());
                 break;
             case R.id.image_back_tologin:
-                finish();
+                if (ll_third.isShown()){
+                    finish();
+                }else {
+                    ll_login.setVisibility(View.GONE);
+                    ll_third.setVisibility(View.VISIBLE);
+                    ll_phone.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.image_close_tologin:
                 mFinish = true;
@@ -336,7 +320,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         }else {
-                            LoginCompleteUtils.goFrom(ToLoginActivity.this);
+                            LoginCompleteUtils.goFrom(activity);
                         }
 
                         if (ToRegisterActivity.instance != null) {
@@ -355,7 +339,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());
-//                   mDialog.showErrorWithStatus(response.getMessage());
                 }
             }
 
@@ -424,4 +407,71 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     }
 
 
+    private void submitData(final View v) {
+        String phone = et_phone.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            ToastUtils.showInfo("请输入手机号");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            ToastUtils.showInfo("请输入密码");
+            return;
+        }
+
+        ClientDiscoverAPI.clickLoginNet(phone, password, new RequestCallBack<String>() {
+            @Override
+            public void onStart() {
+                v.setEnabled(false);
+                if (mDialog != null) mDialog.show();
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                v.setEnabled(true);
+                mDialog.dismiss();
+                if (responseInfo == null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                });
+                LogUtil.e("LOGIN_INFO", responseInfo.result);
+                if (response.isSuccess()) {
+                    LoginInfo loginInfo=response.getData();
+                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
+                        updateUserIdentity();
+                        startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                    } else {
+//                        startActivity(new Intent(activity, MainActivity.class));
+                        LoginCompleteUtils.goFrom(ToLoginActivity.this);
+                    }
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (RegisterActivity.instance != null) {
+                        RegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                v.setEnabled(true);
+                mDialog.dismiss();
+                ToastUtils.showError("网络异常，请确认网络畅通");
+            }
+        });
+
+    }
 }
