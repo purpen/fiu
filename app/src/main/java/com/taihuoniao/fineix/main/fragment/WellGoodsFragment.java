@@ -361,16 +361,16 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
-        ArrayList<String> urlList = new ArrayList<String>();
-        for (Banner banner : list) {
-            urlList.add(banner.cover_url);
-        }
-        if (urlList.size() == 0) {
-            return;
-        }
+//        ArrayList<String> urlList = new ArrayList<String>();
+//        for (Banner banner : list) {
+//            urlList.add(banner.cover_url);
+//        }
+//        if (urlList.size() == 0) {
+//            return;
+//        }
 
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter(activity, urlList);
+            viewPagerAdapter = new ViewPagerAdapter(activity,list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             scrollableView.setAutoScrollDurationFactor(8);
             scrollableView.setInterval(4000);

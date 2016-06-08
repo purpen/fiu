@@ -423,7 +423,7 @@ public class MineFragment extends MyBaseFragment {
                 String url=NetworkConstance.BASE_URL+"/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
-                intent.putExtra(AboutUsActivity.class.getName(),"关于我们");
+                intent.putExtra(AboutUsActivity.class.getName(),"关于Fiu");
                 startActivity(intent);
                 break;
             case R.id.item_feedback:

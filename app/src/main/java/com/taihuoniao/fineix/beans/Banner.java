@@ -14,7 +14,7 @@ public class Banner implements Serializable{
         public String web_url;
         public String summary;
         public String cover_id;
-        public String type;
+        public int type;
         public int ordby;
         public int kind;
         public long created_on;

@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -19,26 +23,28 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import java.util.List;
 
 public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
-    private final String TAG=getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     private Activity activity;
-    private List<T> imageList;
+    private List<T> list;
     protected DisplayImageOptions options;
     private int size;
     private boolean isInfiniteLoop;
     private WaittingDialog svProgressHUD;
-    public int getSize(){
+
+    public int getSize() {
         return size;
     }
-    public ViewPagerAdapter(Activity activity, List<T> imageList) {
+
+    public ViewPagerAdapter(Activity activity, List<T> list) {
         this.activity = activity;
-        this.imageList = imageList;
-        this.size = imageList.size();
-        this.svProgressHUD=new WaittingDialog(activity);
+        this.list = list;
+        this.size = list.size();
+        this.svProgressHUD = new WaittingDialog(activity);
         isInfiniteLoop = false;
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
@@ -67,47 +73,75 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         ViewHolder holder;
         if (view == null) {
             holder = new ViewHolder();
-            view = holder.imageView =new ImageView(activity);
+            view = holder.imageView = new ImageView(activity);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        final T content = imageList.get(getPosition(position));
+        final T content = list.get(getPosition(position));
 
-        if (content instanceof Integer){
+        if (content instanceof Banner){
+            ImageLoader.getInstance().displayImage(((Banner) content).cover_url, holder.imageView,options);
+        }
+
+        if (content instanceof Integer) {
             holder.imageView.setImageResource((Integer) content);
 //            ImageLoader.getInstance().displayImage("drawable://"+(Integer) content,holder.imageView,options);
         }
 
-        if (content instanceof String){
-            if (TextUtils.isEmpty((String)content)){
+        if (content instanceof String) {
+            if (TextUtils.isEmpty((String) content)) {
                 ToastUtils.showError("图片链接为空");
-//                svProgressHUD.showErrorWithStatus("图片链接为空");
-            }else {
-                ImageLoader.getInstance().displayImage((String) content,holder.imageView);
+            } else {
+                ImageLoader.getInstance().displayImage((String) content, holder.imageView,options);
             }
         }
 
-        if (activity instanceof UserGuideActivity){
-            if (position==size-1){
-                if (activity instanceof UserGuideActivity){
-                    if (position==size-1){
-                        view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (TextUtils.isEmpty(UserGuideActivity.fromPage)){
-                                    activity.startActivity(new Intent(activity,MainActivity.class));
-                                }else {
-                                    UserGuideActivity.fromPage=null;
-                                }
-                                activity.finish();
-                            }
-                        });
+        if (activity instanceof UserGuideActivity) {
+            if (position == size - 1) {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (TextUtils.isEmpty(UserGuideActivity.fromPage)) {
+                            activity.startActivity(new Intent(activity, MainActivity.class));
+                        } else {
+                            UserGuideActivity.fromPage = null;
+                        }
+                        activity.finish();
                     }
-                }
+                });
             }
         }
+
+        if (activity instanceof MainActivity){
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Banner banner=(Banner)content;
+                    Intent intent;
+                    switch (banner.type){
+                        case 8:     //场景详情
+                            intent=new Intent(activity, SceneDetailActivity.class);
+                            intent.putExtra("id", banner.web_url);
+                            activity.startActivity(intent);
+                            break;
+                        case 9:     //产品
+                            intent = new Intent(activity,GoodsDetailActivity.class);
+                            intent.putExtra("id",banner.web_url);
+                            activity.startActivity(intent);
+                            break;
+                        case 10:    //情景
+                            intent = new Intent(activity, QingjingDetailActivity.class);
+                            intent.putExtra("id",banner.web_url);
+                            activity.startActivity(intent);
+                            break;
+                    }
+
+                }
+            });
+        }
+
         return view;
     }
 
