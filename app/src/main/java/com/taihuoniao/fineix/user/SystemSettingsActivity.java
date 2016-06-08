@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -104,7 +105,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 startActivity(intent);
                 break;
             case R.id.item_about_us:
-                String url="http://m.taihuoniao.com/app/api/view/about";
+                String url= NetworkConstance.BASE_URL+"/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
                 intent.putExtra(AboutUsActivity.class.getName(),"关于我们");

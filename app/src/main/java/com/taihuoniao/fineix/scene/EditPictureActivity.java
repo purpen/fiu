@@ -300,9 +300,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         dialog = new WaittingDialog(EditPictureActivity.this);
         imageLoader = ImageLoader.getInstance();
         options500_500 = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_500_500)
-                .showImageForEmptyUri(R.mipmap.default_background_500_500)
-                .showImageOnFail(R.mipmap.default_background_500_500)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();

@@ -31,9 +31,9 @@ public class AlbumGridAdapter extends BaseAdapter {
         this.photoList = photoList;
 //        bitmapUtils = new BitmapUtils(context);
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_500_500)
-                .showImageForEmptyUri(R.mipmap.default_background_500_500)
-                .showImageOnFail(R.mipmap.default_background_500_500)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheOnDisk(true)
                 .cacheInMemory(true)
                 .considerExifParams(true)

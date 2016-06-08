@@ -439,6 +439,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                     ThirdLogin thirdLogin=response.getData();
                     if (thirdLogin== null) return;
                     if (thirdLogin.has_user == 0) { //跳转去绑定用户
+                        MainApplication.hasUser=false;
                         Intent intent = new Intent(ToRegisterActivity.this, BindPhoneActivity.class);
                         intent.putExtra("oid", userId);
                         intent.putExtra("oidForWeChat", openidForWeChat);
@@ -449,6 +450,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                         intent.putExtra("sex", sex);
                         startActivity(intent);
                     }else {        //已有该用户，直接跳转主页或订阅情景
+                        MainApplication.hasUser=true;
                         LoginInfo instance = LoginInfo.getInstance();
                         instance.setId(thirdLogin.user._id);
                         instance.setNickname(thirdLogin.user.nickname);

@@ -39,8 +39,8 @@
 
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv"
-                        android:layout_width="@dimen/dp60"
-                        android:layout_height="@dimen/dp60"
+                        android:layout_width="@dimen/dp80"
+                        android:layout_height="@dimen/dp80"
                         android:src="@mipmap/default_head"
                         app:riv_border_color="@color/color_eee"
                         app:riv_border_width="@dimen/dp1"
@@ -48,8 +48,8 @@
 
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv_auth"
-                        android:layout_width="@dimen/dp20"
-                        android:layout_height="@dimen/dp20"
+                        android:layout_width="@dimen/dp15"
+                        android:layout_height="@dimen/dp15"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:src="@mipmap/v"
@@ -66,7 +66,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp5"
+                        >
 
                         <ImageView
                             android:id="@+id/iv_label"

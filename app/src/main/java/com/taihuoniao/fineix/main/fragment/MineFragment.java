@@ -29,6 +29,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
@@ -38,6 +39,7 @@ import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
+import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
@@ -418,7 +420,7 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
             case R.id.item_about_us:
-                String url="http://m.taihuoniao.com/app/api/view/about";
+                String url=NetworkConstance.BASE_URL+"/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
                 intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
                 intent.putExtra(AboutUsActivity.class.getName(),"关于我们");
@@ -432,7 +434,7 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
-                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+//                startActivity(new Intent(activity, OrderInterestQJActivity.class));
         }
     }
 
@@ -457,7 +459,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(intent);
                         break;
                     case 4:
-                        String url="http://t.taihuoniao.com/app/api/view/fiu_point?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
+                        String url= NetworkConstance.BASE_URL+"/view/fiu_point?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
                         intent = new Intent(activity, AboutUsActivity.class);
                         intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
                         intent.putExtra(AboutUsActivity.class.getName(),"积分");
@@ -465,6 +467,13 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 8:
                         startActivity(new Intent(activity, SystemSettingsActivity.class));
+                        break;
+                    case 7:
+                        String url1= NetworkConstance.BASE_URL+"/view/fiu_service_term?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
+                        intent = new Intent(activity, AboutUsActivity.class);
+                        intent.putExtra(AboutUsActivity.class.getSimpleName(),url1);
+                        intent.putExtra(AboutUsActivity.class.getName(),"服务条款");
+                        startActivity(intent);
                         break;
                     case 5:
                         startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));

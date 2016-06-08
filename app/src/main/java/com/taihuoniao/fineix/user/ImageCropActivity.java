@@ -53,9 +53,9 @@ public class ImageCropActivity extends BaseActivity {
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_500_500)
-                .showImageForEmptyUri(R.mipmap.default_background_500_500)
-                .showImageOnFail(R.mipmap.default_background_500_500)
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
                 .delayBeforeLoading(0)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheInMemory(true)

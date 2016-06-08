@@ -295,6 +295,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     ThirdLogin thirdLogin=response.getData();
                     if (thirdLogin== null) return;
                     if (thirdLogin.has_user == 0) { //跳转去绑定用户
+                        MainApplication.hasUser=false;
                         Intent intent = new Intent(activity, BindPhoneActivity.class);
                         intent.putExtra("oid", userId);
                         intent.putExtra("oidForWeChat", openidForWeChat);
@@ -305,6 +306,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         intent.putExtra("sex", sex);
                         startActivity(intent);
                     }else {        //已有该用户，直接跳转主页或订阅情景
+                        MainApplication.hasUser=true;
                         LoginInfo instance = LoginInfo.getInstance();
                         instance.setId(thirdLogin.user._id);
                         instance.setNickname(thirdLogin.user.nickname);
@@ -314,10 +316,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         instance.identify=thirdLogin.user.identify;
                         SPUtil.write(activity, DataConstants.LOGIN_INFO,JsonUtil.toJson(instance));
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
-
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
-
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));
                         }else {
                             LoginCompleteUtils.goFrom(activity);
@@ -437,7 +437,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
                 LogUtil.e("LOGIN_INFO", responseInfo.result);
-                if (response.isSuccess()) {
+                if (response.isSuccess()) {//登录界面登录成功
+                    MainApplication.hasUser=true;
                     LoginInfo loginInfo=response.getData();
                     SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅

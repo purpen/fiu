@@ -15,8 +15,10 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderInterestSlidingAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
@@ -80,7 +82,24 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.btn:
-                startActivity(new Intent(activity,CompleteUserInfoActivity.class));
+                if (MainApplication.hasUser){
+                    LoginCompleteUtils.goFrom(activity);
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (RegisterActivity.instance != null) {
+                        RegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                }else {
+                    startActivity(new Intent(activity,CompleteUserInfoActivity.class));
+                }
                 break;
         }
     }
