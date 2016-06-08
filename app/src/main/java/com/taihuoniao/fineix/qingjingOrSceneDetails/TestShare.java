@@ -171,7 +171,13 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                         TestShare.this.netScene = netScene;
                         setImgParams();
                         recyclerView.setVisibility(View.VISIBLE);
-                        click(0);
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                click(0);
+                            }
+                        });
+//                        click(0);
                     } else {
                         ToastUtils.showError(netScene.getMessage());
                         finish();

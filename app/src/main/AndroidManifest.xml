@@ -46,10 +46,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".qingjingOrSceneDetails.ShareCJActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
