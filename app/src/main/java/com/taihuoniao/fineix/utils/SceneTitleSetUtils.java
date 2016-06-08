@@ -1,21 +1,16 @@
 package com.taihuoniao.fineix.utils;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.taihuoniao.fineix.R;
-
 /**
  * Created by taihuoniao on 2016/5/25.
  */
 public class SceneTitleSetUtils {
-    static Bitmap bitmap = BitmapFactory.decodeResource(Resources.getSystem(), R.mipmap.scene_title_background);
+//    static Bitmap bitmap = BitmapFactory.decodeResource(Resources.getSystem(), R.mipmap.scene_title_background);
 
     //用于动态改变场景title的宽和高
     public static void setTitle(TextView sceneTitle, FrameLayout frameLayout, int maxTitleSize, int minTitleSize, double b) {

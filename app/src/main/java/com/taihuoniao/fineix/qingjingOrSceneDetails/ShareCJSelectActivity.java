@@ -77,6 +77,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initView() {
         titleLayout.setTitleVisible(false);
+        titleLayout.setBackImgVisible(false);
         titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
         scene = (SceneDetails) getIntent().getSerializableExtra("scene");
         if (scene == null) {
@@ -254,12 +255,16 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
-        titleTv.setText(searchItem.getTitle());
-        desTv.setText(searchItem.getDes());
+//        titleTv.setText(searchItem.getTitle());
+//        desTv.setText(searchItem.getDes());
         isSelect = true;
         scene.setOid(searchItem.getOid());
         scene.setTitle(searchItem.getTitle());
         scene.setDes(searchItem.getDes());
+        Intent intent = new Intent();
+        intent.putExtra("scene", scene);
+        setResult(2, intent);
+        finish();
     }
 
 

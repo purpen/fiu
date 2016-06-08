@@ -15,6 +15,8 @@ import org.apache.http.NameValuePair;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -50,39 +52,39 @@ public class MD5Utils {
 
     //sign
     public static HttpHandler<String> sign(RequestParams params, String url, RequestCallBack<String> callBack, boolean isPay) {
-//        boolean firstIn = true;
-//        params.addQueryStringParameter("client_id", "1415289600");
+        boolean firstIn = true;
+        params.addQueryStringParameter("client_id", "1415289600");
         params.addQueryStringParameter("uuid", MainApplication.uuid);
         params.addQueryStringParameter("app_type", "2");
-//        params.addQueryStringParameter("channel", channel);
-//        params.addQueryStringParameter("time", NetworkConstance.CONN_TIMEOUT + "");
+        params.addQueryStringParameter("channel", channel);
+        params.addQueryStringParameter("time", NetworkConstance.CONN_TIMEOUT + "");
         List<NameValuePair> list = params.getQueryStringParams();
-//        Collections.sort(list, new Comparator<NameValuePair>() {
-//            @Override
-//            public int compare(NameValuePair lhs, NameValuePair rhs) {
-//                return lhs.getName().compareTo(rhs.getName());
-//            }
-//        });
-//        StringBuilder sign = new StringBuilder();
-//        for (int i = 0; i < list.size(); i++) {
-//            NameValuePair nameValuePair = list.get(i);
-//            String name = nameValuePair.getName();
-//            String value = nameValuePair.getValue();
-//            if (name.equals("tmp") || value == null) {
-//                continue;
-//            }
-//            if (firstIn) {
-//                sign.append(name).append("=").append(value);
-//                firstIn = false;
-//            } else {
-//                sign.append("&").append(name).append("=").append(value);
-//            }
-//        }
-//        String sign1 = null;
-//
-//        sign1 = getMD5(getMD5(sign.toString() + "545d9f8aac6b7a4d04abffe51415289600"));
-//
-//        params.addQueryStringParameter("sign", sign1);
+        Collections.sort(list, new Comparator<NameValuePair>() {
+            @Override
+            public int compare(NameValuePair lhs, NameValuePair rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+        StringBuilder sign = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            NameValuePair nameValuePair = list.get(i);
+            String name = nameValuePair.getName();
+            String value = nameValuePair.getValue();
+            if (name.equals("tmp") || value == null) {
+                continue;
+            }
+            if (firstIn) {
+                sign.append(name).append("=").append(value);
+                firstIn = false;
+            } else {
+                sign.append("&").append(name).append("=").append(value);
+            }
+        }
+        String sign1 = null;
+
+        sign1 = getMD5(getMD5(sign.toString() + "545d9f8aac6b7a4d04abffe51415289600"));
+
+        params.addQueryStringParameter("sign", sign1);
         Log.e("<<<", params.getQueryStringParams().toString());
         params.addBodyParameter(list);
         params.getQueryStringParams().clear();
