@@ -232,6 +232,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
+                SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+                boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
+                if (first) {
+                    firstRelative.setVisibility(View.VISIBLE);
+                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstImg.setImageResource(R.mipmap.first_in_fiu);
+                    firstRelative.setTag(2);
+                    firstImg.setVisibility(View.VISIBLE);
+                    firstRelative.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((int) (v.getTag()) == 2) {
+                                firstRelative.setVisibility(View.GONE);
+                                firstImg.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    SharedPreferences.Editor editor = firstInSp.edit();
+                    editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
+                    editor.apply();
+                    return;
+                }
                 if (LoginInfo.isUserLogin()) {
                     MainApplication.tag = 1;
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
@@ -398,26 +420,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 1) {
-                                firstImg.setImageResource(R.mipmap.first_in_find);
-//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_find));
-                                firstRelative.setTag(2);
-                            } else if ((int) (v.getTag()) == 2) {
-                                firstImg.setImageResource(R.mipmap.first_in_fiu);
-//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_fiu));
-                                firstRelative.setTag(3);
-                            } else if ((int) (v.getTag()) == 3) {
-                                firstImg.setImageResource(R.mipmap.first_in_wellgood);
-//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_wellgood));
-                                firstRelative.setTag(4);
-                            } else if ((int) (v.getTag()) == 4) {
-                                firstImg.setImageResource(R.mipmap.first_in_mine);
-//                                firstImg.setImageBitmap(res2Bitmap(R.mipmap.first_in_mine));
-                                firstRelative.setTag(5);
-                            } else if ((int) (v.getTag()) == 5) {
                                 firstImg.setVisibility(View.GONE);
-                                if (isMove()) {
-                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
-                                }
                                 firstRelative.setBackgroundResource(R.color.black_first);
                                 firstRightImg.setImageResource(R.mipmap.index);
                                 firstRightImg.setVisibility(View.VISIBLE);
@@ -596,10 +599,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     upAnimator.start();
                 }
             } else if (intent.hasExtra(SceneDetailActivity.class.getSimpleName())) {
-                if(IndexFragment.instance!=null){
+                if (IndexFragment.instance != null) {
                     IndexFragment.instance.refreshSceneList();
                 }
-                if(FindFragment.instance!=null){
+                if (FindFragment.instance != null) {
                     FindFragment.instance.refreshSceneList();
                 }
             }
