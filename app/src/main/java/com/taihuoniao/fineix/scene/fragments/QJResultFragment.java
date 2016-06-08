@@ -35,6 +35,7 @@ import java.util.List;
 public class QJResultFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private String q;
     private String t;
+    private boolean isContent = false;
     //控件
     private PullToRefreshGridView pullToRefreshView;
     private GridView gridView;
@@ -46,11 +47,12 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
     private AllQingjingGridAdapter allQingjingGridAdapter;
     private WaittingDialog dialog;
 
-    public static QJResultFragment newInstance(String q, String t) {
+    public static QJResultFragment newInstance(String q, String t, boolean isContent) {
 
         Bundle args = new Bundle();
         args.putString("q", q);
         args.putString("t", t);
+        args.putBoolean("isContent", isContent);
         QJResultFragment fragment = new QJResultFragment();
         fragment.setArguments(args);
         return fragment;
@@ -61,6 +63,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         q = getArguments().getString("q", null);
         t = getArguments().getString("t", null);
+        isContent = getArguments().getBoolean("isContent");
     }
 
     @Override
@@ -82,7 +85,11 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "","tag",null, handler);
+                if (isContent) {
+                    DataPaser.search(q, t, page + "", "content", null, handler);
+                } else {
+                    DataPaser.search(q, t, page + "", "tag", null, handler);
+                }
             }
         });
         gridView.setNumColumns(2);
@@ -103,7 +110,11 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         }
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "","tag",null, handler);
+        if (isContent) {
+            DataPaser.search(q, t, page + "", "content", null, handler);
+        } else {
+            DataPaser.search(q, t, page + "", "tag", null, handler);
+        }
     }
 
     public void refreshData(String q, String t) {

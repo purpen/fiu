@@ -31,7 +31,7 @@ import java.util.List;
 public class ProductResultFragment extends BaseFragment {
     private String q;
     private String t;
-    private boolean isSearch = false;
+    private boolean isContent = false;
     //控件
     private PullToRefreshListView pullToRefreshView;
     private ListView listView;
@@ -43,12 +43,12 @@ public class ProductResultFragment extends BaseFragment {
     private List<SearchBean.SearchItem> list;
     private GoodListAdapter goodListAdapter;
 
-    public static ProductResultFragment newInstance(String q, String t, boolean isSearch) {
+    public static ProductResultFragment newInstance(String q, String t, boolean isContent) {
 
         Bundle args = new Bundle();
         args.putString("q", q);
         args.putString("t", t);
-        args.putBoolean("isSearch", isSearch);
+        args.putBoolean("isContent", isContent);
         ProductResultFragment fragment = new ProductResultFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,7 +59,7 @@ public class ProductResultFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         q = getArguments().getString("q", null);
         t = getArguments().getString("t", null);
-        isSearch = getArguments().getBoolean("isSearch");
+        isContent = getArguments().getBoolean("isContent");
     }
 
     @Override
@@ -83,7 +83,11 @@ public class ProductResultFragment extends BaseFragment {
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                DataPaser.search(q, t, page + "", "tag", null, handler);
+                if (isContent) {
+                    DataPaser.search(q, t, page + "", "content", null, handler);
+                } else {
+                    DataPaser.search(q, t, page + "", "tag", null, handler);
+                }
             }
         });
         list = new ArrayList<>();
@@ -99,7 +103,11 @@ public class ProductResultFragment extends BaseFragment {
         }
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "", "tag", null, handler);
+        if (isContent) {
+            DataPaser.search(q, t, page + "", "content", null, handler);
+        } else {
+            DataPaser.search(q, t, page + "", "tag", null, handler);
+        }
     }
 
     public void refreshData(String q, String t) {

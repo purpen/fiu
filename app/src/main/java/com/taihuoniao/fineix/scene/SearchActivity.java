@@ -26,7 +26,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     //上个界面传递过来的数据
     private String q;//搜索关键字
     private String t;//搜索什么 7.商品；8.情景；9.场景；10.情景产品；11.场景分享语
-    private boolean isSearch = false;
+    private boolean isContent = false;
     //界面下的控件
     private ImageView backImg;
     private EditText editText;
@@ -75,9 +75,11 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initList() {
         q = getIntent().getStringExtra("q");
         t = getIntent().getStringExtra("t");
-        isSearch = getIntent().getBooleanExtra("isSearch", false);
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
+            isContent = false;
+        }else{
+            isContent = true;
         }
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
@@ -185,7 +187,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         switch (t) {
             case "8":
                 if (qjResultFragment == null) {
-                    qjResultFragment = QJResultFragment.newInstance(editText.getText().toString().trim(), t);
+                    qjResultFragment = QJResultFragment.newInstance(editText.getText().toString().trim(), t,isContent);
                     ft.add(R.id.activity_search_container, qjResultFragment);
                 } else {
                     ft.show(qjResultFragment);
@@ -195,7 +197,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "9":
                 if (cjResultFragment == null) {
-                    cjResultFragment = CJResultFragment.newInstance(editText.getText().toString().trim(), t);
+                    cjResultFragment = CJResultFragment.newInstance(editText.getText().toString().trim(), t,isContent);
                     ft.add(R.id.activity_search_container, cjResultFragment);
                 } else {
                     ft.show(cjResultFragment);
@@ -205,7 +207,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case "10":
                 if (productResultFragment == null) {
-                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t, false);
+                    productResultFragment = ProductResultFragment.newInstance(editText.getText().toString().trim(), t, isContent);
                     ft.add(R.id.activity_search_container, productResultFragment);
                 } else {
                     ft.show(productResultFragment);

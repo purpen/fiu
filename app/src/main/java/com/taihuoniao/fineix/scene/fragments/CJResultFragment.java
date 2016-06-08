@@ -32,6 +32,7 @@ import java.util.List;
 public class CJResultFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private String q;
     private String t;
+    private boolean isContent = false;
     //控件
     public static CJResultFragment instance;
     private RelativeLayout title;
@@ -45,11 +46,12 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private List<SearchBean.SearchItem> list;
     private SceneListViewAdapter sceneListViewAdapter;
 
-    public static CJResultFragment newInstance(String q, String t) {
+    public static CJResultFragment newInstance(String q, String t, boolean isContent) {
 
         Bundle args = new Bundle();
         args.putString("q", q);
         args.putString("t", t);
+        args.putBoolean("isContent", isContent);
         CJResultFragment fragment = new CJResultFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +62,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         q = getArguments().getString("q", null);
         t = getArguments().getString("t", null);
+        isContent = getArguments().getBoolean("isContent");
     }
 
     @Override
@@ -84,7 +87,10 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                DataPaser.search(q, t, page + "", "tag",null, handler);
+                if (isContent) {
+                    DataPaser.search(q, t, page + "", "content", null, handler);
+                } else
+                    DataPaser.search(q, t, page + "", "tag", null, handler);
             }
         });
         list = new ArrayList<>();
@@ -101,7 +107,10 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         }
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "", "tag", null, handler);
+        if (isContent)
+            DataPaser.search(q, t, page + "", "content", null, handler);
+        else
+            DataPaser.search(q, t, page + "", "tag", null, handler);
     }
 
     public void refreshData(String q, String t) {
@@ -112,14 +121,14 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     //外界调用刷新场景列表
-    public void refreshList(){
+    public void refreshList() {
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
         page = 1;
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "", "tag",null, handler);
+        DataPaser.search(q, t, page + "", "tag", null, handler);
     }
 
     private Handler handler = new Handler() {
