@@ -85,24 +85,24 @@ public class CertificateStatusActivity extends BaseActivity{
                     authData = response.getData();
                     refreshUI();
                     return;
-                }else { //首次参加认证
-                    ll_first_auth.setVisibility(View.VISIBLE);
                 }
-//                dialog.showErrorWithStatus(response.getMessage());
+                ToastUtils.showError(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请保持网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请保持网络畅通");
             }
         });
     }
 
     @Override
-    protected void refreshUI() {//审核状态：0.未审核；1.拒绝；2.通过
+    protected void refreshUI() {//审核状态：-1首次认证,0.未审核；1.拒绝；2.通过
        switch (authData.verified){
+           case -1:
+               ll_first_auth.setVisibility(View.VISIBLE);
+               break;
            case 0:
                 rl_certificating.setVisibility(View.VISIBLE);
                break;
