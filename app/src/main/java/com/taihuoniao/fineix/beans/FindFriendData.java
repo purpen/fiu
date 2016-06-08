@@ -17,6 +17,7 @@ public class FindFriendData implements Serializable{
         public String medium_avatar_url;
         public int is_love;
         public ArrayList<CJItem> scene_sight;
+        public String summary;
         public ArrayList<String> areas;
     }
 

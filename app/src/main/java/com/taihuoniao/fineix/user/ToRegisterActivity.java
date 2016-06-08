@@ -1,12 +1,17 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,19 +22,25 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
+import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
+import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
@@ -51,6 +62,20 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private String sex;
     private String nickName;
     private String token;
+    @Bind(R.id.ll_register)
+    LinearLayout ll_register;
+    @Bind(R.id.ll_third)
+    LinearLayout ll_third;
+    @Bind(R.id.ll_phone)
+    LinearLayout ll_phone;
+    @Bind(R.id.et_phone)
+    EditText et_phone;
+    @Bind(R.id.et_password)
+    EditText et_password;
+    @Bind(R.id.et_code)
+    EditText et_code;
+    @Bind(R.id.btn_verify)
+    Button btn_verify;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
@@ -58,86 +83,28 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToRegisterActivity instance = null;
     private WaittingDialog mDialog = null;
-    private boolean mDialogAppear = false;//判断对话框要不要出现
+    private ReadSmsContent readSmsContent;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                btn_verify.setEnabled(false);
+                btn_verify.setTextColor(Color.BLACK);
+//                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode_gray);
+            } else if (msg.what == 2) {
+                btn_verify.setText(msg.arg1 + "s");
+            } else if (msg.what == 3) {
+                btn_verify.setEnabled(true);
+                btn_verify.setTextColor(Color.RED);
+//                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode);
+                btn_verify.setText("获取手机验证码");
+            } else if (msg.what == 4) {
 
+            }
+        }
+    };
     public ToRegisterActivity() {
         super(R.layout.activity_to_register);
     }
-
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
-//                    if (mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                    Toast.makeText(ToRegisterActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case DataConstants.PARSER_THIRD_LOGIN_ERROR:
-//                    if (mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                    Toast.makeText(ToRegisterActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case DataConstants.PARSER_THIRD_LOGIN:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof ThirdLogin) {
-//                            ThirdLogin thirdLogin = (ThirdLogin) msg.obj;
-//                            if (mDialog.isShowing()) {
-//                                mDialog.dismiss();
-//                            }
-//                            if ("true".equals(thirdLogin.getSuccess())) { //三方登录成功
-//                                //为0不存在，1是存在，不存在表示第一次用这个三方号登录本APP，那就去绑定界面，存在则直接进入APP
-//                                if ("0".equals(thirdLogin.getHas_user())) {
-//                                    Intent intent = new Intent(ToRegisterActivity.this, BindPhoneActivity.class);
-//                                    intent.putExtra("oid", userId);
-//                                    intent.putExtra("oidForWeChat", openidForWeChat);
-//                                    intent.putExtra("token", token);
-//                                    intent.putExtra("avatarUrl", avatarUrl);
-//                                    intent.putExtra("nickName", nickName);
-//                                    intent.putExtra("type", loginType);
-//                                    intent.putExtra("sex", sex);
-//                                    startActivity(intent);
-//                                } else { //
-//                                    switch (MainApplication.which_activity) {
-//                                        case DataConstants.SceneDetailActivity:
-//                                            sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-//                                            break;
-//                                        case DataConstants.ElseActivity:
-//                                            break;
-//                                        default:
-//                                            Intent intent = new Intent(ToRegisterActivity.this,
-//                                                    MainActivity.class);
-//                                            startActivity(intent);
-//                                            break;
-//                                    }
-//                                    MainApplication.getIsLoginInfo().setIs_login("1");
-//                                    mDialog.dismiss();
-//                                    if (OptRegisterLoginActivity.instance != null) {
-//                                        OptRegisterLoginActivity.instance.finish();
-//                                    }
-//                                    if (ToLoginActivity.instance != null) {
-//                                        ToLoginActivity.instance.finish();
-//                                    }
-//                                    mHandler.postDelayed(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            ToRegisterActivity.this.finish();
-//                                        }
-//                                    }, 600);
-//                                }
-//                            } else {
-//                                Toast.makeText(ToRegisterActivity.this, "注册失败，请检查网络", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                        break;
-//                    }
-//            }
-//        }
-//    };
-
     @Override
     protected void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -157,18 +124,10 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         mSinaWeiBo.setOnClickListener(this);
         mWeChat = (TextView) findViewById(R.id.tv_weixin_register);
         mWeChat.setOnClickListener(this);
-
+        readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
+        //注册短信内容监听
+        this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, readSmsContent);
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (mDialogAppear) {
-//            if (!mDialog.isShowing()) {
-//                mDialog.show();
-//            }
-//        }
-//    }
 
     @Override
     public void finish() {
@@ -179,11 +138,181 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @OnClick({R.id.btn_verify,R.id.btn_register})
+    void performClick(View v){
+        String phone=null;
+        switch (v.getId()){
+            case R.id.btn_verify: //提交验证码
+                 phone= et_phone.getText().toString().trim();
+                if (TextUtils.isEmpty(phone)){
+                    ToastUtils.showInfo("请输入手机号");
+                     return;
+                }
+
+                if (!EmailUtils.isMobileNO(phone)){
+                    ToastUtils.showInfo("请输入正确手机号");
+                    return;
+                }
+                isPhoneRegisted(phone);
+                break;
+            case R.id.btn_register: //注册
+                phone=et_phone.getText().toString().trim();
+                String password=et_password.getText().toString().trim();
+                String code=et_code.getText().toString().trim();
+                if (TextUtils.isEmpty(phone)){
+                    ToastUtils.showInfo("请输入手机号");
+                    return;
+                }
+
+                if (!EmailUtils.isMobileNO(phone)){
+                    ToastUtils.showInfo("请输入正确手机号");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(code)){
+                    ToastUtils.showInfo("请输入手机的验证码");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)){
+                    ToastUtils.showInfo("请输入密码");
+                    return;
+                }
+                submitData(password,phone,code);
+                break;
+        }
+    }
+
+    //点击注册按钮提交数据
+    private void submitData(String password, String phone, String code) {
+        ClientDiscoverAPI.clickRegisterNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if(responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
+                });
+
+                if (response.isSuccess()) {
+                    LoginInfo loginInfo=response.getData();
+                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
+                        updateUserIdentity();
+                        startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                    } else {
+                        startActivity(new Intent(activity, MainActivity.class));
+                    }
+                    if (ToRegisterActivity.instance != null) {
+                        ToRegisterActivity.instance.finish();
+                    }
+                    if (RegisterActivity.instance != null) {
+                        RegisterActivity.instance.finish();
+                    }
+                    if (OptRegisterLoginActivity.instance != null) {
+                        OptRegisterLoginActivity.instance.finish();
+                    }
+                    if (ToLoginActivity.instance != null) {
+                        ToLoginActivity.instance.finish();
+                    }
+                    finish();
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError("网络异常,请确认网络畅通");
+            }
+        }, password, phone, code);
+    }
+
+    private void isPhoneRegisted(final String phone) { //true 未被注册
+        ClientDiscoverAPI.getPhoneState(phone, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if(response.isSuccess()){
+                    submitPhone(phone);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+
+                            int recordSed = 60;
+                            Message msg = new Message();
+                            msg.what = 1;
+                            mHandler.sendMessage(msg);
+
+                            for (; ; ) {
+                                if (--recordSed < 0)
+                                    break;
+
+                                Message msg2 = new Message();
+                                msg2.what = 2;
+                                msg2.arg1 = recordSed;
+                                mHandler.sendMessage(msg2);
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Message msg3 = new Message();
+                            msg3.what = 3;
+                            mHandler.sendMessage(msg3);
+                        }
+
+                    }.start();
+                }else {
+                    ToastUtils.showError(response.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError("网络异常,请确保网络畅通");
+            }
+        });
+
+    }
+
+    // 提交手机号的方法
+    private void submitPhone(String phone) {
+        ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo==null) return;
+                if (responseInfo.result==null) return;
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                if (response.isSuccess()){
+                    ToastUtils.showInfo(response.getMessage());
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError("网络异常,请确保网络畅通");
+            }
+        }, phone);
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_number_toregister:
-                startActivity(new Intent(activity, RegisterActivity.class));
+//                startActivity(new Intent(activity, RegisterActivity.class));
+                ll_phone.setVisibility(View.GONE);
+                ll_third.setVisibility(View.GONE);
+                ll_register.setVisibility(View.VISIBLE);
+                ll_register.setAnimation(Util.fromBottom2Top());
                 break;
             case R.id.tv_qq_register:
                 if (mDialog!=null) {
@@ -215,7 +344,13 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(wechat);
                 break;
             case R.id.image_back_toregister:
-                finish();
+                if (ll_third.isShown()){
+                    finish();
+                }else {
+                    ll_register.setVisibility(View.GONE);
+                    ll_phone.setVisibility(View.VISIBLE);
+                    ll_third.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.image_close_toregister:
                 mFinish = true;
@@ -276,7 +411,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 //除QQ和微信两特例，其他的ID这样取就行了
                 userId = platDB.getUserId().toString();
             }
-//            DataPaser.thirdLoginParser(userId, token,loginType,mHandler);
             doThirdLogin();
         }
     }
@@ -346,7 +480,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());
-//                    mDialog.showErrorWithStatus(response.getMessage());
                 }
             }
 
@@ -355,7 +488,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 if (mDialog!=null){
                     mDialog.dismiss();
                     ToastUtils.showError("网络异常，请确认网络畅通");
-//                    mDialog.showErrorWithStatus("网络异常,请确认网络畅通");
                 }
             }
         });
@@ -389,7 +521,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
                 ToastUtils.showError("对不起，授权失败");
-//                mDialog.showErrorWithStatus("对不起,授权失败");
             }
         }
         throwable.printStackTrace();
@@ -401,8 +532,13 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             if (mDialog.isShowing()) {
                 mDialog.dismiss();
                 ToastUtils.showError("您取消了授权");
-//                Util.makeToast("您取消了授权");
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        this.getContentResolver().unregisterContentObserver(readSmsContent);
+        super.onDestroy();
     }
 }

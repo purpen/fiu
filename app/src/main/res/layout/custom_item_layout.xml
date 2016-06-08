@@ -66,7 +66,7 @@
         android:layout_marginRight="@dimen/dp10"
         app:riv_corner_radius="@dimen/dp100"
         android:layout_toLeftOf="@id/iv_more_arrow"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/default_head"
         android:visibility="gone" />
 
     <ImageView

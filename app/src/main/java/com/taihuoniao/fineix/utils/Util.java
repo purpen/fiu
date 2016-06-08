@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -249,5 +251,17 @@ public class Util {
 	public static String formatFloat(float price) throws NumberFormatException{
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		return decimalFormat.format(price);
+	}
+
+	/**
+	 * View的Bottom to top
+	 * @return
+     */
+	public static TranslateAnimation fromBottom2Top() {
+		TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+		animation.setDuration(400);
+		return animation;
 	}
 }

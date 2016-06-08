@@ -90,14 +90,13 @@
     <!--登录注册中微信、新浪微博、腾讯QQ的textview按钮-->
     <style name="ToRegisterAndLogin">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginLeft">15dp</item>
-        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginLeft">@dimen/dp16</item>
+        <item name="android:layout_marginRight">@dimen/dp16</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:layout_weight">1</item>
     </style>
     <!--自定义全局标题栏-->
     <declare-styleable name="GlobalTitleLayout">

@@ -55,7 +55,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public static RegisterActivity instance = null;
     private ReadSmsContent readSmsContent;
     private String phone;
-    private boolean phoneCanUse;
     public RegisterActivity(){
         super(R.layout.activity_register);
     }
@@ -310,33 +309,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 Util.makeToast(response.getMessage());
 
-//                if (!TextUtils.isEmpty(responseInfo.result)) {
-//                    try {
-//                        JSONObject obj = new JSONObject(responseInfo.result);
-//                        String successObject = obj.optString("success");
-//                        if ("true".equals(successObject)) {
-//                            Util.makeToast("注册成功");
-////                            RegisterInfo user = (RegisterInfo) DataParser.parserRegisterToList(responseInfo.result);
-////                            Log.e(">>>", ">>>>>which_activity>>>" +MainApplication.which_activity);
-////                            Log.e(">>>", ">>>>>forPaywayToMain>>>" +THNApplication.forPaywayToMain);
-//                            Intent registerIntent = new Intent(RegisterActivity.this,LoginActivity.class);
-//                            startActivity(registerIntent);
-//
-//                        } else {
-//                            JSONObject obj2 = new JSONObject(responseInfo.result);
-//                            String  failure= obj2.optString("message");
-//                            if (!TextUtils.isEmpty(failure)){
-//                                Util.makeToast(failure);
-//                            }
-//                        }
-//                        //点击跳到登录界面
-//
-//
-//                    } catch (Exception e) {
-//                    }
-//                }
             }
-
 
             @Override
             public void onFailure(HttpException e, String s) {

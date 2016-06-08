@@ -28,14 +28,13 @@
         <TextView
             android:id="@+id/tv_click_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp40"
             android:text="注册"
-            android:padding="@dimen/dp10"
             android:layout_marginRight="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
             android:background="@drawable/shap_redbutton_commit"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="@dimen/sp16"
             android:textColor="@android:color/white"/>
         <LinearLayout
             android:layout_width="match_parent"
