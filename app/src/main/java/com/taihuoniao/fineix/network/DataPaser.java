@@ -121,8 +121,8 @@ public class DataPaser {
         ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<商品列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 if (handler == null) {
                     return;
                 }
@@ -186,8 +186,8 @@ public class DataPaser {
         ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<>>>", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<商品详情", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GOODS_DETAIL;
                 msg.obj = new GoodsDetailBean();
@@ -1259,6 +1259,8 @@ public class DataPaser {
         ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<品牌详情",responseInfo.result);
+                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.BRAND_DETAIL;
                 msg.obj = new BrandDetailBean();
@@ -1336,7 +1338,8 @@ public class DataPaser {
         ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
+                Log.e("<<<搜索", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
@@ -1365,7 +1368,7 @@ public class DataPaser {
         ClientDiscoverAPI.productAndScene(page, size, sight_id, product_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<proScene", responseInfo.result);
+                Log.e("<<<关联列表", responseInfo.result);
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.PRODUCT_AND_SCENE;
@@ -2369,7 +2372,7 @@ public class DataPaser {
         ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<个人信息",responseInfo.result);
+                Log.e("<<<个人信息", responseInfo.result);
                 UserInfo userInfo = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_USER_INFO;

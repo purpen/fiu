@@ -129,6 +129,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
         dialog = new WaittingDialog(getActivity());
+        pullToRefreshView.animLayout();
         return view;
     }
 

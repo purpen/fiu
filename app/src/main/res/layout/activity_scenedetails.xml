@@ -498,8 +498,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="17dp"
-            android:paddingRight="17dp"
+            android:paddingTop="8.5dp"
+            android:paddingBottom="8.5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:src="@mipmap/share"/>
     </RelativeLayout>
     <!--<RelativeLayout-->

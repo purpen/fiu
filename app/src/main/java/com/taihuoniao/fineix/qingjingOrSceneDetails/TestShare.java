@@ -356,16 +356,17 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         TextView line = (TextView) view.findViewById(R.id.activity_share_scene_line);
         FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
         TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
-        TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        final TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        final ImageView addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
         ImageView fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
         TextView fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
         if (currentPosition == 2 || currentPosition == 3) {
             userName.setTextColor(getResources().getColor(R.color.black));
-            userInfo.setTextColor(getResources().getColor(R.color.black));
-            locationTv.setTextColor(getResources().getColor(R.color.black));
+            userInfo.setTextColor(getResources().getColor(R.color.black969696));
+            locationTv.setTextColor(getResources().getColor(R.color.black969696));
             locationImg.setImageResource(R.mipmap.location_height_22px);
-            desTv.setTextColor(getResources().getColor(R.color.black));
-            line.setTextColor(getResources().getColor(R.color.black));
+            desTv.setTextColor(getResources().getColor(R.color.black969696));
+            line.setTextColor(getResources().getColor(R.color.black969696));
         }
         ImageLoader.getInstance().displayImage(netScene.getUser_info().getAvatar_url(), userHeadImg, options500_500);
         userName.setText(netScene.getUser_info().getNickname());
@@ -373,6 +374,16 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         locationTv.setText(netScene.getAddress());
         sceneTitle.setText(netScene.getTitle());
         desTv.setText(netScene.getDes());
+        desTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (desTv.getLineCount() > 2) {
+                    addImg.setVisibility(View.VISIBLE);
+                } else {
+                    addImg.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21, 1);
 
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null

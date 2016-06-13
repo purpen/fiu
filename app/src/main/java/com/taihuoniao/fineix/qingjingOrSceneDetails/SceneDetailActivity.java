@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -25,26 +24,31 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
-import com.taihuoniao.fineix.adapters.SceneDetailProductListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SceneDetails;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
@@ -62,6 +66,7 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,8 +144,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private SceneDetails.UserInfo netUserInfo = null;//网络请求返回用户信息
     private String[] location = null;//网络请求返回的经纬度
     //场景下的商品
-    private List<ProductAndSceneListBean.ProductAndSceneItem> sceneProductList;
-    private SceneDetailProductListAdapter sceneProductAdapter;
+    private List<ProductBean.ProductListItem> sceneProductList;
+    private GoodListAdapter sceneProductAdapter;
     //相近产品
     private int currentTime = 1;
     private List<ProductBean.ProductListItem> nearProductList;
@@ -258,7 +263,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        love.setOnClickListener(this);
 //        loveTv.setOnClickListener(this);
         sceneProductList = new ArrayList<>();
-        sceneProductAdapter = new SceneDetailProductListAdapter(SceneDetailActivity.this, sceneProductList);
+        sceneProductAdapter = new GoodListAdapter(SceneDetailActivity.this, sceneProductList, null);
         productListView.setAdapter(sceneProductAdapter);
         nearProductList = new ArrayList<>();
         goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList, null);
@@ -291,7 +296,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         DataPaser.commentsList(1 + "", 3 + "", id, null, 12 + "", handler);
         DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
 //        关联列表数据异常
-        DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
+//        DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
 //        ToastUtils.showSuccess("测试数据");
     }
 
@@ -354,20 +359,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     NetBean netBean = (NetBean) msg.obj;
                     if (netBean.isSuccess()) {
                         ToastUtils.showSuccess(netBean.getMessage());
-//                        dialog.showSuccessWithStatus(netBean.getMessage());
-//                        Intent intent = new Intent(DataConstants.BroadDeleteScene);
-//                        intent.putExtra(SceneDetailActivity.class.getSimpleName(), true);
-//                        sendBroadcast(intent);
-//                        if (CJResultFragment.instance != null) {
-//                            CJResultFragment.instance.refreshList();
-//                        }
                         post(new Runnable() {
                             @Override
                             public void run() {
                                 finish();
                             }
                         });
-//                        finish();
 //                        刷新列表
                     } else {
                         ToastUtils.showError(netBean.getMessage());
@@ -387,15 +384,15 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                        dialog.showErrorWithStatus(netProductBean.getMessage());
                     }
                     break;
-                case DataConstants.PRODUCT_AND_SCENE:
-                    ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
-                    if (netProScene.isSuccess()) {
-//                        Log.e("<<<场景下的产品", "数量" + netProScene.getData().getRows().size());
-                        sceneProductList.clear();
-                        sceneProductList.addAll(netProScene.getData().getRows());
-                        sceneProductAdapter.notifyDataSetChanged();
-                    }
-                    break;
+//                case DataConstants.PRODUCT_AND_SCENE:
+//                    ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
+//                    if (netProScene.isSuccess()) {
+////                        Log.e("<<<场景下的产品", "数量" + netProScene.getData().getRows().size());
+//                        sceneProductList.clear();
+//                        sceneProductList.addAll(netProScene.getData().getRows());
+//                        sceneProductAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
                 case DataConstants.CANCEL_LOVE_SCENE:
                     SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
                     if (netSceneLoveBean1.isSuccess()) {
@@ -492,6 +489,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                         //场景上的商品
                         productList = netSceneDetails.getProduct();
+                        getProductList();
                         getNearProductList();
                         //添加商品
                         addProductToImg();
@@ -520,12 +518,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                             moreUser.setVisibility(View.GONE);
                         }
                         location = netSceneDetails.getLocation();
-                        scrollView.scrollTo(0,imgRelative.getMeasuredHeight()-MainApplication.getContext().getScreenHeight());
+                        scrollView.scrollTo(0, imgRelative.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
                     } else {
-//                        Toast toast = new Toast(SceneDetailActivity.this);
-//                        toast.setView();
-//                        dialog.showErrorWithStatus(netSceneDetails.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneDetails.getMessage(), Toast.LENGTH_SHORT).show();
                         ToastUtils.showError(netSceneDetails.getMessage());
                         post(new Runnable() {
                             @Override
@@ -547,6 +541,50 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void setTitleWidth() {
         SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
+    }
+
+    //获取场景下产品列表
+    private void getProductList() {
+        if (productList == null || productList.size() <= 0) {
+            return;
+        }
+        StringBuilder ids = new StringBuilder();
+        for (int i = 0; i < productList.size(); i++) {
+            ids.append(",").append(productList.get(i).getId());
+        }
+        ids.deleteCharAt(0);
+//        Log.e("<<<场景下商品id", ids.toString());
+        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 3 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean netProductBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    netProductBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
+                    dialog.dismiss();
+                    sceneProductList.clear();
+                    sceneProductList.addAll(netProductBean.getData().getRows());
+                    sceneProductAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+//        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", ids.toString(), null, null, null, handler);
     }
 
     //获取相近产品
@@ -859,16 +897,19 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
         container.setTranslationY(t / 3);
         if (container.getTranslationY() >= container.getMeasuredHeight() / 5) {
-            container.setTranslationY(container.getMeasuredHeight() / 5);
+            container.setTranslationY(container.getMeasuredHeight() / 5+t-container.getMeasuredHeight()*3/5);
         }
         if (container.getTranslationY() <= 0) {
             container.setTranslationY(0);
         }
-        if (t > oldt) {
+        if (t > oldt + DensityUtils.dp2px(SceneDetailActivity.this, 25)) {
             titleRelative.setVisibility(View.GONE);
-        } else if (t < oldt) {
+        } else if (t < oldt - DensityUtils.dp2px(SceneDetailActivity.this, 25)) {
             titleRelative.setVisibility(View.VISIBLE);
         }
-        Log.e("<<<滑动", imgRelative.getBottom() + "," + scrollView.getTop() + "," + t + "," + scrollView.getScrollY());
+        if(t==0){
+            titleRelative.setVisibility(View.VISIBLE);
+        }
+//        Log.e("<<<滑动", imgRelative.getBottom() + "," + scrollView.getTop() + "," + t + "," + scrollView.getScrollY());
     }
 }

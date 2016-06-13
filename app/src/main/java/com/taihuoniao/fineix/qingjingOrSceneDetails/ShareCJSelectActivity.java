@@ -101,7 +101,11 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 //                imageView.setImageBitmap(blurImageAmeliorate(loadedImage));
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    blur(loadedImage, imageView, 20);
+                    try {
+                        blur(loadedImage, imageView, 20);
+                    } catch (Exception e) {
+                        imageView.setImageBitmap(loadedImage);
+                    }
                 } else {
                     imageView.setImageBitmap(loadedImage);
                 }
@@ -155,7 +159,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void blur(Bitmap bkg, View view, float radius) {
+    private void blur(Bitmap bkg, View view, float radius) throws Exception {
         Bitmap overlay = Bitmap.createBitmap(bkg.getWidth(), bkg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
         canvas.drawBitmap(bkg, -view.getLeft(), -view.getTop(), null);

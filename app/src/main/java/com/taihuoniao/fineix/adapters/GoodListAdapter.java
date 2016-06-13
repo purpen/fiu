@@ -81,7 +81,17 @@ public class GoodListAdapter extends BaseAdapter {
             if (list.get(position).getBanner_asset().size() > 0) {
                 holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
                 if (list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) {
-                    holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 + 1);
+                    switch (list.get(position).getBanner_asset().size()) {
+                        case 2:
+                            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
+                            break;
+                        case 4:
+                            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 + 2);
+                            break;
+                        default:
+                            holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 + 1);
+                            break;
+                    }
                 } else {
                     holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
                 }

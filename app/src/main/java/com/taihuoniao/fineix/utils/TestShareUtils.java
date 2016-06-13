@@ -32,14 +32,15 @@ public class TestShareUtils {
     static FrameLayout frameLayout;
     static TextView sceneTitle;
     static TextView desTv;
+    static ImageView addImg;
     static ImageView fiuImg;
     static TextView fiuTv;
-    static DisplayImageOptions options500_500,options750_1334;
+    static DisplayImageOptions options500_500, options750_1334;
     static int layout;
     static double bi = 1;
 
     //根据position动态改变控件的位置
-    public static View selectStyle(Context context1, int position, SceneDetails sceneDetails, double b) {
+    public static View selectStyle(final Context context1, int position, final SceneDetails sceneDetails, double b) {
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -60,7 +61,7 @@ public class TestShareUtils {
         View view = View.inflate(context, layout, null);
 //        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         img = (ImageView) view.findViewById(R.id.activity_share_img);
-        ImageLoader.getInstance().displayImage(sceneDetails.getCover_url(),img,options750_1334);
+        ImageLoader.getInstance().displayImage(sceneDetails.getCover_url(), img, options750_1334);
         userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);
@@ -73,6 +74,7 @@ public class TestShareUtils {
         frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
         sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
         desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
         fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
         fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
         if (position == 2 || position == 3) {
@@ -84,6 +86,20 @@ public class TestShareUtils {
         locationTv.setText(sceneDetails.getAddress());
         sceneTitle.setText(sceneDetails.getTitle());
         desTv.setText(sceneDetails.getDes());
+//        SpannableString spannableString = new SpannableString(desTv.getText().toString());
+//        ImageSpan imageSpan = new ImageSpan(ContextCompat.getDrawable(context1,R.mipmap.share_des_add));
+//        spannableString.setSpan(imageSpan, desTv.getText().toString().length() - 1, desTv.getText().toString().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//        desTv.setText(spannableString);
+        desTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (desTv.getLineCount() > 2) {
+                    addImg.setVisibility(View.VISIBLE);
+                } else {
+                    addImg.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         selectTitleSize(position);
         return view;
     }

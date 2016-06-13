@@ -17,16 +17,13 @@ import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.VideoActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -211,13 +208,14 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_index_subs:
-                if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
-                    MainApplication.which_activity = DataConstants.ElseActivity;
-                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
-                    return;
-                }
-                startActivity(new Intent(getActivity(), SubsCJListActivity.class));
+                startActivity(new Intent(getActivity(), VideoActivity.class));
+//                if (!LoginInfo.isUserLogin()) {
+////                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+//                    MainApplication.which_activity = DataConstants.ElseActivity;
+//                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
+//                    return;
+//                }
+//                startActivity(new Intent(getActivity(), SubsCJListActivity.class));
                 break;
             case R.id.fragment_index_search:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);

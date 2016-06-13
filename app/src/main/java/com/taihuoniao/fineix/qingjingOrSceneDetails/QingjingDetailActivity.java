@@ -512,8 +512,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
         Log.e("<<<", "没进来" + getScrollY());
         backgroundImg.setTranslationY(getScrollY() / 3);
-        if (backgroundImg.getTranslationY() >= backgroundImg.getMeasuredHeight() / 4) {
-            backgroundImg.setTranslationY(backgroundImg.getMeasuredHeight() / 4);
+        if (backgroundImg.getTranslationY() >= backgroundImg.getMeasuredHeight() / 5) {
+            backgroundImg.setTranslationY(backgroundImg.getMeasuredHeight() / 5 + getScrollY() - backgroundImg.getMeasuredHeight() * 3 / 5);
         }
         if (backgroundImg.getTranslationY() <= 0) {
             backgroundImg.setTranslationY(0);

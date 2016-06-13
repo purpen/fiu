@@ -93,6 +93,8 @@
                 android:layout_toLeftOf="@id/activity_share_select_scene_des_cancelimg"
                 android:gravity="center_vertical"
                 android:paddingBottom="14dp"
+                android:maxLines="3"
+                android:ellipsize="end"
                 android:paddingTop="14dp"
                 android:textColor="#cccccc"
                 android:textSize="11sp"/>

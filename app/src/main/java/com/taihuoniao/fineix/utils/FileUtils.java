@@ -36,7 +36,7 @@ public class FileUtils {
                 public boolean accept(File pathname) {
                     String filePath = pathname.getAbsolutePath();
                     return (filePath.endsWith(".png") || filePath.endsWith(".jpg") || filePath
-                            .endsWith(".jepg"));
+                            .endsWith(".jpeg"));
                 }
             })) {
                 photos.add(new PhotoItem(file.getAbsolutePath(), file.lastModified()));

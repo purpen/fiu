@@ -36,6 +36,8 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -68,6 +70,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     TextView name;
     @Bind(R.id.activity_goods_detail_goods_price)
     TextView price;
+    @Bind(R.id.activity_goods_detail_tags_linear)
+    LinearLayout tagsLinear;
     @Bind(R.id.activity_gooddetails_brandlinear)
     LinearLayout brandLinear;
     @Bind(R.id.activity_goods_detail_brand_relative)
@@ -76,8 +80,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     RoundedImageView brandImg;
     @Bind(R.id.activity_goods_detail_brand_title)
     TextView brandTitle;
-    //        @Bind(R.id.activity_goods_detail_product_des)
-//    TextView productDes;
+    @Bind(R.id.activity_goods_detail_product_des)
+    TextView productDes;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
     RecyclerView changjingRecycler;
     @Bind(R.id.activity_goods_detail_recommend_recycler)
@@ -291,7 +295,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             brandLinear.setVisibility(View.GONE);
                             brandRelative.setVisibility(View.GONE);
                         }
-//                        productDes.setText(netGoodsDetailBean.getData().getSummary());
+                        addLabelToLinear(netGoodsDetailBean.getData().getTags());
+                        productDes.setText(netGoodsDetailBean.getData().getSummary());
                         attrbute = netGoodsDetailBean.getData().getAttrbute();
                         // 1.官网；2.淘宝；3.天猫；4.京东
                         switch (attrbute) {
@@ -334,6 +339,29 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
             }
         }
     };
+    private void addLabelToLinear(final List<String> tagsTitleList) {
+        for (int i = 0; i < tagsTitleList.size(); i++) {
+            View view = View.inflate(GoodsDetailActivity.this, R.layout.view_horizontal_label_item, null);
+            TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
+            textView.setText(tagsTitleList.get(i));
+            view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+            lp.rightMargin = DensityUtils.dp2px(GoodsDetailActivity.this, 10);
+            view.setLayoutParams(lp);
+//            view.setTag(tagsList.get(i));
+            final int finalI = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(GoodsDetailActivity.this, SearchActivity.class);
+                    intent.putExtra("q", tagsTitleList.get(finalI));
+                    intent.putExtra("t", "10");
+                    startActivity(intent);
+                }
+            });
+            tagsLinear.addView(view);
+        }
+    }
 
     @Override
     protected void refreshUI(List<String> list) {
