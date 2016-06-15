@@ -32,6 +32,9 @@ android {
             minifyEnabled false
             zipAlignEnabled true
         }
+        debug {
+            zipAlignEnabled false
+        }
     }
 }
 dependencies {

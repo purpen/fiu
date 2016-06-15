@@ -1281,4 +1281,17 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
+    /**
+     * 获取专题信息
+     *
+     * @param id
+     * @param callBack
+     */
+    public static void getSubjectData(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_subject/view";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 }

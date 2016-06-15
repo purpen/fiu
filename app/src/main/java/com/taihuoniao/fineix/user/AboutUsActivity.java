@@ -59,7 +59,7 @@ public class AboutUsActivity extends BaseActivity {
             }
         });
         WebSettings webSettings = mWebAbout.getSettings();
-        webSettings.setJavaScriptEnabled(false);
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
 

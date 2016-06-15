@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -141,6 +142,11 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                         case 10:    //情景
                             intent = new Intent(activity, QingjingDetailActivity.class);
                             intent.putExtra("id",banner.web_url);
+                            activity.startActivity(intent);
+                        case 11:    //专题
+                            intent = new Intent(activity, SubjectActivity.class);
+                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
+                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
                             activity.startActivity(intent);
                             break;
                     }

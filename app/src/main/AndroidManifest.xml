@@ -287,7 +287,10 @@
             android:name=".user.MessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-
+        <activity
+            android:name=".user.SubjectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".user.FeedbackActivity"
             android:screenOrientation="portrait"
