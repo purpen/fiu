@@ -311,7 +311,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             }
         });
 //                scene_id = netScene.getData().getScene_id();
-        selectList = new ArrayList<UsedLabelBean>();
+        selectList = new ArrayList<>();
         for (int i = 0; i < qingjingDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(qingjingDetails.getData().getTags().get(i) + "", qingjingDetails.getData().getTag_titles().get(i));
             selectList.add(usedLabelBean);
@@ -375,7 +375,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             }
         });
         scene_id = sceneDetails.getData().getScene_id();
-        selectList = new ArrayList<UsedLabelBean>();
+        selectList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(sceneDetails.getData().getTags().get(i) + "", sceneDetails.getData().getTag_titles().get(i));
             selectList.add(usedLabelBean);
@@ -384,7 +384,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             UsedLabelBean labelBean = selectList.get(i);
             addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
         }
-        MainApplication.tagInfoList = new ArrayList<TagItem>();
+        MainApplication.tagInfoList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getProduct().size(); i++) {
             TagItem tagItem = new TagItem();
             tagItem.setId(sceneDetails.getData().getProduct().get(i).getId());

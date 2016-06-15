@@ -104,11 +104,18 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                     @Override
                     public void onClick(View v) {
                         if (TextUtils.isEmpty(UserGuideActivity.fromPage)) {
-                            activity.startActivity(new Intent(activity, MainActivity.class));
+                            ((UserGuideActivity) activity).initVideoRes();
+                            UserGuideActivity.setOnVideoCompleteListener(new UserGuideActivity.OnVideoCompleteListener() {
+                                @Override
+                                public void execute() {
+                                    activity.startActivity(new Intent(activity, MainActivity.class));
+                                    activity.finish();
+                                }
+                            });
                         } else {
                             UserGuideActivity.fromPage = null;
+                            activity.finish();
                         }
-                        activity.finish();
                     }
                 });
             }

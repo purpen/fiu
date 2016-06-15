@@ -74,7 +74,7 @@ public class TDevice {
             Integer integer = 0xf & MainApplication.getContext()
                     .getResources().getConfiguration().screenLayout;
             _loadFactor = integer;
-            _loadFactor = Math.max(integer.intValue(), 1);
+            _loadFactor = Math.max(integer, 1);
         }
         return _loadFactor;
     }

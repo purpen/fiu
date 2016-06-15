@@ -21,7 +21,9 @@
 -keep class vi.com.** {*;}
 -dontwarn com.baidu.**
 ##---------------End: proguard configuration for baidumap ----------
-
+-keep class android.**{*;}
+-dontnote android.net.http.**
+-dontnote org.apache.http.**
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
@@ -81,3 +83,35 @@
 -keep class com.tencent.mm.sdk.** {*;}
 
 -keep class com.google.zxing.** {*;}
+
+
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+-keepclasseswithmembernames class * {  # 保持 native 方法不被混淆
+    native <methods>;
+}
+-keepclasseswithmembers class * {   # 保持自定义控件类不被混淆
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+-keepclasseswithmembers class * {# 保持自定义控件类不被混淆
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers enum * {     # 保持枚举 enum 类不被混淆
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class com.taihuoniao.fineix.view.wheelview.** {*;}
+-keep class jp.co.cyberagent.android.gpuimage.** {*;}
+-keep class com.handmark.pulltorefresh.library.** {*;}
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+-dontwarn android.net.**
+
+-ignorewarnings
