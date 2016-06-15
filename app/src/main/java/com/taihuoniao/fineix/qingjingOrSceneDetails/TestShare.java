@@ -23,7 +23,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.ShareCJRecyclerAdapter;
 import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -72,7 +72,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private int[] shareImgs = {R.mipmap.share1, R.mipmap.share4, R.mipmap.share5, R.mipmap.share7};
     private List<ShareDemoBean> shareList;
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
-    private SceneDetails netScene;
+    private SceneDetailsBean netScene;
 
     public TestShare() {
         super(R.layout.activity_test_share);
@@ -166,7 +166,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             dialog.dismiss();
             switch (msg.what) {
                 case DataConstants.SCENE_DETAILS:
-                    SceneDetails netScene = (SceneDetails) msg.obj;
+                    SceneDetailsBean netScene = (SceneDetailsBean) msg.obj;
                     if (netScene.isSuccess()) {
                         TestShare.this.netScene = netScene;
                         setImgParams();
@@ -218,7 +218,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         cLp.height = relativeLayout.getHeight();
         cLp.width = cLp.height * 9 / 16;
         container.setLayoutParams(cLp);
-        ImageLoader.getInstance().loadImage(netScene.getCover_url(), new ImageLoadingListener() {
+        ImageLoader.getInstance().loadImage(netScene.getData().getCover_url(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -281,8 +281,8 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     }
                     return;
                 }
-                if (netScene.getOid() != null) {
-                    DataPaser.commitShareCJ(netScene.getOid(), handler);
+                if (netScene.getData().getOid() != null) {
+                    DataPaser.commitShareCJ(netScene.getData().getOid(), handler);
                 }
                 PopupWindowUtil.show(TestShare.this, initPop());
                 break;
@@ -317,7 +317,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         }
         switch (resultCode) {
             case 2:
-                netScene = (SceneDetails) data.getSerializableExtra("scene");
+                netScene = (SceneDetailsBean) data.getSerializableExtra("scene");
                 click(currentPosition);
                 break;
         }
@@ -344,7 +344,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         //启用绘图缓存
         view.setDrawingCacheEnabled(true);
         ImageView img = (ImageView) view.findViewById(R.id.activity_share_img);
-        ImageLoader.getInstance().displayImage(netScene.getCover_url(), img, options750_1334);
+        ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), img, options750_1334);
         RoundedImageView userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         RelativeLayout userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         TextView userName = (TextView) view.findViewById(R.id.activity_share_user_name);
@@ -356,23 +356,34 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         TextView line = (TextView) view.findViewById(R.id.activity_share_scene_line);
         FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
         TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
-        TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        final TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
+        final ImageView addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
         ImageView fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
         TextView fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
         if (currentPosition == 2 || currentPosition == 3) {
             userName.setTextColor(getResources().getColor(R.color.black));
-            userInfo.setTextColor(getResources().getColor(R.color.black));
-            locationTv.setTextColor(getResources().getColor(R.color.black));
+            userInfo.setTextColor(getResources().getColor(R.color.black969696));
+            locationTv.setTextColor(getResources().getColor(R.color.black969696));
             locationImg.setImageResource(R.mipmap.location_height_22px);
-            desTv.setTextColor(getResources().getColor(R.color.black));
-            line.setTextColor(getResources().getColor(R.color.black));
+            desTv.setTextColor(getResources().getColor(R.color.black969696));
+            line.setTextColor(getResources().getColor(R.color.black969696));
         }
-        ImageLoader.getInstance().displayImage(netScene.getUser_info().getAvatar_url(), userHeadImg, options500_500);
-        userName.setText(netScene.getUser_info().getNickname());
-        userInfo.setText(netScene.getUser_info().getSummary());
-        locationTv.setText(netScene.getAddress());
-        sceneTitle.setText(netScene.getTitle());
-        desTv.setText(netScene.getDes());
+        ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), userHeadImg, options500_500);
+        userName.setText(netScene.getData().getUser_info().getNickname());
+        userInfo.setText(netScene.getData().getUser_info().getSummary());
+        locationTv.setText(netScene.getData().getAddress());
+        sceneTitle.setText(netScene.getData().getTitle());
+        desTv.setText(netScene.getData().getDes());
+        desTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (desTv.getLineCount() > 2) {
+                    addImg.setVisibility(View.VISIBLE);
+                } else {
+                    addImg.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21, 1);
 
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null

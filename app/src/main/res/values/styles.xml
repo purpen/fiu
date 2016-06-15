@@ -199,4 +199,10 @@
     <style name="AnimActivityTheme" parent="@style/AppTheme">
         <item name="android:windowAnimationStyle">@style/FeelyouWindowAnimTheme</item>
     </style>
+    <style name="text_shadow">
+        <item name="android:shadowColor">#ff000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
 </resources>

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -71,6 +72,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
+        Log.e("<<<加载图片的路径",photoList.get(position).getImageUri());
         ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img, options);
         if (photoList.get(position).isChecked()) {
             hold.tv.setBackgroundResource(R.drawable.yellow_album_ground);

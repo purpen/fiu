@@ -26,7 +26,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
@@ -44,7 +44,7 @@ import butterknife.Bind;
  */
 public class ShareCJSelectActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     //上个界面传递过来的数据
-    private SceneDetails scene;
+    private SceneDetailsBean scene;
     @Bind(R.id.activity_share_select_titlelayout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_share_select_search)
@@ -79,14 +79,14 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         titleLayout.setTitleVisible(false);
         titleLayout.setBackImgVisible(false);
         titleLayout.setRightTv(R.string.complete, getResources().getColor(R.color.white), this);
-        scene = (SceneDetails) getIntent().getSerializableExtra("scene");
+        scene = (SceneDetailsBean) getIntent().getSerializableExtra("scene");
         if (scene == null) {
             ToastUtils.showError("数据异常，请重试");
 //            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
 //            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
             finish();
         }
-        ImageLoader.getInstance().loadImage(scene.getCover_url(), options, new ImageLoadingListener() {
+        ImageLoader.getInstance().loadImage(scene.getData().getCover_url(), options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -101,7 +101,11 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 //                imageView.setImageBitmap(blurImageAmeliorate(loadedImage));
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    blur(loadedImage, imageView, 20);
+                    try {
+                        blur(loadedImage, imageView, 20);
+                    } catch (Exception e) {
+                        imageView.setImageBitmap(loadedImage);
+                    }
                 } else {
                     imageView.setImageBitmap(loadedImage);
                 }
@@ -114,8 +118,8 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         });
 //        ImageLoader.getInstance().displayImage(scene.getCover_url(), imageView);
 //        imageView.setImageBitmap(MainApplication.shareBitmap);
-        titleTv.setText(scene.getTitle());
-        desTv.setText(scene.getDes());
+        titleTv.setText(scene.getData().getTitle());
+        desTv.setText(scene.getData().getDes());
         dialog = new WaittingDialog(ShareCJSelectActivity.this);
         listView.setOnScrollListener(this);
 //        listView = pullToRefreshView.getRefreshableView();
@@ -143,8 +147,8 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     protected void requestNet() {
         dialog.show();
         StringBuilder tags = new StringBuilder();
-        for (int i = 0; i < scene.getTag_titles().size(); i++) {
-            tags.append(",").append(scene.getTag_titles().get(i));
+        for (int i = 0; i < scene.getData().getTag_titles().size(); i++) {
+            tags.append(",").append(scene.getData().getTag_titles().get(i));
         }
         if (tags.length() <= 1) {
             return;
@@ -155,7 +159,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void blur(Bitmap bkg, View view, float radius) {
+    private void blur(Bitmap bkg, View view, float radius) throws Exception {
         Bitmap overlay = Bitmap.createBitmap(bkg.getWidth(), bkg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
         canvas.drawBitmap(bkg, -view.getLeft(), -view.getTop(), null);
@@ -200,7 +204,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         }
         switch (resultCode) {
             case 222:
-                SceneDetails resultScene = (SceneDetails) data.getSerializableExtra("scene");
+                SceneDetailsBean resultScene = (SceneDetailsBean) data.getSerializableExtra("scene");
                 scene = resultScene;
                 Intent intent = new Intent();
                 intent.putExtra("scene", scene);
@@ -258,9 +262,9 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 //        titleTv.setText(searchItem.getTitle());
 //        desTv.setText(searchItem.getDes());
         isSelect = true;
-        scene.setOid(searchItem.getOid());
-        scene.setTitle(searchItem.getTitle());
-        scene.setDes(searchItem.getDes());
+        scene.getData().setOid(searchItem.getOid());
+        scene.getData().setTitle(searchItem.getTitle());
+        scene.getData().setDes(searchItem.getDes());
         Intent intent = new Intent();
         intent.putExtra("scene", scene);
         setResult(2, intent);

@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.view.pulltorefresh;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class LoadingLayout extends FrameLayout {
     private String releaseLabel;//释放刷新
 
     private final Animation rotateAnimation, resetRotateAnimation;
+    private final AnimationDrawable animationDrawable;
 
     public LoadingLayout(Context context, final int mode, String releaseLabel,
                          String pullLabel, String refreshingLabel) {
@@ -79,7 +81,14 @@ public class LoadingLayout extends FrameLayout {
                 break;
         }
 //        animImg.setBackgroundResource(R.anim.pull_to_refresh_anim);
-        AnimationDrawable animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.drawable.pull_to_refresh);
+//        animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.anim.pull_to_refresh_anim);
+        animationDrawable = new AnimationDrawable();
+        for(int i=0;i<48;i++){
+            int resID = getResources().getIdentifier("refresh_0" + i, "mipmap", "com.taihuoniao.fineix");
+            Drawable image = ContextCompat.getDrawable(getContext(), resID);
+            animationDrawable.addFrame(image,80);
+        }
+        animationDrawable.setOneShot(false);
         animImg.setImageDrawable(animationDrawable);
     }
 
@@ -90,14 +99,17 @@ public class LoadingLayout extends FrameLayout {
 
     //首页下拉动画的改变
     public void animLayout() {
-//        normalLayout.setVisibility(GONE);
-//        animImg.setVisibility(VISIBLE);
+        normalLayout.setVisibility(GONE);
+        animImg.setVisibility(VISIBLE);
     }
 
     public void reset() {
         headerText.setText(pullLabel);
         headerImage.setVisibility(View.VISIBLE);
         headerProgress.setVisibility(View.GONE);
+        if (animationDrawable.isRunning()) {
+            animationDrawable.stop();
+        }
     }
 
     public void releaseToRefresh() {
@@ -115,6 +127,14 @@ public class LoadingLayout extends FrameLayout {
         headerImage.clearAnimation();
         headerImage.setVisibility(View.INVISIBLE);
         headerProgress.setVisibility(View.VISIBLE);
+        animImg.setImageDrawable(animationDrawable);
+        animationDrawable.start();
+    }
+    public void setAnimImg(int resid){
+        animImg.setImageResource(resid);
+    }
+    public void setAnimImg(Drawable drawable){
+        animImg.setImageDrawable(drawable);
     }
 
     public void setRefreshingLabel(String refreshingLabel) {

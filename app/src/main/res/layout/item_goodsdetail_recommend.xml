@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:background="@drawable/grey_no_corner"
               android:gravity="center_horizontal"
               android:orientation="vertical"
               android:paddingLeft="15dp"
               android:paddingRight="15dp">
 
-    <ImageView
-        android:id="@+id/item_goodsdetail_recommend_img"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:scaleType="centerCrop"
-        />
+    <RelativeLayout
+        android:layout_width="131dp"
+        android:layout_height="131dp"
+        android:background="@drawable/grey_no_corner">
+
+        <ImageView
+            android:id="@+id/item_goodsdetail_recommend_img"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            />
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/item_goodsdetail_recommend_title"

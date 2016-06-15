@@ -174,7 +174,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 new String[]{"1"}, //查询条件中问号对应的值
                 MediaStore.Images.Media.DATE_ADDED + " desc");
         Map<String, AlbumBean> galleries = new HashMap<>();
-        if(cursor==null){
+        if (cursor == null) {
             return galleries;
         }
         cursor.moveToFirst();
@@ -193,7 +193,10 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 }
                 galleries.put(sub, new AlbumBean(name, sub, new ArrayList<PhotoItem>()));
             }
-            galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
+//            Log.e("<<<图片路径", data);
+//            if (data.endsWith(".png") || data.endsWith(".jpg") || data.endsWith(".jpeg")) {
+                galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
+//            }
         }
         //系统相机照片
         ArrayList<PhotoItem> sysPhotos = FileUtils.findPicsInDir(MainApplication.systemPhotoPath);

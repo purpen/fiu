@@ -211,6 +211,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_index_subs:
+//                startActivity(new Intent(getActivity(), VideoActivity.class));
                 if (!LoginInfo.isUserLogin()) {
 //                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;

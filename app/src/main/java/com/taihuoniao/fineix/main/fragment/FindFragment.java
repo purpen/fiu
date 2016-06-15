@@ -143,6 +143,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
 //            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
 //        }
+        pullToRefreshView.animLayout();
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -303,7 +304,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             switch (msg.what) {
                 case DataConstants.FIU_USER:
 //                    dialog.dismiss();
-                    pullToRefreshView.onRefreshComplete();
+//                    pullToRefreshView.onRefreshComplete();
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
                     netUsers = netUser;
                     if (netUser.isSuccess()) {
@@ -337,7 +338,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     break;
                 case DataConstants.QINGJING_LIST:
 //                    dialog.dismiss();
-                    pullToRefreshView.onRefreshComplete();
+//                    pullToRefreshView.onRefreshComplete();
                     QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
                     if (netQingjingListBean.isSuccess()) {
                         qingjingList.clear();
@@ -350,7 +351,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     }
                     break;
                 case DataConstants.CJ_HOTLABEL:
-                    pullToRefreshView.onRefreshComplete();
+//                    pullToRefreshView.onRefreshComplete();
                     CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
                     if(netHot.isSuccess()){
                         hotLabelList.clear();

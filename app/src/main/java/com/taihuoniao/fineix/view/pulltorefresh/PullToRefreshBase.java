@@ -3,8 +3,11 @@ package com.taihuoniao.fineix.view.pulltorefresh;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -14,6 +17,7 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainApplication;
 
 
 public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
@@ -322,6 +326,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 
             case MotionEvent.ACTION_MOVE: {
                 if (isBeingDragged) {
+                    Log.e("<<<下拉", "内部" + getPaddingTop() + "," + getScrollY());
+                    double bi = (double) (-getScrollY()) / (MainApplication.getContext().getScreenHeight() / 2);
+                    int pngId = (int) (bi * 47);
+                    int resID = getResources().getIdentifier("refresh_0" + pngId, "mipmap", "com.taihuoniao.fineix");
+                    Drawable image = ContextCompat.getDrawable(getContext(), resID);
+                    headerLayout.setAnimImg(image);
                     lastMotionY = event.getY();
                     this.pullEvent();
                     return true;
@@ -575,7 +585,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
                     MODE_PULL_DOWN_TO_REFRESH, releaseLabel, pullLabel,
                     refreshingLabel);
             addView(headerLayout, 0, new LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             measureView(headerLayout);
             headerHeight = headerLayout.getMeasuredHeight();
@@ -584,7 +594,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
             footerLayout = new LoadingLayout(context, MODE_PULL_UP_TO_REFRESH,
                     releaseLabel, pullLabel, refreshingLabel);
             addView(footerLayout, new LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             measureView(footerLayout);
             headerHeight = footerLayout.getMeasuredHeight();

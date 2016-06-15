@@ -125,27 +125,45 @@
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/share_erweima"/>
 
-            <TextView
-                android:id="@+id/activity_share_scene_des"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/activity_share_scene_des_relative"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/activity_share_location_linear"
-                android:layout_marginEnd="11dp"
                 android:layout_marginRight="11dp"
-                android:layout_marginTop="7dp"
                 android:layout_toLeftOf="@id/erweima"
-                android:layout_toStartOf="@id/erweima"
-                android:maxLines="2"
-                android:text="a手里的看法加拉塞克大家flak涉及到法律框架啊手动阀手动阀手动阀"
-                android:textColor="@color/white"
-                android:textSize="7sp"/>
+                android:layout_toStartOf="@id/erweima">
+
+                <ImageView
+                    android:id="@+id/activity_share_scene_add_img"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_alignBottom="@id/activity_share_scene_des"
+                    android:layout_alignParentRight="true"
+                    android:visibility="visible"
+                    android:src="@mipmap/share_des_add"/>
+
+                <TextView
+                    android:id="@+id/activity_share_scene_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_toLeftOf="@id/activity_share_scene_add_img"
+                    android:maxLines="2"
+                    android:text="a手里的看法加拉塞克大家flak涉及到法律框架啊手动阀手动啊士大夫士大夫发射点发啊手动阀手动阀手动阀啊士大夫发射点发射点发啊手动阀手动阀手动阀啊手动阀手动阀手动阀手动阀阀手动阀"
+                    android:textColor="@color/white"
+                    android:textSize="7sp"/>
+
+
+            </RelativeLayout>
+
 
             <ImageView
                 android:id="@+id/logo_white"
                 android:layout_width="13dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/activity_share_scene_line"
-                android:layout_below="@id/activity_share_scene_des"
+                android:layout_below="@id/activity_share_scene_des_relative"
                 android:layout_marginTop="7dp"
                 android:src="@mipmap/logo_white"/>
 
@@ -153,7 +171,7 @@
                 android:id="@+id/activity_share_scene_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/activity_share_scene_des"
+                android:layout_below="@id/activity_share_scene_des_relative"
                 android:layout_marginEnd="11dp"
                 android:layout_marginRight="11dp"
                 android:layout_marginTop="7dp"

@@ -181,32 +181,32 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
                 gpuImageView.setFilter(filter);
                 GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
                 switch (position) {
-                    case 1:
-                        filterAdjuster.adjust(97);
+                    case 10:
+                        filterAdjuster.adjust(97);//摩卡
                         break;
-                    case 2:
-                        filterAdjuster.adjust(45);
-                        break;
-                    case 3:
-                        filterAdjuster.adjust(0);
+                    case 4:
+                        filterAdjuster.adjust(45);//暮光
                         break;
                     case 5:
-                        filterAdjuster.adjust(40);
+                        filterAdjuster.adjust(0);//候鸟
                         break;
                     case 6:
-                        filterAdjuster.adjust(100);
+                        filterAdjuster.adjust(40);//夏日
                         break;
-                    case 7:
-                        filterAdjuster.adjust(25);
+                    case 1:
+                        filterAdjuster.adjust(100);//都市
                         break;
                     case 9:
-                        filterAdjuster.adjust(55);
-                        break;
-                    case 10:
-                        filterAdjuster.adjust(53);
+                        filterAdjuster.adjust(25);//佳人
                         break;
                     case 11:
-                        filterAdjuster.adjust(60);
+                        filterAdjuster.adjust(55);//流年
+                        break;
+                    case 3:
+                        filterAdjuster.adjust(53);//日光
+                        break;
+                    case 7:
+                        filterAdjuster.adjust(60);//午茶
                         break;
                 }
                 gpuImageView.requestRender();
