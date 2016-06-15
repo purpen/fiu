@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 /**
@@ -40,7 +40,7 @@ public class TestShareUtils {
     static double bi = 1;
 
     //根据position动态改变控件的位置
-    public static View selectStyle(final Context context1, int position, final SceneDetails sceneDetails, double b) {
+    public static View selectStyle(final Context context1, int position, final SceneDetailsBean sceneDetails, double b) {
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -61,7 +61,7 @@ public class TestShareUtils {
         View view = View.inflate(context, layout, null);
 //        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         img = (ImageView) view.findViewById(R.id.activity_share_img);
-        ImageLoader.getInstance().displayImage(sceneDetails.getCover_url(), img, options750_1334);
+        ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), img, options750_1334);
         userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
         userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);
@@ -80,12 +80,12 @@ public class TestShareUtils {
         if (position == 2 || position == 3) {
             setSize(view, position);
         }
-        ImageLoader.getInstance().displayImage(sceneDetails.getUser_info().getAvatar_url(), userHeadImg, options500_500);
-        userName.setText(sceneDetails.getUser_info().getNickname());
-        userInfo.setText(sceneDetails.getUser_info().getSummary());
-        locationTv.setText(sceneDetails.getAddress());
-        sceneTitle.setText(sceneDetails.getTitle());
-        desTv.setText(sceneDetails.getDes());
+        ImageLoader.getInstance().displayImage(sceneDetails.getData().getUser_info().getAvatar_url(), userHeadImg, options500_500);
+        userName.setText(sceneDetails.getData().getUser_info().getNickname());
+        userInfo.setText(sceneDetails.getData().getUser_info().getSummary());
+        locationTv.setText(sceneDetails.getData().getAddress());
+        sceneTitle.setText(sceneDetails.getData().getTitle());
+        desTv.setText(sceneDetails.getData().getDes());
 //        SpannableString spannableString = new SpannableString(desTv.getText().toString());
 //        ImageSpan imageSpan = new ImageSpan(ContextCompat.getDrawable(context1,R.mipmap.share_des_add));
 //        spannableString.setSpan(imageSpan, desTv.getText().toString().length() - 1, desTv.getText().toString().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);

@@ -6,18 +6,24 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +48,7 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByQJActivity;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.scene.CreateSceneActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -79,6 +86,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView userInfo;
     private TextView subscriptionCount;
     private TextView desTv;
+    private ImageView more;
     private LinearLayout labelLinear;
     private RelativeLayout headRelative;
     private TextView viewCount;
@@ -117,14 +125,19 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private int lastTotalItem = -1;
     //当前用户是否已经订阅
     private int is_subscript = 0;
+    public static QingjingDetailActivity instance;
 
     public QingjingDetailActivity() {
         super(0);
     }
 
+    private View activity_view;
+
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_qingjingdetail);
+        instance = QingjingDetailActivity.this;
+        activity_view = View.inflate(this, R.layout.activity_qingjingdetail, null);
+        setContentView(activity_view);
         backImg = (ImageView) findViewById(R.id.activity_qingjingdetail_back);
         createImg = (ImageView) findViewById(R.id.activity_qingjingdetail_create);
         changjingListView = (ListView) findViewById(R.id.activity_qingjingdetail_listview);
@@ -147,6 +160,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         subscriptionCount = (TextView) header.findViewById(R.id.activity_qingjingdetail_subsnum);
         headRelative = (RelativeLayout) header.findViewById(R.id.header_qingjing_detail_head_relative);
         desTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_des);
+        more = (ImageView) header.findViewById(R.id.activity_qingjingdetail_more);
         labelLinear = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_labellinear);
         userHeadGrid = (GridViewForScrollView) header.findViewById(R.id.activity_qingjingdetail_grid);
         moreUser = (TextView) header.findViewById(R.id.activity_qingjingdetail_more_user);
@@ -168,6 +182,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
         dialog = new WaittingDialog(QingjingDetailActivity.this);
+        initPopupWindow();
     }
 
     @Override
@@ -207,6 +222,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         changjingListView.setOnScrollListener(this);
 //        changjingListView.setOnTouchListener(this);
         changjingListView.setOnItemClickListener(this);
+        more.setOnClickListener(this);
 //        subLinear.setOnClickListener(this);
         subscriptionCount.setOnClickListener(this);
         IntentFilter filter = new IntentFilter();
@@ -323,8 +339,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());
-                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0), netQingjingDetailBean.getData()
-                                .getLocation().getCoordinates().get(1)};
+                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0)+"", netQingjingDetailBean.getData()
+                                .getLocation().getCoordinates().get(1)+""};
                         //添加标签
                         addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
                         is_subscript = netQingjingDetailBean.getData().getIs_subscript();
@@ -349,6 +365,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                             moreUser.setVisibility(View.VISIBLE);
                         } else {
                             moreUser.setVisibility(View.GONE);
+                        }
+                        if (netQingjingDetailBean.getCurrent_user_id() != null && netQingjingDetailBean.getCurrent_user_id().equals(netQingjingDetailBean.getData().getUser_info().getUser_id())) {
+                            more.setVisibility(View.VISIBLE);
                         }
                     } else {
                         ToastUtils.showError(netQingjingDetailBean.getMessage());
@@ -415,6 +434,25 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.popup_scene_detail_more_bianji_linear:
+                if (!LoginInfo.isUserLogin()) {
+//                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+                    MainApplication.which_activity = DataConstants.QingjingDetailActivity;
+                    LoginCompleteUtils.id = id;
+                    startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
+                    return;
+                }
+                Intent intent5 = new Intent(QingjingDetailActivity.this, CreateSceneActivity.class);
+                MainApplication.tag = 2;
+                intent5.putExtra(QingjingDetailActivity.class.getSimpleName(), id);
+                startActivity(intent5);
+                break;
+            case R.id.popup_scene_detail_more_cancel:
+                popupWindow.dismiss();
+                break;
+            case R.id.activity_qingjingdetail_more:
+                showPopup();
+                break;
             case R.id.activity_qingjingdetail_addresslinear:
                 if (locaiton == null) {
                     dialog.show();
@@ -475,6 +513,60 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 break;
         }
     }
+
+    private PopupWindow popupWindow;
+
+    private void initPopupWindow() {
+        WindowManager windowManager = QingjingDetailActivity.this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(QingjingDetailActivity.this, R.layout.popup_scene_details_more, null);
+        TextView pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
+        TextView shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
+        LinearLayout bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
+        TextView jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        pinglunTv.setVisibility(View.GONE);
+        shareTv.setVisibility(View.GONE);
+        bianjiLinear.setVisibility(View.VISIBLE);
+        bianjiLinear.setOnClickListener(this);
+        jubaoTv.setVisibility(View.GONE);
+        cancelTv.setOnClickListener(this);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(QingjingDetailActivity.this,
+                R.color.white));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

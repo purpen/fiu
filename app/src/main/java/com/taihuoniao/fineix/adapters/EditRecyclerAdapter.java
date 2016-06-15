@@ -58,10 +58,10 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
 
         switch (filterList.getName(position)) {
             case "原图":
-                holder.imageView.setImageResource(R.mipmap.filter1);
+                holder.imageView.setImageResource(R.mipmap.yuantu);
                 break;
             case "摩卡":
-                holder.imageView.setImageResource(R.mipmap.filter2);
+                holder.imageView.setImageResource(R.mipmap.moka);
                 break;
             case "暮光":
                 holder.imageView.setImageResource(R.mipmap.muguang);
@@ -94,7 +94,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
                 holder.imageView.setImageResource(R.mipmap.wucha);
                 break;
             default:
-                holder.imageView.setImageResource(R.mipmap.filter1);
+                holder.imageView.setImageResource(R.mipmap.yuantu);
                 break;
         }
         holder.textView.setText(filterList.getName(position));

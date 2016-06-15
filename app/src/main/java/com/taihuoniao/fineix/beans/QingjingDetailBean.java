@@ -2,13 +2,21 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/25.
  */
-public class QingjingDetailBean extends NetBean {
+public class QingjingDetailBean extends NetBean implements Serializable {
     private Data data;
+
+    @Override
+    public String toString() {
+        return "QingjingDetailBean{" +
+                "data=" + data +
+                '}';
+    }
 
     public Data getData() {
         return data;
@@ -18,7 +26,7 @@ public class QingjingDetailBean extends NetBean {
         this.data = data;
     }
 
-    public static class Data {
+    public static class Data implements Serializable{
         private String _id;
         private String title;
         private String user_id;
@@ -40,6 +48,34 @@ public class QingjingDetailBean extends NetBean {
         private UserInfo user_info;
         private List<String> tag_titles;
         private int is_subscript;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "_id='" + _id + '\'' +
+                    ", title='" + title + '\'' +
+                    ", user_id='" + user_id + '\'' +
+                    ", des='" + des + '\'' +
+                    ", tags=" + tags +
+                    ", address='" + address + '\'' +
+                    ", used_count='" + used_count + '\'' +
+                    ", view_count='" + view_count + '\'' +
+                    ", subscription_count=" + subscription_count +
+                    ", love_count='" + love_count + '\'' +
+                    ", comment_count='" + comment_count + '\'' +
+                    ", is_check='" + is_check + '\'' +
+                    ", stick='" + stick + '\'' +
+                    ", status='" + status + '\'' +
+                    ", created_on='" + created_on + '\'' +
+                    ", updated_on='" + updated_on + '\'' +
+                    ", cover_url='" + cover_url + '\'' +
+                    ", created_at='" + created_at + '\'' +
+                    ", user_info=" + user_info +
+                    ", tag_titles=" + tag_titles +
+                    ", is_subscript=" + is_subscript +
+                    ", location=" + location +
+                    '}';
+        }
 
         public int getIs_subscript() {
             return is_subscript;
@@ -139,24 +175,42 @@ public class QingjingDetailBean extends NetBean {
         }
     }
 
-    public static class Location{
-        private List<String> coordinates;
+    public static class Location implements Serializable{
+        private List<Double> coordinates;
 
-        public List<String> getCoordinates() {
+        @Override
+        public String toString() {
+            return "Location{" +
+                    "coordinates=" + coordinates +
+                    '}';
+        }
+
+        public List<Double> getCoordinates() {
             return coordinates;
         }
 
-        public void setCoordinates(List<String> coordinates) {
+        public void setCoordinates(List<Double> coordinates) {
             this.coordinates = coordinates;
         }
     }
 
-    public static class UserInfo {
+    public static class UserInfo implements Serializable{
         private String user_id;
         private String nickname;
         private String avatar_url;
         private String summary;
         private String is_expert;
+
+        @Override
+        public String toString() {
+            return "UserInfo{" +
+                    "avatar_url='" + avatar_url + '\'' +
+                    ", user_id='" + user_id + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", summary='" + summary + '\'' +
+                    ", is_expert='" + is_expert + '\'' +
+                    '}';
+        }
 
         public String getIs_expert() {
             return is_expert;

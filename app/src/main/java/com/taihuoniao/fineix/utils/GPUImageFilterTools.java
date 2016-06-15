@@ -107,22 +107,31 @@ public class GPUImageFilterTools {
     public static FilterList getList() {
         final FilterList filters = new FilterList();
         filters.addFilter("原图", FilterType.NORMAL);
+        filters.addFilter("都市", FilterType.WHITE_BALANCE);
+        filters.addFilter("戏剧", FilterType.LOOKUP_AMATORKA);
+        filters.addFilter("日光", FilterType.BRIGHTNESS);
+        filters.addFilter("暮光", FilterType.SEPIA);
+        filters.addFilter("候鸟", FilterType.SATURATION);
+        filters.addFilter("夏日", FilterType.COLOR_BALANCE);
+        filters.addFilter("午茶", FilterType.SEPIA);
+        filters.addFilter("摩登", FilterType.GRAYSCALE);
+        filters.addFilter("佳人", FilterType.GAMMA);
 //        filters.addFilter("摩卡", FilterType.SEPIA);
         filters.addFilter("摩卡", FilterType.MONOCHROME);
-        filters.addFilter("暮光", FilterType.SEPIA);
+
 //        filters.addFilter("暮光", FilterType.MONOCHROME);
-        filters.addFilter("候鸟", FilterType.SATURATION);
+
 //        filters.addFilter("候鸟", FilterType.DILATION);
-        filters.addFilter("戏剧", FilterType.LOOKUP_AMATORKA);
-        filters.addFilter("夏日", FilterType.COLOR_BALANCE);
-        filters.addFilter("都市", FilterType.WHITE_BALANCE);
-        filters.addFilter("佳人", FilterType.GAMMA);
+
+
+
+
 //        filters.addFilter("佳人", FilterType.BRIGHTNESS);
 //        filters.addFilter("佳人", FilterType.TONE_CURVE);
-        filters.addFilter("摩登", FilterType.GRAYSCALE);
+
         filters.addFilter("流年", FilterType.RGB);
-        filters.addFilter("日光", FilterType.BRIGHTNESS);
-        filters.addFilter("午茶", FilterType.SEPIA);
+
+
         //反差
 //        filters.addFilter("Contrast", FilterType.CONTRAST);
 //        filters.addFilter("Invert", FilterType.INVERT);
