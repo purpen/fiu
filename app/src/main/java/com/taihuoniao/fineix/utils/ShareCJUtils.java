@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 /**
@@ -46,7 +46,7 @@ public class ShareCJUtils {
     static double bi = 1;
 
     //根据position动态改变控件的位置
-    public static View selectStyle(RelativeLayout container, int position, SceneDetails sceneDetails, double b) {
+    public static View selectStyle(RelativeLayout container, int position, SceneDetailsBean sceneDetails, double b) {
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -77,12 +77,12 @@ public class ShareCJUtils {
         if (position == 2||position==3) {
             setSize(view, position);
         }
-        ImageLoader.getInstance().displayImage(sceneDetails.getUser_info().getAvatar_url(), userHeadImg, options500_500);
-        userName.setText(sceneDetails.getUser_info().getNickname());
-        userInfo.setText(sceneDetails.getUser_info().getSummary());
-        locationTv.setText(sceneDetails.getAddress());
-        sceneTitle.setText(sceneDetails.getTitle());
-        desTv.setText(sceneDetails.getDes());
+        ImageLoader.getInstance().displayImage(sceneDetails.getData().getUser_info().getAvatar_url(), userHeadImg, options500_500);
+        userName.setText(sceneDetails.getData().getUser_info().getNickname());
+        userInfo.setText(sceneDetails.getData().getUser_info().getSummary());
+        locationTv.setText(sceneDetails.getData().getAddress());
+        sceneTitle.setText(sceneDetails.getData().getTitle());
+        desTv.setText(sceneDetails.getData().getDes());
         selectTitleSize(position);
         return view;
     }
@@ -107,11 +107,11 @@ public class ShareCJUtils {
     private static void setSize(View view, int position) {
 
             userName.setTextColor(context.getResources().getColor(R.color.black));
-            userInfo.setTextColor(context.getResources().getColor(R.color.black));
-            locationTv.setTextColor(context.getResources().getColor(R.color.black));
+            userInfo.setTextColor(context.getResources().getColor(R.color.black969696));
+            locationTv.setTextColor(context.getResources().getColor(R.color.black969696));
             locationImg.setImageResource(R.mipmap.location_height_22px);
-            desTv.setTextColor(context.getResources().getColor(R.color.black));
-            line.setTextColor(context.getResources().getColor(R.color.black));
+            desTv.setTextColor(context.getResources().getColor(R.color.black969696));
+            line.setTextColor(context.getResources().getColor(R.color.black969696));
 
 //        int padding = DensityUtils.dp2px(context, 22);
 //        view.setPadding((int) (padding * bi), (int) (padding * bi), (int) (padding * bi), (int) (padding * bi));

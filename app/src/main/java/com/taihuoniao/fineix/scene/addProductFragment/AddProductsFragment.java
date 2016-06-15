@@ -86,7 +86,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         if (search) {
             DataPaser.search(q, "10", currentPage + "", null, null, handler);
         } else {
-            if (position == -1) {
+            if (position == 0) {
                 DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
             } else {
                 DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
@@ -204,7 +204,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             int pos = intent.getIntExtra("pos", -1);
             q = intent.getStringExtra("q");
             Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
-            if (q != null && intent.getBooleanExtra("search", false) && pos - 1 == position) {
+            if (q != null && intent.getBooleanExtra("search", false) && pos == position) {
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
                 dialog.show();
@@ -237,7 +237,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-                Log.e("<<<商品详情",responseInfo.result);
+                Log.e("<<<商品详情", responseInfo.result);
                 GoodsDetailBean netGood = new GoodsDetailBean();
                 try {
                     Gson gson = new Gson();

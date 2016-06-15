@@ -311,8 +311,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             }
         });
 //                scene_id = netScene.getData().getScene_id();
+        selectList = new ArrayList<UsedLabelBean>();
         for (int i = 0; i < qingjingDetails.getData().getTags().size(); i++) {
-            selectList = new ArrayList<UsedLabelBean>();
             UsedLabelBean usedLabelBean = new UsedLabelBean(qingjingDetails.getData().getTags().get(i) + "", qingjingDetails.getData().getTag_titles().get(i));
             selectList.add(usedLabelBean);
         }
@@ -375,8 +375,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             }
         });
         scene_id = sceneDetails.getData().getScene_id();
+        selectList = new ArrayList<UsedLabelBean>();
         for (int i = 0; i < sceneDetails.getData().getTags().size(); i++) {
-            selectList = new ArrayList<UsedLabelBean>();
             UsedLabelBean usedLabelBean = new UsedLabelBean(sceneDetails.getData().getTags().get(i) + "", sceneDetails.getData().getTag_titles().get(i));
             selectList.add(usedLabelBean);
         }

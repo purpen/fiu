@@ -52,7 +52,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     protected void requestNet() {
         //获取分类列表
         dialog.show();
-        DataPaser.categoryList(1 + "", 10 + "", handler);
+        DataPaser.categoryList(1 + "", 10 + "",1+"", handler);
     }
 
     @Override
