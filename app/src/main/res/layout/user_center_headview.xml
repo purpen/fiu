@@ -129,8 +129,9 @@
                     android:visibility="invisible">
                     <Button
                         android:id="@+id/bt_focus"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/dp70"
                         android:layout_height="@dimen/dp30"
+                        style="?android:attr/buttonBarButtonStyle"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/shap_redbutton_commit"
                         android:text=""
@@ -139,8 +140,9 @@
 
                     <Button
                         android:id="@+id/bt_msg"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/dp70"
                         android:layout_height="@dimen/dp30"
+                        style="?android:attr/buttonBarButtonStyle"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="@dimen/dp20"
                         android:background="@drawable/shap_redbutton_commit"

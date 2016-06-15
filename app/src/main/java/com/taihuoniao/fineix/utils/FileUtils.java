@@ -27,7 +27,7 @@ import java.util.Collections;
 public class FileUtils {
     //获取path路径下的图片
     public static ArrayList<PhotoItem> findPicsInDir(String path) {
-        ArrayList<PhotoItem> photos = new ArrayList<PhotoItem>();
+        ArrayList<PhotoItem> photos = new ArrayList<>();
         File dir = new File(path);
         if (dir.exists() && dir.isDirectory()) {
             for (File file : dir.listFiles(new FileFilter() {
@@ -58,7 +58,7 @@ public class FileUtils {
     public static boolean bitmapToFile(Bitmap bitmap, String filePath) {
         boolean isSuccess = false;
         if (bitmap == null) {
-            return isSuccess;
+            return false;
         }
         File file = new File(filePath.substring(0,
                 filePath.lastIndexOf(File.separator)));

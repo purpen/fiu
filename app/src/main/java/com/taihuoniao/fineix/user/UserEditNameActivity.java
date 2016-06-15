@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -22,7 +21,6 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import java.util.HashMap;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**

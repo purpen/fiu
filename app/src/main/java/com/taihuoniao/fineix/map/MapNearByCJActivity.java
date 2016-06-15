@@ -199,7 +199,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
                     return;
                 }
                 LogUtil.e("附近所有场景", responseInfo.result);
-                HttpResponse<UserCJListData> response = null;
+                HttpResponse<UserCJListData> response;
                 try {
                     response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<UserCJListData>>() {
                     });
@@ -223,8 +223,8 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 
     private void addOverlayers(final List<SceneListBean> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
-        LatLng ll = null;
-        MarkerOptions option = null;
+        LatLng ll;
+        MarkerOptions option;
         final ArrayList<Marker> markers = new ArrayList<>();
         for (SceneListBean item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));

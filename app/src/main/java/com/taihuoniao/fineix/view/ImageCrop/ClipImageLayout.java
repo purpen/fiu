@@ -17,11 +17,6 @@ public class ClipImageLayout extends RelativeLayout {
     private ClipImageBorderView mClipImageView;
 
 
-    /**
-     * 这里测试，直接写死了大小，真正使用过程中，可以提取为自定义属性
-     */
-    private int mHorizontalPadding = 0;
-
     public void setImage(Bitmap bitmap) {
         /**
          * 这里测试，直接写死了图片，真正使用过程中，可以提取为自定义属性
@@ -60,7 +55,10 @@ public class ClipImageLayout extends RelativeLayout {
      * @param mHorizontalPadding
      */
     public void setHorizontalPadding(int mHorizontalPadding) {
-        this.mHorizontalPadding = mHorizontalPadding;
+        /*
+      这里测试，直接写死了大小，真正使用过程中，可以提取为自定义属性
+     */
+        int mHorizontalPadding1 = mHorizontalPadding;
     }
 
     /**

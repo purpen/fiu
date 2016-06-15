@@ -12,18 +12,6 @@ import android.view.View;
 
 public class ClipImageBorderView extends View {
     /**
-     * 水平方向与View的边距
-     */
-    private int mHorizontalPadding;
-    /**
-     * 垂直方向与View的边距
-     */
-    private int mVerticalPadding;
-    /**
-     * 绘制的矩形的宽度
-     */
-    private int mWidth;
-    /**
      * 边框的颜色，默认为白色
      */
     private int mBorderColor = Color.parseColor("#00FFFFFF");
@@ -56,7 +44,18 @@ public class ClipImageBorderView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // 计算矩形区域的宽度
-        mWidth = getWidth();
+        /*
+      绘制的矩形的宽度
+     */
+        int mWidth = getWidth();
+        /*
+      水平方向与View的边距
+     */
+        int mHorizontalPadding;
+        /*
+      垂直方向与View的边距
+     */
+        int mVerticalPadding;
         if (getHeight() * 9 < getWidth() * 16) {
             mVerticalPadding = 0;
             mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;

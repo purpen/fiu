@@ -75,9 +75,8 @@
             android:layout_marginTop="30dp"
             android:text="我的二维码"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dp16" />
+            android:textSize="@dimen/sp16" />
         <ImageView
-            android:id="@+id/capture_mask_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_above="@id/capture_mask_bottom"
@@ -87,7 +86,6 @@
             android:background="@mipmap/qr_scan_mask" />
 
         <ImageView
-            android:id="@+id/capture_mask_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_above="@id/capture_mask_bottom"

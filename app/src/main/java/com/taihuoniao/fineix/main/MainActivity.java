@@ -510,9 +510,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 11) {
                                 firstImg.setVisibility(View.GONE);
-                                if (isMove()) {
-                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
-                                }
                                 firstRelative.setBackgroundResource(R.color.black_first);
                                 firstLeftImg.setImageResource(R.mipmap.mine2);
                                 firstLeftImg.setVisibility(View.VISIBLE);

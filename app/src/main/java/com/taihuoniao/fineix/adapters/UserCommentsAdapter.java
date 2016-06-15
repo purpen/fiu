@@ -33,7 +33,7 @@ public class UserCommentsAdapter extends CommonBaseAdapter<CommentsBean.CommentI
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final CommentsBean.CommentItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_user_comments,null);
             holder=new ViewHolder(convertView);

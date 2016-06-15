@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.beans;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by taihuoniao on 2016/3/14.
  */
@@ -38,7 +40,7 @@ public class PhotoItem implements Comparable<PhotoItem> {
     }
 
     @Override
-    public int compareTo(PhotoItem another) {
+    public int compareTo(@NonNull PhotoItem another) {
         if (another == null) {
             return 1;
         }

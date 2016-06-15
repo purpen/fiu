@@ -70,6 +70,7 @@ public class PullRefreshLayout extends FrameLayout {
 
 		ViewConfiguration cfg = ViewConfiguration.get(context);
 		mTouchSlop = cfg.getScaledTouchSlop();
+		a.recycle();
 	}
 
 	public PullRefreshLayout(Context context, AttributeSet attrs) {
@@ -527,7 +528,7 @@ public class PullRefreshLayout extends FrameLayout {
 		}
 		if (mTargetAdapterView != null) {
 			int first = mTargetAdapterView.getFirstVisiblePosition();
-			View firstView = null;
+			View firstView;
 			if ((first == 0) && ((firstView = mTargetAdapterView.getChildAt(0)) != null)) {
 				return firstView.getTop() >= 0;
 			}

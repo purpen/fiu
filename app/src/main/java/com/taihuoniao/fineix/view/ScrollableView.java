@@ -83,11 +83,11 @@ public class ScrollableView extends RelativeLayout {
     }
 
     public void showIndicators() {
-        imageViews = new ArrayList<ImageView>();
+        imageViews = new ArrayList<>();
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         llp.setMargins(context.getResources().getDimensionPixelSize(R.dimen.dp5), 0, 0, context.getResources().getDimensionPixelSize(R.dimen.dp10));
         ViewGroup.LayoutParams vlp = new ViewGroup.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        ImageView imageView = null;
+        ImageView imageView;
         for (int i = 0; i < size; i++) {
             imageView = new ImageView(context);
             imageView.setLayoutParams(vlp);

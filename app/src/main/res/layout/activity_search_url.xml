@@ -38,5 +38,5 @@
         android:layout_height="match_parent"
         android:layout_above="@id/activity_search_url_findrelative"
         android:layout_below="@id/activity_search_url_title"
-        android:background="@drawable/grey_no_corner"></WebView>
+        android:background="@drawable/grey_no_corner" />
 </RelativeLayout>

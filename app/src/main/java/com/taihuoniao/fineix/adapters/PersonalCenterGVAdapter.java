@@ -27,7 +27,7 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImgTxtItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView = Util.inflateView(activity, R.layout.item_gv_personalcenter, null);
             holder=new ViewHolder(convertView);

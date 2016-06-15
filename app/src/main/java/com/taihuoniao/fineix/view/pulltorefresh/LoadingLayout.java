@@ -79,7 +79,7 @@ public class LoadingLayout extends FrameLayout {
                 break;
         }
 //        animImg.setBackgroundResource(R.anim.pull_to_refresh_anim);
-        AnimationDrawable animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.anim.pull_to_refresh_anim);
+        AnimationDrawable animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.drawable.pull_to_refresh);
         animImg.setImageDrawable(animationDrawable);
     }
 

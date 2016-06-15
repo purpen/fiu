@@ -3,13 +3,11 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.utils.Util;
 
@@ -33,7 +31,7 @@ public class OrderedQJAdapter extends CommonBaseAdapter<QingJingListBean.QingJin
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final QingJingListBean.QingJingItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_ordered_qj,null);
             holder=new ViewHolder(convertView);

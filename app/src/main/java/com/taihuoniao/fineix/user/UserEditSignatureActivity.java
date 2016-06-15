@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -20,7 +21,6 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
-
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -62,8 +62,8 @@ public class UserEditSignatureActivity extends BaseActivity{
         head_view.setHeadCenterTxtShow(true,"个性签名");
         head_view.setHeadRightTxtShow(true, R.string.save);
         String[] stringArray = getResources().getStringArray(R.array.user_tags);
-        for (int i = 0; i < stringArray.length; i++) {
-            label_view.addLabel(stringArray[i]);
+        for (String aStringArray : stringArray) {
+            label_view.addLabel(aStringArray);
         }
         if (user!=null){
             et_nickname.setText(user.summary);

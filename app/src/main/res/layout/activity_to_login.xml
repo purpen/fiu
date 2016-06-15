@@ -34,7 +34,6 @@
         android:orientation="vertical"
         >
         <TextView
-            android:id="@+id/tv_introduce_tologin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp16"
@@ -77,8 +76,7 @@
             android:maxLength="11"
             android:ems="8"
             android:paddingLeft="5dp"
-            android:phoneNumber="true"
-            android:inputType="number"
+            android:inputType="phone"
             android:singleLine="true"
 
             >
@@ -124,7 +122,6 @@
         android:orientation="vertical"
         >
         <TextView
-            android:id="@+id/tv_prompt_tologin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -138,7 +135,6 @@
             android:layout_height="@dimen/dp40"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
-            android:layout_weight="1"
             android:background="@drawable/shap_home_gridview"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"

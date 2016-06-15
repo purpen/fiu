@@ -82,7 +82,7 @@ public class SystemSettingsActivity extends BaseActivity{
 
     @OnClick({R.id.item_update_psd,R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
     void onClick(View view){
-        Intent intent=null;
+        Intent intent;
         switch (view.getId()){
             case R.id.item_update_psd:
                 startActivity(new Intent(activity,UpdatePasswordActivity.class));

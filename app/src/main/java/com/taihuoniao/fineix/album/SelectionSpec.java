@@ -131,11 +131,7 @@ public final class SelectionSpec implements Parcelable {
     }
 
     public boolean isSingleChoose() {
-        if (mMinSelectable == 0 && mMaxSelectable == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return mMinSelectable == 0 && mMaxSelectable == 1;
     }
 
     public long getMaxPixels() {

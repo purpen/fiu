@@ -27,8 +27,8 @@ import java.util.List;
 public class EvaluateAdapter extends THNBaseAdapter {
     private String editContent = "";
     //定义一个HashMap，用来存放EditText的值，Key是position
-    HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
-    HashMap<Integer, String> hashMapRatingBar = new HashMap<Integer, String>();
+    HashMap<Integer, String> hashMap = new HashMap<>();
+    HashMap<Integer, String> hashMapRatingBar = new HashMap<>();
     private Context context = null;
     private LayoutInflater inflater = null;
     public BitmapUtils bitmapUtils_listview = null;
@@ -66,7 +66,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
 
     @Override
     public View getItemView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder mHolder = null;
+        ViewHolder mHolder;
         if (convertView == null) {
             mHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_publish_evaluate, parent, false);

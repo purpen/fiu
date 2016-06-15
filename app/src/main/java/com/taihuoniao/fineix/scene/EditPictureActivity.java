@@ -69,8 +69,6 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
  * Created by taihuoniao on 2016/3/17.
  */
 public class EditPictureActivity extends BaseActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    //上个界面传递过来的数据
-    private Uri imageUri;
     //界面下的控件
     private View activity_view;
     private GlobalTitleLayout titleLayout;
@@ -82,18 +80,12 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private Button backBtn;
     //    private GPUImageFilterTools.FilterList filterList;
     private RelativeLayout productsRelative;
-    private TextView productsTv;
-    private TextView productsRedline;
     private RelativeLayout chainingRelative;
-    private TextView chainingTv;
-    private TextView chainingRedline;
     private RelativeLayout filterRelative;
     private TextView filterTv;
     private TextView filterRedline;
     //popupwindow下的控件
     private PopupWindow popupWindow;
-    private TextView cancelTv;
-    private TextView confirmTv;
     private ImageView productImg;
     private EditText name;
     private EditText price;
@@ -108,7 +100,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     //标记产品装载图片的容器
     private MyImageViewTouch mImageView;
     //添加链接装载链接的容器
-    private List<LabelView> labels = new ArrayList<LabelView>();
+    private List<LabelView> labels = new ArrayList<>();
     //工具类
     private WaittingDialog dialog;
     //编辑好的图片存储名称
@@ -138,7 +130,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
-        imageUri = getIntent().getData();
+        Uri imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.tools);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
@@ -291,11 +283,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
-        productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
-        chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
+        TextView productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
+        TextView chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
         filterTv = (TextView) findViewById(R.id.activity_edit_filter_tv);
-        productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
-        chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
+        TextView productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
+        TextView chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
         filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
         dialog = new WaittingDialog(EditPictureActivity.this);
         imageLoader = ImageLoader.getInstance();
@@ -321,8 +313,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         WindowManager windowManager = EditPictureActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(EditPictureActivity.this, R.layout.pop_edit, null);
-        cancelTv = (TextView) popup_view.findViewById(R.id.pop_edit_cancel);
-        confirmTv = (TextView) popup_view.findViewById(R.id.pop_edit_confirm);
+        TextView cancelTv = (TextView) popup_view.findViewById(R.id.pop_edit_cancel);
+        TextView confirmTv = (TextView) popup_view.findViewById(R.id.pop_edit_confirm);
         productImg = (ImageView) popup_view.findViewById(R.id.pop_edit_img);
         name = (EditText) popup_view.findViewById(R.id.pop_edit_name);
         price = (EditText) popup_view.findViewById(R.id.pop_edit_price);
@@ -611,7 +603,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 return;
             }
             //保存标签信息
-            List<TagItem> tagInfoList = new ArrayList<TagItem>();
+            List<TagItem> tagInfoList = new ArrayList<>();
             for (LabelView label : labels) {
                 tagInfoList.add(label.getTagInfo());
             }

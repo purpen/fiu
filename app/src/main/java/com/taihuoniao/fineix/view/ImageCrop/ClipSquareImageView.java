@@ -40,7 +40,6 @@ public class ClipSquareImageView extends ImageView implements View.OnTouchListen
     public static final float DEFAULT_MIN_SCALE = 1.0f;
 
     private float minScale = DEFAULT_MIN_SCALE;
-    private float midScale = DEFAULT_MID_SCALE;
     private float maxScale = DEFAULT_MAX_SCALE;
 
     private MultiGestureDetector multiGestureDetector;
@@ -344,7 +343,7 @@ public class ClipSquareImageView extends ImageView implements View.OnTouchListen
                 case MotionEvent.ACTION_MOVE: {
                     final float dx = x - lastTouchX, dy = y - lastTouchY;
 
-                    if (isDragging == false) {
+                    if (!isDragging) {
                         // Use Pythagoras to see if drag length is larger than
                         // touch slop
                         isDragging = Math.sqrt((dx * dx) + (dy * dy)) >= scaledTouchSlop;
@@ -377,6 +376,7 @@ public class ClipSquareImageView extends ImageView implements View.OnTouchListen
                 float x = getWidth() / 2;
                 float y = getHeight() / 2;
 
+                float midScale = DEFAULT_MID_SCALE;
                 if (scale < midScale) {
                     post(new AnimatedZoomRunnable(scale, midScale, x, y));
                 } else if ((scale >= midScale) && (scale < maxScale)) {

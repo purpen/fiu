@@ -1,7 +1,7 @@
 package com.taihuoniao.fineix.user;
+
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -28,14 +28,10 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
 
     private EditText editNewPassword;
     private EditText editPhoneNum;
-    private Button btFindPassword;
     private EditText editVerifyCode;
     private Button btGetVerifyCode;
-    private ImageView mBack;
-    private ImageView mClose;
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
 
-    private String phone;
     private ReadSmsContent readSmsContent;
 
     public FindPasswordActivity() {
@@ -60,7 +56,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
             if (msg.what == DataConstants.PARSER_FIND_PASSWORD) {
                 if (msg.obj instanceof FindPasswordInfo) {
                     FindPasswordInfo info = (FindPasswordInfo) msg.obj;
-                    if (info.getSuccess() == true) {
+                    if (info.getSuccess()) {
                         Toast.makeText(FindPasswordActivity.this, info.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                         finish();
@@ -88,13 +84,13 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         ActivityUtil.getInstance().addActivity(this);
-        mBack = (ImageView) findViewById(R.id.image_back_find_password);
+        ImageView mBack = (ImageView) findViewById(R.id.image_back_find_password);
         mBack.setOnClickListener(this);
-        mClose = (ImageView) findViewById(R.id.image_close_find_password);
+        ImageView mClose = (ImageView) findViewById(R.id.image_close_find_password);
         mClose.setOnClickListener(this);
         editNewPassword = (EditText) findViewById(R.id.pass_new);
         editPhoneNum = (EditText) findViewById(R.id.et_phone_new);
-        btFindPassword = (Button) findViewById(R.id.bt_findpassword);
+        Button btFindPassword = (Button) findViewById(R.id.bt_findpassword);
         btFindPassword.setOnClickListener(this);
         editVerifyCode = (EditText) findViewById(R.id.code_find);
         btGetVerifyCode = (Button) findViewById(R.id.verify_find);
@@ -119,7 +115,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.verify_find:
-                phone = editPhoneNum.getText().toString();
+                String phone = editPhoneNum.getText().toString();
                 if (!TextUtils.isEmpty(phone) && EmailUtils.isMobileNO(phone)) {
 
                     Toast.makeText(FindPasswordActivity.this, "正在获取手机验证码",

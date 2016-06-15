@@ -78,7 +78,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
 
     @Override
     public View getItemView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder mHolder = null;
+        ViewHolder mHolder;
         if (convertView == null) {
             mHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_order, parent, false);

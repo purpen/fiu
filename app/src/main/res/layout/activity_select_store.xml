@@ -74,6 +74,7 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
+            android:baselineAligned="false"
             >
 
             <LinearLayout

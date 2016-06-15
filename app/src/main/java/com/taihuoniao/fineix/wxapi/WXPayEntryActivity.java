@@ -66,7 +66,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     public void onResp(BaseResp resp) {
         LogUtil.e(TAG, "onPayFinish, errCode = " + resp.errCode);
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            String resultTip = "";
+            String resultTip;
             switch (resp.errCode) {
                 case 0:
                     resultTip = "支付成功";

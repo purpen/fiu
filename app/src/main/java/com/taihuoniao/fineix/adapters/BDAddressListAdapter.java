@@ -27,7 +27,7 @@ public class BDAddressListAdapter extends CommonBaseAdapter<PoiInfo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         PoiInfo info = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView = Util.inflateView(activity, R.layout.item_poi_lv, null);
             holder=new ViewHolder(convertView);

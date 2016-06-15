@@ -140,6 +140,7 @@ public final class CameraConfigurationManager {
 	 * @param screenResolution
 	 * @return
 	 */
+	@SuppressWarnings("Convert2Diamond")
 	private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
 		List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
 		if (rawSupportedSizes == null) {
@@ -149,7 +150,7 @@ public final class CameraConfigurationManager {
 		}
 
 		// Sort by size, descending
-		List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(rawSupportedSizes);
+		List<Camera.Size> supportedPreviewSizes = new ArrayList<>(rawSupportedSizes);
 		Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
 			@Override
 			public int compare(Camera.Size a, Camera.Size b) {

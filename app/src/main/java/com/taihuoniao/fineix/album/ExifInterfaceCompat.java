@@ -8,6 +8,7 @@ package com.taihuoniao.fineix.album;
 import android.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.Log;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ public final class ExifInterfaceCompat {
     private ExifInterfaceCompat() {
     }
 
-    public static final ExifInterface newInstance(String filename) throws IOException {
+    public static ExifInterface newInstance(String filename) throws IOException {
         if(filename == null) {
             throw new NullPointerException("filename should not be null");
         } else {
@@ -28,7 +29,7 @@ public final class ExifInterfaceCompat {
         }
     }
 
-    public static final Date getExifDateTime(String filepath) {
+    public static Date getExifDateTime(String filepath) {
         ExifInterface exif;
 
         try {
@@ -53,13 +54,13 @@ public final class ExifInterfaceCompat {
         }
     }
 
-    public static final long getExifDateTimeInMillis(String filepath) {
+    public static long getExifDateTimeInMillis(String filepath) {
         Date datetime = getExifDateTime(filepath);
         return datetime == null?-1L:datetime.getTime();
     }
 
-    public static final int getExifOrientation(String filepath) {
-        ExifInterface exif = null;
+    public static int getExifOrientation(String filepath) {
+        ExifInterface exif;
 
         try {
             exif = newInstance(filepath);

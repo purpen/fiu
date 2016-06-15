@@ -20,7 +20,6 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
  * created at 2016/4/11 16:58
  */
 public class CustomItemLayout extends RelativeLayout {
-    private View view;
     private TextView tv_content;
     private TextView tv_tip_num;
     private TextView tv_right_txt;
@@ -45,17 +44,17 @@ public class CustomItemLayout extends RelativeLayout {
     }
 
     private void inflatelayout(Context context){
-        view = Util.inflateView(context, R.layout.custom_item_layout,this);
-        rl_item_box=(RelativeLayout)view.findViewById(R.id.rl_item_box);
-        tv_content=(TextView)view.findViewById(R.id.tv_content);
-        tv_tip_num=(TextView)view.findViewById(R.id.tv_tip_num);
-        iv_more_arrow=(ImageView)view.findViewById(R.id.iv_more_arrow);
-        tv_right_txt=(TextView)view.findViewById(R.id.tv_right_txt);
-        et_right=(EditText)view.findViewById(R.id.et_right);
-        tv_arrow_left=(TextView)view.findViewById(R.id.tv_arrow_left);
-        tv_arrow_left1=(TextView)view.findViewById(R.id.tv_arrow_left1);
-        iv_user_avatar=(RoundedImageView)view.findViewById(R.id.iv_user_avatar);
-        iv_arrow_left=(ImageView)view.findViewById(R.id.iv_bar_code);
+        View view = Util.inflateView(context, R.layout.custom_item_layout, this);
+        rl_item_box = (RelativeLayout) view.findViewById(R.id.rl_item_box);
+        tv_content = (TextView) view.findViewById(R.id.tv_content);
+        tv_tip_num = (TextView) view.findViewById(R.id.tv_tip_num);
+        iv_more_arrow = (ImageView) view.findViewById(R.id.iv_more_arrow);
+        tv_right_txt = (TextView) view.findViewById(R.id.tv_right_txt);
+        et_right = (EditText) view.findViewById(R.id.et_right);
+        tv_arrow_left = (TextView) view.findViewById(R.id.tv_arrow_left);
+        tv_arrow_left1 = (TextView) view.findViewById(R.id.tv_arrow_left1);
+        iv_user_avatar = (RoundedImageView) view.findViewById(R.id.iv_user_avatar);
+        iv_arrow_left = (ImageView) view.findViewById(R.id.iv_bar_code);
     }
 
     public void setRightMoreImgStyle(boolean isShow){

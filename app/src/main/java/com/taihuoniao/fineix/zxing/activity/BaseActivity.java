@@ -18,14 +18,10 @@ import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.zxing.CommonToast;
 import com.taihuoniao.fineix.zxing.TDevice;
 
-
 import butterknife.ButterKnife;
 
 /**
  * baseActionBar Activity
- * 
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年9月25日 上午11:30:15 引用自：tonlin
  */
 public abstract class BaseActivity extends ActionBarActivity implements
         DialogControl, View.OnClickListener, BaseViewInterface {

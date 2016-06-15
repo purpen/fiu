@@ -30,19 +30,16 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         Top, Bottom, Center
     }
 
-    ;
-
     public interface OnDeleteClickListener {
         void onDeleteClick();
     }
 
-    private int STATE_NONE = 1 << 0;
+    private int STATE_NONE = 1;
     private int STATE_SELECTED = 1 << 1;
-    private int STATE_FOCUSED = 1 << 2;
 
     private OnDeleteClickListener mDeleteClickListener;
 
-    public static final int NONE = 1 << 0;                                     // 1
+    public static final int NONE = 1;                                     // 1
     public static final int GROW_LEFT_EDGE = 1 << 1;                                     // 2
     public static final int GROW_RIGHT_EDGE = 1 << 2;                                     // 4
     public static final int GROW_TOP_EDGE = 1 << 3;                                     // 8
@@ -83,7 +80,6 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
     private final float fpoints[] = new float[]{0, 0};
 
     private int mPadding = 0;
-    private boolean mShowAnchors = true;
     private AlignModeV mAlignVerticalMode = AlignModeV.Center;
     private ImageViewTouch mContext;
 
@@ -199,6 +195,7 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 
         if (is_selected || is_focused) {
 
+            boolean mShowAnchors = true;
             if (mShowAnchors) {
                 final int left = (int) (mTempRect.left);
                 final int right = (int) (mTempRect.right);
@@ -683,6 +680,7 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
 //    }
 
     public boolean isFocused() {
+        int STATE_FOCUSED = 1 << 2;
         return (mState & STATE_FOCUSED) == STATE_FOCUSED;
     }
 

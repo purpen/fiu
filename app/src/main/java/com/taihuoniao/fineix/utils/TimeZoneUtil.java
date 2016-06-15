@@ -15,11 +15,8 @@ public class TimeZoneUtil {
 	 * @return
 	 */
 	public static boolean isInEasternEightZones() {
-		boolean defaultVaule = true;
-		if (TimeZone.getDefault() == TimeZone.getTimeZone("GMT+08"))
-			defaultVaule = true;
-		else
-			defaultVaule = false;
+		boolean defaultVaule;
+		defaultVaule = TimeZone.getDefault() == TimeZone.getTimeZone("GMT+08");
 		return defaultVaule;
 	}
 

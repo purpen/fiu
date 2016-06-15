@@ -16,13 +16,13 @@
                 android:id="@+id/foldName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="#a7a7a7"
                 android:text="相机胶卷" />
 
             <TextView
                 android:id="@+id/photoCount"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="#a7a7a7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -34,7 +34,7 @@ public class ActivityUtil {
 	 */
 	public void addActivity(Activity activity) {
 		if (activityStack == null) {
-			activityStack = new Stack<Activity>();
+			activityStack = new Stack<>();
 		}
 		if(activity!=null){
 		activityStack.add(activity);
@@ -46,7 +46,7 @@ public class ActivityUtil {
 	 */
 	public Activity getCurrentActivity() {
 		if (activityStack == null) {
-			activityStack = new Stack<Activity>();
+			activityStack = new Stack<>();
 		}
 		Activity activity = activityStack.lastElement();
 		return activity;
@@ -66,7 +66,6 @@ public class ActivityUtil {
 		if (activity != null && activityStack != null) {
 			activityStack.remove(activity);
 			activity.finish();
-			activity = null;
 		}
 	}
 	 /** 

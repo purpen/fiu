@@ -6,9 +6,9 @@ package com.taihuoniao.fineix.interfaces;
  *
  */
 public interface BaseViewInterface {
-	
-	public void initView();
-	
-	public void initData();
+
+	void initView();
+
+	void initData();
 	
 }

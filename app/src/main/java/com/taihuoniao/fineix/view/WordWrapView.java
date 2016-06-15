@@ -43,7 +43,7 @@ public class WordWrapView extends ViewGroup {
     int childCount = getChildCount();
     int autualWidth = r - l;
     int x = SIDE_MARGIN;// 横坐标开始
-    int y = 0;//纵坐标开始
+    int y;//纵坐标开始
     int rows = 1;
     for(int i=0;i<childCount;i++){
       View view = getChildAt(i);
@@ -61,7 +61,7 @@ public class WordWrapView extends ViewGroup {
         view.layout(x-width, y-height, x, y);
       }
     }
-  };
+  }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

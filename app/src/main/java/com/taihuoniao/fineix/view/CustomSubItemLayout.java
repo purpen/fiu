@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -18,7 +17,6 @@ import com.taihuoniao.fineix.utils.Util;
  * created at 2016/4/11 16:58
  */
 public class CustomSubItemLayout extends RelativeLayout {
-    private View view;
     private TextView tv_right_txt;
     private ImageView iv_more_arrow;
     private TextView tv_arrow_left;
@@ -40,14 +38,14 @@ public class CustomSubItemLayout extends RelativeLayout {
     }
 
     private void inflatelayout(Context context){
-        view = Util.inflateView(context, R.layout.custom_subitem_layout,this);
-        rl_item_box=(RelativeLayout)view.findViewById(R.id.rl_item_box);
-        tv_title=(TextView)view.findViewById(R.id.tv_title);
-        tv_subtitle=(TextView)view.findViewById(R.id.tv_subtitle);
-        iv=(ImageView)view.findViewById(R.id.iv);
-        iv_more_arrow=(ImageView)view.findViewById(R.id.iv_more_arrow);
-        tv_right_txt=(TextView)view.findViewById(R.id.tv_right_txt);
-        tv_arrow_left=(TextView)view.findViewById(R.id.tv_arrow_left);
+        View view = Util.inflateView(context, R.layout.custom_subitem_layout, this);
+        rl_item_box = (RelativeLayout) view.findViewById(R.id.rl_item_box);
+        tv_title = (TextView) view.findViewById(R.id.tv_title);
+        tv_subtitle = (TextView) view.findViewById(R.id.tv_subtitle);
+        iv = (ImageView) view.findViewById(R.id.iv);
+        iv_more_arrow = (ImageView) view.findViewById(R.id.iv_more_arrow);
+        tv_right_txt = (TextView) view.findViewById(R.id.tv_right_txt);
+        tv_arrow_left = (TextView) view.findViewById(R.id.tv_arrow_left);
     }
 
     public void setRightMoreImgStyle(boolean isShow){

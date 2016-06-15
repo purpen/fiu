@@ -16,9 +16,6 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Applies sobel edge detection on the image.
  */

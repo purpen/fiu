@@ -69,8 +69,7 @@
  
    public static void rotate(PointF[] points, double angle)
    {
-     for (int i = 0; i < points.length; i++)
-       rotate(points[i], angle);
+     for (PointF point : points) rotate(point, angle);
    }
  
    public static void rotateAroundBy(PointF position, PointF center, float angle)
@@ -111,8 +110,7 @@
  
    public static void translate(PointF[] points, float x, float y)
    {
-     for (int i = 0; i < points.length; i++)
-       translate(points[i], x, y);
+     for (PointF point : points) translate(point, x, y);
    }
  
    public static void translate(PointF point, float x, float y)

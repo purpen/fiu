@@ -72,7 +72,7 @@ public class SelectedUriCollection {
     }
 
     public List<Uri> asList() {
-        return new ArrayList<Uri>(mUris);
+        return new ArrayList<>(mUris);
     }
 
     public boolean isEmpty() {

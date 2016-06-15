@@ -33,7 +33,7 @@ public class NoticeAdapter extends CommonBaseAdapter<NoticeData.NoticeItem>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final NoticeData.NoticeItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_user_comments,null);
             holder=new ViewHolder(convertView);

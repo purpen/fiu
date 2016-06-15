@@ -36,14 +36,10 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     private TextView mReason;
     private TextView mMoney;
     private EditText mEditTextReason;
-    private RelativeLayout mReasonLayout;
     private PopupWindow popupWindow = null;
     private MyGlobalTitleLayout title = null;
-    private Button mCommit;
-    private ImageView mImage;
     private String mRid;
     private String mReasonCode = "1";
-    private String mReasonEditTxt = "";
     private List<OrderDetails> mList = new ArrayList<>();
     private Handler mHandler = new Handler() {
         @Override
@@ -119,11 +115,11 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         title.setRightSearchButton(false);
         title.setRightShopCartButton(false);
         mEditTextReason = (EditText) findViewById(R.id.et_refund);
-        mCommit = (Button) findViewById(R.id.bt_commit_refund);
+        Button mCommit = (Button) findViewById(R.id.bt_commit_refund);
         mMoney = (TextView) findViewById(R.id.tv_money_refund);
         mReason = (TextView) findViewById(R.id.tv_reason_refund);
-        mImage = (ImageView) findViewById(R.id.image_refund);
-        mReasonLayout = (RelativeLayout) findViewById(R.id.layout_reason_refund);
+        ImageView mImage = (ImageView) findViewById(R.id.image_refund);
+        RelativeLayout mReasonLayout = (RelativeLayout) findViewById(R.id.layout_reason_refund);
         mCommit.setOnClickListener(this);
         mReason.setOnClickListener(this);
         mReasonLayout.setOnClickListener(this);
@@ -140,7 +136,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                 if (!mDialog.isShowing()) {
                     mDialog.show();
                 }
-                mReasonEditTxt = mEditTextReason.getText() + "";
+                String mReasonEditTxt = mEditTextReason.getText() + "";
                 DataPaser.applyForRefundParser(mRid, mReasonCode, mReasonEditTxt, mHandler);
                 break;
             case R.id.image_refund:

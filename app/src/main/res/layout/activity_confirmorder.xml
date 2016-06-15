@@ -300,6 +300,7 @@
                 android:background="@drawable/backround_corner_gray"
                 android:gravity="top"
                 android:padding="5dp"
+                android:inputType="text"
                 android:textSize="14sp"/>
 
         </LinearLayout>

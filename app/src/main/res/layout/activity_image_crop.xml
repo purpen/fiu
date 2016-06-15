@@ -6,7 +6,6 @@
         android:id="@+id/csiv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/custom_head"
         app:ClipSquareIV_BorderColor="@color/color_transparent"
         app:ClipSquareIV_BorderWidth="0dp"
         app:ClipSquareIV_OutsideColor="#ea000000" />

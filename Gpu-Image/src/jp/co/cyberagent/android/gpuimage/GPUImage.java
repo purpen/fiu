@@ -238,7 +238,7 @@ public class GPUImage {
         };
         Cursor cursor = mContext.getContentResolver()
                 .query(uri, projection, null, null, null);
-        int pathIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        int pathIndex = cursor != null ? cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) : 0;
         String path = null;
         if (cursor.moveToFirst()) {
             path = cursor.getString(pathIndex);
@@ -559,7 +559,7 @@ public class GPUImage {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            if (mRenderer != null && mRenderer.getFrameWidth() == 0) {
+            if (mRenderer.getFrameWidth() == 0) {
                 try {
                     synchronized (mRenderer.mSurfaceChangedWaiter) {
                         mRenderer.mSurfaceChangedWaiter.wait(3000);

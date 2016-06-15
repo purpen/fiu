@@ -20,7 +20,6 @@ public class AroundPoiAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<PoiInfo> mkPoiInfoList;
-    private int selected = -1;
 
     public AroundPoiAdapter(Context context, List<PoiInfo> list) {
         this.mContext = context;
@@ -42,7 +41,7 @@ public class AroundPoiAdapter extends BaseAdapter {
 
     public void setNewList(List<PoiInfo> list, int index) {
         this.mkPoiInfoList = list;
-        this.selected = index;
+        int selected = index;
         this.notifyDataSetChanged();
 
 
@@ -55,7 +54,7 @@ public class AroundPoiAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        RecordHolder holder = null;
+        RecordHolder holder;
         if (convertView == null) {
             holder = new RecordHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);

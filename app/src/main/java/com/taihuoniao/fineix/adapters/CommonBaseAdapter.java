@@ -10,7 +10,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommonBaseAdapter<T> extends BaseAdapter {

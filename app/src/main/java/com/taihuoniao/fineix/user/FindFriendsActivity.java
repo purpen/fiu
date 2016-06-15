@@ -13,7 +13,6 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
@@ -31,7 +30,6 @@ import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,7 +54,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     @Bind(R.id.pull_lv)
     PullToRefreshListView pull_lv;
     private int curPage = 1;
-    private boolean isLoadMore = false;
     private static final String PAGE_SIZE = "10";
     private static final String SORT = "1";  //随机排序
     private static final String HAS_SCENE = "1";
@@ -160,6 +157,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     protected void refreshUI(List<FindFriendData.User> list) {
         if (list == null) return;
         if (list.size() == 0) {
+            boolean isLoadMore = false;
             if (isLoadMore) {
                 Util.makeToast("没有更多数据哦！");
             } else {
@@ -212,7 +210,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
     @Override
     public void onClick(View view) {
-        Platform.ShareParams params = null;
+        Platform.ShareParams params;
         switch (view.getId()) {
             case R.id.item_wx:
                 params = new Platform.ShareParams();

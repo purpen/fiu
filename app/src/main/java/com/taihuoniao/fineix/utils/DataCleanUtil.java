@@ -54,8 +54,8 @@ public class DataCleanUtil {
         try {
             if (file.isDirectory()) {// 如果下面还有文件
                 File files[] = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    deleteFolderFile(files[i], true);
+                for (File file1 : files) {
+                    deleteFolderFile(file1, true);
                 }
             }
             if (deleteThisPath) {
@@ -77,15 +77,15 @@ public class DataCleanUtil {
     }
 
 
-    public static long getFolderSize(File file) throws Exception {
+    public static long getFolderSize(File file) {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
-            for (int i = 0; i < fileList.length; i++) {
-                if (fileList[i].isDirectory()) {
-                    size += getFolderSize(fileList[i]);
+            for (File aFileList : fileList) {
+                if (aFileList.isDirectory()) {
+                    size += getFolderSize(aFileList);
                 } else {
-                    size += fileList[i].length();
+                    size += aFileList.length();
                 }
             }
         } catch (Exception e) {

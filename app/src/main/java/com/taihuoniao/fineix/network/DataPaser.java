@@ -584,13 +584,13 @@ public class DataPaser {
                                 sceneDetails.setTitle(data.optString("title"));
                                 sceneDetails.setDes(data.optString("des"));
                                 sceneDetails.setIs_love(data.optInt("is_love"));
-                                List<Integer> tagsList = new ArrayList<Integer>();
+                                List<Integer> tagsList = new ArrayList<>();
                                 JSONArray tags = data.getJSONArray("tags");
                                 for (int i = 0; i < tags.length(); i++) {
                                     int in = tags.optInt(i);
                                     tagsList.add(in);
                                 }
-                                List<String> tagsTitleList = new ArrayList<String>();
+                                List<String> tagsTitleList = new ArrayList<>();
                                 JSONArray tagsTitle = data.getJSONArray("tag_titles");
                                 for (int i = 0; i < tagsTitle.length(); i++) {
                                     String str = tagsTitle.optString(i, null);
@@ -598,7 +598,7 @@ public class DataPaser {
                                 }
                                 sceneDetails.setTag_titles(tagsTitleList);
                                 sceneDetails.setTags(tagsList);
-                                List<SceneDetails.Product> products = new ArrayList<SceneDetails.Product>();
+                                List<SceneDetails.Product> products = new ArrayList<>();
                                 JSONArray product = data.getJSONArray("product");
                                 for (int i = 0; i < product.length(); i++) {
                                     JSONObject job = product.getJSONObject(i);
@@ -763,7 +763,7 @@ public class DataPaser {
                     if (sceneList.isSuccess()) {
                         JSONObject data = jsonObject.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");
-                        List<SceneListBean> list = new ArrayList<SceneListBean>();
+                        List<SceneListBean> list = new ArrayList<>();
                         for (int i = 0; i < rows.length(); i++) {
                             JSONObject job = rows.getJSONObject(i);
                             SceneListBean sceneListBean = new SceneListBean();
@@ -790,7 +790,7 @@ public class DataPaser {
                             user.setAvatar_url(us.optString("avatar_url"));
                             sceneListBean.setUser_info(user);
                             JSONArray product = job.getJSONArray("product");
-                            List<SceneListBean.Products> productsList = new ArrayList<SceneListBean.Products>();
+                            List<SceneListBean.Products> productsList = new ArrayList<>();
                             for (int j = 0; j < product.length(); j++) {
                                 JSONObject ob = product.getJSONObject(j);
                                 SceneListBean.Products products = new SceneListBean.Products();
@@ -869,7 +869,7 @@ public class DataPaser {
                         JSONObject data = job.getJSONObject("data");
                         usedLabel.setHas_tag(data.optInt("has_tag"));
                         if (usedLabel.getHas_tag() != 0) {
-                            List<UsedLabelBean> list = new ArrayList<UsedLabelBean>();
+                            List<UsedLabelBean> list = new ArrayList<>();
                             JSONArray tags = data.getJSONArray("tags");
                             for (int i = 0; i < tags.length(); i++) {
                                 JSONObject ob = tags.getJSONObject(i);
@@ -925,7 +925,7 @@ public class DataPaser {
                         JSONObject object = data.getJSONObject("1");
                         if (object.optInt("children_count") > 0) {
                             JSONArray children = object.getJSONArray("children");
-                            List<AllLabelBean> childrenList = new ArrayList<AllLabelBean>();
+                            List<AllLabelBean> childrenList = new ArrayList<>();
                             for (int i = 0; i < children.length(); i++) {
                                 JSONObject ob = children.getJSONObject(i);
                                 AllLabelBean allLabelBean = new AllLabelBean();
@@ -934,7 +934,7 @@ public class DataPaser {
                                 allLabelBean.setChildren_count(ob.optInt("children_count"));
                                 if (allLabelBean.getChildren_count() > 0) {
                                     JSONArray children2 = ob.getJSONArray("children");
-                                    List<AllLabelBean> children2List = new ArrayList<AllLabelBean>();
+                                    List<AllLabelBean> children2List = new ArrayList<>();
                                     for (int j = 0; j < children2.length(); j++) {
                                         JSONObject ob2 = children2.getJSONObject(j);
                                         AllLabelBean allLabelBean2 = new AllLabelBean();
@@ -943,7 +943,7 @@ public class DataPaser {
                                         allLabelBean2.setChildren_count(ob2.optInt("children_count"));
                                         if (allLabelBean2.getChildren_count() > 0) {
                                             JSONArray children3 = ob2.getJSONArray("children");
-                                            List<AllLabelBean> children3List = new ArrayList<AllLabelBean>();
+                                            List<AllLabelBean> children3List = new ArrayList<>();
                                             for (int k = 0; k < children3.length(); k++) {
                                                 JSONObject ob3 = children3.getJSONObject(k);
                                                 AllLabelBean allLabelBean3 = new AllLabelBean();
@@ -1013,7 +1013,7 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.PROVINCE_LIST;
-                List<ProvinceBean> list = new ArrayList<ProvinceBean>();
+                List<ProvinceBean> list = new ArrayList<>();
                 try {
                     JSONObject job = new JSONObject(responseInfo.result);
                     JSONObject data = job.getJSONObject("data");
@@ -1024,7 +1024,7 @@ public class DataPaser {
                         provinceBean.set_id(pro.optString("_id"));
                         provinceBean.setName(pro.optString("city"));
                         JSONArray cities = pro.getJSONArray("cities");
-                        List<CityBean> cityBeanList = new ArrayList<CityBean>();
+                        List<CityBean> cityBeanList = new ArrayList<>();
                         for (int j = 0; j < cities.length(); j++) {
                             JSONObject city = cities.getJSONObject(j);
                             CityBean cityBean = new CityBean();
@@ -1100,7 +1100,7 @@ public class DataPaser {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GET_ADDRESS_LIST;
-                List<AddressBean> list = new ArrayList<AddressBean>();
+                List<AddressBean> list = new ArrayList<>();
                 try {
                     JSONObject job = new JSONObject(responseInfo.result);
                     JSONObject data = job.getJSONObject("data");
@@ -1300,7 +1300,7 @@ public class DataPaser {
                     if (categoryBean.isSuccess()) {
                         JSONObject data = job.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");
-                        List<CategoryListBean> list = new ArrayList<CategoryListBean>();
+                        List<CategoryListBean> list = new ArrayList<>();
                         for (int i = 0; i < rows.length(); i++) {
                             JSONObject ob = rows.getJSONObject(i);
                             CategoryListBean categoryListBean = new CategoryListBean();
@@ -1911,14 +1911,14 @@ public class DataPaser {
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_SHOP_CART;
                 try {
-                    list = new ArrayList<ShopCart>();
+                    list = new ArrayList<>();
                     JSONObject obj = new JSONObject(responseInfo.result);
                     JSONObject shopCartObj = obj.getJSONObject("data");
                     ShopCart shopCart = new ShopCart();
                     shopCart.set_id(shopCartObj.optString("_id"));
                     shopCart.setTotal_price(shopCartObj.optString("total_price"));
 
-                    List<ShopCartItem> itemList = new ArrayList<ShopCartItem>();
+                    List<ShopCartItem> itemList = new ArrayList<>();
                     JSONArray shopCartArrs = shopCartObj.getJSONArray("items");
                     for (int i = 0; i < shopCartArrs.length(); i++) {
                         JSONObject shopCartArr = shopCartArrs.getJSONObject(i);
@@ -1986,14 +1986,14 @@ public class DataPaser {
                         Message msg = new Message();
                         msg.what = DataConstants.PARSER_SHOP_CART_CALCULATE;
                         try {
-                            list = new ArrayList<CartDoOrder>();
+                            list = new ArrayList<>();
                             JSONObject obj = new JSONObject(responseInfo.result);
                             JSONObject cartDoOrderObjs = obj.getJSONObject("data");
                             CartDoOrder cartDoOrder = new CartDoOrder();
                             cartDoOrder.setSuccess(obj.optString("success"));
                             cartDoOrder.setIs_nowbuy(cartDoOrderObjs.optString("is_nowbuy"));
                             cartDoOrder.setPay_money(cartDoOrderObjs.optString("pay_money"));
-                            List<CartDoOrderBonus> bonusList = new ArrayList<CartDoOrderBonus>();
+                            List<CartDoOrderBonus> bonusList = new ArrayList<>();
                             JSONArray bonusArray = cartDoOrderObjs.getJSONArray("bonus");
                             for (int j = 0; j < bonusArray.length(); j++) {
                                 JSONObject bonusObj = bonusArray.getJSONObject(j);
@@ -2027,7 +2027,7 @@ public class DataPaser {
                             cartDoOrder.setUser_id(carDoOrderObj.optString("user_id"));
                             cartDoOrder.setIs_cart(carDoOrderObj.optString("is_cart"));
 
-                            List<CartOrderContent> contentList = new ArrayList<CartOrderContent>();
+                            List<CartOrderContent> contentList = new ArrayList<>();
                             JSONObject contentObjs = carDoOrderObj.getJSONObject("dict");
                             CartOrderContent cartOrderContent = new CartOrderContent();
                             cartOrderContent.setCard_money(contentObjs.optString("card_money"));
@@ -2046,7 +2046,7 @@ public class DataPaser {
                             cartDoOrder.setCartOrderContents(contentList);
 
                             JSONArray itemArray = contentObjs.getJSONArray("items");
-                            List<CartOrderContentItem> itemList = new ArrayList<CartOrderContentItem>();
+                            List<CartOrderContentItem> itemList = new ArrayList<>();
                             for (int i = 0; i < itemArray.length(); i++) {
                                 JSONObject itemObj = itemArray.getJSONObject(i);
                                 CartOrderContentItem item = new CartOrderContentItem();
@@ -2181,7 +2181,7 @@ public class DataPaser {
                         nowBuyBean.setSummary(dict.optString("summary"));
                         nowBuyBean.setPayment_method(dict.optString("payment_method"));
                         JSONArray items = dict.getJSONArray("items");
-                        List<NowBuyItemBean> itemList = new ArrayList<NowBuyItemBean>();
+                        List<NowBuyItemBean> itemList = new ArrayList<>();
                         for (int i = 0; i < items.length(); i++) {
                             JSONObject job = items.getJSONObject(i);
                             NowBuyItemBean nowBuyItemBean = new NowBuyItemBean();
@@ -2222,7 +2222,7 @@ public class DataPaser {
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_ORDER_DETAILS;
                 try {
-                    ordersList = new ArrayList<OrderDetails>();
+                    ordersList = new ArrayList<>();
                     JSONObject obj = new JSONObject(responseInfo.result);
                     JSONObject orderObj = obj.getJSONObject("data");
                     OrderDetails details = new OrderDetails();
@@ -2237,7 +2237,7 @@ public class DataPaser {
                     details.setTotal_money(orderObj.optString("total_money"));
                     details.setStatus(orderObj.optString("status"));
                     JSONObject arr = orderObj.getJSONObject("express_info");
-                    List<OrderDetailsAddress> addressList = new ArrayList<OrderDetailsAddress>();
+                    List<OrderDetailsAddress> addressList = new ArrayList<>();
                     OrderDetailsAddress address = new OrderDetailsAddress();
                     address.setAddress(arr.optString("address"));
                     address.setName(arr.optString("name"));
@@ -2248,7 +2248,7 @@ public class DataPaser {
 
                     details.setAddresses(addressList);
                     JSONArray productsArrays = orderObj.getJSONArray("items");
-                    List<OrderDetailsProducts> productsList = new ArrayList<OrderDetailsProducts>();
+                    List<OrderDetailsProducts> productsList = new ArrayList<>();
                     for (int j = 0; j < productsArrays.length(); j++) {
                         JSONObject productsArr = productsArrays.getJSONObject(j);
                         OrderDetailsProducts products = new OrderDetailsProducts();
@@ -2317,7 +2317,7 @@ public class DataPaser {
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_ORDER;
                 try {
-                    list = new ArrayList<OrderEntity>();
+                    list = new ArrayList<>();
                     JSONObject obj = new JSONObject(responseInfo.result);
                     JSONObject orderObj = obj.getJSONObject("data");
                     JSONArray orderArrs = orderObj.getJSONArray("rows");
@@ -2333,7 +2333,7 @@ public class DataPaser {
                         orderEntity.setCreated_at(orderArr.optString("created_at"));
                         orderEntity.setStatus(orderArr.optString("status"));
                         JSONArray array = orderArr.getJSONArray("items");
-                        List<OrderItem> itemList = new ArrayList<OrderItem>();
+                        List<OrderItem> itemList = new ArrayList<>();
                         for (int j = 0; j < array.length(); j++) {
                             JSONObject arr = array.getJSONObject(j);
                             OrderItem item = new OrderItem();
@@ -2427,7 +2427,7 @@ public class DataPaser {
                 Message msg = new Message();
                 msg.what = DataConstants.PASER_SHOPCART_INVENTORY_ITEM;
                 try {
-                    list = new ArrayList<ShopCartInventoryItemBean>();
+                    list = new ArrayList<>();
                     JSONObject obj = new JSONObject(responseInfo.result);
                     JSONObject jsonObj = obj.getJSONObject("data");
                     JSONArray jsonArray = jsonObj.getJSONArray("items");

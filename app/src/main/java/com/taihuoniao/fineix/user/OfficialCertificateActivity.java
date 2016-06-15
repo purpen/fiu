@@ -96,8 +96,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         dialog=new WaittingDialog(this);
         svProgressHUD=new WaittingDialog(this);
         String[] stringArray = getResources().getStringArray(R.array.official_tags);
-        for (int i = 0; i < stringArray.length; i++) {
-            label_view.addLabel(stringArray[i]);
+        for (String aStringArray : stringArray) {
+            label_view.addLabel(aStringArray);
         }
         if (authData!=null){
             tv_tag.setVisibility(View.VISIBLE);
@@ -268,7 +268,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        Intent intent = null;
         switch (view.getId()) {
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();
@@ -311,8 +310,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Intent intent = null;
-            File file = null;
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
 //                    Uri uri = data.getData();

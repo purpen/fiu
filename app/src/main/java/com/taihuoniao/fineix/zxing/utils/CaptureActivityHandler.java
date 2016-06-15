@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
@@ -45,9 +46,9 @@ public class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public CaptureActivityHandler(CaptureActivity activity, CameraManager cameraManager, int decodeMode) {
+	public CaptureActivityHandler(CaptureActivity activity, CameraManager cameraManager) {
 		this.activity = activity;
-		decodeThread = new DecodeThread(activity, decodeMode);
+		decodeThread = new DecodeThread(activity, DecodeThread.ALL_MODE);
 		decodeThread.start();
 		state = State.SUCCESS;
 
@@ -73,7 +74,7 @@ public class CaptureActivityHandler extends Handler {
 			// We're decoding as fast as possible, so when one decode fails,
 			// start another.
 			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+			cameraManager.requestPreviewFrame(decodeThread.getHandler());
 			break;
 		case R.id.return_scan_result:
 			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
@@ -103,7 +104,7 @@ public class CaptureActivityHandler extends Handler {
 	private void restartPreviewAndDecode() {
 		if (state == State.SUCCESS) {
 			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+			cameraManager.requestPreviewFrame(decodeThread.getHandler());
 		}
 	}
 

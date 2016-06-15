@@ -238,7 +238,7 @@ public class ImageViewTouch extends ImageViewTouchBase {
             if (mDoubleTapEnabled) {
                 mUserScaled = true;
                 float scale = getScale();
-                float targetScale = scale;
+                float targetScale;
                 targetScale = onDoubleTapPost(scale, getMaxScale());
                 targetScale = Math.min(getMaxScale(), Math.max(targetScale, getMinScale()));
                 zoomTo(targetScale, e.getX(), e.getY(), DEFAULT_ANIMATION_DURATION);

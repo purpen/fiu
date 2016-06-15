@@ -51,7 +51,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
-import com.taihuoniao.fineix.zxing.decode.DecodeThread;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
 import com.taihuoniao.fineix.zxing.utils.CaptureActivityHandler;
 import com.taihuoniao.fineix.zxing.utils.InactivityTimer;
@@ -85,7 +84,6 @@ public final class CaptureActivity extends BaseActivity implements
     private SurfaceView scanPreview = null;
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
-    private ImageView scanLine;
     private ImageView mFlash;
 
     private Rect mCropRect = null;
@@ -112,7 +110,7 @@ public final class CaptureActivity extends BaseActivity implements
         TextView tv_bar = (TextView) findViewById(R.id.tv_bar);
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        ImageView scanLine = (ImageView) findViewById(R.id.capture_scan_line);
         mFlash = (ImageView) findViewById(R.id.capture_flash);
         mFlash.setOnClickListener(this);
         tv_bar.setOnClickListener(this);
@@ -248,7 +246,7 @@ public final class CaptureActivity extends BaseActivity implements
     private void handleText(String text) {
         String url = text;
         if (TextUtils.isEmpty(text)) return;
-        Intent intent=null;
+        Intent intent;
         LogUtil.e("handleText", text);
         if (text.contains("taihuoniao.com")) {
             if (!text.contains("?")) {//是咱们的域名但没参数
@@ -483,8 +481,8 @@ public final class CaptureActivity extends BaseActivity implements
             // Creating the handler starts the preview, which can also throw a
             // RuntimeException.
             if (handler == null) {
-                handler = new CaptureActivityHandler(this, cameraManager,
-                        DecodeThread.ALL_MODE);
+                handler = new CaptureActivityHandler(this, cameraManager
+                );
             }
 
             initCrop();
@@ -595,7 +593,7 @@ public final class CaptureActivity extends BaseActivity implements
     private boolean flag;
 
     protected void light() {
-        if (flag == true) {
+        if (flag) {
             flag = false;
             // 开闪光灯
             cameraManager.openLight();

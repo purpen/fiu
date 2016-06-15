@@ -47,28 +47,15 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
  * Created by taihuoniao on 2016/6/1.
  */
 public class FilterActivity extends BaseActivity implements View.OnClickListener {
-    //上个界面传递过来的数据
-    private Uri imageUri;
-    //界面下的控件
-    private View activity_view;
     private GlobalTitleLayout titleLayout;
     private RelativeLayout gpuRelative;
     private GPUImageView gpuImageView;
-    private LinearLayout recyclerLinear;
     private RecyclerView recyclerView;
     private SeekBar seekBar;
     private Button backBtn;
-    //    private GPUImageFilterTools.FilterList filterList;
-    private LinearLayout bottomLinear;
     private RelativeLayout productsRelative;
-    private TextView productsTv;
-    private TextView productsRedline;
     private RelativeLayout chainingRelative;
-    private TextView chainingTv;
-    private TextView chainingRedline;
     private RelativeLayout filterRelative;
-    private TextView filterTv;
-    private TextView filterRedline;
     //popupwindow下的控件
     private PopupWindow popupWindow;
     private TextView cancelTv;
@@ -87,13 +74,12 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
     //标记产品装载图片的容器
     private MyImageViewTouch mImageView;
     //添加链接装载链接的容器
-    private List<LabelView> labels = new ArrayList<LabelView>();
+    private List<LabelView> labels = new ArrayList<>();
     //工具类
     private WaittingDialog dialog;
     //编辑好的图片存储名称
     private String picName;
     public static FilterActivity instance = null;
-    private ImageLoader imageLoader;
     //图片加载完毕之后的宽高
     private int picWidth, picHeight;
     private DisplayImageOptions options;
@@ -117,7 +103,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initList() {
-        imageUri = getIntent().getData();
+        Uri imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.filter);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
@@ -253,17 +239,17 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initView() {
-        activity_view = View.inflate(FilterActivity.this, R.layout.activity_edit_picture, null);
+        View activity_view = View.inflate(FilterActivity.this, R.layout.activity_edit_picture, null);
         setContentView(activity_view);
         instance = FilterActivity.this;
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_edit_titlelayout);
         gpuRelative = (RelativeLayout) findViewById(R.id.activity_edit_main_area);
         gpuImageView = (GPUImageView) findViewById(R.id.activity_edit_gpuimage);
-        recyclerLinear = (LinearLayout) findViewById(R.id.activity_edit_recycler_linear);
+        LinearLayout recyclerLinear = (LinearLayout) findViewById(R.id.activity_edit_recycler_linear);
         recyclerView = (RecyclerView) findViewById(R.id.activity_edit_recycler);
         seekBar = (SeekBar) findViewById(R.id.activity_edit_progress);
         backBtn = (Button) findViewById(R.id.activity_edit_back);
-        bottomLinear = (LinearLayout) findViewById(R.id.activity_edit_bottom_linear);
+        LinearLayout bottomLinear = (LinearLayout) findViewById(R.id.activity_edit_bottom_linear);
 //        bottomLinear.setVisibility(View.GONE);
         ViewGroup.LayoutParams l = bottomLinear.getLayoutParams();
         l.height = 1;
@@ -271,14 +257,14 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
-        productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
-        chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
-        filterTv = (TextView) findViewById(R.id.activity_edit_filter_tv);
-        productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
-        chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
-        filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
+        TextView productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
+        TextView chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
+        TextView filterTv = (TextView) findViewById(R.id.activity_edit_filter_tv);
+        TextView productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
+        TextView chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
+        TextView filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
         dialog = new WaittingDialog(FilterActivity.this);
-        imageLoader = ImageLoader.getInstance();
+        ImageLoader imageLoader = ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)

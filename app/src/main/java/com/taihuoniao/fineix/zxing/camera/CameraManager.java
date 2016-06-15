@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-
 import com.taihuoniao.fineix.zxing.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
@@ -173,17 +172,15 @@ public class CameraManager {
      * A single preview frame will be returned to the handler supplied. The data
      * will arrive as byte[] in the message.obj field, with width and height
      * encoded as message.arg1 and message.arg2, respectively.
-     * 
-     * @param handler
-     *            The handler to send the message to.
-     * @param message
-     *            The what field of the message to be sent.
-     */
-    public synchronized void requestPreviewFrame(Handler handler, int message) {
+	 *  @param handler
+	 *            The handler to send the message to.
+	 *
+	 */
+	public synchronized void requestPreviewFrame(Handler handler) {
 	Camera theCamera = camera;
 	if (theCamera != null && previewing) {
-	    previewCallback.setHandler(handler, message);
-	    theCamera.setOneShotPreviewCallback(previewCallback);
+		previewCallback.setHandler(handler, com.taihuoniao.fineix.R.id.decode);
+		theCamera.setOneShotPreviewCallback(previewCallback);
 	}
     }
 

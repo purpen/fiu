@@ -140,7 +140,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
     @OnClick({R.id.btn_verify,R.id.btn_register})
     void performClick(View v){
-        String phone=null;
+        String phone;
         switch (v.getId()){
             case R.id.btn_verify: //提交验证码
                  phone= et_phone.getText().toString().trim();
@@ -388,7 +388,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             PlatformDb platDB = platform.getDb();//获取数平台数据DB
             //通过DB获取各种数据
 
-            sex = platDB.getUserGender().toString();
+            sex = platDB.getUserGender();
             if ("f".equals(sex)) {
                 sex = "2";//女
             } else if ("m".equals(sex)) {
@@ -396,20 +396,20 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
             } else {
                 sex = "0";//保密
             }
-            avatarUrl = platDB.getUserIcon().toString();
-            nickName = platDB.getUserName().toString();
+            avatarUrl = platDB.getUserIcon();
+            nickName = platDB.getUserName();
             openidForWeChat = platDB.getUserId();
-            token = platDB.getToken().toString();
+            token = platDB.getToken();
             userId = null;
             if (TextUtils.equals(LOGIN_TYPE_QQ,loginType)) {
                 //QQ的ID得这样获取，这是MOB公司的错，不是字段写错了
-                userId = platform.getDb().get("weibo").toString();
+                userId = platform.getDb().get("weibo");
             } else if (TextUtils.equals(LOGIN_TYPE_WX, loginType)) {
                 //微信这个神坑，我已无力吐槽，干嘛要搞两个ID出来，泥马，后台说要传的是这个ID，字段没有错！用platDB.getUserId()不行！
-                userId = platform.getDb().get("unionid").toString();
+                userId = platform.getDb().get("unionid");
             } else {
                 //除QQ和微信两特例，其他的ID这样取就行了
-                userId = platDB.getUserId().toString();
+                userId = platDB.getUserId();
             }
             doThirdLogin();
         }

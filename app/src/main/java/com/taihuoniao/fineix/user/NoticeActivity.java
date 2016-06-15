@@ -69,7 +69,7 @@ public class NoticeActivity extends BaseActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 NoticeData.NoticeItem item=list.get(i);
-                Intent intent =null;
+                Intent intent;
                 if (item.kind==12){ //情景
                     intent = new Intent(activity, QingjingDetailActivity.class);
                     intent.putExtra("id",String.valueOf(item.related_id));

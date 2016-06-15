@@ -43,7 +43,7 @@ public class HeaderGridView extends GridView {
         public boolean isSelectable;
     }
 
-    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
+    private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<>();
 
     private void initHeaderGridView() {
         super.setClipChildren(false);
@@ -289,7 +289,7 @@ public class HeaderGridView extends GridView {
             }
             // Adapter
             final int adjPosition = position - numHeadersAndPlaceholders;
-            int adapterCount = 0;
+            int adapterCount;
             if (mAdapter != null) {
                 adapterCount = mAdapter.getCount();
                 if (adjPosition < adapterCount) {
@@ -311,7 +311,7 @@ public class HeaderGridView extends GridView {
             }
             // Adapter
             final int adjPosition = position - numHeadersAndPlaceholders;
-            int adapterCount = 0;
+            int adapterCount;
             if (mAdapter != null) {
                 adapterCount = mAdapter.getCount();
                 if (adjPosition < adapterCount) {
@@ -364,7 +364,7 @@ public class HeaderGridView extends GridView {
             }
             // Adapter
             final int adjPosition = position - numHeadersAndPlaceholders;
-            int adapterCount = 0;
+            int adapterCount;
             if (mAdapter != null) {
                 adapterCount = mAdapter.getCount();
                 if (adjPosition < adapterCount) {

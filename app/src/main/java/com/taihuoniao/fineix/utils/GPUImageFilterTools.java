@@ -260,7 +260,7 @@ public class GPUImageFilterTools {
             case POSTERIZE:
                 return new GPUImagePosterizeFilter();
             case FILTER_GROUP:
-                List<GPUImageFilter> filters = new LinkedList<GPUImageFilter>();
+                List<GPUImageFilter> filters = new LinkedList<>();
                 filters.add(new GPUImageContrastFilter());
                 filters.add(new GPUImageDirectionalSobelEdgeDetectionFilter());
                 filters.add(new GPUImageGrayscaleFilter());
@@ -430,8 +430,8 @@ public class GPUImageFilterTools {
     }
 
     public static class FilterList {
-        public List<String> names = new LinkedList<String>();
-        public List<FilterType> filters = new LinkedList<FilterType>();
+        public List<String> names = new LinkedList<>();
+        public List<FilterType> filters = new LinkedList<>();
         private List<Boolean> isChecked = new LinkedList<>();
 
         public void addFilter(final String name, final FilterType filter) {

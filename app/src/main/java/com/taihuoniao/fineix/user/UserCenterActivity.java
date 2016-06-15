@@ -212,9 +212,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     }
                 }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
-                if (responseInfo == null) {
-                    return;
-                }
 
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
@@ -573,7 +570,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        Intent intent = null;
+        Intent intent;
         switch (view.getId()) {
             case R.id.tv_take_photo:
                 PopupWindowUtil.dismiss();

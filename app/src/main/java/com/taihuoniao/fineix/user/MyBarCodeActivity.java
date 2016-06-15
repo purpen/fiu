@@ -144,9 +144,9 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         View iv_close = view.findViewById(R.id.tv_cancel);
         int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone,};
         String[] name = {"微信好友", "微信朋友圈", "新浪微博", "QQ空间"};
-        List<HashMap<String, Object>> shareList = new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, Object>> shareList = new ArrayList<>();
         for (int i = 0; i < image.length; i++) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put("image", image[i]);
             map.put("text", name[i]);
             shareList.add(map);
@@ -163,11 +163,9 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            String title = "有Fiu的生活，才够意思，快点扫码加我吧！查看个人主页>>http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
-            String titleUrl = "http://m.taihuoniao.com/guide/fiu?infoType=13&infoId=" + LoginInfo.getUserId();
             String imgPath = FileUtils.getSavePath(getPackageName()) + "/share.png";
             FileUtils.bitmapToFile(ImageUtils.convertViewToBitmap(rl_box), imgPath);
-            Platform.ShareParams params = null;
+            Platform.ShareParams params;
             switch (i) { //微信好友
                 case 0:
                     params = new Platform.ShareParams();
@@ -218,8 +216,6 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
 
     @Override
     public void onClick(View v) {
-        Intent intent = null;
-
         switch (v.getId()) {
             case R.id.tv_take_photo:
                 if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath(getPackageName()) + "/bar_code.png")) {

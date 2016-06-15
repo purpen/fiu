@@ -12,7 +12,7 @@
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/pull_lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         pullrefresh:actionViewId="@+id/action_view"
         pullrefresh:toolViewId="@+id/tool_view"
         android:divider="@null"

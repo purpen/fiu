@@ -32,14 +32,12 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
-import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
-import com.taihuoniao.fineix.user.OrderInterestQJActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
@@ -149,7 +147,7 @@ public class MineFragment extends MyBaseFragment {
         imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<>();
-            ImgTxtItem item = null;
+            ImgTxtItem item;
             for (int i = 0; i < imgIds.length; i++) {
                 item = new ImgTxtItem();
                 item.imgId = imgIds[i];
@@ -209,9 +207,6 @@ public class MineFragment extends MyBaseFragment {
                     }
                 }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
-                if (responseInfo == null) {
-                    return;
-                }
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }
@@ -222,7 +217,6 @@ public class MineFragment extends MyBaseFragment {
                     if (response.isSuccess()) {
                         user = response.getData();
                         refreshUIAfterNet();
-                        return;
                     }
 
 
@@ -392,7 +386,7 @@ public class MineFragment extends MyBaseFragment {
 
     @OnClick({R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
     protected void onClick(View v) {
-        Intent intent = null;
+        Intent intent;
         switch (v.getId()) {
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));

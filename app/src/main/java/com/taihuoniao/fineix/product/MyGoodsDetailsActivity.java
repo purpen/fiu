@@ -264,7 +264,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
                     if (msg.obj != null) {
                         if (msg.obj instanceof ShopCartNumber) {
-                            ShopCartNumber numberCart = null;
+                            ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
                             if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
                                 titleLayout.setRightShopCartButton(true);

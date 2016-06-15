@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//import com.umeng.analytics.MobclickAgent;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+
 
 /**
  * @author lilin
@@ -38,7 +36,7 @@ public abstract class MyBaseFragment<T> extends Fragment {
             throw new IllegalArgumentException("please invoke set setFragmentLayout");
         }
         this.layoutId=layoutId;
-    };
+    }
 
     protected void initParams() {
 

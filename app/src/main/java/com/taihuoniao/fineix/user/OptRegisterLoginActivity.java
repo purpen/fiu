@@ -2,9 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,9 +18,11 @@ public class OptRegisterLoginActivity extends BaseActivity implements View.OnCli
     private ImageView mClose;
     private TextView mToRegister;
     private TextView mToLogin;
-    public OptRegisterLoginActivity(){
+
+    public OptRegisterLoginActivity() {
         super(R.layout.activity_opt_register_login);
     }
+
     @Override
     public void finish() {
         super.finish();
@@ -32,7 +32,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected void initView() {
-        instance=this;
+        instance = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         overridePendingTransition(R.anim.up_register, 0);
         mClose = (ImageView) findViewById(R.id.image_close_reg_login);
@@ -55,7 +55,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements View.OnCli
                 startActivity(new Intent(this, ToRegisterActivity.class));
                 break;
             case R.id.tv_click_login:
-                Intent intentLogin = new Intent(this,ToLoginActivity.class);
+                Intent intentLogin = new Intent(this, ToLoginActivity.class);
 //                intentLogin.putExtra("flag", getIntent().getIntExtra("flag", 0));
                 startActivity(intentLogin);
                 break;

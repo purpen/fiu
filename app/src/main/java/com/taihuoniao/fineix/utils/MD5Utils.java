@@ -30,12 +30,12 @@ public class MD5Utils {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             md5.update(info.getBytes("UTF-8"));
             byte[] encryption = md5.digest();
-            StringBuffer strBuf = new StringBuffer();
-            for (int i = 0; i < encryption.length; i++) {
-                if (Integer.toHexString(0xff & encryption[i]).length() == 1) {
-                    strBuf.append("0").append(Integer.toHexString(0xff & encryption[i]));
+            StringBuilder strBuf = new StringBuilder();
+            for (byte anEncryption : encryption) {
+                if (Integer.toHexString(0xff & anEncryption).length() == 1) {
+                    strBuf.append("0").append(Integer.toHexString(0xff & anEncryption));
                 } else {
-                    strBuf.append(Integer.toHexString(0xff & encryption[i]));
+                    strBuf.append(Integer.toHexString(0xff & anEncryption));
                 }
             }
             return strBuf.toString();
@@ -80,7 +80,7 @@ public class MD5Utils {
                 sign.append("&").append(name).append("=").append(value);
             }
         }
-        String sign1 = null;
+        String sign1;
 
         sign1 = getMD5(getMD5(sign.toString() + "545d9f8aac6b7a4d04abffe51415289600"));
 

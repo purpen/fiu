@@ -66,7 +66,7 @@ public class CustomAutoScrollViewPager extends ViewPager {
     private Handler handler;
     private boolean isAutoScroll = false;
     private boolean isStopByTouch = false;
-    private float touchX = 0f, downX = 0f;
+    private float downX = 0f;
     private CustomDurationScroller scroller = null;
 
     public static final int SCROLL_WHAT = 0;
@@ -194,7 +194,7 @@ public class CustomAutoScrollViewPager extends ViewPager {
         }
 
         if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT || slideBorderMode == SLIDE_BORDER_MODE_CYCLE) {
-            touchX = ev.getX();
+            float touchX = ev.getX();
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
                 downX = touchX;
             }
@@ -229,7 +229,7 @@ public class CustomAutoScrollViewPager extends ViewPager {
         private final WeakReference<CustomAutoScrollViewPager> autoScrollViewPager;
 
         public MyHandler(CustomAutoScrollViewPager autoScrollViewPager) {
-            this.autoScrollViewPager = new WeakReference<CustomAutoScrollViewPager>(autoScrollViewPager);
+            this.autoScrollViewPager = new WeakReference<>(autoScrollViewPager);
         }
 
         @Override

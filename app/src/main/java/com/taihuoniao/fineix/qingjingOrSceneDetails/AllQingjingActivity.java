@@ -36,10 +36,6 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/25.
  */
 public class AllQingjingActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
-    //上个界面传递过来用来判断是选择情景还是查看情景的标识
-//    private int isSelect = 0;//0 是从情景列表中跳转过来的 1是从选择情景界面跳转
-    //界面下的控件
-    private View activity_view;
     private ImageView searchQJImg;
     private ImageView createQingjingImg;
     private PullToRefreshGridView pullToRefreshView;
@@ -62,7 +58,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     protected void initView() {
-        activity_view = View.inflate(AllQingjingActivity.this, R.layout.activity_all_qingjing, null);
+        View activity_view = View.inflate(AllQingjingActivity.this, R.layout.activity_all_qingjing, null);
         setContentView(activity_view);
         searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);

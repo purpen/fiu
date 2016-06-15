@@ -95,10 +95,7 @@ public class LoginInfo implements Serializable {
 
     public static boolean isUserLogin() {
         String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
-        if (TextUtils.isEmpty(login_info)) {
-            return false;
-        }
-        return true;
+        return !TextUtils.isEmpty(login_info);
     }
 
 

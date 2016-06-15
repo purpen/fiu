@@ -60,7 +60,6 @@ public class CompleteUserInfoActivity extends BaseActivity {
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private static final String TYPE = "3";
     private Bitmap bitmap;
-    private List<Uri> mSelected;
     private WaittingDialog svProgressHUD;
     public CompleteUserInfoActivity() {
         super(R.layout.activity_complete_user_info);
@@ -203,8 +202,8 @@ public class CompleteUserInfoActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_PICK_IMAGE:
-                    mSelected = PicturePickerUtils.obtainResult(data);
-                    if (mSelected==null) return;
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected == null) return;
                     if (mSelected.size()==0) return;
                     toCropActivity(mSelected.get(0));
 //                    Uri uri = data.getData();

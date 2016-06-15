@@ -432,9 +432,9 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
 
     private void addOverlayers(List<QingJingItem> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
-        LatLng ll = null;
-        MarkerOptions option = null;
-        ArrayList<OverlayOptions> options = new ArrayList<OverlayOptions>();
+        LatLng ll;
+        MarkerOptions option;
+        ArrayList<OverlayOptions> options = new ArrayList<>();
         for (QingJingItem item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));

@@ -49,9 +49,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     private ListViewForScrollView mShopCartListView;
     private WaittingDialog mDialog = null;
     private List<ShopCart> mList = new ArrayList<>();
-    private List<Map<String, Object>> totalList = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> list_delete = new ArrayList<Map<String, Object>>();
-    HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
+    private List<Map<String, Object>> totalList = new ArrayList<>();
+    private List<Map<String, Object>> list_delete = new ArrayList<>();
+    HashMap<Integer, String> hashMap = new HashMap<>();
     private ShopCartAdapter adapter;
     private int mCarNum = 0;
     private MyGlobalTitleLayout title = null;
@@ -99,7 +99,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
                     if (msg.obj != null) {
                         if (msg.obj instanceof ShopCartNumber) {
-                            ShopCartNumber numberCart = null;
+                            ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
                             if (!numberCart.isSuccess() || "0".equals(numberCart.getCount())) {
                                 title.setTitle("购物车");
@@ -119,7 +119,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             mList.addAll((List<ShopCart>) msg.obj);
                             for (int i = 0; i < mList.size(); i++) {
                                 for (int j = 0; j < mList.get(i).getShopCartItemList().size(); j++) {
-                                    map = new HashMap<String, Object>();
+                                    map = new HashMap<>();
                                     map.put("keyImage", mList.get(i).getShopCartItemList().get(j).getCover());
                                     map.put("keyTitle", mList.get(i).getShopCartItemList().get(j).getTitle());
                                     map.put("keyPrice", mList.get(i).getShopCartItemList().get(j).getTotal_price());
@@ -286,8 +286,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     StringBuilder addSubtractBuilder = new StringBuilder();
                     addSubtractBuilder.append("[");
                     for (int i = 0; i < ShopCarActivity.this.hashMap.size(); i++) {
-                        addSubtractBuilder.append("{\"target_id\":" + totalList.get(i).get("keyTargetId") +
-                                ",\"n\":" + ShopCarActivity.this.hashMap.get(i) + ",\"type\":" + 1 + "},");
+                        addSubtractBuilder.append("{\"target_id\":").append(totalList.get(i).get("keyTargetId")).append(",\"n\":").append(ShopCarActivity.this.hashMap.get(i)).append(",\"type\":").append(1).append("},");
 
                     }
                     addSubtractBuilder.append("]");

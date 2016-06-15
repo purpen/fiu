@@ -19,7 +19,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.MergeCursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 
@@ -29,9 +28,6 @@ import android.support.v4.content.CursorLoader;
  *
  * @author KeithYokoma
  * @version 1.0.0
- * @hide
- * @Modification add picture size charge
- * by valuesFeng
  * @since 2014/03/26
  */
 public class AlbumLoader extends CursorLoader {
@@ -42,11 +38,11 @@ public class AlbumLoader extends CursorLoader {
     private static final String IS_LARGE_SIZE = " _size > ? or _size is null";
 
     public static CursorLoader newInstance(Context context, SelectionSpec selectionSpec) {
-        return new AlbumLoader(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PROJECTION, IS_LARGE_SIZE + BUCKET_GROUP_BY, new String[]{selectionSpec.getMinPixels() + ""}, BUCKET_ORDER_BY,selectionSpec );
+        return new AlbumLoader(context, IS_LARGE_SIZE + BUCKET_GROUP_BY, new String[]{selectionSpec.getMinPixels() + ""}, selectionSpec);
     }
 
-    private AlbumLoader(Context context, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, SelectionSpec selectionSpec) {
-        super(context, uri, projection, selection, selectionArgs, sortOrder);
+    private AlbumLoader(Context context, String selection, String[] selectionArgs, SelectionSpec selectionSpec) {
+        super(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, AlbumLoader.PROJECTION, selection, selectionArgs, AlbumLoader.BUCKET_ORDER_BY);
     }
 
     @Override

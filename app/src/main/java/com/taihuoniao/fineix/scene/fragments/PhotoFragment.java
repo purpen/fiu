@@ -74,7 +74,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         titleLayout.setBackListener(this);
         titleLayout.setTitleLinearListener(this);
         titleLayout.setContinueListener(this);
-        albumPaths = new ArrayList<String>();
+        albumPaths = new ArrayList<>();
         albumList = findGalleries(getActivity());
         if (albumList.containsKey(MainApplication.systemPhotoPath)) {
             titleLayout.setTitle(R.string.film_album);
@@ -173,7 +173,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
                 MediaStore.Images.Media.SIZE + ">?",//查询条件
                 new String[]{"1"}, //查询条件中问号对应的值
                 MediaStore.Images.Media.DATE_ADDED + " desc");
-        Map<String, AlbumBean> galleries = new HashMap<String, AlbumBean>();
+        Map<String, AlbumBean> galleries = new HashMap<>();
         if(cursor==null){
             return galleries;
         }

@@ -57,9 +57,6 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     @Bind(R.id.lv)
     ListView lv;
     private BaiduMap mBDMap;
-    private int page; //默认查看第一页
-    private int pageSize;//本界面只展示三条
-    private int radius = 5000; //搜索半径
     private boolean isFirstLoc = true;
     private static final String STICK_ALL = "0"; //所有情境
     private static final String STICK_SELECT = "1"; //精选情境
@@ -147,9 +144,9 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     }
 
     private void getNearByData(LatLng ll) {//附近的所有情境
-        page = 1;
-        pageSize = 1000;
-        radius = 0;
+        int page = 1;
+        int pageSize = 1000;
+        int radius = 0;
         ClientDiscoverAPI.getQJData(ll, radius, String.valueOf(page), String.valueOf(pageSize), STICK_ALL, new RequestCallBack<String>() {
             @Override
             public void onStart() {
@@ -189,9 +186,9 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
 
     private void addOverlayers(final List<QingJingItem> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
-        LatLng ll = null;
-        MarkerOptions option = null;
-        final ArrayList<Marker> markers = new ArrayList<Marker>();
+        LatLng ll;
+        MarkerOptions option;
+        final ArrayList<Marker> markers = new ArrayList<>();
         for (QingJingItem item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));

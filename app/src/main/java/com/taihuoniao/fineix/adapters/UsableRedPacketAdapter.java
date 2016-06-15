@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.utils.Util;
@@ -26,7 +27,7 @@ public class UsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.RedP
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final RedPacketData.RedPacketItem item = list.get(position);
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(activity, R.layout.account_redbag_untimeout, null);
             holder = new ViewHolder(convertView);

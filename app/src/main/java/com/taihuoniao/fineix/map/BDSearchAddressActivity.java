@@ -52,8 +52,6 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
     private ArrayList<PoiInfo> list;
     private BDAddressListAdapter adapter;
     private boolean isFirstLoc = true;
-    private int radius = 1000;    //默认半径
-    private int pageCapacity = 10; //默认分页大小
     private int pageNum=0;
     private PoiSortType sortType = PoiSortType.distance_from_near_to_far; //默认排序类型
     private LatLng latLng;
@@ -223,7 +221,9 @@ public class BDSearchAddressActivity extends BaseActivity implements View.OnClic
 
     private void loadAndshowPoiResult(String keyWord, LatLng latLng) {
         if (!activity.isFinishing() &&dialog!=null) dialog.show();
-        MapUtil.getPoiNearbyByKeyWord(keyWord,latLng,radius,pageNum,pageCapacity,sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
+        int radius = 1000;
+        int pageCapacity = 10;
+        MapUtil.getPoiNearbyByKeyWord(keyWord, latLng, radius, pageNum, pageCapacity, sortType, new MapUtil.MyOnGetPoiSearchResultListener() {
             @Override
             public void onGetPoiResult(PoiResult result) {
                 if (!activity.isFinishing() &&dialog!=null) dialog.dismiss();

@@ -220,11 +220,11 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         int height = bmp.getHeight();
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 
-        int pixR = 0;
-        int pixG = 0;
-        int pixB = 0;
+        int pixR;
+        int pixG;
+        int pixB;
 
-        int pixColor = 0;
+        int pixColor;
 
         int newR = 0;
         int newG = 0;
@@ -232,7 +232,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
         int delta = 16; // 值越小图片会越亮，越大则越暗
 
-        int idx = 0;
+        int idx;
         int[] pixels = new int[width * height];
         bmp.getPixels(pixels, 0, width, 0, 0, width, height);
         for (int i = 1, length = height - 1; i < length; i++) {
@@ -245,9 +245,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                         pixG = Color.green(pixColor);
                         pixB = Color.blue(pixColor);
 
-                        newR = newR + (int) (pixR * gauss[idx]);
-                        newG = newG + (int) (pixG * gauss[idx]);
-                        newB = newB + (int) (pixB * gauss[idx]);
+                        newR = newR + pixR * gauss[idx];
+                        newG = newG + pixG * gauss[idx];
+                        newB = newB + pixB * gauss[idx];
                         idx++;
                     }
                 }

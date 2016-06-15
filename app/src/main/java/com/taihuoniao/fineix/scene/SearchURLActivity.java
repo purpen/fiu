@@ -245,7 +245,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.pop_find_confirm:
                 dialog.show();
-                String attrbute = null;
+                String attrbute;
                 switch (type) {
                     case DataConstants.JINGDONG:
                         attrbute = "4";
@@ -400,7 +400,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 case DataConstants.TAOBAO:
                     TBProductBean netTB = (TBProductBean) msg.obj;
                     if (netTB.isSuccess()) {
-                        TBProductBean.TBProductItem item = null;
+                        TBProductBean.TBProductItem item;
                         try {
                             item = netTB.getData().getRows().get(0);
                         } catch (IndexOutOfBoundsException e) {

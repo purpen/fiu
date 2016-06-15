@@ -29,8 +29,8 @@ public class AlbumAdapter extends CursorAdapter {
     LayoutInflater mInflater;
     ViewHolder viewHolder;
 
-    public AlbumAdapter(Context context, Cursor c) {
-        super(context, c, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+    public AlbumAdapter(Context context) {
+        super(context, null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         mInflater = LayoutInflater.from(context);
     }
 

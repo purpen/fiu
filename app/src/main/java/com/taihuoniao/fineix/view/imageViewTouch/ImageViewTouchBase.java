@@ -36,7 +36,7 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
          * @param drawable
          */
         void onDrawableChanged(Drawable drawable);
-    };
+    }
 
     public interface OnLayoutChangeListener {
         /**
@@ -48,7 +48,7 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
          * @param bottom
          */
         void onLayoutChanged(boolean changed, int left, int top, int right, int bottom);
-    };
+    }
 
     /**
      * Use this to change the {@link ImageViewTouchBase#setDisplayType(DisplayType)} of
@@ -63,7 +63,7 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
         FIT_TO_SCREEN,
         /** Image will be scaled only if bigger than the bounds of this view */
         FIT_IF_BIGGER
-    };
+    }
 
     public static final String       LOG_TAG                    = "ImageViewTouchBase";
     protected static final boolean   LOG_ENABLED                = true;
@@ -317,7 +317,7 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
         } else {
             // drawable is null
             if (mBitmapChanged)
-                onDrawableChanged(drawable);
+                onDrawableChanged(null);
             if (changed || mBitmapChanged || mScaleTypeChanged)
                 onLayoutChanged(left, top, right, bottom);
 
@@ -923,12 +923,12 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
             scrollRect.left = 0;
         if (bitmapRect.top + scrollRect.top >= 0 && bitmapRect.bottom > mThisHeight)
             scrollRect.top = (int) (0 - bitmapRect.top);
-        if (bitmapRect.bottom + scrollRect.top <= (mThisHeight - 0) && bitmapRect.top < 0)
-            scrollRect.top = (int) ((mThisHeight - 0) - bitmapRect.bottom);
+        if (bitmapRect.bottom + scrollRect.top <= (mThisHeight) && bitmapRect.top < 0)
+            scrollRect.top = (int) ((mThisHeight) - bitmapRect.bottom);
         if (bitmapRect.left + scrollRect.left >= 0)
             scrollRect.left = (int) (0 - bitmapRect.left);
-        if (bitmapRect.right + scrollRect.left <= (mThisWidth - 0))
-            scrollRect.left = (int) ((mThisWidth - 0) - bitmapRect.right);
+        if (bitmapRect.right + scrollRect.left <= (mThisWidth))
+            scrollRect.left = (int) ((mThisWidth) - bitmapRect.right);
     }
 
     public void scrollBy(float distanceX, float distanceY, final double durationMs) {

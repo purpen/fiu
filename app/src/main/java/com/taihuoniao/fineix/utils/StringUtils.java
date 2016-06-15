@@ -71,7 +71,7 @@ public class StringUtils {
      * @return
      */
     public static String friendly_time(String sdate) {
-        Date time = null;
+        Date time;
 
         if (TimeZoneUtil.isInEasternEightZones())
             time = toDate(sdate);
@@ -82,7 +82,7 @@ public class StringUtils {
         if (time == null) {
             return "Unknown";
         }
-        String ftime = "";
+        String ftime;
         Calendar cal = Calendar.getInstance();
 
         // 判断是否是同一天
@@ -166,7 +166,7 @@ public class StringUtils {
      * 智能格式化
      */
     public static String friendly_time3(String sdate) {
-        String res = "";
+        String res;
         if (isEmpty(sdate))
             return "";
 
@@ -317,8 +317,8 @@ public class StringUtils {
 
         long diff = 0;
 
-        Date d1 = null;
-        Date d2 = null;
+        Date d1;
+        Date d2;
 
         try {
             d1 = dateFormater.get().parse(dete1);
@@ -455,32 +455,24 @@ public class StringUtils {
      * @return
      */
     public static String toConvertString(InputStream is) {
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader read = new BufferedReader(isr);
         try {
             String line;
             line = read.readLine();
             while (line != null) {
-                res.append(line + "<br>");
+                res.append(line).append("<br>");
                 line = read.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (null != isr) {
-                    isr.close();
-                    isr.close();
-                }
-                if (null != read) {
-                    read.close();
-                    read = null;
-                }
-                if (null != is) {
-                    is.close();
-                    is = null;
-                }
+                isr.close();
+                isr.close();
+                read.close();
+                is.close();
             } catch (IOException e) {
             }
         }

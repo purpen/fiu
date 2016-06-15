@@ -265,7 +265,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 case DataConstants.PARSER_SHOP_CART_NUMBER:
                     if (msg.obj != null) {
                         if (msg.obj instanceof ShopCartNumber) {
-                            ShopCartNumber numberCart = null;
+                            ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
                             if (!"0".equals(numberCart.getCount())) {
                                 cartNumber.setVisibility(View.VISIBLE);
@@ -308,7 +308,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                                     } finally {
                                         top = absoluteLayout.getTop();
                                         bottom = absoluteLayout.getBottom();
-                                        continue;
                                     }
                                 }
                                 handler.sendEmptyMessage(-10);

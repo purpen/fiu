@@ -10,7 +10,6 @@ import java.io.Serializable;
  * 二维码扫描实体类
  * @author 火蚁 (http://my.oschina.net/LittleDY)
  * @version 1.0
- * @created 2014-3-17
  */
 @SuppressWarnings("serial")
 public class BarCode implements Serializable{

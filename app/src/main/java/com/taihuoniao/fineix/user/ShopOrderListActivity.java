@@ -81,23 +81,18 @@ public class ShopOrderListActivity extends FragmentActivity implements TabLayout
         }
         switch (mFlag) {
             case "0":
-                mAll = true;
                 mAllTab.select();
                 break;
             case "1":
-                mPay = true;
                 mPager.setCurrentItem(1);
                 break;
             case "2":
-                mDeliver = true;
                 mPager.setCurrentItem(2);
                 break;
             case "3":
-                mReceiver = true;
                 mPager.setCurrentItem(3);
                 break;
             case "4":
-                mCritical = true;
                 mPager.setCurrentItem(4);
                 break;
         }

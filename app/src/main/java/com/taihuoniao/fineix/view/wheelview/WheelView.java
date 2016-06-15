@@ -38,7 +38,6 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-
 import com.taihuoniao.fineix.R;
 
 import java.util.LinkedList;
@@ -132,8 +131,8 @@ public class WheelView extends View {
 	boolean isCyclic = false;
 	
 	// Listeners
-	private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
-	private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
+	private List<OnWheelChangedListener> changingListeners = new LinkedList<>();
+	private List<OnWheelScrollListener> scrollingListeners = new LinkedList<>();
 
 	/**
 	 * Constructor
@@ -433,8 +432,7 @@ public class WheelView extends View {
 			return 0;
 		}
 
-		int desired = getItemHeight() * visibleItems - ITEM_OFFSET * 2
-				- ADDITIONAL_ITEM_HEIGHT;
+		int desired = getItemHeight() * visibleItems - ADDITIONAL_ITEM_HEIGHT;
 
 		// Check against our minimum height
 		desired = Math.max(desired, getSuggestedMinimumHeight());
@@ -541,12 +539,12 @@ public class WheelView extends View {
 	private int calculateLayoutWidth(int widthSize, int mode) {
 		initResourcesIfNecessary();
 
-		int width = widthSize;
+		int width;
 
 		int maxLength = getMaxTextLength();
 		if (maxLength > 0) {
 			int textWidth =(int) Math.ceil(Layout.getDesiredWidth("0", itemsPaint));
-			itemsWidth = (int) (maxLength * textWidth);
+			itemsWidth = maxLength * textWidth;
 		} else {
 			itemsWidth = 0;
 		}

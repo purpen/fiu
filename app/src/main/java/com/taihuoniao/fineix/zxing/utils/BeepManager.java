@@ -26,7 +26,6 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-
 import com.taihuoniao.fineix.R;
 
 import java.io.Closeable;
@@ -78,12 +77,10 @@ public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlaye
 
 	private static boolean shouldBeep(SharedPreferences prefs, Context activity) {
 		boolean shouldPlayBeep = true;
-		if (shouldPlayBeep) {
-			// See if sound settings overrides this
-			AudioManager audioService = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-			if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-				shouldPlayBeep = false;
-			}
+		// See if sound settings overrides this
+		AudioManager audioService = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
+		if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+			shouldPlayBeep = false;
 		}
 		return shouldPlayBeep;
 	}

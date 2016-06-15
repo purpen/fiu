@@ -23,7 +23,7 @@ public class CommonToast {
 	public static final long DURATION_LONG = 5000L;
 	public static final long DURATION_MEDIUM = 3500L;
 	public static final long DURATION_SHORT = 2500L;
-	private long _duration = 3500l;
+	private long _duration = 3500L;
 	private ToastView _toastVw;
 
 	public CommonToast(Activity activity) {

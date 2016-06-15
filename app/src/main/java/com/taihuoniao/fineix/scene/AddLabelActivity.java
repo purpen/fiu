@@ -61,7 +61,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private TextView usedLabelTv, hotLabelTv;
     private TextView usedLabelLine, hotLabelLine;
     private ViewPager labelViewPager;
-    private HotLabelViewPagerAdapter hotLabelViewPagerAdapter;
     private CustomSlidingTab slidingTab;
     //    private ViewPager allLabelViewPager;
     private WrapContentViewPager allLabelViewPager;
@@ -69,8 +68,6 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private AllLabelViewPagerAdapter1 allLabelViewPagerAdapter;
     //全部标签的页码
     private int allLabelCurrentPage = 1;
-    //热门标签页码
-    private int hotLabelCurrentPage = 1;
     //热门标签的列表
     private List<HotLabel.HotLabelBean> hotLabelList;
     //使用过的标签列表
@@ -294,7 +291,9 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 case DataConstants.HOT_LABEL_LIST:
 //                    dialog.dismiss();
                     HotLabel netHotLabel = (HotLabel) msg.obj;
+                    HotLabelViewPagerAdapter hotLabelViewPagerAdapter;
                     if (netHotLabel.isSuccess()) {
+                        int hotLabelCurrentPage = 1;
                         if (hotLabelCurrentPage == 1) {
                             hotLabelList.clear();
                         }

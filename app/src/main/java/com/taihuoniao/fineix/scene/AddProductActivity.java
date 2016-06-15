@@ -33,9 +33,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 public class AddProductActivity extends BaseActivity implements View.OnClickListener {
     private GlobalTitleLayout titleLayout;
     private CustomSlidingTab slidingTab;
-    private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
-    private RelativeLayout search;
     private EditText editText;
     private ImageView deleteImg;
     private TextView cancelTv;
@@ -78,7 +76,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_product_title);
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
-        search = (RelativeLayout) findViewById(R.id.rl);
+        RelativeLayout search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
         deleteImg = (ImageView) findViewById(R.id.activity_add_product_delete);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
@@ -169,7 +167,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                     dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
-                        addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
+                        AddProductViewPagerAdapter addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         viewPager.setAdapter(addProductViewPagerAdapter);
                         slidingTab.setViewPager(viewPager);
                     }

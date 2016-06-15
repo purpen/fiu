@@ -37,7 +37,7 @@ public class TimeUtil {
         if (bingTime < smallTime) {
             throw new IllegalArgumentException("bingTime must not less than smallTime");
         }
-        int days = 0;
+        int days;
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar1.setTimeInMillis(bingTime);

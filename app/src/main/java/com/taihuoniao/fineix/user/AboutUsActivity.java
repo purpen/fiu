@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,7 +19,6 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import butterknife.Bind;
 
 public class AboutUsActivity extends BaseActivity {
-    private WebView mWebAbout;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     private WaittingDialog dialog;
@@ -46,7 +44,7 @@ public class AboutUsActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,title);
         dialog = new WaittingDialog(this);
-        mWebAbout = (WebView) findViewById(R.id.webView_about);
+        WebView mWebAbout = (WebView) findViewById(R.id.webView_about);
         mWebAbout.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

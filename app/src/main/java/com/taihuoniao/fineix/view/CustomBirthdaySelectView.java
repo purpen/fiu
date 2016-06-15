@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.TimeUtil;
@@ -23,8 +24,6 @@ public class CustomBirthdaySelectView extends LinearLayout {
     private static final int MONTHS_OF_YEAR = 12;
     private boolean isCurrentYear = true;
     private boolean isCurrentMonth = true;
-    private boolean isCyclic = false;
-    private int visibleItems = 5;
     public List<String> months;
     public List<String> years;
     public List<String> days;
@@ -32,9 +31,6 @@ public class CustomBirthdaySelectView extends LinearLayout {
     private WheelView wv_left;
     private WheelView wv_center;
     private WheelView wv_right;
-    private TextView tv_left;
-    private TextView tv_center;
-    private TextView tv_right;
 
     public CustomBirthdaySelectView(Context context) {
         super(context);
@@ -63,12 +59,14 @@ public class CustomBirthdaySelectView extends LinearLayout {
         wv_left = (WheelView) view.findViewById(R.id.wv_left);
         wv_center = (WheelView) view.findViewById(R.id.wv_center);
         wv_right = (WheelView) view.findViewById(R.id.wv_right);
-        tv_left = (TextView) view.findViewById(R.id.tv_center);
-        tv_center = (TextView) view.findViewById(R.id.tv_left);
-        tv_right = (TextView) view.findViewById(R.id.tv_right);
+        TextView tv_left = (TextView) view.findViewById(R.id.tv_center);
+        TextView tv_center = (TextView) view.findViewById(R.id.tv_left);
+        TextView tv_right = (TextView) view.findViewById(R.id.tv_right);
+        boolean isCyclic = false;
         wv_left.setCyclic(isCyclic);
         wv_center.setCyclic(isCyclic);
         wv_right.setCyclic(isCyclic);
+        int visibleItems = 5;
         wv_left.setVisibleItems(visibleItems);
         wv_center.setVisibleItems(visibleItems);
         wv_right.setVisibleItems(visibleItems);
@@ -104,7 +102,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
     }
 
     private void initYears() {
-        years = new ArrayList<String>();
+        years = new ArrayList<>();
         LogUtil.e("initYears", calendar.get(Calendar.YEAR) + "");
         int curYear = calendar.get(Calendar.YEAR);
         for (int i = curYear - DURING_YEAR + 1; i <= curYear; i++) {
@@ -114,7 +112,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
     }
 
     private void initMonths() {
-        months = new ArrayList<String>();
+        months = new ArrayList<>();
         int monthLen = 0;
         if (isCurrentYear) {
             monthLen = calendar.get(Calendar.MONTH) + 1;
@@ -135,7 +133,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
     }
 
     private void initDays() {
-        days = new ArrayList<String>();
+        days = new ArrayList<>();
         int dayLen = 0;
         if (isCurrentMonth) {
             dayLen = calendar.get(Calendar.DAY_OF_MONTH);

@@ -87,7 +87,6 @@ public class EditUserInfoActivity extends BaseActivity {
     private String value;
     public static boolean isSubmitAddress=false;
     private WaittingDialog dialog;
-    private List<Uri> mSelected;
 
     public EditUserInfoActivity() {
         super(R.layout.activity_user_info_layout);
@@ -115,7 +114,7 @@ public class EditUserInfoActivity extends BaseActivity {
 
     @OnClick({R.id.custom_nick_name, R.id.custom_user_avatar,R.id.custom_area,R.id.custom_signature, R.id.custom_auth, R.id.custom_user_sex, R.id.custom_user_birthday, R.id.custom_code})
     void onClick(View view) {
-        Intent intent=null;
+        Intent intent;
         switch (view.getId()) {
             case R.id.custom_user_avatar:
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar,"上传头像"));
@@ -199,7 +198,6 @@ public class EditUserInfoActivity extends BaseActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = null;
             switch (v.getId()) {
                 case R.id.tv_take_photo:
                     PopupWindowUtil.dismiss();
@@ -456,7 +454,6 @@ public class EditUserInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            File file = null;
             switch (requestCode) {
                 case REQUEST_NICK_NAME:
                     user=(User)data.getSerializableExtra(User.class.getSimpleName());
@@ -468,8 +465,8 @@ public class EditUserInfoActivity extends BaseActivity {
                     setLabelSignatrue();
                     break;
                 case REQUEST_CODE_PICK_IMAGE:
-                    mSelected = PicturePickerUtils.obtainResult(data);
-                    if (mSelected==null) return;
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    if (mSelected == null) return;
                     if (mSelected.size()==0) return;
                     toCropActivity(mSelected.get(0));
 //                    Uri uri = data.getData();

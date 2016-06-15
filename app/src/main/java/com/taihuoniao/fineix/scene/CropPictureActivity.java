@@ -26,7 +26,6 @@ import java.io.IOException;
  * Created by taihuoniao on 2016/3/16.
  */
 public class CropPictureActivity extends BaseActivity implements View.OnClickListener {
-    private Uri imageUri;//上个界面获取的图片位置uri
     private GlobalTitleLayout titleLayout;
     private ClipImageLayout clipImageLayout;
     private WaittingDialog dialog;
@@ -46,7 +45,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
-        imageUri = getIntent().getData();
+        Uri imageUri = getIntent().getData();
         titleLayout.setTitle(R.string.crop_picture);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);

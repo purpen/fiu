@@ -15,13 +15,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
 import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,7 +30,6 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
 
 public class MediaStoreCompat {
@@ -55,7 +54,7 @@ public class MediaStoreCompat {
         this.mContext.getContentResolver().registerContentObserver(Media.EXTERNAL_CONTENT_URI, true, this.mObserver);
     }
 
-    public static final boolean hasCameraFeature(Context context) {
+    public static boolean hasCameraFeature(Context context) {
         PackageManager pm = context.getApplicationContext().getPackageManager();
         return pm.hasSystemFeature("android.hardware.camera");
     }
@@ -91,7 +90,7 @@ public class MediaStoreCompat {
             }
         }
 
-        File prepared = new File(preparedUri.toString());
+        File prepared = new File(preparedUri);
         if(captured == null || captured.equals(Uri.fromFile(prepared))) {
             captured = this.findPhotoFromRecentlyTaken(prepared);
             if(captured == null) {
@@ -108,7 +107,7 @@ public class MediaStoreCompat {
     }
 
     public void cleanUp(String uri) {
-        File file = new File(uri.toString());
+        File file = new File(uri);
         if(file.exists()) {
             file.delete();
         }
@@ -116,12 +115,10 @@ public class MediaStoreCompat {
     }
 
     public static String getPathFromUri(ContentResolver resolver, Uri contentUri) {
-        String dataColumn = "_data";
         Cursor cursor = null;
-
         String var5;
         try {
-            cursor = resolver.query(contentUri, new String[]{"_data"}, (String)null, (String[])null, (String)null);
+            cursor = resolver.query(contentUri, new String[]{"_data"}, null, null, null);
             if(cursor == null || !cursor.moveToFirst()) {
                 Object index1 = null;
                 return (String)index1;
@@ -166,18 +163,16 @@ public class MediaStoreCompat {
         long taken = ExifInterfaceCompat.getExifDateTimeInMillis(file.getAbsolutePath());
         int maxPoint = 0;
         PhotoContent maxItem = null;
-        Iterator i$ = this.mRecentlyUpdatedPhotos.iterator();
 
-        while(i$.hasNext()) {
-            PhotoContent item = (PhotoContent)i$.next();
+        for (PhotoContent item : this.mRecentlyUpdatedPhotos) {
             int point = 0;
-            if((long)item.size == fileSize) {
+            if ((long) item.size == fileSize) {
                 ++point;
             }
-            if(item.taken == taken) {
+            if (item.taken == taken) {
                 ++point;
             }
-            if(point > maxPoint) {
+            if (point > maxPoint) {
                 maxPoint = point;
                 maxItem = item;
             }
@@ -196,10 +191,10 @@ public class MediaStoreCompat {
             e.put("title", file.getName());
             e.put("mime_type", "image/jpeg");
             e.put("description", "mixi Photo");
-            e.put("orientation", Integer.valueOf(ExifInterfaceCompat.getExifOrientation(file.getAbsolutePath())));
+            e.put("orientation", ExifInterfaceCompat.getExifOrientation(file.getAbsolutePath()));
             long date = ExifInterfaceCompat.getExifDateTimeInMillis(file.getAbsolutePath());
             if(date != -1L) {
-                e.put("datetaken", Long.valueOf(date));
+                e.put("datetaken", date);
             }
 
             Uri imageUri = this.mContext.getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, e);
@@ -217,7 +212,7 @@ public class MediaStoreCompat {
     }
 
     private void updateLatestPhotos() {
-        Cursor c = Media.query(this.mContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, new String[]{"_id", "datetaken", "_size"}, (String)null, (String[])null, "date_added DESC");
+        Cursor c = Media.query(this.mContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, new String[]{"_id", "datetaken", "_size"}, null, null, "date_added DESC");
         if(c != null) {
             try {
                 int count = 0;
@@ -242,7 +237,7 @@ public class MediaStoreCompat {
 
     private void generateThumbnails(long imageId) {
         try {
-            Thumbnails.getThumbnail(this.mContext.getContentResolver(), imageId, 1, (Options)null);
+            Thumbnails.getThumbnail(this.mContext.getContentResolver(), imageId, 1, null);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

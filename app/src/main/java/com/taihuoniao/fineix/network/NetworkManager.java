@@ -27,8 +27,8 @@ public class NetworkManager {
     }
 
     private NetworkManager() {
-        networkList = new ArrayList<HttpHandler<String>>();
-        tagList = new ArrayList<String>();
+        networkList = new ArrayList<>();
+        tagList = new ArrayList<>();
     }
 
     /**

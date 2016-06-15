@@ -15,7 +15,6 @@ public class GoodsDetailsViewPagerAdapter extends PagerAdapter {
     private List<ImageView> imgList;
 
     public GoodsDetailsViewPagerAdapter(Context context, List<ImageView> imgList) {
-        Context context1 = context;
         this.imgList = imgList;
     }
 

@@ -5,12 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.baidu.mapapi.search.core.PoiInfo;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.utils.Util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,7 +26,7 @@ public class NearByQJAdapter extends CommonBaseAdapter<QingJingItem>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         QingJingItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView = Util.inflateView(activity, R.layout.item_poi_lv, null);
             holder=new ViewHolder(convertView);

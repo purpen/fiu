@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/black333333"/>
-    <item android:drawable="@color/yellow_bd8913" android:state_focused="true"/>
-</selector>

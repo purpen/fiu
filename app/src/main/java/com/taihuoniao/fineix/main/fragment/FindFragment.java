@@ -83,8 +83,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private int currentPage = 1;//页码
     private double distance = 5000;//距离
     private double[] location = null;
-    //界面下的控件
-    private RelativeLayout titlelayout;
     private ImageView searchImg;
     private ImageView locationImg;
     private PullToRefreshListView pullToRefreshView;
@@ -111,7 +109,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     protected View initView() {
         instance = FindFragment.this;
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
-        titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
+        RelativeLayout titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
         searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
         locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_find_scenelistview);
@@ -321,7 +319,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                                     } finally {
                                         top = absoluteLayout.getTop();
                                         bottom = absoluteLayout.getBottom();
-                                        continue;
                                     }
                                 }
                                 handler.sendEmptyMessage(-10);

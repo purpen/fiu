@@ -7,8 +7,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.main.MainApplication;
 
 import java.util.Hashtable;
 
@@ -22,7 +20,7 @@ public class QrCodeUtils {
 	 */
 	public static Bitmap Create2DCode(String text) throws WriterException {
 		//生成二维矩阵,编码时指定大小,不要生成了图片以后再进行缩放,这样会模糊导致识别失败
-		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+		Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		hints.put(EncodeHintType.MARGIN, 0);
 		BitMatrix matrix = new MultiFormatWriter().encode(text,BarcodeFormat.QR_CODE,800,800,hints);

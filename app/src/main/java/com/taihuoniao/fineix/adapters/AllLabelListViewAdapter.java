@@ -21,19 +21,17 @@ import java.util.List;
 public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
     private Context context;
     private List<AllLabelBean> allLabelList;
-    private int pos;//一级目录角标
     private MoreClick moreClick;//点击更多
     private HotLabelViewPagerAdapter.LabelClick labelClick;
-    private AllLabelViewPagerAdapter1 allLabelViewPagerAdapter1;
 
     public AllLabelListViewAdapter(Context context, List<AllLabelBean> allLabelList, int pos, MoreClick moreClick,
                                    HotLabelViewPagerAdapter.LabelClick labelClick, AllLabelViewPagerAdapter1 allLabelViewPagerAdapter1) {
         this.context = context;
         this.allLabelList = allLabelList;
-        this.pos = pos;
+        int pos1 = pos;
         this.moreClick = moreClick;
         this.labelClick = labelClick;
-        this.allLabelViewPagerAdapter1 = allLabelViewPagerAdapter1;
+        AllLabelViewPagerAdapter1 allLabelViewPagerAdapter11 = allLabelViewPagerAdapter1;
     }
 
 

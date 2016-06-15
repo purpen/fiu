@@ -40,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="44dp" />
     <TextView
-        android:id="@+id/tv_introduce_tologin"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:gravity="bottom"
@@ -57,7 +56,7 @@
         android:ems="8"
         android:hint="手机号"
         android:maxLength="11"
-        android:phoneNumber="true"
+        android:inputType="phone"
         android:singleLine="true"
         android:background="@drawable/shap_home_gridview">
 

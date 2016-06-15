@@ -10,7 +10,6 @@ import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -245,17 +244,14 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     private void setUpPicSize(Camera.Parameters parameters) {
 
         if (adapterSize != null) {
-            return;
         } else {
             adapterSize = findBestPictureResolution();
-            return;
         }
     }
 
     private void setUpPreviewSize(Camera.Parameters parameters) {
 
         if (previewSize != null) {
-            return;
         } else {
             previewSize = findBestPreviewResolution();
 //            previewSize = getPreviews();
@@ -277,7 +273,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     int.class);
             if (downPolymorphic != null) {
                 Log.e("<<<", "调整方向");
-                downPolymorphic.invoke(camera, i);
+                downPolymorphic.invoke(camera, 90);
             }
         } catch (Exception e) {
             Log.e("<<<", "图像出错");
@@ -302,7 +298,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
 
         // 按照分辨率从大到小排序
-        List<Camera.Size> supportedPreviewResolutions = new ArrayList<Camera.Size>(rawSupportedSizes);
+        List<Camera.Size> supportedPreviewResolutions = new ArrayList<>(rawSupportedSizes);
         Collections.sort(supportedPreviewResolutions, new Comparator<Camera.Size>() {
             @Override
             public int compare(Camera.Size a, Camera.Size b) {
@@ -366,7 +362,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 + defaultPictureResolution.height);
 
         // 排序
-        List<Camera.Size> sortedSupportedPicResolutions = new ArrayList<Camera.Size>(
+        List<Camera.Size> sortedSupportedPicResolutions = new ArrayList<>(
                 supportedPicResolutions);
         Collections.sort(sortedSupportedPicResolutions, new Comparator<Camera.Size>() {
             @Override
@@ -427,7 +423,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     private void addZoomIn(int delta) {
@@ -465,7 +461,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
     private void showPoint(int x, int y) {
         if (parameters.getMaxNumMeteringAreas() > 0) {
-            List<Camera.Area> areas = new ArrayList<Camera.Area>();
+            List<Camera.Area> areas = new ArrayList<>();
             //xy变换了
             int rectY = -x * 2000 / MainApplication.getContext().getScreenWidth() + 1000;
             int rectX = y * 2000 / MainApplication.getContext().getScreenHeight() - 1000;

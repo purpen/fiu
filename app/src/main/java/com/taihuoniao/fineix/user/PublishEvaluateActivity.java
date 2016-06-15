@@ -37,8 +37,8 @@ import java.util.List;
 public class PublishEvaluateActivity extends Activity {
     private ListViewForScrollView mListView;
     private EvaluateAdapter mAdapter;
-    HashMap<Integer, String> mHashMapRatingBar = new HashMap<Integer, String>();
-    HashMap<Integer, String> mHashMap = new HashMap<Integer, String>();
+    HashMap<Integer, String> mHashMapRatingBar = new HashMap<>();
+    HashMap<Integer, String> mHashMap = new HashMap<>();
     private List<OrderDetails> mList = new ArrayList<>();
     private List<OrderDetailsProducts> mListProducts = new ArrayList<>();
     private TextView mCommit;

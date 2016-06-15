@@ -161,7 +161,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         canvas.drawBitmap(bkg, -view.getLeft(), -view.getTop(), null);
         RenderScript rs = RenderScript.create(this);
         Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
-        ScriptIntrinsicBlur blur = null;
+        ScriptIntrinsicBlur blur;
         blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
         blur.setInput(overlayAlloc);
         blur.setRadius(radius);

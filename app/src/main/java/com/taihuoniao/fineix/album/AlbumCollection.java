@@ -24,11 +24,11 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import java.lang.ref.WeakReference;
 
 /**
  * @version 1.0.0
- * @hide
  */
 public class AlbumCollection implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
     private static final int LOADER_ID = 1;
@@ -85,7 +85,7 @@ public class AlbumCollection implements LoaderManager.LoaderCallbacks<Cursor>, A
         mLoaderManager = activity.getSupportLoaderManager();
         this.directorySelectListener = directorySelectListener;
         this.selectionSpec = selectionSpec;
-        albumAdapter = new AlbumAdapter(activity, null);
+        albumAdapter = new AlbumAdapter(activity);
         listView.setAdapter(albumAdapter);
         listView.setOnItemClickListener(this);
     }

@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.utils;
+
 import android.text.TextUtils;
+
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -56,7 +58,7 @@ public class ProvinceUtil {
         provinceCityMap = new HashMap<>();
         idProvinceMap=new HashMap<>();
         idCitiesMap=new HashMap<>();
-        ArrayList<String> cities = null;
+        ArrayList<String> cities;
         for (ProvinceCityData.Province province:data.rows){
             idProvinceMap.put(province.city,province._id);
             cities = new ArrayList<>();
@@ -81,7 +83,7 @@ public class ProvinceUtil {
             Util.makeToast("抱歉无法获得地址数据,请先确保网络畅通");
             return null;
         }
-        ArrayList<String> provinces = new ArrayList<String>();
+        ArrayList<String> provinces = new ArrayList<>();
         for (ProvinceCityData.Province province : data.rows) {
             provinces.add(province.city);
         }

@@ -53,7 +53,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        T item = null;
+        T item;
         if (sights != null && sights.size() > 0 && sights.get(0) != null) {
             if (position % (1 + list.size()) == list.size()) {
                 ImageView imageView = new ImageView(parent.getContext());
@@ -66,7 +66,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
         } else {
             item = list.get(position % list.size());
         }
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.view_sliding_focus, null);
             holder = new ViewHolder();
@@ -81,7 +81,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
             ImageLoader.getInstance().displayImage((String) item, holder.iv, options);
         }
         if (item instanceof Integer) {
-            ImageLoader.getInstance().displayImage("drawable://" + (Integer) item, holder.iv, options);
+            ImageLoader.getInstance().displayImage("drawable://" + item, holder.iv, options);
         }
         if (position % 2 == 0) {
             holder.left.setVisibility(View.GONE);

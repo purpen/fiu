@@ -17,7 +17,6 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 public class AllLabelFragment extends BaseFragment {
     private int position;
     private AllLabelBean allLabelBean;
-    private AllLabelListViewAdapter adapter;
     private static AllLabelListViewAdapter.MoreClick moreClick;//点击更多
     private static HotLabelViewPagerAdapter.LabelClick labelClick;
     private static AllLabelViewPagerAdapter1 allLabelViewPagerAdapter;
@@ -59,7 +58,7 @@ public class AllLabelFragment extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.view_alllabel_listview, null);
 //        ListView listView = (ListView) view.findViewById(R.id.view_alllabel_listview_listview);
         ListViewForScrollView listView = (ListViewForScrollView) view.findViewById(R.id.view_alllabel_listview_listview);
-        adapter = new AllLabelListViewAdapter(getActivity(), allLabelBean.getChildren(), position, moreClick, labelClick, allLabelViewPagerAdapter);
+        AllLabelListViewAdapter adapter = new AllLabelListViewAdapter(getActivity(), allLabelBean.getChildren(), position, moreClick, labelClick, allLabelViewPagerAdapter);
         listView.setAdapter(adapter);
 //        listView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtils.dp2px(getActivity(),555)));
         return view;

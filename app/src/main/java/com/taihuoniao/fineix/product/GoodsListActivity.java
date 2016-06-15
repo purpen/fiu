@@ -41,8 +41,6 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     ViewPager firstViewPager;//关联slidingtab的时候，设置监听应该是他关联的slidingtab
     //网络请求对话框
     private WaittingDialog dialog;
-    //第一层分类列表适配器
-    private GoodListFirtViewPagerAdapter goodListFirtViewPagerAdapter;
 
 
     @Override
@@ -111,7 +109,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                     dialog.dismiss();
                     CategoryBean netCategoryBean = (CategoryBean) msg.obj;
                     if (netCategoryBean.isSuccess()) {
-                        goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
+                        GoodListFirtViewPagerAdapter goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         firstViewPager.setAdapter(goodListFirtViewPagerAdapter);
                         firstSliding.setViewPager(firstViewPager);
                         firstViewPager.setCurrentItem(position+1, true);

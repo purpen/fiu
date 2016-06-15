@@ -46,7 +46,7 @@ public class OrderInterestSlidingAdapter extends CommonBaseAdapter<QingJingListB
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         QingJingListBean.QingJingItem item=list.get(position);
-        ViewHolder holder =null;
+        ViewHolder holder;
         if (convertView==null) {
             convertView=Util.inflateView(activity,R.layout.item_order_interest,null);
             holder=new ViewHolder(convertView);

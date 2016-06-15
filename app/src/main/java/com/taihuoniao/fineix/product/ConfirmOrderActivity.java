@@ -67,8 +67,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private AddressBean address;
     //收货时间界面选择的返回值
     private String transfer_time = "a";
-    //红包界面选择的返回值
-    private String money;
     private String bonus_code;
     private DecimalFormat df = null;
     //跳转到红包界面
@@ -211,14 +209,14 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             return;
         switch (resultCode) {
             case DataConstants.RESULTCODE_REDBAG:
-                money = data.getStringExtra("money");
+                String money = data.getStringExtra("money");
                 bonus_code = data.getStringExtra("code");
                 if (money != null && bonus_code != null) {
                     saveTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setVisibility(View.VISIBLE);
                     saveMoneyTv.setText("¥ " + df.format(Double.valueOf(money)));
-                    redBagTv.setText("使用了"+money+"元红包");
-                    redBagCancelTv.setText("您使用了一张"+money+"元红包，下单后将不可恢复");
+                    redBagTv.setText("使用了" + money + "元红包");
+                    redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
                         double nowPrice = Double.valueOf(nowBuyBean.getPay_money())-Double.valueOf(money);
                         if(nowPrice<=0){

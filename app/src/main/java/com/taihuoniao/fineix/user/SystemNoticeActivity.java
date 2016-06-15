@@ -95,7 +95,7 @@ public class SystemNoticeActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (list!=null && list.size()>0){
                     SystemNoticeData.SystemNoticeItem item = list.get(i);
-                    Intent intent=null;
+                    Intent intent;
                     switch (item.evt){
                         case 0://链接
                             Uri uri = Uri.parse(item.url);

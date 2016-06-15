@@ -56,12 +56,12 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private String mPayway = NetworkConstance.ALI_PAY;
     private TextView mPayMoney;
     private Button mPayNow;
-//    private WaittingDialog mWaittingDialog = null;
+    //    private WaittingDialog mWaittingDialog = null;
     private CustomDialogForPay mDialog;
     private boolean mBack = true;//判断是否让返回键生效
     private DecimalFormat df = null;
     private String orderId;
-    private Handler mHandler=new Handler();
+    private Handler mHandler = new Handler();
 
 //    private Handler mHandler = new Handler() {
 //        @Override
@@ -225,8 +225,8 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 
     private void getIntentData() {
         Intent intent = getIntent();
-        if (intent.hasExtra("orderId")){
-            orderId=intent.getStringExtra("orderId");
+        if (intent.hasExtra("orderId")) {
+            orderId = intent.getStringExtra("orderId");
         }
     }
 
@@ -296,7 +296,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 //                    mWaittingDialog.show();
 //                }
 //                DataParser.payParser(THNApplication.uuid, mRid, mPayway, mHandler);
-                if (TextUtils.equals(NetworkConstance.ALI_PAY,mPayway)){
+                if (TextUtils.equals(NetworkConstance.ALI_PAY, mPayway)) {
                     AliPay.pay(orderId, PayWayActivity.this, new AliPay.AlipayListener() {
                         @Override
                         public void onSuccess() {
@@ -308,8 +308,8 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                             delayThreeSeconds();
                         }
                     });
-                }else if (TextUtils.equals(NetworkConstance.WX_PAY,mPayway)){
-                    WXPay.pay(orderId,PayWayActivity.this);
+                } else if (TextUtils.equals(NetworkConstance.WX_PAY, mPayway)) {
+                    WXPay.pay(orderId, PayWayActivity.this);
                     WXPayEntryActivity.setWXPayResultListener(new WXPayEntryActivity.WXPayResultListener() {
                         @Override
                         public void onSuccess() {
@@ -532,7 +532,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 
     public static byte[] streamToByte(InputStream is) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int c = 0;
+        int c;
         byte[] buffer = new byte[8 * 1024];
         try {
             while ((c = is.read(buffer)) != -1) {
@@ -544,9 +544,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         } finally {
             try {
-                if (baos != null) {
-                    baos.close();
-                }
+                baos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -578,7 +576,8 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                 if (bis != null) {
                     bis.close();
                 }
-                httpConn.disconnect();
+                if (httpConn != null)
+                    httpConn.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
             }

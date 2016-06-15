@@ -21,7 +21,6 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
     private Context context;
     private List<ProductBean.ProductListItem> list;
     private EditRecyclerAdapter.ItemClick itemClick;
-    private int itemHeight = 0;
     private DisplayImageOptions options;
 
     public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductBean.ProductListItem> list, EditRecyclerAdapter.ItemClick itemClick) {
@@ -62,6 +61,7 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
     }
 
     public int getItemHeight() {
+        int itemHeight = 0;
         return itemHeight;
     }
 

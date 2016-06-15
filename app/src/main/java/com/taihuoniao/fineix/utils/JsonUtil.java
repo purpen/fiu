@@ -38,7 +38,7 @@ public class JsonUtil {
     }
 
     public static <T> T fromJson(String json, TypeToken<HttpResponse<T>> token) throws JsonSyntaxException {
-        return (T) ((HttpResponse<T>) gson.fromJson(json, token.getType())).getData();
+        return ((HttpResponse<T>) gson.fromJson(json, token.getType())).getData();
     }
 
     public static <T> HttpResponse<T> json2Bean(String json, TypeToken<HttpResponse<T>> token) throws JsonSyntaxException {

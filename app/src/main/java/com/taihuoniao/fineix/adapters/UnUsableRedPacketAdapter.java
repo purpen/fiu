@@ -27,7 +27,7 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final RedPacketData.RedPacketItem item = list.get(position);
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(activity, R.layout.account_redbag_timeout, null);
             holder = new ViewHolder(convertView);

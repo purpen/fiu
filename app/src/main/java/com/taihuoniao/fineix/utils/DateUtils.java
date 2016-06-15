@@ -6,7 +6,7 @@ package com.taihuoniao.fineix.utils;
 public class DateUtils {
     public static String getStandardDate(String timeStr) {
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         long t = Long.parseLong(timeStr);
         long time = System.currentTimeMillis() - (t * 1000);
@@ -19,24 +19,24 @@ public class DateUtils {
         long day = (long) Math.ceil(time / 24 / 60 / 60 / 1000.0f);// 天前
 
         if (day - 1 > 0) {
-            sb.append(day + "天");
+            sb.append(day).append("天");
         } else if (hour - 1 > 0) {
             if (hour >= 24) {
                 sb.append("1天");
             } else {
-                sb.append(hour + "小时");
+                sb.append(hour).append("小时");
             }
         } else if (minute - 1 > 0) {
             if (minute == 60) {
                 sb.append("1小时");
             } else {
-                sb.append(minute + "分钟");
+                sb.append(minute).append("分钟");
             }
         } else if (mill - 1 > 0) {
             if (mill == 60) {
                 sb.append("1分钟");
             } else {
-                sb.append(mill + "秒");
+                sb.append(mill).append("秒");
             }
         } else {
             sb.append("刚刚");

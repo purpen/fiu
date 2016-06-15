@@ -30,8 +30,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class EffectUtil {
 
-    public static List<Addon> addonList = new ArrayList<Addon>();
-    private static List<MyHighlightView> hightlistViews = new CopyOnWriteArrayList<MyHighlightView>();
+    public static List<Addon> addonList = new ArrayList<>();
+    private static List<MyHighlightView> hightlistViews = new CopyOnWriteArrayList<>();
 
     public static int size() {
         return hightlistViews.size();
@@ -42,8 +42,8 @@ public class EffectUtil {
     }
 
 
-    public static interface StickerCallback {
-        public void onRemoveSticker(ImageView imageView);
+    public interface StickerCallback {
+        void onRemoveSticker(ImageView imageView);
     }
 
     //添加商品
@@ -64,7 +64,7 @@ public class EffectUtil {
             public void onDeleteClick() {
                 ((MyImageViewTouch) processImage).removeHightlightView(hv);
                 hightlistViews.remove(hv);
-                ((MyImageViewTouch) processImage).invalidate();
+                processImage.invalidate();
             }
         });
 

@@ -36,7 +36,7 @@ public class ShopCartAdapter extends BaseAdapter {
     private final static int STATE_COMPLETE = 0;//完成状态
     private final static int STATE_EDIT = 1;//编辑状态
     private int number = 0, maxNumber = 0, minNumber = 1;
-    HashMap<Integer, String> hashMap = new HashMap<Integer, String>();//装载item上商品加减变化的数目
+    HashMap<Integer, String> hashMap = new HashMap<>();//装载item上商品加减变化的数目
     private OnTwoClickedListener listener = null;
 
     public interface OnTwoClickedListener {
@@ -101,7 +101,7 @@ public class ShopCartAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder mHolder = null;
+        ViewHolder mHolder;
 
         if (convertView == null) {
             mHolder = new ViewHolder();

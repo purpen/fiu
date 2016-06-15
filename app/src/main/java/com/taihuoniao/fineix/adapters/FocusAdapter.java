@@ -66,7 +66,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final FocusFansItem item = list.get(position);
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(activity, R.layout.item_focus_fans, null);
             holder = new ViewHolder(convertView);

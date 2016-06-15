@@ -66,7 +66,7 @@ public class MessageActivity extends BaseActivity {
 
     @OnClick({R.id.item_push_setting, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_notice})
     void onClick(View v) {
-        Intent intent = null;
+        Intent intent;
         switch (v.getId()) {
             case R.id.item_push_setting: //系统通知
                 intent=new Intent(activity, SystemNoticeActivity.class);
@@ -108,9 +108,6 @@ public class MessageActivity extends BaseActivity {
                     }
                 }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
-                if (responseInfo == null) {
-                    return;
-                }
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }

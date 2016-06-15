@@ -20,7 +20,8 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.opengl.GLES20;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,7 +103,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
             int version = readShort(input);
             int totalCurves = readShort(input);
 
-            ArrayList<PointF[]> curves = new ArrayList<PointF[]>(totalCurves);
+            ArrayList<PointF[]> curves = new ArrayList<>(totalCurves);
             float pointRate = 1.0f / 255;
 
             for (int i = 0; i < totalCurves; i++) {
@@ -177,7 +178,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
                         toneCurveByteArray[currentCurveIndex * 4 + 2] = (byte) ((int) Math.min(Math.max(currentCurveIndex + mBlueCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
                         toneCurveByteArray[currentCurveIndex * 4 + 1] = (byte) ((int) Math.min(Math.max(currentCurveIndex + mGreenCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
                         toneCurveByteArray[currentCurveIndex * 4] = (byte) ((int) Math.min(Math.max(currentCurveIndex + mRedCurve.get(currentCurveIndex) + mRgbCompositeCurve.get(currentCurveIndex), 0), 255) & 0xff);
-                        toneCurveByteArray[currentCurveIndex * 4 + 3] = (byte) (255 & 0xff);
+                        toneCurveByteArray[currentCurveIndex * 4 + 3] = (byte) (0xff);
                     }
 
                     GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 256 /*width*/, 1 /*height*/, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, ByteBuffer.wrap(toneCurveByteArray));
@@ -227,7 +228,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
 
         // If we have a first point like (0.3, 0) we'll be missing some points at the beginning
         // that should be 0.
-        Point firstSplinePoint = splinePoints.get(0);
+        Point firstSplinePoint = splinePoints != null ? splinePoints.get(0) : null;
         if (firstSplinePoint.x > 0) {
             for (int i = firstSplinePoint.x; i >= 0; i--) {
                 splinePoints.add(0, new Point(i, 0));
@@ -243,7 +244,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
         }
 
         // Prepare the spline points.
-        ArrayList<Float> preparedSplinePoints = new ArrayList<Float>(splinePoints.size());
+        ArrayList<Float> preparedSplinePoints = new ArrayList<>(splinePoints.size());
         for (Point newPoint : splinePoints) {
             Point origPoint = new Point(newPoint.x, newPoint.x);
 
@@ -264,7 +265,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
 
         // Is [points count] equal to [sdA count]?
 //    int n = [points count];
-        int n = sdA.size();
+        int n = sdA != null ? sdA.size() : 0;
         if (n < 1) {
             return null;
         }
@@ -276,7 +277,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
         }
 
 
-        ArrayList<Point> output = new ArrayList<Point>(n + 1);
+        ArrayList<Point> output = new ArrayList<>(n + 1);
 
         for (int i = 0; i < n - 1; i++) {
             Point cur = points[i];
@@ -356,7 +357,7 @@ public class GPUImageToneCurveFilter extends GPUImageFilter {
             result[i] -= k * result[i + 1];
         }
 
-        ArrayList<Double> output = new ArrayList<Double>(n);
+        ArrayList<Double> output = new ArrayList<>(n);
         for (int i = 0; i < n; i++) output.add(result[i] / matrix[i][1]);
 
         return output;

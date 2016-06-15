@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -59,8 +60,8 @@ public class RankTagActivity extends BaseActivity{
         RankTagActivity.instance=activity;
         custom_head.setHeadCenterTxtShow(true,"身份标签");
         String[] stringArray = getResources().getStringArray(R.array.user_tags);
-        for (int i=0;i<stringArray.length;i++){
-            label_view.addLabel(stringArray[i]);
+        for (String aStringArray : stringArray) {
+            label_view.addLabel(aStringArray);
         }
     }
 

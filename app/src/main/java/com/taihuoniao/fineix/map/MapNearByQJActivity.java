@@ -187,9 +187,9 @@ public class MapNearByQJActivity extends BaseActivity<QingJingItem> {
 
     private void addOverlayers(final List<QingJingItem> list) {
         bitmapDescripter = BitmapDescriptorFactory.fromResource(R.mipmap.icon_marker3);
-        LatLng ll = null;
-        MarkerOptions option = null;
-        final ArrayList<Marker> markers = new ArrayList<Marker>();
+        LatLng ll;
+        MarkerOptions option;
+        final ArrayList<Marker> markers = new ArrayList<>();
         for (QingJingItem item : list) {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));

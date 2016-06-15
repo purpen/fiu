@@ -45,16 +45,12 @@ public class MyImageViewTouch extends ImageViewTouch {
         void onClick(LabelView label);
     }
 
-    ;
-
     //删除的时候会出错
-    private List<MyHighlightView> mOverlayViews = new CopyOnWriteArrayList<MyHighlightView>();
+    private List<MyHighlightView> mOverlayViews = new CopyOnWriteArrayList<>();
 
     private MyHighlightView mOverlayView;
 
     private OnDrawableEventListener mDrawableListener;
-
-    private boolean mForceSingleSelection = true;
 
     private Paint mDropPaint;
 
@@ -62,7 +58,7 @@ public class MyImageViewTouch extends ImageViewTouch {
 
     private boolean mScaleWithContent = false;
 
-    private List<LabelView> labels = new ArrayList<LabelView>();
+    private List<LabelView> labels = new ArrayList<>();
     //当前被点击的标签
     private LabelView currentLabel;
     //标签被点击的处与基本坐标的距离
@@ -185,7 +181,7 @@ public class MyImageViewTouch extends ImageViewTouch {
      * @param value the new force single selection
      */
     public void setForceSingleSelection(boolean value) {
-        mForceSingleSelection = value;
+        boolean mForceSingleSelection = value;
     }
 
     public void setOnDrawableEventListener(OnDrawableEventListener listener) {
@@ -204,9 +200,7 @@ public class MyImageViewTouch extends ImageViewTouch {
 
         if (getDrawable() != null) {
 
-            Iterator<MyHighlightView> iterator = mOverlayViews.iterator();
-            while (iterator.hasNext()) {
-                MyHighlightView view = iterator.next();
+            for (MyHighlightView view : mOverlayViews) {
                 view.getMatrix().set(getImageMatrix());
                 view.invalidate();
             }
@@ -217,9 +211,7 @@ public class MyImageViewTouch extends ImageViewTouch {
     public void postTranslate(float deltaX, float deltaY) {
         super.postTranslate(deltaX, deltaY);
 
-        Iterator<MyHighlightView> iterator = mOverlayViews.iterator();
-        while (iterator.hasNext()) {
-            MyHighlightView view = iterator.next();
+        for (MyHighlightView view : mOverlayViews) {
             if (getScale() != 1) {
                 float[] mvalues = new float[9];
                 getImageMatrix().getValues(mvalues);
@@ -300,9 +292,7 @@ public class MyImageViewTouch extends ImageViewTouch {
     public boolean onSingleTapConfirmed(MotionEvent e) {
 
         // iterate the items and post a single tap event to the selected item
-        Iterator<MyHighlightView> iterator = mOverlayViews.iterator();
-        while (iterator.hasNext()) {
-            MyHighlightView view = iterator.next();
+        for (MyHighlightView view : mOverlayViews) {
             if (view.isSelected()) {
                 view.onSingleTapConfirmed(e.getX(), e.getY());
                 postInvalidate();

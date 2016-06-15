@@ -95,7 +95,7 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
     private SimpleOnGestureListener onDoubleListener = new SimpleOnGestureListener() {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (isAutoScale == true)
+            if (isAutoScale)
                 return true;
 
             float x = e.getX();

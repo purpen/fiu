@@ -1,7 +1,6 @@
 package jp.co.cyberagent.android.gpuimage;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 /**
  * Created by vashisthg 30/05/14.

@@ -1,12 +1,9 @@
 package com.taihuoniao.fineix.pay.alipay;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.reflect.TypeToken;
@@ -18,15 +15,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
 /**
  * @author lilin
  * created at 2016/5/13 15:54
@@ -82,7 +71,7 @@ public class AliPay{
 			default:
 				break;
 			}
-		};
+		}
 	};
 
 	/**

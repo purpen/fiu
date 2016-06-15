@@ -15,7 +15,7 @@ public class CloseableUtils {
     private CloseableUtils() {
     }
 
-    public static final void close(Closeable closeable) {
+    public static void close(Closeable closeable) {
         if(closeable != null) {
             try {
                 closeable.close();

@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_third"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp40">
@@ -37,7 +36,6 @@
         >
 
         <TextView
-            android:id="@+id/tv_introduce_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp16"
@@ -78,9 +76,8 @@
             android:ems="8"
             android:hint="手机号"
             android:maxLength="11"
-            android:inputType="number"
+            android:inputType="phone"
             android:paddingLeft="5dp"
-            android:phoneNumber="true"
             android:singleLine="true"/>
         <LinearLayout
             style="@style/RegisterAndLogin"
@@ -95,7 +92,7 @@
                 android:hint="验证码"
                 android:textSize="14sp"
                 android:maxLength="6"
-                android:numeric="integer"
+                android:inputType="text"
                 android:paddingLeft="5dp" />
             <Button
                 android:id="@+id/btn_verify"
@@ -118,7 +115,7 @@
             android:hint="请输入6-20位数字或字符密码"
             android:maxLength="12"
             android:paddingLeft="5dp"
-            android:password="true" />
+            android:inputType="textPassword" />
         <Button
             android:id="@+id/btn_register"
             style="@style/RegisterAndLogin"
@@ -138,7 +135,6 @@
         >
 
         <TextView
-            android:id="@+id/tv_prompt_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

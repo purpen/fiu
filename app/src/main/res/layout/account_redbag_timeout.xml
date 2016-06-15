@@ -11,22 +11,21 @@
         android:id="@+id/linear_bg_redbag"
         android:layout_width="match_parent"
         android:layout_height="115dp"
+        android:baselineAligned="false"
         android:background="@mipmap/bg_timeout_redbag"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:orientation="vertical"
+            android:layout_weight="2"
             android:paddingLeft="10dp">
 
             <TextView
                 android:id="@+id/tv_thn_redbag"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:text="Fiu红包"
                 android:textColor="@color/color_af8323"
                 android:textSize="14sp" />
@@ -34,20 +33,17 @@
             <TextView
                 android:id="@+id/tv_redbag_code"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
                 android:text="红包码：xxxxx"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_min_money"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:gravity="bottom"
-                android:paddingBottom="17dp"
+                android:layout_height="wrap_content"
                 android:text="最低使用限额：99元"
+                android:layout_marginTop="@dimen/dp40"
                 android:textColor="@color/color_333"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -57,7 +53,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="right">
-
             <TextView
                 android:id="@+id/tv_money_sign"
                 android:layout_width="wrap_content"

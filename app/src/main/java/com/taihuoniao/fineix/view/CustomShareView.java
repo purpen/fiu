@@ -31,9 +31,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * created at 2016/5/15 23:46
  */
 public class CustomShareView extends RelativeLayout implements PlatformActionListener {
-    private GridView gv_share;
-    private View tv_cancel;
-//    private GoodsDetail detail;
+    //    private GoodsDetail detail;
     private Context context;
     public CustomShareView(Context context){
         super(context);
@@ -56,13 +54,13 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
 
     private void initView(Context context){
         View view = Util.inflateView(context, R.layout.share_layout, this);
-        gv_share = (GridView) view.findViewById(R.id.gv_share);
-        tv_cancel = view.findViewById(R.id.tv_cancel);
+        GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
+        View tv_cancel = view.findViewById(R.id.tv_cancel);
         int[] image={R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.sina,R.mipmap.qqzone};
         String[] name={"微信好友","微信朋友圈","新浪微博","QQ空间",};
-        List<HashMap<String, Object>> shareList=new ArrayList<HashMap<String,Object>>();
+        List<HashMap<String, Object>> shareList = new ArrayList<>();
         for(int i=0;i<image.length;i++){
-            HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put("image", image[i]);
             map.put("text", name[i]);
             shareList.add(map);
@@ -81,7 +79,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
     private AdapterView.OnItemClickListener itemClicklistener=new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Platform.ShareParams params=null;
+            Platform.ShareParams params;
             switch (position){
 //                case 0:
 //                    //qq

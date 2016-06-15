@@ -1,149 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
-                android:visible="true"
-                android:oneshot="false">
+    android:visible="true"
+    android:oneshot="false">
     <item
         android:drawable="@mipmap/refresh_00"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_01"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_02"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_03"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_04"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_05"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_06"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_07"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_08"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_09"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_010"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_011"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_012"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_013"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_014"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_015"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_016"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_017"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_018"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_019"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_020"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_021"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_022"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_023"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_024"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_025"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_026"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_027"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_028"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_029"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_030"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_031"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_032"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_033"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_034"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_035"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_036"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_037"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_038"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_039"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_040"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_041"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_042"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_043"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_044"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_045"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_046"
-        android:duration="80"/>
+        android:duration="80" />
     <item
         android:drawable="@mipmap/refresh_047"
-        android:duration="80"/>
+        android:duration="80" />
 </animation-list>

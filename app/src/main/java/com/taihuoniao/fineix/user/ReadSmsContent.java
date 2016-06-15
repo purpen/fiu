@@ -44,10 +44,10 @@ public class ReadSmsContent extends ContentObserver {
             String smsBody = cursor.getString(smsbodyColumn);
             Log.e("399", "smsBody :" + smsBody);
             String verifyCode = getDynamicPassword(smsBody);
-            if(TextUtils.isEmpty(verifyCode)){
+            if (TextUtils.isEmpty(verifyCode)) {
                 return;
             }
-            if(mEditText == null) {
+            if (mEditText == null) {
                 throw new RuntimeException("你传的EditText为空");
             }
             mEditText.setText(verifyCode);
@@ -59,7 +59,8 @@ public class ReadSmsContent extends ContentObserver {
         }
         //在用managedQuery的时候，不能主动调用close()方法， 否则在Android 4.0+的系统上，         会发生崩溃
         if (Build.VERSION.SDK_INT < 14) {
-            cursor.close();
+            if (cursor != null)
+                cursor.close();
         }
     }
 

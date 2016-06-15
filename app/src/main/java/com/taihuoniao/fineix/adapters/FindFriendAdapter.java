@@ -27,7 +27,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ import butterknife.ButterKnife;
  * created at 2016/5/8 17:45
  */
 public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
-    private FindFriendRecycleViewAdapter adapter;
     private ImageLoader imageLoader;
     public FindFriendAdapter(List list, Activity activity){
         super(list,activity);
@@ -49,7 +47,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final FindFriendData.User item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_find_friend,null);
             holder=new ViewHolder(convertView);
@@ -80,7 +78,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         LinearLayoutManager manager = new LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false);
         holder.recycler_view.setLayoutManager(manager);
         if (item.scene_sight !=null || item.scene_sight.size()>0){
-            adapter=new FindFriendRecycleViewAdapter(activity,item.scene_sight);
+            FindFriendRecycleViewAdapter adapter = new FindFriendRecycleViewAdapter(activity, item.scene_sight);
             holder.recycler_view.setAdapter(adapter);
             adapter.setmOnItemClickLitener(new FindFriendRecycleViewAdapter.OnItemClickListener() {
                 @Override

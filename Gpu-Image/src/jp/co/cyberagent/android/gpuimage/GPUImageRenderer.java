@@ -76,8 +76,8 @@ public class GPUImageRenderer implements Renderer, PreviewCallback {
 
     public GPUImageRenderer(final GPUImageFilter filter) {
         mFilter = filter;
-        mRunOnDraw = new LinkedList<Runnable>();
-        mRunOnDrawEnd = new LinkedList<Runnable>();
+        mRunOnDraw = new LinkedList<>();
+        mRunOnDrawEnd = new LinkedList<>();
 
         mGLCubeBuffer = ByteBuffer.allocateDirect(CUBE.length * 4)
                 .order(ByteOrder.nativeOrder())

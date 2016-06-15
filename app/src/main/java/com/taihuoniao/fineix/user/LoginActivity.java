@@ -72,7 +72,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             super.handleMessage(msg);
             switch (msg.what) {
                 case DataConstants.PARSER_LOGIN:
-                    int isFirstLogin = 1;
                     // 登录成功
                     if (msg.obj instanceof LoginInfo) {
                         LoginInfo loginInfo = (LoginInfo) msg.obj;

@@ -7,6 +7,7 @@
         android:id="@+id/activity_select_bottomlinear"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:baselineAligned="false"
         android:layout_alignParentBottom="true"
         android:background="@color/backround_black"
         android:orientation="horizontal">
@@ -64,5 +65,5 @@
         android:id="@+id/activity_select_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/activity_select_bottomlinear"></RelativeLayout>
+        android:layout_above="@id/activity_select_bottomlinear" />
 </RelativeLayout>

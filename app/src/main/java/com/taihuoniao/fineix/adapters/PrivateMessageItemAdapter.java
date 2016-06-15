@@ -53,7 +53,7 @@ public class PrivateMessageItemAdapter extends CommonBaseAdapter<MessageDetailDa
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final MessageDetailData.MessageItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView == null) {
             if (getItemViewType(position)==MESSAGE_OTHERS){
                 convertView= Util.inflateView(activity, R.layout.item_msg_others,null);

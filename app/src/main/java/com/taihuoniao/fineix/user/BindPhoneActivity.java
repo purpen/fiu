@@ -36,15 +36,11 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
     private EditText mPhone;
     private EditText mPassWord;
-    private Button mBind;
-    private TextView mLoginNow;
     public static BindPhoneActivity instance = null;
     private WaittingDialog mDialog = null;
     private String avatarUrl, nickName, sex, token;
     private String type;//来源: 1.微信；2.微博；3.ＱＱ
-    private String mPhoneNumber, mPassWordNumber;
     private String unionId;//微信的联合id
-    private String openIdWeChat;//微信专用的openId
     private String openId;
 
     public BindPhoneActivity() {
@@ -105,9 +101,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         mDialog = new WaittingDialog(this);
         mPhone = (EditText) findViewById(R.id.et_phone_bindPhone);
         mPassWord = (EditText) findViewById(R.id.et_password_bindPhone);
-        mBind = (Button) findViewById(R.id.bt_bindPhone);
+        Button mBind = (Button) findViewById(R.id.bt_bindPhone);
         mBind.setOnClickListener(this);
-        mLoginNow = (TextView) findViewById(R.id.tv_click_login_bindPhone);
+        TextView mLoginNow = (TextView) findViewById(R.id.tv_click_login_bindPhone);
         mLoginNow.setOnClickListener(this);
         mLoginNow.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         mLoginNow.getPaint().setAntiAlias(true);//抗锯齿
@@ -125,7 +121,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         // 针对微信不用传openid，要传unionid，换言之，单独对微信是把unionid当作openid传了，但在这个Activity的接口却要求openid和unionid都要传，而除了微信，QQ和微
         // 博都没有unionid的，只有openid，所以要像这样，单独把微信的unionid提出来
         unionId = getIntent().getStringExtra("oid");//微信的联合id
-        openIdWeChat = getIntent().getStringExtra("oidForWeChat");//微信的openid
+        String openIdWeChat = getIntent().getStringExtra("oidForWeChat");
         openId = getIntent().getStringExtra("oid");
         //1.微信；2.微博；3.ＱＱ
         if ("1".equals(type)) {
@@ -137,13 +133,13 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.bt_bindPhone: //绑定已有账号
-                mPhoneNumber = mPhone.getText() + "";
-                mPassWordNumber = mPassWord.getText() + "";
+                String mPhoneNumber = mPhone.getText() + "";
+                String mPassWordNumber = mPassWord.getText() + "";
                 ClientDiscoverAPI.bindPhoneNet(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
                         v.setEnabled(false);
-                        if (mDialog==null){
+                        if (mDialog != null) {
                             mDialog.show();
                         }
                     }
@@ -182,7 +178,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onStart() {
                         v.setEnabled(false);
-                        if (mDialog==null){
+                        if (mDialog != null) {
                             mDialog.show();
                         }
                     }

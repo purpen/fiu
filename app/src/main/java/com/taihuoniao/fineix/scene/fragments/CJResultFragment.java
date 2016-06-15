@@ -35,7 +35,6 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private boolean isContent = false;
     //控件
     public static CJResultFragment instance;
-    private RelativeLayout title;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
     private ProgressBar progressBar;
@@ -68,7 +67,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_index, null);
-        title = (RelativeLayout) view.findViewById(R.id.fragment_index_title);
+        RelativeLayout title = (RelativeLayout) view.findViewById(R.id.fragment_index_title);
         title.setVisibility(View.GONE);
         pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
         listView = pullToRefreshLayout.getRefreshableView();

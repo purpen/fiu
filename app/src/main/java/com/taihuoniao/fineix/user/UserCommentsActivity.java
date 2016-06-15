@@ -93,7 +93,6 @@ public class UserCommentsActivity extends BaseActivity{
                 LogUtil.e(TAG,responseInfo.result);
                 CommentsBean commentsBean = JsonUtil.fromJson(responseInfo.result,CommentsBean.class);
                 if (commentsBean.isSuccess()){
-                    if (commentsBean==null) return;
                     if (commentsBean.getData()==null) return;
                     list=commentsBean.getData().getRows();
                     refreshUI();

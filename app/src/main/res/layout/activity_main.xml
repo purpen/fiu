@@ -15,7 +15,6 @@
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/custom_head"
         />
 
     <LinearLayout
@@ -73,13 +72,11 @@
             style="@style/MainButtonStyle">
 
             <ImageView
-                android:id="@+id/activity_main_scenebtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/create"/>
 
             <TextView
-                android:id="@+id/tv_nav2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

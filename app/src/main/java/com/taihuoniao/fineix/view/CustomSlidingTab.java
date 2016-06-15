@@ -32,7 +32,7 @@ import java.util.Locale;
 public class CustomSlidingTab extends HorizontalScrollView {
 
     public interface IconTabProvider {
-        public int getPageIconResId(int position);
+        int getPageIconResId(int position);
     }
 
     private static final int[] ATTRS = new int[]{

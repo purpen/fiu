@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.handmark.pulltorefresh.library.extras;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.view.View;
@@ -24,6 +22,8 @@ import android.view.View;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
+
+import java.util.HashMap;
 
 public class SoundPullEventListener<V extends View> implements PullToRefreshBase.OnPullEventListener<V> {
 
@@ -39,14 +39,14 @@ public class SoundPullEventListener<V extends View> implements PullToRefreshBase
 	 */
 	public SoundPullEventListener(Context context) {
 		mContext = context;
-		mSoundMap = new HashMap<State, Integer>();
+		mSoundMap = new HashMap<>();
 	}
 
 	@Override
 	public final void onPullEvent(PullToRefreshBase<V> refreshView, State event, Mode direction) {
 		Integer soundResIdObj = mSoundMap.get(event);
 		if (null != soundResIdObj) {
-			playSound(soundResIdObj.intValue());
+			playSound(soundResIdObj);
 		}
 	}
 

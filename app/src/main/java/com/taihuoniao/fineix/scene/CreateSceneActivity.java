@@ -67,8 +67,6 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/6.
  */
 public class CreateSceneActivity extends BaseActivity implements View.OnClickListener, EditRecyclerAdapter.ItemClick {
-    //上个界面传递过来的图片存储地址
-    private Uri imageUri;
     //控件
     private GlobalTitleLayout titleLayout;
     //    private ImageView sceneImg;
@@ -144,7 +142,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
-        imageUri = getIntent().getData();
+        Uri imageUri = getIntent().getData();
         titleLayout.setFocusable(true);
         titleLayout.setFocusableInTouchMode(true);
         titleLayout.requestFocus();

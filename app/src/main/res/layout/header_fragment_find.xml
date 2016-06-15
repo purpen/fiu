@@ -46,7 +46,7 @@
         android:id="@+id/fragment_find_absolute"
         android:layout_width="match_parent"
         android:layout_height="156dp"
-        android:background="#f0f0f0"></AbsoluteLayout>
+        android:background="#f0f0f0" />
 
     <TextView
         android:layout_width="match_parent"

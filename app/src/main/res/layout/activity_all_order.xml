@@ -57,7 +57,6 @@
             style="@style/AccountCommingPayRelative">
 
             <TextView
-                android:id="@+id/activity_all_order_daifukuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -77,7 +76,6 @@
             style="@style/AccountCommingPayRelative">
 
             <TextView
-                android:id="@+id/activity_all_order_daifahuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -95,7 +93,6 @@
             style="@style/AccountCommingPayRelative">
 
             <TextView
-                android:id="@+id/activity_all_order_daishouhuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -113,7 +110,6 @@
             style="@style/AccountCommingPayRelative">
 
             <TextView
-                android:id="@+id/activity_all_order_daipingjia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -131,7 +127,6 @@
             style="@style/AccountCommingPayRelative">
 
             <TextView
-                android:id="@+id/activity_all_order_tuihuanhuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -139,9 +134,7 @@
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
-            <TextView
-                android:id="@+id/activity_all_order_tuihuanhuored"
-                style="@style/AccountCommingPayRedCircle"/>
+            <TextView style="@style/AccountCommingPayRedCircle" />
         </RelativeLayout>
     </LinearLayout>
 

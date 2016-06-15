@@ -61,9 +61,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private EditText editText;
     private Button sendBtn;
     private PopupWindow popupWindow;
-    //popupWindow下的控件
-    private TextView deleteTv;
-    private TextView cancelTv;
     //网络请求
     private WaittingDialog dialog;
     private String currentUserId = null;//网络获取的当前用户id
@@ -189,9 +186,9 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         WindowManager windowManager = CommentListActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(CommentListActivity.this, R.layout.popup_comment_delete, null);
-        deleteTv = (TextView) popup_view.findViewById(R.id.popup_comment_delete_delete);
+        TextView deleteTv = (TextView) popup_view.findViewById(R.id.popup_comment_delete_delete);
 //        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
-        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);

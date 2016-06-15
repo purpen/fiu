@@ -5,16 +5,16 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.utils.ProvinceUtil;
 import com.taihuoniao.fineix.view.wheelview.OnWheelChangedListener;
 import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
+
 import java.util.List;
 
 public class CustomAddressSelectView extends LinearLayout {
-    private boolean isCyclic = false;
-    private int visibleItems = 5;
     private List<String> provinces;
     private List<String> cities;
     private WheelView wv_left;
@@ -42,9 +42,11 @@ public class CustomAddressSelectView extends LinearLayout {
         wv_left = (WheelView) view.findViewById(R.id.wv_left);
         wv_center = (WheelView) view.findViewById(R.id.wv_center);
 //        wv_right = (WheelView) view.findViewById(R.id.wv_right);
+        boolean isCyclic = false;
         wv_left.setCyclic(isCyclic);
         wv_center.setCyclic(isCyclic);
 //        wv_right.setCyclic(isCyclic);
+        int visibleItems = 5;
         wv_left.setVisibleItems(visibleItems);
         wv_center.setVisibleItems(visibleItems);
 //        wv_right.setVisibleItems(visibleItems);

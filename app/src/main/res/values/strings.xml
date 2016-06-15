@@ -7,11 +7,9 @@
     <string name="mine">个人</string>
     <string name="about_us">关于Fiu</string>
     <string name="feed_back">意见与反馈</string>
-    <string name="partners">战略伙伴App</string>
     <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
     <!-- 网络请求 -->
     <string name="host_failure" translatable="false">连接失败，请检查网络</string>
-    <string name="share">分享</string>
     <!-- PhotoFragment -->
     <string name="film_album">胶卷相册</string>
     <!-- CropPictureActivity -->
@@ -19,9 +17,6 @@
     <!-- EditPictureActivity -->
     <string name="tools">工具</string>
     <string name="filter">滤镜</string>
-    <string name="failed_loading">图片加载失败</string>
-    <string name="more_three_products">您最多可以添加三个商品</string>
-    <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->
     <string name="add_url">添加链接</string>
     <string name="search_products">搜索产品</string>
@@ -57,31 +52,21 @@
     <!-- 编辑地址 -->
     <string name="delete">删除</string>
     <!-- 编辑收货地址界面-->
-    <string name="name_is_empty">收货人不能为空！</string>
-    <string name="phone_is_empty">手机号码不能为空！</string>
-    <string name="address_details_is_empty">详细地址不能为空！</string>
-    <string name="zip_is_empty">邮政编码不能为空！</string>
-    <string name="no_default_address">默认地址不存在！</string>
     <string name="note_pull_loading">刷新中&#8230;</string>
     <string name="note_pull_down">往下拉更新数据&#8230;</string>
     <string name="note_pull_refresh">放开更新数据&#8230;</string>
-    <string name="not_switch_sku">请选择颜色/分类</string>
     <string name="note_update_at">上一次刷新：%1$s</string>
-    <string name="note_not_update">尚未更新</string>
     <string name="all_order">全部订单</string>
     <string name="subs">订阅</string>
     <!--删除收货地址界面-->
-    <string name="delete_success">删除成功</string>
     <string name="edit_address">编辑收货地址</string>
     <!-- 选择收货时间-->
     <string name="transfer_time_a">任意时间</string>
     <string name="transfer_time_b">周一到周五</string>
     <string name="transfer_time_c">周六、日</string>
     <!-- 定位 -->
-    <string name="startlocation">定位</string>
-    <string name="stoplocation">停止</string>
     <string name="select_city">选择城市</string>
-    <string name="locating">定位中...</string>
+    <string name="locating">定位中…</string>
     <string name="location_error">定位失败</string>
     <string name="complete">完成</string>
     <string-array name="mine_gv_txt">
@@ -97,21 +82,11 @@
         <item>系统设置</item>
     </string-array>
 
-    <string-array name="partner_name">
-        <item>淘宝</item>
-        <item>天猫</item>
-        <item>京东</item>
-        <item>亚马逊</item>
-    </string-array>
     <string name="please_input">请输入</string>
     <string name="loading">加载中…</string>
-    <string name="btn_done">OK</string>
-    <string name="btn_reset">Reset</string>
     <string name="qr_scan_tips">将二维码/条码放入框内，即可自动扫描</string>
-    <string name="actionbar_title_qr_scan">二维码/条码</string>
     <string name="title_user_data">个人信息</string>
     <string name="user_avatar">头像</string>
-    <string name="user_name">用户名</string>
     <string name="nick_name">用户名（昵称）</string>
     <string name="user_signature">个性签名</string>
     <string name="user_sex">性别</string>
@@ -121,7 +96,6 @@
     <string name="user_area">地区</string>
     <string name="title_modify_nickname">修改昵称</string>
     <string name="save">保存</string>
-    <string name="clear">清空</string>
     <string name="select_birth">请选择出生日期</string>
     <string name="select_gender">请选择性别</string>
     <string name="select_address">请选择地址</string>
@@ -132,16 +106,6 @@
         <item>女</item>
         <item>保密</item>
     </string-array>
-    <string name="first_in_qing_title">情境定位</string>
-    <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
-    <string name="first_in_jing_title">场景布局</string>
-    <string name="first_in_jing_des">给自己设一个局，换一处风情、换一面质地、换各色朝朝暮暮</string>
-    <string name="first_in_fiu_title">Fiu是什么</string>
-    <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，Fiu同寻常</string>
-    <string name="first_in_pin_title">品牌Mall</string>
-    <string name="first_in_pin_des">你的欲望，予我追寻格调的动力；我的橱窗，给你智居的千方百计</string>
-    <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
-    <string name="first_in_wo_des">不为人知的，呼之欲出的都放在这里</string>
     <string name="order_interest_qj">触动双眸的、与我共鸣的、鲜明新奇的，关注情景给印象一个回忆的中轴线</string>
     <string name="complete_info">猜来猜去的游戏已落伍，取一个昵称，撕开日常标签，给同路者关注你的机会</string>
     <string-array name="user_tags">
@@ -190,10 +154,7 @@
     <string name="share_title_url">我喜欢用图片梳理情绪，个性滤镜搭配细腻文字、还能一站购齐好设计！Fiu有一百种方式让你创新生活体验，快来让分享变成生产力。http://m.taihuoniao.com/guide/fiu</string>
 
     <string name="l_album_name_all">最近图片</string>
-    <string name="l_album_name_selected">选择图片</string>
     <string name="l_album_name_camera">相机</string>
     <string name="l_album_name_download">下载</string>
     <string name="l_album_name_screen_shot">屏幕截图</string>
-    <string name="l_confirm_dialog_title">提示</string>
-    <string name="l_confirm_dialog_message">您确定要放弃本次选择的图片吗?</string>
 </resources>

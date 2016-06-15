@@ -29,7 +29,6 @@ import com.taihuoniao.fineix.R;
 /**
  * @author KeithYokoma
  * @version 1.0.0
- * @hide
  * @since 2014/03/20
  */
 public class Album implements Parcelable {

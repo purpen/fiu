@@ -1,10 +1,11 @@
 package com.taihuoniao.fineix.adapters;
+
 import android.app.Activity;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PrivateMessageListData;
@@ -29,7 +30,7 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final PrivateMessageListData.RowItem item = list.get(position);
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
             convertView= Util.inflateView(activity, R.layout.item_message_list,null);
             holder=new ViewHolder(convertView);

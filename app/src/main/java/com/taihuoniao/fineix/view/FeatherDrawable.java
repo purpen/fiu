@@ -9,79 +9,79 @@ import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 
 public interface FeatherDrawable {
-    public void setMinSize(float paramFloat1, float paramFloat2);
+    void setMinSize(float paramFloat1, float paramFloat2);
 
-    public float getMinWidth();
+    float getMinWidth();
 
-    public float getMinHeight();
+    float getMinHeight();
 
-    public boolean validateSize(RectF paramRectF);
+    boolean validateSize(RectF paramRectF);
 
-    public void draw(Canvas paramCanvas);
+    void draw(Canvas paramCanvas);
 
-    public void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    public void setBounds(Rect paramRect);
+    void setBounds(Rect paramRect);
 
-    public void copyBounds(Rect paramRect);
+    void copyBounds(Rect paramRect);
 
-    public Rect copyBounds();
+    Rect copyBounds();
 
-    public Rect getBounds();
+    Rect getBounds();
 
-    public void setChangingConfigurations(int paramInt);
+    void setChangingConfigurations(int paramInt);
 
-    public int getChangingConfigurations();
+    int getChangingConfigurations();
 
-    public void setDither(boolean paramBoolean);
+    void setDither(boolean paramBoolean);
 
-    public void setFilterBitmap(boolean paramBoolean);
+    void setFilterBitmap(boolean paramBoolean);
 
-    public void setCallback(Drawable.Callback paramCallback);
+    void setCallback(Drawable.Callback paramCallback);
 
-    public void invalidateSelf();
+    void invalidateSelf();
 
-    public void scheduleSelf(Runnable paramRunnable, long paramLong);
+    void scheduleSelf(Runnable paramRunnable, long paramLong);
 
-    public void unscheduleSelf(Runnable paramRunnable);
+    void unscheduleSelf(Runnable paramRunnable);
 
-    public void setAlpha(int paramInt);
+    void setAlpha(int paramInt);
 
-    public void setColorFilter(ColorFilter paramColorFilter);
+    void setColorFilter(ColorFilter paramColorFilter);
 
-    public void setColorFilter(int paramInt, PorterDuff.Mode paramMode);
+    void setColorFilter(int paramInt, PorterDuff.Mode paramMode);
 
-    public void clearColorFilter();
+    void clearColorFilter();
 
-    public boolean isStateful();
+    boolean isStateful();
 
-    public boolean setState(int[] paramArrayOfInt);
+    boolean setState(int[] paramArrayOfInt);
 
-    public int[] getState();
+    int[] getState();
 
-    public Drawable getCurrent();
+    Drawable getCurrent();
 
-    public boolean setLevel(int paramInt);
+    boolean setLevel(int paramInt);
 
-    public int getLevel();
+    int getLevel();
 
-    public boolean setVisible(boolean paramBoolean1, boolean paramBoolean2);
+    boolean setVisible(boolean paramBoolean1, boolean paramBoolean2);
 
-    public boolean isVisible();
+    boolean isVisible();
 
-    public int getOpacity();
+    int getOpacity();
 
-    public Region getTransparentRegion();
+    Region getTransparentRegion();
 
-    public float getCurrentWidth();
+    float getCurrentWidth();
 
-    public float getCurrentHeight();
+    float getCurrentHeight();
 
-    public int getMinimumWidth();
+    int getMinimumWidth();
 
-    public int getMinimumHeight();
+    int getMinimumHeight();
 
-    public boolean getPadding(Rect paramRect);
+    boolean getPadding(Rect paramRect);
 
-    public Drawable mutate();
+    Drawable mutate();
 }

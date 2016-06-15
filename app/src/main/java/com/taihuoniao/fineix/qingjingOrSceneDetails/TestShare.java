@@ -132,9 +132,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         View tv_cancel = view.findViewById(R.id.tv_cancel);
         int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone};
         String[] name = {"微信好友", "微信朋友圈", "新浪微博", "QQ空间",};
-        List<HashMap<String, Object>> shareList = new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, Object>> shareList = new ArrayList<>();
         for (int i = 0; i < image.length; i++) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<>();
             map.put("image", image[i]);
             map.put("text", name[i]);
             shareList.add(map);
@@ -325,7 +325,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
 
     private Bitmap inflateView() {
-        int layout = R.layout.view_share_style1;
+        int layout;
         switch (currentPosition) {
             case 1:
                 layout = R.layout.view_share_style2;
@@ -389,7 +389,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Platform.ShareParams params = null;
+            Platform.ShareParams params;
             String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
             dialog.show();
 //            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);

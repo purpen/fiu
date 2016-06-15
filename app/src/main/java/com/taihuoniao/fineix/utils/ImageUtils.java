@@ -262,7 +262,7 @@ public class ImageUtils {
 
     public static Bitmap decodeUriAsBitmap(Uri uri) {
 
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         try {
 
             bitmap = BitmapFactory.decodeStream(MainApplication.getContext().getContentResolver().openInputStream(uri));

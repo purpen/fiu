@@ -216,10 +216,8 @@ public class UsableRedPacketActivity extends BaseActivity {
                     case MotionEvent.ACTION_UP:
                         bIsMoved = false;
                         bIsDown = false;
-                        if (!bIsMoved && !bIsDown) {
-                            //没有动作,则过1000ms后显示foot_view
-                            mHandler.postDelayed(showBottomBarRunnable, 1000);
-                        }
+                        //没有动作,则过1000ms后显示foot_view
+                        mHandler.postDelayed(showBottomBarRunnable, 1000);
                         if (mDeltaY < 0) { //下滑隐藏
                             hideBottomBar();
                         } else {  //上滑显示

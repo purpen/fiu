@@ -55,8 +55,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     //网络请求返回数据商品列表
     private List<ProductBean.ProductListItem> productList;
     private AddProductGridAdapter addProductGridAdapter;
-    //商品搜索的时候数据
-    private int pos = -1;
     private String q = "";//搜索关键字
     private boolean search = false;//判断是不是搜索
     private List<SearchBean.SearchItem> searchList;
@@ -203,7 +201,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         @Override
         public void onReceive(Context context, Intent intent) {
             //搜索接口
-            pos = intent.getIntExtra("pos", -1);
+            int pos = intent.getIntExtra("pos", -1);
             q = intent.getStringExtra("q");
             Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
             if (q != null && intent.getBooleanExtra("search", false) && pos - 1 == position) {
