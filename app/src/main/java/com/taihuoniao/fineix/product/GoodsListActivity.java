@@ -71,7 +71,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        DataPaser.categoryList(1 + "", 10 + "", handler);
+        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                         goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                         firstViewPager.setAdapter(goodListFirtViewPagerAdapter);
                         firstSliding.setViewPager(firstViewPager);
-                        firstViewPager.setCurrentItem(position+1, true);
+                        firstViewPager.setCurrentItem(position , true);
                     }
                     break;
                 case DataConstants.CART_NUM:

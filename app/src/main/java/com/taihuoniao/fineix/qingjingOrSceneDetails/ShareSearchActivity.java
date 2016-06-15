@@ -25,7 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.SceneDetails;
+import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -43,7 +43,7 @@ import butterknife.Bind;
  */
 public class ShareSearchActivity extends BaseActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
     //上个界面传递过来的数据
-    private SceneDetails scene;
+    private SceneDetailsBean scene;
     @Bind(R.id.activity_share_select_img)
     ImageView backImg;
     @Bind(R.id.activity_share_select_titlelayout)
@@ -65,9 +65,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
     @Override
     protected void initView() {
         dialog = new WaittingDialog(this);
-        scene = (SceneDetails) getIntent().getSerializableExtra("scene");
+        scene = (SceneDetailsBean) getIntent().getSerializableExtra("scene");
         if (scene != null) {
-            ImageLoader.getInstance().displayImage(scene.getCover_url(), backImg);
+            ImageLoader.getInstance().displayImage(scene.getData().getCover_url(), backImg);
         }
         titleLayout.setTitleVisible(false);
         titleLayout.setContinueTvVisible(false);
@@ -189,9 +189,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
-        scene.setOid(searchItem.getOid());
-        scene.setTitle(searchItem.getTitle());
-        scene.setDes(searchItem.getDes());
+        scene.getData().setOid(searchItem.getOid());
+        scene.getData().setTitle(searchItem.getTitle());
+        scene.getData().setDes(searchItem.getDes());
         Intent intent = new Intent();
         intent.putExtra("scene", scene);
         setResult(222, intent);

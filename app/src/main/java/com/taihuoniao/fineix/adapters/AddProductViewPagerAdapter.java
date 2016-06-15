@@ -21,20 +21,20 @@ public class AddProductViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return AddProductsFragment.newInstance(position-1, categoryBean);
+        return AddProductsFragment.newInstance(position, categoryBean);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return "全部";
-        }
-        return categoryBean.getList().get(position - 1).getTitle();
+//        if (position == 0) {
+//            return "全部";
+//        }
+        return categoryBean.getList().get(position ).getTitle();
     }
 
     @Override
     public int getCount() {
-        return categoryBean.getList().size() + 1;
+        return categoryBean.getList().size() ;
     }
 
     @Override

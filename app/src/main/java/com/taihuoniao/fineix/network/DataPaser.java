@@ -471,6 +471,34 @@ public class DataPaser {
     }
 
     //情景
+    //删除情景
+    public static void deleteQingjing(String id, final Handler handler) {
+        ClientDiscoverAPI.deleteQingjing(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Message msg = handler.obtainMessage();
+                msg.what = DataConstants.DELETE_QINGJING;
+                msg.obj = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    msg.obj = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除情景", "数据异常");
+                }
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+            }
+        });
+    }
+
+    //情景
     //情景详情
     public static void qingjingDetails(String id, final Handler handler) {
         ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
@@ -1222,8 +1250,8 @@ public class DataPaser {
 
     //公共
     //分类列表
-    public static void categoryList(String page, String domain, final Handler handler) {
-        ClientDiscoverAPI.categoryList(page, domain, new RequestCallBack<String>() {
+    public static void categoryList(String page, String domain, String show_all, final Handler handler) {
+        ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<>", responseInfo.result);

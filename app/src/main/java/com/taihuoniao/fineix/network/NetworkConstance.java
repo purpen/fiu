@@ -10,7 +10,7 @@ public class NetworkConstance {
     public static final String BASE_URL = "http://m.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
-    public static final String BASE_URL_ESTORE = BASE_URL+"/estore/";
+    public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
@@ -41,6 +41,8 @@ public class NetworkConstance {
     public static final String cancel_subs_qingjing = BASE_URL + "/favorite/ajax_cancel_subscription";
     //情景新增
     public static final String create_qingjing = BASE_URL + "/scene_scene/save";
+    //删除情景
+    public static final String delete_qingjing = BASE_URL + "/scene_scene/delete";
     //情景详情
     public static final String qingjing_details = BASE_URL + "/scene_scene/view";
     //情景列表

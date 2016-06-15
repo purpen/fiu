@@ -175,7 +175,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
 //        DataPaser.hotLabelList(labelPage + "", handler);
-        DataPaser.categoryList(1 + "", 10 + "", handler);
+        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
         //热门标签
         DataPaser.cjHotLabel(false, handler);
 //        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
@@ -371,7 +371,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //        }
 
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter(activity,list);
+            viewPagerAdapter = new ViewPagerAdapter(activity, list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             scrollableView.setAutoScrollDurationFactor(8);
             scrollableView.setInterval(4000);

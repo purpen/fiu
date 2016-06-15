@@ -107,7 +107,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                if (position == -1) {
+                if (position == 0) {
                     DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
                     return;
                 }
@@ -133,7 +133,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         dialog.show();
         Log.e("<<<", "tag_id = " + tag_id);
 //        progressBar.setVisibility(View.VISIBLE);
-        if (position == -1) {
+        if (position == 0) {
             recyclerView.setVisibility(View.GONE);
             DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
             return;

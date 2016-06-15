@@ -170,6 +170,8 @@ public class DataConstants {
     public static final int CJ_HOTLABEL = 15;
     //删除场景
     public static final int DELETE_SCENE = 14;
+    //删除情景
+    public static final int DELETE_QINGJING = 13;
 
     //SharedPreferences 存储文件名
     public static final String USERDATA_SHAREDPREFERENCES_NAME = "fiu_settings";

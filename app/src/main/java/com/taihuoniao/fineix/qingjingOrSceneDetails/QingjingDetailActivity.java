@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -244,6 +245,21 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case DataConstants.DELETE_QINGJING:
+                    dialog.dismiss();
+                    NetBean netBean = (NetBean) msg.obj;
+                    if (netBean.isSuccess()) {
+                        ToastUtils.showSuccess("删除成功");
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+                    } else {
+                        ToastUtils.showError(netBean.getMessage());
+                    }
+                    break;
                 case DataConstants.CANCEL_SUBS_QINGJING:
                     QingjingSubsBean netQingjingSubs = (QingjingSubsBean) msg.obj;
                     if (netQingjingSubs.isSuccess()) {
@@ -339,8 +355,8 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());
-                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0)+"", netQingjingDetailBean.getData()
-                                .getLocation().getCoordinates().get(1)+""};
+                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
+                                .getLocation().getCoordinates().get(1) + ""};
                         //添加标签
                         addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
                         is_subscript = netQingjingDetailBean.getData().getIs_subscript();
@@ -434,6 +450,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.popup_scene_detail_more_jubao:
+                popupWindow.dismiss();
+                dialog.show();
+                DataPaser.deleteQingjing(id, handler);
+                break;
             case R.id.popup_scene_detail_more_bianji_linear:
                 if (!LoginInfo.isUserLogin()) {
 //                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
@@ -444,7 +465,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 }
                 Intent intent5 = new Intent(QingjingDetailActivity.this, CreateSceneActivity.class);
                 MainApplication.tag = 2;
-                intent5.putExtra(QingjingDetailActivity.class.getSimpleName(), id);
+                intent5.putExtra(QingjingDetailActivity.class.getSimpleName(), QingjingDetailBean);
                 startActivity(intent5);
                 break;
             case R.id.popup_scene_detail_more_cancel:
@@ -530,10 +551,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         pinglunTv.setVisibility(View.GONE);
+        jubaoTv.setText("删除");
         shareTv.setVisibility(View.GONE);
         bianjiLinear.setVisibility(View.VISIBLE);
+        jubaoTv.setOnClickListener(this);
         bianjiLinear.setOnClickListener(this);
-        jubaoTv.setVisibility(View.GONE);
+        jubaoTv.setVisibility(View.VISIBLE);
         cancelTv.setOnClickListener(this);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {

@@ -165,6 +165,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("lng", lng);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+    //情景
+    //删除情景
+    public static void deleteQingjing(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.delete_qingjing;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id",id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 
     //情景
     //情景详情
@@ -213,14 +221,16 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("lng", lng);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
-//场景
+
+    //场景
     //删除场景
-    public static void deleteScene(String id,RequestCallBack<String>callBack){
+    public static void deleteScene(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.delete_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //场景
     //场景点赞
     public static void loveScene(String id, RequestCallBack<String> callBack) {
@@ -428,11 +438,12 @@ public class ClientDiscoverAPI {
 
     //公共
     //分类列表
-    public static void categoryList(String page, String domain, RequestCallBack<String> callBack) {
+    public static void categoryList(String page, String domain, String show_all, RequestCallBack<String> callBack) {
         String url = NetworkConstance.category_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", 30 + "");
+        params.addQueryStringParameter("show_all", show_all);
         params.addQueryStringParameter("domain", domain);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
@@ -1180,7 +1191,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
-        params.addQueryStringParameter("type","1"); //过滤已关注
+        params.addQueryStringParameter("type", "1"); //过滤已关注
         params.addQueryStringParameter("sight_count", sight_count); //场景数量
         params.addQueryStringParameter("sort", sort); //0是最新 1是随机
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.FIND_FRIENDS, callBack);
