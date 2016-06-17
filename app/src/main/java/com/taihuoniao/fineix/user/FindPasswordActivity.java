@@ -111,7 +111,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                 mFinish = true;
                 OptRegisterLoginActivity.instance.finish();
                 ToLoginActivity.instance.finish();
-                LoginActivity.instance.finish();
                 finish();
                 break;
             case R.id.verify_find:

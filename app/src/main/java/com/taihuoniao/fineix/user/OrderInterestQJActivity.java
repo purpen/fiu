@@ -87,9 +87,6 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
                     if (ToRegisterActivity.instance != null) {
                         ToRegisterActivity.instance.finish();
                     }
-                    if (RegisterActivity.instance != null) {
-                        RegisterActivity.instance.finish();
-                    }
                     if (OptRegisterLoginActivity.instance != null) {
                         OptRegisterLoginActivity.instance.finish();
                     }

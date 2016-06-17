@@ -169,11 +169,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         Util.makeToast("网络异常");
                     }
                 });
-//                DataPaser.bindPhoneParser(openId, unionId, token, mPhoneNumber, mPassWordNumber, type, mHandler);
                 break;
             case R.id.tv_click_login_bindPhone: //跳过绑定直接登录
-//                DataPaser.skipBindParser(MainApplication.uuid, openId, unionId, token, nickName, sex, avatarUrl, type, mHandler);
-
                 ClientDiscoverAPI.skipBindNet(openId, unionId, token, nickName, sex, avatarUrl, type, new RequestCallBack<String>() {
                     @Override
                     public void onStart() {
@@ -236,31 +233,16 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     //选择绑定成功，或跳过绑定之后完成登录，跳入相应界面
     private void loginSuccess(LoginInfo loginInfo) {
-
-//        MainApplication.getIsLoginInfo().setIs_login("1");
         mDialog.dismiss();
-//        OptRegisterLoginActivity.instance.finish();
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                BindPhoneActivity.this.finish();
-//            }
-//        }, 600);
-
-
         if (loginInfo.identify.is_scene_subscribe == 0) { //未订阅
             updateUserIdentity();
             startActivity(new Intent(activity, OrderInterestQJActivity.class));
         } else {
             LoginCompleteUtils.goFrom(this);
-//            activity.startActivity(new Intent(activity, MainActivity.class));
         }
 
         if (ToRegisterActivity.instance != null) {
             ToRegisterActivity.instance.finish();
-        }
-        if (RegisterActivity.instance != null) {
-            RegisterActivity.instance.finish();
         }
         if (OptRegisterLoginActivity.instance != null) {
             OptRegisterLoginActivity.instance.finish();

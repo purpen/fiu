@@ -232,15 +232,7 @@
             android:theme="@style/AppTheme"
             />
         <activity
-            android:name=".user.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity
             android:name=".user.ToLoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity
-            android:name=".user.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity

@@ -205,9 +205,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                     if (ToRegisterActivity.instance != null) {
                         ToRegisterActivity.instance.finish();
                     }
-                    if (RegisterActivity.instance != null) {
-                        RegisterActivity.instance.finish();
-                    }
                     if (OptRegisterLoginActivity.instance != null) {
                         OptRegisterLoginActivity.instance.finish();
                     }
@@ -308,7 +305,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_number_toregister:
-//                startActivity(new Intent(activity, RegisterActivity.class));
                 ll_phone.setVisibility(View.GONE);
                 ll_third.setVisibility(View.GONE);
                 ll_register.setVisibility(View.VISIBLE);
@@ -468,9 +464,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
                         if (ToRegisterActivity.instance != null) {
                             ToRegisterActivity.instance.finish();
-                        }
-                        if (RegisterActivity.instance != null) {
-                            RegisterActivity.instance.finish();
                         }
                         if (OptRegisterLoginActivity.instance != null) {
                             OptRegisterLoginActivity.instance.finish();

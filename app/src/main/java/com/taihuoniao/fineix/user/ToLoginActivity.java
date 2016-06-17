@@ -192,8 +192,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(sina);
                 break;
             case R.id.tv_phone_number_tologin:
-//                Intent toLoginIntent = new Intent(ToLoginActivity.this, LoginActivity.class);
-//                startActivity(toLoginIntent);
                 ll_phone.setVisibility(View.GONE);
                 ll_third.setVisibility(View.GONE);
                 ll_login.setVisibility(View.VISIBLE);
@@ -324,9 +322,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         if (ToRegisterActivity.instance != null) {
                             ToRegisterActivity.instance.finish();
                         }
-                        if (RegisterActivity.instance != null) {
-                            RegisterActivity.instance.finish();
-                        }
                         if (OptRegisterLoginActivity.instance != null) {
                             OptRegisterLoginActivity.instance.finish();
                         }
@@ -448,9 +443,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                     }
                     if (ToRegisterActivity.instance != null) {
                         ToRegisterActivity.instance.finish();
-                    }
-                    if (RegisterActivity.instance != null) {
-                        RegisterActivity.instance.finish();
                     }
                     if (OptRegisterLoginActivity.instance != null) {
                         OptRegisterLoginActivity.instance.finish();

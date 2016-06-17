@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.user;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +32,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -70,6 +73,7 @@ public class SubjectActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("JavascriptInterface")
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, title);
@@ -84,15 +88,18 @@ public class SubjectActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                addImageClickListner();
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
             }
         });
+
+        webViewAbout.addJavascriptInterface(new JavascriptInterface(this), "imagelistner");
         WebSettings webSettings = webViewAbout.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
-
-        // 为了让javascript中的alert()执行，必须设置以下语句
+        webViewAbout.setWebViewClient(new MyWebViewClient());
+//        // 为了让javascript中的alert()执行，必须设置以下语句
         webViewAbout.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message,
@@ -103,7 +110,6 @@ public class SubjectActivity extends BaseActivity {
                 builder.setTitle("提示：");
                 builder.setMessage(message);
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         result.cancel();
@@ -119,6 +125,65 @@ public class SubjectActivity extends BaseActivity {
                 return true;
             }
         });
+    }
+
+    // 监听
+    private class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            view.getSettings().setJavaScriptEnabled(true);
+            super.onPageFinished(view, url);
+            addImageClickListner();
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            view.getSettings().setJavaScriptEnabled(true);
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+
+        }
+    }
+
+    // 注入js函数监听
+    private void addImageClickListner() {
+        String js = "";
+        // 这段js函数的功能就是，遍历所有的img几点，并添加onclick函数，函数的功能是在图片点击的时候调用本地java接口并传递url过去
+        webViewAbout.loadUrl("javascript:(function(){" + "var objs = document.getElementsByTagName(\"img\"); " +
+                "for(var i=0;i<objs.length;i++)  " +
+                "{"
+                + "objs[i].onclick=function()" +
+                "{"
+                + "window.imagelistner.openImage(this.src);" +
+                "}" +
+                "}" +
+                "})()");
+    }
+
+    public class JavascriptInterface {
+        private Context context;
+
+        public JavascriptInterface(Context context) {
+            this.context = context;
+        }
+
+        public void openImage(String img) {
+            LogUtil.e("JavascriptInterface", img);
+            //
+//            Intent intent = new Intent();
+//            intent.putExtra("image", img);
+//            intent.setClass(context, ShowWebImageActivity.class);
+//            context.startActivity(intent);
+        }
     }
 
     @OnClick({R.id.ibtn_favorite, R.id.ibtn_share, R.id.ibtn_comment})
