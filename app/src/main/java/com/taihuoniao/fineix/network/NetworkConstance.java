@@ -123,7 +123,8 @@ public class NetworkConstance {
 
     //获得用户信息自己和别人的主页
     public static final String MINE_INFO = BASE_URL + "/user/user_info";
-
+    //送积分
+    public static final String GET_BONUS = BASE_URL + "/user/send_exp";
     //获得个人中心
     public static final String USER_CENTER = BASE_URL + "/auth/user";
 

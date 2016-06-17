@@ -129,7 +129,7 @@ public class SceneListViewAdapter extends BaseAdapter {
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
-            isSpertAndSummary(holder.userInfo, list.get(position).getUser_info().getIs_expert(), list.get(position).getUser_info().getSummary());
+            isSpertAndSummary(holder.userInfo, list.get(position).getUser_info().getLabel(), list.get(position).getUser_info().getSummary());
             holder.viewCount.setText(list.get(position).getView_count());
             holder.loveCount.setText(list.get(position).getLove_count());
             holder.sceneTitle.setText(list.get(position).getTitle());
@@ -141,7 +141,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
-            isSpertAndSummary(holder.userInfo, loveList.get(position).getUser_info().getIs_expert(), loveList.get(position).getUser_info().getSummary());
+            isSpertAndSummary(holder.userInfo, loveList.get(position).getUser_info().getLabel(), loveList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(loveList.get(position).getView_count());
             holder.loveCount.setText(loveList.get(position).getLove_count());
             holder.sceneTitle.setText(loveList.get(position).getTitle());
@@ -153,7 +153,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
-            isSpertAndSummary(holder.userInfo, searchList.get(position).getUser_info().getIs_expert(), searchList.get(position).getUser_info().getSummary());
+            isSpertAndSummary(holder.userInfo, searchList.get(position).getUser_info().getLabel(), searchList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(searchList.get(position).getView_count());
             holder.loveCount.setText(searchList.get(position).getLove_count());
             holder.sceneTitle.setText(searchList.get(position).getTitle());
@@ -165,7 +165,7 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());
-            isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getIs_expert(), subsList.get(position).getUser_info().getSummary());
+            isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getLabel(), subsList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(subsList.get(position).getView_count());
             holder.loveCount.setText(subsList.get(position).getLove_count());
             holder.sceneTitle.setText(subsList.get(position).getTitle());
@@ -188,15 +188,15 @@ public class SceneListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
-        if ("1".equals(isSpert) && summary == null ) {
-            userInfo.setText("达人");
-        } else if ("1".equals(isSpert)) {
-            userInfo.setText(String.format("%s | %s", "达人", summary));
-        } else if (summary == null) {
+    private void isSpertAndSummary(TextView userInfo, String label, String summary) {
+        if (label == null && summary == null) {
             userInfo.setText("");
-        } else {
+        } else if (label == null) {
             userInfo.setText(summary);
+        } else if (summary == null) {
+            userInfo.setText(label);
+        } else {
+            userInfo.setText(label + " | " + summary);
         }
     }
 

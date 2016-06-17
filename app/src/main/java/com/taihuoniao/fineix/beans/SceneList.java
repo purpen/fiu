@@ -8,6 +8,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/18.
  */
 public class SceneList extends NetBean {
+    
     private List<SceneListBean> sceneListBeanList;
 
     public List<SceneListBean> getSceneListBeanList() {

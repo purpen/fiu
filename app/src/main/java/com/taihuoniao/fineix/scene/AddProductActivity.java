@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,15 +15,27 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/3/22.
@@ -33,7 +43,9 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 public class AddProductActivity extends BaseActivity implements View.OnClickListener {
     private GlobalTitleLayout titleLayout;
     private CustomSlidingTab slidingTab;
+    private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
+    private RelativeLayout search;
     private EditText editText;
     private ImageView deleteImg;
     private TextView cancelTv;
@@ -52,7 +64,56 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     protected void requestNet() {
         //获取分类列表
         dialog.show();
-        DataPaser.categoryList(1 + "", 10 + "",1+"", handler);
+//        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
+        ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+//                Log.e("<<<>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.CATEGORY_LIST;
+                CategoryBean categoryBean = new CategoryBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    categoryBean.setSuccess(job.optBoolean("success"));
+                    categoryBean.setMessage(job.optString("message"));
+//                    categoryBean.setStatus(job.optString("status"));
+                    if (categoryBean.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<CategoryListBean> list = new ArrayList<CategoryListBean>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject ob = rows.getJSONObject(i);
+                            CategoryListBean categoryListBean = new CategoryListBean();
+                            categoryListBean.set_id(ob.optString("_id"));
+                            categoryListBean.setTitle(ob.optString("title"));
+                            categoryListBean.setName(ob.optString("name"));
+                            categoryListBean.setTag_id(ob.optString("tag_id"));
+                            categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
+                            categoryListBean.setApp_cover_url(ob.optString("app_cover_url"));
+                            list.add(categoryListBean);
+                        }
+                        categoryBean.setList(list);
+                    }
+//                    msg.obj = categoryBean;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                handler.sendMessage(msg);
+                if (categoryBean.isSuccess()) {
+                    addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryBean);
+                    viewPager.setAdapter(addProductViewPagerAdapter);
+                    slidingTab.setViewPager(viewPager);
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     @Override
@@ -76,7 +137,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_product_title);
         slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
-        RelativeLayout search = (RelativeLayout) findViewById(R.id.rl);
+        search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
         deleteImg = (ImageView) findViewById(R.id.activity_add_product_delete);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
@@ -159,37 +220,36 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.CATEGORY_LIST:
-                    dialog.dismiss();
-                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
-                    if (netCategoryBean.isSuccess()) {
-                        AddProductViewPagerAdapter addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
-                        viewPager.setAdapter(addProductViewPagerAdapter);
-                        slidingTab.setViewPager(viewPager);
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.CATEGORY_LIST:
+//                    dialog.dismiss();
+//                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
+//                    if (netCategoryBean.isSuccess()) {
+//                        addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
+//                        viewPager.setAdapter(addProductViewPagerAdapter);
+//                        slidingTab.setViewPager(viewPager);
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    break;
+//            }
+//        }
+//    };
 
     public interface CancelSearch {
         void cancelSearch();
     }
 
-    @Override
-    protected void onDestroy() {
-        //        cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        //        cancelNet();
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//        }
+//        super.onDestroy();
+//    }
 }

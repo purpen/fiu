@@ -11,12 +11,25 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/tiao"/>
 
-    <ImageView
-        android:id="@+id/view_sliding_focus_img"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:scaleType="centerCrop"
-        />
+        android:layout_marginRight="2dp">
+
+        <ImageView
+            android:id="@+id/view_sliding_focus_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_background_750_1334"
+            />
+
+        <TextView
+            android:id="@+id/view_sliding_focus_zhezhao"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#66000000"/>
+    </RelativeLayout>
+
 </LinearLayout>

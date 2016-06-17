@@ -181,31 +181,32 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
                 gpuImageView.setFilter(filter);
                 GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
                 switch (position) {
-                    case 10:
+                    //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
+                    case 4:
                         filterAdjuster.adjust(97);//摩卡
                         break;
-                    case 4:
+                    case 11:
                         filterAdjuster.adjust(45);//暮光
                         break;
-                    case 5:
+                    case 6:
                         filterAdjuster.adjust(0);//候鸟
                         break;
-                    case 6:
+                    case 7:
                         filterAdjuster.adjust(40);//夏日
                         break;
                     case 1:
                         filterAdjuster.adjust(100);//都市
                         break;
-                    case 9:
+                    case 5:
                         filterAdjuster.adjust(25);//佳人
                         break;
-                    case 11:
+                    case 10:
                         filterAdjuster.adjust(55);//流年
                         break;
                     case 3:
                         filterAdjuster.adjust(53);//日光
                         break;
-                    case 7:
+                    case 8:
                         filterAdjuster.adjust(60);//午茶
                         break;
                 }

@@ -16,7 +16,7 @@
         android:layout_below="@id/activity_select_qingjing_titlelayout"
         android:background="#e9e9e9"/>
 
-    <com.taihuoniao.fineix.view.HeaderGridView
+    <com.taihuoniao.fineix.view.GridViewWithHeaderAndFooter
         android:id="@+id/activity_select_qingjing_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

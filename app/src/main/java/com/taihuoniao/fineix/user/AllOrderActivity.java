@@ -1,20 +1,24 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Uri;
+import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.UserInfo;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -53,8 +57,6 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
     RelativeLayout tmRelative;
     @Bind(R.id.activity_all_order_ymxrelative)
     RelativeLayout ymxRelative;
-    @Bind(R.id.activity_all_order_webview)
-    WebView webView;
 
     public AllOrderActivity() {
         super(R.layout.activity_all_order);
@@ -116,19 +118,21 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
                 startActivity(new Intent(AllOrderActivity.this, ReturnGoodsActivity.class));
                 break;
             case R.id.activity_all_order_jdrelative:
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl("http://home.m.jd.com/newAllOrders/newAllOrders.action");
+//                webView.getSettings().setJavaScriptEnabled(true);
+//                webView.loadUrl("http://home.m.jd.com/newAllOrders/newAllOrders.action");
                 ToastUtils.showInfo("正在跳转，请稍等");
+                Uri uri = Uri.parse("http://home.m.jd.com/newAllOrders/newAllOrders.action");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 break;
             case R.id.activity_all_order_tbrelative:
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
-                ToastUtils.showInfo("正在跳转，请稍等");
-                break;
             case R.id.activity_all_order_tmrelative:
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+//                webView.getSettings().setJavaScriptEnabled(true);
+//                webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 ToastUtils.showInfo("正在跳转，请稍等");
+                Uri uri1 = Uri.parse("https://h5.m.taobao.com/mlapp/olist.html");
+                Intent intent1 = new Intent(Intent.ACTION_VIEW, uri1);
+                startActivity(intent1);
                 break;
             case R.id.activity_all_order_ymxrelative:
                 break;
@@ -138,57 +142,83 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        DataPaser.userInfoParser(handler);
-    }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.PARSER_USER_INFO:
-                    UserInfo userInfo = (UserInfo) msg.obj;
-                    if (userInfo.isSuccess()) {
+//        DataPaser.userInfoParser(handler);
+        ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<个人信息", responseInfo.result);
+                UserInfo userInfo = null;
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject userObj = obj.getJSONObject("data");
+                    userInfo = UserInfo.getInstance();
+                    userInfo.setSuccess(obj.optBoolean("success"));
+                    userInfo.setAccount(userObj.optString("account"));
+                    userInfo.setNickname(userObj.optString("nickname"));
+                    userInfo.setTrue_nickname(userObj.optString("true_nickname"));
+                    userInfo.setSex(userObj.optString("sex"));
+                    userInfo.setBirthday(userObj.optString("birthday"));
+                    userInfo.setMedium_avatar_url(userObj.optString("medium_avatar_url"));
+                    userInfo.setRealname(userObj.optString("realname"));
+                    userInfo.setPhone(userObj.optString("phone"));
+                    userInfo.setAddress(userObj.optString("address"));
+                    userInfo.setZip(userObj.optString("zip"));
+                    userInfo.setIm_qq(userObj.optString("im_qq"));
+                    userInfo.setWeixin(userObj.optString("weixin"));
+                    userInfo.setCompany(userObj.optString("company"));
+                    userInfo.setProvince_id(userObj.optString("province_id"));
+                    userInfo.setDistrict_id(userObj.optString("district_id"));
+                    userInfo.setRank_id(userObj.optString("rank_id"));
+                    userInfo.setRank_title(userObj.optString("rank_title"));
+                    userInfo.setBird_coin(userObj.optString("bird_coin"));
+                    userInfo.set_id(userObj.optString("_id"));
+                    JSONObject counterObj = userObj.getJSONObject("counter");
+                    userInfo.setOrder_wait_payment(counterObj.optString("order_wait_payment"));
+                    userInfo.setOrder_ready_goods(counterObj.optString("order_ready_goods"));
+                    userInfo.setOrder_evaluate(counterObj.optString("order_evaluate"));
+                    userInfo.setOrder_total_count(counterObj.optString("order_total_count"));
+                    userInfo.setOrder_sended_goods(counterObj.optString("order_sended_goods"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (userInfo == null) {
+                    return;
+                }
+                if (userInfo.isSuccess()) {
 //                        Log.e("<<<", "待付款" + userInfo.getOrder_wait_payment() + ",待发货" + userInfo.getOrder_ready_goods()
 //                                + ",待收货" + userInfo.getOrder_sended_goods() + ",待评价" + userInfo.getOrder_evaluate());
-                        if (!"0".equals(userInfo.getOrder_wait_payment())) {
-                            daifukuanRed.setVisibility(View.VISIBLE);
-                            daifukuanRed.setText(String.format("%s", userInfo.getOrder_wait_payment()));
-                        } else {
-                            daifukuanRed.setVisibility(View.INVISIBLE);
-                        }
-                        if (!"0".equals(userInfo.getOrder_ready_goods())) {
-                            daifahuoRed.setVisibility(View.VISIBLE);
-                            daifahuoRed.setText(userInfo.getOrder_ready_goods());
-                        } else {
-                            daifahuoRed.setVisibility(View.INVISIBLE);
-                        }
-                        if (!"0".equals(userInfo.getOrder_sended_goods())) {
-                            daishouhuoRed.setVisibility(View.VISIBLE);
-                            daishouhuoRed.setText(userInfo.getOrder_sended_goods());
-                        } else {
-                            daishouhuoRed.setVisibility(View.INVISIBLE);
-                        }
-                        if (!"0".equals(userInfo.getOrder_evaluate())) {
-                            daipingjiaRed.setVisibility(View.VISIBLE);
-                            daipingjiaRed.setText(userInfo.getOrder_evaluate());
-                        } else {
-                            daipingjiaRed.setVisibility(View.INVISIBLE);
-                        }
+                    if (!"0".equals(userInfo.getOrder_wait_payment())) {
+                        daifukuanRed.setVisibility(View.VISIBLE);
+                        daifukuanRed.setText(String.format("%s", userInfo.getOrder_wait_payment()));
+                    } else {
+                        daifukuanRed.setVisibility(View.INVISIBLE);
                     }
-                    break;
-                case DataConstants.NET_FAIL:
-                    break;
+                    if (!"0".equals(userInfo.getOrder_ready_goods())) {
+                        daifahuoRed.setVisibility(View.VISIBLE);
+                        daifahuoRed.setText(userInfo.getOrder_ready_goods());
+                    } else {
+                        daifahuoRed.setVisibility(View.INVISIBLE);
+                    }
+                    if (!"0".equals(userInfo.getOrder_sended_goods())) {
+                        daishouhuoRed.setVisibility(View.VISIBLE);
+                        daishouhuoRed.setText(userInfo.getOrder_sended_goods());
+                    } else {
+                        daishouhuoRed.setVisibility(View.INVISIBLE);
+                    }
+                    if (!"0".equals(userInfo.getOrder_evaluate())) {
+                        daipingjiaRed.setVisibility(View.VISIBLE);
+                        daipingjiaRed.setText(userInfo.getOrder_evaluate());
+                    } else {
+                        daipingjiaRed.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
-        }
-    };
 
-    @Override
-    protected void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
+
 }

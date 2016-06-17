@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.scene.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,18 +11,24 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,9 +91,10 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
                 if (isContent) {
-                    DataPaser.search(q, t, page + "", "content", null, handler);
-                } else
-                    DataPaser.search(q, t, page + "", "tag", null, handler);
+                    search(q, t, page + "", "content", null);
+                } else {
+                    search(q, t, page + "", "tag", null);
+                }
             }
         });
         list = new ArrayList<>();
@@ -107,9 +112,54 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
         if (isContent)
-            DataPaser.search(q, t, page + "", "content", null, handler);
+            search(q, t, page + "", "content", null);
         else
-            DataPaser.search(q, t, page + "", "tag", null, handler);
+            search(q, t, page + "", "tag", null);
+    }
+
+    private void search(String q, String t, String p, String evt, String sort) {
+        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<搜索", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.SEARCH_LIST;
+                SearchBean searchBean = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    searchBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SearchBean netSearch = searchBean;
+                if (netSearch.isSuccess()) {
+                    if (page == 1) {
+                        list.clear();
+                    }
+                    list.addAll(netSearch.getData().getRows());
+                    if (list.size() <= 0) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyView.setVisibility(View.GONE);
+                    }
+                    sceneListViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+//                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+            }
+        });
     }
 
     public void refreshData(String q, String t) {
@@ -127,50 +177,50 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         page = 1;
         dialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
-        DataPaser.search(q, t, page + "", "tag", null, handler);
+        search(q, t, page + "", "tag", null);
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.SEARCH_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    SearchBean netSearch = (SearchBean) msg.obj;
-                    if (netSearch.isSuccess()) {
-                        if (page == 1) {
-                            list.clear();
-                        }
-                        list.addAll(netSearch.getData().getRows());
-                        if (list.size() <= 0) {
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.GONE);
-                        }
-                        sceneListViewAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    ToastUtils.showError("网络错误");
-//                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.SEARCH_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    SearchBean netSearch = (SearchBean) msg.obj;
+//                    if (netSearch.isSuccess()) {
+//                        if (page == 1) {
+//                            list.clear();
+//                        }
+//                        list.addAll(netSearch.getData().getRows());
+//                        if (list.size() <= 0) {
+//                            emptyView.setVisibility(View.VISIBLE);
+//                        } else {
+//                            emptyView.setVisibility(View.GONE);
+//                        }
+//                        sceneListViewAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    ToastUtils.showError("网络错误");
+////                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    public void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        //cancelNet();
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//            handler = null;
+//        }
+//        super.onDestroy();
+//    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

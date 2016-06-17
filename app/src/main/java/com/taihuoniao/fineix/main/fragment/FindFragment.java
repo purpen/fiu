@@ -123,7 +123,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
 //        sceneListView.setDivider(null);
-        sceneListView.setDividerHeight(DensityUtils.dp2px(getActivity(),5));
+        sceneListView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
         dialog = new WaittingDialog(getActivity());
         return view;
     }
@@ -204,8 +204,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //                    dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
 //                    MapUtil.destroyLocationClient();
-                    DataPaser.qingjingList(1 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                    DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.qingjingList(1 + "", 2 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -219,7 +219,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
     //外界调用刷新场景列表的方法
-    public void refreshSceneList(){
+    public void refreshSceneList() {
         currentPage = 1;
         requestNet();
     }
@@ -272,7 +272,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         });
         //场景页热门标签
-        DataPaser.cjHotLabel(true,handler);
+        DataPaser.cjHotLabel(true, handler);
         //热门标签
 //        ClientDiscoverAPI.labelList(null, 1, null, 2, 1, new RequestCallBack<String>() {
 //            @Override
@@ -297,6 +297,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //            }
 //        });
     }
+
     private FiuUserListBean netUsers;
     private Handler handler = new Handler() {
         @Override
@@ -327,7 +328,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         };
                         thread.start();
 
-                    }else {
+                    } else {
                         ToastUtils.showError(netUser.getMessage());
 //                        dialog.showErrorWithStatus(netUser.getMessage());
                     }
@@ -345,7 +346,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         qingjingList.addAll(netQingjingListBean.getData().getRows());
 //                        Toast.makeText(getActivity(), "测试，情景数据个数=" + qingjingList.size(), Toast.LENGTH_SHORT).show();
                         jingQingjingRecyclerAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         ToastUtils.showError(netQingjingListBean.getMessage());
 //                        dialog.showErrorWithStatus(netQingjingListBean.getMessage());
                     }
@@ -353,11 +354,11 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 case DataConstants.CJ_HOTLABEL:
 //                    pullToRefreshView.onRefreshComplete();
                     CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
-                    if(netHot.isSuccess()){
+                    if (netHot.isSuccess()) {
                         hotLabelList.clear();
                         hotLabelList.addAll(netHot.getData().getTags());
                         pinLabelRecyclerAdapter.notifyDataSetChanged();
-                    }else{
+                    } else {
                         ToastUtils.showError(netHot.getMessage());
 //                        dialog.showErrorWithStatus(netHot.getMessage());
                     }
@@ -387,7 +388,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                         sceneList.addAll(netSceneList.getSceneListBeanList());
 //                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
                         sceneListViewAdapter.notifyDataSetChanged();
-                    }else{
+                    } else {
                         ToastUtils.showError(netSceneList.getMessage());
 //                        dialog.showErrorWithStatus(netSceneList.getMessage());
                     }
@@ -403,6 +404,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         }
     };
     private Thread thread;
+
     @Override
     public void onPause() {
         super.onPause();
@@ -433,7 +435,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //        }
 
         if (viewPagerAdapter == null) {
-            viewPagerAdapter = new ViewPagerAdapter(activity,list);
+            viewPagerAdapter = new ViewPagerAdapter(activity, list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
             scrollableView.setAutoScrollDurationFactor(8);
             scrollableView.setInterval(4000);
@@ -449,7 +451,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onDestroy() {
         //        cancelNet();
         MapUtil.destroyLocationClient();
-        if(thread!=null&&thread.isAlive()){
+        if (thread != null && thread.isAlive()) {
             thread.stop();
         }
         if (handler != null) {
@@ -583,7 +585,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             pullToRefreshView.lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+            DataPaser.getSceneList(currentPage + "", null, null, 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
         }
     }
 }

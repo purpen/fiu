@@ -153,6 +153,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private List<ProductBean.ProductListItem> nearProductList;
     private GoodListAdapter goodListAdapter;
     public static SceneDetailActivity instance;
+
     public SceneDetailActivity() {
         super(0);
     }
@@ -242,7 +243,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg.requestFocus();
         backImg.setOnClickListener(this);
         shareImg.setOnClickListener(this);
-        backgroundImg.setOnClickListener(this);
+//        backgroundImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         locationTv.setOnClickListener(this);
         leftLabelLinear.setOnClickListener(this);
@@ -524,7 +525,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                             moreUser.setVisibility(View.GONE);
                         }
                         location = netSceneDetails.getData().getLocation();
-                        scrollView.scrollTo(0, imgRelative.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
+//                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
                     } else {
                         ToastUtils.showError(netSceneDetails.getMessage());
                         post(new Runnable() {
@@ -621,11 +622,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            labelView.pointOrAll(false, isShowAll);
+            labelView.pointOrAll(false, true);
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
             labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
             labelView.setLayoutParams(labelLp);
             container.addView(labelView);
+//            labelView.stopAnim();
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -823,9 +825,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
-                if(netScene==null){
+                if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id,handler);
+                    DataPaser.sceneDetails(id, handler);
                     return;
                 }
                 Intent intent5 = new Intent(SceneDetailActivity.this, CreateSceneActivity.class);
@@ -876,10 +878,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        for (int i = 0; i < imgRelative.getChildCount(); i++) {
-            View view = imgRelative.getChildAt(i);
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View view = container.getChildAt(i);
             if (view instanceof LabelView) {
                 LabelView labelView = (LabelView) view;
+                labelView.stopAnim();
                 labelView.wave();
             }
         }
@@ -887,8 +890,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onStop() {
-        for (int i = 0; i < imgRelative.getChildCount(); i++) {
-            View view = imgRelative.getChildAt(i);
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View view = container.getChildAt(i);
             if (view instanceof LabelView) {
                 LabelView labelView = (LabelView) view;
                 labelView.stopAnim();
@@ -919,12 +922,19 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
-        container.setTranslationY(t / 3);
-        if (container.getTranslationY() >= container.getMeasuredHeight() / 5) {
-            container.setTranslationY(container.getMeasuredHeight() / 5 + t - container.getMeasuredHeight() * 3 / 5);
+        if (t <= titleLinear.getMeasuredHeight()) {
+            imgRelative.setTranslationY(t);
+        } else if (t >= titleLinear.getMeasuredHeight() && t <= titleLinear.getMeasuredHeight() + (double) imgRelative.getMeasuredHeight() * 3 / 5) {
+            imgRelative.setTranslationY((float) ((double) titleLinear.getMeasuredHeight() * 2 / 3 + (double) t / 3));
+        } else if (t >= titleLinear.getMeasuredHeight() + (double) imgRelative.getMeasuredHeight() * 3 / 5) {
+            imgRelative.setTranslationY((float) (-(double) imgRelative.getMeasuredHeight() * 2 / 5 + t));
         }
-        if (container.getTranslationY() <= 0) {
-            container.setTranslationY(0);
+//        imgRelative.setTranslationY(t / 3);
+//        if (imgRelative.getTranslationY() >= imgRelative.getMeasuredHeight() / 5) {
+//            imgRelative.setTranslationY(imgRelative.getMeasuredHeight() / 5 + t - imgRelative.getMeasuredHeight() * 3 / 5);
+//        }
+        if (imgRelative.getTranslationY() <= 0) {
+            imgRelative.setTranslationY(0);
         }
         if (t > oldt + DensityUtils.dp2px(SceneDetailActivity.this, 25)) {
             titleRelative.setVisibility(View.GONE);

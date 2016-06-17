@@ -341,6 +341,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
+            android:name=".main.VideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+
+        <!--<activity-->
+        <!--android:name=".scene.SearchResultActivity"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:theme="@style/AppTheme"/>-->
+        <activity
             android:name=".qingjingOrSceneDetails.SceneDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>

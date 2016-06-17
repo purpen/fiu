@@ -119,6 +119,15 @@ public class LoveSceneBean extends NetBean {
         private String avatar_url;
         private String is_expert;
         private String summary;
+        private String label;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
 
         public String getAvatar_ur() {
             return avatar_url;

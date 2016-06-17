@@ -33,8 +33,8 @@ public class TagItem implements Serializable {
     private double x = 0.5;
     private double y = 0.5;
 
-    private int recordCount;
-    private boolean left = false;
+//    private int recordCount;
+//    private boolean left = false;
 
 
     public String getPrice() {
@@ -49,17 +49,17 @@ public class TagItem implements Serializable {
         return false;
     }
 
-    public void setLeft(boolean left) {
-        this.left = left;
-    }
+//    public void setLeft(boolean left) {
+//        this.left = left;
+//    }
 
-    public int getRecordCount() {
-        return recordCount;
-    }
+//    public int getRecordCount() {
+//        return recordCount;
+//    }
 
-    public void setRecordCount(int recordCount) {
-        this.recordCount = recordCount;
-    }
+//    public void setRecordCount(int recordCount) {
+//        this.recordCount = recordCount;
+//    }
 
     public TagItem() {
 
@@ -112,13 +112,7 @@ public class TagItem implements Serializable {
 
     @Override
     public String toString() {
-        return "TagItem{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", price='" + price + '\'' +
-                ", type=" + type +
-                ", x=" + x +
-                ", y=" + y +
-                '}';
+//        return "{id:" + id + ",price:" + price + ",title:" + name + ",x:" + x + ",y:" + y + "}";
+        return "{\"id\":\"" + id + "\",\"price\":\"" + price + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + "}";
     }
 }

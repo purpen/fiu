@@ -4,8 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +26,12 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -48,8 +52,8 @@ import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.BDSearchAddressActivity;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -62,6 +66,7 @@ import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -413,6 +418,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     Log.e("<<<获取位置", location[1] + "," + location[0]);
 //                    getAddressByCoordinate();
                     dialog.dismiss();
+                    MapUtil.destroyLocationClient();
+                    MapUtil.destroyGeoCoder();
+                    MapUtil.destroyPoiSearch();
                 }
             }
         });
@@ -436,9 +444,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 ImageUtils.location = null;
-                MapUtil.destroyLocationClient();
                 recyclerAdapter = new AddressRecycleAdapter(CreateSceneActivity.this, poiInfoList, CreateSceneActivity.this);
                 recyclerView.setAdapter(recyclerAdapter);
+                MapUtil.destroyLocationClient();
+                MapUtil.destroyGeoCoder();
+                MapUtil.destroyPoiSearch();
             }
 
             @Override
@@ -529,6 +539,18 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    StringBuilder products = new StringBuilder();
+
+                    if (MainApplication.tagInfoList != null && MainApplication.tagInfoList.size() > 0) {
+                        products.append("[");
+                        for (int i = 0; i < MainApplication.tagInfoList.size(); i++) {
+                            products.append(MainApplication.tagInfoList.get(i).toString());
+                            if (i != MainApplication.tagInfoList.size() - 1) {
+                                products.append(",");
+                            }
+                        }
+                        products.append("]");
+                    }
                     StringBuilder product_id = new StringBuilder();
                     StringBuilder product_title = new StringBuilder();
                     StringBuilder product_price = new StringBuilder();
@@ -576,11 +598,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    DataPaser.createScene(sceneDetails == null ? null : sceneDetails.getData().get_id(), tmp, titleEdt.getText().toString(), contentEdt.getText().toString(),
-                            scene_id, tags.toString(), product_id.toString(), product_title.toString(),
-                            product_price.toString(), product_x.toString(), product_y.toString(), locationTv.getText().toString(),
-                            lat + "", lng + "",
-                            handler);
+                    createCJ(sceneDetails == null ? null : sceneDetails.getData().get_id(), tmp, titleEdt.getText().toString()
+                            , contentEdt.getText().toString(), scene_id, tags.toString(),
+                            products.toString(),
+                            locationTv.getText().toString(),
+                            lat + "", lng + "");
                 } else if (MainApplication.tag == 2) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     int sapleSize = 100;
@@ -601,8 +623,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    DataPaser.createQingjing(qingjingDetails == null ? null : qingjingDetails.getData().get_id(), titleEdt.getText().toString(), contentEdt.getText().toString(),
-                            tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "", handler);
+                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id(), titleEdt.getText().toString(), contentEdt.getText().toString(),
+                            tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "");
                 } else {
                     dialog.dismiss();
                 }
@@ -733,87 +755,195 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         recyclerView.setVisibility(View.GONE);
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.CREATE_QINGJING:
-                    dialog.dismiss();
-                    AddProductBean netBean1 = (AddProductBean) msg.obj;
-                    if (netBean1.isSuccess()) {
-                        if (QingjingDetailActivity.instance != null) {
-                            QingjingDetailActivity.instance.finish();
-                        }
-                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
-                        Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
-                        in.putExtra("id", netBean1.getData().getId());
-                        in.putExtra("create", true);
-                        startActivity(in);
-                        if (SelectPhotoOrCameraActivity.instance != null) {
-                            SelectPhotoOrCameraActivity.instance.finish();
-                        }
-                        if (CropPictureActivity.instance != null) {
-                            CropPictureActivity.instance.finish();
-                        }
-                        if (EditPictureActivity.instance != null) {
-                            EditPictureActivity.instance.finish();
-                        }
-                        if (FilterActivity.instance != null) {
-                            FilterActivity.instance.finish();
-                        }
-                        CreateSceneActivity.this.finish();
-                    } else {
-                        Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+    private void createQJ(String id, String title, String des, String tags, String address, String tmp, String lat, String lng) {
+        ClientDiscoverAPI.createQingjing(id, title, des, tags, address, tmp, lat, lng, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                AddProductBean netBean = new AddProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddProductBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<创建情景", "数据解析异常");
+                }
+                dialog.dismiss();
+                AddProductBean netBean1 = netBean;
+                if (netBean1.isSuccess()) {
+                    if (QingjingDetailActivity.instance != null) {
+                        QingjingDetailActivity.instance.finish();
                     }
-                    break;
-                case DataConstants.CREATE_SCENE:
-                    dialog.dismiss();
-                    AddProductBean netBean = (AddProductBean) msg.obj;
-                    if (netBean.isSuccess()) {
-                        if (SceneDetailActivity.instance != null) {
-                            SceneDetailActivity.instance.finish();
-                        }
-                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
-                        if (MainApplication.whichQingjing != null) {
-                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                        }
-                        MainApplication.whichQingjing = null;
-                        MainApplication.tagInfoList = null;
-                        Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
-                        intent.putExtra("id", netBean.getData().getId());
-                        intent.putExtra("create", true);
-                        startActivity(intent);
-                        if (SelectPhotoOrCameraActivity.instance != null) {
-                            SelectPhotoOrCameraActivity.instance.finish();
-                        }
-                        if (CropPictureActivity.instance != null) {
-                            CropPictureActivity.instance.finish();
-                        }
-                        if (EditPictureActivity.instance != null) {
-                            EditPictureActivity.instance.finish();
-                        }
-                        if (FilterActivity.instance != null) {
-                            FilterActivity.instance.finish();
-                        }
-                        CreateSceneActivity.this.finish();
-                    } else {
-                        Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
+                    Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
+                    in.putExtra("id", netBean1.getData().getId());
+                    in.putExtra("create", true);
+                    startActivity(in);
+                    if (SelectPhotoOrCameraActivity.instance != null) {
+                        SelectPhotoOrCameraActivity.instance.finish();
                     }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    break;
+                    if (CropPictureActivity.instance != null) {
+                        CropPictureActivity.instance.finish();
+                    }
+                    if (EditPictureActivity.instance != null) {
+                        EditPictureActivity.instance.finish();
+                    }
+                    if (FilterActivity.instance != null) {
+                        FilterActivity.instance.finish();
+                    }
+                    CreateSceneActivity.this.finish();
+                } else {
+                    Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-    };
 
-    @Override
-    protected void onDestroy() {
-        //        cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
+
+    private void createCJ(String id, String tmp, String title, String des, String scene_id, String tags, String products,
+                          String address, String lat, String lng) {
+        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, products, address,
+                lat, lng, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        AddProductBean addProductBean = new AddProductBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<AddProductBean>() {
+                            }.getType();
+                            addProductBean = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            Log.e("<<<创建场景", "数据解析异常");
+                        }
+                        dialog.dismiss();
+                        AddProductBean netBean = addProductBean;
+                        if (netBean.isSuccess()) {
+                            if (SceneDetailActivity.instance != null) {
+                                SceneDetailActivity.instance.finish();
+                            }
+                            dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
+                            if (MainApplication.whichQingjing != null) {
+                                sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+                            }
+                            MainApplication.whichQingjing = null;
+                            MainApplication.tagInfoList = null;
+                            Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
+                            intent.putExtra("id", netBean.getData().getId());
+                            intent.putExtra("create", true);
+                            startActivity(intent);
+                            if (SelectPhotoOrCameraActivity.instance != null) {
+                                SelectPhotoOrCameraActivity.instance.finish();
+                            }
+                            if (CropPictureActivity.instance != null) {
+                                CropPictureActivity.instance.finish();
+                            }
+                            if (EditPictureActivity.instance != null) {
+                                EditPictureActivity.instance.finish();
+                            }
+                            if (FilterActivity.instance != null) {
+                                FilterActivity.instance.finish();
+                            }
+                            CreateSceneActivity.this.finish();
+                        } else {
+                            Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        ToastUtils.showError("网络错误");
+                    }
+                });
+    }
+
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.CREATE_QINGJING:
+//                    dialog.dismiss();
+//                    AddProductBean netBean1 = (AddProductBean) msg.obj;
+//                    if (netBean1.isSuccess()) {
+//                        if (QingjingDetailActivity.instance != null) {
+//                            QingjingDetailActivity.instance.finish();
+//                        }
+//                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
+//                        Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
+//                        in.putExtra("id", netBean1.getData().getId());
+//                        in.putExtra("create", true);
+//                        startActivity(in);
+//                        if (SelectPhotoOrCameraActivity.instance != null) {
+//                            SelectPhotoOrCameraActivity.instance.finish();
+//                        }
+//                        if (CropPictureActivity.instance != null) {
+//                            CropPictureActivity.instance.finish();
+//                        }
+//                        if (EditPictureActivity.instance != null) {
+//                            EditPictureActivity.instance.finish();
+//                        }
+//                        if (FilterActivity.instance != null) {
+//                            FilterActivity.instance.finish();
+//                        }
+//                        CreateSceneActivity.this.finish();
+//                    } else {
+//                        Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.CREATE_SCENE:
+//                    dialog.dismiss();
+//                    AddProductBean netBean = (AddProductBean) msg.obj;
+//                    if (netBean.isSuccess()) {
+//                        if (SceneDetailActivity.instance != null) {
+//                            SceneDetailActivity.instance.finish();
+//                        }
+//                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
+//                        if (MainApplication.whichQingjing != null) {
+//                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
+//                        }
+//                        MainApplication.whichQingjing = null;
+//                        MainApplication.tagInfoList = null;
+//                        Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
+//                        intent.putExtra("id", netBean.getData().getId());
+//                        intent.putExtra("create", true);
+//                        startActivity(intent);
+//                        if (SelectPhotoOrCameraActivity.instance != null) {
+//                            SelectPhotoOrCameraActivity.instance.finish();
+//                        }
+//                        if (CropPictureActivity.instance != null) {
+//                            CropPictureActivity.instance.finish();
+//                        }
+//                        if (EditPictureActivity.instance != null) {
+//                            EditPictureActivity.instance.finish();
+//                        }
+//                        if (FilterActivity.instance != null) {
+//                            FilterActivity.instance.finish();
+//                        }
+//                        CreateSceneActivity.this.finish();
+//                    } else {
+//                        Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    break;
+//            }
+//        }
+//    };
+
+//    @Override
+//    protected void onDestroy() {
+//        //        cancelNet();
+//
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//            handler = null;
+//        }
+//        super.onDestroy();
+//    }
 }

@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +20,12 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.CommentsListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -29,8 +33,8 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -38,6 +42,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +130,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
+                getComments(currentPage + "", 8 + "", target_id, null, type);
             }
         });
         pullToRefreshLayout.setOnClickListener(this);
@@ -179,7 +184,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
+        getComments(currentPage + "", 8 + "", target_id, null, type);
     }
 
     private void initPopupWindow() {
@@ -188,7 +193,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         View popup_view = View.inflate(CommentListActivity.this, R.layout.popup_comment_delete, null);
         TextView deleteTv = (TextView) popup_view.findViewById(R.id.popup_comment_delete_delete);
 //        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
-        TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        TextView  cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
@@ -228,89 +233,202 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
     }
 
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.DELETE_COMMENT:
-                    popupWindow.dismiss();
-                    NetBean netBean1 = (NetBean) msg.obj;
+    //删除评论
+    private void deleteComment(String id) {
+        ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.DELETE_COMMENT;
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除评论", "数据解析异常" + e.toString());
+                }
+                popupWindow.dismiss();
 //                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
-                    if (netBean1.isSuccess()) {
-                        currentPage = 1;
-                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netBean1.getMessage());
+                if (netBean.isSuccess()) {
+                    currentPage = 1;
+                    getComments(currentPage + "", 8 + "", target_id, null, type);
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netBean.getMessage());
 //                        dialog.showErrorWithStatus(netBean1.getMessage());
-                    }
-                    break;
-                case DataConstants.SEND_COMMENT:
-                    NetBean netBean = (NetBean) msg.obj;
-//                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    if (netBean.isSuccess()) {
-                        editText.setHint("评论一下");
-                        is_reply = 0 + "";
-                        reply_id = null;
-                        reply_user_id = null;
-                        editText.setText("");
-                        currentPage = 1;
-                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                        if ("0".equals(netBean.getCurrent_user_id())) {
-                            MainApplication.which_activity = DataConstants.ElseActivity;
-                            startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
-                        }
-                    }
-                    break;
-                case DataConstants.COMMENTS_LIST:
-                    dialog.dismiss();
-                    pullToRefreshLayout.onRefreshComplete();
-                    progressBar.setVisibility(View.GONE);
-                    CommentsBean netCommentsBean = (CommentsBean) msg.obj;
-                    currentUserId = netCommentsBean.getCurrent_user_id();
-                    if (netCommentsBean.isSuccess()) {
-                        pullToRefreshLayout.setLoadingTime();
-                        if (currentPage == 1) {
-                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
-                            pullToRefreshLayout.lastTotalItem = -1;
-                            commentList.clear();
-                        }
-                        commentList.addAll(netCommentsBean.getData().getRows());
-                        if (commentList.size() <= 0) {
-                            nothingTv.setVisibility(View.VISIBLE);
-                        } else {
-                            nothingTv.setVisibility(View.GONE);
-                        }
-                        commentsListAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    pullToRefreshLayout.onRefreshComplete();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
-                    break;
+                }
             }
-        }
-    };
 
-    @Override
-    protected void onDestroy() {
-        //        cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
+    //发表评论
+    private void sendComments(String target_i, String conten, String typ, String target_user_id, String is_r, String reply_i, String reply_user_i) {
+        ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "数据解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+//                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                if (netBean.isSuccess()) {
+                    editText.setHint("评论一下");
+                    is_reply = 0 + "";
+                    reply_id = null;
+                    reply_user_id = null;
+                    editText.setText("");
+                    currentPage = 1;
+                    getComments(currentPage + "", 8 + "", target_id, null, type);
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                    if ("0".equals(netBean.getCurrent_user_id())) {
+                        MainApplication.which_activity = DataConstants.ElseActivity;
+                        startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
+    //评论列表
+    private void getComments(String page, String size, String target_id, String target_user_id, String type) {
+        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<评论", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.COMMENTS_LIST;
+                CommentsBean netComments = new CommentsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommentsBean>() {
+                    }.getType();
+                    netComments = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                pullToRefreshLayout.onRefreshComplete();
+                progressBar.setVisibility(View.GONE);
+                CommentsBean netCommentsBean = netComments;
+                currentUserId = netCommentsBean.getCurrent_user_id();
+                if (netCommentsBean.isSuccess()) {
+                    pullToRefreshLayout.setLoadingTime();
+                    if (currentPage == 1) {
+                        pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
+                        pullToRefreshLayout.lastTotalItem = -1;
+                        commentList.clear();
+                    }
+                    commentList.addAll(netCommentsBean.getData().getRows());
+                    if (commentList.size() <= 0) {
+                        nothingTv.setVisibility(View.VISIBLE);
+                    } else {
+                        nothingTv.setVisibility(View.GONE);
+                    }
+                    commentsListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    //    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.DELETE_COMMENT:
+//                    popupWindow.dismiss();
+//                    NetBean netBean1 = (NetBean) msg.obj;
+////                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
+//                    if (netBean1.isSuccess()) {
+//                        currentPage = 1;
+//                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netBean1.getMessage());
+////                        dialog.showErrorWithStatus(netBean1.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.SEND_COMMENT:
+//                    NetBean netBean = (NetBean) msg.obj;
+////                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    if (netBean.isSuccess()) {
+//                        editText.setHint("评论一下");
+//                        is_reply = 0 + "";
+//                        reply_id = null;
+//                        reply_user_id = null;
+//                        editText.setText("");
+//                        currentPage = 1;
+//                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netBean.getMessage());
+////                        dialog.showErrorWithStatus(netBean.getMessage());
+//                        if ("0".equals(netBean.getCurrent_user_id())) {
+//                            MainApplication.which_activity = DataConstants.ElseActivity;
+//                            startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
+//                        }
+//                    }
+//                    break;
+//                case DataConstants.COMMENTS_LIST:
+//                    dialog.dismiss();
+//                    pullToRefreshLayout.onRefreshComplete();
+//                    progressBar.setVisibility(View.GONE);
+//                    CommentsBean netCommentsBean = (CommentsBean) msg.obj;
+//                    currentUserId = netCommentsBean.getCurrent_user_id();
+//                    if (netCommentsBean.isSuccess()) {
+//                        pullToRefreshLayout.setLoadingTime();
+//                        if (currentPage == 1) {
+//                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
+//                            pullToRefreshLayout.lastTotalItem = -1;
+//                            commentList.clear();
+//                        }
+//                        commentList.addAll(netCommentsBean.getData().getRows());
+//                        if (commentList.size() <= 0) {
+//                            nothingTv.setVisibility(View.VISIBLE);
+//                        } else {
+//                            nothingTv.setVisibility(View.GONE);
+//                        }
+//                        commentsListAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    pullToRefreshLayout.onRefreshComplete();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
     @Override
     public void onBackPressed() {
         if (commentList != null) {
@@ -321,6 +439,17 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         super.onBackPressed();
     }
 
+//    @Override
+//    protected void onDestroy() {
+//        //        cancelNet();
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//            handler = null;
+//        }
+//        super.onDestroy();
+//    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -329,7 +458,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 dialog.show();
-                DataPaser.deleteComment(commentList.get(po).get_id(), handler);
+//                DataPaser.deleteComment(commentList.get(po).get_id(), handler);
+                deleteComment(commentList.get(po).get_id());
                 break;
             case R.id.popup_scene_detail_more_cancel:
                 popupWindow.dismiss();
@@ -354,10 +484,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 //                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id, handler);
+                        sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id);
+//                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id, handler);
                         break;
                     default:
-                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, null, null, handler);
+                        sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, null, null);
                         break;
                 }
                 break;

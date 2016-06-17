@@ -198,6 +198,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 case 1:
                     dialog.dismiss();
                     ToastUtils.showSuccess("分享成功");
+                    DataPaser.getBonus(2 + "", 1 + "", id, handler);
                     break;
             }
         }

@@ -306,59 +306,35 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 
     public void wave() {
         final AnimationSet as = new AnimationSet(true);
+        as.setRepeatCount(Animation.INFINITE);
         ScaleAnimation sa = new ScaleAnimation(1f, 3f, 1f, 3f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(ANIMATIONEACHOFFSET * 3);
         AlphaAnimation aniAlp = new AlphaAnimation(1, 0.1f);
         as.setDuration(ANIMATIONEACHOFFSET * 3);
         as.addAnimation(sa);
+        sa.setRepeatCount(Animation.INFINITE);
         as.addAnimation(aniAlp);
+        aniAlp.setRepeatCount(Animation.INFINITE);
         final AnimationSet as1 = new AnimationSet(true);
+        as1.setRepeatCount(Animation.INFINITE);
         ScaleAnimation sa1 = new ScaleAnimation(1f, 6f, 1f, 6f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa1.setDuration(ANIMATIONEACHOFFSET * 3);
         AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0.1f);
         as1.setDuration(ANIMATIONEACHOFFSET * 3);
         as1.addAnimation(sa1);
+        sa1.setRepeatCount(Animation.INFINITE);
         as1.addAnimation(aniAlp1);
-//        as1.setStartOffset(1800);
-
-        as1.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-//                if (pointLeft.getVisibility() == VISIBLE) {
-//                    pointLeft.startAnimation(as);
-//                }
-//                if (pointRight.getVisibility() == VISIBLE) {
-                pointRight.startAnimation(as);
-                animPoint.startAnimation(as1);
-//                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-//        if (pointLeft.getVisibility() == VISIBLE) {
-//            pointLeft.startAnimation(as);
-//        }
-//        if (pointRight.getVisibility() == VISIBLE) {
+        aniAlp1.setRepeatCount(Animation.INFINITE);
         animPoint.setVisibility(VISIBLE);
         pointRight.startAnimation(as);
         animPoint.startAnimation(as1);
-
-//        }
     }
 
     public void stopAnim() {
         pointRight.clearAnimation();
-//        pointLeft.clearAnimation();
+        animPoint.clearAnimation();
     }
 
     public void updateLocation(int x, int y) {

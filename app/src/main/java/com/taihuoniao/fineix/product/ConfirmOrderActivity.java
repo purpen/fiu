@@ -3,22 +3,23 @@ package com.taihuoniao.fineix.product;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
 import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
@@ -26,6 +27,9 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
@@ -80,7 +84,54 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         initView();
         setData();
         dialog.show();
-        DataPaser.getDefaultAddress(mHandler);
+//        DataPaser.getDefaultAddress(mHandler);
+        getDefaultAddress();
+    }
+
+    private void getDefaultAddress() {
+        ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                AddressBean addressBean = new AddressBean();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject data = obj.getJSONObject("data");
+                    addressBean.setHas_default(data.optString("has_default"));
+                    if ("1".equals(addressBean.getHas_default())) {
+                        addressBean.set_id(data.optString("_id"));
+                        addressBean.setName(data.optString("name"));
+                        addressBean.setPhone(data.optString("phone"));
+                        addressBean.setAddress(data.optString("address"));
+                        addressBean.setZip(data.optString("zip"));
+                        addressBean.setProvince(data.optString("province"));
+                        addressBean.setCity(data.optString("city"));
+                        addressBean.setProvince_name(data.optString("province_name"));
+                        addressBean.setCity_name(data.optString("city_name"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                AddressBean netAddress = addressBean;
+                dialog.dismiss();
+                if ("1".equals(netAddress.getHas_default())) {
+                    addressBean = netAddress;
+                    setAddressData(addressBean);
+                } else {
+                    ToastUtils.showInfo("默认地址不存在!");
+//                        dialog.showErrorWithStatus("默认地址不存在!");
+//                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -196,11 +247,56 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     return;
                 }
                 if (nowBuyBean != null)
-                    DataPaser.nowConfirmOrder(nowBuyBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), nowBuyBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code, mHandler);
+                    confirmOrder(nowBuyBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), nowBuyBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 else if (cartBean != null)
-                    DataPaser.nowConfirmOrder(cartBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code, mHandler);
+                    confirmOrder(cartBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 break;
         }
+    }
+
+    private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
+        ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NowConfirmBean nowConfirmBean = new NowConfirmBean();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    nowConfirmBean.setSuccess(job.optBoolean("success"));
+                    nowConfirmBean.setMessage(job.optString("message"));
+                    JSONObject data = job.getJSONObject("data");
+                    if (nowConfirmBean.isSuccess()) {
+                        nowConfirmBean.setRid(data.optString("rid"));
+                        nowConfirmBean.setPay_money(data.optString("pay_money"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                //                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
+                if (nowConfirmBean.isSuccess()) {
+                    ToastUtils.showSuccess(nowConfirmBean.getMessage());
+//                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
+//                        netConfirmBean.getRid();     //订单rid
+                    Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
+                    intent.putExtra("paymoney", nowConfirmBean.getPay_money());
+                    intent.putExtra("orderId", nowConfirmBean.getRid());
+                    startActivity(intent);
+                    finish();
+                } else {
+                    ToastUtils.showError(nowConfirmBean.getMessage());
+//                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -218,16 +314,17 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     redBagTv.setText("使用了" + money + "元红包");
                     redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
-                        double nowPrice = Double.valueOf(nowBuyBean.getPay_money())-Double.valueOf(money);
-                        if(nowPrice<=0){
+                        double nowPrice = Double.valueOf(nowBuyBean.getPay_money()) - Double.valueOf(money);
+                        if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
-                        }else{
-                        payPriceTv.setText("¥ " + df.format(nowPrice));}
+                        } else {
+                            payPriceTv.setText("¥ " + df.format(nowPrice));
+                        }
                     } else if (cartBean != null) {
-                        double nowPrice = Double.valueOf(cartBean.getPay_money())-Double.valueOf(money);
-                        if(nowPrice<=0){
+                        double nowPrice = Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money);
+                        if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
-                        }else{
+                        } else {
                             payPriceTv.setText(String.format("¥ %s", df.format(Double.valueOf(cartBean.getPay_money()) - Double.valueOf(money))));
                         }
 
@@ -240,7 +337,8 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     setAddressData(address);
                 } else {
                     dialog.show();
-                    DataPaser.getDefaultAddress(mHandler);
+                    getDefaultAddress();
+//                    DataPaser.getDefaultAddress(mHandler);
                 }
                 break;
             case DataConstants.RESULTCODE_TRANSFER_TIME:
@@ -268,50 +366,50 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         phoneTv.setText(address.getPhone());
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.NOW_CONFIRM_ORDER:
-                    dialog.dismiss();
-                    NowConfirmBean netConfirmBean = (NowConfirmBean) msg.obj;
-//                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    if (netConfirmBean.isSuccess()) {
-                        ToastUtils.showSuccess(netConfirmBean.getMessage());
-//                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
-//                        netConfirmBean.getRid();     //订单rid
-                        Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
-                        intent.putExtra("paymoney", netConfirmBean.getPay_money());
-                        intent.putExtra("orderId", netConfirmBean.getRid());
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        ToastUtils.showError(netConfirmBean.getMessage());
-//                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
-                    }
-                    break;
-                case DataConstants.DEFAULT_ADDRESS:
-                    dialog.dismiss();
-                    AddressBean netAddress = (AddressBean) msg.obj;
-                    dialog.dismiss();
-                    if (netAddress != null && "1".equals(netAddress.getHas_default())) {
-                        addressBean = netAddress;
-                        setAddressData(addressBean);
-                    } else {
-                        ToastUtils.showInfo("默认地址不存在!");
-//                        dialog.showErrorWithStatus("默认地址不存在!");
-//                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.NETWORK_FAILURE:
-                    dialog.dismiss();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.NOW_CONFIRM_ORDER:
+//                    dialog.dismiss();
+//                    NowConfirmBean netConfirmBean = (NowConfirmBean) msg.obj;
+////                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    if (netConfirmBean.isSuccess()) {
+//                        ToastUtils.showSuccess(netConfirmBean.getMessage());
+////                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
+////                        netConfirmBean.getRid();     //订单rid
+//                        Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
+//                        intent.putExtra("paymoney", netConfirmBean.getPay_money());
+//                        intent.putExtra("orderId", netConfirmBean.getRid());
+//                        startActivity(intent);
+//                        finish();
+//                    }else {
+//                        ToastUtils.showError(netConfirmBean.getMessage());
+////                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.DEFAULT_ADDRESS:
+//                    dialog.dismiss();
+//                    AddressBean netAddress = (AddressBean) msg.obj;
+//                    dialog.dismiss();
+//                    if (netAddress != null && "1".equals(netAddress.getHas_default())) {
+//                        addressBean = netAddress;
+//                        setAddressData(addressBean);
+//                    } else {
+//                        ToastUtils.showInfo("默认地址不存在!");
+////                        dialog.showErrorWithStatus("默认地址不存在!");
+////                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.NETWORK_FAILURE:
+//                    dialog.dismiss();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
 
     private void cancelNet() {
         NetworkManager.getInstance().cancel("getDefaultAddress");
