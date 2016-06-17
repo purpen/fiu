@@ -143,7 +143,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
                 if (isSearch.equals("0")) {
-                    DataPaser.qingjingList(page + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "", handler);
+                    DataPaser.qingjingList(page + "", 1 + "", 0+"",distance + "", latLng.longitude + "", latLng.latitude + "", handler);
                 } else if (isSearch.equals("1")) {
                     DataPaser.search(q, 8 + "", page + "", "tag", null, handler);
                 }
@@ -169,7 +169,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     protected void requestNet() {
         if (isSearch.equals("0")) {
             dialog.show();
-            DataPaser.qingjingList(page + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "", handler);
+            DataPaser.qingjingList(page + "",1+"", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "", handler);
         }
 //        handler.sendEmptyMessageDelayed(-2, 10000);
 

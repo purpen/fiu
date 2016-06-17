@@ -105,19 +105,27 @@ import jp.co.cyberagent.android.gpuimage.GPUImageWhiteBalanceFilter;
 
 public class GPUImageFilterTools {
     public static FilterList getList() {
+//        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
         final FilterList filters = new FilterList();
         filters.addFilter("原图", FilterType.NORMAL);
         filters.addFilter("都市", FilterType.WHITE_BALANCE);
-        filters.addFilter("戏剧", FilterType.LOOKUP_AMATORKA);
+        filters.addFilter("摩登", FilterType.GRAYSCALE);
         filters.addFilter("日光", FilterType.BRIGHTNESS);
-        filters.addFilter("暮光", FilterType.SEPIA);
+        filters.addFilter("摩卡", FilterType.MONOCHROME);
+        filters.addFilter("佳人", FilterType.GAMMA);
         filters.addFilter("候鸟", FilterType.SATURATION);
         filters.addFilter("夏日", FilterType.COLOR_BALANCE);
         filters.addFilter("午茶", FilterType.SEPIA);
-        filters.addFilter("摩登", FilterType.GRAYSCALE);
-        filters.addFilter("佳人", FilterType.GAMMA);
+        filters.addFilter("戏剧", FilterType.LOOKUP_AMATORKA);
+        filters.addFilter("流年", FilterType.RGB);
+        filters.addFilter("暮光", FilterType.SEPIA);
+
+
+
+
+
 //        filters.addFilter("摩卡", FilterType.SEPIA);
-        filters.addFilter("摩卡", FilterType.MONOCHROME);
+
 
 //        filters.addFilter("暮光", FilterType.MONOCHROME);
 
@@ -129,7 +137,7 @@ public class GPUImageFilterTools {
 //        filters.addFilter("佳人", FilterType.BRIGHTNESS);
 //        filters.addFilter("佳人", FilterType.TONE_CURVE);
 
-        filters.addFilter("流年", FilterType.RGB);
+
 
 
         //反差

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -73,6 +74,7 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
             convertView.setTag(holder);
             holder.left = (ImageView) convertView.findViewById(R.id.view_sliding_focus_left);
             holder.iv = (ImageView) convertView.findViewById(R.id.view_sliding_focus_img);
+            holder.zhezhaoTv = (TextView) convertView.findViewById(R.id.view_sliding_focus_zhezhao);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -98,5 +100,6 @@ public class SlidingFocusAdapter<T> extends CommonBaseAdapter<T> {
     static class ViewHolder {
         ImageView left;
         ImageView iv;
+        TextView zhezhaoTv;
     }
 }

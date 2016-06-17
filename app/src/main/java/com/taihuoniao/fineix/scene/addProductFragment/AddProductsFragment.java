@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +27,6 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -80,17 +77,126 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         getActivity().registerReceiver(searchProductReceiver, filter);
     }
 
+    private void search(String q, String t, String page, String evt, String sort) {
+        ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+//                    Log.e("<<<搜索", responseInfo.result);
+//                    WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                    Message msg = handler.obtainMessage();
+//                    msg.what = DataConstants.SEARCH_LIST;
+                SearchBean searchBean = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    searchBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+//                    handler.sendMessage(msg);
+                dialog.dismiss();
+                pullToRefreshView.onRefreshComplete();
+                progressBar.setVisibility(View.GONE);
+//                    SearchBean netSearch = (SearchBean) msg.obj;
+                if (searchBean.isSuccess()) {
+                    productList.clear();
+                    if (currentPage == 1) {
+                        pullToRefreshView.lastTotalItem = -1;
+                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                        searchList.clear();
+                    }
+                    searchList.addAll(searchBean.getData().getRows());
+                    if (searchList.size() <= 0) {
+                        nothingTv.setVisibility(View.VISIBLE);
+                    } else {
+                        nothingTv.setVisibility(View.GONE);
+                    }
+                    addProductGridAdapter.notifyDataSetChanged();
+                    pullToRefreshView.setLoadingTime();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
     @Override
     protected void requestNet() {
 //        progressBar.setVisibility(View.VISIBLE);
         if (search) {
-            DataPaser.search(q, "10", currentPage + "", null, null, handler);
+//            DataPaser.search(q, "10", currentPage + "", null, null, handler);
+            search(q, "10", currentPage + "", null, null);
         } else {
             if (position == 0) {
-                DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+//                DataPaser.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+                ClientDiscoverAPI.getProductList(null, null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
+                        getProductList(responseInfo.result);
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        ToastUtils.showError("网络错误");
+                    }
+                });
             } else {
-                DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+//                DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
+                ClientDiscoverAPI.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
+                        getProductList(responseInfo.result);
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        ToastUtils.showError("网络错误");
+                    }
+                });
             }
+        }
+    }
+
+    private void getProductList(String result) {
+        ProductBean productBean = new ProductBean();
+        try {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ProductBean>() {
+            }.getType();
+            productBean = gson.fromJson(result, type);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+//        dialog.dismiss();
+        pullToRefreshView.onRefreshComplete();
+        progressBar.setVisibility(View.GONE);
+        ProductBean netProductBean = productBean;
+        if (netProductBean.isSuccess()) {
+            searchList.clear();
+            if (currentPage == 1) {
+                productList.clear();
+                pullToRefreshView.lastTotalItem = -1;
+                pullToRefreshView.lastSavedFirstVisibleItem = -1;
+            }
+            productList.addAll(netProductBean.getData().getRows());
+            if (productList.size() <= 0) {
+                nothingTv.setVisibility(View.VISIBLE);
+            } else {
+                nothingTv.setVisibility(View.GONE);
+            }
+            //刷新数据
+            addProductGridAdapter.notifyDataSetChanged();
+            pullToRefreshView.setLoadingTime();
         }
     }
 
@@ -139,63 +245,63 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         return view;
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.SEARCH_LIST:
-                    dialog.dismiss();
-                    pullToRefreshView.onRefreshComplete();
-                    progressBar.setVisibility(View.GONE);
-                    SearchBean netSearch = (SearchBean) msg.obj;
-                    if (netSearch.isSuccess()) {
-                        productList.clear();
-                        if (currentPage == 1) {
-                            pullToRefreshView.lastTotalItem = -1;
-                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                            searchList.clear();
-                        }
-                        searchList.addAll(netSearch.getData().getRows());
-                        if (searchList.size() <= 0) {
-                            nothingTv.setVisibility(View.VISIBLE);
-                        } else {
-                            nothingTv.setVisibility(View.GONE);
-                        }
-                        addProductGridAdapter.notifyDataSetChanged();
-                        pullToRefreshView.setLoadingTime();
-                    }
-                    break;
-                case DataConstants.ADD_PRODUCT_LIST:
-                    dialog.dismiss();
-                    pullToRefreshView.onRefreshComplete();
-                    progressBar.setVisibility(View.GONE);
-                    ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess()) {
-                        searchList.clear();
-                        if (currentPage == 1) {
-                            productList.clear();
-                            pullToRefreshView.lastTotalItem = -1;
-                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                        }
-                        productList.addAll(netProductBean.getData().getRows());
-                        if (productList.size() <= 0) {
-                            nothingTv.setVisibility(View.VISIBLE);
-                        } else {
-                            nothingTv.setVisibility(View.GONE);
-                        }
-                        //刷新数据
-                        addProductGridAdapter.notifyDataSetChanged();
-                        pullToRefreshView.setLoadingTime();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    pullToRefreshView.onRefreshComplete();
-                    progressBar.setVisibility(View.GONE);
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.SEARCH_LIST:
+//                    dialog.dismiss();
+//                    pullToRefreshView.onRefreshComplete();
+//                    progressBar.setVisibility(View.GONE);
+//                    SearchBean netSearch = (SearchBean) msg.obj;
+//                    if (netSearch.isSuccess()) {
+//                        productList.clear();
+//                        if (currentPage == 1) {
+//                            pullToRefreshView.lastTotalItem = -1;
+//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
+//                            searchList.clear();
+//                        }
+//                        searchList.addAll(netSearch.getData().getRows());
+//                        if (searchList.size() <= 0) {
+//                            nothingTv.setVisibility(View.VISIBLE);
+//                        } else {
+//                            nothingTv.setVisibility(View.GONE);
+//                        }
+//                        addProductGridAdapter.notifyDataSetChanged();
+//                        pullToRefreshView.setLoadingTime();
+//                    }
+//                    break;
+//                case DataConstants.ADD_PRODUCT_LIST:
+//                    dialog.dismiss();
+//                    pullToRefreshView.onRefreshComplete();
+//                    progressBar.setVisibility(View.GONE);
+//                    ProductBean netProductBean = (ProductBean) msg.obj;
+//                    if (netProductBean.isSuccess()) {
+//                        searchList.clear();
+//                        if (currentPage == 1) {
+//                            productList.clear();
+//                            pullToRefreshView.lastTotalItem = -1;
+//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
+//                        }
+//                        productList.addAll(netProductBean.getData().getRows());
+//                        if (productList.size() <= 0) {
+//                            nothingTv.setVisibility(View.VISIBLE);
+//                        } else {
+//                            nothingTv.setVisibility(View.GONE);
+//                        }
+//                        //刷新数据
+//                        addProductGridAdapter.notifyDataSetChanged();
+//                        pullToRefreshView.setLoadingTime();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    pullToRefreshView.onRefreshComplete();
+//                    progressBar.setVisibility(View.GONE);
+//                    break;
+//            }
+//        }
+//    };
 
     private BroadcastReceiver searchProductReceiver = new BroadcastReceiver() {
         @Override
@@ -208,7 +314,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
                 dialog.show();
-                DataPaser.search(q, "10", currentPage + "", null, null, handler);
+//                DataPaser.search(q, "10", currentPage + "", null, null, handler);
+                search(q,"10",currentPage+"",null,null);
             } else if (search && !intent.getBooleanExtra("search", true)) {
                 search = false;
                 currentPage = 1;
@@ -223,17 +330,22 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     public void onDestroy() {
         //        cancelNet();
         getActivity().unregisterReceiver(searchProductReceiver);
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//        }
         super.onDestroy();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         dialog.show();
-        ClientDiscoverAPI.goodsDetails(productList.get(position).get_id(), new RequestCallBack<String>() {
+        String ids = null;
+        if (productList.size() > 0) {
+            ids = productList.get(position).get_id();
+        } else if (searchList.size() > 0) {
+            ids = searchList.get(position).get_id();
+        }
+        ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

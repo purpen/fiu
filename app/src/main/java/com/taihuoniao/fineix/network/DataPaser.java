@@ -530,8 +530,8 @@ public class DataPaser {
 
     //情景
     //列表数据
-    public static void qingjingList(String page, String sort, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.qingjingList(page, sort, dis, lng, lat, new RequestCallBack<String>() {
+    public static void qingjingList(String page, String sort,String fine, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.qingjingList(page, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -559,10 +559,9 @@ public class DataPaser {
 
     //场景
     //新增场景
-    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String product_id,
-                                   String product_title, String product_price, String product_x, String product_y,
+    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String products,
                                    String address, String lat, String lng, final Handler handler) {
-        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, product_id, product_title, product_price, product_x, product_y, address,
+        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, products, address,
                 lat, lng, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -711,8 +710,8 @@ public class DataPaser {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String scene_id, String sort, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, dis, lng, lat, new RequestCallBack<String>() {
+    public static void getSceneList(String page, String size, String scene_id, String sort,String fine, String dis, String lng, String lat, final Handler handler) {
+        ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<场景列表", responseInfo.result);
@@ -744,7 +743,8 @@ public class DataPaser {
                             JSONObject us = job.getJSONObject("user_info");
                             SceneListBean.User user = new SceneListBean.User();
                             user.setAccount(us.optString("account"));
-                            user.setIs_expert(us.optString("is_expert"));
+                            user.setLabel(us.optString("label"));
+//                            user.setIs_expert(us.optString("is_expert"));
                             user.setUser_id(us.optString("user_id"));
                             user.setSummary(us.optString("summary"));
                             user.setNickname(us.optString("nickname"));
@@ -2476,5 +2476,18 @@ public class DataPaser {
             }
         });
     }
+//送积分
+    public static void getBonus(String type,String evt,String target_id,final Handler handler){
+        ClientDiscoverAPI.getBonus(type, evt, target_id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
 
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
 }

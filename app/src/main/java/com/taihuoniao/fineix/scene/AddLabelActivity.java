@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -35,12 +34,16 @@ import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.WrapContentViewPager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private TextView usedLabelTv, hotLabelTv;
     private TextView usedLabelLine, hotLabelLine;
     private ViewPager labelViewPager;
+    private HotLabelViewPagerAdapter hotLabelViewPagerAdapter;
     private CustomSlidingTab slidingTab;
     //    private ViewPager allLabelViewPager;
     private WrapContentViewPager allLabelViewPager;
@@ -68,6 +72,8 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     private AllLabelViewPagerAdapter1 allLabelViewPagerAdapter;
     //全部标签的页码
     private int allLabelCurrentPage = 1;
+    //热门标签页码
+    private int hotLabelCurrentPage = 1;
     //热门标签的列表
     private List<HotLabel.HotLabelBean> hotLabelList;
     //使用过的标签列表
@@ -170,28 +176,172 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     protected void requestNet() {
         dialog.show();
         //需要登录
-        DataPaser.usedLabelList(handler);
-        DataPaser.labelList(null, allLabelCurrentPage, null, 0, 0, handler);
+//        DataPaser.usedLabelList(handler);
+        ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<用过的标签", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.USED_LABEL_LIST;
+                UsedLabel usedLabel = new UsedLabel();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    usedLabel.setSuccess(job.optBoolean("success"));
+                    usedLabel.setMessage(job.optString("message"));
+//                    usedLabel.setStatus(job.optString("status"));
+                    if (usedLabel.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        usedLabel.setHas_tag(data.optInt("has_tag"));
+                        if (usedLabel.getHas_tag() != 0) {
+                            List<UsedLabelBean> list = new ArrayList<UsedLabelBean>();
+                            JSONArray tags = data.getJSONArray("tags");
+                            for (int i = 0; i < tags.length(); i++) {
+                                JSONObject ob = tags.getJSONObject(i);
+                                UsedLabelBean usedLabelBean = new UsedLabelBean();
+                                usedLabelBean.set_id(ob.optString("_id"));
+                                usedLabelBean.setUser_id(ob.optString("user_id"));
+                                usedLabelBean.setUsed_count(ob.optString("used_count"));
+                                usedLabelBean.setUpdated_on(ob.optString("updated_on"));
+                                usedLabelBean.setType(ob.optString("type"));
+                                usedLabelBean.setTitle_en(ob.optString("title_en"));
+                                usedLabelBean.setTitle_cn(ob.optString("title_cn"));
+                                usedLabelBean.setStick(ob.optString("stick"));
+                                usedLabelBean.setStatus(ob.optString("status"));
+                                list.add(usedLabelBean);
+                            }
+                            usedLabel.setUsedLabelList(list);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (usedLabel.isSuccess()) {
+                    if (usedLabel.getHas_tag() == 0) {
+                        Log.e("<<<", "没有用过的标签");
+                        return;
+                    }
+                    usedLabelList.addAll(usedLabel.getUsedLabelList());
+                    usedLabelRelative.setVisibility(View.VISIBLE);
+                    hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
+                    labelViewPager.setAdapter(hotLabelViewPagerAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                ToastUtils.showError("网络错误");
+            }
+        });
+//        DataPaser.labelList(null, allLabelCurrentPage, null, 0, 0, handler);
+        ClientDiscoverAPI.labelList(null, allLabelCurrentPage, null, 0, 0, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+//                Log.e("<<<全部标签", responseInfo.result);
+//                WriteJsonToSD.writeToSD("quanbubiaoqian", responseInfo.result);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.LABEL_LIST;
+                AllLabel allLabel = new AllLabel();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    allLabel.setSuccess(job.optBoolean("success"));
+                    allLabel.setMessage(job.optString("message"));
+//                    allLabel.setStatus(job.optString("status"));
+                    if (allLabel.isSuccess()) {
+                        JSONObject data = job.getJSONObject("data");
+                        JSONObject object = data.getJSONObject("1");
+                        if (object.optInt("children_count") > 0) {
+                            JSONArray children = object.getJSONArray("children");
+                            List<AllLabelBean> childrenList = new ArrayList<AllLabelBean>();
+                            for (int i = 0; i < children.length(); i++) {
+                                JSONObject ob = children.getJSONObject(i);
+                                AllLabelBean allLabelBean = new AllLabelBean();
+                                allLabelBean.set_id(ob.optString("_id"));
+                                allLabelBean.setTitle_cn(ob.optString("title_cn"));
+                                allLabelBean.setChildren_count(ob.optInt("children_count"));
+                                if (allLabelBean.getChildren_count() > 0) {
+                                    JSONArray children2 = ob.getJSONArray("children");
+                                    List<AllLabelBean> children2List = new ArrayList<AllLabelBean>();
+                                    for (int j = 0; j < children2.length(); j++) {
+                                        JSONObject ob2 = children2.getJSONObject(j);
+                                        AllLabelBean allLabelBean2 = new AllLabelBean();
+                                        allLabelBean2.set_id(ob2.optString("_id"));
+                                        allLabelBean2.setTitle_cn(ob2.optString("title_cn"));
+                                        allLabelBean2.setChildren_count(ob2.optInt("children_count"));
+                                        if (allLabelBean2.getChildren_count() > 0) {
+                                            JSONArray children3 = ob2.getJSONArray("children");
+                                            List<AllLabelBean> children3List = new ArrayList<AllLabelBean>();
+                                            for (int k = 0; k < children3.length(); k++) {
+                                                JSONObject ob3 = children3.getJSONObject(k);
+                                                AllLabelBean allLabelBean3 = new AllLabelBean();
+                                                allLabelBean3.set_id(ob3.optString("_id"));
+                                                allLabelBean3.setTitle_cn(ob3.optString("title_cn"));
+                                                children3List.add(allLabelBean3);
+                                            }
+                                            allLabelBean2.setChildren(children3List);
+                                        }
+                                        children2List.add(allLabelBean2);
+                                    }
+                                    allLabelBean.setChildren(children2List);
+                                }
+                                childrenList.add(allLabelBean);
+                            }
+                            allLabel.setChildren(childrenList);
+                        }
+                    }
+//                    msg.obj = allLabel;
+                } catch (JSONException e) {
+                    Log.e("<<<", "解析异常");
+                    e.printStackTrace();
+                }
+                if (allLabel.isSuccess()) {
+                    if (allLabelCurrentPage == 1) {
+                        allLabelList.clear();
+                    }
+                    allLabelList.addAll(allLabel.getChildren());
+                    allLabelViewPagerAdapter.notifyDataSetChanged();
+//                        allLabelViewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, allLabelViewPagerAdapter.getMaxHeight()));
+                    slidingTab.setViewPager(allLabelViewPager);
+                }
+//                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
         ClientDiscoverAPI.labelList(null, 1, 18 + "", 3, 1, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.HOT_LABEL_LIST;
-                msg.obj = new HotLabel();
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.HOT_LABEL_LIST;
+                HotLabel netHotLabel = new HotLabel();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<HotLabel>() {
                     }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
+                    netHotLabel = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
 //                    Toast.makeText(AddLabelActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                 }
-                handler.sendMessage(msg);
+//                handler.sendMessage(msg);
+                if (netHotLabel.isSuccess()) {
+                    if (hotLabelCurrentPage == 1) {
+                        hotLabelList.clear();
+                    }
+                    hotLabelList.addAll(netHotLabel.getData().getRows());
+                    hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
+                    labelViewPager.setAdapter(hotLabelViewPagerAdapter);
+                }
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
                 Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+                ToastUtils.showError("网络错误");
             }
         });
     }
@@ -242,7 +392,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
 //        focusView.setFocusable(true);
 //        focusView.setFocusableInTouchMode(true);
 //        focusView.requestFocus();
-        handler.post(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
                 horizontalScrollView.fullScroll(View.FOCUS_RIGHT);
@@ -284,66 +434,39 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.HOT_LABEL_LIST:
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.HOT_LABEL_LIST:
+////                    dialog.dismiss();
+//                    HotLabel netHotLabel = (HotLabel) msg.obj;
+//
+//                    break;
+//                case DataConstants.LABEL_LIST:
 //                    dialog.dismiss();
-                    HotLabel netHotLabel = (HotLabel) msg.obj;
-                    HotLabelViewPagerAdapter hotLabelViewPagerAdapter;
-                    if (netHotLabel.isSuccess()) {
-                        int hotLabelCurrentPage = 1;
-                        if (hotLabelCurrentPage == 1) {
-                            hotLabelList.clear();
-                        }
-                        hotLabelList.addAll(netHotLabel.getData().getRows());
-                        hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
-                        labelViewPager.setAdapter(hotLabelViewPagerAdapter);
-                    }
-                    break;
-                case DataConstants.LABEL_LIST:
-                    dialog.dismiss();
-                    AllLabel netAllLabel = (AllLabel) msg.obj;
-                    if (netAllLabel.isSuccess()) {
-                        if (allLabelCurrentPage == 1) {
-                            allLabelList.clear();
-                        }
-                        allLabelList.addAll(netAllLabel.getChildren());
-                        allLabelViewPagerAdapter.notifyDataSetChanged();
-//                        allLabelViewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, allLabelViewPagerAdapter.getMaxHeight()));
-                        slidingTab.setViewPager(allLabelViewPager);
-                    }
-                    break;
-                case DataConstants.USED_LABEL_LIST:
+//                    AllLabel netAllLabel = (AllLabel) msg.obj;
+//
+//                    break;
+//                case DataConstants.USED_LABEL_LIST:
+////                    dialog.dismiss();
+//                    UsedLabel netUsedLabel = (UsedLabel) msg.obj;
+//
+//                    break;
+//                case DataConstants.NET_FAIL:
 //                    dialog.dismiss();
-                    UsedLabel netUsedLabel = (UsedLabel) msg.obj;
-                    if (netUsedLabel.isSuccess()) {
-                        if (netUsedLabel.getHas_tag() == 0) {
-                            Log.e("<<<", "没有用过的标签");
-                            return;
-                        }
-                        usedLabelList.addAll(netUsedLabel.getUsedLabelList());
-                        usedLabelRelative.setVisibility(View.VISIBLE);
-                        hotLabelViewPagerAdapter = new HotLabelViewPagerAdapter(getSupportFragmentManager(), AddLabelActivity.this, usedLabelList, hotLabelList, AddLabelActivity.this);
-                        labelViewPager.setAdapter(hotLabelViewPagerAdapter);
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    break;
-            }
-        }
-    };
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onDestroy() {
         //        cancelNet();
         unregisterReceiver(labelReceiver);
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//        }
         super.onDestroy();
     }
 

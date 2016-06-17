@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Display;
@@ -19,15 +17,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressBean;
 import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.ProvinceBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -36,6 +39,11 @@ import com.taihuoniao.fineix.view.wheelview.ArrayWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.OnWheelChangedListener;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,12 +97,61 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         cancelNet();
+//        if(mHandler!=null){
+//            mHandler.removeCallbacksAndMessages(null);
+//        }
         super.onDestroy();
     }
 
     private void getProvinceData() {
         dialog.show();
-        DataPaser.getProvinceList(mHandler);
+//        DataPaser.getProvinceList(mHandler);
+        ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.PROVINCE_LIST;
+                List<ProvinceBean> list = new ArrayList<ProvinceBean>();
+                try {
+                    JSONObject job = new JSONObject(responseInfo.result);
+                    JSONObject data = job.getJSONObject("data");
+                    JSONArray rows = data.getJSONArray("rows");
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject pro = rows.getJSONObject(i);
+                        ProvinceBean provinceBean = new ProvinceBean();
+                        provinceBean.set_id(pro.optString("_id"));
+                        provinceBean.setName(pro.optString("city"));
+                        JSONArray cities = pro.getJSONArray("cities");
+                        List<CityBean> cityBeanList = new ArrayList<CityBean>();
+                        for (int j = 0; j < cities.length(); j++) {
+                            JSONObject city = cities.getJSONObject(j);
+                            CityBean cityBean = new CityBean();
+                            cityBean.set_id(city.optString("_id"));
+                            cityBean.setName(city.optString("city"));
+                            cityBean.setParent_id(city.optString("parent_id"));
+                            cityBeanList.add(cityBean);
+                        }
+                        provinceBean.setCityList(cityBeanList);
+                        list.add(provinceBean);
+                    }
+//                    msg.obj = list;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                handler.sendMessage(msg);
+//                                    List<ProvinceBean> netList = (List<ProvinceBean>) msg.obj;
+                provinceList.clear();
+                provinceList.addAll(list);
+                initPopupWindow();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
 
@@ -257,63 +314,98 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         provinceId = provinceList.get(provinceView.getCurrentItem()).get_id();
         //接口 25
         dialog.show();
-        DataPaser.commitAddressParser(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", mHandler);
+//        DataPaser.commitAddressParser(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", mHandler);
+        ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.COMMIT_NEW_ADDRESS;
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
+                    Intent intent = new Intent();
+                    intent.putExtra("address", 1);
+                    setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+                    finish();
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                }
+//                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.PROVINCE_LIST:
-                    dialog.dismiss();
-                    List<ProvinceBean> netList = (List<ProvinceBean>) msg.obj;
-                    provinceList.clear();
-                    provinceList.addAll(netList);
-                    initPopupWindow();
-                    break;
-                case DataConstants.DELETE_ADDRESS:
-                    dialog.dismiss();
-                    NetBean netBean1 = (NetBean) msg.obj;
-                    if(netBean1.isSuccess()){
-                        ToastUtils.showSuccess("删除成功");
-//                        dialog.showSuccessWithStatus("删除成功");
-//                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
-                        intent.putExtra("address", 1);
-                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-                        finish();
-                    }else{
-                        ToastUtils.showError(netBean1.getMessage());
-                    }
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.PROVINCE_LIST:
+//                    dialog.dismiss();
+//                    List<ProvinceBean> netList = (List<ProvinceBean>) msg.obj;
+//                    provinceList.clear();
+//                    provinceList.addAll(netList);
+//                    initPopupWindow();
+//                    break;
+//                case DataConstants.DELETE_ADDRESS:
+//                    dialog.dismiss();
+//                    NetBean netBean1 = (NetBean) msg.obj;
+//                    if(netBean1.isSuccess()){
+//                        ToastUtils.showSuccess("删除成功");
+////                        dialog.showSuccessWithStatus("删除成功");
+////                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent();
+//                        intent.putExtra("address", 1);
+//                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+//                        finish();
+//                    }else{
+//                        ToastUtils.showError(netBean1.getMessage());
+//                    }
+//
+//                    break;
+//                case DataConstants.COMMIT_NEW_ADDRESS:
+//                    dialog.dismiss();
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if (netBean.isSuccess()) {
+//                        ToastUtils.showSuccess(netBean.getMessage());
+////                        dialog.showSuccessWithStatus(netBean.getMessage());
+//                        Intent intent = new Intent();
+//                        intent.putExtra("address", 1);
+//                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+//                        finish();
+//                    } else {
+//                        ToastUtils.showError(netBean.getMessage());
+////                        dialog.showErrorWithStatus(netBean.getMessage());
+//                    }
+//
+//                    break;
+//                case DataConstants.NETWORK_FAILURE:
+//                    dialog.dismiss();
+//                    Toast.makeText(AddNewAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
 
-                    break;
-                case DataConstants.COMMIT_NEW_ADDRESS:
-                    dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    if (netBean.isSuccess()) {
-                        ToastUtils.showSuccess(netBean.getMessage());
-//                        dialog.showSuccessWithStatus(netBean.getMessage());
-                        Intent intent = new Intent();
-                        intent.putExtra("address", 1);
-                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-                        finish();
-                    } else {
-                        ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                    }
-
-                    break;
-                case DataConstants.NETWORK_FAILURE:
-                    dialog.dismiss();
-                    Toast.makeText(AddNewAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 
     private void putData() {
-
         if (addressBean != null) {
             titleLayout.setRightTv(R.string.delete, getResources().getColor(R.color.black333333), new View.OnClickListener() {
                 @Override
@@ -325,7 +417,44 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             AddNewAddressActivity.this.dialog.show();
-                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
+//                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
+                            ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
+//                                    Message msg = handler.obtainMessage();
+//                                    msg.what = DataConstants.DELETE_ADDRESS;
+                                    AddNewAddressActivity.this.dialog.dismiss();
+                                    NetBean netBean = new NetBean();
+                                    try {
+                                        Gson gson = new Gson();
+                                        Type type = new TypeToken<NetBean>() {
+                                        }.getType();
+                                        netBean = gson.fromJson(responseInfo.result, type);
+//                    JSONObject ojb = new JSONObject(responseInfo.result);
+//                    msg.obj = ojb.optBoolean("success");
+                                    } catch (JsonSyntaxException e) {
+                                        e.printStackTrace();
+                                    }
+//                                    handler.sendMessage(msg);
+                                    if (netBean.isSuccess()) {
+                                        ToastUtils.showSuccess("删除成功");
+//                        dialog.showSuccessWithStatus("删除成功");
+//                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("address", 1);
+                                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
+                                        finish();
+                                    } else {
+                                        ToastUtils.showError(netBean.getMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(HttpException error, String msg) {
+                                    AddNewAddressActivity.this.dialog.dismiss();
+                                    ToastUtils.showError("网络错误");
+                                }
+                            });
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -353,9 +482,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                 isdefault = true;
                 isDefaultImg.setImageResource(R.mipmap.switch_on);
             }
-
         }
-
     }
 
 

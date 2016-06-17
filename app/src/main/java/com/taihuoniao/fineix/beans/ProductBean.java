@@ -32,6 +32,7 @@ public class ProductBean extends NetBean implements Serializable{
         }
     }
     public static class ProductListItem{
+        public int pos;
         private String _id;
         private String title;
         private String sale_price;

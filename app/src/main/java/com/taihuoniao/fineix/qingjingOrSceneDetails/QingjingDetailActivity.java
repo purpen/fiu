@@ -237,7 +237,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         dialog.show();
         DataPaser.qingjingDetails(id, handler);
         DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-        DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+        DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
     }
 
 
@@ -623,7 +623,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+            DataPaser.getSceneList(currentPage + "", null, id, null,null, null, null, null, handler);
         }
         Log.e("<<<", "没进来" + getScrollY());
         backgroundImg.setTranslationY(getScrollY() / 3);
@@ -649,12 +649,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
                 dialog.show();
                 currentPage = 1;
-                DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+                DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
             } else {
                 dialog.show();
                 DataPaser.qingjingDetails(id, handler);
                 currentPage = 1;
-                DataPaser.getSceneList(currentPage + "", null, id, null, null, null, null, handler);
+                DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
             }
         }
     };

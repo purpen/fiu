@@ -26,6 +26,8 @@ public class GoodListAdapter extends BaseAdapter {
     private Activity activity;
     private List<ProductBean.ProductListItem> list;
     private List<SearchBean.SearchItem> searchList;
+    //    private ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity,0, null, null);
+//    private int pos;
 
     public GoodListAdapter(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
         this.activity = activity;
@@ -59,8 +61,8 @@ public class GoodListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_good_listview, null);
             holder = new ViewHolder();
@@ -75,11 +77,33 @@ public class GoodListAdapter extends BaseAdapter {
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
+        holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int posi, long id) {
+//                pos = position;
+                if(list!=null){
+                    list.get(position).pos = posi;
+                }else{
+                    searchList.get(position).pos = posi;
+                }
+                ProductSlidingAdapter productSlidingAdapter = (ProductSlidingAdapter) holder.slidingFocusImageView.getTag();
+                productSlidingAdapter.notifyDataSetChanged();
+//                Log.e("<<<切换焦点", position + "," + pos);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         if (list != null) {
             holder.nameTv.setText(list.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
             if (list.get(position).getBanner_asset().size() > 0) {
-                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
+//                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter<String>(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
+                ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity,list.get(position), null);
+                holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
+                holder.slidingFocusImageView.setTag(productSlidingAdapter1);
                 if (list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) {
                     switch (list.get(position).getBanner_asset().size()) {
                         case 2:
@@ -123,7 +147,10 @@ public class GoodListAdapter extends BaseAdapter {
             holder.nameTv.setText(searchList.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", searchList.get(position).getSale_price()));
             if (searchList.get(position).getBanners().size() > 0) {
-                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter(holder.slidingFocusImageView, null, searchList.get(position).getBanners(), activity));
+//                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter<String>(holder.slidingFocusImageView, null, searchList.get(position).getBanners(), activity));
+                ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity, null, searchList.get(position));
+                holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
+                holder.slidingFocusImageView.setTag(productSlidingAdapter1);
                 holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
             }
             switch (searchList.get(position).getAttrbute()) {

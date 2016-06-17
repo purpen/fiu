@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.baidu.location.BDLocation;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -28,7 +27,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -73,12 +71,12 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     //外界调用刷新场景列表
     public void refreshSceneList(){
         currentPage = 1;
-        if (location == null) {
-            getCurrentLocation();
-            return;
-        }
+//        if (location == null) {
+//            getCurrentLocation();
+//            return;
+//        }
         dialog.show();
-        DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
     }
 
     @Override
@@ -94,12 +92,12 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             @Override
             public void onRefresh() {
                 currentPage = 1;
-                if (location == null) {
-                    getCurrentLocation();
-                    return;
-                }
+//                if (location == null) {
+//                    getCurrentLocation();
+//                    return;
+//                }
                 dialog.show();
-                DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
             }
         });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -107,7 +105,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
+                DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
             }
         });
         sceneList = new ArrayList<>();
@@ -116,22 +114,25 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         listView.setOnItemClickListener(this);
 //        listView.setOnScrollListener(this);
         listView.setOnTouchListener(this);
-        getCurrentLocation();
+//        getCurrentLocation();
+        dialog.show();
+        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
     }
 
-    private void getCurrentLocation() {
-        dialog.show();
-        MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                if (location == null && bdLocation != null) {
-                    location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-                    MapUtil.destroyLocationClient();
-                    DataPaser.getSceneList(currentPage + "", 8 + "", null, 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                }
-            }
-        });
-    }
+
+//    private void getCurrentLocation() {
+//        dialog.show();
+//        MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
+//            @Override
+//            public void onReceiveLocation(BDLocation bdLocation) {
+//                if (location == null && bdLocation != null) {
+//                    location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
+//                    MapUtil.destroyLocationClient();
+//
+//                }
+//            }
+//        });
+//    }
 
     @Override
     protected View initView() {
@@ -152,9 +153,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case -2:
-
-                    break;
                 case DataConstants.SCENE_LIST:
                     pullToRefreshLayout.onRefreshComplete();
                     dialog.dismiss();
@@ -193,7 +191,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             handler.removeCallbacksAndMessages(null);
             handler = null;
         }
-        MapUtil.destroyLocationClient();
+//        MapUtil.destroyLocationClient();
         super.onDestroy();
     }
 

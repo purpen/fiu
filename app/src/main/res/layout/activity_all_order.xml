@@ -293,9 +293,4 @@
         android:layout_height="1px"
         android:background="#e6e6e6"/>
 
-    <WebView
-        android:id="@+id/activity_all_order_webview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"/>
 </LinearLayout>

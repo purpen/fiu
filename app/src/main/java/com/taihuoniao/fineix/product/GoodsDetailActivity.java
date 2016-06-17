@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,8 +88,6 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     RecyclerView recommendRecycler;
     @Bind(R.id.activity_goods_detail_buy_now)
     Button buyNowBtn;
-    @Bind(R.id.activity_goods_detail_webview)
-    WebView webView;
     //判断产品是自营的还是第三方商城的标识
     private String attrbute = "0";// 1.官网；2.淘宝；3.天猫；4.京东
     private String url = null;
@@ -226,10 +224,14 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             return;
                         }
                         ClientDiscoverAPI.wantBuy(id);
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        Log.e("<<<商品url", "url=" + url);
-                        webView.loadUrl(url);
                         ToastUtils.showInfo("正在跳转，请稍等");
+                        Uri uri1 = Uri.parse(url);
+                        Intent intent3 = new Intent(Intent.ACTION_VIEW, uri1);
+                        startActivity(intent3);
+//                        webView.getSettings().setJavaScriptEnabled(true);
+//                        Log.e("<<<商品url", "url=" + url);
+//                        webView.loadUrl(url);
+//                        ToastUtils.showInfo("正在跳转，请稍等");
 //                        dialog.showInfoWithStatus("正在跳转，请稍等");
 //                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);

@@ -32,6 +32,7 @@ public class SearchBean extends NetBean {
     }
 
     public static class SearchItem implements Serializable {
+        public int pos;
         private boolean isSelect;
         private String _id;
         private String cover_url;
@@ -193,6 +194,15 @@ public class SearchBean extends NetBean {
         private String avatar_url;
         private String summary;
         private String is_expert;
+        private String label;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
 
         public String getAvatar_url() {
             return avatar_url;

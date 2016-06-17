@@ -49,7 +49,7 @@ import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomListView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.HeaderGridView;
+import com.taihuoniao.fineix.view.GridViewWithHeaderAndFooter;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     private TextView qingjingTv;
     private TextView allQingjingTv;
     @Bind(R.id.activity_select_qingjing_grid)
-    HeaderGridView qingjingGrid;
+    GridViewWithHeaderAndFooter qingjingGrid;
     @Bind(R.id.activity_select_qingjing_progress)
     ProgressBar progressBar;
     //地图
@@ -187,7 +187,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                     MapStatus.Builder builder = new MapStatus.Builder();
                     builder.target(ll).zoom(18);
                     mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                    DataPaser.qingjingList(page + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
+                    DataPaser.qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
                 }
             }
         });
@@ -328,7 +328,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int pos = position - qingjingGrid.getHeaderViewCount() * qingjingGrid.getNumColumns();//实际点的position
+        int pos = position/* - qingjingGrid.getHeaderViewCount() * qingjingGrid.getNumColumns()*/;//实际点的position
         for (int i = 0; i < qingjingList.size(); i++) {
             if (pos == i) {
                 qingjingList.get(pos).setIsSelect(true);
@@ -353,7 +353,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             lastTotalItem = totalItemCount;
             page++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.qingjingList(page + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
+            DataPaser.qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
         }
     }
 
