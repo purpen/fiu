@@ -11,6 +11,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -115,8 +116,9 @@ public class SystemSettingsActivity extends BaseActivity{
                 startActivity(new Intent(activity,FeedbackActivity.class));
                 break;
             case R.id.item_share:
-                PopupWindowUtil.show(activity,new CustomShareView(activity));
-                //TODO 分享
+                ShareContent content = new ShareContent();
+                content.shareTxt = getResources().getString(R.string.share_title_url);
+                PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
         }
     }
@@ -146,14 +148,14 @@ public class SystemSettingsActivity extends BaseActivity{
         });
     }
 
-    private class MyAsyncTask extends AsyncTask{
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Void doInBackground(Void... params) {
             try {
                 DataCleanUtil.cleanAppData(activity, FileUtils.getSavePath(getPackageName()));
             } catch (Exception e) {
@@ -163,11 +165,10 @@ public class SystemSettingsActivity extends BaseActivity{
         }
 
         @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             setCacheSize();
             ToastUtils.showSuccess("清理完成");
-//            svProgressHUD.showSuccessWithStatus("清理完成");
         }
     }
 

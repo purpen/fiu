@@ -26,7 +26,6 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.main.VideoActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -241,7 +240,6 @@ public class MineFragment extends MyBaseFragment {
     public void onResume() {
         super.onResume();
         if (LoginInfo.isUserLogin()) {
-//            rl.setVisibility(View.GONE);
             if (isInitLoad) {
                 isInitLoad = false;
             } else {
@@ -249,8 +247,6 @@ public class MineFragment extends MyBaseFragment {
                     loadData();
                 }
             }
-        } else {
-//            rl.setVisibility(View.VISIBLE);
         }
     }
 
@@ -430,7 +426,6 @@ public class MineFragment extends MyBaseFragment {
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
 //                startActivity(new Intent(activity, OrderInterestQJActivity.class));
-                startActivity(new Intent(activity, VideoActivity.class));
         }
     }
 

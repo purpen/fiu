@@ -809,7 +809,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
-                intent3.putExtra("target_id", id);
+                intent3.putExtra("w", id);
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id());
                 startActivity(intent3);

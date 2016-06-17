@@ -23,22 +23,46 @@
         android:layout_height="@dimen/dp45"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/ibtn_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/share" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
 
-        <ImageButton
+            <TextView
+                android:id="@+id/ibtn_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawablePadding="@dimen/dp10"
+                android:drawableLeft="@mipmap/share"
+                android:gravity="center"
+                android:text="1" />
+        </RelativeLayout>
+
+        <ImageView
             android:id="@+id/ibtn_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/share" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@mipmap/share"
+            android:scaleType="centerInside"
+            android:layout_gravity="center" />
 
-        <ImageButton
-            android:id="@+id/ibtn_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/share" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ibtn_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawablePadding="@dimen/dp10"
+                android:layout_weight="100"
+                android:drawableLeft="@mipmap/share"
+                android:gravity="center"
+                android:text="1" />
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

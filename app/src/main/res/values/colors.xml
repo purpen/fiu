@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- mainactivity tab的背景颜色-->
-
     <color name="color_transparent">#00000000</color>
     <color name="white40">#40FFFFFF</color>
     <!-- SearchURLActivity -->

@@ -311,6 +311,15 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (commentList != null) {
+            Intent intent = new Intent();
+            intent.putExtra(CommentListActivity.class.getSimpleName(), commentList.size());
+            setResult(RESULT_OK, intent);
+        }
+        super.onBackPressed();
+    }
 
     @Override
     public void onClick(View v) {

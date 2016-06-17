@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -20,23 +20,35 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.beans.SupportData;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SubjectActivity extends BaseActivity {
+    public static final int REQUEST_COMMENT = 100;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.webView_about)
     WebView webViewAbout;
+    @Bind(R.id.ibtn_favorite)
+    TextView ibtnFavorite;
+    @Bind(R.id.ibtn_comment)
+    TextView ibtnComment;
     private WaittingDialog dialog;
     private String url;
     private String title;
@@ -112,17 +124,115 @@ public class SubjectActivity extends BaseActivity {
     @OnClick({R.id.ibtn_favorite, R.id.ibtn_share, R.id.ibtn_comment})
     void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ibtn_favorite: //收藏
-
+            case R.id.ibtn_favorite: //点赞
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    return;
+                }
+                doFavorite((TextView) v);
                 break;
             case R.id.ibtn_share: //分享
-
+                ShareContent content = new ShareContent();
+                content.shareTxt = data.share_desc;
+                content.url = data.content_view_url;
+                PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
             case R.id.ibtn_comment: //去评论
-
+                if (data == null) return;
+                Intent intent = new Intent(activity, CommentListActivity.class);
+                intent.putExtra("target_id", String.valueOf(data._id)); //专题id
+                intent.putExtra("type", String.valueOf(13));
+                intent.putExtra("target_user_id", String.valueOf(data.user_id));
+                startActivityForResult(intent, REQUEST_COMMENT);
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK == resultCode) {
+            switch (requestCode) {
+                case REQUEST_COMMENT:
+                    int count = data.getIntExtra(CommentListActivity.class.getSimpleName(), this.data.comment_count);
+                    ibtnComment.setText(String.valueOf(count));
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 点赞
+     */
+    private void doFavorite(final TextView v) {
+        if (data == null) return;
+        switch (data.is_love) {
+            case 0:
+                ClientDiscoverAPI.loveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        v.setEnabled(false);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        v.setEnabled(true);
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse<SupportData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SupportData>>() {
+                        });
+                        if (response.isSuccess()) {
+                            data.is_love = 1;
+                            v.setText(response.getData().love_count);
+                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+                            ToastUtils.showSuccess("已赞");
+                            return;
+                        }
+                        ToastUtils.showError(response.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        v.setEnabled(true);
+                        ToastUtils.showError("网络异常，请确保网络畅通");
+                    }
+                });
+                break;
+            case 1:
+                ClientDiscoverAPI.cancelLoveNet(String.valueOf(data._id), String.valueOf(13), new RequestCallBack<String>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        v.setEnabled(false);
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        v.setEnabled(true);
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse<SupportData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SupportData>>() {
+                        });
+                        if (response.isSuccess()) {
+                            data.is_love = 0;
+                            v.setText(response.getData().love_count);
+                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+                            ToastUtils.showSuccess("已取消赞");
+                            return;
+                        }
+                        ToastUtils.showError(response.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        v.setEnabled(true);
+                        ToastUtils.showError("网络异常，请确保网络畅通");
+                    }
+                });
+                break;
+        }
+    }
+
 
     @Override
     protected void requestNet() {
@@ -151,6 +261,9 @@ public class SubjectActivity extends BaseActivity {
     @Override
     protected void refreshUI() {
         webViewAbout.loadUrl(data.content_view_url);
+        ibtnFavorite.setText(String.valueOf(data.love_count));
+        ibtnFavorite.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+        ibtnComment.setText(String.valueOf(data.comment_count));
     }
 
     @Override
@@ -160,10 +273,4 @@ public class SubjectActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

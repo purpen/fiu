@@ -1,11 +1,10 @@
 <resources>
 
-    <style name="AppTheme" parent="@style/AppBaseTheme"/>
+    <style name="AppTheme" parent="@style/AppBaseTheme" />
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorPrimaryDark">@color/color_222</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
@@ -100,8 +99,8 @@
     </style>
     <!--自定义全局标题栏-->
     <declare-styleable name="GlobalTitleLayout">
-        <attr name="global_title_layout_title" format="reference|string"/>
-        <attr name="global_title_layout_show_back" format="boolean"/>
+        <attr name="global_title_layout_title" format="reference|string" />
+        <attr name="global_title_layout_show_back" format="boolean" />
     </declare-styleable>
     <!--自定义购物车中checkbox的图案样式-->
     <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
@@ -192,13 +191,16 @@
         <item name="android:layout_marginBottom">@dimen/dp16</item>
         <item name="android:background">@color/default_background_label</item>
     </style>
+
     <style name="FeelyouWindowAnimTheme" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/in_from_left</item>
         <item name="android:activityCloseExitAnimation">@anim/out_from_left</item>
     </style>
+
     <style name="AnimActivityTheme" parent="@style/AppTheme">
         <item name="android:windowAnimationStyle">@style/FeelyouWindowAnimTheme</item>
     </style>
+
     <style name="text_shadow">
         <item name="android:shadowColor">#ff000000</item>
         <item name="android:shadowDx">0</item>

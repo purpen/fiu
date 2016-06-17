@@ -82,7 +82,7 @@ public class UserGuideActivity extends BaseActivity {
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
                     if (TextUtils.isEmpty(SPUtil.read(activity, DataConstants.GUIDE_TAG))) {
-                        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
+//                        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
                         initGuide();
                     } else if (isTaskRoot()) {
                         goMainPage();
@@ -108,6 +108,7 @@ public class UserGuideActivity extends BaseActivity {
         String uri = "android.resource://" + getPackageName() + "/" + R.raw.first_in_app;
         activityVideoView.setVideoURI(Uri.parse(uri));
         activityVideoView.start();
+        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
         activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
