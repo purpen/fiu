@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -61,8 +62,16 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
 
         imageLoader.displayImage(item.getCover_url(), holder.iv_bg, options);
         imageLoader.displayImage(item.getUser_info().getAvatar_url(), holder.iv_avatar, options_head);
+        if (1 == item.getUser_info().is_expert) {
+            holder.riv_auth.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(item.getUser_info().expert_info) && !TextUtils.isEmpty(item.getUser_info().expert_label)) {
+                holder.tv_info.setText(String.format("%s | %s", item.getUser_info().expert_label, item.getUser_info().expert_info));
+            }
+        } else {
+            holder.riv_auth.setVisibility(View.GONE);
+            holder.tv_info.setText(item.getUser_info().getSummary());
+        }
         holder.tv_name.setText(item.getUser_info().getNickname());
-        holder.tv_info.setText(item.getUser_info().getSummary());
         holder.tv_view_count.setText(item.getView_count());
         holder.tv_love_count.setText(item.getLove_count());
         holder.tv_title.setText(item.getTitle());
@@ -78,12 +87,13 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         ImageView iv_bg;
         @Bind(R.id.item_scenelist_user_headimg)
         RoundedImageView iv_avatar;
+        @Bind(R.id.riv_auth)
+        RoundedImageView riv_auth;
         @Bind(R.id.item_scenelist_user_name)
         TextView tv_name;
 
         @Bind(R.id.item_scenelist_user_info)
         TextView tv_info;
-
         @Bind(R.id.item_scenelist_view_count)
         TextView tv_view_count;
         @Bind(R.id.item_scenelist_frame)

@@ -182,9 +182,10 @@ public class SceneListBean {
         private String follow_count;
         private String fans_count;
         private String love_count;
-//        private String is_expert;
+        public int is_expert;
         private String label;
-
+        public String expert_info;
+        public String expert_label;
         public String getLabel() {
             return label;
         }
@@ -264,13 +265,5 @@ public class SceneListBean {
         public void setUser_id(String user_id) {
             this.user_id = user_id;
         }
-//
-//        public String getIs_expert() {
-//            return is_expert;
-//        }
-//
-//        public void setIs_expert(String is_expert) {
-//            this.is_expert = is_expert;
-//        }
     }
 }

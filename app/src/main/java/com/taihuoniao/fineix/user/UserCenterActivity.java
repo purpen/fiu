@@ -359,14 +359,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     return;
                 }
                 ToastUtils.showError(listBean.getMessage());
-//                dialog.showErrorWithStatus(listBean.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
