@@ -99,6 +99,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     } else {
                         params.setText(content.shareTxt + content.url);
                     }
+
+                    if (!TextUtils.isEmpty(content.imageUrl)) {
+                        params.setImageUrl(content.imageUrl);
+                    }
 //                    params.setTitle(content.title);
 //                    params.setTitleUrl(content.titleUrl); // 标题的超链接
 //                    params.setImageUrl();
@@ -117,7 +121,10 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     } else {
                         params.setText(content.shareTxt + content.url);
                     }
-//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+
+                    if (!TextUtils.isEmpty(content.imageUrl)) {
+                        params.setImageUrl(content.imageUrl);
+                    }
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     weibo.share(params);
@@ -132,6 +139,9 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                         params.setText(content.shareTxt);
                     } else {
                         params.setText(content.shareTxt + content.url);
+                    }
+                    if (!TextUtils.isEmpty(content.imageUrl)) {
+                        params.setImageUrl(content.imageUrl);
                     }
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(CustomShareView.this);

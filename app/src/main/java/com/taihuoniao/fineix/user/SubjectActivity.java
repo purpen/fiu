@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +29,10 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -43,6 +45,10 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class SubjectActivity extends BaseActivity {
+    private static final String INFO_TYPE_QJ = "10";
+    private static final String INFO_TYPE_CJ = "11";
+    private static final String INFO_TYPE_CP = "12";
+    private static final String INFO_TYPE_USER = "13";
     public static final int REQUEST_COMMENT = 100;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -88,12 +94,10 @@ public class SubjectActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                addImageClickListner();
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
             }
         });
 
-        webViewAbout.addJavascriptInterface(new JavascriptInterface(this), "imagelistner");
         WebSettings webSettings = webViewAbout.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
@@ -127,10 +131,40 @@ public class SubjectActivity extends BaseActivity {
         });
     }
 
-    // 监听
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            LogUtil.e("shouldOverrideUrlLoading", url);
+            if (url.contains("infoType") && url.contains("infoId")) {
+                Intent intent;
+                url = url.substring(url.indexOf("?") + 1, url.length());
+                String[] args = url.split("&");
+                String infoType = args[0].split("=")[1];
+                String infoId = args[1].split("=")[1];
+                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
+                if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
+                    LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
+                    return true;
+                }
+                if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
+                    intent = new Intent(activity, UserCenterActivity.class);
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
+                    intent = new Intent(activity, QingjingDetailActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转场景详情
+                    intent = new Intent(activity, SceneDetailActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
+                    intent = new Intent(activity, GoodsDetailActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                }
+                return true;
+            }
             return super.shouldOverrideUrlLoading(view, url);
         }
 
@@ -138,7 +172,6 @@ public class SubjectActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             view.getSettings().setJavaScriptEnabled(true);
             super.onPageFinished(view, url);
-            addImageClickListner();
         }
 
         @Override
@@ -151,38 +184,6 @@ public class SubjectActivity extends BaseActivity {
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
 
-        }
-    }
-
-    // 注入js函数监听
-    private void addImageClickListner() {
-        String js = "";
-        // 这段js函数的功能就是，遍历所有的img几点，并添加onclick函数，函数的功能是在图片点击的时候调用本地java接口并传递url过去
-        webViewAbout.loadUrl("javascript:(function(){" + "var objs = document.getElementsByTagName(\"img\"); " +
-                "for(var i=0;i<objs.length;i++)  " +
-                "{"
-                + "objs[i].onclick=function()" +
-                "{"
-                + "window.imagelistner.openImage(this.src);" +
-                "}" +
-                "}" +
-                "})()");
-    }
-
-    public class JavascriptInterface {
-        private Context context;
-
-        public JavascriptInterface(Context context) {
-            this.context = context;
-        }
-
-        public void openImage(String img) {
-            LogUtil.e("JavascriptInterface", img);
-            //
-//            Intent intent = new Intent();
-//            intent.putExtra("image", img);
-//            intent.setClass(context, ShowWebImageActivity.class);
-//            context.startActivity(intent);
         }
     }
 
@@ -201,6 +202,7 @@ public class SubjectActivity extends BaseActivity {
                 ShareContent content = new ShareContent();
                 content.shareTxt = data.share_desc;
                 content.url = data.content_view_url;
+                content.imageUrl = data.cover_url;
                 PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
             case R.id.ibtn_comment: //去评论
