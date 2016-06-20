@@ -56,9 +56,9 @@ public class PrivateMessageItemAdapter extends CommonBaseAdapter<MessageDetailDa
         ViewHolder holder;
         if (convertView == null) {
             if (getItemViewType(position)==MESSAGE_OTHERS){
-                convertView= Util.inflateView(activity, R.layout.item_msg_others,null);
+                convertView = Util.inflateView(R.layout.item_msg_others, null);
             }else {
-                convertView= Util.inflateView(activity, R.layout.item_msg_me,null);
+                convertView = Util.inflateView(R.layout.item_msg_me, null);
             }
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);

@@ -1,8 +1,8 @@
 package com.taihuoniao.fineix.user;
+
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,8 +22,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-import java.util.HashMap;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -35,7 +33,7 @@ public class CertificateStatusActivity extends BaseActivity{
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.iv_label)
-    ImageView iv_label;
+    TextView iv_label;
     @Bind(R.id.tv_info)
     TextView tv_info;
     @Bind(R.id.rl_certificating)
@@ -47,10 +45,8 @@ public class CertificateStatusActivity extends BaseActivity{
     @Bind(R.id.ll_first_auth)
     LinearLayout ll_first_auth;
     private AuthData authData;
-    private HashMap<String,Integer> labelMap=new HashMap<>();
     private WaittingDialog dialog;
     public static CertificateStatusActivity instance;
-    public static final int[] labelsImg={R.mipmap.dana,R.mipmap.hj,R.mipmap.xingshe,R.mipmap.yishufan,R.mipmap.shouyiren,R.mipmap.renlaifeng,R.mipmap.shuhui,R.mipmap.buyer};
     public CertificateStatusActivity(){
         super(R.layout.activity_certificate_status);
     }
@@ -60,10 +56,6 @@ public class CertificateStatusActivity extends BaseActivity{
         custom_head.setHeadCenterTxtShow(true,"官方认证");
         instance=this;
         dialog=new WaittingDialog(this);
-        String[] labels = getResources().getStringArray(R.array.official_tags);
-        for (int i=0;i<labels.length;i++){
-            labelMap.put(labels[i],labelsImg[i]);
-        }
     }
 
     @Override
@@ -119,9 +111,7 @@ public class CertificateStatusActivity extends BaseActivity{
 
     private void setPassInfo(){
         if (!TextUtils.isEmpty(authData.label)){
-            if (labelMap.containsKey(authData.label)){
-                iv_label.setImageResource(labelMap.get(authData.label));
-            }
+            iv_label.setText(authData.label);
         }
 
         if (!TextUtils.isEmpty(authData.info)){

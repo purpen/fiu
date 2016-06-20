@@ -50,7 +50,7 @@ public class ScrollableView extends RelativeLayout {
     }
 
     private void initView() {
-        View view = Util.inflateView(context, R.layout.scrollable_view,this);
+        View view = Util.inflateView(R.layout.scrollable_view, this);
         viewPager = (CustomAutoScrollViewPager) view.findViewById(R.id.casvp);
         ll = (LinearLayout) view.findViewById(R.id.ll);
     }

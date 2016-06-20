@@ -49,7 +49,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         final FindFriendData.User item = list.get(position);
         ViewHolder holder;
         if (convertView==null){
-            convertView= Util.inflateView(activity, R.layout.item_find_friend,null);
+            convertView = Util.inflateView(R.layout.item_find_friend, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

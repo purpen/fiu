@@ -84,7 +84,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     }
 
     private View initPopView(int layout, String title) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
@@ -141,13 +141,11 @@ public class CompleteUserInfoActivity extends BaseActivity {
         String sign = et_sign.getText().toString().trim();
         if (TextUtils.isEmpty(nickname)) {
             ToastUtils.showError("请填写昵称");
-//            svProgressHUD.showErrorWithStatus("请填写昵称");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
             ToastUtils.showError("请填写个性签名");
-//            svProgressHUD.showErrorWithStatus("请填写个性签名");
             return;
         }
 
@@ -178,20 +176,16 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     }
                     if (!activity.isFinishing()&& svProgressHUD!=null)
                         ToastUtils.showSuccess(response.getMessage());
-//                        svProgressHUD.showSuccessWithStatus(response.getMessage());
                     finish();
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
-//                svProgressHUD.showErrorWithStatus(response.getMessage());
-
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (!activity.isFinishing()&& svProgressHUD!=null) svProgressHUD.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }
@@ -206,12 +200,6 @@ public class CompleteUserInfoActivity extends BaseActivity {
                     if (mSelected == null) return;
                     if (mSelected.size()==0) return;
                     toCropActivity(mSelected.get(0));
-//                    Uri uri = data.getData();
-//                    if (uri != null) {
-//                        toCropActivity(uri);
-//                    } else {
-//                        Util.makeToast("抱歉，从相册获取图片失败");
-//                    }
                     break;
                 case REQUEST_CODE_CAPTURE_CAMERA:
                     if (imageUri != null) {
@@ -223,9 +211,6 @@ public class CompleteUserInfoActivity extends BaseActivity {
     }
 
     protected void getImageFromAlbum() {
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType("image/*");//相片类型
-//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
         Picker.from(this)
                 .count(1)
                 .enableCamera(false)
@@ -242,7 +227,6 @@ public class CompleteUserInfoActivity extends BaseActivity {
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
             ToastUtils.showError("未检测到SD卡");
-//            svProgressHUD.showErrorWithStatus("未检测到SD卡");
         }
     }
 

@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -25,7 +24,6 @@ public class CustomHeadView extends RelativeLayout {
     private RelativeLayout rl_head_shop;
     private TextView tv_head_right;
     private TextView tv_tip_num;
-    private SearchView sv;
     private EditText et_search;
     private ImageButton ib_search;
     private RelativeLayout rl_search;
@@ -45,7 +43,7 @@ public class CustomHeadView extends RelativeLayout {
     }
 
     private void inflatelayout(Context context) {
-        View view = Util.inflateView(context, R.layout.custom_headview_layout, this);
+        View view = Util.inflateView(R.layout.custom_headview_layout, this);
         initViews(view);
     }
 
@@ -57,7 +55,6 @@ public class CustomHeadView extends RelativeLayout {
         ib_search = (ImageButton) view.findViewById(R.id.ib_search);
         head_center_tv = (TextView) view.findViewById(R.id.head_center_tv);
         iv_center_logo = (ImageView) view.findViewById(R.id.iv_center_logo);
-        sv = (SearchView) view.findViewById(R.id.sv_head_view);
         iv_head_search = (ImageButton) view.findViewById(R.id.iv_head_search);
         rl_head_shop = (RelativeLayout) view.findViewById(R.id.rl_head_shop);
         head_view_shop = (ImageButton) view.findViewById(R.id.head_view_shop);
@@ -229,8 +226,5 @@ public class CustomHeadView extends RelativeLayout {
 
     public TextView getHeadRightTV(){
         return tv_head_right;
-    }
-    public SearchView getSearchView(){
-        return sv;
     }
 }

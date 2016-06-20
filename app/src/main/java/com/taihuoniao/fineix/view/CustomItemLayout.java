@@ -44,7 +44,7 @@ public class CustomItemLayout extends RelativeLayout {
     }
 
     private void inflatelayout(Context context){
-        View view = Util.inflateView(context, R.layout.custom_item_layout, this);
+        View view = Util.inflateView(R.layout.custom_item_layout, this);
         rl_item_box = (RelativeLayout) view.findViewById(R.id.rl_item_box);
         tv_content = (TextView) view.findViewById(R.id.tv_content);
         tv_tip_num = (TextView) view.findViewById(R.id.tv_tip_num);

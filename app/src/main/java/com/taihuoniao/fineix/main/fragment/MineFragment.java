@@ -52,7 +52,6 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -98,7 +97,7 @@ public class MineFragment extends MyBaseFragment {
     @Bind(R.id.iv_bg)
     ImageView iv_bg;
     @Bind(R.id.iv_label)
-    ImageView iv_label;
+    TextView iv_label;
     @Bind(R.id.tv_auth)
     TextView tv_auth;
     @Bind(R.id.tv_lv)
@@ -120,7 +119,6 @@ public class MineFragment extends MyBaseFragment {
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
-    private HashMap<String,Integer> labelMap=new HashMap<>();
     private WaittingDialog dialog;
 
 
@@ -154,11 +152,6 @@ public class MineFragment extends MyBaseFragment {
                 item.txt = imgTxt[i];
                 gvList.add(item);
             }
-        }
-
-        String[] labels = getResources().getStringArray(R.array.official_tags);
-        for (int i=0;i<labels.length;i++){
-            labelMap.put(labels[i],UserCenterActivity.labelsImg[i]);
         }
 
 //        if (partnerLogos.length == partnerName.length) {
@@ -229,8 +222,6 @@ public class MineFragment extends MyBaseFragment {
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                LogUtil.e(TAG, s);
                 Util.makeToast("对不起,网络请求失败");
             }
         });
@@ -326,9 +317,7 @@ public class MineFragment extends MyBaseFragment {
         }
 
         if (!TextUtils.isEmpty(user.expert_label)){
-            if (labelMap.containsKey(user.expert_label)){
-                iv_label.setImageResource(labelMap.get(user.expert_label));
-            }
+            iv_label.setText(String.format("%s |", user.expert_label));
         }else {
             iv_label.setVisibility(View.GONE);
         }
@@ -425,7 +414,7 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, BDSearchAddressActivity.class));
-//                startActivity(new Intent(activity, OrderInterestQJActivity.class));
+//                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
         }
     }
 

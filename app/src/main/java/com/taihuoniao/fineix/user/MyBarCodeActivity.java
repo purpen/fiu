@@ -137,7 +137,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     }
 
     private View initPopView(int layout) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         GridView gv = (GridView) view.findViewById(R.id.gv);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);

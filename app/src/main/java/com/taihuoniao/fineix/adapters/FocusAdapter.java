@@ -68,7 +68,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         final FocusFansItem item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(activity, R.layout.item_focus_fans, null);
+            convertView = Util.inflateView(R.layout.item_focus_fans, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -146,7 +146,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     }
 
     private void showFocusFansConfirmView(FocusFansItem item, String tips) {
-        View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
+        View view = Util.inflateView(R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);

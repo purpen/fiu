@@ -65,6 +65,9 @@ public class PopupWindowUtil {
             setWindowAlpha(1f);
             if (windowListener!=null){
                 windowListener.onDismiss();
+                activity = null;
+                popupWindow = null;
+                windowListener = null;
             }
         }
     };

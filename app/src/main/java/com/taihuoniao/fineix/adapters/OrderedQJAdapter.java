@@ -33,7 +33,7 @@ public class OrderedQJAdapter extends CommonBaseAdapter<QingJingListBean.QingJin
         final QingJingListBean.QingJingItem item = list.get(position);
         ViewHolder holder;
         if (convertView==null){
-            convertView= Util.inflateView(activity, R.layout.item_ordered_qj,null);
+            convertView = Util.inflateView(R.layout.item_ordered_qj, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

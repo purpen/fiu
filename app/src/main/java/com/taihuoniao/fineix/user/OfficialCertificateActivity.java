@@ -162,7 +162,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     }
 
     private View initPopView(int layout, String title) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);

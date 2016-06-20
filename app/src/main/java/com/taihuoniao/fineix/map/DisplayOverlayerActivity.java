@@ -220,7 +220,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
                     return true;
                 }
                 LatLng ll = marker.getPosition();
-                View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+                View view = Util.inflateView(R.layout.info_window_layout, null);
                 LogUtil.e("huge", item.cover_url);
                 ImageLoader.getInstance().displayImage(item.cover_url, ((ImageView) view.findViewById(R.id.iv)));
                 ((TextView) view.findViewById(R.id.tv_desc)).setText(item.title);

@@ -50,7 +50,6 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -86,7 +85,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private TextView tv_label;
     private TextView tv_lv;
     private TextView tv_auth;
-    private ImageView iv_label;
+    private TextView iv_label;
     @Bind(R.id.iv_detail)
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
@@ -111,8 +110,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     private boolean isFirstLoad = true;
     private String flag;
-    private HashMap<String,Integer> labelMap=new HashMap<>();
-    public static final int[] labelsImg={R.mipmap.dana,R.mipmap.hj,R.mipmap.xingshe,R.mipmap.yishufan,R.mipmap.shouyiren,R.mipmap.renlaifeng,R.mipmap.shuhui,R.mipmap.buyer};
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -146,7 +143,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
-        View headView = Util.inflateView(activity, R.layout.user_center_headview, null);
+        View headView = Util.inflateView(R.layout.user_center_headview, null);
         if (LoginInfo.getUserId()!=userId){
             iv_right.setVisibility(View.GONE);
         }
@@ -183,10 +180,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
         }
-        String[] labels = getResources().getStringArray(R.array.official_tags);
-        for (int i=0;i<labels.length;i++){
-            labelMap.put(labels[i],labelsImg[i]);
-        }
     }
 
     @Override
@@ -222,7 +215,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-//                    dialog.showErrorWithStatus("对不起,数据异常");
                 }
             }
 
@@ -230,7 +222,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
 
@@ -281,14 +272,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
-//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
             }
         });
     }
@@ -439,9 +428,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         if (!TextUtils.isEmpty(user.expert_label)){
-            if (labelMap.containsKey(user.expert_label)){
-                iv_label.setImageResource(labelMap.get(user.expert_label));
-            }
+            iv_label.setText(String.format("%s |", user.expert_label));
         }else {
             iv_label.setVisibility(View.GONE);
         }
@@ -451,12 +438,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }else {
             tv_auth.setVisibility(View.GONE);
         }
-
-//        if (TextUtils.isEmpty(user.nickname) || LoginInfo.getUserId() != userId) {
-//            tv_nick.setVisibility(View.GONE);
-//        } else {
-//            tv_nick.setText(user.nickname);
-//        }
 
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
@@ -478,7 +459,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     }
 
     private View initPopView(int layout, String title) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);

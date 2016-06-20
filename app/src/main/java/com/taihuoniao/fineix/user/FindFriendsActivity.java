@@ -73,7 +73,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         custom_head.setHeadCenterTxtShow(true,"发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
-        View view = Util.inflateView(activity, R.layout.headview_findfriend, null);
+        View view = Util.inflateView(R.layout.headview_findfriend, null);
         item_wx = ButterKnife.findById(view, R.id.item_wx);
         item_wx.setImg(R.mipmap.wechat);
         item_wx.setTitle("邀请微信好友");

@@ -33,7 +33,7 @@ public class SystemNoticeAdapter extends CommonBaseAdapter<SystemNoticeData.Syst
         final SystemNoticeData.SystemNoticeItem item = list.get(position);
         ViewHolder holder;
         if (convertView==null){
-            convertView= Util.inflateView(activity, R.layout.item_system_notice,null);
+            convertView = Util.inflateView(R.layout.item_system_notice, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

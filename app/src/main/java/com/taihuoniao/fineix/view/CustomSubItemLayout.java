@@ -38,7 +38,7 @@ public class CustomSubItemLayout extends RelativeLayout {
     }
 
     private void inflatelayout(Context context){
-        View view = Util.inflateView(context, R.layout.custom_subitem_layout, this);
+        View view = Util.inflateView(R.layout.custom_subitem_layout, this);
         rl_item_box = (RelativeLayout) view.findViewById(R.id.rl_item_box);
         tv_title = (TextView) view.findViewById(R.id.tv_title);
         tv_subtitle = (TextView) view.findViewById(R.id.tv_subtitle);

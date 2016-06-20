@@ -32,7 +32,7 @@ public class PrivateMessageListAdapter extends CommonBaseAdapter<PrivateMessageL
         final PrivateMessageListData.RowItem item = list.get(position);
         ViewHolder holder;
         if (convertView==null){
-            convertView= Util.inflateView(activity, R.layout.item_message_list,null);
+            convertView = Util.inflateView(R.layout.item_message_list, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

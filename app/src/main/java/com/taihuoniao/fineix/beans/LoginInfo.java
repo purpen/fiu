@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.beans;
 
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.taihuoniao.fineix.main.MainApplication;
@@ -15,8 +14,6 @@ import java.util.ArrayList;
  * Created by android on 2016/1/20.
  */
 public class LoginInfo implements Serializable {
-    private static SharedPreferences sp;
-    public static SharedPreferences.Editor editor;
     private long _id;
     private String message;
     private String account;
@@ -49,15 +46,6 @@ public class LoginInfo implements Serializable {
             instance=new LoginInfo();
         return instance;
     }
-
-    //初始化于Application onCreate()中执行
-//    public static void init(Context context) {
-//        ourInstance = new LoginInfo();
-//        sp = context.getSharedPreferences(DataConstants.USERDATA_SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-//        editor = sp.edit();
-//
-//    }
-
     public static String getHeadPicUrl() {
         if (isUserLogin()) {
             String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
@@ -194,11 +182,6 @@ public class LoginInfo implements Serializable {
     public void setFirst_login(int first_login) {
         this.first_login = first_login;
     }
-
-    public String getSuccess() {
-        return sp.getString("isLogin", "");
-    }
-
 
     public String getMessage() {
         return message;

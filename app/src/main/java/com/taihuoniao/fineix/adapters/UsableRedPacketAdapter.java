@@ -29,7 +29,7 @@ public class UsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.RedP
         final RedPacketData.RedPacketItem item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(activity, R.layout.account_redbag_untimeout, null);
+            convertView = Util.inflateView(R.layout.account_redbag_untimeout, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

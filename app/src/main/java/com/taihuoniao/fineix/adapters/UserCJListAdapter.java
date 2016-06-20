@@ -53,7 +53,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         final SceneListBean item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(activity, R.layout.item_scenelist, null);
+            convertView = Util.inflateView(R.layout.item_scenelist, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

@@ -39,7 +39,7 @@
         android:layout_marginLeft="@dimen/dp10"
         android:textSize="@dimen/sp14"
         android:lineSpacingMultiplier="1.1"
-        android:gravity="center"
+        android:gravity="left|center"
         android:layout_alignTop="@+id/iv"
         android:background="@drawable/msg_from"
         android:paddingLeft="@dimen/dp10"

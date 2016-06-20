@@ -52,7 +52,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
     }
 
     private void initView(Context context){
-        View view = Util.inflateView(context, R.layout.share_layout, this);
+        View view = Util.inflateView(R.layout.share_layout, this);
         GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
         View tv_cancel = view.findViewById(R.id.tv_cancel);
         int[] image={R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.sina,R.mipmap.qqzone};

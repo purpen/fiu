@@ -156,7 +156,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     private View initPopView(int layout, int resId, List<String> list) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         View tv_cancel_select = view.findViewById(R.id.tv_cancel_select);
         View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
@@ -170,7 +170,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     private View initAddressPopView(int layout, int resId, List<String> list) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         View tv_cancel_select = view.findViewById(R.id.tv_cancel_select);
         View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
@@ -184,7 +184,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     private View initPopView(int layout,String title) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         ((TextView)view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
@@ -258,7 +258,7 @@ public class EditUserInfoActivity extends BaseActivity {
     }
 
     private View initPopView(int layout, int resId) {
-        View view = Util.inflateView(this, layout, null);
+        View view = Util.inflateView(activity, layout, null);
         View tv_cancel_select = view.findViewById(R.id.tv_cancel_select);
         View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);

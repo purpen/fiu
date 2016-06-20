@@ -40,7 +40,7 @@ public class UserQJListAdapter extends CommonBaseAdapter<QingJingListBean.QingJi
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView==null){
-            convertView= Util.inflateView(activity, R.layout.item_grid_qj,null);
+            convertView = Util.inflateView(R.layout.item_grid_qj, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

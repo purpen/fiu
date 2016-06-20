@@ -85,7 +85,7 @@ public class Util {
 		Toast result = new Toast(MainApplication.getContext());
 		result.setGravity(Gravity.CENTER,0,0);
 		result.setDuration(Toast.LENGTH_SHORT);
-		View v = inflateView(MainApplication.getContext(),R.layout.transient_notification, null);
+		View v = inflateView(R.layout.transient_notification, null);
 		TextView tv = (TextView)v.findViewById(R.id.message);
 		tv.setText(content);
 		result.setView(v);
@@ -96,7 +96,7 @@ public class Util {
 		Toast result = new Toast(context);
 		result.setGravity(Gravity.CENTER,0,0);
 		result.setDuration(Toast.LENGTH_SHORT);
-		View v = inflateView(context, R.layout.transient_notification, null);
+		View v = inflateView(R.layout.transient_notification, null);
 		TextView tv = (TextView)v.findViewById(R.id.message);
 		tv.setText(content);
 		result.setView(v);
@@ -134,9 +134,16 @@ public class Util {
 		wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.heightPixels;
 	}
-	public static View inflateView(Context context,int resourceId,ViewGroup root){
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService
-			      (Context.LAYOUT_INFLATER_SERVICE);
+
+	public static View inflateView(int resourceId, ViewGroup root) {
+		LayoutInflater inflater = (LayoutInflater) MainApplication.getContext().getSystemService
+				(Context.LAYOUT_INFLATER_SERVICE);
+		return inflater.inflate(resourceId, root);
+	}
+
+	public static View inflateView(Activity activity, int resourceId, ViewGroup root) {
+		LayoutInflater inflater = (LayoutInflater) activity.getSystemService
+				(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(resourceId,root);
 	}
 

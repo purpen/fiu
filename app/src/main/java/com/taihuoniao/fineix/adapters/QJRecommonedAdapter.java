@@ -28,7 +28,7 @@ public class QJRecommonedAdapter extends CommonBaseAdapter<QingJingItem> {
         QingJingItem item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView= Util.inflateView(activity,R.layout.item_qj_layout,null);
+            convertView = Util.inflateView(R.layout.item_qj_layout, null);
             holder = new ViewHolder(convertView);
             holder.iv=(ImageView) convertView.findViewById(R.id.iv);
             holder.tv_desc = (TextView) convertView

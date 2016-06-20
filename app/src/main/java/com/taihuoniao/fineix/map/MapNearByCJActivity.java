@@ -271,7 +271,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
     }
 
     private void showInfoWindow(LatLng ll, SceneListBean item) {
-        View view = Util.inflateView(activity, R.layout.info_window_layout, null);
+        View view = Util.inflateView(R.layout.info_window_layout, null);
         LogUtil.e(TAG,item.getCover_url());
         ImageLoader.getInstance().displayImage(item.getCover_url(), ((ImageView) view.findViewById(R.id.iv)), options);
         ((TextView) view.findViewById(R.id.tv_desc)).setText(item.getScene_title());

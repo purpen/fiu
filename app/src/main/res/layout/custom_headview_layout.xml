@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@android:color/white">
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white">
 
     <ImageButton
         android:id="@+id/head_goback"
@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         android:background="@drawable/selector_fff_eee"
         android:padding="@dimen/dp16"
-        android:src="@mipmap/back_black"/>
+        android:src="@mipmap/back_black" />
 
     <ImageButton
         android:id="@+id/iv_left"
@@ -20,8 +20,7 @@
         android:layout_centerVertical="true"
         android:background="@drawable/selector_fff_eee"
         android:padding="@dimen/dp16"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_search"
@@ -30,8 +29,7 @@
         android:layout_centerInParent="true"
         android:layout_toRightOf="@+id/head_goback"
         android:background="@drawable/search_radius_border"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/et_search"
@@ -45,8 +43,7 @@
             android:paddingLeft="@dimen/dp10"
             android:singleLine="true"
             android:textColorHint="@color/color_999"
-            android:textSize="@dimen/sp14"
-            />
+            android:textSize="@dimen/sp14" />
 
         <ImageButton
             android:id="@+id/ib_search"
@@ -56,8 +53,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp16"
             android:background="@null"
-            android:src="@mipmap/clear"
-            />
+            android:src="@mipmap/clear" />
     </RelativeLayout>
 
     <TextView
@@ -70,15 +66,7 @@
         android:singleLine="true"
         android:textColor="@color/color_333"
         android:textSize="@dimen/sp16"
-        android:visibility="gone"/>
-
-    <android.support.v7.widget.SearchView
-        android:id="@+id/sv_head_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_center_logo"
@@ -86,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@mipmap/head_logo"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rl_head_shop"
@@ -97,8 +85,7 @@
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <ImageButton
             android:id="@+id/head_view_shop"
@@ -109,8 +96,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:padding="@dimen/dp16"
-            android:src="@mipmap/ic_launcher"
-            />
+            android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/tv_tip_num"
@@ -126,19 +112,19 @@
             android:text="99+"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp10"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </RelativeLayout>
+
     <ImageButton
         android:id="@+id/ib_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/selector_fff_eee"
-        android:src="@mipmap/icon_more"
-        android:padding="@dimen/dp16"
         android:layout_alignParentRight="true"
-        android:visibility="gone"
-        />
+        android:background="@drawable/selector_fff_eee"
+        android:padding="@dimen/dp16"
+        android:src="@mipmap/icon_more"
+        android:visibility="gone" />
+
     <ImageButton
         android:id="@+id/iv_head_search"
         android:layout_width="wrap_content"
@@ -150,28 +136,26 @@
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
         android:src="@mipmap/ic_launcher"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 
     <TextView
         android:id="@+id/tv_head_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:drawablePadding="@dimen/dp5"
         android:layout_alignParentRight="true"
         android:background="@drawable/selector_fff_eee"
+        android:drawablePadding="@dimen/dp5"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
         android:textColor="@color/color_333"
         android:textSize="@dimen/sp14"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_ddd"/>
+        android:background="@color/color_ddd" />
 </RelativeLayout>
