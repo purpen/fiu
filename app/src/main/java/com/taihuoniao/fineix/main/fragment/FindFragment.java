@@ -318,6 +318,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                                     try {
                                         Thread.sleep(100);
                                     } catch (Exception e) {
+                                        e.printStackTrace();
                                     } finally {
                                         top = absoluteLayout.getTop();
                                         bottom = absoluteLayout.getBottom();

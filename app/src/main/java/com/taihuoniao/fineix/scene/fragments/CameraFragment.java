@@ -140,7 +140,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                     try {
                         cameraInst.startPreview();
                     } catch (Throwable e) {
-
+                        e.printStackTrace();
                     }
                 }
                 break;
@@ -531,6 +531,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             try {
                 croppedImage = decoder.decodeRegion(rect, new BitmapFactory.Options());
             } catch (IllegalArgumentException e) {
+                e.printStackTrace();
             }
         } catch (Throwable e) {
             e.printStackTrace();

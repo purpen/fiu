@@ -400,6 +400,7 @@ public class StringUtils {
         try {
             return Integer.parseInt(str);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return defValue;
     }
@@ -426,6 +427,7 @@ public class StringUtils {
         try {
             return Long.parseLong(obj);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -440,6 +442,7 @@ public class StringUtils {
         try {
             return Boolean.parseBoolean(b);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -474,6 +477,7 @@ public class StringUtils {
                 read.close();
                 is.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return res.toString();

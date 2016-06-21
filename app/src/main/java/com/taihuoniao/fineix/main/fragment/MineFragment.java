@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
+import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
@@ -57,13 +58,16 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MineFragment extends MyBaseFragment {
-    public interface onMessageCountChangeListener{
+    public interface onMessageCountChangeListener {
         void onMessageCountChange(int count);
     }
+
     private static onMessageCountChangeListener listener;
-    public static void setOnMessageCountChangeListener(onMessageCountChangeListener listener){
-        MineFragment.listener=listener;
+
+    public static void setOnMessageCountChangeListener(onMessageCountChangeListener listener) {
+        MineFragment.listener = listener;
     }
+
     @Bind(R.id.gv)
     CustomGridView gv;
     @Bind(R.id.iv_detail)
@@ -115,7 +119,7 @@ public class MineFragment extends MyBaseFragment {
     private boolean isInitLoad = true;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
-    public int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
+    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_collects, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
@@ -135,7 +139,7 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             loadData();
         }
     }
@@ -188,7 +192,7 @@ public class MineFragment extends MyBaseFragment {
         ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&&dialog!=null) dialog.show();
+                if (!activity.isFinishing() && dialog != null) dialog.show();
             }
 
             @Override
@@ -196,7 +200,7 @@ public class MineFragment extends MyBaseFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
+                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
@@ -234,7 +238,7 @@ public class MineFragment extends MyBaseFragment {
             if (isInitLoad) {
                 isInitLoad = false;
             } else {
-                if (((MainActivity)activity).getVisibleFragment() instanceof MineFragment){
+                if (((MainActivity) activity).getVisibleFragment() instanceof MineFragment) {
                     loadData();
                 }
             }
@@ -285,7 +289,8 @@ public class MineFragment extends MyBaseFragment {
                             break;
                         case 1:
                             gvList.get(i).count = user.counter.message_total_count;
-                            if (listener!=null) listener.onMessageCountChange(user.counter.message_total_count);
+                            if (listener != null)
+                                listener.onMessageCountChange(user.counter.message_total_count);
                             break;
                     }
 
@@ -304,34 +309,34 @@ public class MineFragment extends MyBaseFragment {
 //            ll_box.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
 
-        if (user.identify.is_expert==1){
+        if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             riv_auth.setVisibility(View.GONE);
         }
 
         if (TextUtils.isEmpty(user.summary)) {
-            tv_real.setText(String.format(" | %s","还没有个性签名！"));
+            tv_real.setText(String.format(" | %s", "还没有个性签名！"));
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }
 
-        if (!TextUtils.isEmpty(user.expert_label)){
+        if (!TextUtils.isEmpty(user.expert_label)) {
             iv_label.setText(String.format("%s |", user.expert_label));
-        }else {
+        } else {
             iv_label.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(user.expert_info)){
+        if (!TextUtils.isEmpty(user.expert_info)) {
             tv_auth.setText(user.expert_info);
-        }else {
+        } else {
             tv_auth.setVisibility(View.GONE);
         }
 
 
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
-        }else {
+        } else {
             tv_label.setVisibility(View.GONE);
         }
 
@@ -400,10 +405,10 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(new Intent(activity, FindFriendsActivity.class));
                 break;
             case R.id.item_about_us:
-                String url=NetworkConstance.BASE_URL+"/view/about";
+                String url = NetworkConstance.BASE_URL + "/view/about";
                 intent = new Intent(activity, AboutUsActivity.class);
-                intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
-                intent.putExtra(AboutUsActivity.class.getName(),"关于Fiu");
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
+                intent.putExtra(AboutUsActivity.class.getName(), "关于Fiu");
                 startActivity(intent);
                 break;
             case R.id.item_feedback:
@@ -438,28 +443,31 @@ public class MineFragment extends MyBaseFragment {
                         intent.putExtra("user", user);
                         startActivity(intent);
                         break;
-                    case 4:
-                        String url= NetworkConstance.BASE_URL+"/view/fiu_point?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
-                        intent = new Intent(activity, AboutUsActivity.class);
-                        intent.putExtra(AboutUsActivity.class.getSimpleName(),url);
-                        intent.putExtra(AboutUsActivity.class.getName(),"积分");
-                        startActivity(intent);
-                        break;
-                    case 8:
-                        startActivity(new Intent(activity, SystemSettingsActivity.class));
-                        break;
-                    case 7:
-                        String url1= NetworkConstance.BASE_URL+"/view/fiu_service_term?uuid="+MainApplication.uuid+"&from_to=2&app_type=2";
-                        intent = new Intent(activity, AboutUsActivity.class);
-                        intent.putExtra(AboutUsActivity.class.getSimpleName(),url1);
-                        intent.putExtra(AboutUsActivity.class.getName(),"服务条款");
-                        startActivity(intent);
+                    case 4: //收藏
+                        startActivity(new Intent(activity, CollectionsActivity.class));
                         break;
                     case 5:
-                        startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));
+                        String url = NetworkConstance.BASE_URL + "/view/fiu_point?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                        intent = new Intent(activity, AboutUsActivity.class);
+                        intent.putExtra(AboutUsActivity.class.getSimpleName(), url);
+                        intent.putExtra(AboutUsActivity.class.getName(), "积分");
+                        startActivity(intent);
                         break;
                     case 6:
+                        startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));
+                        break;
+                    case 7:
                         startActivity(new Intent(activity, SelectAddressActivity.class));
+                        break;
+                    case 8:
+                        String url1 = NetworkConstance.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                        intent = new Intent(activity, AboutUsActivity.class);
+                        intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
+                        intent.putExtra(AboutUsActivity.class.getName(), "服务条款");
+                        startActivity(intent);
+                        break;
+                    case 9:
+                        startActivity(new Intent(activity, SystemSettingsActivity.class));
                         break;
                 }
             }

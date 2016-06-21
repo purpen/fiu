@@ -117,7 +117,6 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
                 List<OrderDetails> ordersList = new ArrayList<OrderDetails>();
-                ;
 //                Message msg = new Message();
 //                msg.what = DataConstants.PARSER_ORDER_DETAILS;
                 try {

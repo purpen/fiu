@@ -30,29 +30,30 @@ import butterknife.Bind;
 
 /**
  * @author lilin
- * created at 2016/5/5 18:12
+ *         created at 2016/6/21 15:43
  */
-public class OrderQJActivity  extends BaseActivity{
+public class CollectionsActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.pull_gv)
     PullToRefreshGridView pull_gv;
-    private int curPage=1;
-    private boolean isLoadMore=false;
-    public static final String PAGE_SIZE="10";
-    public static final String PAGE_TYPE="scene";
-    public static final String PAGE_EVENT="subscription";
-    private List<QingJingListBean.QingJingItem> mList=new ArrayList<>();
+    private int curPage = 1;
+    private boolean isLoadMore = false;
+    public static final String PAGE_SIZE = "10";
+    public static final String PAGE_TYPE = "scene";
+    public static final String PAGE_EVENT = "subscription";
+    private List<QingJingListBean.QingJingItem> mList = new ArrayList<>();
     private WaittingDialog dialog;
     private OrderedQJAdapter adapter;
-    public OrderQJActivity(){
+
+    public CollectionsActivity() {
         super(R.layout.activity_order_qj);
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"订阅的情景");
-        dialog=new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, "收藏");
+        dialog = new WaittingDialog(this);
         pull_gv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 
@@ -74,7 +75,7 @@ public class OrderQJActivity  extends BaseActivity{
         pull_gv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-                isLoadMore=true;
+                isLoadMore = true;
                 requestNet();
             }
         });
@@ -82,34 +83,34 @@ public class OrderQJActivity  extends BaseActivity{
         pull_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent=new Intent(activity, QingjingDetailActivity.class);
-                intent.putExtra("id",mList.get(i).get_id());
+                Intent intent = new Intent(activity, QingjingDetailActivity.class);
+                intent.putExtra("id", mList.get(i).get_id());
                 startActivity(intent);
             }
         });
     }
 
-    private void resetData(){
-        curPage=1;
-        isLoadMore=false;
+    private void resetData() {
+        curPage = 1;
+        isLoadMore = false;
         mList.clear();
     }
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.commonList(String.valueOf(curPage),PAGE_SIZE,null, String.valueOf(LoginInfo.getUserId()),PAGE_TYPE,PAGE_EVENT,new RequestCallBack<String>(){
+        ClientDiscoverAPI.commonList(String.valueOf(curPage), PAGE_SIZE, null, String.valueOf(LoginInfo.getUserId()), PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (curPage==1) dialog.show();
+                if (curPage == 1) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-                if (responseInfo==null) return;
+                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 QingJingListBean listBean = JsonUtil.fromJson(responseInfo.result, QingJingListBean.class);
-                if (listBean.isSuccess()){
+                if (listBean.isSuccess()) {
                     List list = listBean.getData().getRows();
                     refreshUI(list);
                     return;
@@ -120,7 +121,7 @@ public class OrderQJActivity  extends BaseActivity{
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                if(TextUtils.isEmpty(s)) return;
+                if (TextUtils.isEmpty(s)) return;
                 Util.makeToast(s);
             }
         });
@@ -128,8 +129,8 @@ public class OrderQJActivity  extends BaseActivity{
 
     @Override
     protected void refreshUI(List list) {
-        if (list==null) return;
-        if (list.size()==0){
+        if (list == null) return;
+        if (list.size() == 0) {
 //            if (isLoadMore){
 //                Util.makeToast("没有更多数据哦！");
 //            }else {
@@ -140,16 +141,16 @@ public class OrderQJActivity  extends BaseActivity{
 
         curPage++;
 
-        if (adapter==null){
+        if (adapter == null) {
             mList.addAll(list);
-            adapter=new OrderedQJAdapter(mList,activity);
+            adapter = new OrderedQJAdapter(mList, activity);
             pull_gv.setAdapter(adapter);
-        }else {
+        } else {
             mList.addAll(list);
             adapter.notifyDataSetChanged();
         }
 
-        if (pull_gv !=null)
+        if (pull_gv != null)
             pull_gv.onRefreshComplete();
     }
 

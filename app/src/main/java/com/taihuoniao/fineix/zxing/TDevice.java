@@ -379,7 +379,7 @@ public class TDevice {
                             Uri.parse(otherMarketUri));
                     context.startActivity(intent);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         }

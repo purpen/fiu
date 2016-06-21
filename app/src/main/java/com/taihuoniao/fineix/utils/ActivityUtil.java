@@ -135,6 +135,7 @@ public class ActivityUtil {
 		try {
 			finishAllActivity();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	//判读程序是否在运行

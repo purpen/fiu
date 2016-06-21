@@ -306,6 +306,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                                     try {
                                         Thread.sleep(100);
                                     } catch (Exception e) {
+                                        e.printStackTrace();
                                     } finally {
                                         top = absoluteLayout.getTop();
                                         bottom = absoluteLayout.getBottom();

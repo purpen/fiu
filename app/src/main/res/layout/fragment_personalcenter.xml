@@ -168,7 +168,8 @@
 
                 <View
                     android:layout_width="@dimen/dp5"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/ll_qj"
@@ -177,7 +178,8 @@
                     android:layout_weight="1"
                     android:background="@color/color_222"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_qj"
