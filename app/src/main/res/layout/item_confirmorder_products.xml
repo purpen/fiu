@@ -30,8 +30,7 @@
             android:layout_toRightOf="@id/activity_confirmorder_productimg"
             android:maxLines="2"
             android:minLines="2"
-            android:text="wow 男人的口袋工具箱 创意螺丝刀等等"
-            android:textColor="#000000"
+             android:textColor="#000000"
             android:textSize="13sp"/>
 
         <LinearLayout

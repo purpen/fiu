@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
 
@@ -165,11 +166,30 @@
                             android:orientation="horizontal"
                             android:paddingLeft="15dp">
 
-                            <ImageView
-                                android:id="@+id/activity_scenedetails_userhead"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                />
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                >
+
+                                <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                                    android:id="@+id/activity_scenedetails_userhead"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    app:riv_border_color="#eeeeee"
+                                    app:riv_border_width="1dp"
+                                    app:riv_corner_radius="@dimen/dp100" />
+
+                                <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                                    android:id="@+id/riv_auth"
+                                    android:layout_width="@dimen/dp10"
+                                    android:layout_height="@dimen/dp10"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:scaleType="fitXY"
+                                    android:src="@mipmap/v"
+                                    android:visibility="gone"
+                                    app:riv_corner_radius="@dimen/dp100" />
+                            </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"

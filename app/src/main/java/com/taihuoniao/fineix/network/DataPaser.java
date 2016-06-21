@@ -743,8 +743,10 @@ public class DataPaser {
                             JSONObject us = job.getJSONObject("user_info");
                             SceneListBean.User user = new SceneListBean.User();
                             user.setAccount(us.optString("account"));
-                            user.setLabel(us.optString("label"));
-//                            user.setIs_expert(us.optString("is_expert"));
+//                            user.setLabel(us.optString("label"));
+                            user.is_expert = us.optInt("is_expert");
+                            user.expert_info = us.optString("expert_info");
+                            user.expert_label = us.optString("expert_label");
                             user.setUser_id(us.optString("user_id"));
                             user.setSummary(us.optString("summary"));
                             user.setNickname(us.optString("nickname"));
@@ -762,8 +764,8 @@ public class DataPaser {
                                 products.setId(ob.optString("id"));
                                 products.setTitle(ob.optString("title"));
                                 products.setPrice(ob.optString("price"));
-                                products.setX(ob.optString("x"));
-                                products.setY(ob.optString("y"));
+                                products.setX(ob.optDouble("x"));
+                                products.setY(ob.optDouble("y"));
                                 productsList.add(products);
                             }
                             sceneListBean.setProductsList(productsList);
@@ -1194,7 +1196,7 @@ public class DataPaser {
         ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<>>", responseInfo.result);
+                Log.e("<<<品牌列表", responseInfo.result);
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.BRAND_LIST;

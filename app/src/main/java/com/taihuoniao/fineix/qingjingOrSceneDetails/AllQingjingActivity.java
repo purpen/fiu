@@ -88,7 +88,8 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                     getCurrentLocation();
                     return;
                 }
-                progressBar.setVisibility(View.VISIBLE);
+//                progressBar.setVisibility(View.VISIBLE);
+                dialog.show();
                 page = 1;
                 getQJList(page + "", 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
             }
@@ -131,7 +132,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     }
 
     private void getQJList(String pa, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(pa, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(pa, sort, fine, dis, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

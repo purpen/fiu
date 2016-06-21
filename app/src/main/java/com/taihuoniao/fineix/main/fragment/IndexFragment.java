@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,8 +34,8 @@ import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, AbsListView.OnScrollListener, View.OnTouchListener {
-    public static IndexFragment instance;
+public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, View.OnTouchListener {
+    //    public static IndexFragment instance;
     private View fragment_view;
     private RelativeLayout titlelayout;
     private ImageView searchImg;
@@ -57,7 +56,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     protected void requestNet() {
-        instance = IndexFragment.this;
+//        instance = IndexFragment.this;
+        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
     }
 
     private int getStatusBarHeight() {
@@ -68,15 +68,16 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         }
         return result;
     }
+
     //外界调用刷新场景列表
-    public void refreshSceneList(){
+    public void refreshSceneList() {
         currentPage = 1;
 //        if (location == null) {
 //            getCurrentLocation();
 //            return;
 //        }
         dialog.show();
-        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
+        requestNet();
     }
 
     @Override
@@ -97,7 +98,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                    return;
 //                }
                 dialog.show();
-                DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
+                requestNet();
+//                DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
             }
         });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -105,7 +107,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             public void onLastItemVisible() {
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
-                DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "",1+"", distance + "", null, null, handler);
+                requestNet();
+//                DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
             }
         });
         sceneList = new ArrayList<>();
@@ -116,7 +119,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         listView.setOnTouchListener(this);
 //        getCurrentLocation();
         dialog.show();
-        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
+//        DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
     }
 
 
@@ -203,13 +206,11 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
 
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_index_subs:
-//                startActivity(new Intent(getActivity(), VideoActivity.class));
+//                startActivity(new Intent(getActivity(), AppleWatchActivity.class));
                 if (!LoginInfo.isUserLogin()) {
 //                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
@@ -226,20 +227,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         }
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-//        Log.e("<<<滑动状态", "state=" + scrollState);
-//        if (scrollState == SCROLL_STATE_FLING) {
-//            //划过多少个整个的item
-//
-//        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//        Log.e("<<<首页滑动",
-//                "scrollY=" + getScrollY());
-    }
 
 
     public int getScrollY() {
@@ -256,7 +243,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (listView == null || listView.getChildAt(0) == null) {
+        if (listView == null || listView.getChildAt(0) == null || sceneList.size() <= 1) {
             return false;
         }
         switch (event.getAction()) {
@@ -279,17 +266,33 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 //firstvisibleitem的偏移量
                 int s = getScrollY() % (listView.getChildAt(0).getHeight());
                 if (nowP.y < startP.y && s > 0.2 * listView.getChildAt(0).getHeight()) {
-                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+//                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+//                    listView.smoothScrollToPositionFromTop();
+                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
                     cancelChenjin();
                     anim(listView.getFirstVisiblePosition() + 1);
                 } else if (nowP.y < startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
-                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+//                    listView.smoothScrollByOffset(listView.getFirstVisiblePosition());
+//                    if (is16To9()) {
+//                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+//                    } else {
+                        listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
+                                -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+//                    }
                 } else if (nowP.y > startP.y && s < 0.8 * listView.getChildAt(0).getHeight() && s > 0) {
-                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+//                    if (is16To9()) {
+//                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
+//                    } else {
+                        listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
+                                -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+//                    }
                     chenjin();
                     anim(listView.getFirstVisiblePosition());
                 } else if (nowP.y > startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
-                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+//                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
+                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
                 }
                 nowP = null;
                 startP = null;
@@ -326,6 +329,10 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         intent.putExtra("index", 2);
         intent.setAction(DataConstants.BroadShopCart);
         getActivity().sendBroadcast(intent);
+    }
+
+    private boolean is16To9() {
+        return MainApplication.getContext().getScreenHeight() * 9 == MainApplication.getContext().getScreenWidth() * 16;
     }
 
     private PointF startP, nowP;

@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,7 +33,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
@@ -66,6 +66,7 @@ import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -97,7 +98,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView locationTv;
     private TextView timeTv;
     private LinearLayout leftLabelLinear;
-    private ImageView userHead;
+    private RoundedImageView userHead;
+    private RoundedImageView vImg;
     private TextView userName;
     private TextView userInfo;
     //    private LinearLayout bottomLinear;
@@ -181,7 +183,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         locationTv = (TextView) findViewById(R.id.activity_scenedetails_location);
         timeTv = (TextView) findViewById(R.id.activity_scenedetails_time);
         leftLabelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_left_label);
-        userHead = (ImageView) findViewById(R.id.activity_scenedetails_userhead);
+        userHead = (RoundedImageView) findViewById(R.id.activity_scenedetails_userhead);
+        vImg = (RoundedImageView) findViewById(R.id.riv_auth);
         userName = (TextView) findViewById(R.id.activity_scenedetails_username);
         userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
 //        bottomLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_bottomlinear);
@@ -279,7 +282,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
         options750_1334 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -508,7 +511,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         netUserInfo = netSceneDetails.getData().getUser_info();
                         ImageLoader.getInstance().displayImage(netSceneDetails.getData().getUser_info().getAvatar_url(), userHead, options);
                         userName.setText(netSceneDetails.getData().getUser_info().getNickname());
-                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
+                        if(netSceneDetails.getData().getUser_info().getIs_expert()==0){
+                            vImg.setVisibility(View.GONE);
+                            userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
+                        }else{
+                            vImg.setVisibility(View.VISIBLE);
+                            userInfo.setText(netSceneDetails.getData().getUser_info().getExpert_label()+" | "+netSceneDetails.getData().getUser_info().getExpert_info());
+                        }
+//                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
                         loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
                         moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
                         desTv.setText(netSceneDetails.getData().getDes());
@@ -668,17 +678,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
-        if ("1".equals(isSpert) && summary == null) {
-            userInfo.setText("达人");
-        } else if ("1".equals(isSpert)) {
-            userInfo.setText(String.format("%s | %s", "达人", summary));
-        } else if (summary == null) {
-            userInfo.setText("");
-        } else {
-            userInfo.setText(summary);
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -923,8 +922,27 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
         if (t <= titleLinear.getMeasuredHeight()) {
+            for (int i = 0; i < container.getChildCount(); i++) {
+                View view = container.getChildAt(i);
+                if (view instanceof LabelView) {
+                    LabelView labelView = (LabelView) view;
+                    VisibleAnimListener visibleAnimListener = new VisibleAnimListener();
+                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 1).setDuration(500);
+                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 1).setDuration(500);
+                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 1).setDuration(500);
+                    visibleAnim1.addListener(visibleAnimListener);
+                    visibleAnim2.addListener(visibleAnimListener);
+                    visibleAnim3.addListener(visibleAnimListener);
+                    if (animFlag == 0) {
+                        visibleAnim1.start();
+                        visibleAnim2.start();
+                        visibleAnim3.start();
+                    }
+                }
+            }
             imgRelative.setTranslationY(t);
         } else if (t >= titleLinear.getMeasuredHeight() && t <= titleLinear.getMeasuredHeight() + (double) imgRelative.getMeasuredHeight() * 3 / 5) {
+
             imgRelative.setTranslationY((float) ((double) titleLinear.getMeasuredHeight() * 2 / 3 + (double) t / 3));
         } else if (t >= titleLinear.getMeasuredHeight() + (double) imgRelative.getMeasuredHeight() * 3 / 5) {
             imgRelative.setTranslationY((float) (-(double) imgRelative.getMeasuredHeight() * 2 / 5 + t));
@@ -943,7 +961,76 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         if (t == 0) {
             titleRelative.setVisibility(View.VISIBLE);
+
+        }
+        if (t >= titleLinear.getMeasuredHeight()) {
+            for (int i = 0; i < container.getChildCount(); i++) {
+                View view = container.getChildAt(i);
+                if (view instanceof LabelView) {
+                    LabelView labelView = (LabelView) view;
+                    GoneAnimListener visibleAnimListener = new GoneAnimListener();
+                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 0).setDuration(500);
+                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 0).setDuration(500);
+                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 0).setDuration(500);
+                    visibleAnim1.addListener(visibleAnimListener);
+                    visibleAnim2.addListener(visibleAnimListener);
+                    visibleAnim3.addListener(visibleAnimListener);
+                    if (animFlag == 2) {
+                        visibleAnim1.start();
+                        visibleAnim2.start();
+                        visibleAnim3.start();
+                    }
+                }
+            }
         }
 //        Log.e("<<<滑动", imgRelative.getBottom() + "," + scrollView.getTop() + "," + t + "," + scrollView.getScrollY());
+    }
+
+    private int animFlag = 2;
+
+    private class VisibleAnimListener implements Animator.AnimatorListener {
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+//            animFlag = 1;
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            animFlag = 2;
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+    }
+
+    private class GoneAnimListener implements Animator.AnimatorListener {
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+//            animFlag = 3;
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            animFlag = 0;
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
     }
 }

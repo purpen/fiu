@@ -82,10 +82,16 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     TextView brandTitle;
     @Bind(R.id.activity_goods_detail_product_des)
     TextView productDes;
+    @Bind(R.id.activity_goods_detail_suoshuchangjing_linear)
+    LinearLayout changjingLinear;
     @Bind(R.id.activity_goods_detail_suoshuchangjing_recycler)
     RecyclerView changjingRecycler;
     @Bind(R.id.activity_goods_detail_recommend_recycler)
     RecyclerView recommendRecycler;
+    @Bind(R.id.activity_goods_detail_shoucang)
+    LinearLayout shoucangLinear;
+    @Bind(R.id.activity_goods_detail_fenxiang)
+    LinearLayout fenxiangLinear;
     @Bind(R.id.activity_goods_detail_buy_now)
     Button buyNowBtn;
     //判断产品是自营的还是第三方商城的标识
@@ -173,6 +179,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataConstants.BroadDeleteScene);
         registerReceiver(goodDetailReceiver, intentFilter);
+        shoucangLinear.setOnClickListener(this);
+        fenxiangLinear.setOnClickListener(this);
     }
 
     @Override
@@ -188,6 +196,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_goods_detail_fenxiang:
+                ToastUtils.showError("分享");
+                break;
+            case R.id.activity_goods_detail_shoucang:
+                ToastUtils.showError("收藏");
+                break;
             case R.id.activity_goods_detail_brand_relative:
                 if (netGood == null) {
                     dialog.show();
@@ -275,11 +289,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                             changjingList.clear();
                         }
                         changjingList.addAll(netProductSceneBean.getData().getRows());
+                        if (changjingList.size() <= 0) {
+                            changjingLinear.setVisibility(View.GONE);
+                        } else {
+                            changjingLinear.setVisibility(View.VISIBLE);
+                        }
                         changjingAdaper.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netProductSceneBean.getMessage());
-//                        dialog.showErrorWithStatus(netProductSceneBean.getMessage());
-//                        Toast.makeText(GoodsDetailActivity.this, netProductSceneBean.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case DataConstants.GOODS_DETAIL:
@@ -341,6 +356,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
             }
         }
     };
+
     private void addLabelToLinear(final List<String> tagsTitleList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(GoodsDetailActivity.this, R.layout.view_horizontal_label_item, null);

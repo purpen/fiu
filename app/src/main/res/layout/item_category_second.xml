@@ -16,7 +16,6 @@
         android:gravity="center"
         android:padding="5dp"
         android:singleLine="true"
-        android:text="清晨"
         android:textColor="@color/black333333"
         android:textSize="12sp">
 

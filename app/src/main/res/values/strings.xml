@@ -197,4 +197,8 @@
     <string name="redbag_code">红包码：xxxxx</string>
     <string name="less_money">最低使用限额：99元</string>
     <string name="money">¥</string>
+    <string name="used_labels">使用过的标签</string>
+    <string name="hot_labels">热门标签</string>
+    <string name="all_labels">全部标签</string>
+    <string name="please_select_one">请在情绪、环境、时间、人物中各选一个</string>
 </resources>

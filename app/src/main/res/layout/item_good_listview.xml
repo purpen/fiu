@@ -32,7 +32,6 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:singleLine="true"
-            android:text="大江无人机X350"
             android:textColor="@color/white"
             android:textSize="12sp"
             />
@@ -53,7 +52,6 @@
             android:layout_weight="168"
             android:background="@mipmap/product_right_label"
             android:gravity="center"
-            android:text="￥288"
             android:textColor="@color/white"
             android:textSize="@dimen/sp12"
             />

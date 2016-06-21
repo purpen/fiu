@@ -124,7 +124,7 @@
 
     <FrameLayout
         android:id="@+id/activity_share_frame"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/activity_share_erweima_relative"
         android:layout_marginTop="5dp">
@@ -140,7 +140,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:text="详见的小路"
             android:textColor="@color/white"
             android:textSize="29sp"/>
     </FrameLayout>

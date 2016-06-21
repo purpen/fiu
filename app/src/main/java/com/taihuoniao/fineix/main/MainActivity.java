@@ -30,7 +30,6 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -594,13 +593,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 });
                 if (animFlag == 2) {
                     upAnimator.start();
-                }
-            } else if (intent.hasExtra(SceneDetailActivity.class.getSimpleName())) {
-                if (IndexFragment.instance != null) {
-                    IndexFragment.instance.refreshSceneList();
-                }
-                if (FindFragment.instance != null) {
-                    FindFragment.instance.refreshSceneList();
                 }
             }
         }

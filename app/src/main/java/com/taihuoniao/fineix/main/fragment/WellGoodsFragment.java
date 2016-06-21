@@ -7,8 +7,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
@@ -58,6 +60,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.appleWatchView.AppleWatchView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -77,7 +80,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private ListView listView;
     private ProgressBar progressBar;
     //headerview下的控件
-    private AbsoluteLayout absoluteLayout;
+    private AppleWatchView absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
     private WaittingDialog dialog;
@@ -115,9 +118,17 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         //headerview
         View header = View.inflate(getActivity(), R.layout.header_fragment_wellgoods, null);
         scrollableView = (ScrollableView) header.findViewById(R.id.scrollableView);
-        absoluteLayout = (AbsoluteLayout) header.findViewById(R.id.fragment_wellgoods_absolute);
+        absoluteLayout = (AppleWatchView) header.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
         absoluteLayout.setLayoutParams(lp);
+        absoluteLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                dis(absoluteLayout.getParent());
+                absoluteLayout.onTouchEvent(event);
+                return true;
+            }
+        });
         labelRecycler = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_label_recycler);
         recyclerView = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_recycler);
         listView.addHeaderView(header);
@@ -133,7 +144,12 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         return view;
     }
 
-
+    private void dis(ViewParent viewParent) {
+        viewParent.requestDisallowInterceptTouchEvent(true);
+        if (viewParent.getParent() != null) {
+            dis(viewParent.getParent());
+        }
+    }
     @Override
     protected void requestNet() {
         dialog.show();
@@ -201,7 +217,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //            }
 //        });
 //品牌列表
-        DataPaser.brandList(1, 50, handler);
+        DataPaser.brandList(1, 100, handler);
     }
 
     private int getStatusBarHeight() {
@@ -297,30 +313,13 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     BrandListBean netBrandListBean = (BrandListBean) msg.obj;
                     if (netBrandListBean.isSuccess()) {
                         brandItemList = netBrandListBean.getData().getRows();
-                        thread = new Thread() {
-                            @Override
-                            public void run() {
-                                int top = absoluteLayout.getTop();
-                                int bottom = absoluteLayout.getBottom();
-                                while (bottom - top <= 0) {
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        top = absoluteLayout.getTop();
-                                        bottom = absoluteLayout.getBottom();
-                                    }
-                                }
-                                handler.sendEmptyMessage(-10);
-                            }
-                        };
-                        thread.start();
+                        absoluteLayout.init(getActivity(),null,netBrandListBean);
+//                        absoluteLayout.invalidate();
                     }
                     break;
-                case -10:
-                    addImgToAbsolute(brandItemList);
-                    break;
+//                case -10:
+//                    addImgToAbsolute(brandItemList);
+//                    break;
                 case DataConstants.CJ_HOTLABEL:
 //                    dialog.dismiss();
                     CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
@@ -358,7 +357,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         }
     };
-    private Thread thread;
+//    private Thread thread;
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
@@ -403,9 +402,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onDestroy() {
         //        cancelNet();
-        if (thread != null && thread.isAlive()) {
-            thread.stop();
-        }
+//        if (thread != null && thread.isAlive()) {
+//            thread.stop();
+//        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
@@ -425,80 +424,80 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
      * 数据里应有图片地址，类型，id，
      * 大 51dp 中 33dp 小 21dp
      */
-    private void addImgToAbsolute(List<BrandListBean.BrandItem> list) {
-        if (list == null) {
-            return;
-        }
-        absoluteLayout.removeAllViews();
-        int top = absoluteLayout.getTop();
-        int bottom = absoluteLayout.getBottom();
-        Random random = new Random();
-        List<RandomImg> randomImgs = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            RandomImg randomImg = new RandomImg();
-            randomImg.id = list.get(i).get_id().get$id();
-            randomImg.url = list.get(i).getCover_url();
-            randomImg.type = i % 3 + "";
-            switch (randomImg.type) {
-                case "1":
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-                    break;
-                case "2":
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
-                    break;
-                default:
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
-                    break;
-            }
-            randomImgs.add(randomImg);
-        }
-        for (int i = 0; i < randomImgs.size(); i++) {
-            RandomImg randomImg = randomImgs.get(i);
-
-            whi:
-            for (int k = 0; k < 200; k++) {
-                int x = random.nextInt(MainApplication.getContext().getScreenWidth());
-                int y = random.nextInt(bottom - top) + top;
-                if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
-                        bottom - y < randomImg.radius || y - top < randomImg.radius) {
-                    continue;
-                }
-                for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
-                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
-                    RandomImg randomImg1 = (RandomImg) img1.getTag();
-                    if (randomImg1 == null) {
-                        continue;
-                    }
-                    if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
-                        continue whi;
-                    }
-                }
-                randomImg.x = x;
-                randomImg.y = y;
-                break;
-            }
-            if (randomImg.x == 0 && randomImg.y == 0) {
-                continue;
-            }
-            RoundedImageView img = new RoundedImageView(getActivity());
-            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
-            img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
-                    randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
-            img.setCornerRadiusDimen(R.dimen.dp100);
-            img.setTag(randomImg);
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
-                    intent.putExtra("id", randomImg1.id);
-                    startActivity(intent);
-                }
-            });
-            absoluteLayout.addView(img);
-        }
-    }
+//    private void addImgToAbsolute(List<BrandListBean.BrandItem> list) {
+//        if (list == null) {
+//            return;
+//        }
+//        absoluteLayout.removeAllViews();
+//        int top = absoluteLayout.getTop();
+//        int bottom = absoluteLayout.getBottom();
+//        Random random = new Random();
+//        List<RandomImg> randomImgs = new ArrayList<>();
+//        for (int i = 0; i < list.size(); i++) {
+//            RandomImg randomImg = new RandomImg();
+//            randomImg.id = list.get(i).get_id();
+//            randomImg.url = list.get(i).getCover_url();
+//            randomImg.type = i % 3 + "";
+//            switch (randomImg.type) {
+//                case "1":
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
+//                    break;
+//                case "2":
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
+//                    break;
+//                default:
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+//                    break;
+//            }
+//            randomImgs.add(randomImg);
+//        }
+//        for (int i = 0; i < randomImgs.size(); i++) {
+//            RandomImg randomImg = randomImgs.get(i);
+//
+//            whi:
+//            for (int k = 0; k < 200; k++) {
+//                int x = random.nextInt(MainApplication.getContext().getScreenWidth());
+//                int y = random.nextInt(bottom - top) + top;
+//                if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
+//                        bottom - y < randomImg.radius || y - top < randomImg.radius) {
+//                    continue;
+//                }
+//                for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
+//                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
+//                    RandomImg randomImg1 = (RandomImg) img1.getTag();
+//                    if (randomImg1 == null) {
+//                        continue;
+//                    }
+//                    if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
+//                        continue whi;
+//                    }
+//                }
+//                randomImg.x = x;
+//                randomImg.y = y;
+//                break;
+//            }
+//            if (randomImg.x == 0 && randomImg.y == 0) {
+//                continue;
+//            }
+//            RoundedImageView img = new RoundedImageView(getActivity());
+//            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
+//            img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
+//                    randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
+//            img.setCornerRadiusDimen(R.dimen.dp100);
+//            img.setTag(randomImg);
+//            img.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    RandomImg randomImg1 = (RandomImg) v.getTag();
+//                    Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
+//                    intent.putExtra("id", randomImg1.id);
+//                    startActivity(intent);
+//                }
+//            });
+//            absoluteLayout.addView(img);
+//        }
+//    }
 
     @Override
     public void onClick(View v) {

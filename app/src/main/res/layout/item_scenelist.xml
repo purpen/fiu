@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+<RelativeLayout
+    android:id="@+id/item_scenelist_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <ImageView
         android:id="@+id/item_scenelist_backgroundimg"
         android:layout_width="match_parent"
-        android:layout_height="640dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/default_background_750_1334"
         android:scaleType="centerCrop"/>
 
     <RelativeLayout
@@ -42,7 +45,7 @@
                         android:layout_height="32dp"
                         app:riv_border_color="@color/white"
                         app:riv_border_width="1dp"
-                        app:riv_corner_radius="@dimen/dp100" />
+                        app:riv_corner_radius="@dimen/dp100"/>
 
                     <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                         android:id="@+id/riv_auth"
@@ -53,7 +56,7 @@
                         android:scaleType="fitXY"
                         android:src="@mipmap/v"
                         android:visibility="gone"
-                        app:riv_corner_radius="@dimen/dp100" />
+                        app:riv_corner_radius="@dimen/dp100"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -67,7 +70,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="狗蛋"
                         android:textColor="@color/white"
                         android:textSize="11sp"/>
 
@@ -82,7 +84,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"/>
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
@@ -126,7 +128,7 @@
 
             <FrameLayout
                 android:id="@+id/item_scenelist_frame"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp">
 
@@ -143,7 +145,6 @@
                     android:includeFontPadding="false"
                     android:maxEms="11"
                     android:maxLines="2"
-                    android:text="详见的小路阿三是的分厘卡似的地方浪费空间"
                     android:textColor="@color/white"
                     android:textSize="20sp"/>
             </FrameLayout>
@@ -214,5 +215,9 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/item_scenelist_point_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></RelativeLayout>
 
 </RelativeLayout>
