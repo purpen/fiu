@@ -29,15 +29,6 @@ import butterknife.Bind;
  *         created at 2016/4/18 16:10
  */
 public class UserGuideActivity extends BaseActivity {
-    public interface OnVideoCompleteListener {
-        void execute();
-    }
-
-    private static OnVideoCompleteListener onVideoCompleteListener;
-
-    public static void setOnVideoCompleteListener(OnVideoCompleteListener listener) {
-        UserGuideActivity.onVideoCompleteListener = listener;
-    }
     @Bind(R.id.scrollableView)
     ScrollableView scrollableView;
     @Bind(R.id.iv_welcome)
@@ -82,8 +73,7 @@ public class UserGuideActivity extends BaseActivity {
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
                     if (TextUtils.isEmpty(SPUtil.read(activity, DataConstants.GUIDE_TAG))) {
-//                        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
-                        initGuide();
+                        initVideoRes();
                     } else if (isTaskRoot()) {
                         goMainPage();
                     }
@@ -108,16 +98,17 @@ public class UserGuideActivity extends BaseActivity {
         String uri = "android.resource://" + getPackageName() + "/" + R.raw.first_in_app;
         activityVideoView.setVideoURI(Uri.parse(uri));
         activityVideoView.start();
-        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
         activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (onVideoCompleteListener != null) onVideoCompleteListener.execute();
+                initGuide();
             }
         });
     }
 
     private void initGuide() {
+        scrollableView.setVisibility(View.VISIBLE);
+        activityVideoView.setVisibility(View.GONE);
         if (TextUtils.isEmpty(fromPage)) {
             isGuide = true;
         }
@@ -127,6 +118,7 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.guide2);
         list.add(R.mipmap.guide3);
         scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
+        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
 //        scrollableView.showIndicators();
     }
 

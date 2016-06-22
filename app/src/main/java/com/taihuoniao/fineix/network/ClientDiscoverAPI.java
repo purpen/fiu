@@ -1301,4 +1301,25 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
+
+    public static void isInvited(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/gateway/is_invited";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+
+    public static void submitInviteCode(String code, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/gateway/valide_invite_code";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("code", code);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    public static void updateInviteCodeStatus(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/gateway/del_invite_code";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 }
