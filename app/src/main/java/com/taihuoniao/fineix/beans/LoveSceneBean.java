@@ -40,6 +40,15 @@ public class LoveSceneBean extends NetBean {
         private String created_at;
         private String scene_title;
         private User user_info;
+        private List<SceneListBean.Products> product;
+
+        public List<SceneListBean.Products> getProduct() {
+            return product;
+        }
+
+        public void setProduct(List<SceneListBean.Products> product) {
+            this.product = product;
+        }
 
         public String getScene_title() {
             return scene_title;
@@ -115,18 +124,44 @@ public class LoveSceneBean extends NetBean {
     }
 
     public static class User {
+        private String user_id;
         private String nickname;
         private String avatar_url;
-        private String is_expert;
+        private int is_expert;
         private String summary;
-        private String label;
+        private String expert_label;
+        private String expert_info;
 
-        public String getLabel() {
-            return label;
+        public String getExpert_info() {
+            return expert_info;
         }
 
-        public void setLabel(String label) {
-            this.label = label;
+        public void setExpert_info(String expert_info) {
+            this.expert_info = expert_info;
+        }
+
+        public String getExpert_label() {
+            return expert_label;
+        }
+
+        public void setExpert_label(String expert_label) {
+            this.expert_label = expert_label;
+        }
+
+        public int getIs_expert() {
+            return is_expert;
+        }
+
+        public void setIs_expert(int is_expert) {
+            this.is_expert = is_expert;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
         }
 
         public String getAvatar_ur() {
@@ -153,16 +188,9 @@ public class LoveSceneBean extends NetBean {
             this.summary = summary;
         }
 
-        public String getIs_expert() {
-            return is_expert;
-        }
-
         public String getAvatar_url() {
             return avatar_url;
         }
 
-        public void setIs_expert(String is_expert) {
-            this.is_expert = is_expert;
-        }
     }
 }

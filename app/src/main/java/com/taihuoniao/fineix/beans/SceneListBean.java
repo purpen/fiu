@@ -128,8 +128,8 @@ public class SceneListBean {
         private String id;
         private String title;
         private String price;
-        private String x;
-        private String y;
+        private double x;
+        private double y;
 
         public String getId() {
             return id;
@@ -155,19 +155,19 @@ public class SceneListBean {
             this.title = title;
         }
 
-        public String getX() {
+        public double getX() {
             return x;
         }
 
-        public void setX(String x) {
+        public void setX(double x) {
             this.x = x;
         }
 
-        public String getY() {
+        public double getY() {
             return y;
         }
 
-        public void setY(String y) {
+        public void setY(double y) {
             this.y = y;
         }
     }
@@ -183,16 +183,16 @@ public class SceneListBean {
         private String fans_count;
         private String love_count;
         public int is_expert;
-        private String label;
+//        private String label;
         public String expert_info;
         public String expert_label;
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
+//        public String getLabel() {
+//            return label;
+//        }
+//
+//        public void setLabel(String label) {
+//            this.label = label;
+//        }
 
         public String getAccount() {
             return account;

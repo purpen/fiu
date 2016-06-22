@@ -50,7 +50,7 @@
 
     <FrameLayout
         android:id="@+id/activity_share_frame"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/activity_share_user_linear"
         android:layout_marginTop="5dp">
@@ -68,7 +68,6 @@
             android:includeFontPadding="false"
             android:maxEms="11"
             android:maxLines="2"
-            android:text="详见的小路"
             android:textColor="@color/white"
             android:textSize="29sp"/>
     </FrameLayout>

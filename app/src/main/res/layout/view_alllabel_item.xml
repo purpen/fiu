@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:paddingBottom="13dp"
         android:paddingTop="14dp"
-        android:text="喜"
         android:textColor="#212121"
         android:textSize="14sp"/>
 

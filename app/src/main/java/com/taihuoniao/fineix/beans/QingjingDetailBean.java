@@ -199,7 +199,33 @@ public class QingjingDetailBean extends NetBean implements Serializable {
         private String nickname;
         private String avatar_url;
         private String summary;
-        private String is_expert;
+        private int is_expert;
+        private String expert_label;
+        private String expert_info;
+
+        public int getIs_expert() {
+            return is_expert;
+        }
+
+        public String getExpert_info() {
+            return expert_info;
+        }
+
+        public void setExpert_info(String expert_info) {
+            this.expert_info = expert_info;
+        }
+
+        public String getExpert_label() {
+            return expert_label;
+        }
+
+        public void setExpert_label(String expert_label) {
+            this.expert_label = expert_label;
+        }
+
+        public void setIs_expert(int is_expert) {
+            this.is_expert = is_expert;
+        }
 
         @Override
         public String toString() {
@@ -212,13 +238,6 @@ public class QingjingDetailBean extends NetBean implements Serializable {
                     '}';
         }
 
-        public String getIs_expert() {
-            return is_expert;
-        }
-
-        public void setIs_expert(String is_expert) {
-            this.is_expert = is_expert;
-        }
 
         public String getAvatar_url() {
             return avatar_url;

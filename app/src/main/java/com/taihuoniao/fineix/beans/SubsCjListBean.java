@@ -18,7 +18,7 @@ public class SubsCjListBean extends NetBean {
         this.data = data;
     }
 
-    public static class Data{
+    public static class Data {
         private List<SubsCJItem> rows;
 
         public List<SubsCJItem> getRows() {
@@ -29,7 +29,8 @@ public class SubsCjListBean extends NetBean {
             this.rows = rows;
         }
     }
-    public static class SubsCJItem{
+
+    public static class SubsCJItem {
         private String _id;
         private String title;
         private String address;
@@ -39,6 +40,15 @@ public class SubsCjListBean extends NetBean {
         private String created_at;
         private String scene_title;
         private Userinfo user_info;
+        private List<SceneListBean.Products> product;
+
+        public List<SceneListBean.Products> getProduct() {
+            return product;
+        }
+
+        public void setProduct(List<SceneListBean.Products> product) {
+            this.product = product;
+        }
 
         public String get_id() {
             return _id;
@@ -112,20 +122,30 @@ public class SubsCjListBean extends NetBean {
             this.view_count = view_count;
         }
     }
-    public static class Userinfo{
+
+    public static class Userinfo {
         private String user_id;
         private String nickname;
         private String avatar_url;
         private String summary;
-        private String is_expert;
-        private String label;
+        private int is_expert;
+        private String expert_label;
+        private String expert_info;
 
-        public String getLabel() {
-            return label;
+        public String getExpert_info() {
+            return expert_info;
         }
 
-        public void setLabel(String label) {
-            this.label = label;
+        public void setExpert_info(String expert_info) {
+            this.expert_info = expert_info;
+        }
+
+        public String getExpert_label() {
+            return expert_label;
+        }
+
+        public void setExpert_label(String expert_label) {
+            this.expert_label = expert_label;
         }
 
         public String getAvatar_url() {
@@ -136,11 +156,11 @@ public class SubsCjListBean extends NetBean {
             this.avatar_url = avatar_url;
         }
 
-        public String getIs_expert() {
+        public int getIs_expert() {
             return is_expert;
         }
 
-        public void setIs_expert(String is_expert) {
+        public void setIs_expert(int is_expert) {
             this.is_expert = is_expert;
         }
 

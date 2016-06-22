@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:singleLine="true"
-            android:text="狗蛋"
             android:textColor="#212121"
             android:textSize="13sp"/>
 
@@ -36,7 +35,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:singleLine="true"
-            android:text="3 天前"
             android:textColor="#999999"
             android:textSize="12sp"/>
     </RelativeLayout>
@@ -48,7 +46,6 @@
         android:layout_below="@id/item_comment_relative"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="3dp"
-        android:text="阿斯兰的开发思路；看到附近啊收到了；副科级；理论来看"
         android:layout_toRightOf="@id/item_comment_head"
         android:textColor="#666666"
         android:textSize="12sp"/>

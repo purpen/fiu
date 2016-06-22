@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="使用过的标签"
+                        android:text="@string/used_labels"
                         android:textColor="@color/yellow_bd8913"
                         android:textSize="15sp"/>
 
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="热门标签"
+                        android:text="@string/hot_labels"
                         android:textColor="@color/black333333"
                         android:textSize="15sp"/>
 
@@ -160,7 +160,7 @@
                     android:layout_centerHorizontal="true"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="全部标签"
+                    android:text="@string/all_labels"
                     android:textColor="@color/black333333"
                     android:textSize="15sp"/>
 
@@ -185,7 +185,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="9dp"
                 android:gravity="center"
-                android:text="请在情绪、环境、时间、人物中各选一个"
+                android:text="@string/please_select_one"
                 android:textColor="#999999"
                 android:textSize="11sp"/>
 

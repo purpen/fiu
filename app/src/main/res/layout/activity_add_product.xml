@@ -27,7 +27,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:paddingRight="16dp"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="#666666"
             android:textSize="14sp"
             android:visibility="visible"/>

@@ -45,7 +45,6 @@
                     android:minLines="2"
                     android:paddingBottom="5dp"
                     android:paddingTop="10dp"
-                    android:text="大标题"
                     android:textColor="#333333"
                     android:textSize="13sp"/>
 
@@ -57,7 +56,6 @@
                         android:id="@+id/tv_color_order_inner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="颜色：蓝色"
                         android:textSize="11sp"/>
 
                     <TextView
@@ -66,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:paddingRight="10dp"
-                        android:text="× 1"/>
+                      />
                 </RelativeLayout>
 
                 <TextView
@@ -75,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
                     android:paddingTop="5dp"
-                    android:text="¥288.00"
                     android:textColor="@color/yellow_bd8913"
                     android:textSize="11sp"/>
             </LinearLayout>

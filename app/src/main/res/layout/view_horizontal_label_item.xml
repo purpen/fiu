@@ -9,7 +9,6 @@
     android:paddingLeft="10dp"
     android:paddingRight="18dp"
     android:singleLine="true"
-    android:text="哈哈"
     android:textColor="#666666"
     android:textSize="12sp">
 

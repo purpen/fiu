@@ -101,6 +101,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         ClientDiscoverAPI.subsCJList(page + "", 8 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<订阅",responseInfo.result);
                 pullToRefreshView.onRefreshComplete();
                 SubsCjListBean subsCjListBean = new SubsCjListBean();
                 try {

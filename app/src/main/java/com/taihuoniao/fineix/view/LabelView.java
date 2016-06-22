@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 /**
  * @author tongqian.ni
  */
-public class LabelView extends LinearLayout implements View.OnFocusChangeListener {
+public class LabelView extends LinearLayout  {
     //贴纸
     private MyImageViewTouch mImageView;
     //容器
@@ -39,9 +39,9 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 //    private ImageView pointLeft;
     //    private TextView labelTxtLeft;
 //    private TextView priceTxtLeft;
-    private RelativeLayout relativeRight;
+    public RelativeLayout relativeRight;
     public TextView nameLeft;
-    private TextView priceRight;
+    public TextView priceRight;
     private ImageView pointRight;
     private ImageView animPoint;
     private ImageView deleteImg;
@@ -69,7 +69,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
         deleteImg = (ImageView) findViewById(R.id.view_label_delete);
 //        deleteImg.setOnClickListener(this);
-        this.setOnFocusChangeListener(this);
+//        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -91,7 +91,7 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
         deleteImg = (ImageView) findViewById(R.id.view_label_delete);
 //        deleteImg.setOnClickListener(this);
-        this.setOnFocusChangeListener(this);
+//        this.setOnFocusChangeListener(this);
 //        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
 //        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
@@ -304,6 +304,12 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
 //        }
     }
 
+    public void setA(float alpha) {
+        relativeRight.setAlpha(alpha);
+        priceRight.setAlpha(alpha);
+        nameLeft.setAlpha(alpha);
+    }
+
     public void wave() {
         final AnimationSet as = new AnimationSet(true);
         as.setRepeatCount(Animation.INFINITE);
@@ -342,16 +348,6 @@ public class LabelView extends LinearLayout implements View.OnFocusChangeListene
         y = y < 0 ? 0 : y;
         setupLocation(x, y);
         wave();
-    }
-
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            deleteImg.setVisibility(VISIBLE);
-        } else {
-            deleteImg.setVisibility(GONE);
-        }
     }
 
 }

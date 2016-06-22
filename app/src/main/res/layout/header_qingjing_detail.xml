@@ -38,7 +38,6 @@
                 android:includeFontPadding="false"
                 android:maxEms="9"
                 android:maxLines="2"
-                android:text="长城脚下的手工匠人阿斯蒂芬阿斯蒂芬阿斯蒂芬"
                 android:textColor="@color/white"
                 android:textSize="23sp"/>
 
@@ -63,7 +62,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:gravity="center_vertical"
-                    android:text="北京市 朝阳区"
                     android:textColor="@color/white"
                     android:textSize="9sp"/>
 
@@ -82,7 +80,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
-                    android:text="3天前"
                     android:textColor="@color/white"
                     android:textSize="9sp"/>
             </LinearLayout>
@@ -104,14 +101,30 @@
                     android:orientation="horizontal"
                     android:paddingLeft="15dp">
 
-                    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-                        android:id="@+id/activity_qingjingdetail_userhead"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:riv_border_color="#eeeeee"
-                        app:riv_border_width="1dp"
-                        app:riv_corner_radius="100dp"
-                        />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                            android:id="@+id/activity_qingjingdetail_userhead"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:riv_border_color="#eeeeee"
+                            app:riv_border_width="1dp"
+                            app:riv_corner_radius="@dimen/dp100"/>
+
+                        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                            android:id="@+id/riv_auth"
+                            android:layout_width="@dimen/dp10"
+                            android:layout_height="@dimen/dp10"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/v"
+                            android:visibility="gone"
+                            app:riv_corner_radius="@dimen/dp100"/>
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -124,7 +137,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
-                            android:text="Lady Gaga"
                             android:textColor="#000000"
                             android:textSize="11sp"/>
 
@@ -134,7 +146,6 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/activity_qingjingdetail_username"
                             android:singleLine="true"
-                            android:text="这是人"
                             android:textColor="#212121"
                             android:textSize="10sp"/>
                     </RelativeLayout>
@@ -178,7 +189,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="8dp"
-            android:text="我勒个去，啊顺利打开附件ask啊顺利打开附件，啊上的浪费空间。啊手动阀似的咖啡碱。阿斯蒂芬卢卡斯京东方啊是懒得看风景阿里山的看法。飞机ask的飞机喀什地方就，发生的飞机啊速度飞快。"
             android:textColor="#212121"
             android:textSize="11sp"/>
 
@@ -191,15 +201,15 @@
                 android:id="@+id/activity_qingjingdetail_more"
                 android:layout_width="wrap_content"
                 android:layout_height="21dp"
-                android:visibility="gone"
                 android:layout_alignParentRight="true"
-                android:src="@mipmap/more_height_10px"/>
+                android:src="@mipmap/more_height_10px"
+                android:visibility="gone"/>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/activity_qingjingdetail_more"
                 android:layout_toLeftOf="@id/activity_qingjingdetail_more"
+                android:layout_toStartOf="@id/activity_qingjingdetail_more"
                 android:scrollbars="none"
                 >
 

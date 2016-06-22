@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -121,8 +122,8 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<搜索", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                Log.e("<<<搜索", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
 //                Message msg = handler.obtainMessage();
 //                msg.what = DataConstants.SEARCH_LIST;
                 SearchBean searchBean = new SearchBean();

@@ -16,7 +16,6 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text="2016-3-10"
             android:textColor="#212121"
             android:textSize="11sp"/>
 
@@ -28,7 +27,6 @@
             android:layout_weight="1"
             android:gravity="right"
             android:paddingRight="10dp"
-            android:text="交易状态"
             android:textColor="#666666"
             android:textSize="11sp"/>
     </LinearLayout>
@@ -49,7 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="（含运费：¥ 6.00）"
             android:textSize="11sp"/>
 
         <TextView
@@ -58,7 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_freight_order"
-            android:text="实付：¥ 6.00"
             android:textSize="11sp"/>
 
         <TextView
@@ -68,7 +64,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_paymoney_order"
             android:paddingRight="5dp"
-            android:text="合计：¥ 6.00"
             android:textSize="11sp"/>
 
         <TextView
@@ -83,7 +78,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_totalmoney_order"
             android:paddingRight="5dp"
-            android:text="共1件商品"
             android:textSize="11sp"/>
     </RelativeLayout>
 
@@ -107,7 +101,6 @@
             android:gravity="center"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
-            android:text="删除订单"
             android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
 
@@ -122,7 +115,6 @@
             android:gravity="center"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
-            android:text="发表评价"
             android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
     </RelativeLayout>

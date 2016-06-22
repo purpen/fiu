@@ -210,7 +210,33 @@ public class SceneDetailsBean extends NetBean implements Serializable {
         private String follow_count;
         private String fans_count;
         private String love_count;
-        private String is_expert;
+        private int is_expert;
+        private String expert_label;
+        private String expert_info;
+
+        public int getIs_expert() {
+            return is_expert;
+        }
+
+        public String getExpert_info() {
+            return expert_info;
+        }
+
+        public void setExpert_info(String expert_info) {
+            this.expert_info = expert_info;
+        }
+
+        public String getExpert_label() {
+            return expert_label;
+        }
+
+        public void setExpert_label(String expert_label) {
+            this.expert_label = expert_label;
+        }
+
+        public void setIs_expert(int is_expert) {
+            this.is_expert = is_expert;
+        }
 
         public String getAccount() {
             return account;
@@ -276,13 +302,6 @@ public class SceneDetailsBean extends NetBean implements Serializable {
             this.user_id = user_id;
         }
 
-        public String getIs_expert() {
-            return is_expert;
-        }
-
-        public void setIs_expert(String is_expert) {
-            this.is_expert = is_expert;
-        }
     }
 
     public static class Locat implements Serializable {

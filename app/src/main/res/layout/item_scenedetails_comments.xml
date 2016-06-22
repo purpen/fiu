@@ -18,7 +18,6 @@
         android:background="@drawable/comment"
         android:lineSpacingExtra="8dp"
         android:maxEms="10"
-        android:text="产品设计的不错很"
         android:textColor="#666666"
         android:textSize="11sp"/>
 </LinearLayout>

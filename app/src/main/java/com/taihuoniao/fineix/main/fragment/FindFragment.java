@@ -7,9 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
@@ -61,6 +62,7 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.appleWatchView.AppleWatchView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -97,12 +99,13 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private List<QingJingListBean.QingJingItem> qingjingList;
     private JingQingjingRecyclerAdapter jingQingjingRecyclerAdapter;
     private RecyclerView labelRecycler;
-    private AbsoluteLayout absoluteLayout;
+    private AppleWatchView absoluteLayout;
     //网络请求对话框
     private WaittingDialog dialog;
     //listview分页加载
 //    private int lastSavedFirstVisibleItem = -1;
 //    private int lastTotalItem = -1;
+//    private GestureDetector gestureDetector;
 
 
     @Override
@@ -120,9 +123,16 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         allQingjingTv = (TextView) headerView.findViewById(R.id.fragment_find_allqingjing);
         qingjingRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_qingjing_recycler);
         labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
-        absoluteLayout = (AbsoluteLayout) headerView.findViewById(R.id.fragment_find_absolute);
+        absoluteLayout = (AppleWatchView) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
-//        sceneListView.setDivider(null);
+        absoluteLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                dis(absoluteLayout.getParent());
+                absoluteLayout.onTouchEvent(event);
+                return true;
+            }
+        });
         sceneListView.setDividerHeight(DensityUtils.dp2px(getActivity(), 5));
         dialog = new WaittingDialog(getActivity());
         return view;
@@ -135,6 +145,13 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    private void dis(ViewParent viewParent) {
+        viewParent.requestDisallowInterceptTouchEvent(true);
+        if (viewParent.getParent() != null) {
+            dis(viewParent.getParent());
+        }
     }
 
     @Override
@@ -151,7 +168,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 location = null;
                 requestNet();
 //                absoluteLayout.removeAllViews();
-                DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
+//                DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
             }
         });
 //        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -205,7 +222,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
 //                    MapUtil.destroyLocationClient();
                     DataPaser.qingjingList(1 + "", 2 + "", 1 + "", distance + "", location[0] + "", location[1] + "", handler);
-                    DataPaser.getSceneList(currentPage + "", null, null, 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+                    DataPaser.getSceneList(currentPage + "", null, null, 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
                 }
             }
         });
@@ -228,6 +245,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected void requestNet() {
         dialog.show();
+        DataPaser.fiuUserList(1 + "", 100 + "", null, null, 1 + "", handler);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onStart() {
@@ -309,35 +327,37 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     FiuUserListBean netUser = (FiuUserListBean) msg.obj;
                     netUsers = netUser;
                     if (netUser.isSuccess()) {
-                        thread = new Thread() {
-                            @Override
-                            public void run() {
-                                int top = absoluteLayout.getTop();
-                                int bottom = absoluteLayout.getBottom();
-                                while (bottom - top <= 0) {
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        top = absoluteLayout.getTop();
-                                        bottom = absoluteLayout.getBottom();
-                                    }
-                                }
-                                handler.sendEmptyMessage(-10);
-                            }
-                        };
-                        thread.start();
+                        absoluteLayout.init(getActivity(), netUser, null);
+//                        absoluteLayout.invalidate();
+//                        absoluteLayout.requestLayout();
+//                        thread = new Thread() {
+//                            @Override
+//                            public void run() {
+//                                int top = absoluteLayout.getTop();
+//                                int bottom = absoluteLayout.getBottom();
+//                                while (bottom - top <= 0) {
+//                                    try {
+//                                        Thread.sleep(100);
+//                                    } catch (Exception e) {
+//                                    } finally {
+//                                        top = absoluteLayout.getTop();
+//                                        bottom = absoluteLayout.getBottom();
+//                                    }
+//                                }
+//                                handler.sendEmptyMessage(-10);
+//                            }
+//                        };
+//                        thread.start();
 
                     } else {
                         ToastUtils.showError(netUser.getMessage());
 //                        dialog.showErrorWithStatus(netUser.getMessage());
                     }
                     break;
-                case -10:
-                    absoluteLayout.removeAllViews();
-                    addImgToAbsolute(netUsers.getData().getUsers());
-                    break;
+//                case -10:
+//                    absoluteLayout.removeAllViews();
+//                    addImgToAbsolute(netUsers.getData().getUsers());
+//                    break;
                 case DataConstants.QINGJING_LIST:
 //                    dialog.dismiss();
 //                    pullToRefreshView.onRefreshComplete();
@@ -404,7 +424,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         }
     };
-    private Thread thread;
+//    private Thread thread;
 
     @Override
     public void onPause() {
@@ -418,10 +438,10 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onResume() {
         super.onResume();
-        //用户大小不一的头像
-        if (absoluteLayout.getChildCount() <= 0) {
-            DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
-        }
+//        //用户大小不一的头像
+//        if (absoluteLayout.getChildCount() <= 0) {
+//            DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
+//        }
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -452,9 +472,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onDestroy() {
         //        cancelNet();
         MapUtil.destroyLocationClient();
-        if (thread != null && thread.isAlive()) {
-            thread.stop();
-        }
+//        if (thread != null && thread.isAlive()) {
+//            thread.stop();
+//        }
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
             handler = null;
@@ -463,79 +483,79 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
 
-    private void addImgToAbsolute(List<FiuUserListBean.FiuUserItem> list) {
-        Random random = new Random();
-        List<RandomImg> randomImgs = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            RandomImg randomImg = new RandomImg();
-            randomImg.id = list.get(i).get_id();
-            randomImg.url = list.get(i).getMedium_avatar_url();
-            randomImg.type = i % 3 + 1 + "";
-            Log.e("<<<大小", "type=" + randomImg.type);
-            switch (randomImg.type) {
-                case "1":
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-                    break;
-                case "2":
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
-                    break;
-                default:
-                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
-                    break;
-            }
-            randomImgs.add(randomImg);
-        }
-        int top = absoluteLayout.getTop();
-        int bottom = absoluteLayout.getBottom();
-        if (bottom - top <= 0) {
-            return;
-        }
-        for (int i = 0; i < randomImgs.size(); i++) {
-            RandomImg randomImg = randomImgs.get(i);
-            whi:
-            for (int k = 0; k < 200; k++) {
-                int x = random.nextInt(MainApplication.getContext().getScreenWidth());
-                int y = random.nextInt(bottom - top) + top;
-                if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
-                        bottom - y < randomImg.radius || y - top < randomImg.radius) {
-                    continue;
-                }
-                for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
-                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
-                    RandomImg randomImg1 = (RandomImg) img1.getTag();
-                    if (randomImg1 == null) {
-                        continue;
-                    }
-                    if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
-                        continue whi;
-                    }
-                }
-                randomImg.x = x;
-                randomImg.y = y;
-                break;
-            }
-            if (randomImg.x == 0 && randomImg.y == 0) {
-                continue;
-            }
-            RoundedImageView img = new RoundedImageView(getActivity());
-            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
-            img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
-                    randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
-            img.setCornerRadiusDimen(R.dimen.dp100);
-            img.setTag(randomImg);
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RandomImg randomImg1 = (RandomImg) v.getTag();
-                    Intent intent = new Intent(getActivity(), UserCenterActivity.class);
-                    intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(randomImg1.id));
-                    startActivity(intent);
-                }
-            });
-            absoluteLayout.addView(img);
-        }
-    }
+//    private void addImgToAbsolute(List<FiuUserListBean.FiuUserItem> list) {
+//        Random random = new Random();
+//        List<RandomImg> randomImgs = new ArrayList<>();
+//        for (int i = 0; i < list.size(); i++) {
+//            RandomImg randomImg = new RandomImg();
+//            randomImg.id = list.get(i).get_id();
+//            randomImg.url = list.get(i).getMedium_avatar_url();
+//            randomImg.type = i % 3 + 1 + "";
+//            Log.e("<<<大小", "type=" + randomImg.type);
+//            switch (randomImg.type) {
+//                case "1":
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
+//                    break;
+//                case "2":
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
+//                    break;
+//                default:
+//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
+//                    break;
+//            }
+//            randomImgs.add(randomImg);
+//        }
+//        int top = absoluteLayout.getTop();
+//        int bottom = absoluteLayout.getBottom();
+//        if (bottom - top <= 0) {
+//            return;
+//        }
+//        for (int i = 0; i < randomImgs.size(); i++) {
+//            RandomImg randomImg = randomImgs.get(i);
+//            whi:
+//            for (int k = 0; k < 200; k++) {
+//                int x = random.nextInt(MainApplication.getContext().getScreenWidth());
+//                int y = random.nextInt(bottom - top) + top;
+//                if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
+//                        bottom - y < randomImg.radius || y - top < randomImg.radius) {
+//                    continue;
+//                }
+//                for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
+//                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
+//                    RandomImg randomImg1 = (RandomImg) img1.getTag();
+//                    if (randomImg1 == null) {
+//                        continue;
+//                    }
+//                    if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
+//                        continue whi;
+//                    }
+//                }
+//                randomImg.x = x;
+//                randomImg.y = y;
+//                break;
+//            }
+//            if (randomImg.x == 0 && randomImg.y == 0) {
+//                continue;
+//            }
+//            RoundedImageView img = new RoundedImageView(getActivity());
+//            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
+//            img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
+//                    randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
+//            img.setCornerRadiusDimen(R.dimen.dp100);
+//            img.setTag(randomImg);
+//            img.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    RandomImg randomImg1 = (RandomImg) v.getTag();
+//                    Intent intent = new Intent(getActivity(), UserCenterActivity.class);
+//                    intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(randomImg1.id));
+//                    startActivity(intent);
+//                }
+//            });
+//            absoluteLayout.addView(img);
+//        }
+//    }
 
 
     @Override
@@ -586,7 +606,60 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             pullToRefreshView.lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, null, 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
+            DataPaser.getSceneList(currentPage + "", null, null, 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "", handler);
         }
     }
+//    public class CommonGestureListener extends GestureDetector.SimpleOnGestureListener {
+//
+//        @Override
+//        public boolean onDown(MotionEvent e) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onDown...");
+//            return false;
+//        }
+//
+//        @Override
+//        public void onShowPress(MotionEvent e) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onShowPress...");
+//            super.onShowPress(e);
+//        }
+//
+//        @Override
+//        public void onLongPress(MotionEvent e) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onLongPress...");
+//        }
+//
+//        @Override
+//        public boolean onSingleTapConfirmed(MotionEvent e) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onSingleTapConfirmed...");
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onSingleTapUp(MotionEvent e) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onSingleTapUp...");
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+//                               float velocityY){
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onFling...");
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+//                                float distanceX, float distanceY) {
+//            // TODO Auto-generated method stub
+//            Log.e("<<<", "onScroll...");
+//            return super.onScroll(e1, e2, distanceX, distanceY);
+//        }
+//
+//    }
 }

@@ -19,7 +19,6 @@
             android:gravity="center"
             android:maxWidth="114dp"
             android:singleLine="true"
-            android:text="亮神智能感应灯"
             android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
 
@@ -30,7 +29,6 @@
             android:layout_toRightOf="@id/view_label_left_name"
             android:background="@mipmap/label_price"
             android:gravity="center"
-            android:text="¥1288"
             android:textColor="@color/white"
             android:textSize="12sp"/>
 

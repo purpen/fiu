@@ -83,6 +83,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView timeTv;
     private LinearLayout leftLabel;
     private RoundedImageView userHead;
+    private RoundedImageView vImg;
     private TextView userName;
     private TextView userInfo;
     private TextView subscriptionCount;
@@ -156,6 +157,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         timeTv = (TextView) header.findViewById(R.id.activity_qingjingdetail_time);
         leftLabel = (LinearLayout) header.findViewById(R.id.activity_qingjingdetail_leftlabel);
         userHead = (RoundedImageView) header.findViewById(R.id.activity_qingjingdetail_userhead);
+        vImg = (RoundedImageView) header.findViewById(R.id.riv_auth);
         userName = (TextView) header.findViewById(R.id.activity_qingjingdetail_username);
         userInfo = (TextView) header.findViewById(R.id.activity_qingjingdetail_userinfo);
         subscriptionCount = (TextView) header.findViewById(R.id.activity_qingjingdetail_subsnum);
@@ -350,8 +352,15 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                         timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
                         netUserInfo = netQingjingDetailBean.getData().getUser_info();
                         ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
+                        if(netQingjingDetailBean.getData().getUser_info().getIs_expert()==0){
+                            vImg.setVisibility(View.GONE);
+                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
+                        }else{
+                            vImg.setVisibility(View.VISIBLE);
+                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label()+" | "+netQingjingDetailBean.getData().getUser_info().getExpert_info());
+                        }
                         userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
-                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
+//                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
                         subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
                         moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
                         desTv.setText(netQingjingDetailBean.getData().getDes());

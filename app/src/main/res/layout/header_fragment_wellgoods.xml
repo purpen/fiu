@@ -42,13 +42,13 @@
             android:textSize="11sp"/>
     </LinearLayout>
 
-    <AbsoluteLayout
+    <com.taihuoniao.fineix.view.appleWatchView.AppleWatchView
         android:id="@+id/fragment_wellgoods_absolute"
         android:layout_width="match_parent"
         android:layout_height="157dp"
         android:background="#f0f0f0">
 
-    </AbsoluteLayout>
+    </com.taihuoniao.fineix.view.appleWatchView.AppleWatchView>
 
     <TextView
         android:layout_width="match_parent"

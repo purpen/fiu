@@ -51,7 +51,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="狗蛋"
                     android:textColor="@color/white"
                     android:textSize="8sp"/>
 
@@ -61,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/activity_share_user_name"
                     android:singleLine="true"
-                    android:text="描述"
                     android:textColor="@color/white"
                     android:textSize="7sp"/>
             </RelativeLayout>
@@ -70,7 +68,7 @@
 
         <FrameLayout
             android:id="@+id/activity_share_frame"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/activity_share_location_linear"
             android:layout_marginTop="5dp">
@@ -87,7 +85,6 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:maxLines="2"
-                android:text="详见的小路"
                 android:textColor="@color/white"
                 android:textSize="29sp"/>
         </FrameLayout>
@@ -146,7 +143,7 @@
                     android:layout_height="7dp"
                     android:layout_alignBottom="@id/activity_share_scene_des"
                     android:layout_alignParentRight="true"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:src="@mipmap/share_des_add"/>
 
                 <TextView
@@ -156,8 +153,7 @@
                     android:layout_marginTop="7dp"
                     android:layout_toLeftOf="@id/activity_share_scene_add_img"
                     android:maxLines="2"
-                    android:text="a手里的看法加拉塞克大家flak涉及到法律框架啊手动阀手动啊士大夫士大夫发射点发啊手动阀手动阀手动阀啊士大夫发射点发射点发啊手动阀手动阀手动阀啊手动阀手动阀手动阀手动阀阀手动阀"
-                    android:textColor="@color/white"
+                           android:textColor="@color/white"
                     android:textSize="7sp"/>
 
 

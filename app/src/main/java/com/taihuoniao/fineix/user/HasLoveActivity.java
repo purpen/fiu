@@ -16,8 +16,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
+import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -39,8 +39,9 @@ import butterknife.Bind;
  * 未完成，接口返回数据有问题
  */
 public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemClickListener {
-
-//    GlobalTitleLayout titleLayout;
+    //上个界面传递过来的数据
+    private User user;//用户信息
+    //    GlobalTitleLayout titleLayout;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.activity_has_love_pulltorefreshview)
@@ -49,8 +50,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
     ProgressBar progressBar;
     private ListView listView;
     private WaittingDialog dialog;
-    //当前用户的user_id
-    private long user_id;
+
     //场景列表
     private int page = 1;
     private List<LoveSceneBean.LoveSceneItem> list;
@@ -59,9 +59,10 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     protected void getIntentData() {
-        user_id = LoginInfo.getUserId();//用户id
-//        Log.e("<<<", "logininfo.userid=" + user_id);
-        if (user_id == -1 || user_id == 0) {
+//        user_id = LoginInfo.getUserId();//用户id
+        user = (User) getIntent().getSerializableExtra("user");
+//        Log.e("<<<", "logininfo.userid=" + user_id + "," + user._id);
+        if (user == null || user._id == 0L) {
             ToastUtils.showError("用户信息为空");
 //            new SVProgressHUD(this).showErrorWithStatus("用户信息为空");
 //            Toast.makeText(HasLoveActivity.this, "用户信息为空", Toast.LENGTH_SHORT).show();
@@ -76,7 +77,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
     @Override
     protected void initView() {
 //        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_has_love_titlelayout);
-        custom_head.setHeadCenterTxtShow(true,R.string.has_love);
+        custom_head.setHeadCenterTxtShow(true, R.string.has_love);
 //        pullToRefreshView = (PullToRefreshListView) findViewById(R.id.activity_has_love_pulltorefreshview);
 //        progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
         listView = pullToRefreshView.getRefreshableView();
@@ -92,7 +93,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 //        titleLayout.setContinueTvVisible(false);
 //        titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
         list = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list,null,null);
+        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list, null, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
         pullToRefreshView.setPullToRefreshEnabled(false);
@@ -114,7 +115,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void requestLoveSceneList() {
-        ClientDiscoverAPI.commonList(page + "", 8 + "", null, user_id + "", "sight", "love", new RequestCallBack<String>() {
+        ClientDiscoverAPI.commonList(page + "", 8 + "", null, user._id + "", "sight", "love", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<赞过的", responseInfo.result);
@@ -150,7 +151,6 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
             }
         });
     }
-
 
 
     @Override
