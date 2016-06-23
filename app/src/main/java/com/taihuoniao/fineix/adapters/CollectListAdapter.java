@@ -56,15 +56,15 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
             }
         });
         if (list != null) {
-            holder.nameTv.setText(item.title);
-            holder.priceTv.setText(String.format("¥%s", item.sale_price));
-            if (item.banner_asset.size() > 0) {
+            holder.nameTv.setText(item.scene_product.title);
+            holder.priceTv.setText(String.format("¥%s", item.scene_product.sale_price));
+            if (item.scene_product.banner_asset.size() > 0) {
 //                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter<String>(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
                 CollectSlidingAdapter productSlidingAdapter1 = new CollectSlidingAdapter(activity, item);
                 holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
                 holder.slidingFocusImageView.setTag(productSlidingAdapter1);
-                if (item.sights != null && item.sights.size() > 0 && item.sights.get(0) != null) {
-                    switch (item.sights.size()) {
+                if (item.scene_product.sights != null && item.scene_product.sights.size() > 0 && item.scene_product.sights.get(0) != null) {
+                    switch (item.scene_product.sights.size()) {
                         case 2:
                             holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
                             break;
@@ -80,7 +80,7 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
                 }
             }
 //            holder.slidingFocusImageView.setSelection(0);
-            switch (item.attrbute) {
+            switch (item.scene_product.attrbute) {
                 case "1":
                     holder.img.setImageResource(R.mipmap.product_fiu);
                     break;
@@ -128,13 +128,12 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
             if (list != null) {
-                if (list.get(this.position).sights != null && list.get(this.position).sights.size() > 0 && list.get(this.position).sights.get(0) != null) {
-                    if (position % (1 + list.get(this.position).banner_asset.size()) == list.get(this.position).banner_asset.size()) {
+                if (list.get(this.position).scene_product.sights != null && list.get(this.position).scene_product.sights.size() > 0 && list.get(this.position).scene_product.sights.get(0) != null) {
+                    if (position % (1 + list.get(this.position).scene_product.banner_asset.size()) == list.get(this.position).scene_product.banner_asset.size()) {
                         Intent intent1 = new Intent(activity, SceneDetailActivity.class);
-                        intent1.putExtra("id", list.get(this.position).sights.get(0).id);
+                        intent1.putExtra("id", list.get(this.position).scene_product.sights.get(0).id);
                         activity.startActivity(intent1);
                         return;
                     } else {

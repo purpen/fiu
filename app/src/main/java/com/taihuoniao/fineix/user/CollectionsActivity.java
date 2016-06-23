@@ -27,6 +27,7 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,7 +36,7 @@ import butterknife.Bind;
  * @author lilin
  *         created at 2016/6/21 15:43
  */
-public class CollectionsActivity extends BaseActivity {
+public class CollectionsActivity extends BaseActivity<CollectionItem> {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.pull_lv)
@@ -131,8 +132,15 @@ public class CollectionsActivity extends BaseActivity {
     }
 
     @Override
-    protected void refreshUI(List list) {
+    protected void refreshUI(List<CollectionItem> list) {
         if (list == null) return;
+
+        Iterator<CollectionItem> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            CollectionItem item = iterator.next();
+            if (null == item.scene_product) iterator.remove();
+        }
+
         if (list.size() == 0) {
 //            if (isLoadMore){
 //                Util.makeToast("没有更多数据哦！");
@@ -141,6 +149,7 @@ public class CollectionsActivity extends BaseActivity {
 //            }
             return;
         }
+
 
         curPage++;
 
