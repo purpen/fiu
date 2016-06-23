@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
 import android.graphics.PointF;
-import android.os.Handler;
-import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +10,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -19,8 +20,8 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
@@ -30,6 +31,10 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +62,97 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     @Override
     protected void requestNet() {
 //        instance = IndexFragment.this;
-        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
+//        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
+        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneList sceneL = new SceneList();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                    sceneL.setSuccess(jsonObject.optBoolean("success"));
+                    sceneL.setMessage(jsonObject.optString("message"));
+//                    sceneList.setStatus(jsonObject.optString("status"));
+                    if (sceneL.isSuccess()) {
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<SceneListBean> list = new ArrayList<>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject job = rows.getJSONObject(i);
+                            SceneListBean sceneListBean = new SceneListBean();
+                            sceneListBean.set_id(job.optString("_id"));
+                            sceneListBean.setAddress(job.optString("address"));
+                            sceneListBean.setScene_title(job.optString("scene_title"));
+                            sceneListBean.setView_count(job.optString("view_count"));
+                            sceneListBean.setCreated_at(job.optString("created_at"));
+                            sceneListBean.setLove_count(job.optString("love_count"));
+                            sceneListBean.setCover_url(job.optString("cover_url"));
+                            sceneListBean.setTitle(job.optString("title"));
+                            sceneListBean.setDes(job.optString("des"));
+                            JSONObject us = job.getJSONObject("user_info");
+                            SceneListBean.User user = new SceneListBean.User();
+                            user.setAccount(us.optString("account"));
+//                            user.setLabel(us.optString("label"));
+                            user.is_expert = us.optInt("is_expert");
+                            user.expert_info = us.optString("expert_info");
+                            user.expert_label = us.optString("expert_label");
+                            user.setUser_id(us.optString("user_id"));
+                            user.setSummary(us.optString("summary"));
+                            user.setNickname(us.optString("nickname"));
+                            user.setLove_count(us.optString("love_count"));
+                            user.setFollow_count(us.optString("follow_count"));
+                            user.setFans_count(us.optString("fans_count"));
+//                            user.setCounter(us.optString("counter"));
+                            user.setAvatar_url(us.optString("avatar_url"));
+                            sceneListBean.setUser_info(user);
+                            JSONArray product = job.getJSONArray("product");
+                            List<SceneListBean.Products> productsList = new ArrayList<>();
+                            for (int j = 0; j < product.length(); j++) {
+                                JSONObject ob = product.getJSONObject(j);
+                                SceneListBean.Products products = new SceneListBean.Products();
+                                products.setId(ob.optString("id"));
+                                products.setTitle(ob.optString("title"));
+                                products.setPrice(ob.optString("price"));
+                                products.setX(ob.optDouble("x"));
+                                products.setY(ob.optDouble("y"));
+                                productsList.add(products);
+                            }
+                            sceneListBean.setProductsList(productsList);
+                            list.add(sceneListBean);
+                        }
+                        sceneL.setSceneListBeanList(list);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                pullToRefreshLayout.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SceneList netSceneList = sceneL;
+                if (netSceneList.isSuccess()) {
+                    pullToRefreshLayout.setLoadingTime();
+                    if (currentPage == 1) {
+                        sceneList.clear();
+                        pullToRefreshLayout.lastTotalItem = -1;
+                        pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
+                    }
+                    sceneList.addAll(netSceneList.getSceneListBeanList());
+                    if (currentPage == 1 && sceneList.size() > 0) {
+                        sceneList.get(0).setStartAnim(true);
+                    }
+                    sceneListViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                pullToRefreshLayout.onRefreshComplete();
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private int getStatusBarHeight() {
@@ -69,23 +164,9 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return result;
     }
 
-    //外界调用刷新场景列表
-    public void refreshSceneList() {
-        currentPage = 1;
-//        if (location == null) {
-//            getCurrentLocation();
-//            return;
-//        }
-        dialog.show();
-        requestNet();
-    }
 
     @Override
     protected void initList() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-//            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
-//        }
         searchImg.setOnClickListener(this);
         subsImg.setOnClickListener(this);
 //        pullToRefreshLayout.setPullToRefreshEnabled(false);
@@ -93,13 +174,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             @Override
             public void onRefresh() {
                 currentPage = 1;
-//                if (location == null) {
-//                    getCurrentLocation();
-//                    return;
-//                }
                 dialog.show();
                 requestNet();
-//                DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
             }
         });
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -108,18 +184,14 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
                 requestNet();
-//                DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
             }
         });
         sceneList = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
-//        listView.setOnScrollListener(this);
         listView.setOnTouchListener(this);
-//        getCurrentLocation();
         dialog.show();
-//        DataPaser.getSceneList(currentPage + "", 8 + "", null, 0 + "", 0 + "", distance + "", null, null, handler);
     }
 
 
@@ -152,51 +224,41 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return fragment_view;
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.SCENE_LIST:
-                    pullToRefreshLayout.onRefreshComplete();
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    SceneList netSceneList = (SceneList) msg.obj;
-                    if (netSceneList.isSuccess()) {
-                        pullToRefreshLayout.setLoadingTime();
-                        if (currentPage == 1) {
-                            sceneList.clear();
-                            pullToRefreshLayout.lastTotalItem = -1;
-                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
-                        }
-                        sceneList.addAll(netSceneList.getSceneListBeanList());
-                        if (currentPage == 1 && sceneList.size() > 0) {
-                            sceneList.get(0).setStartAnim(true);
-                        }
-                        sceneListViewAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    pullToRefreshLayout.onRefreshComplete();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.SCENE_LIST:
+//                    pullToRefreshLayout.onRefreshComplete();
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    SceneList netSceneList = (SceneList) msg.obj;
+//                    if (netSceneList.isSuccess()) {
+//                        pullToRefreshLayout.setLoadingTime();
+//                        if (currentPage == 1) {
+//                            sceneList.clear();
+//                            pullToRefreshLayout.lastTotalItem = -1;
+//                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
+//                        }
+//                        sceneList.addAll(netSceneList.getSceneListBeanList());
+//                        if (currentPage == 1 && sceneList.size() > 0) {
+//                            sceneList.get(0).setStartAnim(true);
+//                        }
+//                        sceneListViewAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    pullToRefreshLayout.onRefreshComplete();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    public void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-//        MapUtil.destroyLocationClient();
-        super.onDestroy();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -226,7 +288,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 break;
         }
     }
-
 
 
     public int getScrollY() {
@@ -269,7 +330,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
 //                    listView.smoothScrollToPositionFromTop();
                     listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
                     cancelChenjin();
                     anim(listView.getFirstVisiblePosition() + 1);
                 } else if (nowP.y < startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
@@ -277,22 +338,22 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                    if (is16To9()) {
 //                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
 //                    } else {
-                        listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
-                                -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
 //                    }
                 } else if (nowP.y > startP.y && s < 0.8 * listView.getChildAt(0).getHeight() && s > 0) {
 //                    if (is16To9()) {
 //                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
 //                    } else {
-                        listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
-                                -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
 //                    }
                     chenjin();
                     anim(listView.getFirstVisiblePosition());
                 } else if (nowP.y > startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
 //                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
                     listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(),300);
+                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
                 }
                 nowP = null;
                 startP = null;

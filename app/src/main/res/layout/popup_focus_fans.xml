@@ -51,7 +51,7 @@
         android:id="@+id/tv_cancel"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:text="取消"
+        android:text="@string/cancel"
         android:background="@drawable/selector_fff_eee"
         android:gravity="center"
         android:textColor="@color/color_333"

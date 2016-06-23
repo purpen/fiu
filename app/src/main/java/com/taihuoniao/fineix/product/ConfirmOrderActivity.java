@@ -3,19 +3,24 @@ package com.taihuoniao.fineix.product;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ConfirmOrderProductsAdapter;
-import com.taihuoniao.fineix.beans.AddressBean;
+import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CartDoOrder;
+import com.taihuoniao.fineix.beans.DefaultAddressBean;
 import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -31,6 +36,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 
 /**
@@ -66,9 +72,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //网络请求dialog
     private WaittingDialog dialog;
     //网络请求返回值
-    private AddressBean addressBean;
+    private DefaultAddressBean addressDefaultBean;
     //收货地址界面选择的返回值
-    private AddressBean address;
+    private AddressListBean.AddressListItem addressListItem;
     //收货时间界面选择的返回值
     private String transfer_time = "a";
     private String bonus_code;
@@ -84,7 +90,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         initView();
         setData();
         dialog.show();
-//        DataPaser.getDefaultAddress(mHandler);
         getDefaultAddress();
     }
 
@@ -92,35 +97,25 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                AddressBean addressBean = new AddressBean();
+//                Log.e("<<<默认收货地址", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject data = obj.getJSONObject("data");
-                    addressBean.setHas_default(data.optString("has_default"));
-                    if ("1".equals(addressBean.getHas_default())) {
-                        addressBean.set_id(data.optString("_id"));
-                        addressBean.setName(data.optString("name"));
-                        addressBean.setPhone(data.optString("phone"));
-                        addressBean.setAddress(data.optString("address"));
-                        addressBean.setZip(data.optString("zip"));
-                        addressBean.setProvince(data.optString("province"));
-                        addressBean.setCity(data.optString("city"));
-                        addressBean.setProvince_name(data.optString("province_name"));
-                        addressBean.setCity_name(data.optString("city_name"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<DefaultAddressBean>() {
+                    }.getType();
+                    defaultAddressBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<默认收货地址", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
-                AddressBean netAddress = addressBean;
+                DefaultAddressBean netAddress = defaultAddressBean;
                 dialog.dismiss();
-                if ("1".equals(netAddress.getHas_default())) {
-                    addressBean = netAddress;
-                    setAddressData(addressBean);
+                if (netAddress.getData().getHas_default() == 1) {
+                    addressDefaultBean = netAddress;
+                    setAddressData(addressDefaultBean);
                 } else {
                     ToastUtils.showInfo("默认地址不存在!");
-//                        dialog.showErrorWithStatus("默认地址不存在!");
-//                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -239,7 +234,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             case R.id.activity_confirmorder_paybtn:
 //                startActivity(new Intent(ConfirmOrderActivity.this, PayWayActivity.class));
                 dialog.show();
-                if (address == null && addressBean == null) {
+                if (addressListItem == null && addressDefaultBean == null) {
                     dialog.dismiss();
                     ToastUtils.showError("请选择收货地址!");
 //                    dialog.showErrorWithStatus("请选择收货地址!");
@@ -247,9 +242,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     return;
                 }
                 if (nowBuyBean != null)
-                    confirmOrder(nowBuyBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), nowBuyBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(nowBuyBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), nowBuyBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 else if (cartBean != null)
-                    confirmOrder(cartBean.get_id(), address == null ? addressBean.get_id() : address.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 break;
         }
     }
@@ -332,9 +327,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 }
                 break;
             case DataConstants.RESULTCODE_ADDRESS:
-                address = (AddressBean) data.getSerializableExtra("addressBean");
-                if (address != null) {
-                    setAddressData(address);
+                addressListItem = (AddressListBean.AddressListItem) data.getSerializableExtra("addressBean");
+                if (addressListItem != null) {
+                    setAddressData(addressListItem);
                 } else {
                     dialog.show();
                     getDefaultAddress();
@@ -358,7 +353,15 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         }
     }
 
-    private void setAddressData(AddressBean address) {
+    private void setAddressData(DefaultAddressBean address) {
+        noAddressTv.setVisibility(View.GONE);
+        nameTv.setText(address.getData().getName());
+        addressTv.setText(address.getData().getProvince_name() + "  " + address.getData().getCity_name());
+        addressDetailsTv.setText(address.getData().getAddress());
+        phoneTv.setText(address.getData().getPhone());
+    }
+
+    private void setAddressData(AddressListBean.AddressListItem address) {
         noAddressTv.setVisibility(View.GONE);
         nameTv.setText(address.getName());
         addressTv.setText(address.getProvince_name() + "  " + address.getCity_name());
@@ -366,50 +369,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         phoneTv.setText(address.getPhone());
     }
 
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.NOW_CONFIRM_ORDER:
-//                    dialog.dismiss();
-//                    NowConfirmBean netConfirmBean = (NowConfirmBean) msg.obj;
-////                    Toast.makeText(ConfirmOrderActivity.this, netConfirmBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                    if (netConfirmBean.isSuccess()) {
-//                        ToastUtils.showSuccess(netConfirmBean.getMessage());
-////                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
-////                        netConfirmBean.getRid();     //订单rid
-//                        Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
-//                        intent.putExtra("paymoney", netConfirmBean.getPay_money());
-//                        intent.putExtra("orderId", netConfirmBean.getRid());
-//                        startActivity(intent);
-//                        finish();
-//                    }else {
-//                        ToastUtils.showError(netConfirmBean.getMessage());
-////                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.DEFAULT_ADDRESS:
-//                    dialog.dismiss();
-//                    AddressBean netAddress = (AddressBean) msg.obj;
-//                    dialog.dismiss();
-//                    if (netAddress != null && "1".equals(netAddress.getHas_default())) {
-//                        addressBean = netAddress;
-//                        setAddressData(addressBean);
-//                    } else {
-//                        ToastUtils.showInfo("默认地址不存在!");
-////                        dialog.showErrorWithStatus("默认地址不存在!");
-////                        Toast.makeText(ConfirmOrderActivity.this, R.string.no_default_address, Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.NETWORK_FAILURE:
-//                    dialog.dismiss();
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-////                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
 
     private void cancelNet() {
         NetworkManager.getInstance().cancel("getDefaultAddress");

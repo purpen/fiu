@@ -26,7 +26,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="请选择支付方式"
+            android:text="@string/select_pay_method"
             android:textSize="14sp"/>
 
         <TextView
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="支付宝支付"
+            android:text="@string/alipay_pay"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="微信支付"
+            android:text="@string/wechat_pay"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -112,7 +112,7 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/yellow_bd8913"
-        android:text="立即支付"
+        android:text="@string/pay_now"
         android:textColor="@color/white"
         android:textSize="14sp"/>
 </RelativeLayout>

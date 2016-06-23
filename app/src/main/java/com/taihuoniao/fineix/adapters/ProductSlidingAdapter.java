@@ -84,7 +84,8 @@ public class ProductSlidingAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if (productListItem != null) {
-            if (position == productListItem.pos) {
+//            Log.e("<<<遮罩", position + "," + productListItem.getPos());
+            if (position == productListItem.getPos()) {
                 holder.zhezhaoTv.setVisibility(View.GONE);
             } else {
                 holder.zhezhaoTv.setVisibility(View.VISIBLE);

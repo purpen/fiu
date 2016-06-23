@@ -14,7 +14,7 @@
         >
         <EditText
             android:id="@+id/et"
-            android:hint="搜索地点"
+            android:hint="@string/search_sites"
             android:textColorHint="@color/color_999"
             android:textSize="@dimen/sp14"
             android:background="@null"

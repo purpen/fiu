@@ -91,7 +91,7 @@
             android:layout_marginLeft="15dp"
             android:layout_toLeftOf="@id/colorimg"
             android:gravity="center_vertical"
-            android:text="颜色分类"
+            android:text="@string/color_category"
             android:textColor="#000000"
             android:textSize="14sp"/>
     </RelativeLayout>
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="相关推荐"
+            android:text="@string/near_recommend"
             android:textColor="#000000"
             android:textSize="14sp"/>
 
@@ -153,7 +153,7 @@
 
                 android:layout_toLeftOf="@id/commentsimg"
                 android:gravity="center_vertical"
-                android:text="商品评价"
+                android:text="@string/products_comments"
                 android:textColor="#000000"
                 android:textSize="14sp"/>
         </RelativeLayout>
@@ -176,7 +176,7 @@
             android:layout_height="100dp"
             android:background="@color/white"
             android:gravity="center"
-            android:text="暂无评论"
+            android:text="@string/no_comments"
             android:textColor="#999999"
             android:textSize="16sp"
             android:visibility="gone"/>
@@ -187,7 +187,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="更多评论>>"
+        android:text="@string/more_comments"
         android:textSize="12sp"
         android:visibility="gone"/>
 
@@ -219,7 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="产品详情"
+                android:text="@string/product_detail"
                 android:textColor="#000000"
                 android:textSize="14sp"/>
         </RelativeLayout>
@@ -248,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="商品评价"
+                android:text="@string/products_comments"
                 android:textColor="#000000"
                 android:textSize="14sp"/>
         </RelativeLayout>
@@ -259,6 +259,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="--上拉查看商品详情--"
+        android:text="@string/up_to_look_more_detail"
         />
 </LinearLayout>

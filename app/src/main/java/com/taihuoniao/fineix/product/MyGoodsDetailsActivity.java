@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -29,6 +27,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -40,9 +44,13 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.GoodsDetailsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.NowBuyBean;
+import com.taihuoniao.fineix.beans.NowBuyItemBean;
+import com.taihuoniao.fineix.beans.RelationProductsBean;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
+import com.taihuoniao.fineix.beans.SkusBean;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
@@ -56,6 +64,11 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,9 +139,133 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         filter.addAction(DataConstants.BROAD_GOODS_DETAILS);
         registerReceiver(goodsDetailsActivityReceiver, filter);
         dialog.show();
-        DataPaser.goodsDetails(id, mHandler);
+        goodsDetail(id);
         int currentPage = 1;
-        DataPaser.getGoodsDetailsCommentsList(id, currentPage + "", mHandler);
+        goodsComments(id, currentPage + "");
+    }
+
+    private void goodsComments(String target_id, String page) {
+        ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(responseInfo.result);
+                commentsList.addAll(list);
+                if (commentsList.size() > 3) {
+                    moreCommentsTv.setVisibility(View.VISIBLE);
+                } else {
+                    moreCommentsTv.setVisibility(View.GONE);
+                }
+                commentListsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void goodsDetail(String id) {
+        ClientDiscoverAPI.goodsDetailsNet(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                GoodsDetailsBean goodsDetails = new GoodsDetailsBean();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    goodsDetails.setSuccess(obj.optBoolean("success"));
+                    goodsDetails.setMessage(obj.optString("message"));
+                    JSONObject data = obj.getJSONObject("data");
+                    if (goodsDetails.isSuccess()) {
+                        goodsDetails.set_id(data.optString("_id"));
+                        goodsDetails.setTitle(data.optString("title"));
+                        goodsDetails.setSale_price(data.optString("sale_price"));
+                        goodsDetails.setMarket_price(data.optString("market_price"));
+                        goodsDetails.setIs_love(data.optString("is_love"));
+                        goodsDetails.setShare_view_url(data.optString("share_view_url"));
+                        goodsDetails.setShare_desc(data.optString("share_desc"));
+                        JSONArray asset = data.getJSONArray("asset");
+                        List<String> imgUrlList = new ArrayList<>();
+                        for (int i = 0; i < asset.length(); i++) {
+                            String imgUrl = asset.optString(i);
+                            imgUrlList.add(imgUrl);
+                        }
+                        goodsDetails.setImgUrlList(imgUrlList);
+                        JSONArray relationProducts = data.getJSONArray("relation_products");
+                        List<RelationProductsBean> relationProductsList = new ArrayList<>();
+                        for (int i = 0; i < relationProducts.length(); i++) {
+                            JSONObject job = relationProducts.optJSONObject(i);
+                            RelationProductsBean relationProductsBean = new RelationProductsBean();
+                            relationProductsBean.set_id(job.optString("_id"));
+                            relationProductsBean.setCover_url(job.optString("cover_url"));
+                            relationProductsBean.setTitle(job.optString("title"));
+                            relationProductsBean.setSale_price(job.optString("sale_price"));
+                            relationProductsList.add(relationProductsBean);
+                        }
+                        goodsDetails.setRelationProductsList(relationProductsList);
+                        goodsDetails.setWap_view_url(data.optString("wap_view_url"));
+                        goodsDetails.setContent_view_url(data.optString("content_view_url"));
+                        goodsDetails.setCover_url(data.optString("cover_url"));
+                        goodsDetails.setSkus_count(data.optString("skus_count"));
+                        if (Integer.parseInt(data.optString("skus_count")) > 0) {
+                            List<SkusBean> skuList = new ArrayList<>();
+                            JSONArray skus = data.getJSONArray("skus");
+                            for (int i = 0; i < skus.length(); i++) {
+                                JSONObject jsonObject = skus.getJSONObject(i);
+                                SkusBean skusBean = new SkusBean();
+                                skusBean.set_id(jsonObject.optString("_id"));
+                                skusBean.setMode(jsonObject.optString("mode"));
+                                skusBean.setPrice(jsonObject.optString("price"));
+                                skusBean.setQuantity(jsonObject.optString("quantity"));
+                                skuList.add(skusBean);
+                            }
+                            goodsDetails.setSkus(skuList);
+                        }
+                        goodsDetails.setInventory(data.optString("inventory"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                goodsDetailsBean = goodsDetails;
+                dialog.dismiss();
+                if (goodsDetailsBean.getImgUrlList() == null) {
+                    Toast.makeText(MyGoodsDetailsActivity.this, "访问的商品不存在", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                imgList.clear();
+                pointLinear.removeAllViews();
+                for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
+                    ImageView img = new ImageView(MyGoodsDetailsActivity.this);
+                    img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                    imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
+                    imgList.add(img);
+                }
+                viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
+                addPointToLinear();
+                nameTv.setText(goodsDetailsBean.getTitle());
+                salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+                priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+                marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
+                marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
+                gridView.setAdapter(gridViewAdapter);
+                webView.loadUrl(goodsDetailsBean.getContent_view_url());
+                imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
+                productsTitle.setText(goodsDetailsBean.getTitle());
+                maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
+                quantity.setText(maxNumber + "");
+                addSkuToLinear();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     @Override
@@ -142,7 +279,40 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        DataPaser.shopCartNumberParser(mHandler);
+//        DataPaser.shopCartNumberParser(mHandler);
+        shopCartNumber();
+    }
+
+    private void shopCartNumber() {
+        ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ShopCartNumber shopCartNumber = new ShopCartNumber();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    shopCartNumber.setSuccess(obj.optBoolean("success"));
+                    JSONObject cartNumberObj = obj.getJSONObject("data");
+                    shopCartNumber.setCount(cartNumberObj.optString("count"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ShopCartNumber numberCart;
+                numberCart = shopCartNumber;
+                if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
+                    titleLayout.setRightShopCartButton(true);
+                    titleLayout.setShopCartCountertext(numberCart.getCount() + "");
+                } else {
+                    titleLayout.setRightShopCartButton(false);
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
     }
 
     @Override
@@ -257,128 +427,99 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         imageLoader = ImageLoader.getInstance();
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.PARSER_SHOP_CART_NUMBER:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof ShopCartNumber) {
-                            ShopCartNumber numberCart;
-                            numberCart = (ShopCartNumber) msg.obj;
-                            if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
-                                titleLayout.setRightShopCartButton(true);
-                                titleLayout.setShopCartCountertext(numberCart.getCount() + "");
-                            }else{
-                                titleLayout.setRightShopCartButton(false);
-                            }
-                        }
-                    }
-                    break;
-                case DataConstants.BUY_NOW:
-                    dialog.dismiss();
-                    NowBuyBean netNowBuy = (NowBuyBean) msg.obj;
-                    if (netNowBuy.getSuccess()) {
-                        Intent intent = new Intent(MyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
-                        intent.putExtra("NowBuyBean", netNowBuy);
-                        startActivity(intent);
-                    } else {
-                        ToastUtils.showError(netNowBuy.getMessage());
-//                        dialog.showErrorWithStatus(netNowBuy.getMessage());
-//                        Toast.makeText(MyGoodsDetailsActivity.this, netNowBuy.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    popupWindow.dismiss();
-                    break;
-                case DataConstants.ADD_TO_CART:
-                    dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    if(netBean.isSuccess()){
-                        ToastUtils.showSuccess(netBean.getMessage());
-//                        dialog.showSuccessWithStatus(netBean.getMessage());
-                    }else{
-                        ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                    }
-                    popupWindow.dismiss();
-                    DataPaser.shopCartNumberParser(mHandler);
-                    break;
-//                case DataConstants.CANCEL_LOVE:
-//                    dialog.dismiss();
-//                    boolean cancelSuccess = (boolean) msg.obj;
-//                    if (cancelSuccess) {
-//                        isLove = false;
-//                        loveImg.setImageResource(R.mipmap.heart_red_3x);
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.PARSER_SHOP_CART_NUMBER:
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof ShopCartNumber) {
+//                            ShopCartNumber numberCart;
+//                            numberCart = (ShopCartNumber) msg.obj;
+//                            if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
+//                                titleLayout.setRightShopCartButton(true);
+//                                titleLayout.setShopCartCountertext(numberCart.getCount() + "");
+//                            }else{
+//                                titleLayout.setRightShopCartButton(false);
+//                            }
+//                        }
 //                    }
 //                    break;
-//                case DataConstants.LOVE:
+//                case DataConstants.BUY_NOW:
 //                    dialog.dismiss();
-//                    boolean loveSuccess = (boolean) msg.obj;
-//                    if (loveSuccess) {
-//                        isLove = true;
-//                        loveImg.setImageResource(R.mipmap.heart_y);
-//                    }
-//
-//                    break;
-                case DataConstants.GOODS_DETAILS_COMMENTS:
-                    List<TryCommentsBean> netList = (List<TryCommentsBean>) msg.obj;
-                    commentsList.addAll(netList);
-                    if (commentsList.size() > 3) {
-                        moreCommentsTv.setVisibility(View.VISIBLE);
-                    } else {
-                        moreCommentsTv.setVisibility(View.GONE);
-                    }
-                    commentListsAdapter.notifyDataSetChanged();
-                    break;
-                case DataConstants.GOODS_DETAILS:
-                    dialog.dismiss();
-                    goodsDetailsBean = (GoodsDetailsBean) msg.obj;
-                    if (goodsDetailsBean == null || goodsDetailsBean.getImgUrlList() == null) {
-                        Toast.makeText(MyGoodsDetailsActivity.this, "访问的商品不存在", Toast.LENGTH_SHORT).show();
-                        finish();
-                        return;
-                    }
-                    imgList.clear();
-                    pointLinear.removeAllViews();
-                    for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
-                        ImageView img = new ImageView(MyGoodsDetailsActivity.this);
-                        img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                        img.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
-                        imgList.add(img);
-                    }
-                    viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
-                    addPointToLinear();
-                    nameTv.setText(goodsDetailsBean.getTitle());
-                    salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-                    priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-                    marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
-                    marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                    GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
-                    gridView.setAdapter(gridViewAdapter);
-//                    if (goodsDetailsBean.getIs_love().equals("0")) {
-//                        isLove = false;
-//                        loveImg.setImageResource(R.mipmap.heart_red_3x);
+//                    NowBuyBean netNowBuy = (NowBuyBean) msg.obj;
+//                    if (netNowBuy.getSuccess()) {
+//                        Intent intent = new Intent(MyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
+//                        intent.putExtra("NowBuyBean", netNowBuy);
+//                        startActivity(intent);
 //                    } else {
-//                        isLove = true;
-//                        loveImg.setImageResource(R.mipmap.heart_y);
+//                        ToastUtils.showError(netNowBuy.getMessage());
 //                    }
-//                    url = goodsDetailsBean.getContent_view_url();
-                    webView.loadUrl(goodsDetailsBean.getContent_view_url());
-                    imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
-                    productsTitle.setText(goodsDetailsBean.getTitle());
-                    maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
-                    quantity.setText(maxNumber + "");
-                    addSkuToLinear();
-                    break;
-                case DataConstants.NETWORK_FAILURE:
-                    dialog.dismiss();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(MyGoodsDetailsActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
+//                    popupWindow.dismiss();
+//                    break;
+//                case DataConstants.ADD_TO_CART:
+//                    dialog.dismiss();
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if(netBean.isSuccess()){
+//                        ToastUtils.showSuccess(netBean.getMessage());
+////                        dialog.showSuccessWithStatus(netBean.getMessage());
+//                    }else{
+//                        ToastUtils.showError(netBean.getMessage());
+////                        dialog.showErrorWithStatus(netBean.getMessage());
+//                    }
+//                    popupWindow.dismiss();
+//                    DataPaser.shopCartNumberParser(mHandler);
+//                    break;
+//                case DataConstants.GOODS_DETAILS_COMMENTS:
+//                    List<TryCommentsBean> netList = (List<TryCommentsBean>) msg.obj;
+//                    commentsList.addAll(netList);
+//                    if (commentsList.size() > 3) {
+//                        moreCommentsTv.setVisibility(View.VISIBLE);
+//                    } else {
+//                        moreCommentsTv.setVisibility(View.GONE);
+//                    }
+//                    commentListsAdapter.notifyDataSetChanged();
+//                    break;
+//                case DataConstants.GOODS_DETAILS:
+//                    dialog.dismiss();
+//                    goodsDetailsBean = (GoodsDetailsBean) msg.obj;
+//                    if (goodsDetailsBean == null || goodsDetailsBean.getImgUrlList() == null) {
+//                        Toast.makeText(MyGoodsDetailsActivity.this, "访问的商品不存在", Toast.LENGTH_SHORT).show();
+//                        finish();
+//                        return;
+//                    }
+//                    imgList.clear();
+//                    pointLinear.removeAllViews();
+//                    for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
+//                        ImageView img = new ImageView(MyGoodsDetailsActivity.this);
+//                        img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//                        img.setScaleType(ImageView.ScaleType.FIT_XY);
+//                        imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
+//                        imgList.add(img);
+//                    }
+//                    viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
+//                    addPointToLinear();
+//                    nameTv.setText(goodsDetailsBean.getTitle());
+//                    salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+//                    priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+//                    marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
+//                    marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+//                    GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
+//                    gridView.setAdapter(gridViewAdapter);
+//                    webView.loadUrl(goodsDetailsBean.getContent_view_url());
+//                    imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
+//                    productsTitle.setText(goodsDetailsBean.getTitle());
+//                    maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
+//                    quantity.setText(maxNumber + "");
+//                    addSkuToLinear();
+//                    break;
+//                case DataConstants.NETWORK_FAILURE:
+//                    dialog.dismiss();
+//                    ToastUtils.showError("网络错误");
+//                    break;
+//            }
+//        }
+//    };
 
     private void addSkuToLinear() {
         if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
@@ -489,9 +630,9 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 if (goodsDetailsBean == null) {
                     cancelNet();
                     dialog.show();
-                    DataPaser.goodsDetails(id, mHandler);
+                    goodsDetail(id);
                     int currentPage = 1;
-                    DataPaser.getGoodsDetailsCommentsList(id, currentPage + "", mHandler);
+                    goodsComments(id, currentPage + "");
                     return;
                 }
                 if (LoginInfo.isUserLogin()) {
@@ -540,9 +681,9 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 if (goodsDetailsBean == null) {
                     cancelNet();
                     dialog.show();
-                    DataPaser.goodsDetails(id, mHandler);
+                    goodsDetail(id);
                     int currentPage = 1;
-                    DataPaser.getGoodsDetailsCommentsList(id, currentPage + "", mHandler);
+                    goodsComments(id, currentPage + "");
                     return;
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
@@ -552,20 +693,20 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();
-                        DataPaser.addToCart(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString(), mHandler);
+                        addToCart(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                     }
                 } else {
                     dialog.show();
-                    DataPaser.addToCart(id, "1", numberTv.getText().toString(), mHandler);
+                    addToCart(id, "1", numberTv.getText().toString());
                 }
                 break;
             case R.id.dialog_cart_buybtn:
                 if (goodsDetailsBean == null) {
                     cancelNet();
                     dialog.show();
-                    DataPaser.goodsDetails(id, mHandler);
+                    goodsDetail(id);
                     int currentPage = 1;
-                    DataPaser.getGoodsDetailsCommentsList(id, currentPage + "", mHandler);
+                    goodsComments(id, currentPage + "");
                     return;
                 }
                 if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
@@ -575,15 +716,106 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
                         dialog.show();
-                        DataPaser.buyNow(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString(), mHandler);
+                        buyNow(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                     }
                 } else {
                     dialog.show();
-                    DataPaser.buyNow(id, "1", numberTv.getText().toString(), mHandler);
+                    buyNow(id, "1", numberTv.getText().toString());
                 }
 
                 break;
         }
+    }
+
+    private void buyNow(String target_id, String type, String n) {
+        ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NowBuyBean nowBuyBean = new NowBuyBean();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject data = obj.getJSONObject("data");
+                    nowBuyBean.setSuccess(obj.optBoolean("success"));
+                    nowBuyBean.setMessage(obj.optString("message"));
+                    if (nowBuyBean.getSuccess()) {
+                        nowBuyBean.setBonus_number(data.getJSONArray("bonus").length());
+                        nowBuyBean.setIs_nowbuy(data.optString("is_nowbuy"));
+                        nowBuyBean.setPay_money(data.optString("pay_money"));
+                        JSONObject order_info = data.getJSONObject("order_info");
+                        nowBuyBean.setRid(order_info.optString("rid"));
+                        JSONObject dict = order_info.getJSONObject("dict");
+                        nowBuyBean.setTransfer_time(dict.optString("transfer_time"));
+                        nowBuyBean.setSummary(dict.optString("summary"));
+                        nowBuyBean.setPayment_method(dict.optString("payment_method"));
+                        JSONArray items = dict.getJSONArray("items");
+                        List<NowBuyItemBean> itemList = new ArrayList<>();
+                        for (int i = 0; i < items.length(); i++) {
+                            JSONObject job = items.getJSONObject(i);
+                            NowBuyItemBean nowBuyItemBean = new NowBuyItemBean();
+                            nowBuyItemBean.setCover(job.optString("cover"));
+                            nowBuyItemBean.setType(job.optString("type"));
+                            nowBuyItemBean.setTitle(job.optString("title"));
+                            nowBuyItemBean.setSubtotal(job.optString("subtotal"));
+                            nowBuyItemBean.setSku_name(job.optString("sku_name"));
+                            nowBuyItemBean.setSku_mode(job.optString("sku_mode"));
+                            nowBuyItemBean.setQuantity(job.optString("quantity"));
+                            itemList.add(nowBuyItemBean);
+                        }
+                        nowBuyBean.setItemList(itemList);
+                        nowBuyBean.set_id(order_info.optString("_id"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                NowBuyBean netNowBuy = nowBuyBean;
+                if (netNowBuy.getSuccess()) {
+                    Intent intent = new Intent(MyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
+                    intent.putExtra("NowBuyBean", netNowBuy);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showError(netNowBuy.getMessage());
+                }
+                popupWindow.dismiss();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
+    private void addToCart(String target_id, String type, String n) {
+        ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type1 = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type1);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                }
+                popupWindow.dismiss();
+                shopCartNumber();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
     }
 
 
@@ -663,7 +895,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private BroadcastReceiver goodsDetailsActivityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            DataPaser.goodsDetails(id, mHandler);
+            goodsDetail(id);
         }
     };
 

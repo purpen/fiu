@@ -16,7 +16,7 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:background="@color/yellow_bd8913"
-        android:text="提交"
+        android:text="@string/commit"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 
@@ -35,7 +35,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/background_product_white_corner"
-            android:hint="收货人姓名"
+            android:hint="@string/consignee_name"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:singleLine="true"
@@ -47,7 +47,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
-            android:hint="手机"
+            android:hint="@string/phone"
             android:inputType="phone"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -60,7 +60,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
-            android:hint="邮政编码"
+            android:hint="@string/postcode"
             android:inputType="number"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="北京市"
+                android:text="@string/beijing"
                 android:textColor="#000000"
                 android:textSize="16sp"/>
 
@@ -92,7 +92,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="东城区"
+                android:text="@string/dongcheng"
                 android:textColor="#000000"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -103,7 +103,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
-            android:hint="详细地址"
+            android:hint="@string/detail_address"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:singleLine="true"
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="设为默认地址"
+                android:text="@string/set_default_address"
                 android:textSize="16sp"/>
 
             <ImageView

@@ -286,7 +286,7 @@ public class AppleWatchView extends View {
             } else {
                 bitmap = info.icon;
             }
-            if(bitmap==null){
+            if (bitmap == null) {
                 return;
             }
 
@@ -370,6 +370,24 @@ public class AppleWatchView extends View {
                         return true;
                     }
                 }
+//                if (disX < 0) {
+//                    if ((mAppInfos.get(rightItemIndex).x - scrollX) <= 0) {
+//                        return true;
+//                    }
+//                } else {
+//                    if ((mAppInfos.get(leftItemIndex).x - scrollX) >= mWidth) {
+//                        return true;
+//                    }
+//                }
+//                if (disY < 0) {
+//                    if ((mAppInfos.get(bottomItemIndex).y - scrollY) <= 0) {
+//                        return true;
+//                    }
+//                } else {
+//                    if ((mAppInfos.get(topItemIndex).y - scrollY) >= mHeight) {
+//                        return true;
+//                    }
+//                }
 
                 scrollBy(-disX, -disY);
 
@@ -425,6 +443,9 @@ public class AppleWatchView extends View {
             float clickX = e.getX() + getScrollX();
             float clickY = e.getY() + getScrollY();
             for (AppInfo info : mAppInfos) {
+                if (info == null || info.content == null) {
+                    return false;
+                }
                 if (info.content.contains(clickX, clickY)) {
                     if (info.appIntent != null) {
                         mActivity.startActivity(info.appIntent);

@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,9 +14,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.NoticeData;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
@@ -58,9 +53,6 @@ public class NoticeActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"提醒");
         dialog=new WaittingDialog(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(noticeReceiver,intentFilter);
     }
 
     @Override
@@ -132,18 +124,5 @@ public class NoticeActivity extends BaseActivity{
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(noticeReceiver);
-        super.onDestroy();
-    }
 
-    private BroadcastReceiver noticeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
-//                刷新场景列表
-            }
-        }
-    };
 }

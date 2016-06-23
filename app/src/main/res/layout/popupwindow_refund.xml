@@ -24,7 +24,7 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
-        android:text="我不想要了"
+        android:text="@string/dont_want_to_buy"
         android:textColor="@color/black333333"
         android:textSize="14sp" />
 
@@ -38,7 +38,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
-        android:text="其他"
+        android:text="@string/other"
         android:textColor="@color/black333333"
         android:textSize="14sp" />
 
@@ -52,7 +52,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/shap_home_gridview"
         android:padding="10dp"
-        android:text="取消"
+        android:text="@string/cancel"
         android:textColor="@color/black333333"
         android:textSize="14sp" />
 

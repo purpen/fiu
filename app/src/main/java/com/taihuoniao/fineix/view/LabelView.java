@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 /**
  * @author tongqian.ni
  */
-public class LabelView extends LinearLayout  {
+public class LabelView extends LinearLayout {
     //贴纸
     private MyImageViewTouch mImageView;
     //容器
@@ -156,35 +156,14 @@ public class LabelView extends LinearLayout  {
         this.parentWidth = overlay.getWidth();
 //        setImageWidth((int) parentWidth);
         this.parentHeight = overlay.getHeight();
-//        setImageHeight((int) this.parentHeight);
-//        if (tagInfo.isLeft()) {
-//            relativeRight.setVisibility(View.GONE);
-//            relativeLeft.setVisibility(View.VISIBLE);
-//            //点到左边缘的位置,不是整个控件
-//            int toLeft = left - DensityUtils.dp2px(getContext(), 62) - DensityUtils.dp2px(getContext(), 2) - (gpuRelative.getWidth() - overlay.getWidth()) / 2;
-//            Log.e("<<<", "toLeft=" + toLeft + ",top=" + top);
-//            setupLocation(toLeft, top);
-//            parent.addView(this);
-//            post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    RelativeLayout.LayoutParams pointLeftLp = (RelativeLayout.LayoutParams) pointLeft.getLayoutParams();
-//                    //点到左边缘的位置,不是整个控件
-//                    int toLeft = left - priceLeft.getMeasuredWidth() - pointLeftLp.leftMargin;
-//                    setupLocation(toLeft, top);
-//                    relativeLeft.setVisibility(View.VISIBLE);
-//                }
-//            });
-//        } else {
-        double bi = overlay.getWidth() / parent.getWidth();
-        priceRight.setWidth(DensityUtils.dp2px(getContext(), 63 * bi));
-        priceRight.setHeight(DensityUtils.dp2px(getContext(), 24 * bi));
-        nameLeft.setWidth(DensityUtils.dp2px(getContext(), 114 * bi));
-        nameLeft.setHeight(DensityUtils.dp2px(getContext(), 24 * bi));
-        pointRight.setMaxWidth(DensityUtils.dp2px(getContext(), 15 * bi));
-        pointRight.setMinimumWidth(DensityUtils.dp2px(getContext(), 15 * bi));
-        pointRight.setMaxHeight(DensityUtils.dp2px(getContext(), 15 * bi));
-        pointRight.setMinimumHeight(DensityUtils.dp2px(getContext(), 15 * bi));
+        double bi = (double) overlay.getWidth() / (double) parent.getWidth();
+        Log.e("<<<添加labelview", "bi=" + bi);
+        priceRight.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 63));
+        priceRight.getLayoutParams().height = (int) (bi * DensityUtils.dp2px(getContext(), 24));
+        nameLeft.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 114));
+        nameLeft.getLayoutParams().height = (int) (bi*DensityUtils.dp2px(getContext(),24));
+        pointRight.getLayoutParams().width = (int) (bi*DensityUtils.dp2px(getContext(),4));
+        pointRight.getLayoutParams().height = (int) (bi*DensityUtils.dp2px(getContext(),4));
         relativeRight.setVisibility(View.VISIBLE);
 //            relativeLeft.setVisibility(View.GONE);
         setupLocation(left, top);
@@ -316,7 +295,7 @@ public class LabelView extends LinearLayout  {
         ScaleAnimation sa = new ScaleAnimation(1f, 3f, 1f, 3f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(ANIMATIONEACHOFFSET * 3);
-        AlphaAnimation aniAlp = new AlphaAnimation(1, 0.1f);
+        AlphaAnimation aniAlp = new AlphaAnimation(1, 0.5f);
         as.setDuration(ANIMATIONEACHOFFSET * 3);
         as.addAnimation(sa);
         sa.setRepeatCount(Animation.INFINITE);
@@ -327,7 +306,7 @@ public class LabelView extends LinearLayout  {
         ScaleAnimation sa1 = new ScaleAnimation(1f, 6f, 1f, 6f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa1.setDuration(ANIMATIONEACHOFFSET * 3);
-        AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0.1f);
+        AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0.5f);
         as1.setDuration(ANIMATIONEACHOFFSET * 3);
         as1.addAnimation(sa1);
         sa1.setRepeatCount(Animation.INFINITE);

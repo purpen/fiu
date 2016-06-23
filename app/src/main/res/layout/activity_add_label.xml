@@ -22,10 +22,12 @@
         android:background="@color/white">
 
         <ImageView
+            android:contentDescription="@string/delete_all_select_labels"
             android:id="@+id/activity_add_label_cancel"
             android:layout_width="44dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
             android:src="@mipmap/cancel_gray"/>
@@ -35,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_toLeftOf="@id/activity_add_label_cancel"
+            android:layout_toStartOf="@id/activity_add_label_cancel"
             android:scrollbars="none"
             >
 
@@ -44,6 +47,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingRight="1dp"
+                android:paddingEnd="1dp"
                 android:paddingLeft="16dp">
 
             </LinearLayout>

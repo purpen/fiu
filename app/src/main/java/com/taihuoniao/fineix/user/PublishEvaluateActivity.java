@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,18 +17,20 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.OrderDetails;
+import com.taihuoniao.fineix.beans.OrderDetailsAddress;
 import com.taihuoniao.fineix.beans.OrderDetailsProducts;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,26 +52,26 @@ public class PublishEvaluateActivity extends Activity {
     private String mEditContent;
     private WaittingDialog dialog;
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DataConstants.PARSER_ORDER_DETAILS:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof List) {
-                            mList.clear();
-                            mList.addAll((Collection<? extends OrderDetails>) msg.obj);
-                            mListProducts.clear();
-                            mListProducts.addAll(mList.get(0).getProducts());
-
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    break;
-            }
-        }
-    };
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case DataConstants.PARSER_ORDER_DETAILS:
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof List) {
+//                            mList.clear();
+//                            mList.addAll((Collection<? extends OrderDetails>) msg.obj);
+//                            mListProducts.clear();
+//                            mListProducts.addAll(mList.get(0).getProducts());
+//
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +144,7 @@ public class PublishEvaluateActivity extends Activity {
                                     ToastUtils.showSuccess(netBean.getMessage());
 //                                    dialog.showSuccessWithStatus(netBean.getMessage());
                                     onBackPressed();
-                                }else{
+                                } else {
                                     ToastUtils.showError(netBean.getMessage());
 //                                    dialog.showErrorWithStatus(netBean.getMessage());
                                 }
@@ -167,6 +167,69 @@ public class PublishEvaluateActivity extends Activity {
         mTargetId = getIntent().getStringExtra("productId");
         mSkuId = getIntent().getStringExtra("skuId");
         mRid = getIntent().getStringExtra("rid");
-        DataPaser.orderPayDetailsParser(mRid, mHandler);
+//        DataPaser.orderPayDetailsParser(mRid, mHandler);
+        //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
+        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
+                List<OrderDetails> ordersList = new ArrayList<>();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject orderObj = obj.getJSONObject("data");
+                    OrderDetails details = new OrderDetails();
+                    details.setRid(orderObj.optString("rid"));
+                    details.setExpress_company(orderObj.optString("express_company"));
+                    details.setExpress_no(orderObj.optString("express_no"));
+                    details.setCreated_at(orderObj.optString("created_at"));
+                    details.setFreight(orderObj.optString("freight"));
+                    details.setItems_count(orderObj.optString("items_count"));
+                    details.setPay_money(orderObj.optString("pay_money"));
+                    details.setPayment_method(orderObj.optString("payment_method"));
+                    details.setTotal_money(orderObj.optString("total_money"));
+                    details.setStatus(orderObj.optString("status"));
+                    JSONObject arr = orderObj.getJSONObject("express_info");
+                    List<OrderDetailsAddress> addressList = new ArrayList<>();
+                    OrderDetailsAddress address = new OrderDetailsAddress();
+                    address.setAddress(arr.optString("address"));
+                    address.setName(arr.optString("name"));
+                    address.setCity(arr.optString("city"));
+                    address.setPhone(arr.optString("phone"));
+                    address.setProvince(arr.optString("province"));
+                    addressList.add(address);
+
+                    details.setAddresses(addressList);
+                    JSONArray productsArrays = orderObj.getJSONArray("items");
+                    List<OrderDetailsProducts> productsList = new ArrayList<>();
+                    for (int j = 0; j < productsArrays.length(); j++) {
+                        JSONObject productsArr = productsArrays.getJSONObject(j);
+                        OrderDetailsProducts products = new OrderDetailsProducts();
+                        products.setName(productsArr.optString("name"));
+                        products.setCover_url(productsArr.optString("cover_url"));
+                        products.setPrice(productsArr.optString("price"));
+                        products.setProduct_id(productsArr.optString("product_id"));
+                        products.setQuantity(productsArr.optString("quantity"));
+                        products.setSale_price(productsArr.optString("sale_price"));
+                        products.setSku(productsArr.optString("sku"));
+                        products.setSku_name(productsArr.optString("sku_name"));
+                        productsList.add(products);
+                    }
+                    details.setProducts(productsList);
+                    ordersList.add(details);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mList.clear();
+                mList.addAll(ordersList);
+                mListProducts.clear();
+                mListProducts.addAll(mList.get(0).getProducts());
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 }

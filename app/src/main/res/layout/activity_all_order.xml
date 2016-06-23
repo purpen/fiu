@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:gravity="center_vertical"
-            android:text="我的订单"
+            android:text="@string/my_order"
             android:textColor="@color/black333333"
             android:textSize="14sp"/>
 
@@ -36,7 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="17dp"
             android:gravity="center_vertical"
-            android:text="查看全部"
+            android:text="@string/look_all"
             android:textColor="#666666"
             android:textSize="12sp"/>
     </RelativeLayout>
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="待付款"
+                android:text="@string/obligation"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="待发货"
+                android:text="@string/wait_for_delivery"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="待收货"
+                android:text="@string/waiting_for_goods"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="待评价"
+                android:text="@string/waiting_for_comments"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="退换货"
+                android:text="@string/changing_or_refunding"
                 android:textColor="@color/black333333"
                 android:textSize="14sp"/>
 
@@ -163,7 +163,7 @@
             android:layout_marginLeft="11dp"
             android:layout_toRightOf="@id/jd"
             android:gravity="center_vertical"
-            android:text="京东订单"
+            android:text="@string/jingdong_orders"
             android:textColor="@color/black333333"
             android:textSize="13sp"/>
 
@@ -200,7 +200,7 @@
             android:layout_marginLeft="11dp"
             android:layout_toRightOf="@id/tb"
             android:gravity="center_vertical"
-            android:text="淘宝订单"
+            android:text="@string/taobao_orders"
             android:textColor="@color/black333333"
             android:textSize="13sp"/>
 
@@ -237,7 +237,7 @@
             android:layout_marginLeft="11dp"
             android:layout_toRightOf="@id/tm"
             android:gravity="center_vertical"
-            android:text="天猫订单"
+            android:text="@string/tianmao_orders"
             android:textColor="@color/black333333"
             android:textSize="13sp"/>
 
@@ -275,7 +275,7 @@
             android:layout_marginLeft="11dp"
             android:layout_toRightOf="@id/ymx"
             android:gravity="center_vertical"
-            android:text="亚马逊订单"
+            android:text="@string/yamaxun_orders"
             android:textColor="@color/black333333"
             android:textSize="13sp"/>
 

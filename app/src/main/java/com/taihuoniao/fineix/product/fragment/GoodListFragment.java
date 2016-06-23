@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.product.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
@@ -20,13 +24,13 @@ import com.taihuoniao.fineix.adapters.GoodListFragmentRecyclerAdapter;
 import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +81,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     protected View initView() {
         categoryBean = (CategoryBean) getArguments().getSerializable("categoryBean");
         position = getArguments().getInt("position", 0);
-        Log.e("<<<产品分类",position+"");
+        Log.e("<<<产品分类", position + "");
         if (position >= 0)
             tag_id = categoryBean == null ? "0" : categoryBean.getList().get(position).getTag_id();
         View view = View.inflate(getActivity(), R.layout.fragment_good_list, null);
@@ -108,16 +112,16 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
                 if (position == 0) {
-                    DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
+                    getProducts(null, null, null, page + "", 8 + "", null, null, null, null);
                     return;
                 }
                 if (tag_id.equals("0")) {
-                    DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
+                    getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
                 } else {
                     if (pos == -1) {
-                        DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
+                        getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
                     } else {
-                        DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, null, null, handler);
+                        getProducts(categoryBean.getList().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, null, null);
                     }
                 }
             }
@@ -125,6 +129,76 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         productList = new ArrayList<>();
         goodListAdapter = new GoodListAdapter(getActivity(), productList, null);
         listView.setAdapter(goodListAdapter);
+    }
+
+    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                             String stick, String fine) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+//                    listview适配器
+                ProductBean netProductBean = productBean;
+                if (netProductBean.isSuccess()) {
+                    productList.addAll(netProductBean.getData().getRows());
+                    goodListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void getCateLabels(String tag_id) {
+        ClientDiscoverAPI.categoryLabel(tag_id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CategoryLabelListBean categoryLabelListBean = new CategoryLabelListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryLabelListBean>() {
+                    }.getType();
+                    categoryLabelListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                CategoryLabelListBean netCategory = categoryLabelListBean;
+                if (netCategory.isSuccess()) {
+                    recyclerList.clear();
+                    recyclerList.addAll(netCategory.getData().getTags());
+//                        click(0);
+                    goodListFragmentRecyclerAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netCategory.getMessage());
+//                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
+//                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     protected void requestNet() {
@@ -135,67 +209,59 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //        progressBar.setVisibility(View.VISIBLE);
         if (position == 0) {
             recyclerView.setVisibility(View.GONE);
-            DataPaser.getProductList(null, null, null, page + "", 8 + "", null, null, null, null, handler);
+            getProducts(null, null, null, page + "", 8 + "", null, null, null, null);
             return;
         }
         if (tag_id == null) {
             dialog.dismiss();
             return;
         }
-        DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null, handler);
+        getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
         if (tag_id.equals("0")) {
             recyclerView.setVisibility(View.GONE);
         } else {
             recyclerView.setVisibility(View.VISIBLE);
-            DataPaser.categoryLabel(tag_id, handler);
+            getCateLabels(tag_id);
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.ADD_PRODUCT_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-//                    listview适配器
-                    ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess()) {
-                        productList.addAll(netProductBean.getData().getRows());
-                        goodListAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.CATEGORY_LABEL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    CategoryLabelListBean netCategory = (CategoryLabelListBean) msg.obj;
-                    if (netCategory.isSuccess()) {
-                        recyclerList.clear();
-                        recyclerList.addAll(netCategory.getData().getTags());
-//                        click(0);
-                        goodListFragmentRecyclerAdapter.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netCategory.getMessage());
-//                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
-//                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.ADD_PRODUCT_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+////                    listview适配器
+//                    ProductBean netProductBean = (ProductBean) msg.obj;
+//                    if (netProductBean.isSuccess()) {
+//                        productList.addAll(netProductBean.getData().getRows());
+//                        goodListAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.CATEGORY_LABEL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    CategoryLabelListBean netCategory = (CategoryLabelListBean) msg.obj;
+//                    if (netCategory.isSuccess()) {
+//                        recyclerList.clear();
+//                        recyclerList.addAll(netCategory.getData().getTags());
+////                        click(0);
+//                        goodListFragmentRecyclerAdapter.notifyDataSetChanged();
+//                    } else {
+//                        ToastUtils.showError(netCategory.getMessage());
+////                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
+////                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    public void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        super.onDestroy();
-    }
 
     @Override
     public void click(int postion) {
@@ -216,7 +282,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //        dialog.show();
 
         Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
-        DataPaser.getProductList(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null, handler);
+        getProducts(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null);
     }
 
 }

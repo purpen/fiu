@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
@@ -20,6 +18,12 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -28,11 +32,13 @@ import com.taihuoniao.fineix.beans.AddProductBean;
 import com.taihuoniao.fineix.beans.JDProductBean;
 import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import java.lang.reflect.Type;
 
 /**
  * Created by taihuoniao on 2016/3/24.
@@ -254,7 +260,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                         }
                         if (netJingDong == null) {
                             dialog.show();
-                            DataPaser.getJDProductData(handler, id);
+                            getJDProductData(id);
                             return;
                         }
                         StringBuilder banners_url = new StringBuilder();
@@ -269,9 +275,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
 //                            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        DataPaser.addProduct(attrbute, netJingDong.getData().getRows().get(0).getOid(), null, netJingDong.getData().getRows().get(0).getTitle(),
+                        addProduct(attrbute, netJingDong.getData().getRows().get(0).getOid(), null, netJingDong.getData().getRows().get(0).getTitle(),
                                 netJingDong.getData().getRows().get(0).getMarket_price(), netJingDong.getData().getRows().get(0).getSale_price(),
-                                netJingDong.getData().getRows().get(0).getLink(), netJingDong.getData().getRows().get(0).getCover_url(), banners_url.toString(), handler);
+                                netJingDong.getData().getRows().get(0).getLink(), netJingDong.getData().getRows().get(0).getCover_url(), banners_url.toString());
                         break;
                     case DataConstants.TAOBAO:
                         attrbute = "2";
@@ -299,11 +305,11 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 dialog.show();
                 switch (type) {
                     case DataConstants.JINGDONG:
-                        DataPaser.getJDProductData(handler, id);
+                        getJDProductData(id);
                         break;
                     case DataConstants.TAOBAO:
                     case DataConstants.TIANMAO:
-                        DataPaser.getTBProductData(handler, id);
+                        getTBProductData(id);
                         break;
                     case DataConstants.YAMAXUN:
 //                        Toast.makeText(SearchURLActivity.this, "亚马逊搜索无接口", Toast.LENGTH_SHORT).show();
@@ -315,13 +321,151 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private void addProduct(String attrbute, String oid, String sku_id, String title, String market_price, String sale_price,
+                            String link, String cover_url, String banners_url) {
+        ClientDiscoverAPI.addProduct(attrbute, oid, sku_id, title, market_price, sale_price, link, cover_url, banners_url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                AddProductBean addProductBean = new AddProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddProductBean>() {
+                    }.getType();
+                    addProductBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                AddProductBean netAdd = addProductBean;
+                if (netAdd.isSuccess()) {
+                    String name = nameTv.getText().toString();
+                    String price = priceTv.getText().toString();
+                    TagItem tagItem = new TagItem(name, price);
+                    tagItem.setType(type);
+//                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
+                    tagItem.setId(netAdd.getData().getId());
+                    tagItem.setImagePath(imagePath);
+                    Intent intent = new Intent();
+                    intent.putExtra("tagItem", tagItem);
+                    setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
+                    popupWindow.dismiss();
+                    finish();
+                } else {
+                    ToastUtils.showError(netAdd.getMessage());
+//                        dialog.showErrorWithStatus(netAdd.getMessage());
+//                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    private void getTBProductData(String ids) {
+        ClientDiscoverAPI.getTBProductsData(ids, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                TBProductBean tbProductBean = new TBProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<TBProductBean>() {
+                    }.getType();
+                    tbProductBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                TBProductBean netTB = tbProductBean;
+                if (netTB.isSuccess()) {
+                    TBProductBean.TBProductItem item;
+                    try {
+                        item = netTB.getData().getRows().get(0);
+                    } catch (IndexOutOfBoundsException e) {
+                        ToastUtils.showError("产品无效");
+                        popupWindow.dismiss();
+                        return;
+                    }
+                    if (item == null) {
+                        ToastUtils.showError("产品无效");
+                        popupWindow.dismiss();
+                        return;
+                    }
+                    netTaoBao = netTB;
+                    imagePath = item.getCover_url();
+                    ImageLoader.getInstance().displayImage(imagePath, productsImg, options);
+                    nameTv.setText(item.getTitle());
+                    priceTv.setText(item.getSale_price());
+                    market_price = item.getMarket_price();
+                    sale_price = item.getSale_price();
+                    link = item.getLink();
+                    name = item.getTitle();
+                    sku_id = null;
+                    showPopup();
+                } else {
+                    ToastUtils.showError(netTB.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    private void getJDProductData(String ids) {
+        ClientDiscoverAPI.getJDProductsData(ids, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                JDProductBean jdProductBean = new JDProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<JDProductBean>() {
+                    }.getType();
+                    jdProductBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+//                    dialog.dismiss();
+                JDProductBean netJD = jdProductBean;
+                if (netJD.isSuccess()) {
+                    netJingDong = netJD;
+                    imagePath = netJD.getData().getRows().get(0).getCover_url();
+                    ImageLoader.getInstance().displayImage(imagePath, productsImg, options);
+                    nameTv.setText(netJD.getData().getRows().get(0).getTitle());
+                    priceTv.setText(netJD.getData().getRows().get(0).getSale_price());
+                    market_price = netJD.getData().getRows().get(0).getMarket_price();
+                    sale_price = netJD.getData().getRows().get(0).getSale_price();
+                    link = netJD.getData().getRows().get(0).getLink();
+                    name = netJD.getData().getRows().get(0).getTitle();
+                    sku_id = null;
+                    showPopup();
+                } else {
+                    ToastUtils.showError(netJD.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
     private void addTBPro(String attrbute) {
         if (id.equals("-1")) {
             return;
         }
         if (netTaoBao == null) {
             dialog.show();
-            DataPaser.getTBProductData(handler, id);
+            getTBProductData(id);
             return;
         }
         StringBuilder banners_url = new StringBuilder();
@@ -332,13 +476,11 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
             banners_url.delete(0, 2);
         } else {
             ToastUtils.showError("数据异常");
-//            dialog.showErrorWithStatus("数据异常");
-//            Toast.makeText(SearchURLActivity.this, "数据异常", Toast.LENGTH_SHORT).show();
             return;
         }
-        DataPaser.addProduct(attrbute, netTaoBao.getData().getRows().get(0).getOid(), null, netTaoBao.getData().getRows().get(0).getTitle(),
+        addProduct(attrbute, netTaoBao.getData().getRows().get(0).getOid(), null, netTaoBao.getData().getRows().get(0).getTitle(),
                 netTaoBao.getData().getRows().get(0).getMarket_price(), netTaoBao.getData().getRows().get(0).getSale_price(),
-                netTaoBao.getData().getRows().get(0).getLink(), netTaoBao.getData().getRows().get(0).getCover_url(), banners_url.toString(), handler);
+                netTaoBao.getData().getRows().get(0).getLink(), netTaoBao.getData().getRows().get(0).getCover_url(), banners_url.toString());
 
     }
 
@@ -350,110 +492,95 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
             super.onBackPressed();
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            dialog.dismiss();
-            switch (msg.what) {
-                case DataConstants.ADD_PRODUCT:
-                    AddProductBean netAdd = (AddProductBean) msg.obj;
-                    if (netAdd.isSuccess()) {
-                        String name = nameTv.getText().toString();
-                        String price = priceTv.getText().toString();
-                        TagItem tagItem = new TagItem(name, price);
-                        tagItem.setType(type);
-//                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
-                        tagItem.setId(netAdd.getData().getId());
-                        tagItem.setImagePath(imagePath);
-                        Intent intent = new Intent();
-                        intent.putExtra("tagItem", tagItem);
-                        setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
-                        popupWindow.dismiss();
-                        finish();
-                    } else {
-                        ToastUtils.showError(netAdd.getMessage());
-//                        dialog.showErrorWithStatus(netAdd.getMessage());
-//                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.JINGDONG:
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//            switch (msg.what) {
+//                case DataConstants.ADD_PRODUCT:
 //                    dialog.dismiss();
-                    JDProductBean netJD = (JDProductBean) msg.obj;
-                    if (netJD.isSuccess()) {
-                        netJingDong = netJD;
-                        imagePath = netJD.getData().getRows().get(0).getCover_url();
-                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
-                        nameTv.setText(netJD.getData().getRows().get(0).getTitle());
-                        priceTv.setText(netJD.getData().getRows().get(0).getSale_price());
-                        market_price = netJD.getData().getRows().get(0).getMarket_price();
-                        sale_price = netJD.getData().getRows().get(0).getSale_price();
-                        link = netJD.getData().getRows().get(0).getLink();
-                        name = netJD.getData().getRows().get(0).getTitle();
-                        sku_id = null;
-                        showPopup();
-                    } else {
-                        ToastUtils.showError(netJD.getMessage());
-//                        dialog.showErrorWithStatus(netJD.getMessage());
-//                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.TAOBAO:
-                    TBProductBean netTB = (TBProductBean) msg.obj;
-                    if (netTB.isSuccess()) {
-                        TBProductBean.TBProductItem item;
-                        try {
-                            item = netTB.getData().getRows().get(0);
-                        } catch (IndexOutOfBoundsException e) {
-                            ToastUtils.showError("产品无效");
-//                            dialog.showErrorWithStatus("产品无效");
-//                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
-                            popupWindow.dismiss();
-                            return;
-                        }
-                        if (item == null) {
-                            ToastUtils.showError("产品无效");
-//                            dialog.showErrorWithStatus("产品无效");
-//                            Toast.makeText(SearchURLActivity.this, "产品无效", Toast.LENGTH_SHORT).show();
-                            popupWindow.dismiss();
-                            return;
-                        }
-                        netTaoBao = netTB;
-                        imagePath = item.getCover_url();
-                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
-                        nameTv.setText(item.getTitle());
-                        priceTv.setText(item.getSale_price());
-                        market_price = item.getMarket_price();
-                        sale_price = item.getSale_price();
-                        link = item.getLink();
-                        name = item.getTitle();
-                        sku_id = null;
-                        showPopup();
-                    } else {
-                        ToastUtils.showError(netTB.getMessage());
-//                        dialog.showErrorWithStatus(netTB.getMessage());
-//                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.YAMAXUN:
-                    break;
-                case DataConstants.NET_FAIL:
-                    break;
-            }
-        }
-    };
+//                    AddProductBean netAdd = (AddProductBean) msg.obj;
+//                    if (netAdd.isSuccess()) {
+//                        String name = nameTv.getText().toString();
+//                        String price = priceTv.getText().toString();
+//                        TagItem tagItem = new TagItem(name, price);
+//                        tagItem.setType(type);
+////                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
+//                        tagItem.setId(netAdd.getData().getId());
+//                        tagItem.setImagePath(imagePath);
+//                        Intent intent = new Intent();
+//                        intent.putExtra("tagItem", tagItem);
+//                        setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);
+//                        popupWindow.dismiss();
+//                        finish();
+//                    } else {
+//                        ToastUtils.showError(netAdd.getMessage());
+////                        dialog.showErrorWithStatus(netAdd.getMessage());
+////                        Toast.makeText(SearchURLActivity.this, netAdd.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.JINGDONG:
+//                    dialog.dismiss();
+////                    dialog.dismiss();
+//                    JDProductBean netJD = (JDProductBean) msg.obj;
+//                    if (netJD.isSuccess()) {
+//                        netJingDong = netJD;
+//                        imagePath = netJD.getData().getRows().get(0).getCover_url();
+//                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
+//                        nameTv.setText(netJD.getData().getRows().get(0).getTitle());
+//                        priceTv.setText(netJD.getData().getRows().get(0).getSale_price());
+//                        market_price = netJD.getData().getRows().get(0).getMarket_price();
+//                        sale_price = netJD.getData().getRows().get(0).getSale_price();
+//                        link = netJD.getData().getRows().get(0).getLink();
+//                        name = netJD.getData().getRows().get(0).getTitle();
+//                        sku_id = null;
+//                        showPopup();
+//                    } else {
+//                        ToastUtils.showError(netJD.getMessage());
+////                        dialog.showErrorWithStatus(netJD.getMessage());
+////                        Toast.makeText(SearchURLActivity.this, netJD.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.TAOBAO:
+//                    dialog.dismiss();
+//                    TBProductBean netTB = (TBProductBean) msg.obj;
+//                    if (netTB.isSuccess()) {
+//                        TBProductBean.TBProductItem item;
+//                        try {
+//                            item = netTB.getData().getRows().get(0);
+//                        } catch (IndexOutOfBoundsException e) {
+//                            ToastUtils.showError("产品无效");
+//                            popupWindow.dismiss();
+//                            return;
+//                        }
+//                        if (item == null) {
+//                            ToastUtils.showError("产品无效");
+//                            popupWindow.dismiss();
+//                            return;
+//                        }
+//                        netTaoBao = netTB;
+//                        imagePath = item.getCover_url();
+//                        ImageLoader.getInstance().displayImage(imagePath, productsImg,options);
+//                        nameTv.setText(item.getTitle());
+//                        priceTv.setText(item.getSale_price());
+//                        market_price = item.getMarket_price();
+//                        sale_price = item.getSale_price();
+//                        link = item.getLink();
+//                        name = item.getTitle();
+//                        sku_id = null;
+//                        showPopup();
+//                    } else {
+//                        ToastUtils.showError(netTB.getMessage());
+////                        dialog.showErrorWithStatus(netTB.getMessage());
+////                        Toast.makeText(SearchURLActivity.this, netTB.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.YAMAXUN:
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    break;
+//            }
+//        }
+//    };
 
-
-    @Override
-    protected void onDestroy() {
-//        cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
-    }
-
-//    private void cancelNet() {
-//        Toast.makeText(SearchURLActivity.this, "取消网络请求未做", Toast.LENGTH_SHORT).show();
-//    }
 }

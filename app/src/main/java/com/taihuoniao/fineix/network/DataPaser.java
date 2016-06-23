@@ -12,7 +12,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddProductBean;
-import com.taihuoniao.fineix.beans.AddressBean;
+import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.AllLabel;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.ApplyForRefund;
@@ -530,7 +530,7 @@ public class DataPaser {
 
     //情景
     //列表数据
-    public static void qingjingList(String page, String sort,String fine, String dis, String lng, String lat, final Handler handler) {
+    public static void qingjingList(String page, String sort, String fine, String dis, String lng, String lat, final Handler handler) {
         ClientDiscoverAPI.qingjingList(page, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -710,7 +710,7 @@ public class DataPaser {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String scene_id, String sort,String fine, String dis, String lng, String lat, final Handler handler) {
+    public static void getSceneList(String page, String size, String scene_id, String sort, String fine, String dis, String lng, String lat, final Handler handler) {
         ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -1021,42 +1021,42 @@ public class DataPaser {
 
     //收货地址
     //  默认收货地址的解析
-    public static void getDefaultAddress(final Handler handler) {
-        ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.DEFAULT_ADDRESS;
-                AddressBean addressBean = null;
-                try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject data = obj.getJSONObject("data");
-                    addressBean = new AddressBean();
-                    addressBean.setHas_default(data.optString("has_default"));
-                    if ("1".equals(addressBean.getHas_default())) {
-                        addressBean.set_id(data.optString("_id"));
-                        addressBean.setName(data.optString("name"));
-                        addressBean.setPhone(data.optString("phone"));
-                        addressBean.setAddress(data.optString("address"));
-                        addressBean.setZip(data.optString("zip"));
-                        addressBean.setProvince(data.optString("province"));
-                        addressBean.setCity(data.optString("city"));
-                        addressBean.setProvince_name(data.optString("province_name"));
-                        addressBean.setCity_name(data.optString("city_name"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                msg.obj = addressBean;
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
-            }
-        });
-    }
+//    public static void getDefaultAddress(final Handler handler) {
+//        ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.DEFAULT_ADDRESS;
+//                AddressBean addressBean = null;
+//                try {
+//                    JSONObject obj = new JSONObject(responseInfo.result);
+//                    JSONObject data = obj.getJSONObject("data");
+//                    addressBean = new AddressBean();
+//                    addressBean.setHas_default(data.optString("has_default"));
+//                    if ("1".equals(addressBean.getHas_default())) {
+//                        addressBean.set_id(data.optString("_id"));
+//                        addressBean.setName(data.optString("name"));
+//                        addressBean.setPhone(data.optString("phone"));
+//                        addressBean.setAddress(data.optString("address"));
+//                        addressBean.setZip(data.optString("zip"));
+//                        addressBean.setProvince(data.optString("province"));
+//                        addressBean.setCity(data.optString("city"));
+//                        addressBean.setProvince_name(data.optString("province_name"));
+//                        addressBean.setCity_name(data.optString("city_name"));
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                msg.obj = addressBean;
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
+//            }
+//        });
+//    }
 
 
     //收货地址
@@ -1065,34 +1065,19 @@ public class DataPaser {
         ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<收货地址列表", responseInfo.result);
+                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GET_ADDRESS_LIST;
-                List<AddressBean> list = new ArrayList<>();
+                AddressListBean addressListBean = new AddressListBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    JSONObject data = job.getJSONObject("data");
-                    JSONArray rows = data.getJSONArray("rows");
-                    for (int i = 0; i < rows.length(); i++) {
-                        JSONObject ob = rows.getJSONObject(i);
-                        AddressBean addressBean = new AddressBean();
-                        addressBean.set_id(ob.optString("_id"));
-                        addressBean.setName(ob.optString("name"));
-                        addressBean.setPhone(ob.optString("phone"));
-                        addressBean.setProvince(ob.optString("province"));
-                        addressBean.setCity(ob.optString("city"));
-                        addressBean.setAddress(ob.optString("address"));
-                        addressBean.setZip(ob.optString("zip"));
-                        addressBean.setIs_default(ob.optString("is_default"));
-                        addressBean.setProvince(ob.optString("province"));
-                        addressBean.setCity(ob.optString("city"));
-                        addressBean.setProvince_name(ob.optString("province_name"));
-                        addressBean.setCity_name(ob.optString("city_name"));
-                        list.add(addressBean);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddressListBean>(){}.getType();
+                    addressListBean = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<收货地址列表", "数据解析异常" + e.toString());
                 }
-                msg.obj = list;
+                msg.obj = addressListBean;
                 handler.sendMessage(msg);
             }
 
@@ -1339,15 +1324,59 @@ public class DataPaser {
                 WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.PRODUCT_AND_SCENE;
-                msg.obj = new ProductAndSceneListBean();
+                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductAndSceneListBean>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                    productAndSceneListBean.setSuccess(jsonObject.optBoolean("success"));
+                    productAndSceneListBean.setMessage(jsonObject.optString("message"));
+                    productAndSceneListBean.setStatus(jsonObject.optString("status"));
+                    productAndSceneListBean.setCurrent_user_id(jsonObject.optString("current_user_id"));
+                    ProductAndSceneListBean.Data data = new ProductAndSceneListBean.Data();
+                    JSONObject jsonObject1 = jsonObject.optJSONObject("data");
+                    List<ProductAndSceneListBean.ProductAndSceneItem> rows = new ArrayList<ProductAndSceneListBean.ProductAndSceneItem>();
+                    JSONArray jsonArray = jsonObject1.optJSONArray("rows");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject2 = jsonArray.optJSONObject(i);
+                        ProductAndSceneListBean.ProductAndSceneItem productAndSceneItem = new ProductAndSceneListBean.ProductAndSceneItem();
+                        ProductAndSceneListBean.Product product = new ProductAndSceneListBean.Product();
+                        JSONObject jsonObject3 = jsonObject2.optJSONObject("product");
+                        product.set_id(jsonObject3.optString("_id"));
+                        product.setTitle(jsonObject3.optString("title"));
+                        product.setOid(jsonObject3.optString("oid"));
+                        product.setSale_price(jsonObject3.optString("sale_price"));
+                        product.setMarket_price(jsonObject3.optString("market_price"));
+                        product.setLink(jsonObject3.optString("link"));
+                        product.setAttrbute(jsonObject3.optString("attrbute"));
+                        product.setCover_url(jsonObject3.optString("cover_url"));
+                        List<String> banner_asset = new ArrayList<String>();
+                        JSONArray jsonArray1 = jsonObject3.optJSONArray("banner_asset");
+                        for (int j = 0; j < jsonArray1.length(); j++) {
+//                            banner_asset.set(j,jsonArray1.getString(j));
+                            banner_asset.add(jsonArray1.optString(j));
+                        }
+                        product.setBanner_asset(banner_asset);
+                        productAndSceneItem.setProduct(product);
+                        ProductAndSceneListBean.Sight sight = new ProductAndSceneListBean.Sight();
+                        JSONObject jsonObject4 = jsonObject2.optJSONObject("sight");
+                        if (jsonObject4 != null) {
+                            sight.set_id(jsonObject4.optString("_id"));
+                            sight.setTitle(jsonObject4.optString("title"));
+                        } else {
+                            continue;
+                        }
+                        productAndSceneItem.setSight(sight);
+                        rows.add(productAndSceneItem);
+                    }
+                    data.setRows(rows);
+                    productAndSceneListBean.setData(data);
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<ProductAndSceneListBean>() {
+//                    }.getType();
+//                    productAndSceneListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JSONException e) {
                     Log.e("<<<场景商品关联列表>>>", "数据异常" + e.toString());
                 }
+                msg.obj = productAndSceneListBean;
                 handler.sendMessage(msg);
             }
 
@@ -1495,10 +1524,9 @@ public class DataPaser {
         });
     }
 
-    private static List<TryCommentsBean> parserTryDetailsCommentsList(String jsonString) {
-        List<TryCommentsBean> list = null;
+    public static List<TryCommentsBean> parserTryDetailsCommentsList(String jsonString) {
+        List<TryCommentsBean> list  = new ArrayList<>();
         try {
-            list = new ArrayList<>();
             JSONObject obj = new JSONObject(jsonString);
             JSONObject data = obj.getJSONObject("data");
             JSONArray rows = data.getJSONArray("rows");
@@ -2478,8 +2506,9 @@ public class DataPaser {
             }
         });
     }
-//送积分
-    public static void getBonus(String type,String evt,String target_id,final Handler handler){
+
+    //送积分
+    public static void getBonus(String type, String evt, String target_id, final Handler handler) {
         ClientDiscoverAPI.getBonus(type, evt, target_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

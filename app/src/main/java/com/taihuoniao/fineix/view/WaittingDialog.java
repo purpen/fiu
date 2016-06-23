@@ -55,8 +55,8 @@ public class WaittingDialog extends Dialog {
     @Override
     public void show() {
         clearAnimations();
-        ivBigLoading.startAnimation(mRotateAnimation);
         super.show();
+        ivBigLoading.startAnimation(mRotateAnimation);
     }
 
     @Override

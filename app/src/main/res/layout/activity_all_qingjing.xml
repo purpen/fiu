@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="全部情景"
+            android:text="@string/all_qingjing"
             android:textColor="@color/black333333"
             android:textSize="16sp"
             />

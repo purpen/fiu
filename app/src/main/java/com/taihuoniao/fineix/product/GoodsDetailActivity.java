@@ -1,12 +1,7 @@
 package com.taihuoniao.fineix.product;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -26,24 +27,28 @@ import com.taihuoniao.fineix.adapters.GoodsDetailRecommendRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailSceneRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +95,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     RecyclerView recommendRecycler;
     @Bind(R.id.activity_goods_detail_shoucang)
     LinearLayout shoucangLinear;
-    @Bind(R.id.activity_goods_detail_fenxiang)
-    LinearLayout fenxiangLinear;
+    @Bind(R.id.activity_goods_detail_shoucang_img)
+    ImageView shoucangImg;
     @Bind(R.id.activity_goods_detail_buy_now)
     Button buyNowBtn;
     //判断产品是自营的还是第三方商城的标识
@@ -113,6 +118,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     //圆图
     private DisplayImageOptions option;
     private DecimalFormat df;
+    private boolean isFavourate = false;//是否已收藏
 
     public GoodsDetailActivity() {
         super(R.layout.activity_goods_detail);
@@ -176,19 +182,15 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         scrollableView.setFocusable(true);
         scrollableView.setFocusableInTouchMode(true);
         scrollableView.requestFocus();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(goodDetailReceiver, intentFilter);
         shoucangLinear.setOnClickListener(this);
-        fenxiangLinear.setOnClickListener(this);
     }
 
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.goodsDetail(id, handler);
-        DataPaser.productAndScene(page + "", 20 + "", null, id, handler);
-        DataPaser.getProductList(null, null, null, recommendPage + "", 4 + "", null, id, null, null, handler);
+        goodsDetails(id);
+        productAndScene(page + "", 20 + "", null, id);
+        getProducts(null, null, null, recommendPage + "", 4 + "", null, id, null, null);
 //        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
 
@@ -196,16 +198,17 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_goods_detail_fenxiang:
-                ToastUtils.showError("分享");
-                break;
             case R.id.activity_goods_detail_shoucang:
-                ToastUtils.showError("收藏");
+                if (isFavourate) {
+                    cancelFavorite();
+                } else {
+                    favorite();
+                }
                 break;
             case R.id.activity_goods_detail_brand_relative:
                 if (netGood == null) {
                     dialog.show();
-                    DataPaser.goodsDetail(id, handler);
+                    goodsDetails(id);
                     return;
                 }
                 if (netGood.getData().getBrand() == null) {
@@ -219,12 +222,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 switch (attrbute) {
                     case "0":
                         dialog.show();
-                        DataPaser.goodsDetail(id, handler);
+                        goodsDetails(id);
                         break;
                     case "1":
                         if (netGood == null) {
                             dialog.show();
-                            DataPaser.goodsDetail(id, handler);
+                            goodsDetails(id);
                             return;
                         }
                         Intent intent2 = new Intent(GoodsDetailActivity.this, MyGoodsDetailsActivity.class);
@@ -234,7 +237,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     default:
                         if (url == null) {
                             dialog.show();
-                            DataPaser.goodsDetail(id, handler);
+                            goodsDetails(id);
                             return;
                         }
                         ClientDiscoverAPI.wantBuy(id);
@@ -242,15 +245,6 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         Uri uri1 = Uri.parse(url);
                         Intent intent3 = new Intent(Intent.ACTION_VIEW, uri1);
                         startActivity(intent3);
-//                        webView.getSettings().setJavaScriptEnabled(true);
-//                        Log.e("<<<商品url", "url=" + url);
-//                        webView.loadUrl(url);
-//                        ToastUtils.showInfo("正在跳转，请稍等");
-//                        dialog.showInfoWithStatus("正在跳转，请稍等");
-//                        Toast.makeText(GoodsDetailActivity.this, "正在跳转，请稍等", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(GoodsDetailActivity.this, WebActivity.class);
-//                        intent.putExtra("url", url);
-//                        startActivity(intent);
                         break;
                 }
                 break;
@@ -263,99 +257,101 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.ADD_PRODUCT_LIST:
-                    dialog.dismiss();
-                    ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess()) {
-                        if (recommendPage == 1) {
-                            recommendList.clear();
-                        }
-                        recommendList.addAll(netProductBean.getData().getRows());
-                        recommendRecyclerAdapter.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netProductBean.getMessage());
-//                       dialog.showErrorWithStatus(netProductBean.getMessage());
-                    }
-                    break;
-                case DataConstants.PRODUCT_AND_SCENE:
-                    dialog.dismiss();
-                    ProductAndSceneListBean netProductSceneBean = (ProductAndSceneListBean) msg.obj;
-                    if (netProductSceneBean.isSuccess()) {
-                        if (page == 1) {
-                            changjingList.clear();
-                        }
-                        changjingList.addAll(netProductSceneBean.getData().getRows());
-                        if (changjingList.size() <= 0) {
-                            changjingLinear.setVisibility(View.GONE);
-                        } else {
-                            changjingLinear.setVisibility(View.VISIBLE);
-                        }
-                        changjingAdaper.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.GOODS_DETAIL:
-                    dialog.dismiss();
-                    GoodsDetailBean netGoodsDetailBean = (GoodsDetailBean) msg.obj;
-                    if (netGoodsDetailBean.isSuccess()) {
-                        netGood = netGoodsDetailBean;
-                        ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
-                        name.setText(netGoodsDetailBean.getData().getTitle());
-                        price.setText("¥ " + df.format(Double.valueOf(netGoodsDetailBean.getData().getSale_price())));
-                        if (netGoodsDetailBean.getData().getBrand() != null) {
-                            ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
-                            brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
-                        } else {
-                            brandLinear.setVisibility(View.GONE);
-                            brandRelative.setVisibility(View.GONE);
-                        }
-                        addLabelToLinear(netGoodsDetailBean.getData().getTags());
-                        productDes.setText(netGoodsDetailBean.getData().getSummary());
-                        attrbute = netGoodsDetailBean.getData().getAttrbute();
-                        // 1.官网；2.淘宝；3.天猫；4.京东
-                        switch (attrbute) {
-                            case "1":
-                                buyNowBtn.setText("去购买");
-                                break;
-                            case "2":
-                                buyNowBtn.setText("去淘宝购买");
-                                break;
-                            case "3":
-                                buyNowBtn.setText("去天猫购买");
-                                break;
-                            case "4":
-                                buyNowBtn.setText("去京东购买");
-                                break;
-                        }
-                        url = netGoodsDetailBean.getData().getLink();
-                        refreshUI(banner);
-                    } else {
-                        ToastUtils.showError(netGoodsDetailBean.getMessage());
-//                        Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                        dialog.showErrorWithStatus(netGoodsDetailBean.getMessage());
-                        finish();
-                    }
-                    break;
-                case DataConstants.CART_NUM:
-                    CartBean netCartBean = (CartBean) msg.obj;
-                    if (netCartBean.isSuccess() && netCartBean.getData().getCount() > 0) {
-                        cartNum.setVisibility(View.VISIBLE);
-                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
-                    } else {
-                        cartNum.setVisibility(View.GONE);
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.ADD_PRODUCT_LIST:
+//                    dialog.dismiss();
+//                    ProductBean netProductBean = (ProductBean) msg.obj;
+//                    if (netProductBean.isSuccess()) {
+//                        if (recommendPage == 1) {
+//                            recommendList.clear();
+//                        }
+//                        recommendList.addAll(netProductBean.getData().getRows());
+//                        recommendRecyclerAdapter.notifyDataSetChanged();
+//                    } else {
+//                        ToastUtils.showError(netProductBean.getMessage());
+////                       dialog.showErrorWithStatus(netProductBean.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.PRODUCT_AND_SCENE:
+//                    dialog.dismiss();
+//                    ProductAndSceneListBean netProductSceneBean = (ProductAndSceneListBean) msg.obj;
+//                    if (netProductSceneBean.isSuccess()) {
+//                        if (page == 1) {
+//                            changjingList.clear();
+//                        }
+//                        changjingList.addAll(netProductSceneBean.getData().getRows());
+//                        if (changjingList.size() <= 0) {
+//                            changjingLinear.setVisibility(View.GONE);
+//                        } else {
+//                            changjingLinear.setVisibility(View.VISIBLE);
+//                        }
+//                        changjingAdaper.notifyDataSetChanged();
+//                    }else{
+//                        changjingLinear.setVisibility(View.GONE);
+//                    }
+//                    break;
+//                case DataConstants.GOODS_DETAIL:
+//                    dialog.dismiss();
+//                    GoodsDetailBean netGoodsDetailBean = (GoodsDetailBean) msg.obj;
+//                    if (netGoodsDetailBean.isSuccess()) {
+//                        netGood = netGoodsDetailBean;
+//                        ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
+//                        name.setText(netGoodsDetailBean.getData().getTitle());
+//                        price.setText("¥ " + df.format(Double.valueOf(netGoodsDetailBean.getData().getSale_price())));
+//                        if (netGoodsDetailBean.getData().getBrand() != null) {
+//                            ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
+//                            brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
+//                        } else {
+//                            brandLinear.setVisibility(View.GONE);
+//                            brandRelative.setVisibility(View.GONE);
+//                        }
+//                        addLabelToLinear(netGoodsDetailBean.getData().getTags());
+//                        productDes.setText(netGoodsDetailBean.getData().getSummary());
+//                        attrbute = netGoodsDetailBean.getData().getAttrbute();
+//                        // 1.官网；2.淘宝；3.天猫；4.京东
+//                        switch (attrbute) {
+//                            case "1":
+//                                buyNowBtn.setText("去购买");
+//                                break;
+//                            case "2":
+//                                buyNowBtn.setText("去淘宝购买");
+//                                break;
+//                            case "3":
+//                                buyNowBtn.setText("去天猫购买");
+//                                break;
+//                            case "4":
+//                                buyNowBtn.setText("去京东购买");
+//                                break;
+//                        }
+//                        url = netGoodsDetailBean.getData().getLink();
+//                        refreshUI(banner);
+//                    } else {
+//                        ToastUtils.showError(netGoodsDetailBean.getMessage());
+////                        Toast.makeText(GoodsDetailActivity.this, netGoodsDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+////                        dialog.showErrorWithStatus(netGoodsDetailBean.getMessage());
+//                        finish();
+//                    }
+//                    break;
+//                case DataConstants.CART_NUM:
+//                    CartBean netCartBean = (CartBean) msg.obj;
+//                    if (netCartBean.isSuccess() && netCartBean.getData().getCount() > 0) {
+//                        cartNum.setVisibility(View.VISIBLE);
+//                        cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
+//                    } else {
+//                        cartNum.setVisibility(View.GONE);
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+//                    break;
+//            }
+//        }
+//    };
 
     private void addLabelToLinear(final List<String> tagsTitleList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
@@ -412,22 +408,37 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void onResume() {
         super.onResume();
-        DataPaser.cartNum(handler);
+        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CartBean cartBean = new CartBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CartBean>() {
+                    }.getType();
+                    cartBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                CartBean netCartBean = cartBean;
+                if (netCartBean.isSuccess() && netCartBean.getData().getCount() > 0) {
+                    cartNum.setVisibility(View.VISIBLE);
+                    cartNum.setText(String.format("%d", netCartBean.getData().getCount()));
+                } else {
+                    cartNum.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
         if (scrollableView != null) {
             scrollableView.start();
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        //cancelNet();
-        unregisterReceiver(goodDetailReceiver);
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
-    }
 
     @Override
     public void click(int postion) {
@@ -437,14 +448,253 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         startActivity(intent);
     }
 
-    private BroadcastReceiver goodDetailReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
-                page = 1;
-                dialog.show();
-                DataPaser.productAndScene(page + "", 20 + "", null, id, handler);
+
+    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                             String stick, String fine) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                ProductBean netProductBean = productBean;
+                if (netProductBean.isSuccess()) {
+                    if (recommendPage == 1) {
+                        recommendList.clear();
+                    }
+                    recommendList.addAll(netProductBean.getData().getRows());
+                    recommendRecyclerAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netProductBean.getMessage());
+//                       dialog.showErrorWithStatus(netProductBean.getMessage());
+                }
             }
-        }
-    };
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void productAndScene(String p, String size, String sight_id, String product_id) {
+        ClientDiscoverAPI.productAndScene(p, size, sight_id, product_id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                    productAndSceneListBean.setSuccess(jsonObject.optBoolean("success"));
+                    productAndSceneListBean.setMessage(jsonObject.optString("message"));
+                    productAndSceneListBean.setStatus(jsonObject.optString("status"));
+                    productAndSceneListBean.setCurrent_user_id(jsonObject.optString("current_user_id"));
+                    ProductAndSceneListBean.Data data = new ProductAndSceneListBean.Data();
+                    JSONObject jsonObject1 = jsonObject.optJSONObject("data");
+                    List<ProductAndSceneListBean.ProductAndSceneItem> rows = new ArrayList<ProductAndSceneListBean.ProductAndSceneItem>();
+                    JSONArray jsonArray = jsonObject1.optJSONArray("rows");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject2 = jsonArray.optJSONObject(i);
+                        ProductAndSceneListBean.ProductAndSceneItem productAndSceneItem = new ProductAndSceneListBean.ProductAndSceneItem();
+                        ProductAndSceneListBean.Product product = new ProductAndSceneListBean.Product();
+                        JSONObject jsonObject3 = jsonObject2.optJSONObject("product");
+                        product.set_id(jsonObject3.optString("_id"));
+                        product.setTitle(jsonObject3.optString("title"));
+                        product.setOid(jsonObject3.optString("oid"));
+                        product.setSale_price(jsonObject3.optString("sale_price"));
+                        product.setMarket_price(jsonObject3.optString("market_price"));
+                        product.setLink(jsonObject3.optString("link"));
+                        product.setAttrbute(jsonObject3.optString("attrbute"));
+                        product.setCover_url(jsonObject3.optString("cover_url"));
+                        List<String> banner_asset = new ArrayList<String>();
+                        JSONArray jsonArray1 = jsonObject3.optJSONArray("banner_asset");
+                        for (int j = 0; j < jsonArray1.length(); j++) {
+                            banner_asset.add(jsonArray1.optString(j));
+                        }
+                        product.setBanner_asset(banner_asset);
+                        productAndSceneItem.setProduct(product);
+                        ProductAndSceneListBean.Sight sight = new ProductAndSceneListBean.Sight();
+                        JSONObject jsonObject4 = jsonObject2.optJSONObject("sight");
+                        if (jsonObject4 != null) {
+                            sight.set_id(jsonObject4.optString("_id"));
+                            sight.setTitle(jsonObject4.optString("title"));
+                        } else {
+                            continue;
+                        }
+                        productAndSceneItem.setSight(sight);
+                        rows.add(productAndSceneItem);
+                    }
+                    data.setRows(rows);
+                    productAndSceneListBean.setData(data);
+                } catch (JSONException e) {
+                    Log.e("<<<场景商品关联列表>>>", "数据异常" + e.toString());
+                }
+                dialog.dismiss();
+                if (productAndSceneListBean.isSuccess()) {
+                    if (page == 1) {
+                        changjingList.clear();
+                    }
+                    changjingList.addAll(productAndSceneListBean.getData().getRows());
+                    if (changjingList.size() <= 0) {
+                        changjingLinear.setVisibility(View.GONE);
+                    } else {
+                        changjingLinear.setVisibility(View.VISIBLE);
+                    }
+                    changjingAdaper.notifyDataSetChanged();
+                } else {
+                    changjingLinear.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void goodsDetails(String id) {
+        ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<商品详情", responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                GoodsDetailBean goodsDetailBean = new GoodsDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<GoodsDetailBean>() {
+                    }.getType();
+                    goodsDetailBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                dialog.dismiss();
+                GoodsDetailBean netGoodsDetailBean = goodsDetailBean;
+                if (netGoodsDetailBean.isSuccess()) {
+                    netGood = netGoodsDetailBean;
+                    ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
+                    name.setText(netGoodsDetailBean.getData().getTitle());
+                    price.setText("¥ " + df.format(Double.valueOf(netGoodsDetailBean.getData().getSale_price())));
+                    if (netGoodsDetailBean.getData().getBrand() != null) {
+                        ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
+                        brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());
+                    } else {
+                        brandLinear.setVisibility(View.GONE);
+                        brandRelative.setVisibility(View.GONE);
+                    }
+                    addLabelToLinear(netGoodsDetailBean.getData().getTags());
+                    productDes.setText(netGoodsDetailBean.getData().getSummary());
+                    attrbute = netGoodsDetailBean.getData().getAttrbute();
+                    // 1.官网；2.淘宝；3.天猫；4.京东
+                    switch (attrbute) {
+                        case "1":
+                            buyNowBtn.setText("去购买");
+                            break;
+                        case "2":
+                            buyNowBtn.setText("去淘宝购买");
+                            break;
+                        case "3":
+                            buyNowBtn.setText("去天猫购买");
+                            break;
+                        case "4":
+                            buyNowBtn.setText("去京东购买");
+                            break;
+                    }
+                    url = netGoodsDetailBean.getData().getLink();
+                    if (netGoodsDetailBean.getData().getIs_favorite() == 1) {
+                        isFavourate = true;
+                        shoucangImg.setImageResource(R.mipmap.star_yellow_width_42px);
+                    } else {
+                        isFavourate = false;
+                        shoucangImg.setImageResource(R.mipmap.star_gray_width_42px);
+                    }
+                    refreshUI(banner);
+                } else {
+                    ToastUtils.showError(netGoodsDetailBean.getMessage());
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+            }
+        });
+    }
+
+    //收藏和取消收藏
+    private void favorite() {
+        dialog.show();
+        ClientDiscoverAPI.favorite(id, "10", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<收藏产品", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    netBean = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<收藏","数据解析异常"+e.toString());
+                }
+                dialog.dismiss();
+                if(netBean.isSuccess()){
+                    isFavourate=true;
+                    shoucangImg.setImageResource(R.mipmap.star_yellow_width_42px);
+                }else{
+                    ToastUtils.showError(netBean.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    private void cancelFavorite() {
+        dialog.show();
+        ClientDiscoverAPI.cancelFavorite(id, "10", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<收藏产品", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<收藏", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    isFavourate = false;
+                    shoucangImg.setImageResource(R.mipmap.star_gray_width_42px);
+                }else{
+                    ToastUtils.showError(netBean.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
 }

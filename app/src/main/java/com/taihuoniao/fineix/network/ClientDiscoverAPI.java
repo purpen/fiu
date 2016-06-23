@@ -265,7 +265,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("scene_id", scene_id);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("fine", fine);
-        params.addQueryStringParameter("dis",10000+"");
+        params.addQueryStringParameter("dis", 10000 + "");
         params.addQueryStringParameter("lng", lng);
         params.addQueryStringParameter("lat", lat);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -1279,6 +1279,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //送积分
     public static void getBonus(String type,String evt,String target_id,RequestCallBack<String>callBack){
         String url = NetworkConstance.GET_BONUS;
@@ -1299,6 +1300,23 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/scene_subject/view";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //收藏产品和取消收藏
+    public static void favorite(String id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.favorite_product;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    public static void cancelFavorite(String id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.cancel_favorite_product;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

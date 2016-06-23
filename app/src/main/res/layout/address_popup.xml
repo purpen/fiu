@@ -33,7 +33,7 @@
         android:layout_height="45dp"
         android:background="@color/yellow_bd8913"
         android:gravity="center"
-        android:text="确定"
+        android:text="@string/confirm"
         android:textColor="@color/white"/>
 
 </LinearLayout>

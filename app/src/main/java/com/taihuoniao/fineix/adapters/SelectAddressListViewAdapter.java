@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.AddressBean;
+import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.AddNewAddressActivity;
@@ -32,12 +32,12 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
     private int mScreentWidth;
     private View view;
     private Context context;
-    private List<AddressBean> list;
+    private List<AddressListBean.AddressListItem> list;
     private Activity activity;
     private Handler mHandler;
     private WaittingDialog waittingDialog;
 
-    public SelectAddressListViewAdapter(Context context, List<AddressBean> list, int mScreentWidth, Activity activity, Handler mHandler) {
+    public SelectAddressListViewAdapter(Context context, List<AddressListBean.AddressListItem> list, int mScreentWidth, Activity activity, Handler mHandler) {
         this.context = context;
         this.list = list;
         this.mScreentWidth = mScreentWidth;

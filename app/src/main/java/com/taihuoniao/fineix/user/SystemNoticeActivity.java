@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -20,7 +17,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -70,10 +66,6 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void initView() {
         dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "系统通知");
-//        custom_head.setHeadRightTxtShow(true,R.string.clear);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(systemReceiver,intentFilter);
     }
 
     @OnClick(R.id.tv_head_right)
@@ -187,18 +179,4 @@ public class SystemNoticeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(systemReceiver);
-        super.onDestroy();
-    }
-
-    private BroadcastReceiver systemReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
-                //
-            }
-        }
-    };
 }

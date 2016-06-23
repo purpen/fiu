@@ -19,7 +19,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:background="#da9d17"
-            android:text="加入购物车"
+            android:text="@string/add_to_cart"
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
@@ -30,7 +30,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:background="@color/yellow_bd8913"
-            android:text="立即购买"
+            android:text="@string/buy_now"
             android:textColor="@color/white"
             android:textSize="16sp"/>
     </LinearLayout>
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="库存:"
+                    android:text="@string/inventory"
                     android:textColor="#999999"
                     android:textSize="13sp"/>
 
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="7dp"
-            android:text="颜色/分类"
+            android:text="@string/color_category"
             android:textColor="#000000"
             android:textSize="14sp"/>
 
@@ -157,7 +157,7 @@
                     android:gravity="center"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
-                    android:text="默认"
+                    android:text="@string/defaul"
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
 
@@ -178,7 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
-            android:text="数量"
+            android:text="@string/numbers"
             android:textColor="#000000"
             android:textSize="14sp"/>
 
@@ -205,7 +205,7 @@
                 android:layout_height="30dp"
                 android:background="@drawable/grey_no_corner"
                 android:gravity="center"
-                android:text="1"
+                android:text="@string/number_1"
                 android:textColor="#000000"
                 android:textSize="16sp"/>
 

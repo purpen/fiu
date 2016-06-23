@@ -182,7 +182,7 @@
                 android:layout_toStartOf="@id/erweima"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text=" | 创新产品情景式购物平台"
+                android:text="@string/fiu_descrip"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
 
@@ -209,7 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:text="有Fiu才购"
+            android:text="@string/fiu_to_buy"
             android:textColor="#000000"
             android:textSize="7sp"/>
     </LinearLayout>

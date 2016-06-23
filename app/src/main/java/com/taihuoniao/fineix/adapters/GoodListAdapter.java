@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class GoodListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView( int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_good_listview, null);
@@ -77,18 +78,20 @@ public class GoodListAdapter extends BaseAdapter {
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
+        final int p = position;
         holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posi, long id) {
 //                pos = position;
                 if(list!=null){
-                    list.get(position).pos = posi;
+                    list.get(p).setPos(posi);
                 }else{
-                    searchList.get(position).pos = posi;
+                    searchList.get(p).pos = posi;
                 }
                 ProductSlidingAdapter productSlidingAdapter = (ProductSlidingAdapter) holder.slidingFocusImageView.getTag();
                 productSlidingAdapter.notifyDataSetChanged();
-//                Log.e("<<<切换焦点", position + "," + pos);
+//                Log.e("<<<切换焦点", p + "," + list.get(p).getPos()+",适配器"+productSlidingAdapter);
             }
 
             @Override
@@ -104,6 +107,7 @@ public class GoodListAdapter extends BaseAdapter {
                 ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity,list.get(position), null);
                 holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
                 holder.slidingFocusImageView.setTag(productSlidingAdapter1);
+//                Log.e("<<<适配器",productSlidingAdapter1.toString());
                 if (list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) {
                     switch (list.get(position).getBanner_asset().size()) {
                         case 2:

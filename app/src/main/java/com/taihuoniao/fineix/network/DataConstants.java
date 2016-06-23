@@ -161,7 +161,7 @@ public class DataConstants {
     //创建场景的添加产品页面的搜索广播
     public static final String BroadSearchFragment = "com.taihuoniao.fiu.searchProduct";
     //删除场景后通知场景列表页面刷新
-    public static final String BroadDeleteScene = "com.taihuoniao.fiu.delete";
+//    public static final String BroadDeleteScene = "com.taihuoniao.fiu.delete";
     //删除评论
     public static final int DELETE_COMMENT = 17;
     //分享场景语境次数

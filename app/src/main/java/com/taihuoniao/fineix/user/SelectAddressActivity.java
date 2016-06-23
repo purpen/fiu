@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.AddressBean;
+import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
@@ -37,7 +37,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     private LinearLayout emptyView;
     private PullToRefreshListView pullToRefresh;
     private ListView listView;
-    private List<AddressBean> list = new ArrayList();
+    private List<AddressListBean.AddressListItem> list = new ArrayList<AddressListBean.AddressListItem>();
     private SelectAddressListViewAdapter listViewAdapter;
     //网络请求
     private int currentPage = 1;
@@ -183,14 +183,19 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     break;
                 case DataConstants.GET_ADDRESS_LIST:
                     dialog.dismiss();
-                    List<AddressBean> list1 = (List<AddressBean>) msg.obj;
-                    list.addAll(list1);
-                    if(list.size()<=0){
-                        emptyView.setVisibility(View.VISIBLE);
+                    AddressListBean netAddressList = (AddressListBean) msg.obj;
+                    if(netAddressList.isSuccess()){
+                        list.addAll(netAddressList.getData().getRows());
+                        if(list.size()<=0){
+                            emptyView.setVisibility(View.VISIBLE);
+                        }else{
+                            emptyView.setVisibility(View.GONE);
+                        }
+                        listViewAdapter.notifyDataSetChanged();
                     }else{
-                        emptyView.setVisibility(View.GONE);
+                        ToastUtils.showError(netAddressList.getMessage());
                     }
-                    listViewAdapter.notifyDataSetChanged();
+
                     break;
                 case DataConstants.NETWORK_FAILURE:
                     dialog.dismiss();

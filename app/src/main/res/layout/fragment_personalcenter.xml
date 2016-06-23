@@ -161,7 +161,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="场景"
+                        android:text="@string/sight"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>
@@ -191,7 +191,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="情景"
+                        android:text="@string/scene"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>

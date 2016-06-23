@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="left"
-            android:text="申请退款："
+            android:text="@string/application_for_drawback"
             android:textSize="14sp"/>
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_toRightOf="@+id/tv_service_refund"
             android:paddingRight="10dp"
             android:layout_centerVertical="true"
-            android:text="退款"
+            android:text="@string/refund"
             android:textColor="#333333"
             android:textSize="14sp"/>
     </RelativeLayout>
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="left"
-            android:text="退款原因："
+            android:text="@string/refund_reason"
             android:textSize="14sp"/>
         <TextView
             android:id="@+id/tv_reason_refund"
@@ -66,7 +66,7 @@
             android:layout_toRightOf="@+id/tv_text_reason"
             android:layout_centerVertical="true"
             android:textColor="#333333"
-            android:text="我不想要了"/>
+            android:text="@string/want_not_buy"/>
         <ImageView
             android:id="@+id/image_refund"
             android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="left"
-            android:text="退款金额："
+            android:text="@string/refund_money"
             android:textSize="14sp"/>
         <TextView
             android:id="@+id/tv_money_refund"
@@ -112,7 +112,7 @@
         android:layout_margin="10dp"
         android:background="@drawable/shap_home_gridview"
         android:gravity="top"
-        android:hint="写下您的退款理由吧"
+        android:hint="@string/write_your_reason"
         android:lineSpacingExtra="2dp"
         android:padding="5dp"
         android:textSize="14sp"
@@ -123,7 +123,7 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/yellow_bd8913"
-        android:text="提交"
+        android:text="@string/commit"
         android:textSize="14sp"
         android:textColor="@color/white"/>
 </RelativeLayout>
