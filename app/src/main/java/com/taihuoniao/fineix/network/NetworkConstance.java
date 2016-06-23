@@ -209,4 +209,7 @@ public class NetworkConstance {
 
     //上传官方认证信息
     public static final String UPLOAD_IDENTIFY_URL = BASE_URL + "/my/talent_save";
+    //收藏产品和取消收藏
+    public static final String favorite_product = BASE_URL + "/favorite/ajax_favorite";
+    public static final String cancel_favorite_product = BASE_URL + "/favorite/ajax_cancel_favorite";
 }

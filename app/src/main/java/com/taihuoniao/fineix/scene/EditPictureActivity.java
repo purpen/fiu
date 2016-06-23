@@ -674,6 +674,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                             dialog.dismiss();
+//                            Log.e("<<<<图片加载失败", imageUri);
                             ToastUtils.showError("图片加载失败");
 //                            dialog.showErrorWithStatus("图片加载失败");
 //                            Toast.makeText(EditPictureActivity.this, R.string.failed_loading, Toast.LENGTH_SHORT).show();

@@ -35,7 +35,7 @@
                 android:layout_height="44dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:hint="请输入20字以内的标题"
+                android:hint="@string/input_more_twenty"
                 android:paddingLeft="15dp"
                 android:textColorHint="#999999"
                 android:textSize="12sp"/>
@@ -70,7 +70,7 @@
                     android:layout_marginLeft="23dp"
                     android:background="@null"
                     android:gravity="top"
-                    android:hint="添加描述"
+                    android:hint="@string/add_des"
                     android:textColorHint="#999999"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -118,7 +118,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/activity_create_scene_deleteaddress"
                     android:layout_toRightOf="@id/location"
-                    android:text="添加地点"
+                    android:text="@string/add_address"
                     android:textColor="@color/black333333"
                     android:textSize="13sp"/>
             </RelativeLayout>
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="标签"
+                    android:text="@string/label"
                     android:textColor="@color/black333333"
                     android:textSize="13sp"/>
             </RelativeLayout>
@@ -215,7 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="所属情景"
+                    android:text="@string/belong_what_qingjing"
                     android:textColor="@color/black333333"
                     android:textSize="13sp"/>
             </RelativeLayout>

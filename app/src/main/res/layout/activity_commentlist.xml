@@ -34,7 +34,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginLeft="11dp"
             android:background="@drawable/corner_yellow"
-            android:text="发送"
+            android:text="@string/send"
             android:textColor="@color/white"
             android:textSize="11sp"
             />
@@ -46,7 +46,7 @@
             android:layout_toLeftOf="@id/activity_commentlist_send"
             android:background="@drawable/corner_white_4dp"
             android:gravity="center_vertical"
-            android:hint="评论一下"
+            android:hint="@string/take_comment"
             android:paddingLeft="13dp"
             android:singleLine="true"
             android:textSize="11sp"/>
@@ -76,7 +76,7 @@
         android:layout_above="@id/bottom_line"
         android:layout_below="@id/top_line"
         android:gravity="center"
-        android:text="你可是第一个看到它的人，快来评论一下吧"
+        android:text="@string/you_are_first_comment"
         android:visibility="gone"/>
 
     <ProgressBar

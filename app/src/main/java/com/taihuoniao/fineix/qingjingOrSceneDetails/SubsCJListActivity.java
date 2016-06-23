@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,9 +17,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -81,9 +76,6 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
                 requestNet();
             }
         });
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
-        registerReceiver(subsListReceiver,intentFilter);
     }
 
     @Override
@@ -146,20 +138,5 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(subsListReceiver);
-        super.onDestroy();
-    }
 
-    private BroadcastReceiver subsListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra(IndexFragment.class.getSimpleName())){
-                page = 1;
-                dialog.show();
-                requestNet();
-            }
-        }
-    };
 }

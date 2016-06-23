@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="标记产品"
+                android:text="@string/mark_product"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
         </RelativeLayout>
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="添加链接"
+                android:text="@string/add_chain"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
         </RelativeLayout>
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="滤镜"
+                android:text="@string/filter"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
         </RelativeLayout>
@@ -136,7 +136,7 @@
             android:id="@+id/activity_edit_back"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="返回"
+            android:text="@string/back"
             android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>

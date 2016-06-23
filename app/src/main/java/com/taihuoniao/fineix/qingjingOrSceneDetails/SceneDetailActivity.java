@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -50,7 +50,6 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.scene.CreateSceneActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
@@ -300,12 +299,181 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.sceneDetails(id + "", handler);
-        DataPaser.commentsList(1 + "", 3 + "", id, null, 12 + "", handler);
-        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
+        sceneDetails(id);
+        commentsList(1 + "", 3 + "", id, null, 12 + "");
+        commonList(1 + "", 14 + "", id, null, "sight", "love");
 //        关联列表数据异常
 //        DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
 //        ToastUtils.showSuccess("测试数据");
+    }
+
+    private void commonList(String page, String size, String id, String user_id, String type, String event) {
+        ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CommonBean commonBean = new CommonBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommonBean>() {
+                    }.getType();
+                    commonBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<通用列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                CommonBean netCommonBean = commonBean;
+                if (netCommonBean.isSuccess()) {
+                    headList.clear();
+                    headList.addAll(netCommonBean.getData().getRows());
+                    if (headList.size() <= 0) {
+                        headRelative.setVisibility(View.GONE);
+                    } else {
+                        headRelative.setVisibility(View.VISIBLE);
+                    }
+                    sceneDetailUserHeadAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void commentsList(String page, String size, String target_id, String target_user_id, String type) {
+        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CommentsBean commentsBean = new CommentsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommentsBean>() {
+                    }.getType();
+                    commentsBean = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+//                    Log.e("<<<", "评论列表");
+                CommentsBean netCommentBean = commentsBean;
+                if (netCommentBean.isSuccess()) {
+//                        commentList.clear();
+                    commentList.addAll(netCommentBean.getData().getRows());
+                    if (netCommentBean.getData().getRows().size() > 3) {
+                        allComment.setVisibility(View.VISIBLE);
+                        moreComment.setVisibility(View.VISIBLE);
+                    }
+                    sceneDetailCommentAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netCommentBean.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Log.e("<<<", "请求失败 ");
+            }
+        });
+    }
+
+    private void sceneDetails(String i) {
+        ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        SceneDetailsBean sceneDetails = new SceneDetailsBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SceneDetailsBean>() {
+                            }.getType();
+                            sceneDetails = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            Log.e("<<<", "解析异常");
+                        }
+                        dialog.dismiss();
+//                    Log.e("<<<", "场景详情");
+                        SceneDetailsBean netSceneDetails = sceneDetails;
+                        if (netSceneDetails.isSuccess()) {
+//                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
+                            netScene = netSceneDetails;
+                            ImageLoader.getInstance().displayImage(netSceneDetails.getData().getCover_url(), backgroundImg, options750_1334);
+                            //用户是否已经点赞
+                            isLove = netSceneDetails.getData().getIs_love();
+                            switch (isLove) {
+                                case 1:
+                                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
+//                                love.setImageResource(R.mipmap.love_yes);
+                                    break;
+                                default:
+                                    loveCount.setBackgroundResource(R.mipmap.love_scene);
+//                                love.setImageResource(R.mipmap.like_height_43px);
+                                    break;
+                            }
+                            //场景上的商品
+                            productList = netSceneDetails.getData().getProduct();
+                            getProductList();
+                            getNearProductList();
+                            //添加商品
+                            addProductToImg();
+                            changjingTitle.setText(netSceneDetails.getData().getTitle());
+                            setTitleWidth();
+                            suoshuqingjingTv.setText(netSceneDetails.getData().getScene_title());
+                            locationTv.setText(netSceneDetails.getData().getAddress());
+                            timeTv.setText(netSceneDetails.getData().getCreated_at());
+                            netUserInfo = netSceneDetails.getData().getUser_info();
+                            ImageLoader.getInstance().displayImage(netSceneDetails.getData().getUser_info().getAvatar_url(), userHead, options);
+                            userName.setText(netSceneDetails.getData().getUser_info().getNickname());
+                            if (netSceneDetails.getData().getUser_info().getIs_expert() == 0) {
+                                vImg.setVisibility(View.GONE);
+                                userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
+                            } else {
+                                vImg.setVisibility(View.VISIBLE);
+                                userInfo.setText(netSceneDetails.getData().getUser_info().getExpert_label() + " | " + netSceneDetails.getData().getUser_info().getExpert_info());
+                            }
+//                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
+                            loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
+                            moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
+                            desTv.setText(netSceneDetails.getData().getDes());
+                            //添加标签
+                            addLabelToLinear(netSceneDetails.getData().getTag_titles(), netSceneDetails.getData().getTags());
+
+                            viewCount.setText(netSceneDetails.getData().getView_count());
+                            loveCountTv.setText(String.format("%d", netSceneDetails.getData().getLove_count()));
+                            commentNum.setText(netSceneDetails.getData().getComment_count());
+                            allComment.setText(String.format("全部%s条评论", netSceneDetails.getData().getComment_count()));
+                            if (netSceneDetails.getData().getLove_count() > 14) {
+                                moreUser.setVisibility(View.VISIBLE);
+                            } else {
+                                moreUser.setVisibility(View.GONE);
+                            }
+                            location = netSceneDetails.getData().getLocation();
+//                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
+                        } else {
+                            ToastUtils.showError(netSceneDetails.getMessage());
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Log.e("<<<", "请求失败 ");
+                    }
+                }
+
+        );
     }
 
 
@@ -360,201 +528,201 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.DELETE_SCENE:
-                    dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    if (netBean.isSuccess()) {
-                        ToastUtils.showSuccess(netBean.getMessage());
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        });
-//                        刷新列表
-                    } else {
-                        ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                    }
-                    break;
-                case DataConstants.ADD_PRODUCT_LIST:
-                    ProductBean netProductBean = (ProductBean) msg.obj;
-                    if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
-                        dialog.dismiss();
-                        nearProductList.clear();
-                        nearProductList.addAll(netProductBean.getData().getRows());
-                        goodListAdapter.notifyDataSetChanged();
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netProductBean.getMessage());
-//                        dialog.showErrorWithStatus(netProductBean.getMessage());
-                    }
-                    break;
-//                case DataConstants.PRODUCT_AND_SCENE:
-//                    ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
-//                    if (netProScene.isSuccess()) {
-////                        Log.e("<<<场景下的产品", "数量" + netProScene.getData().getRows().size());
-//                        sceneProductList.clear();
-//                        sceneProductList.addAll(netProScene.getData().getRows());
-//                        sceneProductAdapter.notifyDataSetChanged();
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.DELETE_SCENE:
+//                    dialog.dismiss();
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if (netBean.isSuccess()) {
+//                        ToastUtils.showSuccess(netBean.getMessage());
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                finish();
+//                            }
+//                        });
+////                        刷新列表
+//                    } else {
+//                        ToastUtils.showError(netBean.getMessage());
+////                        dialog.showErrorWithStatus(netBean.getMessage());
 //                    }
 //                    break;
-                case DataConstants.CANCEL_LOVE_SCENE:
-                    SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
-                    if (netSceneLoveBean1.isSuccess()) {
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
-                        isLove = 0;
-                        loveCount.setBackgroundResource(R.mipmap.love_scene);
-//                        love.setImageResource(R.mipmap.like_height_43px);
-                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
-                        loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
-                        moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
-                        if (netSceneLoveBean1.getData().getLove_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netSceneLoveBean1.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.LOVE_SCENE:
-                    SceneLoveBean netSceneLoveBean = (SceneLoveBean) msg.obj;
-//                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                    if (netSceneLoveBean.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
-                        isLove = 1;
-                        loveCount.setBackgroundResource(R.mipmap.loved_scene);
-//                        love.setImageResource(R.mipmap.love_yes);
-                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
-                        loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
-                        moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
-                        if (netSceneLoveBean.getData().getLove_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netSceneLoveBean.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.COMMON_LIST:
-                    dialog.dismiss();
-                    CommonBean netCommonBean = (CommonBean) msg.obj;
-                    if (netCommonBean.isSuccess()) {
-                        headList.clear();
-                        headList.addAll(netCommonBean.getData().getRows());
-                        if (headList.size() <= 0) {
-                            headRelative.setVisibility(View.GONE);
-                        } else {
-                            headRelative.setVisibility(View.VISIBLE);
-                        }
-                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.COMMENTS_LIST:
-                    dialog.dismiss();
-//                    Log.e("<<<", "评论列表");
-                    CommentsBean netCommentBean = (CommentsBean) msg.obj;
-                    if (netCommentBean.isSuccess()) {
-//                        commentList.clear();
-                        commentList.addAll(netCommentBean.getData().getRows());
-                        if (netCommentBean.getData().getRows().size() > 3) {
-                            allComment.setVisibility(View.VISIBLE);
-                            moreComment.setVisibility(View.VISIBLE);
-                        }
-                        sceneDetailCommentAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.SCENE_DETAILS:
-                    dialog.dismiss();
-//                    Log.e("<<<", "场景详情");
-                    SceneDetailsBean netSceneDetails = (SceneDetailsBean) msg.obj;
-                    if (netSceneDetails.isSuccess()) {
-//                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
-                        netScene = netSceneDetails;
-                        ImageLoader.getInstance().displayImage(netSceneDetails.getData().getCover_url(), backgroundImg, options750_1334);
-                        //用户是否已经点赞
-                        isLove = netSceneDetails.getData().getIs_love();
-                        switch (isLove) {
-                            case 1:
-                                loveCount.setBackgroundResource(R.mipmap.loved_scene);
-//                                love.setImageResource(R.mipmap.love_yes);
-                                break;
-                            default:
-                                loveCount.setBackgroundResource(R.mipmap.love_scene);
-//                                love.setImageResource(R.mipmap.like_height_43px);
-                                break;
-                        }
-                        //场景上的商品
-                        productList = netSceneDetails.getData().getProduct();
-                        getProductList();
-                        getNearProductList();
-                        //添加商品
-                        addProductToImg();
-                        changjingTitle.setText(netSceneDetails.getData().getTitle());
-                        setTitleWidth();
-                        suoshuqingjingTv.setText(netSceneDetails.getData().getScene_title());
-                        locationTv.setText(netSceneDetails.getData().getAddress());
-                        timeTv.setText(netSceneDetails.getData().getCreated_at());
-                        netUserInfo = netSceneDetails.getData().getUser_info();
-                        ImageLoader.getInstance().displayImage(netSceneDetails.getData().getUser_info().getAvatar_url(), userHead, options);
-                        userName.setText(netSceneDetails.getData().getUser_info().getNickname());
-                        if(netSceneDetails.getData().getUser_info().getIs_expert()==0){
-                            vImg.setVisibility(View.GONE);
-                            userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
-                        }else{
-                            vImg.setVisibility(View.VISIBLE);
-                            userInfo.setText(netSceneDetails.getData().getUser_info().getExpert_label()+" | "+netSceneDetails.getData().getUser_info().getExpert_info());
-                        }
-//                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
-                        loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
-                        moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
-                        desTv.setText(netSceneDetails.getData().getDes());
-                        //添加标签
-                        addLabelToLinear(netSceneDetails.getData().getTag_titles(), netSceneDetails.getData().getTags());
-
-                        viewCount.setText(netSceneDetails.getData().getView_count());
-                        loveCountTv.setText(String.format("%d", netSceneDetails.getData().getLove_count()));
-                        commentNum.setText(netSceneDetails.getData().getComment_count());
-                        allComment.setText(String.format("全部%s条评论", netSceneDetails.getData().getComment_count()));
-                        if (netSceneDetails.getData().getLove_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-                        location = netSceneDetails.getData().getLocation();
-//                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
-                    } else {
-                        ToastUtils.showError(netSceneDetails.getMessage());
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        });
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Log.e("<<<", "请求失败 ");
-                    break;
-            }
-        }
-    };
+//                case DataConstants.ADD_PRODUCT_LIST:
+//                    ProductBean netProductBean = (ProductBean) msg.obj;
+//                    if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
+//                        dialog.dismiss();
+//                        nearProductList.clear();
+//                        nearProductList.addAll(netProductBean.getData().getRows());
+//                        goodListAdapter.notifyDataSetChanged();
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netProductBean.getMessage());
+////                        dialog.showErrorWithStatus(netProductBean.getMessage());
+//                    }
+//                    break;
+////                case DataConstants.PRODUCT_AND_SCENE:
+////                    ProductAndSceneListBean netProScene = (ProductAndSceneListBean) msg.obj;
+////                    if (netProScene.isSuccess()) {
+//////                        Log.e("<<<场景下的产品", "数量" + netProScene.getData().getRows().size());
+////                        sceneProductList.clear();
+////                        sceneProductList.addAll(netProScene.getData().getRows());
+////                        sceneProductAdapter.notifyDataSetChanged();
+////                    }
+////                    break;
+//                case DataConstants.CANCEL_LOVE_SCENE:
+//                    SceneLoveBean netSceneLoveBean1 = (SceneLoveBean) msg.obj;
+//                    if (netSceneLoveBean1.isSuccess()) {
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+//                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
+//                        isLove = 0;
+//                        loveCount.setBackgroundResource(R.mipmap.love_scene);
+////                        love.setImageResource(R.mipmap.like_height_43px);
+//                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
+//                        loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
+//                        moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
+//                        if (netSceneLoveBean1.getData().getLove_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netSceneLoveBean1.getMessage());
+////                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.LOVE_SCENE:
+//                    SceneLoveBean netSceneLoveBean = (SceneLoveBean) msg.obj;
+////                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+//                    if (netSceneLoveBean.isSuccess()) {
+//                        DataPaser.commonList(1 + "", 14 + "", id, null, "sight", "love", handler);
+//                        isLove = 1;
+//                        loveCount.setBackgroundResource(R.mipmap.loved_scene);
+////                        love.setImageResource(R.mipmap.love_yes);
+//                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+//                        loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+//                        moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
+//                        if (netSceneLoveBean.getData().getLove_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netSceneLoveBean.getMessage());
+////                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.COMMON_LIST:
+//                    dialog.dismiss();
+//                    CommonBean netCommonBean = (CommonBean) msg.obj;
+//                    if (netCommonBean.isSuccess()) {
+//                        headList.clear();
+//                        headList.addAll(netCommonBean.getData().getRows());
+//                        if (headList.size() <= 0) {
+//                            headRelative.setVisibility(View.GONE);
+//                        } else {
+//                            headRelative.setVisibility(View.VISIBLE);
+//                        }
+//                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.COMMENTS_LIST:
+//                    dialog.dismiss();
+////                    Log.e("<<<", "评论列表");
+//                    CommentsBean netCommentBean = (CommentsBean) msg.obj;
+//                    if (netCommentBean.isSuccess()) {
+////                        commentList.clear();
+//                        commentList.addAll(netCommentBean.getData().getRows());
+//                        if (netCommentBean.getData().getRows().size() > 3) {
+//                            allComment.setVisibility(View.VISIBLE);
+//                            moreComment.setVisibility(View.VISIBLE);
+//                        }
+//                        sceneDetailCommentAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.SCENE_DETAILS:
+//                    dialog.dismiss();
+////                    Log.e("<<<", "场景详情");
+//                    SceneDetailsBean netSceneDetails = (SceneDetailsBean) msg.obj;
+//                    if (netSceneDetails.isSuccess()) {
+////                        Log.e("<<<", "url=" + netSceneDetails.getCover_url());
+//                        netScene = netSceneDetails;
+//                        ImageLoader.getInstance().displayImage(netSceneDetails.getData().getCover_url(), backgroundImg, options750_1334);
+//                        //用户是否已经点赞
+//                        isLove = netSceneDetails.getData().getIs_love();
+//                        switch (isLove) {
+//                            case 1:
+//                                loveCount.setBackgroundResource(R.mipmap.loved_scene);
+////                                love.setImageResource(R.mipmap.love_yes);
+//                                break;
+//                            default:
+//                                loveCount.setBackgroundResource(R.mipmap.love_scene);
+////                                love.setImageResource(R.mipmap.like_height_43px);
+//                                break;
+//                        }
+//                        //场景上的商品
+//                        productList = netSceneDetails.getData().getProduct();
+//                        getProductList();
+//                        getNearProductList();
+//                        //添加商品
+//                        addProductToImg();
+//                        changjingTitle.setText(netSceneDetails.getData().getTitle());
+//                        setTitleWidth();
+//                        suoshuqingjingTv.setText(netSceneDetails.getData().getScene_title());
+//                        locationTv.setText(netSceneDetails.getData().getAddress());
+//                        timeTv.setText(netSceneDetails.getData().getCreated_at());
+//                        netUserInfo = netSceneDetails.getData().getUser_info();
+//                        ImageLoader.getInstance().displayImage(netSceneDetails.getData().getUser_info().getAvatar_url(), userHead, options);
+//                        userName.setText(netSceneDetails.getData().getUser_info().getNickname());
+//                        if(netSceneDetails.getData().getUser_info().getIs_expert()==0){
+//                            vImg.setVisibility(View.GONE);
+//                            userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
+//                        }else{
+//                            vImg.setVisibility(View.VISIBLE);
+//                            userInfo.setText(netSceneDetails.getData().getUser_info().getExpert_label()+" | "+netSceneDetails.getData().getUser_info().getExpert_info());
+//                        }
+////                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
+//                        loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
+//                        moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
+//                        desTv.setText(netSceneDetails.getData().getDes());
+//                        //添加标签
+//                        addLabelToLinear(netSceneDetails.getData().getTag_titles(), netSceneDetails.getData().getTags());
+//
+//                        viewCount.setText(netSceneDetails.getData().getView_count());
+//                        loveCountTv.setText(String.format("%d", netSceneDetails.getData().getLove_count()));
+//                        commentNum.setText(netSceneDetails.getData().getComment_count());
+//                        allComment.setText(String.format("全部%s条评论", netSceneDetails.getData().getComment_count()));
+//                        if (netSceneDetails.getData().getLove_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                        location = netSceneDetails.getData().getLocation();
+////                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
+//                    } else {
+//                        ToastUtils.showError(netSceneDetails.getMessage());
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                finish();
+//                            }
+//                        });
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Log.e("<<<", "请求失败 ");
+//                    break;
+//            }
+//        }
+//    };
 
     private void setTitleWidth() {
         SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
@@ -571,7 +739,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         ids.deleteCharAt(0);
 //        Log.e("<<<场景下商品id", ids.toString());
-        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 3 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ProductBean netProductBean = new ProductBean();
@@ -587,6 +755,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     dialog.dismiss();
                     sceneProductList.clear();
                     sceneProductList.addAll(netProductBean.getData().getRows());
+//                    Log.e("<<<场景产品",sceneProductList.size()+","+sceneProductList.toString());
                     sceneProductAdapter.notifyDataSetChanged();
                 } else {
                     dialog.dismiss();
@@ -615,7 +784,42 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         ids.deleteCharAt(0);
 //        Log.e("<<<场景下商品id", ids.toString());
-        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
+        getProducts(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null);
+    }
+
+    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                             String stick, String fine) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                ProductBean netProductBean = productBean;
+                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
+                    dialog.dismiss();
+                    nearProductList.clear();
+                    nearProductList.addAll(netProductBean.getData().getRows());
+                    goodListAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     private void addProductToImg() {
@@ -685,7 +889,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_left_label:
                 if (netUserInfo == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id, handler);
+                    sceneDetails(id);
                     return;
                 }
                 Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
@@ -708,13 +912,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id, handler);
+                    sceneDetails(id);
                     return;
                 }
                 if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id())) {
                     popupWindow.dismiss();
                     dialog.show();
-                    DataPaser.deleteScene(id, handler);
+                    deleteScene(id);
                     return;
                 }
                 Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
@@ -734,12 +938,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                跳转到地图界面，查看附近的场景
                 if (location == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id, handler);
+                    sceneDetails(id);
                     return;
                 }
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id, handler);
+                    sceneDetails(id);
                     return;
                 }
                 String address = netScene.getData().getAddress();
@@ -789,10 +993,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 dialog.show();
                 switch (isLove) {
                     case 1:
-                        DataPaser.cancelLoveScene(id, handler);
+                        cancelLoveScene(id);
                         break;
                     default:
-                        DataPaser.loveScene(id, handler);
+                        loveScene(id);
                         break;
                 }
                 break;
@@ -806,7 +1010,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                Log.e("<<<点击", "点击评论");
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id + "", handler);
+                    sceneDetails(id + "");
                     return;
                 }
                 Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
@@ -826,7 +1030,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id, handler);
+                    sceneDetails(id);
                     return;
                 }
                 Intent intent5 = new Intent(SceneDetailActivity.this, CreateSceneActivity.class);
@@ -837,7 +1041,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_more:
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id + "", handler);
+                    sceneDetails(id + "");
                     return;
                 }
 //                if(netScene.getUser_info().getUser_id().equals(netScene.getCurrent_user_id()))
@@ -848,6 +1052,135 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 showPopup();
                 break;
         }
+    }
+    private void loveScene(String i){
+        ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean= gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                SceneLoveBean netSceneLoveBean = sceneLoveBean;
+//                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+                    if (netSceneLoveBean.isSuccess()) {
+                        commonList(1 + "", 14 + "", id, null, "sight", "love");
+                        isLove = 1;
+                        loveCount.setBackgroundResource(R.mipmap.loved_scene);
+//                        love.setImageResource(R.mipmap.love_yes);
+                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+                        loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+                        moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
+                        if (netSceneLoveBean.getData().getLove_count() > 14) {
+                            moreUser.setVisibility(View.VISIBLE);
+                        } else {
+                            moreUser.setVisibility(View.GONE);
+                        }
+                    } else {
+                        dialog.dismiss();
+                        ToastUtils.showError(netSceneLoveBean.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void cancelLoveScene(String i) {
+        ClientDiscoverAPI.cancelLoveScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                //                case DataConstants.CANCEL_LOVE_SCENE:
+                SceneLoveBean netSceneLoveBean1 = sceneLoveBean;
+                if (netSceneLoveBean1.isSuccess()) {
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+                    isLove = 0;
+                    loveCount.setBackgroundResource(R.mipmap.love_scene);
+//                        love.setImageResource(R.mipmap.like_height_43px);
+                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
+                    loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
+                    moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
+                    if (netSceneLoveBean1.getData().getLove_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netSceneLoveBean1.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+//                    break;
+//                case DataConstants.LOVE_SCENE:
+//
+//                    break;
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void deleteScene(String i) {
+        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除场景", "数据解析异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+//                        刷新列表
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     @Override
@@ -862,7 +1195,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_commentlistview:
                 if (netScene == null) {
                     dialog.show();
-                    DataPaser.sceneDetails(id + "", handler);
+                    sceneDetails(this.id);
                     return;
                 }
                 Intent intent2 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
@@ -903,10 +1236,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     protected void onDestroy() {
         //cancelNet();
         unregisterReceiver(sceneDetailReceiver);
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//            handler = null;
+//        }
         super.onDestroy();
     }
 
@@ -915,7 +1248,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void onReceive(Context context, Intent intent) {
             dialog.show();
-            DataPaser.sceneDetails(id + "", handler);
+            sceneDetails(id);
         }
     };
 

@@ -1,19 +1,25 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -70,15 +76,15 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.activity_report_sexual_violence:
                 dialog.show();
-                DataPaser.report(target_id, type, 1 + "", handler);
+                report(target_id, type, 1 + "");
                 break;
             case R.id.activity_report_steal_picture:
                 dialog.show();
-                DataPaser.report(target_id, type, 2 + "", handler);
+                report(target_id, type, 2 + "");
                 break;
             case R.id.activity_report_advertising_cheat:
                 dialog.show();
-                DataPaser.report(target_id, type, 3 + "", handler);
+                report(target_id, type, 3 + "");
                 break;
             case R.id.title_continue:
                 onBackPressed();
@@ -86,33 +92,53 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.REPORT:
-                    dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    if (netBean.isSuccess()) {
-                        reportLinear.setVisibility(View.GONE);
-                        successTv.setVisibility(View.VISIBLE);
-                        titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), ReportActivity.this);
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    break;
+    private void report(String target_id, String type, String evt) {
+        ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    reportLinear.setVisibility(View.GONE);
+                    successTv.setVisibility(View.VISIBLE);
+                    titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), ReportActivity.this);
+                }
             }
-        }
-    };
 
-    @Override
-    protected void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
+
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.REPORT:
+//                    dialog.dismiss();
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if (netBean.isSuccess()) {
+//                        reportLinear.setVisibility(View.GONE);
+//                        successTv.setVisibility(View.VISIBLE);
+//                        titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), ReportActivity.this);
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    break;
+//            }
+//        }
+//    };
+
 }

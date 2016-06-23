@@ -108,8 +108,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
+            if(bottomLinear!=null){
+                bottomLinear.setTranslationY(0);
+                animFlag = 0;
+            }else{
+                bottomLinear.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        bottomLinear.setTranslationY(0);
+                        animFlag = 0;
+                    }
+                });
+            }
         }
         which2Switch();
+
         super.onNewIntent(intent);
     }
 
@@ -130,7 +143,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
+            if(bottomLinear!=null){
+                bottomLinear.setTranslationY(0);
+                animFlag = 0;
+            }else{
+                bottomLinear.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        bottomLinear.setTranslationY(0);
+                        animFlag = 0;
+                    }
+                });
+            }
         }
+
     }
 
     @Override
@@ -147,7 +173,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataConstants.BroadShopCart);
-        intentFilter.addAction(DataConstants.BroadDeleteScene);
         registerReceiver(mainReceiver, intentFilter);
 //        WindowUtils.chenjin(MainActivity.this);
     }
@@ -566,36 +591,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             } else if (2 == intent.getIntExtra("index", -1)) {
 //                WindowUtils.chenjin(MainActivity.this);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                }
-                ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(500);
-                upAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 0;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                if (animFlag == 2) {
-                    upAnimator.start();
-                }
+                moveToReset();
             }
         }
     };
+
+    private void moveToReset() {
+        if (bottomLinear.getTranslationY() <= 0) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(500);
+        upAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 0;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        if (animFlag == 2) {
+            upAnimator.start();
+        }
+    }
+
     private int animFlag = 0;
 }

@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="11dp"
                 android:paddingTop="33dp"
-                android:text="评价"
+                android:text="@string/comment"
                 android:textColor="#333333"
                 android:textSize="14sp" />
             <!--android:isIndicator="false"必设这句，否则点击星条无反应-->
@@ -71,7 +71,7 @@
         android:layout_margin="5dp"
         android:background="@drawable/shap_home_gridview"
         android:gravity="top"
-        android:hint="写下您对商品的感受，对他人帮助很大"
+        android:hint="@string/take_your_comment"
         android:lineSpacingExtra="2dp"
         android:padding="5dp"
         android:textSize="14sp">

@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="编辑产品"
+            android:text="@string/edit_product"
             android:textColor="#999999"
             android:textSize="16sp"/>
     </RelativeLayout>
@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="¥"
+                    android:text="@string/money_symbol"
                     android:textColor="@color/title_black"/>
 
                 <EditText
@@ -118,7 +118,7 @@
         android:background="@drawable/yellow_corner_white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="删除产品"
+        android:text="@string/delete_product"
         android:textColor="@color/yellow_bd8913"
         android:textSize="16sp"/>
 
@@ -140,7 +140,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="@color/black333333"
             android:textSize="15sp"/>
 
@@ -151,7 +151,7 @@
             android:layout_weight="1"
             android:background="@color/yellow_bd8913"
             android:gravity="center"
-            android:text="确定"
+            android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="15sp"/>
     </LinearLayout>

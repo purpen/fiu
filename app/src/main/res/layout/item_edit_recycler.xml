@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="滤镜"
+            android:text="@string/filter"
             android:textColor="@color/white"
             android:textSize="12sp"/>
     </RelativeLayout>

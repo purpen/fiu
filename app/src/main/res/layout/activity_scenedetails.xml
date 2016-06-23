@@ -74,7 +74,6 @@
                             android:includeFontPadding="false"
                             android:maxLines="2"
                             android:maxWidth="300dp"
-                            android:text="详见的小路"
                             android:textColor="@color/white"
                             android:textSize="40sp"/>
                     </FrameLayout>
@@ -98,7 +97,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
                             android:gravity="center_vertical"
-                            android:text="232"
                             android:textColor="@color/white"
                             android:textSize="9sp"/>
 
@@ -118,7 +116,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:gravity="center_vertical"
-                            android:text="3天前"
                             android:textColor="@color/white"
                             android:textSize="9sp"/>
                     </LinearLayout>
@@ -143,7 +140,6 @@
                             android:layout_marginLeft="6dp"
                             android:gravity="center_vertical"
                             android:singleLine="true"
-                            android:text="北京市 朝阳区"
                             android:textColor="@color/white"
                             android:textSize="9sp"/>
                     </LinearLayout>
@@ -167,8 +163,8 @@
                             android:paddingLeft="15dp">
 
                             <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 >
 
                                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
@@ -202,7 +198,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
-                                    android:text="Lady Gaga"
                                     android:textColor="#000000"
                                     android:textSize="11sp"/>
 
@@ -212,7 +207,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/activity_scenedetails_username"
                                     android:singleLine="true"
-                                    android:text="这是人"
                                     android:textColor="#999999"
                                     android:textSize="10sp"/>
                             </RelativeLayout>
@@ -226,7 +220,6 @@
                             android:background="@mipmap/love_scene"
                             android:gravity="bottom|center_horizontal"
                             android:paddingBottom="10dp"
-                            android:text="300人赞过"
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             />
@@ -264,8 +257,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="8dp"
-                        android:text="我勒个去，啊顺利打开附件ask啊顺利打开附件，啊上的浪费空间。啊手动阀似的咖啡碱。阿斯蒂芬卢卡斯京东方啊是懒得看风景阿里山的看法。飞机ask的飞机喀什地方就，发生的飞机啊速度飞快。"
-                        android:textColor="#212121"
+                         android:textColor="#212121"
                         android:textSize="11sp"/>
 
                     <HorizontalScrollView
@@ -322,7 +314,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="6dp"
-                            android:text="234"
                             android:textColor="#999999"
                             android:textSize="12sp"/>
 
@@ -337,7 +328,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="6dp"
-                            android:text="234"
                             android:textColor="#999999"
                             android:textSize="12sp"/>
 
@@ -353,7 +343,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="6dp"
-                            android:text="234"
                             android:textColor="#999999"
                             android:textSize="12sp"/>
 
@@ -387,7 +376,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@mipmap/comment_numbers"
                         android:gravity="center"
-                        android:text="300+"
+                        android:text="@string/number_300"
                         android:textColor="@color/white"
                         android:textSize="11sp"
                         android:visibility="gone"
@@ -414,7 +403,6 @@
                         android:id="@+id/activity_scenedetails_allcomment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="全部123条评论"
                         android:textColor="#999999"
                         android:textSize="11sp"
                         android:visibility="gone"/>
@@ -445,7 +433,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="此场景下的产品"
+                        android:text="@string/products_of_sight"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
                 </LinearLayout>
@@ -474,7 +462,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="相近的产品"
+                        android:text="@string/near_products"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
                 </LinearLayout>

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -29,6 +28,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -47,8 +52,8 @@ import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByQJActivity;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.scene.CreateSceneActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
@@ -62,6 +67,11 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,183 +240,393 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         subscriptionCount.setOnClickListener(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadQingjingDetail);
-        filter.addAction(DataConstants.BroadDeleteScene);
         registerReceiver(qingjingReceiver, filter);
     }
 
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.qingjingDetails(id, handler);
-        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-        DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
+        qingjingDetails(id);
+        commonList(1 + "", 14 + "", id, null, "scene", "subscription");
+        getSceneList(currentPage + "", null, id, null, null, null, null, null);
     }
 
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.DELETE_QINGJING:
-                    dialog.dismiss();
-                    NetBean netBean = (NetBean) msg.obj;
-                    if (netBean.isSuccess()) {
-                        ToastUtils.showSuccess("删除成功");
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
+    private void getSceneList(String page, String size, String scene_id, String sort, String fine, final String dis, String lng, String lat) {
+        ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneList sceneList1 = new SceneList();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+                    sceneList1.setSuccess(jsonObject.optBoolean("success"));
+                    sceneList1.setMessage(jsonObject.optString("message"));
+//                    sceneList.setStatus(jsonObject.optString("status"));
+                    if (sceneList1.isSuccess()) {
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        List<SceneListBean> list = new ArrayList<>();
+                        for (int i = 0; i < rows.length(); i++) {
+                            JSONObject job = rows.getJSONObject(i);
+                            SceneListBean sceneListBean = new SceneListBean();
+                            sceneListBean.set_id(job.optString("_id"));
+                            sceneListBean.setAddress(job.optString("address"));
+                            sceneListBean.setScene_title(job.optString("scene_title"));
+                            sceneListBean.setView_count(job.optString("view_count"));
+                            sceneListBean.setCreated_at(job.optString("created_at"));
+                            sceneListBean.setLove_count(job.optString("love_count"));
+                            sceneListBean.setCover_url(job.optString("cover_url"));
+                            sceneListBean.setTitle(job.optString("title"));
+                            sceneListBean.setDes(job.optString("des"));
+                            JSONObject us = job.getJSONObject("user_info");
+                            SceneListBean.User user = new SceneListBean.User();
+                            user.setAccount(us.optString("account"));
+//                            user.setLabel(us.optString("label"));
+                            user.is_expert = us.optInt("is_expert");
+                            user.expert_info = us.optString("expert_info");
+                            user.expert_label = us.optString("expert_label");
+                            user.setUser_id(us.optString("user_id"));
+                            user.setSummary(us.optString("summary"));
+                            user.setNickname(us.optString("nickname"));
+                            user.setLove_count(us.optString("love_count"));
+                            user.setFollow_count(us.optString("follow_count"));
+                            user.setFans_count(us.optString("fans_count"));
+//                            user.setCounter(us.optString("counter"));
+                            user.setAvatar_url(us.optString("avatar_url"));
+                            sceneListBean.setUser_info(user);
+                            JSONArray product = job.getJSONArray("product");
+                            List<SceneListBean.Products> productsList = new ArrayList<>();
+                            for (int j = 0; j < product.length(); j++) {
+                                JSONObject ob = product.getJSONObject(j);
+                                SceneListBean.Products products = new SceneListBean.Products();
+                                products.setId(ob.optString("id"));
+                                products.setTitle(ob.optString("title"));
+                                products.setPrice(ob.optString("price"));
+                                products.setX(ob.optDouble("x"));
+                                products.setY(ob.optDouble("y"));
+                                productsList.add(products);
                             }
-                        });
+                            sceneListBean.setProductsList(productsList);
+                            list.add(sceneListBean);
+                        }
+                        sceneList1.setSceneListBeanList(list);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SceneList netSceneList = sceneList1;
+                if (netSceneList.isSuccess()) {
+                    if (currentPage == 1) {
+                        sceneList.clear();
+                        lastSavedFirstVisibleItem = -1;
+                        lastTotalItem = -1;
+                    }
+                    sceneList.addAll(netSceneList.getSceneListBeanList());
+                    if (sceneList.size() == 0) {
+                        emptyView.setVisibility(View.VISIBLE);
                     } else {
-                        ToastUtils.showError(netBean.getMessage());
+                        emptyView.setVisibility(View.GONE);
                     }
-                    break;
-                case DataConstants.CANCEL_SUBS_QINGJING:
-                    QingjingSubsBean netQingjingSubs = (QingjingSubsBean) msg.obj;
-                    if (netQingjingSubs.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-                        is_subscript = 0;
-                        subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
-//                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
-                        moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
-                        if (netQingjingSubs.getData().getSubscription_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
+                    sceneListViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void commonList(String page, String size, String id, String user_id, String type, String event) {
+        ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CommonBean commonBean = new CommonBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommonBean>() {
+                    }.getType();
+                    commonBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<通用列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                CommonBean netCommonBean = commonBean;
+                if (netCommonBean.isSuccess()) {
+                    headList.clear();
+                    headList.addAll(netCommonBean.getData().getRows());
+                    if (headList.size() <= 0) {
+                        headRelative.setVisibility(View.GONE);
                     } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netQingjingSubs.getMessage());
-//                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
-//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
+                        headRelative.setVisibility(View.VISIBLE);
                     }
-                    break;
-                case DataConstants.SUBS_QINGJING:
-                    QingjingSubsBean netQingjingSubsBean = (QingjingSubsBean) msg.obj;
-                    if (netQingjingSubsBean.isSuccess()) {
-                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-                        is_subscript = 1;
-                        subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
-//                        subsImg.setImageResource(R.mipmap.subs_yes);
-                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
-                        moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
-                        if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-                    } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netQingjingSubsBean.getMessage());
-//                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
-//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.SCENE_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    SceneList netSceneList = (SceneList) msg.obj;
-                    if (netSceneList.isSuccess()) {
-                        if (currentPage == 1) {
-                            sceneList.clear();
-                            lastSavedFirstVisibleItem = -1;
-                            lastTotalItem = -1;
-                        }
-                        sceneList.addAll(netSceneList.getSceneListBeanList());
-                        if (sceneList.size() == 0) {
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyView.setVisibility(View.GONE);
-                        }
-                        sceneListViewAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.COMMON_LIST:
-                    dialog.dismiss();
-                    CommonBean netCommonBean = (CommonBean) msg.obj;
-                    if (netCommonBean.isSuccess()) {
-                        headList.clear();
-                        headList.addAll(netCommonBean.getData().getRows());
-                        if (headList.size() <= 0) {
-                            headRelative.setVisibility(View.GONE);
-                        } else {
-                            headRelative.setVisibility(View.VISIBLE);
-                        }
-                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.QINGJING_DETAILS:
-                    dialog.dismiss();
-                    QingjingDetailBean netQingjingDetailBean = (QingjingDetailBean) msg.obj;
-                    if (netQingjingDetailBean.isSuccess()) {
+                    sceneDetailUserHeadAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void qingjingDetails(String id) {
+        ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingjingDetailBean qingjingDetailBean = new QingjingDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingDetailBean>() {
+                    }.getType();
+                    qingjingDetailBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
+                dialog.dismiss();
+                QingjingDetailBean netQingjingDetailBean = qingjingDetailBean;
+                if (netQingjingDetailBean.isSuccess()) {
 //                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
-                        QingjingDetailBean = netQingjingDetailBean;
-                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
-                        SpannableStringBuilder style = new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
-                        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getResources().getColor(R.color.black));
-                        style.setSpan(backgroundColorSpan, 0, netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                        qingjingTitle.setText(style);
-                        locationTv.setText(netQingjingDetailBean.getData().getAddress());
-                        timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
-                        netUserInfo = netQingjingDetailBean.getData().getUser_info();
-                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
-                        if(netQingjingDetailBean.getData().getUser_info().getIs_expert()==0){
-                            vImg.setVisibility(View.GONE);
-                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
-                        }else{
-                            vImg.setVisibility(View.VISIBLE);
-                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label()+" | "+netQingjingDetailBean.getData().getUser_info().getExpert_info());
-                        }
-                        userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
+                    QingjingDetailBean = netQingjingDetailBean;
+                    ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
+                    SpannableStringBuilder style = new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
+                    BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getResources().getColor(R.color.black));
+                    style.setSpan(backgroundColorSpan, 0, netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    qingjingTitle.setText(style);
+                    locationTv.setText(netQingjingDetailBean.getData().getAddress());
+                    timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
+                    netUserInfo = netQingjingDetailBean.getData().getUser_info();
+                    ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
+                    if (netQingjingDetailBean.getData().getUser_info().getIs_expert() == 0) {
+                        vImg.setVisibility(View.GONE);
+                        userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
+                    } else {
+                        vImg.setVisibility(View.VISIBLE);
+                        userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label() + " | " + netQingjingDetailBean.getData().getUser_info().getExpert_info());
+                    }
+                    userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
 //                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
-                        subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
-                        moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
-                        desTv.setText(netQingjingDetailBean.getData().getDes());
-                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
-                                .getLocation().getCoordinates().get(1) + ""};
-                        //添加标签
-                        addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
-                        is_subscript = netQingjingDetailBean.getData().getIs_subscript();
-                        switch (is_subscript) {
-                            case 1:
-                                subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+                    subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
+                    moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
+                    desTv.setText(netQingjingDetailBean.getData().getDes());
+                    locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
+                            .getLocation().getCoordinates().get(1) + ""};
+                    //添加标签
+                    addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
+                    is_subscript = netQingjingDetailBean.getData().getIs_subscript();
+                    switch (is_subscript) {
+                        case 1:
+                            subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
 //                                subsImg.setImageResource(R.mipmap.subs_yes);
 //                                subsTv.setText("取消订阅");
-                                break;
-                            default:
-                                subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+                            break;
+                        default:
+                            subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
 //                                subsImg.setImageResource(R.mipmap.subscribe_height_49px);
 //                                subsTv.setText("+订阅此情景");
-                                break;
-                        }
-                        if (netQingjingDetailBean.getData().getSubscription_count() <= 0) {
-                            headRelative.setVisibility(View.GONE);
-                        } else {
-                            headRelative.setVisibility(View.VISIBLE);
-                        }
-                        if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
-                        if (netQingjingDetailBean.getCurrent_user_id() != null && netQingjingDetailBean.getCurrent_user_id().equals(netQingjingDetailBean.getData().getUser_info().getUser_id())) {
-                            more.setVisibility(View.VISIBLE);
-                        }
+                            break;
+                    }
+                    if (netQingjingDetailBean.getData().getSubscription_count() <= 0) {
+                        headRelative.setVisibility(View.GONE);
                     } else {
-                        ToastUtils.showError(netQingjingDetailBean.getMessage());
+                        headRelative.setVisibility(View.VISIBLE);
+                    }
+                    if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                    if (netQingjingDetailBean.getCurrent_user_id() != null && netQingjingDetailBean.getCurrent_user_id().equals(netQingjingDetailBean.getData().getUser_info().getUser_id())) {
+                        more.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    ToastUtils.showError(netQingjingDetailBean.getMessage());
 //                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
 //                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    break;
+                }
             }
-        }
-    };
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    //    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.DELETE_QINGJING:
+//                    dialog.dismiss();
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if (netBean.isSuccess()) {
+//                        ToastUtils.showSuccess("删除成功");
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                finish();
+//                            }
+//                        });
+//                    } else {
+//                        ToastUtils.showError(netBean.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.CANCEL_SUBS_QINGJING:
+//                    QingjingSubsBean netQingjingSubs = (QingjingSubsBean) msg.obj;
+//                    if (netQingjingSubs.isSuccess()) {
+//                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
+//                        is_subscript = 0;
+//                        subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+////                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
+//                        moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
+//                        if (netQingjingSubs.getData().getSubscription_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netQingjingSubs.getMessage());
+////                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
+////                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.SUBS_QINGJING:
+//                    QingjingSubsBean netQingjingSubsBean = (QingjingSubsBean) msg.obj;
+//                    if (netQingjingSubsBean.isSuccess()) {
+//                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
+//                        is_subscript = 1;
+//                        subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+////                        subsImg.setImageResource(R.mipmap.subs_yes);
+//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
+//                        moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
+//                        if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                    } else {
+//                        dialog.dismiss();
+//                        ToastUtils.showError(netQingjingSubsBean.getMessage());
+////                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
+////                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.SCENE_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    SceneList netSceneList = (SceneList) msg.obj;
+//                    if (netSceneList.isSuccess()) {
+//                        if (currentPage == 1) {
+//                            sceneList.clear();
+//                            lastSavedFirstVisibleItem = -1;
+//                            lastTotalItem = -1;
+//                        }
+//                        sceneList.addAll(netSceneList.getSceneListBeanList());
+//                        if (sceneList.size() == 0) {
+//                            emptyView.setVisibility(View.VISIBLE);
+//                        } else {
+//                            emptyView.setVisibility(View.GONE);
+//                        }
+//                        sceneListViewAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.COMMON_LIST:
+//                    dialog.dismiss();
+//                    CommonBean netCommonBean = (CommonBean) msg.obj;
+//                    if (netCommonBean.isSuccess()) {
+//                        headList.clear();
+//                        headList.addAll(netCommonBean.getData().getRows());
+//                        if (headList.size() <= 0) {
+//                            headRelative.setVisibility(View.GONE);
+//                        } else {
+//                            headRelative.setVisibility(View.VISIBLE);
+//                        }
+//                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.QINGJING_DETAILS:
+//                    dialog.dismiss();
+//                    QingjingDetailBean netQingjingDetailBean = (QingjingDetailBean) msg.obj;
+//                    if (netQingjingDetailBean.isSuccess()) {
+////                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
+//                        QingjingDetailBean = netQingjingDetailBean;
+//                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
+//                        SpannableStringBuilder style = new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
+//                        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getResources().getColor(R.color.black));
+//                        style.setSpan(backgroundColorSpan, 0, netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                        qingjingTitle.setText(style);
+//                        locationTv.setText(netQingjingDetailBean.getData().getAddress());
+//                        timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
+//                        netUserInfo = netQingjingDetailBean.getData().getUser_info();
+//                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
+//                        if(netQingjingDetailBean.getData().getUser_info().getIs_expert()==0){
+//                            vImg.setVisibility(View.GONE);
+//                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
+//                        }else{
+//                            vImg.setVisibility(View.VISIBLE);
+//                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label()+" | "+netQingjingDetailBean.getData().getUser_info().getExpert_info());
+//                        }
+//                        userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
+////                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
+//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
+//                        moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
+//                        desTv.setText(netQingjingDetailBean.getData().getDes());
+//                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
+//                                .getLocation().getCoordinates().get(1) + ""};
+//                        //添加标签
+//                        addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
+//                        is_subscript = netQingjingDetailBean.getData().getIs_subscript();
+//                        switch (is_subscript) {
+//                            case 1:
+//                                subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+////                                subsImg.setImageResource(R.mipmap.subs_yes);
+////                                subsTv.setText("取消订阅");
+//                                break;
+//                            default:
+//                                subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+////                                subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+////                                subsTv.setText("+订阅此情景");
+//                                break;
+//                        }
+//                        if (netQingjingDetailBean.getData().getSubscription_count() <= 0) {
+//                            headRelative.setVisibility(View.GONE);
+//                        } else {
+//                            headRelative.setVisibility(View.VISIBLE);
+//                        }
+//                        if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
+//                            moreUser.setVisibility(View.VISIBLE);
+//                        } else {
+//                            moreUser.setVisibility(View.GONE);
+//                        }
+//                        if (netQingjingDetailBean.getCurrent_user_id() != null && netQingjingDetailBean.getCurrent_user_id().equals(netQingjingDetailBean.getData().getUser_info().getUser_id())) {
+//                            more.setVisibility(View.VISIBLE);
+//                        }
+//                    } else {
+//                        ToastUtils.showError(netQingjingDetailBean.getMessage());
+////                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
+////                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    break;
+//            }
+//        }
+//    };
     private QingjingDetailBean QingjingDetailBean;//网络请求返回数据
 
     private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
@@ -433,26 +653,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void isSpertAndSummary(TextView userInfo, String isSpert, String summary) {
-        if ("1".equals(isSpert) && summary == null) {
-            userInfo.setText("达人");
-        } else if ("1".equals(isSpert)) {
-            userInfo.setText(String.format("%s | %s", "达人", summary));
-        } else if (summary == null) {
-            userInfo.setText("");
-        } else {
-            userInfo.setText(summary);
-        }
-    }
 
     @Override
     protected void onDestroy() {
         //cancelNet();
         unregisterReceiver(qingjingReceiver);
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
         super.onDestroy();
     }
 
@@ -462,7 +667,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case R.id.popup_scene_detail_more_jubao:
                 popupWindow.dismiss();
                 dialog.show();
-                DataPaser.deleteQingjing(id, handler);
+                deleteQingjing(id);
                 break;
             case R.id.popup_scene_detail_more_bianji_linear:
                 if (!LoginInfo.isUserLogin()) {
@@ -486,12 +691,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case R.id.activity_qingjingdetail_addresslinear:
                 if (locaiton == null) {
                     dialog.show();
-                    DataPaser.qingjingDetails(id, handler);
+                    qingjingDetails(id);
                     return;
                 }
                 if (QingjingDetailBean == null) {
                     dialog.show();
-                    DataPaser.qingjingDetails(id, handler);
+                    qingjingDetails(id);
                     return;
                 }
                 String address = QingjingDetailBean.getData().getAddress();
@@ -504,7 +709,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             case R.id.activity_qingjingdetail_leftlabel:
                 if (netUserInfo == null) {
                     dialog.show();
-                    DataPaser.qingjingDetails(id, handler);
+                    qingjingDetails(id);
                     return;
                 }
                 Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
@@ -534,14 +739,137 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 dialog.show();
                 switch (is_subscript) {
                     case 1:
-                        DataPaser.cancelSubsQingjing(id, handler);
+                        cancelSubsQingjing(id);
                         break;
                     default:
-                        DataPaser.subsQingjing(id, handler);
+                        subsQingjing(id);
                         break;
                 }
                 break;
         }
+    }
+
+    private void subsQingjing(String i) {
+        ClientDiscoverAPI.subsQingjing(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingjingSubsBean qingjingSubsBean = new QingjingSubsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingSubsBean>() {
+                    }.getType();
+                    qingjingSubsBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                QingjingSubsBean netQingjingSubsBean = qingjingSubsBean;
+                if (netQingjingSubsBean.isSuccess()) {
+                    commonList(1 + "", 14 + "", id, null, "scene", "subscription");
+                    is_subscript = 1;
+                    subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
+//                        subsImg.setImageResource(R.mipmap.subs_yes);
+                    subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
+                    moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
+                    if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netQingjingSubsBean.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
+//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void cancelSubsQingjing(String i) {
+        ClientDiscoverAPI.cancelSubsQingjing(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingjingSubsBean qingjingSubsBean = new QingjingSubsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingjingSubsBean>() {
+                    }.getType();
+                    qingjingSubsBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<数据解析异常", e.toString());
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                QingjingSubsBean netQingjingSubs = qingjingSubsBean;
+                if (netQingjingSubs.isSuccess()) {
+                    commonList(1 + "", 14 + "", id, null, "scene", "subscription");
+                    is_subscript = 0;
+                    subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
+//                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
+                    subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
+                    moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
+                    if (netQingjingSubs.getData().getSubscription_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netQingjingSubs.getMessage());
+//                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
+//                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void deleteQingjing(String id) {
+        ClientDiscoverAPI.deleteQingjing(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除情景", "数据异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess("删除成功");
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 
     private PopupWindow popupWindow;
@@ -632,7 +960,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getSceneList(currentPage + "", null, id, null,null, null, null, null, handler);
+            getSceneList(currentPage + "", null, id, null, null, null, null, null);
         }
         Log.e("<<<", "没进来" + getScrollY());
         backgroundImg.setTranslationY(getScrollY() / 3);
@@ -658,12 +986,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
                 dialog.show();
                 currentPage = 1;
-                DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
+                getSceneList(currentPage + "", null, id, null, null, null, null, null);
             } else {
                 dialog.show();
-                DataPaser.qingjingDetails(id, handler);
+                qingjingDetails(id);
                 currentPage = 1;
-                DataPaser.getSceneList(currentPage + "", null, id,null, null, null, null, null, handler);
+                getSceneList(currentPage + "", null, id, null, null, null, null, null);
             }
         }
     };

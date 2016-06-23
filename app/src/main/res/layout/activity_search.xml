@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="#666666"
             android:textSize="14sp"/>
 
@@ -63,7 +63,7 @@
                 android:layout_toLeftOf="@id/activity_search_delete"
                 android:layout_toRightOf="@id/search"
                 android:background="@null"
-                android:hint="搜索"
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textSize="13sp"/>
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="情景"
+                android:text="@string/scene"
                 android:textColor="#333333"
                 android:textSize="14sp"/>
 
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="场景"
+                android:text="@string/sight"
                 android:textColor="#333333"
                 android:textSize="14sp"/>
 
@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="产品"
+                android:text="@string/product"
                 android:textColor="#333333"
                 android:textSize="14sp"/>
 

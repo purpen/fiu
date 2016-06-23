@@ -65,7 +65,7 @@
                     android:layout_weight="8"
                     android:background="@drawable/grey_no_corner"
                     android:gravity="center"
-                    android:text="1"
+                    android:text="@string/number_1"
                     android:textColor="#333333"
                     android:textSize="16sp"/>
 
@@ -91,7 +91,7 @@
                     android:id="@+id/tv_color_shopcart_item_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="颜色/分类："
+                    android:text="@string/color_or_category"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -99,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="数量 * "
+                    android:text="@string/the_number"
                     android:textSize="11sp"/>
             </LinearLayout>
         </LinearLayout>
@@ -123,7 +123,6 @@
                 android:maxLines="2"
                 android:minLines="2"
                 android:paddingRight="10dp"
-                android:text="标题"
                 android:textColor="#333333"
                 android:textSize="13sp"/>
 
@@ -137,7 +136,7 @@
                     android:id="@+id/tv_color_shopcart_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="颜色/分类："
+                    android:text="@string/color_or_category"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -145,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="数量 * "
+                    android:text="@string/the_number"
                     android:textSize="11sp"/>
             </LinearLayout>
 
@@ -153,7 +152,7 @@
                 android:id="@+id/tv_price_shopcart_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="价钱"
+                android:text="@string/the_money"
                 android:textColor="@color/yellow_bd8913"
                 android:textSize="11sp"/>
         </LinearLayout>

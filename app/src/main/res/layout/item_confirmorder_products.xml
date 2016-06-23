@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="颜色/种类:"
+                android:text="@string/color_or_category"
                 android:textColor="#999999"
                 android:textSize="13sp"/>
 
@@ -56,14 +56,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="白色"
                 android:textColor="#999999"
                 android:textSize="13sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=",数量*"
+                android:text="@string/the_numbers"
                 android:textColor="#999999"
                 android:textSize="13sp"/>
 

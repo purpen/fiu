@@ -46,48 +46,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"/>
-    <!--<Button-->
-    <!--android:id="@+id/location_btn"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="定位" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/poi_btn"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/location_btn"-->
-    <!--android:text="POI" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/share_btn"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/poi_btn"-->
-    <!--android:text="分享" />-->
-    <!--<Button-->
-    <!--android:id="@+id/sliding_tab_btn"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/share_btn"-->
-    <!--android:text="滑动界面" />-->
-    <!--<Button-->
-    <!--android:id="@+id/geo"-->
-    <!--android:layout_below="@+id/sliding_tab_btn"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="GEO" />-->
-    <!--<Button-->
-    <!--android:id="@+id/select_search_qj"-->
-    <!--android:layout_below="@+id/geo"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="选择和搜索情景" />-->
     <TextView
         android:id="@+id/fragment_index_emptyview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="没找到？\n\n或许Fiu首页有你要查的东西"
+        android:text="@string/search_nothing"
         android:visibility="gone"/>
 </FrameLayout>

@@ -71,7 +71,7 @@
                 android:layout_toLeftOf="@id/activity_add_product_delete"
                 android:layout_toRightOf="@+id/iv"
                 android:background="@null"
-                android:hint="搜索产品"
+                android:hint="@string/search_products"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textSize="13sp"

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="@color/color_af8323"
             android:textSize="@dimen/sp14" />
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="请选择省份"
+            android:text="@string/select_a_province"
             android:textColor="@color/color_333"
             android:textSize="@dimen/sp14" />
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="完成"
+            android:text="@string/complete"
             android:textColor="@color/color_af8323"
             android:textSize="@dimen/sp14" />
     </RelativeLayout>

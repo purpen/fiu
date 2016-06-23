@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/dp10"
             android:paddingBottom="@dimen/dp10"
-            android:text="查看详情"
+            android:text="@string/check_for_detail"
             android:textSize="@dimen/sp12"
             android:drawableRight="@mipmap/more"
             android:textColor="@color/color_333"

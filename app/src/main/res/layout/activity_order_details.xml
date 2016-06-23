@@ -44,7 +44,7 @@
                     android:layout_toRightOf="@+id/image_address"
                     android:paddingBottom="5dp"
                     android:paddingTop="10dp"
-                    android:text="收货人"
+                    android:text="@string/consignee"
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/image_address"
-                    android:text="省份"
+                    android:text="@string/province"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -64,7 +64,7 @@
                     android:layout_below="@+id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/tv_province_order_details"
                     android:paddingLeft="10dp"
-                    android:text="城市"
+                    android:text="@string/city"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:layout_toRightOf="@+id/image_address"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
-                    android:text="详细地址"
+                    android:text="@string/detail_address"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_address_order_details"
                     android:layout_toRightOf="@+id/image_address"
-                    android:text="电话号"
+                    android:text="@string/phone_number"
                     android:textSize="11sp"/>
             </RelativeLayout>
 
@@ -105,7 +105,7 @@
                 <TextView
                     android:id="@+id/tv_number"
                     style="@style/order_details_textview"
-                    android:text="订单编号："
+                    android:text="@string/order_number"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -122,7 +122,7 @@
                 <TextView
                     android:id="@+id/tv_number_logistics_company"
                     style="@style/order_details_textview"
-                    android:text="物流公司："
+                    android:text="@string/logistics_company"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -139,7 +139,7 @@
                 <TextView
                     android:id="@+id/tv_number_logistics"
                     style="@style/order_details_textview"
-                    android:text="物流单号："
+                    android:text="@string/logistics_odd_number"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -154,7 +154,7 @@
                 <TextView
                     android:id="@+id/tv_payway"
                     style="@style/order_details_textview"
-                    android:text="支付方式："
+                    android:text="@string/pay_method"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -169,7 +169,7 @@
                 <TextView
                     android:id="@+id/tv_totalmoney"
                     style="@style/order_details_textview"
-                    android:text="商品总额："
+                    android:text="@string/products_money"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -187,7 +187,7 @@
                 <TextView
                     android:id="@+id/tv_freight"
                     style="@style/order_details_textview"
-                    android:text="运费："
+                    android:text="@string/freight"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -205,7 +205,7 @@
                 <TextView
                     android:id="@+id/tv_paymoney"
                     style="@style/order_details_textview"
-                    android:text="实付金额："
+                    android:text="@string/amount_paid"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -226,7 +226,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
                 android:gravity="center"
-                android:text="联系客服"
+                android:text="@string/contact_customer_service"
                 android:textColor="#666666"
                 android:textSize="13sp"/>
 
@@ -252,7 +252,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="8dp"
-            android:text="取消订单"
+            android:text="@string/cancel_order"
             android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
 
@@ -268,7 +268,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="8dp"
-            android:text="立即支付"
+            android:text="@string/pay_now"
             android:textColor="@color/yellow_bd8913"
             android:textSize="12sp"/>
     </RelativeLayout>

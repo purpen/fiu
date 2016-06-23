@@ -32,7 +32,7 @@ public class ProductBean extends NetBean implements Serializable{
         }
     }
     public static class ProductListItem{
-        public int pos;
+        private int pos;
         private String _id;
         private String title;
         private String sale_price;
@@ -43,6 +43,31 @@ public class ProductBean extends NetBean implements Serializable{
         private List<String> category_tags;
         private List<String> banner_asset = new ArrayList<>();
         private List<Sight> sights;
+
+        @Override
+        public String toString() {
+            return "ProductListItem{" +
+                    "_id='" + _id + '\'' +
+                    ", pos=" + pos +
+                    ", title='" + title + '\'' +
+                    ", sale_price='" + sale_price + '\'' +
+                    ", market_price='" + market_price + '\'' +
+                    ", love_count='" + love_count + '\'' +
+                    ", cover_url='" + cover_url + '\'' +
+                    ", attrbute='" + attrbute + '\'' +
+                    ", category_tags=" + category_tags +
+                    ", banner_asset=" + banner_asset +
+                    ", sights=" + sights +
+                    '}';
+        }
+
+        public int getPos() {
+            return pos;
+        }
+
+        public void setPos(int pos) {
+            this.pos = pos;
+        }
 
         public String get_id() {
             return _id;

@@ -17,7 +17,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:gravity="center"
-        android:text="+添加新地址"
+        android:text="@string/add_new_address"
         android:textColor="#333333"
         android:textSize="16sp"/>
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="你还没有收货地址"
+            android:text="@string/no_address"
             android:textColor="#ff999999"
             android:textSize="14sp"/>
     </LinearLayout>

@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="牛Brands"
+            android:text="@string/severe_brands"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[尖货这里找]"
+            android:text="@string/good_here"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>
@@ -92,7 +92,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="Fiu东西"
+            android:text="@string/fiu_things"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -101,7 +101,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[东西不少，牌子不小]"
+            android:text="@string/more_goods_more_brands"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>

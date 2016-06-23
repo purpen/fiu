@@ -30,7 +30,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/yellow_bd8913"
         android:gravity="center"
-        android:text="提交"
+        android:text="@string/commit"
         android:textColor="@color/white"
         android:textSize="15sp" />
 </RelativeLayout>

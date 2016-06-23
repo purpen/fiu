@@ -35,7 +35,6 @@ public class ProductAndSceneListBean extends NetBean {
         private Product product;
         private Sight sight;
 
-
         public Product getProduct() {
             return product;
         }

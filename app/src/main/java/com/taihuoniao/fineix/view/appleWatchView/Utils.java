@@ -20,14 +20,8 @@ public class Utils {
 
         int[] nums = null;
         switch (num) {
-            case 1:
-                nums = new int[]{1};
-                break;
-            case 2:
-                nums = new int[]{2};
-                break;
-            case 3:
-                nums = new int[]{1, 2};
+            case 0:
+                nums = new int[]{0};
                 break;
             case 4:
                 nums = new int[]{1, 2, 1};
@@ -46,9 +40,6 @@ public class Utils {
                 break;
             case 9:
                 nums = new int[]{1, 2, 3, 2, 1};
-                break;
-            default:
-                nums = new int[]{0};
                 break;
         }
 
@@ -108,10 +99,9 @@ public class Utils {
             result[4]++;
             result[5]++;
         } else if (remainder == 6) {
-            result[0]++;
             result[1]++;
             result[2]++;
-            result[3]++;
+            result[3] += 2;
             result[4]++;
             result[5]++;
         }

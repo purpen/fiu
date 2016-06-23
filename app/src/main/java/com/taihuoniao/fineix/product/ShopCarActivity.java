@@ -101,14 +101,25 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if (!numberCart.isSuccess() || "0".equals(numberCart.getCount())) {
+                            if(numberCart.isSuccess()&&Integer.parseInt(numberCart.getCount())>0){
+                                title.setRightButtomVisible(true);
+                                title.setTitle("购物车(" + numberCart.getCount() + ")");
+                            }else{
                                 title.setTitle("购物车");
                                 title.setRightButtomVisible(false);
-                            } else {
-                                title.setTitle("购物车(" + numberCart.getCount() + ")");
-                                title.setRightButtomVisible(true);
                             }
+//                            if (!numberCart.isSuccess() || "0".equals(numberCart.getCount())) {
+//                                title.setTitle("购物车");
+//                                title.setRightButtomVisible(false);
+//                            } else {
+//                                title.setTitle("购物车(" + numberCart.getCount() + ")");
+//                                title.setRightButtomVisible(true);
+//                            }
+                        } else {
+                            title.setRightButtomVisible(false);
                         }
+                    } else {
+                        title.setRightButtomVisible(false);
                     }
                     break;
                 case DataConstants.PARSER_SHOP_CART:

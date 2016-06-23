@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="热Fiuer"
+            android:text="@string/hot_fiuer"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[有Bigger不低调]"
+            android:text="@string/bigger_no_low_profile"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>
@@ -79,7 +79,7 @@
             android:gravity="center"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
-            android:text="查看全部"
+            android:text="@string/look_all"
             android:textSize="10sp"/>
 
         <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="新Land"
+                android:text="@string/new_land"
                 android:textColor="#222222"
                 android:textSize="13sp"/>
             <!-- 999999 -->
@@ -108,7 +108,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="[圈地有收益]"
+                android:text="@string/enclosure_is_earnings"
                 android:textColor="#999999"
                 android:textSize="11sp"/>
         </LinearLayout>
@@ -136,7 +136,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="High场景"
+            android:text="@string/high_sight"
             android:textColor="#222222"
             android:textSize="13sp"/>
         <!-- 999999 -->
@@ -145,7 +145,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="[谁用谁上瘾]"
+            android:text="@string/whoever_with_addiction"
             android:textColor="#999999"
             android:textSize="11sp"/>
     </LinearLayout>

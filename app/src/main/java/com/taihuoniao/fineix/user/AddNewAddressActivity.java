@@ -26,7 +26,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.AddressBean;
+import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -54,7 +54,7 @@ import java.util.Map;
  */
 public class AddNewAddressActivity extends Activity implements View.OnClickListener, OnWheelChangedListener {
     //从选择地址界面传递过来的数据
-    private AddressBean addressBean;
+    private AddressListBean.AddressListItem addressBean;
     //界面下控件
     private View activity_view;
     private GlobalTitleLayout titleLayout;
@@ -224,7 +224,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     }
 
     private void setData() {
-        addressBean = (AddressBean) getIntent().getSerializableExtra("addressBean");
+        addressBean = (AddressListBean.AddressListItem) getIntent().getSerializableExtra("addressBean");
         titleLayout.setTitle(R.string.edit_address, getResources().getColor(R.color.black333333));
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);

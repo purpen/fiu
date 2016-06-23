@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/5/3.
  */
-public class GoodsDetailBean extends NetBean implements Serializable{
+public class GoodsDetailBean extends NetBean implements Serializable {
     private Data data;
 
     public Data getData() {
@@ -19,7 +19,7 @@ public class GoodsDetailBean extends NetBean implements Serializable{
         this.data = data;
     }
 
-    public static class Data implements Serializable{
+    public static class Data implements Serializable {
         private String _id;
         private String title;
         private String short_title;
@@ -50,7 +50,7 @@ public class GoodsDetailBean extends NetBean implements Serializable{
         private String tags_s;
         private String created_at;
         private String cover_url;
-        private String is_favorite;
+        private int is_favorite;
         private String is_love;
         private List<String> banner_asset;
         private List<PNG> png_asset;
@@ -183,11 +183,11 @@ public class GoodsDetailBean extends NetBean implements Serializable{
             this.fine = fine;
         }
 
-        public String getIs_favorite() {
+        public int getIs_favorite() {
             return is_favorite;
         }
 
-        public void setIs_favorite(String is_favorite) {
+        public void setIs_favorite(int is_favorite) {
             this.is_favorite = is_favorite;
         }
 
@@ -328,7 +328,7 @@ public class GoodsDetailBean extends NetBean implements Serializable{
         }
     }
 
-    public static class PNG implements Serializable{
+    public static class PNG implements Serializable {
         private String url;
         private String width;
         private String height;
@@ -358,7 +358,7 @@ public class GoodsDetailBean extends NetBean implements Serializable{
         }
     }
 
-    public static class Brand implements Serializable{
+    public static class Brand implements Serializable {
         private String cover_url;
         private String _id;
         private String title;

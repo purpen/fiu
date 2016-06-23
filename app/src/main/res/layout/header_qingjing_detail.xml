@@ -283,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="此情景下的场景"
+            android:text="@string/sights_of_scene"
             android:textColor="#666666"
             android:textSize="13sp"/>
     </LinearLayout>
@@ -302,7 +302,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
             android:gravity="center"
-            android:text="创建新的场景"
+            android:text="@string/create_sight"
             android:textColor="#666666"
             android:textSize="18sp"/>
 
@@ -311,7 +311,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="在这里上传图片、选一段文字，即刻开启你的情景之路吧"
+            android:text="@string/create_sight_in_empty_scene"
             android:textColor="#666666"
             android:textSize="13sp"/>
 
@@ -322,7 +322,7 @@
             android:layout_marginTop="25dp"
             android:background="@drawable/corner_yellow"
             android:gravity="center"
-            android:text="+ 创建场景"
+            android:text="@string/create_sight_empty_scene"
             android:textColor="@color/white"
             android:textSize="15sp"/>
     </LinearLayout>
