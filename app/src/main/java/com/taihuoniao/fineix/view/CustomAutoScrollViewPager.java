@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
-public class CustomAutoScrollViewPager extends ViewPager {
+public class CustomAutoScrollViewPager extends CustomViewPager {
     public static final int DEFAULT_INTERVAL = 3000;
     public static final int LEFT = 0;
     public static final int RIGHT = 1;

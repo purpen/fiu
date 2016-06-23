@@ -1317,9 +1317,10 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    public static void updateInviteCodeStatus(RequestCallBack<String> callBack) {
+    public static void updateInviteCodeStatus(String code, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/gateway/del_invite_code";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("code", code);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

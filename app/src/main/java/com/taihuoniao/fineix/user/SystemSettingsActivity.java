@@ -134,7 +134,7 @@ public class SystemSettingsActivity extends BaseActivity{
                     ToastUtils.showSuccess("退出成功");
 //                    svProgressHUD.showSuccessWithStatus("退出成功");
                 }
-                SPUtil.remove(activity,DataConstants.LOGIN_INFO);
+                SPUtil.remove(DataConstants.LOGIN_INFO);
                 Intent intent=new Intent(activity,MainActivity.class);
                 intent.putExtra(IndexFragment.class.getSimpleName(),IndexFragment.class.getSimpleName());
                 startActivity(intent);

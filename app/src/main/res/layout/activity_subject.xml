@@ -28,13 +28,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <TextView
                 android:id="@+id/ibtn_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:drawablePadding="@dimen/dp10"
-                android:drawableLeft="@mipmap/share"
                 android:gravity="center"
                 android:text="1" />
         </RelativeLayout>
@@ -44,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@mipmap/share"
+            android:src="@mipmap/share_subject"
             android:scaleType="centerInside"
             android:layout_gravity="center" />
 
@@ -60,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:drawablePadding="@dimen/dp10"
                 android:layout_weight="100"
-                android:drawableLeft="@mipmap/share"
+                android:drawableLeft="@mipmap/comments"
                 android:gravity="center"
                 android:text="1" />
         </RelativeLayout>

@@ -129,4 +129,12 @@ public class ScrollableView extends RelativeLayout {
         public void onPageScrollStateChanged(int arg0) {
         }
     }
+
+    public void setCurrentItem(int i) {
+        viewPager.setCurrentItem(i);
+    }
+
+    public void setPagingEnabled(boolean b) {
+        viewPager.setPagingEnabled(false);
+    }
 }

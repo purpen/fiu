@@ -61,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shap_redbutton_commit"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@color/color_af8323"
         android:textSize="@dimen/sp14"
         android:text="下一步"
         android:textColor="@android:color/white" />

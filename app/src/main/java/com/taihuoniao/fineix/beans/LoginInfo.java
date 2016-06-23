@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.beans;
 
 import android.text.TextUtils;
 
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -48,7 +47,7 @@ public class LoginInfo implements Serializable {
     }
     public static String getHeadPicUrl() {
         if (isUserLogin()) {
-            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
             loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo.medium_avatar_url;
         }
@@ -57,7 +56,7 @@ public class LoginInfo implements Serializable {
 
     public static LoginInfo getLoginInfo(){
         if (isUserLogin()) {
-            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
             loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo;
         }
@@ -66,7 +65,7 @@ public class LoginInfo implements Serializable {
 
     public static long getUserId() {
         if (isUserLogin()) {
-            String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
             loginInfo = JsonUtil.fromJson(login_info,LoginInfo.class);
             return loginInfo._id;
         }
@@ -82,7 +81,7 @@ public class LoginInfo implements Serializable {
     }
 
     public static boolean isUserLogin() {
-        String login_info = SPUtil.read(MainApplication.getContext(), DataConstants.LOGIN_INFO);
+        String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
         return !TextUtils.isEmpty(login_info);
     }
 

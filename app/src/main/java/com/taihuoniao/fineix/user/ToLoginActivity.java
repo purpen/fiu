@@ -310,7 +310,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         instance.areas=thirdLogin.user.areas;
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
                         instance.identify=thirdLogin.user.identify;
-                        SPUtil.write(activity, DataConstants.LOGIN_INFO,JsonUtil.toJson(instance));
+                        SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
 //                        MainApplication.getIsLoginInfo().setIs_login("1");
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
@@ -433,7 +433,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 if (response.isSuccess()) {//登录界面登录成功
                     MainApplication.hasUser=true;
                     LoginInfo loginInfo=response.getData();
-                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
                         startActivity(new Intent(activity, OrderInterestQJActivity.class));

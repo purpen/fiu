@@ -33,9 +33,10 @@
             android:textColor="@color/color_333"
             android:textSize="@dimen/sp14"
             android:height="@dimen/dp35"
-            android:maxLength="20" />
+            android:maxLength="10" />
 
         <Button
+            android:id="@+id/btn"
             android:layout_width="@dimen/dp70"
             android:layout_height="@dimen/dp40"
             android:layout_marginLeft="@dimen/dp5"

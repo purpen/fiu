@@ -214,6 +214,7 @@ public class DataConstants {
     public static final int REQUESTCODE_REDBAG = 57;
     public static final int RESULTCODE_REDBAG = 56;
     public static final String GUIDE_TAG = "guide";
+    public static final String INVITE_CODE_TAG = "INVITE_CODE_TAG";
     public static final int GUIDE_INTERVAL = 3000;
     public static final String APP_ID = "";
     //帐户处我的红包未过期

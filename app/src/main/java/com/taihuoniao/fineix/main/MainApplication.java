@@ -207,14 +207,14 @@ public class MainApplication extends Application {
         if (clazz.equals(HttpResponse.class)) {
             HttpResponse response = JsonUtil.fromJson(json, HttpResponse.class);
             if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, response.getStatus())) {//需要登录
-                SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
+                SPUtil.remove(DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }
         } else {
             NetBean netBean = JsonUtil.fromJson(json, NetBean.class);
             if (TextUtils.equals(NetworkConstance.STATUS_NEED_LOGIN, netBean.getStatus())) {//需要登录
-                SPUtil.remove(getContext(), DataConstants.LOGIN_INFO);
+                SPUtil.remove(DataConstants.LOGIN_INFO);
                 getContext().startActivity(new Intent(getContext(), OptRegisterLoginActivity.class));
                 return false;
             }

@@ -45,7 +45,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     @Bind(R.id.progress_bar)
     ProgressBar progress_bar;
     private int curPage = 1;
-    private static final String PAGE_SIZE = "10";
+    private static final String PAGE_SIZE = "15";
     private static final String TYPE_SCENE = "scene";
     private static final String EVENT = "subscription";
     private WaittingDialog dialog;
@@ -104,7 +104,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     @Override
     protected void requestNet() {//sort=2 stick=0
         String stick = "0"; //是推荐
-        String sort="2";
+        String sort = "1";
         ClientDiscoverAPI.getQJData(String.valueOf(curPage),PAGE_SIZE,sort,stick, new RequestCallBack<String>() {
             @Override
             public void onStart() {

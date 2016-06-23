@@ -195,7 +195,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
 
                 if (response.isSuccess()) {
                     LoginInfo loginInfo=response.getData();
-                    SPUtil.write(MainApplication.getContext(), DataConstants.LOGIN_INFO,JsonUtil.toJson(loginInfo));
+                    SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
                         startActivity(new Intent(activity, OrderInterestQJActivity.class));
@@ -454,7 +454,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                         instance.areas=thirdLogin.user.areas;
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
                         instance.identify=thirdLogin.user.identify;
-                        SPUtil.write(activity, DataConstants.LOGIN_INFO,JsonUtil.toJson(instance));
+                        SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
                             startActivity(new Intent(activity, OrderInterestQJActivity.class));

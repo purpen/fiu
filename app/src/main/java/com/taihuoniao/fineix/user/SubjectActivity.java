@@ -252,7 +252,7 @@ public class SubjectActivity extends BaseActivity {
                         if (response.isSuccess()) {
                             data.is_love = 1;
                             v.setText(response.getData().love_count);
-                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.collect, 0, 0, 0);
                             ToastUtils.showSuccess("已赞");
                             return;
                         }
@@ -283,7 +283,7 @@ public class SubjectActivity extends BaseActivity {
                         if (response.isSuccess()) {
                             data.is_love = 0;
                             v.setText(response.getData().love_count);
-                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+                            v.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.not_collect, 0, 0, 0);
                             ToastUtils.showSuccess("已取消赞");
                             return;
                         }
@@ -329,7 +329,11 @@ public class SubjectActivity extends BaseActivity {
     protected void refreshUI() {
         webViewAbout.loadUrl(data.content_view_url);
         ibtnFavorite.setText(String.valueOf(data.love_count));
-        ibtnFavorite.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.share, 0, 0, 0);
+        if (data.is_love == 1) {
+            ibtnFavorite.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.collect, 0, 0, 0);
+        } else {
+            ibtnFavorite.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.not_collect, 0, 0, 0);
+        }
         ibtnComment.setText(String.valueOf(data.comment_count));
     }
 

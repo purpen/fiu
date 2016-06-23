@@ -155,7 +155,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                         if (response.isSuccess()) {
                             LoginInfo loginInfo = response.getData();
-                            SPUtil.write(activity, DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                             loginSuccess(loginInfo);
                         }else {
                             Util.makeToast(response.getMessage());
@@ -191,7 +191,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                         if (response.isSuccess()) {
                             LoginInfo loginInfo = response.getData();
-                            SPUtil.write(activity, DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
+                            SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                             loginSuccess(loginInfo);
                         }else {
                             Util.makeToast(response.getMessage());

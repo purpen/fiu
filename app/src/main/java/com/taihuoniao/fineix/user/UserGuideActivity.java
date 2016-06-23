@@ -39,6 +39,7 @@ public class UserGuideActivity extends BaseActivity {
     private boolean isGuide = false;
     private List<Integer> list;
     public static String fromPage;
+    private int currentPosition;
 
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
@@ -47,6 +48,8 @@ public class UserGuideActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null)
+            currentPosition = savedInstanceState.getInt("currentPosition");
         if (!isTaskRoot()) {
             if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && TextUtils.equals(Intent.ACTION_MAIN, intent.getAction())) {
                 finish();
@@ -72,10 +75,14 @@ public class UserGuideActivity extends BaseActivity {
                 @Override
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
-                    if (TextUtils.isEmpty(SPUtil.read(activity, DataConstants.GUIDE_TAG))) {
+                    if (TextUtils.isEmpty(SPUtil.read(DataConstants.GUIDE_TAG))) {
                         initVideoRes();
                     } else if (isTaskRoot()) {
-                        goMainPage();
+                        if (SPUtil.readBool(DataConstants.INVITE_CODE_TAG)) {
+                            showInvite();
+                        } else {
+                            goMainPage();
+                        }
                     }
                 }
             }, DataConstants.GUIDE_INTERVAL);
@@ -84,7 +91,8 @@ public class UserGuideActivity extends BaseActivity {
         }
     }
 
-    public void initVideoRes() {
+
+    private void initVideoRes() {
         scrollableView.setVisibility(View.GONE);
         activityVideoView.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -98,12 +106,21 @@ public class UserGuideActivity extends BaseActivity {
         String uri = "android.resource://" + getPackageName() + "/" + R.raw.first_in_app;
         activityVideoView.setVideoURI(Uri.parse(uri));
         activityVideoView.start();
+        SPUtil.write(DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
         activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 initGuide();
             }
         });
+    }
+
+    private void showInvite() {
+        scrollableView.setVisibility(View.VISIBLE);
+        activityVideoView.setVisibility(View.GONE);
+        list = new ArrayList<>();
+        list.add(R.mipmap.guide3);
+        scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
     }
 
     private void initGuide() {
@@ -118,23 +135,46 @@ public class UserGuideActivity extends BaseActivity {
         list.add(R.mipmap.guide2);
         list.add(R.mipmap.guide3);
         scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
-        SPUtil.write(activity, DataConstants.GUIDE_TAG, DataConstants.GUIDE_TAG);
-//        scrollableView.showIndicators();
     }
+
 
     private void goMainPage() {
         startActivity(new Intent(activity, MainActivity.class));
         finish();
     }
 
+
     @Override
-    public void onBackPressed() {
-        if (isGuide) {
-            goMainPage();
-        } else {
-            super.onBackPressed();
+    protected void onResume() {
+        super.onResume();
+        if (null == activityVideoView) return;
+        activityVideoView.seekTo(currentPosition);
+        activityVideoView.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (null == activityVideoView) return;
+        if (activityVideoView.isPlaying()) {
+            currentPosition = activityVideoView.getCurrentPosition();
+            activityVideoView.pause();
         }
     }
 
+    //    @Override
+//    public void onBackPressed() {
+//        if (isGuide) {
+//            goMainPage();
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("currentPosition", currentPosition);
+        super.onSaveInstanceState(outState);
+    }
 }
