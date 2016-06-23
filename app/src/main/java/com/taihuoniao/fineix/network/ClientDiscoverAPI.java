@@ -6,6 +6,7 @@ import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -1321,6 +1322,24 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/gateway/del_invite_code";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("code", code);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * @param page
+     * @param size
+     * @param type
+     * @param event
+     * @param callBack
+     */
+    public static void getCollectOrdered(String page, String size, String type, String event, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/favorite/get_new_list";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("user_id", String.valueOf(LoginInfo.getUserId()));
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("event", event);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }
