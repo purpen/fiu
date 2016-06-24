@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.dodola.bubblecloud.BubbleCloudView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.FiuUsersAdapter;
 import com.taihuoniao.fineix.adapters.JingQingjingRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
@@ -48,6 +50,8 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -55,7 +59,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.appleWatchView.AppleWatchView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -68,8 +71,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
-    public static FindFragment instance;
-    private static final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
+    //    public static FindFragment instance;
+    private final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
     private List<String> hotLabelList;
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
@@ -95,7 +98,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private List<QingJingListBean.QingJingItem> qingjingList;
     private JingQingjingRecyclerAdapter jingQingjingRecyclerAdapter;
     private RecyclerView labelRecycler;
-    private AppleWatchView absoluteLayout;
+    private BubbleCloudView absoluteLayout;
     //网络请求对话框
     private WaittingDialog dialog;
     //listview分页加载
@@ -106,7 +109,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected View initView() {
-        instance = FindFragment.this;
+//        instance = FindFragment.this;
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
         RelativeLayout titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
         searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
@@ -119,7 +122,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         allQingjingTv = (TextView) headerView.findViewById(R.id.fragment_find_allqingjing);
         qingjingRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_qingjing_recycler);
         labelRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_labelrecycler);
-        absoluteLayout = (AppleWatchView) headerView.findViewById(R.id.fragment_find_absolute);
+        absoluteLayout = (BubbleCloudView) headerView.findViewById(R.id.fragment_find_absolute);
         sceneListView.addHeaderView(headerView);
         absoluteLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -167,14 +170,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 //                DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
             }
         });
-//        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//                currentPage++;
-//                progressBar.setVisibility(View.VISIBLE);
-//                DataPaser.getSceneList(currentPage + "", null, null, 0 + "", distance + "", location[0] + "", location[1] + "", handler);
-//            }
-//        });
         searchImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
@@ -231,14 +226,18 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
+        absoluteLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), UserCenterActivity.class);
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUsers.getData().getUsers().get(position).get_id()));
+                startActivity(intent);
+            }
+        });
     }
 
-    //外界调用刷新场景列表的方法
-    public void refreshSceneList() {
-        currentPage = 1;
-        requestNet();
-    }
-    private void getCJList(){
+
+    private void getCJList() {
         ClientDiscoverAPI.getSceneList(currentPage + "", null, null, 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -333,7 +332,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         });
     }
-    private void getQJList(){
+
+    private void getQJList() {
         ClientDiscoverAPI.qingjingList(1 + "", 2 + "", 1 + "", distance + "", location[0] + "", location[1] + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -373,7 +373,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected void requestNet() {
         dialog.show();
-        ClientDiscoverAPI.fiuUserList(1 + "", 60 + "", null, null, 1 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", null, null, 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 FiuUserListBean fiuUserListBean = new FiuUserListBean();
@@ -388,7 +388,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 FiuUserListBean netUser = fiuUserListBean;
                 netUsers = netUser;
                 if (netUser.isSuccess()) {
-                    absoluteLayout.init(getActivity(), netUser, null);
+                    FiuUsersAdapter fiuUsersAdapter = new FiuUsersAdapter(getActivity(), netUser);
+//                    absoluteLayout.init(getActivity(), netUser, null);
+                    absoluteLayout.setAdapter(fiuUsersAdapter);
                 } else {
                     ToastUtils.showError(netUser.getMessage());
                 }

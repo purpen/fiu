@@ -133,4 +133,10 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
+    }
 }

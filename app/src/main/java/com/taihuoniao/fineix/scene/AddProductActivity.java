@@ -15,13 +15,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -30,12 +32,7 @@ import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Type;
 
 /**
  * Created by taihuoniao on 2016/3/22.
@@ -69,40 +66,18 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-//                Log.e("<<<>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.CATEGORY_LIST;
-                CategoryBean categoryBean = new CategoryBean();
+                CategoryListBean categoryListBean = new CategoryListBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    categoryBean.setSuccess(job.optBoolean("success"));
-                    categoryBean.setMessage(job.optString("message"));
-//                    categoryBean.setStatus(job.optString("status"));
-                    if (categoryBean.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        List<CategoryListBean> list = new ArrayList<CategoryListBean>();
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject ob = rows.getJSONObject(i);
-                            CategoryListBean categoryListBean = new CategoryListBean();
-                            categoryListBean.set_id(ob.optString("_id"));
-                            categoryListBean.setTitle(ob.optString("title"));
-                            categoryListBean.setName(ob.optString("name"));
-                            categoryListBean.setTag_id(ob.optString("tag_id"));
-                            categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
-                            categoryListBean.setApp_cover_url(ob.optString("app_cover_url"));
-                            list.add(categoryListBean);
-                        }
-                        categoryBean.setList(list);
-                    }
-//                    msg.obj = categoryBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
 //                handler.sendMessage(msg);
-                if (categoryBean.isSuccess()) {
-                    addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryBean);
+                if (categoryListBean.isSuccess()) {
+                    addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryListBean);
                     viewPager.setAdapter(addProductViewPagerAdapter);
                     slidingTab.setViewPager(viewPager);
                 }

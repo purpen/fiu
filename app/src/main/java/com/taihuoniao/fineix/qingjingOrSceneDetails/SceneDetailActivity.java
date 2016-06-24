@@ -60,6 +60,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -386,6 +387,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Log.e("<<<场景详情", responseInfo.result);
+                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         SceneDetailsBean sceneDetails = new SceneDetailsBean();
                         try {
                             Gson gson = new Gson();
@@ -1014,7 +1017,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
-                intent3.putExtra("w", id);
+                intent3.putExtra("target_id", id);
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id());
                 startActivity(intent3);
@@ -1053,7 +1056,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
-    private void loveScene(String i){
+
+    private void loveScene(String i) {
         ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -1062,31 +1066,31 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Type type = new TypeToken<SceneLoveBean>() {
                     }.getType();
-                    sceneLoveBean= gson.fromJson(responseInfo.result, type);
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
 //                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
                 }
                 SceneLoveBean netSceneLoveBean = sceneLoveBean;
 //                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                    if (netSceneLoveBean.isSuccess()) {
-                        commonList(1 + "", 14 + "", id, null, "sight", "love");
-                        isLove = 1;
-                        loveCount.setBackgroundResource(R.mipmap.loved_scene);
+                if (netSceneLoveBean.isSuccess()) {
+                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+                    isLove = 1;
+                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
 //                        love.setImageResource(R.mipmap.love_yes);
-                        loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
-                        loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
-                        moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
-                        if (netSceneLoveBean.getData().getLove_count() > 14) {
-                            moreUser.setVisibility(View.VISIBLE);
-                        } else {
-                            moreUser.setVisibility(View.GONE);
-                        }
+                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+                    loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+                    moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
+                    if (netSceneLoveBean.getData().getLove_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
                     } else {
-                        dialog.dismiss();
-                        ToastUtils.showError(netSceneLoveBean.getMessage());
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netSceneLoveBean.getMessage());
 //                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
 //                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                }
             }
 
             @Override
@@ -1235,6 +1239,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         //cancelNet();
+        instance = null;
         unregisterReceiver(sceneDetailReceiver);
 //        if (handler != null) {
 //            handler.removeCallbacksAndMessages(null);

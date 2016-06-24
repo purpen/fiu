@@ -4,17 +4,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.product.fragment.GoodListFragment;
 
 /**
  * Created by taihuoniao on 2016/5/4.
  */
 public class GoodListFirtViewPagerAdapter extends FragmentStatePagerAdapter {
-    private CategoryBean categoryBean;
+    private CategoryListBean categoryBean;
 //    private List<GoodListFragment> fragmentList;
 
-    public GoodListFirtViewPagerAdapter(FragmentManager fm, CategoryBean categoryBean) {
+    public GoodListFirtViewPagerAdapter(FragmentManager fm, CategoryListBean categoryBean) {
         super(fm);
         this.categoryBean = categoryBean;
 //        fragmentList = new ArrayList<>();
@@ -28,7 +28,7 @@ public class GoodListFirtViewPagerAdapter extends FragmentStatePagerAdapter {
 //        if (position == 0) {
 //            return "全部";
 //        }
-        return categoryBean.getList().get(position).getTitle();
+        return categoryBean.getData().getRows().get(position).getTitle();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class GoodListFirtViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return categoryBean.getList().size() ;
+        return categoryBean.getData().getRows().size() ;
     }
 
 //    @Override

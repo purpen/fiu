@@ -20,11 +20,11 @@ import java.util.List;
  */
 public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.VH> {
     private Context context;
-    private List<CategoryListBean> list;
+    private List<CategoryListBean.CategoryListItem> list;
     private EditRecyclerAdapter.ItemClick itemClick;
     private DisplayImageOptions options;
 
-    public PinRecyclerAdapter(Context context, List<CategoryListBean> list, EditRecyclerAdapter.ItemClick itemClick1) {
+    public PinRecyclerAdapter(Context context, List<CategoryListBean.CategoryListItem> list, EditRecyclerAdapter.ItemClick itemClick1) {
         this.context = context;
         this.list = list;
         itemClick = itemClick1;

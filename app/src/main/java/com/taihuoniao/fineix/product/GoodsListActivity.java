@@ -19,20 +19,13 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListFirtViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CartBean;
-import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 
@@ -87,39 +80,17 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<>", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.CATEGORY_LIST;
-                CategoryBean categoryBean = new CategoryBean();
+                CategoryListBean categoryListBean = new CategoryListBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    categoryBean.setSuccess(job.optBoolean("success"));
-                    categoryBean.setMessage(job.optString("message"));
-//                    categoryBean.setStatus(job.optString("status"));
-                    if (categoryBean.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        List<CategoryListBean> list = new ArrayList<>();
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject ob = rows.getJSONObject(i);
-                            CategoryListBean categoryListBean = new CategoryListBean();
-                            categoryListBean.set_id(ob.optString("_id"));
-                            categoryListBean.setTitle(ob.optString("title"));
-                            categoryListBean.setName(ob.optString("name"));
-                            categoryListBean.setTag_id(ob.optString("tag_id"));
-                            categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
-                            categoryListBean.setApp_cover_url(ob.optString("app_cover_url"));
-                            list.add(categoryListBean);
-                        }
-                        categoryBean.setList(list);
-                    }
-//                    msg.obj = categoryBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
-                CategoryBean netCategoryBean = categoryBean;
+                CategoryListBean netCategoryBean = categoryListBean;
                 if (netCategoryBean.isSuccess()) {
                     GoodListFirtViewPagerAdapter goodListFirtViewPagerAdapter = new GoodListFirtViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
                     firstViewPager.setAdapter(goodListFirtViewPagerAdapter);

@@ -1,10 +1,9 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,13 +15,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -30,6 +35,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +136,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     q = editText.getText().toString().trim();
                     page = 1;
                     dialog.show();
-                    DataPaser.search(q, 8 + "", page + "", "tag", null, handler);
+                    search(q, 8 + "", page + "", "tag", null);
                 }
                 return false;
             }
@@ -143,9 +149,9 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
                 if (isSearch.equals("0")) {
-                    DataPaser.qingjingList(page + "", 1 + "", 0+"",distance + "", latLng.longitude + "", latLng.latitude + "", handler);
+                    qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
                 } else if (isSearch.equals("1")) {
-                    DataPaser.search(q, 8 + "", page + "", "tag", null, handler);
+                    search(q, 8 + "", page + "", "tag", null);
                 }
             }
         });
@@ -169,127 +175,56 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     protected void requestNet() {
         if (isSearch.equals("0")) {
             dialog.show();
-            DataPaser.qingjingList(page + "",1+"", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "", handler);
+            qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
         }
-//        handler.sendEmptyMessageDelayed(-2, 10000);
-
-
-//        ImageLoader.getInstance().loadImage("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2468356536,2310768742&fm=116&", new ImageLoadingListener() {
-//            @Override
-//            public void onLoadingStarted(String imageUri, View view) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                Log.e("<<<cccccccccccccccc", "url=" + imageUri);
-//                HttpUtils httpUtils = new HttpUtils(60000);
-//                RequestParams params = new RequestParams("utf-8");
-//                ByteArrayOutputStream op = new ByteArrayOutputStream();
-//                loadedImage.compress(Bitmap.CompressFormat.PNG, 40, op);
-//                Log.e("<<<ccccccccccc", "size=" + op.size());
-//                params.addBodyParameter("image", op.toString());
-////                params.addQueryStringParameter("image", Base64Utils.encodeLines(op.toByteArray()));
-//                httpUtils.send(HttpRequest.HttpMethod.POST, "http://115.28.204.191/upLoad.php", params, new RequestCallBack<String>() {
-//                    @Override
-//                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                        Log.e("<<<ccccccccccccc", responseInfo.result);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(HttpException error, String msg) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onLoadingCancelled(String imageUri, View view) {
-//
-//            }
-//        });
-//
-
     }
 
-//    public static String byte2hex(byte[] b) {
-//        StringBuffer sb = new StringBuffer();
-//        String stmp = "";
-//        for (int n = 0; n < b.length; n++) {
-//            stmp = Integer.toHexString(b[n] & 0XFF);
-//            if (stmp.length() == 1) {
-//                sb.append("0" + stmp);
-//            } else {
-//                sb.append(stmp);
-//            }
-//
-//
-//        }
-//        return sb.toString();
-//    }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-//                case -2:
-//                    Toast.makeText(MainApplication.getContext(), "为空", Toast.LENGTH_SHORT).show();
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.SEARCH_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    SearchBean netSearch = (SearchBean) msg.obj;
+//                    if (netSearch.isSuccess()) {
+//                        if (page == 1) {
+//                            searchList.clear();
+//                            pullToRefreshView.lastTotalItem = -1;
+//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
+//                        }
+//                        searchList.addAll(netSearch.getData().getRows());
+//                        allQingjingGridAdapter.notifyDataSetChanged();
+//                    }
 //                    break;
-                case DataConstants.SEARCH_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    SearchBean netSearch = (SearchBean) msg.obj;
-                    if (netSearch.isSuccess()) {
-                        if (page == 1) {
-                            searchList.clear();
-                            pullToRefreshView.lastTotalItem = -1;
-                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                        }
-                        searchList.addAll(netSearch.getData().getRows());
-                        allQingjingGridAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.QINGJING_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
-                    if (netQingjingListBean.isSuccess()) {
-                        if (page == 1) {
-                            qingjingList.clear();
-                            pullToRefreshView.lastTotalItem = -1;
-                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                        }
-                        qingjingList.addAll(netQingjingListBean.getData().getRows());
-                        allQingjingGridAdapter.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netQingjingListBean.getMessage());
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
+//                case DataConstants.QINGJING_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
+//                    if (netQingjingListBean.isSuccess()) {
+//                        if (page == 1) {
+//                            qingjingList.clear();
+//                            pullToRefreshView.lastTotalItem = -1;
+//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
+//                        }
+//                        qingjingList.addAll(netQingjingListBean.getData().getRows());
+//                        allQingjingGridAdapter.notifyDataSetChanged();
+//                    } else {
+//                        ToastUtils.showError(netQingjingListBean.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    protected void onDestroy() {
-        //cancelNet();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
-        super.onDestroy();
-    }
 
     @Override
     public void onClick(View v) {
@@ -344,5 +279,85 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
             }
         }
         allQingjingGridAdapter.notifyDataSetChanged();
+    }
+
+    //搜索
+    private void search(String q, String t, String p, String evt, String sort) {
+        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SearchBean searchBean = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    searchBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SearchBean netSearch = searchBean;
+                if (netSearch.isSuccess()) {
+                    if (page == 1) {
+                        searchList.clear();
+                        pullToRefreshView.lastTotalItem = -1;
+                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                    }
+                    searchList.addAll(netSearch.getData().getRows());
+                    allQingjingGridAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netSearch.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+//                    dialog.showErrorWithStatus("网络错误");
+//                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //情景列表
+    private void qingjingList(String p, String sort, String fine, String dis, String lng, String lat) {
+        ClientDiscoverAPI.qingjingList(p, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingJingListBean qingJingListBean = new QingJingListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingJingListBean>() {
+                    }.getType();
+                    qingJingListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                QingJingListBean netQingjingListBean = qingJingListBean;
+                if (netQingjingListBean.isSuccess()) {
+                    if (page == 1) {
+                        qingjingList.clear();
+                        pullToRefreshView.lastTotalItem = -1;
+                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                    }
+                    qingjingList.addAll(netQingjingListBean.getData().getRows());
+                    allQingjingGridAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netQingjingListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 }

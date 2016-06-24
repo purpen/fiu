@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 public abstract class BaseFragment<T> extends Fragment {
     //    protected static final String systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";//系统相册路径
     protected final String TAG = getClass().getSimpleName();
-    protected static Activity activity;
+    protected  Activity activity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -98,6 +98,7 @@ public abstract class BaseFragment<T> extends Fragment {
 
     @Override
     public void onDestroy() {
+        activity=null;
         super.onDestroy();
     }
 

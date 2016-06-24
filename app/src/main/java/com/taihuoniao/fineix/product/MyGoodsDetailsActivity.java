@@ -292,14 +292,14 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     JSONObject obj = new JSONObject(responseInfo.result);
                     shopCartNumber.setSuccess(obj.optBoolean("success"));
                     JSONObject cartNumberObj = obj.getJSONObject("data");
-                    shopCartNumber.setCount(cartNumberObj.optString("count"));
+                    shopCartNumber.setCount(cartNumberObj.optInt("count"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 ShopCartNumber numberCart;
                 numberCart = shopCartNumber;
-                if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
+                if (numberCart.isSuccess() && numberCart.getCount() > 0) {
                     titleLayout.setRightShopCartButton(true);
                     titleLayout.setShopCartCountertext(numberCart.getCount() + "");
                 } else {

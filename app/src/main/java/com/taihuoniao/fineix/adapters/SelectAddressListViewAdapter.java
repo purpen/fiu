@@ -1,10 +1,8 @@
 package com.taihuoniao.fineix.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +17,8 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.user.AddNewAddressActivity;
-import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.user.SelectAddressActivity;
 
 import java.util.List;
 
@@ -33,17 +30,15 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
     private View view;
     private Context context;
     private List<AddressListBean.AddressListItem> list;
-    private Activity activity;
-    private Handler mHandler;
-    private WaittingDialog waittingDialog;
+    private SelectAddressActivity activity;
+//    private WaittingDialog waittingDialog;
 
-    public SelectAddressListViewAdapter(Context context, List<AddressListBean.AddressListItem> list, int mScreentWidth, Activity activity, Handler mHandler) {
+    public SelectAddressListViewAdapter(Context context, List<AddressListBean.AddressListItem> list, int mScreentWidth, SelectAddressActivity activity) {
         this.context = context;
         this.list = list;
         this.mScreentWidth = mScreentWidth;
         this.activity = activity;
-        this.mHandler = mHandler;
-        this.waittingDialog = new WaittingDialog(context);
+//        this.waittingDialog = new WaittingDialog(context);
     }
 
     @Override
@@ -159,8 +154,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        waittingDialog.show();
-                        DataPaser.deleteAddress(list.get(position).get_id(), mHandler);
+                        activity.deleteAddress(list.get(position).get_id());
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -224,4 +218,5 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         private TextView deleteTv;
         private RelativeLayout relativeLayout;
     }
+
 }

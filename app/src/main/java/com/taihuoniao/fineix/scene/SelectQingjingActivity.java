@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -24,6 +22,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -40,18 +39,19 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.map.DisplayOverlayerActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomListView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.GridViewWithHeaderAndFooter;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,7 +187,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                     MapStatus.Builder builder = new MapStatus.Builder();
                     builder.target(ll).zoom(18);
                     mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                    DataPaser.qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
+                    qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "");
                 }
             }
         });
@@ -268,33 +268,33 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         }
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.QINGJING_LIST:
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
-                    if (netQingjingListBean.isSuccess()) {
-                        allQingjingTv.setText("查看全部");
-                        qingjingTv.setText("推荐情景");
-                        if (page == 1) {
-                            qingjingList.clear();
-                            lastTotalItem = -1;
-                            lastSavedFirstVisibleItem = -1;
-                        }
-                        qingjingList.addAll(netQingjingListBean.getData().getRows());
-                        allQingjingGridAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    dialog.show();
-                    progressBar.setVisibility(View.GONE);
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.QINGJING_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
+//                    if (netQingjingListBean.isSuccess()) {
+//                        allQingjingTv.setText("查看全部");
+//                        qingjingTv.setText("推荐情景");
+//                        if (page == 1) {
+//                            qingjingList.clear();
+//                            lastTotalItem = -1;
+//                            lastSavedFirstVisibleItem = -1;
+//                        }
+//                        qingjingList.addAll(netQingjingListBean.getData().getRows());
+//                        allQingjingGridAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.show();
+//                    progressBar.setVisibility(View.GONE);
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void onResume() {
@@ -319,10 +319,10 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         if (bitmapDescripter != null) {
             bitmapDescripter.recycle();
         }
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
+//        if (handler != null) {
+//            handler.removeCallbacksAndMessages(null);
+//            handler = null;
+//        }
         super.onDestroy();
     }
 
@@ -353,7 +353,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             lastTotalItem = totalItemCount;
             page++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "", handler);
+            qingjingList(page + "",2+"", 1 + "", distance + "", ll.longitude + "", ll.latitude + "");
         }
     }
 
@@ -444,5 +444,45 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             options.add(option);
         }
         mBDMap.addOverlays(options);
+    }
+    //情景列表
+    private void qingjingList(String p, String sort, String fine, String dis, String lng, String lat) {
+        ClientDiscoverAPI.qingjingList(p, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingJingListBean qingJingListBean = new QingJingListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingJingListBean>() {
+                    }.getType();
+                    qingJingListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                QingJingListBean netQingjingListBean = qingJingListBean;
+                if (netQingjingListBean.isSuccess()) {
+                    allQingjingTv.setText("查看全部");
+                    qingjingTv.setText("推荐情景");
+                    if (page == 1) {
+                        qingjingList.clear();
+                        lastTotalItem = -1;
+                        lastSavedFirstVisibleItem = -1;
+                    }
+                    qingjingList.addAll(netQingjingListBean.getData().getRows());
+                    allQingjingGridAdapter.notifyDataSetChanged();
+                }else{
+                    ToastUtils.showError(netQingjingListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 }

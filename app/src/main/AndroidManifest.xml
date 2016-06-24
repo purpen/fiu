@@ -45,10 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".main.AppleWatchActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/NoTitleFullscreen"/>-->
+        <activity
+            android:name=".main.AppleWatchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>

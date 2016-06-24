@@ -42,11 +42,11 @@
             android:textSize="11sp"/>
     </LinearLayout>
 
-    <com.taihuoniao.fineix.view.appleWatchView.AppleWatchView
+    <com.dodola.bubblecloud.BubbleCloudView
         android:id="@+id/fragment_find_absolute"
         android:layout_width="match_parent"
         android:layout_height="157dp"
-        android:background="@color/f0f0f0" />
+        android:background="@color/f0f0f0"/>
 
     <TextView
         android:layout_width="match_parent"

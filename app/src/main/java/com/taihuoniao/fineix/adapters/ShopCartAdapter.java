@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
+import com.taihuoniao.fineix.utils.ToastUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -53,7 +58,7 @@ public class ShopCartAdapter extends BaseAdapter {
     private ShopCarActivity shopCarActivity;
     private Context context;
     private DecimalFormat df = null;
-//    public BitmapUtils bitmapUtils_listview = null;
+    //    public BitmapUtils bitmapUtils_listview = null;
     private DisplayImageOptions options;
 
     public ShopCartAdapter(List<Map<String, Object>> list, ShopCarActivity shopCarActivity, Context context) {
@@ -61,13 +66,13 @@ public class ShopCartAdapter extends BaseAdapter {
         this.list = list;
         this.context = context;
         inflater = (LayoutInflater) shopCarActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        options =  new DisplayImageOptions.Builder()
+        options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
                 .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-               .build();
+                .build();
 //        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
 //        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
 //                .configMemoryCacheEnabled(true)
@@ -161,7 +166,7 @@ public class ShopCartAdapter extends BaseAdapter {
                 } else {
                     mHolder.mColorEdit.setText("颜色/分类：" + list.get(position).get("keyColor") + "");
                 }
-                DataPaser.shopcartInventoryParser(mHandler);
+                inventory();
                 final ViewHolder finalMHolder = mHolder;
                 mHolder.mSubtract.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -202,7 +207,7 @@ public class ShopCartAdapter extends BaseAdapter {
                 break;
         }
         mHolder.mCheckBox.setChecked((Boolean) list.get(position).get("status"));
-        ImageLoader.getInstance().displayImage(list.get(position).get("keyImage") + "",mHolder.mImageGoods);
+        ImageLoader.getInstance().displayImage(list.get(position).get("keyImage") + "", mHolder.mImageGoods);
 //        bitmapUtils_listview.display(mHolder.mImageGoods, list.get(position).get("keyImage") + "");
         listener.onLetterCliced(hashMap);
 
@@ -237,20 +242,53 @@ public class ShopCartAdapter extends BaseAdapter {
     }
 
     List<ShopCartInventoryItemBean> mInventoryList = new ArrayList<>();
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DataConstants.PASER_SHOPCART_INVENTORY_ITEM:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof List) {
-                            mInventoryList.clear();
-                            mInventoryList.addAll((Collection<? extends ShopCartInventoryItemBean>) msg.obj);
-                        }
+
+    //    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case DataConstants.PASER_SHOPCART_INVENTORY_ITEM:
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof List) {
+//                            mInventoryList.clear();
+//                            mInventoryList.addAll((Collection<? extends ShopCartInventoryItemBean>) msg.obj);
+//                        }
+//                    }
+//                    break;
+//            }
+//        }
+//    };
+    private void inventory() {
+        ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                List<ShopCartInventoryItemBean> list = new ArrayList<>();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    JSONObject jsonObj = obj.getJSONObject("data");
+                    JSONArray jsonArray = jsonObj.getJSONArray("items");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        ShopCartInventoryItemBean bean = new ShopCartInventoryItemBean();
+                        bean.setN(jsonObject.optString("n"));
+                        bean.setProduct_id(jsonObject.optString("product_id"));
+                        bean.setQuantity(jsonObject.optString("quantity"));
+                        bean.setTarget_id(jsonObject.optString("target_id"));
+                        bean.setType(jsonObject.optString("type"));
+                        list.add(bean);
                     }
-                    break;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mInventoryList.clear();
+                mInventoryList.addAll(list);
             }
-        }
-    };
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
 }

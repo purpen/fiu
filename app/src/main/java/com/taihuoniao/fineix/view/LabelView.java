@@ -45,6 +45,7 @@ public class LabelView extends LinearLayout {
     private ImageView pointRight;
     private ImageView animPoint;
     private ImageView deleteImg;
+    private TextView yellowPoint;
 //    private TextView labelTxtRight;
 //    private TextView priceTxtRight;
 
@@ -54,56 +55,28 @@ public class LabelView extends LinearLayout {
 
     public LabelView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.view_label, this);
-//        labelIcon = (ImageView) findViewById(R.id.view_label_point);
-//        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
-//        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
-//        nameRight = (TextView) findViewById(R.id.view_label_right_name);
-//        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
-//        labelTxtLeft = (TextView) findViewById(R.id.view_label_left_name);
-//        priceTxtLeft = (TextView) findViewById(R.id.view_label_left_price);
-        relativeRight = (RelativeLayout) findViewById(R.id.view_label_right);
-        nameLeft = (TextView) findViewById(R.id.view_label_left_name);
-        priceRight = (TextView) findViewById(R.id.view_label_right_price);
-        pointRight = (ImageView) findViewById(R.id.view_label_right_point);
-        animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
-        deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-//        deleteImg.setOnClickListener(this);
-//        this.setOnFocusChangeListener(this);
-//        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
-//        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
+        init(context);
     }
 
     public LabelView(Context context, AttributeSet attr) {
         super(context, attr);
+        init(context);
+    }
+
+    private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
-//        labelIcon = (ImageView) findViewById(R.id.view_label_point);
-//        relativeLeft = (RelativeLayout) findViewById(R.id.view_label_left);
-//        priceLeft = (TextView) findViewById(R.id.view_label_left_price);
-//        nameRight = (TextView) findViewById(R.id.view_label_right_name);
-//        pointLeft = (ImageView) findViewById(R.id.view_label_left_point);
-//        labelTxtLeft = (TextView) findViewById(R.id.view_label_left_name);
-//        priceTxtLeft = (TextView) findViewById(R.id.view_label_left_price);
         relativeRight = (RelativeLayout) findViewById(R.id.view_label_right);
         nameLeft = (TextView) findViewById(R.id.view_label_left_name);
         priceRight = (TextView) findViewById(R.id.view_label_right_price);
         pointRight = (ImageView) findViewById(R.id.view_label_right_point);
         animPoint = (ImageView) findViewById(R.id.view_label_anim_point);
+        yellowPoint = (TextView) findViewById(R.id.view_label_yellow_point);
         deleteImg = (ImageView) findViewById(R.id.view_label_delete);
-//        deleteImg.setOnClickListener(this);
-//        this.setOnFocusChangeListener(this);
-//        labelTxtRight = (TextView) findViewById(R.id.view_label_right_name);
-//        priceTxtRight = (TextView) findViewById(R.id.view_label_right_price);
     }
 
     public void init(TagItem tagItem) {
-//        tagInfo.setName(tagItem.getName());
-//        tagInfo.setId(tagItem.getId());
-//        tagInfo.setType(tagItem.getType());
         tagInfo = tagItem;
         nameLeft.setText(tagItem.getName());
-//        nameRight.setText(tagItem.getName());
-//        priceLeft.setText(tagItem.getPrice());
         priceRight.setText(tagItem.getPrice());
     }
 
@@ -161,9 +134,22 @@ public class LabelView extends LinearLayout {
         priceRight.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 63));
         priceRight.getLayoutParams().height = (int) (bi * DensityUtils.dp2px(getContext(), 24));
         nameLeft.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 114));
-        nameLeft.getLayoutParams().height = (int) (bi*DensityUtils.dp2px(getContext(),24));
-        pointRight.getLayoutParams().width = (int) (bi*DensityUtils.dp2px(getContext(),4));
-        pointRight.getLayoutParams().height = (int) (bi*DensityUtils.dp2px(getContext(),4));
+        nameLeft.getLayoutParams().height = (int) (bi * DensityUtils.dp2px(getContext(), 24));
+        RelativeLayout.LayoutParams pointRightLp = (RelativeLayout.LayoutParams) pointRight.getLayoutParams();
+        pointRightLp.width = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+        pointRightLp.height = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+//        pointRightLp.rightMargin = (int) (bi * DensityUtils.dp2px(getContext(), 7));
+        pointRight.setLayoutParams(pointRightLp);
+        RelativeLayout.LayoutParams animPointLp = (RelativeLayout.LayoutParams) animPoint.getLayoutParams();
+        animPointLp.width = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+        animPointLp.height = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+//        animPointLp.rightMargin = (int) (bi * DensityUtils.dp2px(getContext(), 7));
+        animPoint.setLayoutParams(animPointLp);
+        RelativeLayout.LayoutParams yellowPointLp = (RelativeLayout.LayoutParams) yellowPoint.getLayoutParams();
+        yellowPointLp.width = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+        yellowPointLp.height = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+//        yellowPointLp.rightMargin = (int) (bi * DensityUtils.dp2px(getContext(), 7));
+        yellowPoint.setLayoutParams(yellowPointLp);
         relativeRight.setVisibility(View.VISIBLE);
 //            relativeLeft.setVisibility(View.GONE);
         setupLocation(left, top);

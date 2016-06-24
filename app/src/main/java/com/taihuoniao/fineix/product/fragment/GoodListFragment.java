@@ -21,8 +21,8 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.GoodListFragmentRecyclerAdapter;
-import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -38,7 +38,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/5/4.
  */
 public class GoodListFragment extends Fragment implements EditRecyclerAdapter.ItemClick {
-    private CategoryBean categoryBean;
+    private CategoryListBean categoryBean;
     private int position;
     private String tag_id;//第二级商品分类的tag_id
     //界面下的控件
@@ -58,7 +58,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //    private SVProgressHUD dialog;
     private WaittingDialog dialog;
 
-    public static GoodListFragment newInstance(int position, CategoryBean categoryBean) {
+    public static GoodListFragment newInstance(int position, CategoryListBean categoryBean) {
 
         Bundle args = new Bundle();
         args.putInt("position", position);
@@ -79,11 +79,11 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 
 
     protected View initView() {
-        categoryBean = (CategoryBean) getArguments().getSerializable("categoryBean");
+        categoryBean = (CategoryListBean) getArguments().getSerializable("categoryBean");
         position = getArguments().getInt("position", 0);
         Log.e("<<<产品分类", position + "");
         if (position >= 0)
-            tag_id = categoryBean == null ? "0" : categoryBean.getList().get(position).getTag_id();
+            tag_id = categoryBean == null ? "0" : categoryBean.getData().getRows().get(position).getTag_id();
         View view = View.inflate(getActivity(), R.layout.fragment_good_list, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_good_list_recycler);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_good_list_progress);
@@ -116,12 +116,12 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
                     return;
                 }
                 if (tag_id.equals("0")) {
-                    getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
+                    getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
                 } else {
                     if (pos == -1) {
-                        getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
+                        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
                     } else {
-                        getProducts(categoryBean.getList().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, null, null);
+                        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, null, null);
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
             dialog.dismiss();
             return;
         }
-        getProducts(categoryBean.getList().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
+        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
         if (tag_id.equals("0")) {
             recyclerView.setVisibility(View.GONE);
         } else {
@@ -282,7 +282,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 //        dialog.show();
 
         Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
-        getProducts(categoryBean.getList().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null);
+        getProducts(categoryBean.getData().getRows().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null);
     }
 
 }

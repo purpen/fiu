@@ -39,7 +39,6 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     private String t;
     private boolean isContent = false;
     //控件
-    public static CJResultFragment instance;
     private PullToRefreshListView pullToRefreshLayout;
     private ListView listView;
     private ProgressBar progressBar;
@@ -79,7 +78,6 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_index_progress);
         emptyView = (TextView) view.findViewById(R.id.fragment_index_emptyview);
         dialog = new WaittingDialog(getActivity());
-        instance = CJResultFragment.this;
         return view;
     }
 
@@ -157,8 +155,6 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError("网络错误");
-//                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
             }
         });
     }
@@ -170,58 +166,6 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
         requestNet();
     }
 
-    //外界调用刷新场景列表
-    public void refreshList() {
-        if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
-            return;
-        }
-        page = 1;
-        dialog.show();
-//        progressBar.setVisibility(View.VISIBLE);
-        search(q, t, page + "", "tag", null);
-    }
-
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.SEARCH_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    SearchBean netSearch = (SearchBean) msg.obj;
-//                    if (netSearch.isSuccess()) {
-//                        if (page == 1) {
-//                            list.clear();
-//                        }
-//                        list.addAll(netSearch.getData().getRows());
-//                        if (list.size() <= 0) {
-//                            emptyView.setVisibility(View.VISIBLE);
-//                        } else {
-//                            emptyView.setVisibility(View.GONE);
-//                        }
-//                        sceneListViewAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    ToastUtils.showError("网络错误");
-////                    new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-//                    break;
-//            }
-//        }
-//    };
-
-//    @Override
-//    public void onDestroy() {
-//        //cancelNet();
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//            handler = null;
-//        }
-//        super.onDestroy();
-//    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
