@@ -21,7 +21,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
-import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 public class AddProductsFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private int position;
-    private CategoryBean categoryBean;
+    private CategoryListBean categoryBean;
     //控件
     private PullToRefreshGridView pullToRefreshView;
     private TextView nothingTv;
@@ -58,7 +58,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     private WaittingDialog dialog;
 
 
-    public static AddProductsFragment newInstance(int position, CategoryBean categoryBean) {
+    public static AddProductsFragment newInstance(int position, CategoryListBean categoryBean) {
 
         Bundle args = new Bundle();
         args.putInt("position", position);
@@ -72,7 +72,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments() != null ? getArguments().getInt("position") : 0;
-        categoryBean = getArguments() != null ? (CategoryBean) getArguments().getSerializable("categoryBean") : null;
+        categoryBean = getArguments() != null ? (CategoryListBean) getArguments().getSerializable("categoryBean") : null;
         IntentFilter filter = new IntentFilter(DataConstants.BroadSearchFragment);
         getActivity().registerReceiver(searchProductReceiver, filter);
     }
@@ -150,7 +150,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 });
             } else {
 //                DataPaser.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, handler);
-                ClientDiscoverAPI.getProductList(categoryBean.getList().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                ClientDiscoverAPI.getProductList(categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();

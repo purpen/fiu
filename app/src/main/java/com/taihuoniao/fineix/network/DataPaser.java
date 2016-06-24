@@ -25,7 +25,6 @@ import com.taihuoniao.fineix.beans.CartDoOrder;
 import com.taihuoniao.fineix.beans.CartDoOrderBonus;
 import com.taihuoniao.fineix.beans.CartOrderContent;
 import com.taihuoniao.fineix.beans.CartOrderContentItem;
-import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
@@ -1066,15 +1065,16 @@ public class DataPaser {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<收货地址列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json",responseInfo.result);
+                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GET_ADDRESS_LIST;
                 AddressListBean addressListBean = new AddressListBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<AddressListBean>(){}.getType();
-                    addressListBean = gson.fromJson(responseInfo.result,type);
-                }catch (JsonSyntaxException e){
+                    Type type = new TypeToken<AddressListBean>() {
+                    }.getType();
+                    addressListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
                     Log.e("<<<收货地址列表", "数据解析异常" + e.toString());
                 }
                 msg.obj = addressListBean;
@@ -1241,44 +1241,21 @@ public class DataPaser {
         ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<>", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.CATEGORY_LIST;
-                CategoryBean categoryBean = new CategoryBean();
+                CategoryListBean categoryListBean = new CategoryListBean();
                 try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    categoryBean.setSuccess(job.optBoolean("success"));
-                    categoryBean.setMessage(job.optString("message"));
-//                    categoryBean.setStatus(job.optString("status"));
-                    if (categoryBean.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        List<CategoryListBean> list = new ArrayList<>();
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject ob = rows.getJSONObject(i);
-                            CategoryListBean categoryListBean = new CategoryListBean();
-                            categoryListBean.set_id(ob.optString("_id"));
-                            categoryListBean.setTitle(ob.optString("title"));
-                            categoryListBean.setName(ob.optString("name"));
-                            categoryListBean.setTag_id(ob.optString("tag_id"));
-                            categoryListBean.setApp_cover_s_url(ob.optString("app_cover_s_url"));
-                            categoryListBean.setApp_cover_url(ob.optString("app_cover_url"));
-                            list.add(categoryListBean);
-                        }
-                        categoryBean.setList(list);
-                    }
-                    msg.obj = categoryBean;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
                 }
-                handler.sendMessage(msg);
+
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+
             }
         });
 
@@ -1525,7 +1502,7 @@ public class DataPaser {
     }
 
     public static List<TryCommentsBean> parserTryDetailsCommentsList(String jsonString) {
-        List<TryCommentsBean> list  = new ArrayList<>();
+        List<TryCommentsBean> list = new ArrayList<>();
         try {
             JSONObject obj = new JSONObject(jsonString);
             JSONObject data = obj.getJSONObject("data");
@@ -1960,7 +1937,7 @@ public class DataPaser {
                     JSONObject obj = new JSONObject(responseInfo.result);
                     shopCartNumber.setSuccess(obj.optBoolean("success"));
                     JSONObject cartNumberObj = obj.getJSONObject("data");
-                    shopCartNumber.setCount(cartNumberObj.optString("count"));
+                    shopCartNumber.setCount(cartNumberObj.optInt("count"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -2482,33 +2459,33 @@ public class DataPaser {
     }
 
     //场景分享语境次数接口
-    public static void commitShareCJ(String id, final Handler handler) {
+    public static void commitShareCJ(String id) {
         ClientDiscoverAPI.commitShareCJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.SHARECJ;
-                msg.obj = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<场景分享语境", "数据解析异常");
-                }
-                handler.sendMessage(msg);
+//                Message msg = handler.obtainMessage();
+//                msg.what = DataConstants.SHARECJ;
+//                msg.obj = new NetBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<NetBean>() {
+//                    }.getType();
+//                    msg.obj = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<场景分享语境", "数据解析异常");
+//                }
+//                handler.sendMessage(msg);
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
+//                handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
     }
 
     //送积分
-    public static void getBonus(String type, String evt, String target_id, final Handler handler) {
+    public static void getBonus(String type, String evt, String target_id) {
         ClientDiscoverAPI.getBonus(type, evt, target_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

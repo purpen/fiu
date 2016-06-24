@@ -6,11 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -20,6 +19,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -28,12 +33,12 @@ import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,7 +160,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         }
         tags.deleteCharAt(0);
         searchStr = tags.toString();
-        DataPaser.search(tags.toString(), 11 + "", currentPage + "", "tag", 0 + "", handler);
+        search(tags.toString(), 11 + "", currentPage + "", "tag", 0 + "");
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -215,44 +220,36 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     }
 
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            dialog.dismiss();
-            progressBar.setVisibility(View.GONE);
-            switch (msg.what) {
-                case DataConstants.SEARCH_LIST:
-                    SearchBean netSearch = (SearchBean) msg.obj;
-                    if (netSearch.isSuccess()) {
-                        if (currentPage == 1) {
-                            list.clear();
-                            lastTotalItem = -1;
-                            lastSavedFirstVisibleItem = -1;
-                        }
-                        list.addAll(netSearch.getData().getRows());
-                        shareCJSelectListAdapter.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netSearch.getMessage());
-//                        dialog.showErrorWithStatus(netSearch.getMessage());
-//                        Toast.makeText(ShareCJSelectActivity.this, netSearch.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(ShareCJSelectActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//            switch (msg.what) {
+//                case DataConstants.SEARCH_LIST:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    SearchBean netSearch = (SearchBean) msg.obj;
+//                    if (netSearch.isSuccess()) {
+//                        if (currentPage == 1) {
+//                            list.clear();
+//                            lastTotalItem = -1;
+//                            lastSavedFirstVisibleItem = -1;
+//                        }
+//                        list.addAll(netSearch.getData().getRows());
+//                        shareCJSelectListAdapter.notifyDataSetChanged();
+//                    } else {
+//                        ToastUtils.showError(netSearch.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    ToastUtils.showError("网络错误");
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    protected void onDestroy() {
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        super.onDestroy();
-    }
 
     private boolean isSelect = false;
 
@@ -287,10 +284,49 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
             lastTotalItem = totalItemCount;
             currentPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.search(searchStr, 11 + "", currentPage + "", "tag", 0 + "", handler);
+            search(searchStr, 11 + "", currentPage + "", "tag", 0 + "");
         }
     }
 
     private int lastTotalItem = -1;
     private int lastSavedFirstVisibleItem = -1;
+
+    //搜索列表
+    private void search(String q, String t, String page, String evt, String sort) {
+        ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SearchBean searchBean = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    searchBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SearchBean netSearch = searchBean;
+                if (netSearch.isSuccess()) {
+                    if (currentPage == 1) {
+                        list.clear();
+                        lastTotalItem = -1;
+                        lastSavedFirstVisibleItem = -1;
+                    }
+                    list.addAll(netSearch.getData().getRows());
+                    shareCJSelectListAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netSearch.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                    dialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
+                    ToastUtils.showError("网络错误");
+            }
+        });
+    }
 }

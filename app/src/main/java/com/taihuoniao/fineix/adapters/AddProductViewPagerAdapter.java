@@ -5,16 +5,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
-import com.taihuoniao.fineix.beans.CategoryBean;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.scene.addProductFragment.AddProductsFragment;
 
 /**
  * Created by taihuoniao on 2016/4/13.
  */
 public class AddProductViewPagerAdapter extends FragmentPagerAdapter {
-    private CategoryBean categoryBean;
+    private CategoryListBean categoryBean;
 
-    public AddProductViewPagerAdapter(FragmentManager fm, CategoryBean categoryBean) {
+    public AddProductViewPagerAdapter(FragmentManager fm, CategoryListBean categoryBean) {
         super(fm);
         this.categoryBean = categoryBean;
     }
@@ -29,12 +29,12 @@ public class AddProductViewPagerAdapter extends FragmentPagerAdapter {
 //        if (position == 0) {
 //            return "全部";
 //        }
-        return categoryBean.getList().get(position ).getTitle();
+        return categoryBean.getData().getRows().get(position).getTitle();
     }
 
     @Override
     public int getCount() {
-        return categoryBean.getList().size() ;
+        return categoryBean.getData().getRows().size() ;
     }
 
     @Override

@@ -3,27 +3,34 @@ package com.taihuoniao.fineix.user;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SelectAddressListViewAdapter;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressListBean;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +44,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     private LinearLayout emptyView;
     private PullToRefreshListView pullToRefresh;
     private ListView listView;
+    private ProgressBar progressBar;
     private List<AddressListBean.AddressListItem> list = new ArrayList<AddressListBean.AddressListItem>();
     private SelectAddressListViewAdapter listViewAdapter;
     //网络请求
@@ -52,7 +60,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         initView();
         setData();
         dialog.show();
-        DataPaser.getAddressList(currentPage + "", mHandler);
+        getAddressList(currentPage + "");
     }
 
     @Override
@@ -88,7 +96,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 //        listView.setEmptyView(emptyView);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this, mHandler);
+        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this);
         listView.setAdapter(listViewAdapter);
         pullToRefresh.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -99,12 +107,13 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (visibleItemCount > 0
-                        && (firstVisibleItem + visibleItemCount == totalItemCount)) {
+                        && (firstVisibleItem + visibleItemCount >= totalItemCount)) {
                     if (firstVisibleItem != lastSavedFirstVisibleItem && totalItemCount != lastTotalItem) {
                         lastSavedFirstVisibleItem = firstVisibleItem;
                         lastTotalItem = totalItemCount;
+                        progressBar.setVisibility(View.VISIBLE);
                         currentPage++;
-                        DataPaser.getAddressList(currentPage + "", mHandler);
+                        getAddressList(currentPage + "");
                     }
                 }
             }
@@ -117,6 +126,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         emptyView = (LinearLayout) findViewById(R.id.activity_select_address_emptylinear);
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
         listView = pullToRefresh.getRefreshableView();
+        progressBar = (ProgressBar) findViewById(R.id.activity_select_address_progress);
         //listivew侧滑删除效果的实现
         dialog = new WaittingDialog(SelectAddressActivity.this);
     }
@@ -142,7 +152,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                     list.clear();
                     currentPage = 1;
                     dialog.show();
-                    DataPaser.getAddressList(currentPage + "", mHandler);
+                    getAddressList(currentPage + "");
                 }
                 break;
         }
@@ -162,53 +172,128 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         super.onBackPressed();
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DataConstants.DELETE_ADDRESS:
-                    NetBean netBean = (NetBean) msg.obj;
-                    if(netBean.isSuccess()){
-                        ToastUtils.showSuccess("删除成功");
-//                        dialog.showSuccessWithStatus("删除成功");
-//                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                        list.clear();
-                        currentPage = 1;
-                        dialog.show();
-                        DataPaser.getAddressList(currentPage + "", mHandler);
-                    }
-                   else{
-                        ToastUtils.showError(netBean.getMessage());
-                    }
-                    break;
-                case DataConstants.GET_ADDRESS_LIST:
+    public void deleteAddress(String id) {
+        dialog.show();
+        ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess("删除成功");
+                    currentPage = 1;
+                    getAddressList(currentPage + "");
+                } else {
                     dialog.dismiss();
-                    AddressListBean netAddressList = (AddressListBean) msg.obj;
-                    if(netAddressList.isSuccess()){
-                        list.addAll(netAddressList.getData().getRows());
-                        if(list.size()<=0){
-                            emptyView.setVisibility(View.VISIBLE);
-                        }else{
-                            emptyView.setVisibility(View.GONE);
-                        }
-                        listViewAdapter.notifyDataSetChanged();
-                    }else{
-                        ToastUtils.showError(netAddressList.getMessage());
-                    }
-
-                    break;
-                case DataConstants.NETWORK_FAILURE:
-                    dialog.dismiss();
-                    ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-                    break;
+                    ToastUtils.showError(netBean.getMessage());
+                }
             }
-        }
-    };
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.DELETE_ADDRESS:
+//                    NetBean netBean = (NetBean) msg.obj;
+//                    if(netBean.isSuccess()){
+//                        ToastUtils.showSuccess("删除成功");
+////                        dialog.showSuccessWithStatus("删除成功");
+////                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+//                        list.clear();
+//                        currentPage = 1;
+//                        dialog.show();
+//                        DataPaser.getAddressList(currentPage + "", mHandler);
+//                    }
+//                   else{
+//                        ToastUtils.showError(netBean.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.GET_ADDRESS_LIST:
+//                    dialog.dismiss();
+//                    AddressListBean netAddressList = (AddressListBean) msg.obj;
+//                    if(netAddressList.isSuccess()){
+//                        list.addAll(netAddressList.getData().getRows());
+//                        if(list.size()<=0){
+//                            emptyView.setVisibility(View.VISIBLE);
+//                        }else{
+//                            emptyView.setVisibility(View.GONE);
+//                        }
+//                        listViewAdapter.notifyDataSetChanged();
+//                    }else{
+//                        ToastUtils.showError(netAddressList.getMessage());
+//                    }
+//
+//                    break;
+//                case DataConstants.NETWORK_FAILURE:
+//                    dialog.dismiss();
+//                    ToastUtils.showError("网络错误");
+////                    dialog.showErrorWithStatus("网络错误");
+////                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//    };
 
     private void cancelNet() {
         NetworkManager.getInstance().cancel("getAddressList");
     }
 
+    //获得收货地址列表
+    private void getAddressList( String page) {
+        ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                AddressListBean addressListBean = new AddressListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<AddressListBean>() {
+                    }.getType();
+                    addressListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<收货地址列表", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                AddressListBean netAddressList = addressListBean;
+                if (netAddressList.isSuccess()) {
+                    if(currentPage==1){
+                        list.clear();
+                    }
+                    list.addAll(netAddressList.getData().getRows());
+                    if (list.size() <= 0) {
+                        emptyView.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyView.setVisibility(View.GONE);
+                    }
+                    listViewAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netAddressList.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
 }

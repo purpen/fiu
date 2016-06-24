@@ -88,7 +88,7 @@ public class ShopOrderFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (!isVisibleToUser) {
             mHandler.removeCallbacks(mLoadData);
-        } else if (isVisibleToUser) {
+        } else {
             mDialog = new WaittingDialog(getActivity());
             if (curPage == 1) {
                 mDialog.show();
@@ -210,5 +210,11 @@ public class ShopOrderFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+    }
 }

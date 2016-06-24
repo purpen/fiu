@@ -101,10 +101,10 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         if (msg.obj instanceof ShopCartNumber) {
                             ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
-                            if(numberCart.isSuccess()&&Integer.parseInt(numberCart.getCount())>0){
+                            if (numberCart.isSuccess() && numberCart.getCount() > 0) {
                                 title.setRightButtomVisible(true);
                                 title.setTitle("购物车(" + numberCart.getCount() + ")");
-                            }else{
+                            } else {
                                 title.setTitle("购物车");
                                 title.setRightButtomVisible(false);
                             }
@@ -115,11 +115,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 //                                title.setTitle("购物车(" + numberCart.getCount() + ")");
 //                                title.setRightButtomVisible(true);
 //                            }
-                        } else {
-                            title.setRightButtomVisible(false);
                         }
-                    } else {
-                        title.setRightButtomVisible(false);
                     }
                     break;
                 case DataConstants.PARSER_SHOP_CART:
@@ -354,7 +350,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 }
             }
         });
-        title.setRightButtomVisible(false);
+//        title.setRightButtomVisible(false);
         mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -571,5 +567,13 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         mActionText = (TextView) findViewById(R.id.pull_note);
         mActionText.setText("下拉刷新");
         mTimeText = (TextView) findViewById(R.id.refresh_time);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 }

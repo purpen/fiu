@@ -3,9 +3,9 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -16,6 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -27,7 +33,7 @@ import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.ShareCJRecyclerAdapter;
 import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -39,6 +45,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,61 +163,41 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.sceneDetails(id, handler);
+        sceneDetails(id);
     }
 
     private Bitmap loadImg = null;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            dialog.dismiss();
-            switch (msg.what) {
-                case DataConstants.SCENE_DETAILS:
-                    SceneDetailsBean netScene = (SceneDetailsBean) msg.obj;
-                    if (netScene.isSuccess()) {
-                        TestShare.this.netScene = netScene;
-                        setImgParams();
-                        recyclerView.setVisibility(View.VISIBLE);
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                click(0);
-                            }
-                        });
-//                        click(0);
-                    } else {
-                        ToastUtils.showError(netScene.getMessage());
-                        finish();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    ToastUtils.showError("网络错误，请重试");
-                    finish();
-                    break;
-                case 3:
-                    dialog.dismiss();
-                    ToastUtils.showError("对不起，分享出错");
-                    break;
-                case 2:
-                    dialog.dismiss();
-                    ToastUtils.showInfo("您取消了分享");
-                    break;
-                case 1:
-                    dialog.dismiss();
-                    ToastUtils.showSuccess("分享成功");
-                    DataPaser.getBonus(2 + "", 1 + "", id, handler);
-                    break;
-            }
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            dialog.dismiss();
+//            switch (msg.what) {
+//                case DataConstants.SCENE_DETAILS:
+//                    SceneDetailsBean netScene = (SceneDetailsBean) msg.obj;
+//                    if (netScene.isSuccess()) {
+//                        TestShare.this.netScene = netScene;
+//                        setImgParams();
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        new Handler().post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                click(0);
+//                            }
+//                        });
+////                        click(0);
+//                    } else {
+//                        ToastUtils.showError(netScene.getMessage());
+//                        finish();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    ToastUtils.showError("网络错误，请重试");
+//                    finish();
+//                    break;
+//            }
+//        }
+//    };
 
-    @Override
-    protected void onDestroy() {
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        super.onDestroy();
-    }
 
 
     //动态设置container和imgview的宽高
@@ -283,7 +270,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     return;
                 }
                 if (netScene.getData().getOid() != null) {
-                    DataPaser.commitShareCJ(netScene.getData().getOid(), handler);
+                    DataPaser.commitShareCJ(netScene.getData().getOid());
                 }
                 PopupWindowUtil.show(TestShare.this, initPop());
                 break;
@@ -297,7 +284,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private void selectShareStyle(int position) {
         if (netScene == null) {
             dialog.show();
-            DataPaser.sceneDetails(id, handler);
+            sceneDetails(id);
             return;
         }
         if (view != null) {
@@ -473,16 +460,77 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        handler.sendEmptyMessage(1);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+                ToastUtils.showSuccess("分享成功");
+                DataPaser.getBonus(2 + "", 1 + "", id);
+            }
+        });
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        handler.sendEmptyMessage(2);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+                ToastUtils.showInfo("您取消了分享");
+            }
+        });
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        handler.sendEmptyMessage(3);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+                ToastUtils.showError("对不起，分享出错");
+            }
+        });
+    }
+
+    //场景详情
+    private void sceneDetails(String id) {
+        ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        SceneDetailsBean sceneDetails = new SceneDetailsBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SceneDetailsBean>() {
+                            }.getType();
+                            sceneDetails = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            Log.e("<<<", "解析异常");
+                        }
+                        dialog.dismiss();
+                        SceneDetailsBean netScene = sceneDetails;
+                        if (netScene.isSuccess()) {
+                            TestShare.this.netScene = netScene;
+                            setImgParams();
+                            recyclerView.setVisibility(View.VISIBLE);
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    click(0);
+                                }
+                            });
+                        } else {
+                            ToastUtils.showError(netScene.getMessage());
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                            dialog.dismiss();
+                        ToastUtils.showError(R.string.net_fail);
+                    }
+                }
+
+        );
     }
 }

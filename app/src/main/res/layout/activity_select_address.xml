@@ -53,4 +53,11 @@
         android:layout_above="@id/activity_select_address_addnewaddresstv"
         android:layout_below="@id/activity_select_address_title"
         android:layout_marginTop="5dp"/>
+
+    <ProgressBar
+        android:id="@+id/activity_select_address_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

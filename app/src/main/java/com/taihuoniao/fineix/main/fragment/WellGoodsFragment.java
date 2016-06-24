@@ -1,18 +1,17 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.AbsListView;
-import android.widget.AbsoluteLayout;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,15 +19,17 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dodola.bubblecloud.BubbleCloudView;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.FiuBrandsAdapter;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinRecyclerAdapter;
@@ -38,16 +39,13 @@ import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.CJHotLabelBean;
-import com.taihuoniao.fineix.beans.CategoryBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
-import com.taihuoniao.fineix.beans.RandomImg;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
@@ -60,14 +58,15 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.appleWatchView.AppleWatchView;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
-import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
     //界面下的控件
@@ -80,7 +79,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private ListView listView;
     private ProgressBar progressBar;
     //headerview下的控件
-    private AppleWatchView absoluteLayout;
+    private BubbleCloudView absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
     private WaittingDialog dialog;
@@ -90,7 +89,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private PinLabelRecyclerAdapter pinLabelRecyclerAdapter;
     private int labelPage = 1;
     //分类列表
-    private List<CategoryListBean> list;
+    private List<CategoryListBean.CategoryListItem> list;
     private PinRecyclerAdapter pinRecyclerAdapter;
     private DisplayImageOptions options;
     private ScrollableView scrollableView;
@@ -118,7 +117,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         //headerview
         View header = View.inflate(getActivity(), R.layout.header_fragment_wellgoods, null);
         scrollableView = (ScrollableView) header.findViewById(R.id.scrollableView);
-        absoluteLayout = (AppleWatchView) header.findViewById(R.id.fragment_wellgoods_absolute);
+        absoluteLayout = (BubbleCloudView) header.findViewById(R.id.fragment_wellgoods_absolute);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
         absoluteLayout.setLayoutParams(lp);
         absoluteLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -150,10 +149,11 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             dis(viewParent.getParent());
         }
     }
+
     @Override
     protected void requestNet() {
         dialog.show();
-        DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null, handler);
+        getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -191,9 +191,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         });
 //        DataPaser.hotLabelList(labelPage + "", handler);
-        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
+        categoryList(1 + "", 10 + "", 1 + "");
         //热门标签
-        DataPaser.cjHotLabel(false, handler);
+        cjHotLabel(false);
 //        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
 //            @Override
 //            public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -217,7 +217,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //            }
 //        });
 //品牌列表
-        DataPaser.brandList(1, 100, handler);
+        brandList(1, 60);
     }
 
     private int getStatusBarHeight() {
@@ -273,102 +273,86 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
+        absoluteLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
+                intent.putExtra("id",brandItemList.get(position).get_id());
+                startActivity(intent);
+            }
+        });
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(final Message msg) {
-            switch (msg.what) {
-                case DataConstants.PARSER_SHOP_CART_NUMBER:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof ShopCartNumber) {
-                            ShopCartNumber numberCart;
-                            numberCart = (ShopCartNumber) msg.obj;
-                            if (!"0".equals(numberCart.getCount())) {
-                                cartNumber.setVisibility(View.VISIBLE);
-                                cartNumber.setText(numberCart.getCount());
-                            } else {
-                                cartNumber.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-                    break;
-                case DataConstants.ADD_PRODUCT_LIST:
-                    pullToRefreshView.onRefreshComplete();
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    ProductBean netProduct = (ProductBean) msg.obj;
-                    if (netProduct.isSuccess()) {
-                        if (productPage == 1) {
-                            productList.clear();
-                            lastSavedFirstVisibleItem = -1;
-                            lastTotalItem = -1;
-                        }
-
-                        productList.addAll(netProduct.getData().getRows());
-                        goodListAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.BRAND_LIST:
-                    BrandListBean netBrandListBean = (BrandListBean) msg.obj;
-                    if (netBrandListBean.isSuccess()) {
-                        brandItemList = netBrandListBean.getData().getRows();
-                        absoluteLayout.init(getActivity(),null,netBrandListBean);
-//                        absoluteLayout.invalidate();
-                    }
-                    break;
-//                case -10:
-//                    addImgToAbsolute(brandItemList);
-//                    break;
-                case DataConstants.CJ_HOTLABEL:
-//                    dialog.dismiss();
-                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
-                    if (netHot.isSuccess()) {
-                        hotLabelList.clear();
-                        hotLabelList.addAll(netHot.getData().getTags());
-                        pinLabelRecyclerAdapter.notifyDataSetChanged();
-                    } else {
-                        ToastUtils.showError(netHot.getMessage());
-//                        dialog.showErrorWithStatus(netHot.getMessage());
-                    }
-                    break;
-//                case DataConstants.HOT_LABEL_LIST:
-//                    dialog.dismiss();
-//                    HotLabel netHotLabel = (HotLabel) msg.obj;
-//                    if (netHotLabel.isSuccess()) {
-//                        hotLabelList.addAll(netHotLabel.getData().getRows());
-//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(final Message msg) {
+//            switch (msg.what) {
+//                case DataConstants.PARSER_SHOP_CART_NUMBER:
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof ShopCartNumber) {
+//                            ShopCartNumber numberCart;
+//                            numberCart = (ShopCartNumber) msg.obj;
+//                            if (!"0".equals(numberCart.getCount())) {
+//                                cartNumber.setVisibility(View.VISIBLE);
+//                                cartNumber.setText(numberCart.getCount());
+//                            } else {
+//                                cartNumber.setVisibility(View.GONE);
+//                            }
+//                        }
 //                    }
 //                    break;
-                case DataConstants.CATEGORY_LIST:
+//                case DataConstants.ADD_PRODUCT_LIST:
+//                    pullToRefreshView.onRefreshComplete();
 //                    dialog.dismiss();
-                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
-                    if (netCategoryBean.isSuccess()) {
-                        list.clear();
-                        list.addAll(netCategoryBean.getList());
-                        pinRecyclerAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case DataConstants.NET_FAIL:
-                    pullToRefreshView.onRefreshComplete();
-                    dialog.dismiss();
-                    progressBar.setVisibility(View.GONE);
-                    break;
-            }
-        }
-    };
-//    private Thread thread;
+//                    progressBar.setVisibility(View.GONE);
+//                    ProductBean netProduct = (ProductBean) msg.obj;
+//                    if (netProduct.isSuccess()) {
+//                        if (productPage == 1) {
+//                            productList.clear();
+//                            lastSavedFirstVisibleItem = -1;
+//                            lastTotalItem = -1;
+//                        }
+//
+//                        productList.addAll(netProduct.getData().getRows());
+//                        goodListAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.BRAND_LIST:
+//                    BrandListBean netBrandListBean = (BrandListBean) msg.obj;
+//                    if (netBrandListBean.isSuccess()) {
+//                        brandItemList = netBrandListBean.getData().getRows();
+//                        absoluteLayout.init(getActivity(),null,netBrandListBean);
+//                    }
+//                    break;
+//                case DataConstants.CJ_HOTLABEL:
+//                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
+//                    if (netHot.isSuccess()) {
+//                        hotLabelList.clear();
+//                        hotLabelList.addAll(netHot.getData().getTags());
+//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
+//                    } else {
+//                        ToastUtils.showError(netHot.getMessage());
+//                    }
+//                    break;
+//                case DataConstants.CATEGORY_LIST:
+//                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
+//                    if (netCategoryBean.isSuccess()) {
+//                        list.clear();
+//                        list.addAll(netCategoryBean.getList());
+//                        pinRecyclerAdapter.notifyDataSetChanged();
+//                    }
+//                    break;
+//                case DataConstants.NET_FAIL:
+//                    pullToRefreshView.onRefreshComplete();
+//                    dialog.dismiss();
+//                    progressBar.setVisibility(View.GONE);
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
-//        ArrayList<String> urlList = new ArrayList<String>();
-//        for (Banner banner : list) {
-//            urlList.add(banner.cover_url);
-//        }
-//        if (urlList.size() == 0) {
-//            return;
-//        }
-
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter(activity, list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
@@ -392,24 +376,43 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onResume() {
         super.onResume();
-        DataPaser.shopCartNumberParser(handler);
+//        DataPaser.shopCartNumberParser(handler);
+        ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ShopCartNumber shopCartNumber = new ShopCartNumber();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    shopCartNumber.setSuccess(obj.optBoolean("success"));
+                    JSONObject cartNumberObj = obj.getJSONObject("data");
+                    shopCartNumber.setCount(cartNumberObj.optInt("count"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                    if (msg.obj != null) {
+//                        if (msg.obj instanceof ShopCartNumber) {
+                ShopCartNumber numberCart;
+                numberCart = shopCartNumber;
+                if (numberCart.getCount() > 0) {
+                    cartNumber.setVisibility(View.VISIBLE);
+                    cartNumber.setText(numberCart.getCount() + "");
+                } else {
+                    cartNumber.setVisibility(View.GONE);
+                }
+//                        }
+//                    }
+            }
 
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
         if (scrollableView != null) {
             scrollableView.start();
         }
     }
 
-    @Override
-    public void onDestroy() {
-        //        cancelNet();
-//        if (thread != null && thread.isAlive()) {
-//            thread.stop();
-//        }
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        super.onDestroy();
-    }
 
     @Override
     public void click(int postion) {
@@ -420,84 +423,6 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     private List<BrandListBean.BrandItem> brandItemList;
 
-    /**
-     * 数据里应有图片地址，类型，id，
-     * 大 51dp 中 33dp 小 21dp
-     */
-//    private void addImgToAbsolute(List<BrandListBean.BrandItem> list) {
-//        if (list == null) {
-//            return;
-//        }
-//        absoluteLayout.removeAllViews();
-//        int top = absoluteLayout.getTop();
-//        int bottom = absoluteLayout.getBottom();
-//        Random random = new Random();
-//        List<RandomImg> randomImgs = new ArrayList<>();
-//        for (int i = 0; i < list.size(); i++) {
-//            RandomImg randomImg = new RandomImg();
-//            randomImg.id = list.get(i).get_id();
-//            randomImg.url = list.get(i).getCover_url();
-//            randomImg.type = i % 3 + "";
-//            switch (randomImg.type) {
-//                case "1":
-//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 21) / 2;
-//                    break;
-//                case "2":
-//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 33) / 2;
-//                    break;
-//                default:
-//                    randomImg.radius = DensityUtils.dp2px(getActivity(), 51) / 2;
-//                    break;
-//            }
-//            randomImgs.add(randomImg);
-//        }
-//        for (int i = 0; i < randomImgs.size(); i++) {
-//            RandomImg randomImg = randomImgs.get(i);
-//
-//            whi:
-//            for (int k = 0; k < 200; k++) {
-//                int x = random.nextInt(MainApplication.getContext().getScreenWidth());
-//                int y = random.nextInt(bottom - top) + top;
-//                if (MainApplication.getContext().getScreenWidth() - x < randomImg.radius || x < randomImg.radius ||
-//                        bottom - y < randomImg.radius || y - top < randomImg.radius) {
-//                    continue;
-//                }
-//                for (int j = 0; j < absoluteLayout.getChildCount(); j++) {
-//                    RoundedImageView img1 = (RoundedImageView) absoluteLayout.getChildAt(j);
-//                    RandomImg randomImg1 = (RandomImg) img1.getTag();
-//                    if (randomImg1 == null) {
-//                        continue;
-//                    }
-//                    if (Math.sqrt((randomImg1.x - x) * (randomImg1.x - x) + (randomImg1.y - y) * (randomImg1.y - y)) < randomImg1.radius + randomImg.radius) {
-//                        continue whi;
-//                    }
-//                }
-//                randomImg.x = x;
-//                randomImg.y = y;
-//                break;
-//            }
-//            if (randomImg.x == 0 && randomImg.y == 0) {
-//                continue;
-//            }
-//            RoundedImageView img = new RoundedImageView(getActivity());
-//            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            ImageLoader.getInstance().displayImage(randomImgs.get(i).url, img, options);
-//            img.setLayoutParams(new AbsoluteLayout.LayoutParams(randomImg.radius * 2, randomImg.radius * 2,
-//                    randomImg.x - randomImg.radius, randomImg.y - top - randomImg.radius));
-//            img.setCornerRadiusDimen(R.dimen.dp100);
-//            img.setTag(randomImg);
-//            img.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    RandomImg randomImg1 = (RandomImg) v.getTag();
-//                    Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
-//                    intent.putExtra("id", randomImg1.id);
-//                    startActivity(intent);
-//                }
-//            });
-//            absoluteLayout.addView(img);
-//        }
-//    }
 
     @Override
     public void onClick(View v) {
@@ -535,7 +460,154 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             lastTotalItem = totalItemCount;
             productPage++;
             progressBar.setVisibility(View.VISIBLE);
-            DataPaser.getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null, handler);
+            getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
+    }
+
+    //产品
+    //列表
+    private void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                                String stick, String fine) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                pullToRefreshView.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ProductBean netProduct = productBean;
+                if (netProduct.isSuccess()) {
+                    if (productPage == 1) {
+                        pullToRefreshView.setLoadingTime();
+                        productList.clear();
+                        lastSavedFirstVisibleItem = -1;
+                        lastTotalItem = -1;
+                    }
+
+                    productList.addAll(netProduct.getData().getRows());
+                    goodListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                pullToRefreshView.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //分类列表
+    private void categoryList(String page, String domain, String show_all) {
+        ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CategoryListBean categoryListBean = new CategoryListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
+                }
+                CategoryListBean netCategoryBean = categoryListBean;
+                if (netCategoryBean.isSuccess()) {
+                    list.clear();
+                    list.addAll(netCategoryBean.getData().getRows());
+                    pinRecyclerAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netCategoryBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                pullToRefreshView.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+
+    }
+
+    //热门标签
+    private void cjHotLabel(boolean isCJ) {
+        ClientDiscoverAPI.cjHotLabel(isCJ, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CJHotLabelBean cjHotLabelBean = new CJHotLabelBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CJHotLabelBean>() {
+                    }.getType();
+                    cjHotLabelBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<场景热门标签", "数据解析异常");
+                }
+                CJHotLabelBean netHot = cjHotLabelBean;
+                if (netHot.isSuccess()) {
+                    hotLabelList.clear();
+                    hotLabelList.addAll(netHot.getData().getTags());
+                    pinLabelRecyclerAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netHot.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                pullToRefreshView.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //品牌列表
+    private void brandList(int page, int size) {
+        ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                BrandListBean brandListBean = new BrandListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BrandListBean>() {
+                    }.getType();
+                    brandListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常" + e.toString());
+                }
+                BrandListBean netBrandListBean = brandListBean;
+                if (netBrandListBean.isSuccess()) {
+                    FiuBrandsAdapter fiuBrandsAdapter = new FiuBrandsAdapter(getActivity(), netBrandListBean);
+                    brandItemList = netBrandListBean.getData().getRows();
+                    absoluteLayout.setAdapter(fiuBrandsAdapter);
+//                    absoluteLayout.init(getActivity(), null, netBrandListBean);
+                } else {
+                    ToastUtils.showError(netBrandListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 }

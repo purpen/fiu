@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="@dimen/item_size"
+                android:layout_height="@dimen/item_size"
+                android:background="@drawable/white_circle">
+
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+        android:id="@+id/item_round"
+        android:layout_width="@dimen/item_size"
+        android:layout_height="@dimen/item_size"
+        app:riv_border_color="@color/white"
+        app:riv_border_width="1dp"
+        app:riv_corner_radius="100dp"/>
+</RelativeLayout>
