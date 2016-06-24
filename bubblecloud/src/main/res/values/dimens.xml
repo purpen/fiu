@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screenw">200dp</dimen>
+    <!-- 控件的宽。用来判断是否达到边缘从而变小-->
+    <dimen name="screenh">140dp</dimen>
+    <!-- 控件的高。用来判断是否达到边缘从而变小-->
+    <!--<dimen name="containerw">224dp</dimen>-->
+    <!--<dimen name="containerh">264dp</dimen>-->
+    <dimen name="sphereR">100dp</dimen>
+    <dimen name="hexR">63dp</dimen>
+    <!-- 每个圆之间的间距-->
+    <dimen name="item_size">73dp</dimen>
+    <!-- 每个圆的最大直径-->
+    <dimen name="edge_size">12dp</dimen>
+    <!-- 每个圆的最小直径-->
+</resources>
