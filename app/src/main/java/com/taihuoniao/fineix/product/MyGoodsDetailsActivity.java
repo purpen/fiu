@@ -902,8 +902,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private void cancelNet() {
         NetworkManager.getInstance().cancel("goodsDetails");
         NetworkManager.getInstance().cancel("goodsDetailsCommentsList");
-//        NetworkManager.getInstance().cancel("cancelLove");
-//        NetworkManager.getInstance().cancel("love");
         NetworkManager.getInstance().cancel("addToCart");
         NetworkManager.getInstance().cancel("buyNow");
     }

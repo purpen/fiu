@@ -657,6 +657,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         //cancelNet();
+        instance = null;
         unregisterReceiver(qingjingReceiver);
         super.onDestroy();
     }
