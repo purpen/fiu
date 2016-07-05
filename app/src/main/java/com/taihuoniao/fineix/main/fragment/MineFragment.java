@@ -119,7 +119,7 @@ public class MineFragment extends MyBaseFragment {
     private boolean isInitLoad = true;
     private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
     private PersonalCenterGVAdapter adapter;
-    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_support, R.mipmap.gv_collects, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
+    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
@@ -438,12 +438,12 @@ public class MineFragment extends MyBaseFragment {
                     case 2:
                         startActivity(new Intent(activity, OrderQJActivity.class));
                         break;
-                    case 3:
+                    case 4:
                         Intent intent = new Intent(activity, HasLoveActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
                         break;
-                    case 4: //收藏
+                    case 3: //收藏
                         startActivity(new Intent(activity, CollectionsActivity.class));
                         break;
                     case 5:

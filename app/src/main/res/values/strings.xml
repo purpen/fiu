@@ -88,8 +88,8 @@
         <item>订单</item>
         <item>消息</item>
         <item>订阅</item>
-        <item>赞过</item>
         <item>收藏</item>
+        <item>赞过</item>
         <item>积分</item>
         <item>红包</item>
         <item>收货地址</item>
@@ -142,7 +142,7 @@
     <string name="first_in_pin_des">你的欲望，予我追寻格调的动力；我的橱窗，给你智居的千方百计</string>
     <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
     <string name="first_in_wo_des">不为人知的，呼之欲出的都放在这里</string>
-    <string name="order_interest_qj">触动双眸的、与我共鸣的、鲜明新奇的，关注情景给印象一个回忆的中轴线</string>
+    <string name="order_interest_qj">现在你可以订阅感兴趣的情景</string>
     <string name="complete_info">猜来猜去的游戏已落伍，取一个昵称，撕开日常标签，给同路者关注你的机会</string>
     <string-array name="user_tags">
         <item>老司机</item>

@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.CustomShareView;
-import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -56,7 +55,6 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
-    private WaittingDialog svProgressHUD;
     public SystemSettingsActivity(){
         super(R.layout.activity_system_settings);
     }
@@ -64,7 +62,6 @@ public class SystemSettingsActivity extends BaseActivity{
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"系统设置");
-        svProgressHUD=new WaittingDialog(this);
         item_update_psd.setTVStyle(0,"修改密码", R.color.color_333);
         item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
         item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
