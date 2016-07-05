@@ -148,7 +148,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
 
     private void showFocusFansConfirmView(FocusFansItem item, String tips) {
-        View view = Util.inflateView(R.layout.popup_focus_fans, null);
+        View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
