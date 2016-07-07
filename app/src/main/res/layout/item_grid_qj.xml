@@ -25,6 +25,7 @@
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp10"
             android:orientation="vertical"
             >
 
@@ -33,8 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginBottom="@dimen/dp5"
-                android:layout_marginRight="@dimen/dp10">
+                android:layout_marginBottom="@dimen/dp5">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -89,6 +89,7 @@
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp10"
             android:orientation="vertical"
             >
 
@@ -97,7 +98,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginRight="@dimen/dp10"
                 android:layout_marginBottom="@dimen/dp5">
 
                 <ImageView
@@ -115,6 +115,7 @@
                     android:textColor="@android:color/white"
                     android:text="@string/app_name"
                     android:textSize="@dimen/sp14"
+                    android:maxEms="10"
                     android:includeFontPadding="false" />
             </FrameLayout>
             <TextView
