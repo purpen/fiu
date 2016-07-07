@@ -6,7 +6,6 @@
     android:paddingLeft="@dimen/dp4"
     android:paddingRight="@dimen/dp4"
     android:paddingBottom="@dimen/dp4"
-    android:paddingTop="@dimen/dp5"
     android:baselineAligned="false"
     >
     <RelativeLayout
@@ -28,22 +27,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <TextView
-                android:id="@+id/tv_title_left"
+
+            <FrameLayout
+                android:id="@+id/item_left_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:background="@android:color/black"
-                android:textColor="@android:color/white"
-                android:text="@string/app_name"
-                android:textSize="@dimen/sp14"
-                android:paddingLeft="@dimen/dp5"
-                android:paddingRight="@dimen/dp5"
                 android:layout_marginLeft="@dimen/dp10"
-                android:layout_marginRight="@dimen/dp10"
                 android:layout_marginBottom="@dimen/dp5"
-                />
+                android:layout_marginRight="@dimen/dp10">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="matrix"
+                    android:src="@mipmap/scene_title_background" />
+
+                <TextView
+                    android:id="@+id/tv_title_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:text="@string/app_name"
+                    android:includeFontPadding="false"
+                    android:maxEms="11"
+                    android:maxLines="2"
+                    android:textSize="14sp" />
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/tv_desc_left"
                 android:layout_width="match_parent"
@@ -80,22 +91,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <TextView
-                android:id="@+id/tv_title_right"
+
+            <FrameLayout
+                android:id="@+id/item_right_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:background="@android:color/black"
-                android:textColor="@android:color/white"
-                android:text="@string/app_name"
-                android:textSize="@dimen/sp14"
-                android:paddingLeft="@dimen/dp5"
-                android:paddingRight="@dimen/dp5"
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_marginRight="@dimen/dp10"
-                android:layout_marginBottom="@dimen/dp5"
-                />
+                android:layout_marginBottom="@dimen/dp5">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="matrix"
+                    android:src="@mipmap/scene_title_background" />
+
+                <TextView
+                    android:id="@+id/tv_title_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:text="@string/app_name"
+                    android:textSize="@dimen/sp14"
+                    android:includeFontPadding="false" />
+            </FrameLayout>
             <TextView
                 android:id="@+id/tv_desc_right"
                 android:layout_width="match_parent"

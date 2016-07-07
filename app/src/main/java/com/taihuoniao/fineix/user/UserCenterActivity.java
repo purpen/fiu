@@ -24,8 +24,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
-import com.taihuoniao.fineix.adapters.UserCJListAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
+import com.taihuoniao.fineix.adapters.UserQJListAdapter1;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
@@ -62,7 +62,7 @@ import butterknife.ButterKnife;
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     private int curPage = 1;
     private static final String PAGE_SIZE = "10";
-    private UserCJListAdapter adapterCJ;
+    private UserQJListAdapter1 adapterCJ;
     private UserQJListAdapter adapterQJ;
     private List<SceneListBean> mSceneList = new ArrayList<>();
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
@@ -306,7 +306,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
         if (adapterCJ == null) {
             mSceneList.addAll(list);
-            adapterCJ = new UserCJListAdapter(mSceneList, activity);
+            adapterCJ = new UserQJListAdapter1(mSceneList, activity);
             lv_cj.setAdapter(adapterCJ);
         } else {
             mSceneList.addAll(list);
@@ -452,8 +452,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
 
         tv_lv.setText(String.format("Lv%s", user.rank_id));
-        tv_qj.setText(String.valueOf(user.scene_count));
-        tv_cj.setText(String.valueOf(user.sight_count));
+        tv_qj.setText(String.valueOf(user.sight_count));
+//        tv_cj.setText(String.valueOf(user.sight_count));
         tv_focus.setText(String.valueOf(user.follow_count));
         tv_fans.setText(String.valueOf(user.fans_count));
     }
@@ -654,16 +654,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 showCj();
                 break;
             case R.id.ll_qj:
-                if (which == MineFragment.REQUEST_QJ) return;
-                showQJ();
+                if (which == MineFragment.REQUEST_CJ) return;
+                showCj();
                 break;
         }
     }
 
     private void showCj() {
         resetData();
-        lv_cj.setVisibility(View.VISIBLE);
-        lv_qj.setVisibility(View.GONE);
+        lv_cj.setVisibility(View.GONE);
+        lv_qj.setVisibility(View.VISIBLE);
         which = MineFragment.REQUEST_CJ;
         adapterCJ = null;
         loadCJData();

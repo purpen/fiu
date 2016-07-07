@@ -347,8 +347,8 @@ public class MineFragment extends MyBaseFragment {
         }
 
         tv_lv.setText(String.format("Lv%s", user.rank_id));
-        tv_qj.setText(String.valueOf(user.scene_count));
-        tv_cj.setText(String.valueOf(user.sight_count));
+        tv_qj.setText(String.valueOf(user.sight_count)); //场景改情景
+//        tv_cj.setText(String.valueOf(user.sight_count)); //情景改地盘
         tv_focus.setText(String.valueOf(user.follow_count));
         tv_fans.setText(String.valueOf(user.fans_count));
     }
@@ -384,7 +384,7 @@ public class MineFragment extends MyBaseFragment {
                 break;
             case R.id.ll_qj:
                 intent = new Intent(activity, UserCenterActivity.class);
-                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_QJ);
+                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
                 startActivity(intent);
                 //
                 break;

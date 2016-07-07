@@ -4,17 +4,19 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
+import com.taihuoniao.fineix.adapters.SupportQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.beans.User;
@@ -24,8 +26,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,33 +39,28 @@ import butterknife.Bind;
  * 未完成，接口返回数据有问题
  */
 public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    @Bind(R.id.pull_gv)
+    PullToRefreshGridView pullGv;
     //上个界面传递过来的数据
     private User user;//用户信息
     //    GlobalTitleLayout titleLayout;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    @Bind(R.id.activity_has_love_pulltorefreshview)
-    PullToRefreshListView pullToRefreshView;
     @Bind(R.id.activity_has_love_progress)
     ProgressBar progressBar;
-    private ListView listView;
     private WaittingDialog dialog;
 
     //场景列表
     private int page = 1;
     private List<LoveSceneBean.LoveSceneItem> list;
-    private SceneListViewAdapter sceneListViewAdapter;
+    private SupportQJAdapter adapter;
 
 
     @Override
     protected void getIntentData() {
-//        user_id = LoginInfo.getUserId();//用户id
         user = (User) getIntent().getSerializableExtra("user");
-//        Log.e("<<<", "logininfo.userid=" + user_id + "," + user._id);
         if (user == null || user._id == 0L) {
             ToastUtils.showError("用户信息为空");
-//            new SVProgressHUD(this).showErrorWithStatus("用户信息为空");
-//            Toast.makeText(HasLoveActivity.this, "用户信息为空", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -76,28 +71,40 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     protected void initView() {
-//        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_has_love_titlelayout);
         custom_head.setHeadCenterTxtShow(true, R.string.has_love);
-//        pullToRefreshView = (PullToRefreshListView) findViewById(R.id.activity_has_love_pulltorefreshview);
-//        progressBar = (ProgressBar) findViewById(R.id.activity_has_love_progress);
-        listView = pullToRefreshView.getRefreshableView();
-        listView.setDividerHeight(0);
-        listView.setDivider(null);
         dialog = new WaittingDialog(HasLoveActivity.this);
     }
 
     @Override
     protected void initList() {
-//        titleLayout.setBackgroundResource(R.color.white);
-//        titleLayout.setBackImg(R.mipmap.back_black);
-//        titleLayout.setContinueTvVisible(false);
-//        titleLayout.setTitle(R.string.has_love, getResources().getColor(R.color.black333333));
         list = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(HasLoveActivity.this, null, list, null, null);
-        listView.setAdapter(sceneListViewAdapter);
-        listView.setOnItemClickListener(this);
-        pullToRefreshView.setPullToRefreshEnabled(false);
-        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        adapter = new SupportQJAdapter(list, activity);
+        pullGv.setAdapter(adapter);
+        pullGv.setOnItemClickListener(this);
+//        pullToRefreshView.setPullToRefreshEnabled(false);
+//        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+//            @Override
+//            public void onLastItemVisible() {
+//                page++;
+//                progressBar.setVisibility(View.VISIBLE);
+//                requestLoveSceneList();
+//            }
+//        });
+
+        pullGv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+                resetData();
+                requestLoveSceneList();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+
+            }
+        });
+
+        pullGv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 page++;
@@ -105,7 +112,11 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
                 requestLoveSceneList();
             }
         });
+    }
 
+    private void resetData() {
+        page = 1;
+        list.clear();
     }
 
     @Override
@@ -132,7 +143,11 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
                             list.clear();
                         }
                         list.addAll(loveSceneBean.getData().getRows());
-                        sceneListViewAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
+
+                        if (pullGv != null)
+                            pullGv.onRefreshComplete();
+
                     } else {
                         ToastUtils.showError(loveSceneBean.getMessage());
 //                        dialog.showErrorWithStatus(loveSceneBean.getMessage());
@@ -155,7 +170,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        LoveSceneBean.LoveSceneItem loveSceneItem = (LoveSceneBean.LoveSceneItem) listView.getAdapter().getItem(position);
+        LoveSceneBean.LoveSceneItem loveSceneItem = (LoveSceneBean.LoveSceneItem) pullGv.getRefreshableView().getAdapter().getItem(position);
         Intent intent = new Intent(HasLoveActivity.this, SceneDetailActivity.class);
         intent.putExtra("id", loveSceneItem.get_id());
         startActivity(intent);
