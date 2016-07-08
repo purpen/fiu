@@ -11,8 +11,9 @@
         android:id="@+id/item_scenelist_backgroundimg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/default_background_750_1334"
-        android:scaleType="centerCrop"/>
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_background_750_1334"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -218,6 +219,8 @@
     <RelativeLayout
         android:id="@+id/item_scenelist_point_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></RelativeLayout>
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
 
 </RelativeLayout>

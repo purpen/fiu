@@ -25,9 +25,16 @@ public class OptRegisterLoginActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void finish() {
+        instance = null;
         super.finish();
         //关闭窗体动画显示
         overridePendingTransition(0, R.anim.down_register);
+    }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
     }
 
     @Override

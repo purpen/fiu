@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/13.
  */
-public class CategoryListBean extends NetBean implements Serializable{
+public class CategoryListBean extends NetBean implements Serializable {
     private Data data;
 
     public Data getData() {
@@ -19,7 +19,7 @@ public class CategoryListBean extends NetBean implements Serializable{
         this.data = data;
     }
 
-    public static class Data implements Serializable{
+    public static class Data implements Serializable {
         private List<CategoryListItem> rows;
 
         public List<CategoryListItem> getRows() {
@@ -30,7 +30,8 @@ public class CategoryListBean extends NetBean implements Serializable{
             this.rows = rows;
         }
     }
-    public static class CategoryListItem implements Serializable{
+
+    public static class CategoryListItem implements Serializable {
         private String _id;
         private String title;
         private String name;
@@ -45,6 +46,15 @@ public class CategoryListBean extends NetBean implements Serializable{
         private String order_by;
         private List<String> tags;
         private String app_cover_s_url;
+        private String back_url;
+
+        public String getBack_url() {
+            return back_url;
+        }
+
+        public void setBack_url(String back_url) {
+            this.back_url = back_url;
+        }
 
         public String get_id() {
             return _id;

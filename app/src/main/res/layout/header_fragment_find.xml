@@ -10,43 +10,66 @@
         android:id="@+id/scrollableView"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:layout_marginTop="45dp"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:orientation="horizontal"
-        android:paddingLeft="13dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/fiu_huoban"/>
+        android:gravity="center_vertical"
+        >
 
         <TextView
+            android:id="@+id/fragment_find_allfiuer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/hot_fiuer"
-            android:textColor="#222222"
-            android:textSize="13sp"/>
-        <!-- 999999 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/bigger_no_low_profile"
-            android:textColor="#999999"
-            android:textSize="11sp"/>
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:text="@string/look_all"
+            android:textSize="10sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@id/fragment_find_allfiuer"
+            android:orientation="horizontal"
+            android:paddingLeft="13dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/fiu_huoban"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/hot_fiuer"
+                android:textColor="#222222"
+                android:textSize="13sp"/>
+            <!-- 999999 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/bigger_no_low_profile"
+                android:textColor="#999999"
+                android:textSize="11sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <com.dodola.bubblecloud.BubbleCloudView
         android:id="@+id/fragment_find_absolute"
         android:layout_width="match_parent"
-        android:layout_height="157dp"
-        android:background="@color/f0f0f0"/>
+        android:layout_height="160dp"
+        android:background="@color/f0f0f0"
+        />
+
 
     <TextView
         android:layout_width="match_parent"

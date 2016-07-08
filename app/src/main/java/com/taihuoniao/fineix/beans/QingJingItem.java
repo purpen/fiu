@@ -27,4 +27,12 @@ public class QingJingItem implements Serializable {
     public long created_on;
     public long updated_on;
     public String cover_url;
+
+    @Override
+    public String toString() {
+        return "QingJingItem{" +
+                "_id=" + _id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

@@ -13,6 +13,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -156,7 +157,7 @@ public class AllLabelListViewAdapter extends BaseAdapter implements AdapterView.
 
     }
 
-    public interface MoreClick {
+    public interface MoreClick extends Serializable{
         void moreClick(int position1, int position2, int distance);
     }
 

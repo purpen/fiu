@@ -87,8 +87,6 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         scene = (SceneDetailsBean) getIntent().getSerializableExtra("scene");
         if (scene == null) {
             ToastUtils.showError("数据异常，请重试");
-//            new SVProgressHUD(this).showErrorWithStatus("数据异常，请重试");
-//            Toast.makeText(ShareCJSelectActivity.this, "数据异常，请返回重试", Toast.LENGTH_SHORT).show();
             finish();
         }
         ImageLoader.getInstance().loadImage(scene.getData().getCover_url(), options, new ImageLoadingListener() {
@@ -99,7 +97,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                ToastUtils.showError("图片加载失败");
+//                ToastUtils.showError("图片加载失败");
             }
 
             @Override
@@ -118,28 +116,13 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                ToastUtils.showError("图片加载失败");
+//                ToastUtils.showError("图片加载失败");
             }
         });
-//        ImageLoader.getInstance().displayImage(scene.getCover_url(), imageView);
-//        imageView.setImageBitmap(MainApplication.shareBitmap);
         titleTv.setText(scene.getData().getTitle());
         desTv.setText(scene.getData().getDes());
         dialog = new WaittingDialog(ShareCJSelectActivity.this);
         listView.setOnScrollListener(this);
-//        listView = pullToRefreshView.getRefreshableView();
-//        pullToRefreshView.setPullToRefreshEnabled(false);
-//        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//                if (searchStr == null) {
-//                    return;
-//                }
-//                progressBar.setVisibility(View.VISIBLE);
-//                currentPage++;
-//                DataPaser.search(searchStr, 11 + "", currentPage + "", "tag", 0 + "", handler);
-//            }
-//        });
         shareCJSelectListAdapter = new ShareCJSelectListAdapter(this, list);
         listView.setAdapter(shareCJSelectListAdapter);
         listView.setOnItemClickListener(this);
@@ -209,8 +192,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
         }
         switch (resultCode) {
             case 222:
-                SceneDetailsBean resultScene = (SceneDetailsBean) data.getSerializableExtra("scene");
-                scene = resultScene;
+                scene = (SceneDetailsBean) data.getSerializableExtra("scene");
                 Intent intent = new Intent();
                 intent.putExtra("scene", scene);
                 setResult(2, intent);

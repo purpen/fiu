@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <LinearLayout
@@ -52,12 +52,12 @@
         android:layout_height="wrap_content"
         >
 
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/mv"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp180"
-            android:clickable="true"
-            />
+        <!--<com.baidu.mapapi.map.MapView-->
+        <!--android:id="@+id/mv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp180"-->
+        <!--android:clickable="true"-->
+        <!--/>-->
 
         <TextView
             android:id="@+id/tv"
@@ -73,13 +73,18 @@
             android:textSize="@dimen/sp14"
             />
 
-        <com.taihuoniao.fineix.view.CustomListView
-            android:id="@+id/lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <android.support.v7.widget.RecyclerView
             android:layout_below="@id/tv"
-            android:divider="@color/color_ddd"
-            android:dividerHeight="@dimen/dp05"/>
+            android:id="@+id/activity_select_qingjing_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="267dp"/>
+        <!--<com.taihuoniao.fineix.view.ListViewForScrollView-->
+        <!--android:id="@+id/lv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tv"-->
+        <!--android:divider="@color/color_ddd"-->
+        <!--android:dividerHeight="@dimen/dp05"/>-->
     </RelativeLayout>
 
 

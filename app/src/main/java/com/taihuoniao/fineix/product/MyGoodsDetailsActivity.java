@@ -166,107 +166,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    private void goodsDetail(String id) {
-        ClientDiscoverAPI.goodsDetailsNet(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                GoodsDetailsBean goodsDetails = new GoodsDetailsBean();
-                try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    goodsDetails.setSuccess(obj.optBoolean("success"));
-                    goodsDetails.setMessage(obj.optString("message"));
-                    JSONObject data = obj.getJSONObject("data");
-                    if (goodsDetails.isSuccess()) {
-                        goodsDetails.set_id(data.optString("_id"));
-                        goodsDetails.setTitle(data.optString("title"));
-                        goodsDetails.setSale_price(data.optString("sale_price"));
-                        goodsDetails.setMarket_price(data.optString("market_price"));
-                        goodsDetails.setIs_love(data.optString("is_love"));
-                        goodsDetails.setShare_view_url(data.optString("share_view_url"));
-                        goodsDetails.setShare_desc(data.optString("share_desc"));
-                        JSONArray asset = data.getJSONArray("asset");
-                        List<String> imgUrlList = new ArrayList<>();
-                        for (int i = 0; i < asset.length(); i++) {
-                            String imgUrl = asset.optString(i);
-                            imgUrlList.add(imgUrl);
-                        }
-                        goodsDetails.setImgUrlList(imgUrlList);
-                        JSONArray relationProducts = data.getJSONArray("relation_products");
-                        List<RelationProductsBean> relationProductsList = new ArrayList<>();
-                        for (int i = 0; i < relationProducts.length(); i++) {
-                            JSONObject job = relationProducts.optJSONObject(i);
-                            RelationProductsBean relationProductsBean = new RelationProductsBean();
-                            relationProductsBean.set_id(job.optString("_id"));
-                            relationProductsBean.setCover_url(job.optString("cover_url"));
-                            relationProductsBean.setTitle(job.optString("title"));
-                            relationProductsBean.setSale_price(job.optString("sale_price"));
-                            relationProductsList.add(relationProductsBean);
-                        }
-                        goodsDetails.setRelationProductsList(relationProductsList);
-                        goodsDetails.setWap_view_url(data.optString("wap_view_url"));
-                        goodsDetails.setContent_view_url(data.optString("content_view_url"));
-                        goodsDetails.setCover_url(data.optString("cover_url"));
-                        goodsDetails.setSkus_count(data.optString("skus_count"));
-                        if (Integer.parseInt(data.optString("skus_count")) > 0) {
-                            List<SkusBean> skuList = new ArrayList<>();
-                            JSONArray skus = data.getJSONArray("skus");
-                            for (int i = 0; i < skus.length(); i++) {
-                                JSONObject jsonObject = skus.getJSONObject(i);
-                                SkusBean skusBean = new SkusBean();
-                                skusBean.set_id(jsonObject.optString("_id"));
-                                skusBean.setMode(jsonObject.optString("mode"));
-                                skusBean.setPrice(jsonObject.optString("price"));
-                                skusBean.setQuantity(jsonObject.optString("quantity"));
-                                skuList.add(skusBean);
-                            }
-                            goodsDetails.setSkus(skuList);
-                        }
-                        goodsDetails.setInventory(data.optString("inventory"));
-                    }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                goodsDetailsBean = goodsDetails;
-                dialog.dismiss();
-                if (goodsDetailsBean.getImgUrlList() == null) {
-                    Toast.makeText(MyGoodsDetailsActivity.this, "访问的商品不存在", Toast.LENGTH_SHORT).show();
-                    finish();
-                    return;
-                }
-                imgList.clear();
-                pointLinear.removeAllViews();
-                for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
-                    ImageView img = new ImageView(MyGoodsDetailsActivity.this);
-                    img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    img.setScaleType(ImageView.ScaleType.FIT_XY);
-                    imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
-                    imgList.add(img);
-                }
-                viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
-                addPointToLinear();
-                nameTv.setText(goodsDetailsBean.getTitle());
-                salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-                priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-                marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
-                marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
-                gridView.setAdapter(gridViewAdapter);
-                webView.loadUrl(goodsDetailsBean.getContent_view_url());
-                imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
-                productsTitle.setText(goodsDetailsBean.getTitle());
-                maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
-                quantity.setText(maxNumber + "");
-                addSkuToLinear();
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
 
     @Override
     protected void initView() {
@@ -327,12 +227,12 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         id = getIntent().getStringExtra("id");
         Log.e("<<<自营商品id", "id=" + id);
         if (id == null) {
-            ToastUtils.showError("暂无此商品");
+            ToastUtils.showError("暂无此好货");
 //            dialog.showErrorWithStatus("暂无此商品");
 //            Toast.makeText(MyGoodsDetailsActivity.this, "暂无此商品", Toast.LENGTH_SHORT).show();
             finish();
         }
-        titleLayout.setTitle("产品详情");
+        titleLayout.setTitle("好货详情");
         viewPager.setOnPageChangeListener(this);
         moreColorRelative.setOnClickListener(this);
         moreCommentsRelative.setOnClickListener(this);
@@ -768,13 +668,12 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     e.printStackTrace();
                 }
                 dialog.dismiss();
-                NowBuyBean netNowBuy = nowBuyBean;
-                if (netNowBuy.getSuccess()) {
+                if (nowBuyBean.getSuccess()) {
                     Intent intent = new Intent(MyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
-                    intent.putExtra("NowBuyBean", netNowBuy);
+                    intent.putExtra("NowBuyBean", nowBuyBean);
                     startActivity(intent);
                 } else {
-                    ToastUtils.showError(netNowBuy.getMessage());
+                    ToastUtils.showError(nowBuyBean.getMessage());
                 }
                 popupWindow.dismiss();
             }
@@ -786,37 +685,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    private void addToCart(String target_id, String type, String n) {
-        ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type1 = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type1);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-//                        dialog.showSuccessWithStatus(netBean.getMessage());
-                } else {
-                    ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                }
-                popupWindow.dismiss();
-                shopCartNumber();
-            }
 
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-        });
-    }
 
 
     private void initPopuptWindow() {
@@ -905,5 +774,136 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         NetworkManager.getInstance().cancel("addToCart");
         NetworkManager.getInstance().cancel("buyNow");
     }
+    private void goodsDetail(String id) {
+        ClientDiscoverAPI.goodsDetailsNet(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                GoodsDetailsBean goodsDetails = new GoodsDetailsBean();
+                try {
+                    JSONObject obj = new JSONObject(responseInfo.result);
+                    goodsDetails.setSuccess(obj.optBoolean("success"));
+                    goodsDetails.setMessage(obj.optString("message"));
+                    JSONObject data = obj.getJSONObject("data");
+                    if (goodsDetails.isSuccess()) {
+                        goodsDetails.set_id(data.optString("_id"));
+                        goodsDetails.setTitle(data.optString("title"));
+                        goodsDetails.setSale_price(data.optString("sale_price"));
+                        goodsDetails.setMarket_price(data.optString("market_price"));
+                        goodsDetails.setIs_love(data.optString("is_love"));
+                        goodsDetails.setShare_view_url(data.optString("share_view_url"));
+                        goodsDetails.setShare_desc(data.optString("share_desc"));
+                        JSONArray asset = data.getJSONArray("asset");
+                        List<String> imgUrlList = new ArrayList<>();
+                        for (int i = 0; i < asset.length(); i++) {
+                            String imgUrl = asset.optString(i);
+                            imgUrlList.add(imgUrl);
+                        }
+                        goodsDetails.setImgUrlList(imgUrlList);
+                        JSONArray relationProducts = data.getJSONArray("relation_products");
+                        List<RelationProductsBean> relationProductsList = new ArrayList<>();
+                        for (int i = 0; i < relationProducts.length(); i++) {
+                            JSONObject job = relationProducts.optJSONObject(i);
+                            RelationProductsBean relationProductsBean = new RelationProductsBean();
+                            relationProductsBean.set_id(job.optString("_id"));
+                            relationProductsBean.setCover_url(job.optString("cover_url"));
+                            relationProductsBean.setTitle(job.optString("title"));
+                            relationProductsBean.setSale_price(job.optString("sale_price"));
+                            relationProductsList.add(relationProductsBean);
+                        }
+                        goodsDetails.setRelationProductsList(relationProductsList);
+                        goodsDetails.setWap_view_url(data.optString("wap_view_url"));
+                        goodsDetails.setContent_view_url(data.optString("content_view_url"));
+                        goodsDetails.setCover_url(data.optString("cover_url"));
+                        goodsDetails.setSkus_count(data.optString("skus_count"));
+                        if (Integer.parseInt(data.optString("skus_count")) > 0) {
+                            List<SkusBean> skuList = new ArrayList<>();
+                            JSONArray skus = data.getJSONArray("skus");
+                            for (int i = 0; i < skus.length(); i++) {
+                                JSONObject jsonObject = skus.getJSONObject(i);
+                                SkusBean skusBean = new SkusBean();
+                                skusBean.set_id(jsonObject.optString("_id"));
+                                skusBean.setMode(jsonObject.optString("mode"));
+                                skusBean.setPrice(jsonObject.optString("price"));
+                                skusBean.setQuantity(jsonObject.optString("quantity"));
+                                skuList.add(skusBean);
+                            }
+                            goodsDetails.setSkus(skuList);
+                        }
+                        goodsDetails.setInventory(data.optString("inventory"));
+                    }
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                goodsDetailsBean = goodsDetails;
+                dialog.dismiss();
+                if (goodsDetailsBean.getImgUrlList() == null) {
+                    Toast.makeText(MyGoodsDetailsActivity.this, "访问的好货不存在", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                imgList.clear();
+                pointLinear.removeAllViews();
+                for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
+                    ImageView img = new ImageView(MyGoodsDetailsActivity.this);
+                    img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                    imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
+                    imgList.add(img);
+                }
+                viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
+                addPointToLinear();
+                nameTv.setText(goodsDetailsBean.getTitle());
+                salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+                priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
+                marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
+                marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
+                gridView.setAdapter(gridViewAdapter);
+                webView.loadUrl(goodsDetailsBean.getContent_view_url());
+                imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
+                productsTitle.setText(goodsDetailsBean.getTitle());
+                maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
+                quantity.setText(maxNumber + "");
+                addSkuToLinear();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+    private void addToCart(String target_id, String type, String n) {
+        ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type1 = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type1);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+//                        dialog.showSuccessWithStatus(netBean.getMessage());
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                }
+                popupWindow.dismiss();
+                shopCartNumber();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
 }

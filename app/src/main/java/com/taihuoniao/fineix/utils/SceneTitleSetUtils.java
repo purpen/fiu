@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.utils;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -12,7 +11,14 @@ import android.widget.TextView;
 public class SceneTitleSetUtils {
 //    static Bitmap bitmap = BitmapFactory.decodeResource(Resources.getSystem(), R.mipmap.scene_title_background);
 
-    //用于动态改变场景title的宽和高
+    /**
+     * 用于动态改变场景title的宽和高
+     * @param sceneTitle 设置文字的textview
+     * @param frameLayout 背景framelayout
+     * @param maxTitleSize 没用
+     * @param minTitleSize 没用
+     * @param b 用于在分享时设置当前图片的宽与屏幕宽的比，设置字体大小
+     */
     public static void setTitle(final TextView sceneTitle, FrameLayout frameLayout, int maxTitleSize, int minTitleSize, double b) {
 //        尝试动态改变bimap
         double leng = sceneTitle.getText().length();
@@ -27,7 +33,7 @@ public class SceneTitleSetUtils {
         } else {
             l = (int) leng;
         }
-        Log.e("<<<缩小倍数", b + "");
+//        Log.e("<<<缩小倍数", b + "");
 //            遍历所有字符判断是否含有英文字符。有的话算半个
 //        FrameLayout.LayoutParams slp = (FrameLayout.LayoutParams) sceneTitle.getLayoutParams();
         if (leng < 8) {

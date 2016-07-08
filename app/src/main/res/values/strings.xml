@@ -2,7 +2,7 @@
     <string name="app_name">Fiu</string>
     <string name="qing">精选</string>
     <string name="jing">发现</string>
-    <string name="fiu">Fiuing</string>
+    <string name="fiu">Fiu</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
     <string name="about_us">关于Fiu</string>
@@ -22,7 +22,7 @@
     <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->
     <string name="add_url">添加链接</string>
-    <string name="search_products">搜索产品</string>
+    <string name="search_products">搜索好货</string>
     <string name="jingdong">京东</string>
     <string name="taobao">淘宝</string>
     <string name="tianmao">天猫</string>
@@ -36,20 +36,20 @@
     <string name="input_product_title">输入商品名称</string>
     <string name="confirm_add">确认添加</string>
     <!-- CreateSceneActivity -->
-    <string name="create_scene">创建场景</string>
-    <string name="create_qingjing">创建情境</string>
-    <string name="bianji_scene">编辑场景</string>
-    <string name="bianji_qingjing">编辑情景</string>
+    <string name="create_scene">创建情景</string>
+    <string name="create_qingjing">创建地盘</string>
+    <string name="bianji_scene">编辑情景</string>
+    <string name="bianji_qingjing">编辑地盘</string>
     <string name="publish">发布</string>
     <!-- AddLabelActivity -->
     <string name="add_label">添加标签</string>
     <string name="confirm">确定</string>
     <!-- AddProductActivity -->
-    <string name="add_product">添加产品</string>
+    <string name="add_product">添加好货</string>
     <!-- CommentListActivity -->
     <string name="comment">评论</string>
     <!-- SelectQingjingActivity -->
-    <string name="select_qingjing">选择情景</string>
+    <string name="select_qingjing">选择地盘</string>
     <!-- ReportActivity -->
     <string name="report">举报</string>
     <!-- 个人中心 -->
@@ -134,7 +134,7 @@
     </string-array>
     <string name="first_in_qing_title">情境定位</string>
     <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
-    <string name="first_in_jing_title">场景布局</string>
+    <string name="first_in_jing_title">情景布局</string>
     <string name="first_in_jing_des">给自己设一个局，换一处风情、换一面质地、换各色朝朝暮暮</string>
     <string name="first_in_fiu_title">Fiu是什么</string>
     <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，Fiu同寻常</string>
@@ -142,7 +142,8 @@
     <string name="first_in_pin_des">你的欲望，予我追寻格调的动力；我的橱窗，给你智居的千方百计</string>
     <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
     <string name="first_in_wo_des">不为人知的，呼之欲出的都放在这里</string>
-    <string name="order_interest_qj">现在你可以订阅感兴趣的情景</string>
+    <string name="order_interest_qj">触动双眸的、与我共鸣的、鲜明新奇的，关注地盘给印象一个回忆的中轴线</string>
+    <!--<string name="order_interest_qj">现在你可以订阅感兴趣的情景</string>-->
     <string name="complete_info">猜来猜去的游戏已落伍，取一个昵称，撕开日常标签，给同路者关注你的机会</string>
     <string-array name="user_tags">
         <item>老司机</item>
@@ -179,9 +180,9 @@
         <item>赎回自由身</item>
         <item>职业buyer</item>
     </string-array>
-    <string name="user_center_qj_tip">每个情景都有故事，来都来了，讲讲你的故事吧</string>
+    <string name="user_center_qj_tip">每个地盘都有故事，来都来了，讲讲你的故事吧</string>
     <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
-    <string name="user_center_cj_tip">你还没有发表过新场景哦，快来Fiu一下嘛</string>
+    <string name="user_center_cj_tip">你还没有发表过新情景哦，快来Fiu一下嘛</string>
     <string name="user_center_cj_tip1">关于TA的经历，你想知道的可能都在这里</string>
     <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
     <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
@@ -222,7 +223,7 @@
     <string name="taobao_orders">淘宝订单</string>
     <string name="tianmao_orders">天猫订单</string>
     <string name="yamaxun_orders">亚马逊订单</string>
-    <string name="all_qingjing">全部情景</string>
+    <string name="all_qingjing">全部地盘</string>
     <string name="application_for_drawback">申请退款：</string>
     <string name="refund">退款</string>
     <string name="refund_reason">退款原因：</string>
@@ -255,7 +256,7 @@
     <string name="add_des">添加描述</string>
     <string name="add_address">添加地点</string>
     <string name="label">标签</string>
-    <string name="belong_what_qingjing">所属情景</string>
+    <string name="belong_what_qingjing">所属地盘</string>
     <string name="mark_product">标记产品</string>
     <string name="add_chain">添加链接</string>
     <string name="back">返回</string>
@@ -266,7 +267,7 @@
     <string name="to_buy">去购买</string>
     <string name="brand">品牌</string>
     <string name="product_lightspot">产品亮点</string>
-    <string name="belong_what_changjing">所属场景</string>
+    <string name="belong_what_changjing">所属情景</string>
     <string name="related_recommend">相关推荐</string>
     <string name="add_to_cart">加入购物车</string>
     <string name="buy_now">立即购买</string>
@@ -277,7 +278,7 @@
     <string name="logistics_company">物流公司：</string>
     <string name="logistics_odd_number">物流单号：</string>
     <string name="pay_method">支付方式：</string>
-    <string name="products_money">商品总额：</string>
+    <string name="products_money">好货总额：</string>
     <string name="freight">运费：</string>
     <string name="amount_paid">实付金额：</string>
     <string name="delete_all_select_labels">删除全部所选的标签</string>
@@ -297,17 +298,17 @@
     <string name="thank_for_report">感谢你的举报，如果此照片违反了我们的规定，我们会将其移除。</string>
     <string name="no_data">暂无数据！</string>
     <string name="number_300">300+</string>
-    <string name="products_of_sight">此场景下的产品</string>
+    <string name="products_of_sight">此情景下的产品</string>
     <string name="near_products">相近的产品</string>
     <string name="search">搜索</string>
-    <string name="scene">情景</string>
-    <string name="sight">场景</string>
+    <string name="scene">地盘</string>
+    <string name="sight">情景</string>
     <string name="product">产品</string>
     <string name="photo_album">相册</string>
     <string name="take_picture">拍照</string>
     <string name="add_new_address">+添加新地址</string>
     <string name="no_address">你还没有收货地址</string>
-    <string name="search_scene">搜索情景</string>
+    <string name="search_scene">搜索地盘</string>
     <string name="search_text">搜索文字</string>
     <string name="select_all">全选</string>
     <string name="account">结算</string>
@@ -323,26 +324,26 @@
     <string name="bigger_no_low_profile">[有Bigger不低调]</string>
     <string name="new_land">新Land</string>
     <string name="enclosure_is_earnings">[圈地有收益]</string>
-    <string name="high_sight">High场景</string>
+    <string name="high_sight">High情景</string>
     <string name="whoever_with_addiction">[谁用谁上瘾]</string>
     <string name="severe_brands">牛Brands</string>
     <string name="good_here">[尖货这里找]</string>
     <string name="fiu_things">Fiu东西</string>
     <string name="more_goods_more_brands">[东西不少，牌子不小]</string>
-    <string name="sights_of_scene">此情景下的场景</string>
-    <string name="create_sight">创建新的场景</string>
-    <string name="create_sight_in_empty_scene">在这里上传图片、选一段文字，即刻开启你的情景之路吧</string>
-    <string name="create_sight_empty_scene">+ 创建场景</string>
-    <string name="near_scene">附近的情景</string>
-    <string name="recommend_scene">推荐情景</string>
+    <string name="sights_of_scene">此地盘下的情景</string>
+    <string name="create_sight">创建新的情景</string>
+    <string name="create_sight_in_empty_scene">在这里上传图片、选一段文字，即刻开启你的地盘之路吧</string>
+    <string name="create_sight_empty_scene">+ 创建情景</string>
+    <string name="near_scene">附近的地盘</string>
+    <string name="recommend_scene">推荐地盘</string>
     <string name="default_address">默认地址</string>
     <string name="color_or_category">颜色/种类:</string>
     <string name="the_numbers">,数量*</string>
     <string name="near_recommend">相关推荐</string>
-    <string name="products_comments">商品评价</string>
+    <string name="products_comments">好货评价</string>
     <string name="more_comments"><![CDATA[更多评论>>]]></string>
     <string name="product_detail">产品详情</string>
-    <string name="up_to_look_more_detail">--上拉查看商品详情--</string>
+    <string name="up_to_look_more_detail">--上拉查看好货详情--</string>
     <string name="coment">评价</string>
     <string name="take_your_comment">写下您对商品的感受，对他人帮助很大</string>
     <string name="fiu_des">Fiu | 创新产品情景式购物平台</string>
@@ -363,5 +364,6 @@
     <string name="dropdown_update_data">下拉更新数据</string>
     <string name="continue_to">继续</string>
     <string name="no_product">暂无商品</string>
-    <string name="fiu_descrip">| 创新产品情景式购物平台</string>
+    <string name="fiu_descrip"> | 创新产品情景式购物平台</string>
+    <string name="no_this_sight">没有这个地盘</string>
 </resources>

@@ -51,7 +51,7 @@ public class OrderQJActivity  extends BaseActivity{
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"订阅的情景");
+        custom_head.setHeadCenterTxtShow(true,"订阅的地盘");
         dialog=new WaittingDialog(this);
         pull_gv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }

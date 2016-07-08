@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,13 +44,16 @@ import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.SerSceneListBean;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.ViewPagerActivity;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -70,7 +75,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener {
+public class FindFragment extends BaseFragment<Banner> implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, SceneListViewAdapter.SceneListAdapterScrollListener {
     //    public static FindFragment instance;
     private final String PAGE_NAME = "app_fiu_sight_index_slide"; //TODO 换成场景banner
     //标签列表
@@ -84,6 +89,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private int currentPage = 1;//页码
     private double distance = 5000;//距离
     private double[] location = null;
+    private RelativeLayout titlelayout;
+    private ImageView logoImg;
     private ImageView searchImg;
     private ImageView locationImg;
     private PullToRefreshListView pullToRefreshView;
@@ -93,6 +100,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private ProgressBar progressBar;
     //HeaderView中的控件
     private ScrollableView scrollableView;
+    private TextView allFiuerTv;
     private TextView allQingjingTv;
     private RecyclerView qingjingRecycler;
     private List<QingJingListBean.QingJingItem> qingjingList;
@@ -101,23 +109,21 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     private BubbleCloudView absoluteLayout;
     //网络请求对话框
     private WaittingDialog dialog;
-    //listview分页加载
-//    private int lastSavedFirstVisibleItem = -1;
-//    private int lastTotalItem = -1;
-//    private GestureDetector gestureDetector;
-
+    private float lastY = -1;//用来判断上滑还是下滑
+    private boolean isDown = false;//判断是否listview正在向下滑动
 
     @Override
     protected View initView() {
-//        instance = FindFragment.this;
         View view = View.inflate(getActivity(), R.layout.fragment_find, null);
-        RelativeLayout titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
+        titlelayout = (RelativeLayout) view.findViewById(R.id.fragment_find_titlelayout);
+        logoImg = (ImageView) view.findViewById(R.id.fragment_find_logo);
         searchImg = (ImageView) view.findViewById(R.id.fragment_find_search);
         locationImg = (ImageView) view.findViewById(R.id.fragment_find_location);
         pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_find_scenelistview);
         sceneListView = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_find_progress);
         View headerView = View.inflate(getActivity(), R.layout.header_fragment_find, null);
+        allFiuerTv = (TextView) headerView.findViewById(R.id.fragment_find_allfiuer);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
         allQingjingTv = (TextView) headerView.findViewById(R.id.fragment_find_allqingjing);
         qingjingRecycler = (RecyclerView) headerView.findViewById(R.id.fragment_find_qingjing_recycler);
@@ -137,14 +143,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         return view;
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     private void dis(ViewParent viewParent) {
         viewParent.requestDisallowInterceptTouchEvent(true);
@@ -155,10 +153,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void initList() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-//            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
-//        }
+        logoImg.setOnClickListener(this);
         pullToRefreshView.animLayout();
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
@@ -166,10 +161,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 currentPage = 1;
                 location = null;
                 requestNet();
-//                absoluteLayout.removeAllViews();
-//                DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
             }
         });
+        allFiuerTv.setOnClickListener(this);
         searchImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
@@ -203,7 +197,26 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         sceneList = new ArrayList<>();
         sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
         sceneListView.setAdapter(sceneListViewAdapter);
-        sceneListView.setOnScrollListener(this);
+        sceneListViewAdapter.setListView(sceneListView);
+        sceneListViewAdapter.setSceneListAdapterScrollListener(this);
+//        sceneListView.setOnScrollListener(this);
+        sceneListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (event.getY() > lastY) {
+                        //listview向上滑动
+                        isDown = false;
+                        lastY = event.getY();
+                    } else if (event.getY() < lastY) {
+                        //listview向下滑动
+                        isDown = true;
+                        lastY = event.getY();
+                    }
+                }
+                return false;
+            }
+        });
         sceneListView.setOnItemClickListener(this);
         MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
             @Override
@@ -236,15 +249,12 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         });
     }
 
+    private int lastSceneSize = -1;
 
     private void getCJList() {
         ClientDiscoverAPI.getSceneList(currentPage + "", null, null, 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<场景列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.SCENE_LIST;
                 SceneList sceneList1 = new SceneList();
                 try {
                     JSONObject jsonObject = new JSONObject(responseInfo.result);
@@ -306,19 +316,19 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
-                SceneList netSceneList = sceneList1;
-                if (netSceneList.isSuccess()) {
+                if (sceneList1.isSuccess()) {
                     pullToRefreshView.setLoadingTime();
                     if (currentPage == 1) {
                         sceneList.clear();
                         pullToRefreshView.lastSavedFirstVisibleItem = -1;
                         pullToRefreshView.lastTotalItem = -1;
                     }
-                    sceneList.addAll(netSceneList.getSceneListBeanList());
+//                    lastSceneSize = sceneList.size();
+                    sceneList.addAll(sceneList1.getSceneListBeanList());
 //                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
                     sceneListViewAdapter.notifyDataSetChanged();
                 } else {
-                    ToastUtils.showError(netSceneList.getMessage());
+                    ToastUtils.showError(sceneList1.getMessage());
 //                        dialog.showErrorWithStatus(netSceneList.getMessage());
                 }
             }
@@ -449,7 +459,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         });
         //场景页热门标签
-//        DataPaser.cjHotLabel(true, handler);
         ClientDiscoverAPI.cjHotLabel(true, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -483,76 +492,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
     private FiuUserListBean netUsers;
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.FIU_USER:
-////                    dialog.dismiss();
-////                    pullToRefreshView.onRefreshComplete();
-//                    FiuUserListBean netUser = (FiuUserListBean) msg.obj;
-//                    netUsers = netUser;
-//                    if (netUser.isSuccess()) {
-//                        absoluteLayout.init(getActivity(), netUser, null);
-//                    } else {
-//                        ToastUtils.showError(netUser.getMessage());
-////                        dialog.showErrorWithStatus(netUser.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.QINGJING_LIST:
-//                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
-//                    if (netQingjingListBean.isSuccess()) {
-//                        qingjingList.clear();
-//                        qingjingList.addAll(netQingjingListBean.getData().getRows());
-////                        Toast.makeText(getActivity(), "测试，情景数据个数=" + qingjingList.size(), Toast.LENGTH_SHORT).show();
-//                        jingQingjingRecyclerAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netQingjingListBean.getMessage());
-////                        dialog.showErrorWithStatus(netQingjingListBean.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.CJ_HOTLABEL:
-////                    pullToRefreshView.onRefreshComplete();
-//                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
-//                    if (netHot.isSuccess()) {
-//                        hotLabelList.clear();
-//                        hotLabelList.addAll(netHot.getData().getTags());
-//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netHot.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.SCENE_LIST:
-//                    dialog.dismiss();
-//                    pullToRefreshView.onRefreshComplete();
-//                    progressBar.setVisibility(View.GONE);
-//                    SceneList netSceneList = (SceneList) msg.obj;
-//                    if (netSceneList.isSuccess()) {
-//                        pullToRefreshView.setLoadingTime();
-//                        if (currentPage == 1) {
-//                            sceneList.clear();
-//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-//                            pullToRefreshView.lastTotalItem = -1;
-//                        }
-//                        sceneList.addAll(netSceneList.getSceneListBeanList());
-////                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
-//                        sceneListViewAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netSceneList.getMessage());
-////                        dialog.showErrorWithStatus(netSceneList.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    pullToRefreshView.onRefreshComplete();
-//                    progressBar.setVisibility(View.GONE);
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-//                    break;
-//            }
-//        }
-//    };
-//    private Thread thread;
 
     @Override
     public void onPause() {
@@ -566,10 +505,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     public void onResume() {
         super.onResume();
-//        //用户大小不一的头像
-//        if (absoluteLayout.getChildCount() <= 0) {
-//            DataPaser.fiuUserList(1 + "", 40 + "", null, null, 1 + "", handler);
-//        }
         if (scrollableView != null) {
             scrollableView.start();
         }
@@ -578,11 +513,6 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
-//        ArrayList<String> urlList = new ArrayList<>();
-//        for (Banner banner : list) {
-//            urlList.add(banner.cover_url);
-//        }
-
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter(activity, list);
             scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
@@ -600,28 +530,40 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     public void onDestroy() {
         //        cancelNet();
         MapUtil.destroyLocationClient();
-//        if (thread != null && thread.isAlive()) {
-//            thread.stop();
-//        }
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//            handler = null;
-//        }
         super.onDestroy();
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+//        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+        int a = -1;//这个id在数据中位置
         SceneListBean sceneListBean = (SceneListBean) parent.getAdapter().getItem(position);
-        intent.putExtra("id", sceneListBean.get_id());
-        startActivity(intent);
+        for (int i = 0; i < sceneList.size(); i++) {
+            if (sceneList.get(i).get_id().equals(sceneListBean.get_id())) {
+                a = i;
+                break;
+            }
+        }
+        SerSceneListBean serSceneListBean = new SerSceneListBean();
+        serSceneListBean.setSceneList(sceneList);
+        intent.putExtra("page", currentPage);
+        intent.putExtra("position", a + "");
+        intent.putExtra("bean", serSceneListBean);
+        intent.putExtra(FindFragment.class.getSimpleName(), false);
+        getActivity().startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fragment_find_allfiuer:
+                startActivity(new Intent(getActivity(), AllFiuerActivity.class));
+                break;
+            case R.id.fragment_find_logo:
+                sceneListView.setSelection(0);
+                break;
             case R.id.fragment_find_search:
                 Intent intent1 = new Intent(getActivity(), SearchActivity.class);
                 intent1.putExtra("t", "8");
@@ -644,9 +586,87 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
         startActivity(intent);
     }
 
+    private int animFlag = 0;
+    private ObjectAnimator downAnimator, upAnimator;
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+            if (isDown) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.moveToDown();
+                if (downAnimator == null) {
+                    initDownAnimator();
+                }
+                if (animFlag == 0) {
+                    downAnimator.start();
+                }
+            } else {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.moveToReset();
+                if (titlelayout.getTranslationY() >= 0) {
+                    return;
+                }
+                if (upAnimator == null) {
+                    initUpAnimator();
+                }
+                if (animFlag == 2) {
+                    upAnimator.start();
+                }
+            }
+        }
+    }
 
+    //初始化titlelayout的下滑动画
+    private void initUpAnimator() {
+        upAnimator = ObjectAnimator.ofFloat(titlelayout, "translationY", 0).setDuration(300);
+        upAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 0;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    //初始化titlelayout上滑的动画
+    private void initDownAnimator() {
+        downAnimator = ObjectAnimator.ofFloat(titlelayout, "translationY", -titlelayout.getMeasuredHeight()).setDuration(300);
+        downAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 2;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     @Override

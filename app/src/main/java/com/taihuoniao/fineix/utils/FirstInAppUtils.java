@@ -179,6 +179,12 @@ public class FirstInAppUtils {
 //                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
 //            }
 //        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                activity = null;
+            }
+        });
     }
 
 

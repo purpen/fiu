@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.qingjingOrSceneDetails;
+package com.taihuoniao.fineix.main;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -6,11 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +40,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailCommentAdapter;
 import com.taihuoniao.fineix.adapters.SceneDetailUserHeadAdapter;
-import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.CommonBean;
@@ -46,11 +48,14 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.TestShare;
 import com.taihuoniao.fineix.scene.CreateSceneActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -73,9 +78,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by taihuoniao on 2016/4/19.
+ * Created by taihuoniao on 2016/7/8.
  */
-public class SceneDetailActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MyScrollView.OnScrollListener {
+public class ViewPagerFragment extends Fragment implements MyScrollView.OnScrollListener, View.OnClickListener, AdapterView.OnItemClickListener {
+    public static ViewPagerFragment newInstance(String id) {
+        Bundle args = new Bundle();
+        args.putString("id", id);
+        ViewPagerFragment fragment = new ViewPagerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        id = getArguments().getString("id");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = initView();
+        initList();
+        requestNet();
+        return view;
+    }
+
     //上个界面传递过来的场景id
     private String id;
     private boolean isCreate;//判断是不是从创建界面跳转过来的
@@ -154,78 +181,69 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private int currentTime = 1;
     private List<ProductBean.ProductListItem> nearProductList;
     private GoodListAdapter goodListAdapter;
-    public static SceneDetailActivity instance;
 
-    public SceneDetailActivity() {
-        super(0);
+    //    public static SceneDetailActivity instance;
+    //activity中调用当前view
+    public View getMoveView() {
+        return activity_view;
     }
 
-    @Override
-    protected void initView() {
-        instance = SceneDetailActivity.this;
-        activity_view = View.inflate(SceneDetailActivity.this, R.layout.activity_scenedetails, null);
-        setContentView(activity_view);
-//        nearListView = (ListView) findViewById(R.id.activity_scenedetails_nearlistview);
-//        View header = View.inflate(SceneDetailActivity.this,R.layout.header_scenedetails,null);
-        scrollView = (MyScrollView) findViewById(R.id.activity_scenedetails_scrollview);
-//        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
-        titleRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_title);
-        backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
-        shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
-        imgRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_imgrelative);
-        container = (RelativeLayout) findViewById(R.id.activity_scenedetails_container);
-        backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
-        titleLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_titlelinear);
-        frameLayout = (FrameLayout) findViewById(R.id.activity_scenedetails_framelayout);
-        changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
-        suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
-        locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
-        locationTv = (TextView) findViewById(R.id.activity_scenedetails_location);
-        timeTv = (TextView) findViewById(R.id.activity_scenedetails_time);
-        leftLabelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_left_label);
-        userHead = (RoundedImageView) findViewById(R.id.activity_scenedetails_userhead);
-        vImg = (RoundedImageView) findViewById(R.id.riv_auth);
-        userName = (TextView) findViewById(R.id.activity_scenedetails_username);
-        userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
+    private View initView() {
+//        instance = SceneDetailActivity.this;
+        activity_view = View.inflate(getActivity(), R.layout.activity_scenedetails, null);
+        scrollView = (MyScrollView) activity_view.findViewById(R.id.activity_scenedetails_scrollview);
+        titleRelative = (RelativeLayout) activity_view.findViewById(R.id.activity_scenedetails_title);
+        backImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_back);
+        shareImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_share);
+        imgRelative = (RelativeLayout) activity_view.findViewById(R.id.activity_scenedetails_imgrelative);
+        container = (RelativeLayout) activity_view.findViewById(R.id.activity_scenedetails_container);
+        backgroundImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_background);
+        titleLinear = (LinearLayout) activity_view.findViewById(R.id.activity_scenedetails_titlelinear);
+        frameLayout = (FrameLayout) activity_view.findViewById(R.id.activity_scenedetails_framelayout);
+        changjingTitle = (TextView) activity_view.findViewById(R.id.activity_scenedetails_changjing_title);
+        suoshuqingjingTv = (TextView) activity_view.findViewById(R.id.activity_scenedetails_suoshuqingjing);
+        locationImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_locationimg);
+        locationTv = (TextView) activity_view.findViewById(R.id.activity_scenedetails_location);
+        timeTv = (TextView) activity_view.findViewById(R.id.activity_scenedetails_time);
+        leftLabelLinear = (LinearLayout) activity_view.findViewById(R.id.activity_scenedetails_left_label);
+        userHead = (RoundedImageView) activity_view.findViewById(R.id.activity_scenedetails_userhead);
+        vImg = (RoundedImageView) activity_view.findViewById(R.id.riv_auth);
+        userName = (TextView) activity_view.findViewById(R.id.activity_scenedetails_username);
+        userInfo = (TextView) activity_view.findViewById(R.id.activity_scenedetails_userinfo);
 //        bottomLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_bottomlinear);
-        loveCount = (TextView) findViewById(R.id.activity_scenedetails_lovecount);
-        goneLayout = (LinearLayout) findViewById(R.id.activity_scenedetails_gonelinear);
-        desTv = (TextView) findViewById(R.id.activity_scenedetails_changjing_des);
-        labelLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_labellinear);
-        viewCount = (TextView) findViewById(R.id.activity_scenedetails_viewcount);
-        loveCountTv = (TextView) findViewById(R.id.activity_scenedetails_love_count);
-        commentImg = (ImageView) findViewById(R.id.activity_scenedetails_commentimg);
-        commentNum = (TextView) findViewById(R.id.activity_scenedetails_commentcount);
-        moreImg = (ImageView) findViewById(R.id.activity_scenedetails_more);
-        headRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_head_relative);
-        userHeadGrid = (GridViewForScrollView) findViewById(R.id.activity_scenedetails_grid);
-        moreUser = (TextView) findViewById(R.id.activity_scenedetails_moreuser);
-        commentsLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_commentlinear);
-        commentsListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_commentlistview);
-        allComment = (TextView) findViewById(R.id.activity_scenedetails_allcomment);
-        moreComment = (ImageView) findViewById(R.id.activity_scenedetails_morecomment);
-//        love = (ImageView) findViewById(R.id.activity_scenedetails_love);
-//        loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
-        productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
-        nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
-        dialog = new WaittingDialog(SceneDetailActivity.this);
+        loveCount = (TextView) activity_view.findViewById(R.id.activity_scenedetails_lovecount);
+        goneLayout = (LinearLayout) activity_view.findViewById(R.id.activity_scenedetails_gonelinear);
+        desTv = (TextView) activity_view.findViewById(R.id.activity_scenedetails_changjing_des);
+        labelLinear = (LinearLayout) activity_view.findViewById(R.id.activity_scenedetails_labellinear);
+        viewCount = (TextView) activity_view.findViewById(R.id.activity_scenedetails_viewcount);
+        loveCountTv = (TextView) activity_view.findViewById(R.id.activity_scenedetails_love_count);
+        commentImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_commentimg);
+        commentNum = (TextView) activity_view.findViewById(R.id.activity_scenedetails_commentcount);
+        moreImg = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_more);
+        headRelative = (RelativeLayout) activity_view.findViewById(R.id.activity_scenedetails_head_relative);
+        userHeadGrid = (GridViewForScrollView) activity_view.findViewById(R.id.activity_scenedetails_grid);
+        moreUser = (TextView) activity_view.findViewById(R.id.activity_scenedetails_moreuser);
+        commentsLinear = (LinearLayout) activity_view.findViewById(R.id.activity_scenedetails_commentlinear);
+        commentsListView = (ListViewForScrollView) activity_view.findViewById(R.id.activity_scenedetails_commentlistview);
+        allComment = (TextView) activity_view.findViewById(R.id.activity_scenedetails_allcomment);
+        moreComment = (ImageView) activity_view.findViewById(R.id.activity_scenedetails_morecomment);
+        productListView = (ListViewForScrollView) activity_view.findViewById(R.id.activity_scenedetails_productlistview);
+        nearProductListView = (ListViewForScrollView) activity_view.findViewById(R.id.activity_scenedetails_nearproductlistview);
+        dialog = new WaittingDialog(getActivity());
+        if (id == null) {
+            ToastUtils.showError(getString(R.string.no_this_sight));
+            return activity_view;
+        }
         initPopupWindow();
+        return activity_view;
     }
 
 
     private int scrollY = 0;
     private int isEnd = 0;//0没开始，1已开始，2已结束（向上的动画，向下的相反）
 
-    @Override
-    protected void initList() {
-        id = getIntent().getStringExtra("id");
-        isCreate = getIntent().getBooleanExtra("create", false);
-        if (id == null) {
-            ToastUtils.showError(getString(R.string.no_this_sight));
-//            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
-//            Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+    private void initList() {
+
         if (isCreate) {
             backImg.setImageResource(R.mipmap.cancel_black);
         }
@@ -254,13 +272,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         commentNum.setOnClickListener(this);
         moreImg.setOnClickListener(this);
         headList = new ArrayList<>();
-        sceneDetailUserHeadAdapter = new SceneDetailUserHeadAdapter(SceneDetailActivity.this, headList);
+        sceneDetailUserHeadAdapter = new SceneDetailUserHeadAdapter(getActivity(), headList);
         userHeadGrid.setAdapter(sceneDetailUserHeadAdapter);
         userHeadGrid.setOnItemClickListener(this);
         moreUser.setOnClickListener(this);
         commentsListView.setDividerHeight(0);
         commentList = new ArrayList<>();
-        sceneDetailCommentAdapter = new SceneDetailCommentAdapter(SceneDetailActivity.this, commentList);
+        sceneDetailCommentAdapter = new SceneDetailCommentAdapter(getActivity(), commentList);
         commentsListView.setAdapter(sceneDetailCommentAdapter);
         commentsListView.setOnItemClickListener(this);
 //        commentsLinear.setOnClickListener(this);
@@ -271,10 +289,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //        love.setOnClickListener(this);
 //        loveTv.setOnClickListener(this);
         sceneProductList = new ArrayList<>();
-        sceneProductAdapter = new GoodListAdapter(SceneDetailActivity.this, sceneProductList, null);
+        sceneProductAdapter = new GoodListAdapter(getActivity(), sceneProductList, null);
         productListView.setAdapter(sceneProductAdapter);
         nearProductList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(SceneDetailActivity.this, nearProductList, null);
+        goodListAdapter = new GoodListAdapter(getActivity(), nearProductList, null);
         nearProductListView.setAdapter(goodListAdapter);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
@@ -290,15 +308,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DataConstants.BroadSceneDetail);
-        registerReceiver(sceneDetailReceiver, filter);
-//        Log.e("<<<高度差", lp.height - MainApplication.getContext().getScreenHeight() + "");
-//        scrollView.scrollTo(0, lp.height - MainApplication.getContext().getScreenHeight());
+
     }
 
-    @Override
-    protected void requestNet() {
+    private void requestNet() {
+        if (id == null) {
+            return;
+        }
         dialog.show();
         sceneDetails(id);
         commentsList(1 + "", 3 + "", id, null, 12 + "");
@@ -384,12 +400,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-
-
     private void initPopupWindow() {
-        WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
+        WindowManager windowManager = getActivity().getWindowManager();
         Display display = windowManager.getDefaultDisplay();
-        View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
+        View popup_view = View.inflate(getActivity(), R.layout.popup_scene_details_more, null);
         pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
         shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
         bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
@@ -408,14 +422,14 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                WindowManager.LayoutParams params = getWindow().getAttributes();
+                WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
                 params.alpha = 1f;
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                getWindow().setAttributes(params);
+                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getActivity().getWindow().setAttributes(params);
 
             }
         });
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(SceneDetailActivity.this,
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(getActivity(),
                 R.color.white));
         popupWindow.setTouchInterceptor(new View.OnTouchListener() {
 
@@ -429,10 +443,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showPopup() {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
+        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
         params.alpha = 0.4f;
-        getWindow().setAttributes(params);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getActivity().getWindow().setAttributes(params);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
     }
 
@@ -541,7 +555,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         isShowAll = false;
         for (final SceneDetailsBean.SceneProductItem product : productList) {
 //            Log.e("<<<", productList.toString());
-            final LabelView labelView = new LabelView(SceneDetailActivity.this);
+            final LabelView labelView = new LabelView(getActivity());
             TagItem tagItem = new TagItem();
             tagItem.setId(product.getId());
             tagItem.setName(product.getTitle());
@@ -561,7 +575,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     if (labelView.nameLeft.getVisibility() == View.INVISIBLE) {
                         return;
                     }
-                    Intent intent = new Intent(SceneDetailActivity.this, GoodsDetailActivity.class);
+                    Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
                     String id = labelView.getTagInfo().getId();//商品id
                     intent.putExtra("id", id);
                     startActivity(intent);
@@ -572,19 +586,19 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
-            View view = View.inflate(SceneDetailActivity.this, R.layout.view_horizontal_label_item, null);
+            View view = View.inflate(getActivity(), R.layout.view_horizontal_label_item, null);
             TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
             textView.setText(tagsTitleList.get(i));
             view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.rightMargin = DensityUtils.dp2px(SceneDetailActivity.this, 10);
+            lp.rightMargin = DensityUtils.dp2px(getActivity(), 10);
             view.setLayoutParams(lp);
             view.setTag(tagsList.get(i));
             final int finalI = i;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(SceneDetailActivity.this, SearchActivity.class);
+                    Intent intent = new Intent(getActivity(), SearchActivity.class);
                     intent.putExtra("q", tagsTitleList.get(finalI));
                     intent.putExtra("t", "9");
                     startActivity(intent);
@@ -604,13 +618,13 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id);
                     return;
                 }
-                Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
+                Intent intent = new Intent(getActivity(), UserCenterActivity.class);
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
                 startActivity(intent);
                 break;
             case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
-                Intent intent4 = new Intent(SceneDetailActivity.this, TestShare.class);
+                Intent intent4 = new Intent(getActivity(), TestShare.class);
                 intent4.putExtra("id", id);
                 startActivity(intent4);
                 break;
@@ -619,7 +633,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                    Toast.makeText(SceneDetailActivity.this,"请先登录",Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
                     LoginCompleteUtils.id = id;
-                    startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }
                 if (netScene == null) {
@@ -633,7 +647,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     deleteScene(id);
                     return;
                 }
-                Intent intent1 = new Intent(SceneDetailActivity.this, ReportActivity.class);
+                Intent intent1 = new Intent(getActivity(), ReportActivity.class);
                 intent1.putExtra("target_id", id);
                 intent1.putExtra("type", 4 + "");
                 startActivity(intent1);
@@ -643,7 +657,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.activity_scenedetails_back:
-                onBackPressed();
+                getActivity().onBackPressed();
                 break;
             case R.id.activity_scenedetails_locationimg:
             case R.id.activity_scenedetails_location:
@@ -660,7 +674,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 String address = netScene.getData().getAddress();
                 LatLng ll = new LatLng(netScene.getData().getLocation().getCoordinates().get(1), netScene.getData().getLocation().getCoordinates().get(0));
-                Intent intent2 = new Intent(SceneDetailActivity.this, MapNearByCJActivity.class);
+                Intent intent2 = new Intent(getActivity(), MapNearByCJActivity.class);
                 intent2.putExtra("address", address);
                 intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
                 startActivity(intent2);
@@ -699,7 +713,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
                     LoginCompleteUtils.id = id;
-                    startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }
                 dialog.show();
@@ -725,7 +739,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id + "");
                     return;
                 }
-                Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
+                Intent intent3 = new Intent(getActivity(), CommentListActivity.class);
                 intent3.putExtra("target_id", id);
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id());
@@ -737,7 +751,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
                     LoginCompleteUtils.id = id;
-                    startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }
                 if (netScene == null) {
@@ -745,7 +759,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id);
                     return;
                 }
-                Intent intent5 = new Intent(SceneDetailActivity.this, CreateSceneActivity.class);
+                Intent intent5 = new Intent(getActivity(), CreateSceneActivity.class);
                 MainApplication.tag = 1;
                 intent5.putExtra(SceneDetailActivity.class.getSimpleName(), netScene);
                 startActivity(intent5);
@@ -878,7 +892,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            finish();
+                            getActivity().finish();
                         }
                     });
 //                        刷新列表
@@ -901,7 +915,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         switch (parent.getId()) {
             case R.id.activity_scenedetails_grid:
 //                Log.e("<<<点击用户头像", "user-id=" + headList.get(position).getUser().getUser_id());
-                Intent intent1 = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
+                Intent intent1 = new Intent(getActivity(), UserCenterActivity.class);
                 intent1.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
                 startActivity(intent1);
                 break;
@@ -911,7 +925,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(this.id);
                     return;
                 }
-                Intent intent2 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
+                Intent intent2 = new Intent(getActivity(), CommentListActivity.class);
                 intent2.putExtra("target_id", this.id);
                 intent2.putExtra("type", 12 + "");
                 intent2.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id());
@@ -920,9 +934,10 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         for (int i = 0; i < container.getChildCount(); i++) {
             View view = container.getChildAt(i);
             if (view instanceof LabelView) {
@@ -934,7 +949,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onStop() {
+    public void onPause() {
+        super.onPause();
         for (int i = 0; i < container.getChildCount(); i++) {
             View view = container.getChildAt(i);
             if (view instanceof LabelView) {
@@ -942,14 +958,20 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 labelView.stopAnim();
             }
         }
-        super.onStop();
     }
 
     @Override
-    protected void onDestroy() {
-        instance = null;
-        unregisterReceiver(sceneDetailReceiver);
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DataConstants.BroadSceneDetail);
+        getActivity().registerReceiver(sceneDetailReceiver, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(sceneDetailReceiver);
     }
 
     //广播接收器
@@ -992,9 +1014,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         if (imgRelative.getTranslationY() <= 0) {
             imgRelative.setTranslationY(0);
         }
-        if (t > oldt + DensityUtils.dp2px(SceneDetailActivity.this, 25)) {
+        if (t > oldt + DensityUtils.dp2px(getActivity(), 25)) {
             titleRelative.setVisibility(View.GONE);
-        } else if (t < oldt - DensityUtils.dp2px(SceneDetailActivity.this, 25)) {
+        } else if (t < oldt - DensityUtils.dp2px(getActivity(), 25)) {
             titleRelative.setVisibility(View.VISIBLE);
         }
         if (t == 0) {
@@ -1071,6 +1093,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
         }
     }
+
     private void sceneDetails(String i) {
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
@@ -1127,7 +1150,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
                                 vImg.setVisibility(View.GONE);
                                 userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
-                                  }
+                            }
 //                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
                             loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
                             moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
@@ -1148,12 +1171,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
                         } else {
                             ToastUtils.showError(netSceneDetails.getMessage());
-                            new Handler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finish();
-                                }
-                            });
+//                            new Handler().post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    finish();
+//                                }
+//                            });
                         }
                     }
 

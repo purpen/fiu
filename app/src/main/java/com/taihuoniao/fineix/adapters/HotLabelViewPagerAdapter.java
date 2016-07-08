@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.beans.Label;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.scene.labelFragment.HotLabelFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class HotLabelViewPagerAdapter extends FragmentPagerAdapter implements Ad
         labelClick.click(parent.getAdapter().getItem(position));
     }
 
-    public interface LabelClick {
+    public interface LabelClick extends Serializable{
         void click(Object object);
     }
 }

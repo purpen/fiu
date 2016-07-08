@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
@@ -191,7 +190,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         super.onCreate(savedInstanceState);
 //        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_shop_car);
-        ActivityUtil.getInstance().addActivity(this);
+//        ActivityUtil.getInstance().addActivity(this);
     }
 
     @Override
@@ -516,11 +515,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     }
 
     //定义日期格式，照搬即可
-    public static String formatDate(Date date) {
+    public  String formatDate(Date date) {
         return dateFormat.format(date);
     }
 
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     @Override

@@ -96,7 +96,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             mHolder = (ViewHolder) convertView.getTag();
         }
         mHolder.mTradeStatus.setText(list.get(position).getStatus_label());
-        mHolder.mProductCounts.setText("共" + list.get(position).getItems_count() + "件商品");
+        mHolder.mProductCounts.setText("共" + list.get(position).getItems_count() + "件好货");
         mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money());
         mHolder.mPayMoney.setText("实付：¥" + list.get(position).getPay_money());
         mHolder.mFreight.setText("（含运费¥" + list.get(position).getFreight() + "）");

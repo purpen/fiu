@@ -146,8 +146,8 @@ public class LabelView extends LinearLayout {
 //        animPointLp.rightMargin = (int) (bi * DensityUtils.dp2px(getContext(), 7));
         animPoint.setLayoutParams(animPointLp);
         RelativeLayout.LayoutParams yellowPointLp = (RelativeLayout.LayoutParams) yellowPoint.getLayoutParams();
-        yellowPointLp.width = (int) (bi * DensityUtils.dp2px(getContext(), 4));
-        yellowPointLp.height = (int) (bi * DensityUtils.dp2px(getContext(), 4));
+        yellowPointLp.width = (int) (bi * DensityUtils.dp2px(getContext(), 7));
+        yellowPointLp.height = (int) (bi * DensityUtils.dp2px(getContext(), 7));
 //        yellowPointLp.rightMargin = (int) (bi * DensityUtils.dp2px(getContext(), 7));
         yellowPoint.setLayoutParams(yellowPointLp);
         relativeRight.setVisibility(View.VISIBLE);
@@ -220,7 +220,7 @@ public class LabelView extends LinearLayout {
     private int imageWidth = 0;
     private int imageHeight = 0;
 
-    private static final int ANIMATIONEACHOFFSET = 600;
+    private static final int ANIMATIONEACHOFFSET = 1000;
 
 //    private boolean emptyItem = false;
 //
@@ -278,10 +278,10 @@ public class LabelView extends LinearLayout {
     public void wave() {
         final AnimationSet as = new AnimationSet(true);
         as.setRepeatCount(Animation.INFINITE);
-        ScaleAnimation sa = new ScaleAnimation(1f, 3f, 1f, 3f, ScaleAnimation.RELATIVE_TO_SELF,
+        ScaleAnimation sa = new ScaleAnimation(1f, 4f, 1f, 4f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(ANIMATIONEACHOFFSET * 3);
-        AlphaAnimation aniAlp = new AlphaAnimation(1, 0.5f);
+        AlphaAnimation aniAlp = new AlphaAnimation(1, 0f);
         as.setDuration(ANIMATIONEACHOFFSET * 3);
         as.addAnimation(sa);
         sa.setRepeatCount(Animation.INFINITE);
@@ -292,7 +292,7 @@ public class LabelView extends LinearLayout {
         ScaleAnimation sa1 = new ScaleAnimation(1f, 6f, 1f, 6f, ScaleAnimation.RELATIVE_TO_SELF,
                 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa1.setDuration(ANIMATIONEACHOFFSET * 3);
-        AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0.5f);
+        AlphaAnimation aniAlp1 = new AlphaAnimation(1, 0f);
         as1.setDuration(ANIMATIONEACHOFFSET * 3);
         as1.addAnimation(sa1);
         sa1.setRepeatCount(Animation.INFINITE);
@@ -301,6 +301,10 @@ public class LabelView extends LinearLayout {
         animPoint.setVisibility(VISIBLE);
         pointRight.startAnimation(as);
         animPoint.startAnimation(as1);
+//        pointRight.setScaleX(3f);
+//        pointRight.setScaleY(3f);
+//        animPoint.setScaleX(6f);
+//        animPoint.setScaleY(6f);
     }
 
     public void stopAnim() {

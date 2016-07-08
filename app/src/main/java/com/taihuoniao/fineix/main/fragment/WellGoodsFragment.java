@@ -1,7 +1,10 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -13,7 +16,6 @@ import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -33,6 +35,7 @@ import com.taihuoniao.fineix.adapters.FiuBrandsAdapter;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.SeconCategoryAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
@@ -43,16 +46,17 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.product.AllBrandsActivity;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -71,6 +75,8 @@ import java.util.List;
 public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
     //界面下的控件
     private RelativeLayout titlelayout;
+//    private LinearLayout goneLinear;
+    private RecyclerView secondCategoryRecycler;
     private ImageView searchImg;
     private RelativeLayout cartRelative;
     private TextView cartNumber;
@@ -79,6 +85,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private ListView listView;
     private ProgressBar progressBar;
     //headerview下的控件
+    private TextView allBrandTv;
     private BubbleCloudView absoluteLayout;
     private RecyclerView labelRecycler;
     private RecyclerView recyclerView;
@@ -91,6 +98,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     //分类列表
     private List<CategoryListBean.CategoryListItem> list;
     private PinRecyclerAdapter pinRecyclerAdapter;
+    private SeconCategoryAdapter seconCategoryAdapter;
     private DisplayImageOptions options;
     private ScrollableView scrollableView;
     private ViewPagerAdapter viewPagerAdapter;
@@ -102,10 +110,14 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private GoodListAdapter goodListAdapter;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
+    private float lastY = -1;//用来判断上滑还是下滑
+    private boolean isDown = false;//判断是否listview正在向下滑动
 
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
+//        goneLinear = (LinearLayout) view.findViewById(R.id.fragment_wellgoods_gone_linear);
+        secondCategoryRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_second_recycler);
         titlelayout = (RelativeLayout) view.findViewById(R.id.title_relative1);
         searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
         cartRelative = (RelativeLayout) view.findViewById(R.id.fragment_wellgoods_cart_relative);
@@ -116,10 +128,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_wellgoods_progress);
         //headerview
         View header = View.inflate(getActivity(), R.layout.header_fragment_wellgoods, null);
+        allBrandTv = (TextView) header.findViewById(R.id.fragment_wellgoods_allbrand);
         scrollableView = (ScrollableView) header.findViewById(R.id.scrollableView);
         absoluteLayout = (BubbleCloudView) header.findViewById(R.id.fragment_wellgoods_absolute);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), DensityUtils.dp2px(getActivity(), 157));
-        absoluteLayout.setLayoutParams(lp);
         absoluteLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -131,6 +142,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_label_recycler);
         recyclerView = (RecyclerView) header.findViewById(R.id.fragment_wellgoods_recycler);
         listView.addHeaderView(header);
+        View header2 = View.inflate(getActivity(), R.layout.header2_fragment_wellgoods, null);
+        listView.addHeaderView(header2);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -190,53 +203,19 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 Util.makeToast(s);
             }
         });
-//        DataPaser.hotLabelList(labelPage + "", handler);
         categoryList(1 + "", 10 + "", 1 + "");
         //热门标签
         cjHotLabel(false);
-//        ClientDiscoverAPI.labelList(null, 1, null, 5, 1, new RequestCallBack<String>() {
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.HOT_LABEL_LIST;
-//                msg.obj = new HotLabel();
-//                try {
-//                    Gson gson = new Gson();
-//                    Type type = new TypeToken<HotLabel>() {
-//                    }.getType();
-//                    msg.obj = gson.fromJson(responseInfo.result, type);
-//                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(getActivity(), "数据异常", Toast.LENGTH_SHORT).show();
-//                }
-//                handler.sendMessage(msg);
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
-//            }
-//        });
 //品牌列表
-        brandList(1, 60);
+        brandList(1, 100);
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     @Override
     protected void initList() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            Log.e("<<<状态栏", "statusbarheight=" + getStatusBarHeight());
-//            titlelayout.setPadding(0, getStatusBarHeight(), 0, 0);
-//        }
         searchImg.setOnClickListener(this);
 //        cartImg.setOnClickListener(this);
+        allBrandTv.setOnClickListener(this);
         cartRelative.setOnClickListener(this);
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
@@ -258,14 +237,36 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         labelRecycler.setAdapter(pinLabelRecyclerAdapter);
         list = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
+        secondCategoryRecycler.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 5);
         recyclerView.setLayoutManager(layoutManager);
+        secondCategoryRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
+        seconCategoryAdapter = new SeconCategoryAdapter(getActivity(), list,this);
+        secondCategoryRecycler.setAdapter(seconCategoryAdapter);
         productList = new ArrayList<>();
         goodListAdapter = new GoodListAdapter(getActivity(), productList, null);
         listView.setAdapter(goodListAdapter);
+        listView.setDividerHeight(0);
         listView.setOnScrollListener(this);
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (event.getY() > lastY) {
+                        //listview向上滑动
+                        isDown = false;
+                        lastY = event.getY();
+                    } else if (event.getY() < lastY) {
+                        //listview向下滑动
+                        isDown = true;
+                        lastY = event.getY();
+                    }
+                }
+                return false;
+            }
+        });
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -277,79 +278,11 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
-                intent.putExtra("id",brandItemList.get(position).get_id());
+                intent.putExtra("id", brandItemList.get(position).get_id());
                 startActivity(intent);
             }
         });
     }
-
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(final Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.PARSER_SHOP_CART_NUMBER:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof ShopCartNumber) {
-//                            ShopCartNumber numberCart;
-//                            numberCart = (ShopCartNumber) msg.obj;
-//                            if (!"0".equals(numberCart.getCount())) {
-//                                cartNumber.setVisibility(View.VISIBLE);
-//                                cartNumber.setText(numberCart.getCount());
-//                            } else {
-//                                cartNumber.setVisibility(View.GONE);
-//                            }
-//                        }
-//                    }
-//                    break;
-//                case DataConstants.ADD_PRODUCT_LIST:
-//                    pullToRefreshView.onRefreshComplete();
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    ProductBean netProduct = (ProductBean) msg.obj;
-//                    if (netProduct.isSuccess()) {
-//                        if (productPage == 1) {
-//                            productList.clear();
-//                            lastSavedFirstVisibleItem = -1;
-//                            lastTotalItem = -1;
-//                        }
-//
-//                        productList.addAll(netProduct.getData().getRows());
-//                        goodListAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.BRAND_LIST:
-//                    BrandListBean netBrandListBean = (BrandListBean) msg.obj;
-//                    if (netBrandListBean.isSuccess()) {
-//                        brandItemList = netBrandListBean.getData().getRows();
-//                        absoluteLayout.init(getActivity(),null,netBrandListBean);
-//                    }
-//                    break;
-//                case DataConstants.CJ_HOTLABEL:
-//                    CJHotLabelBean netHot = (CJHotLabelBean) msg.obj;
-//                    if (netHot.isSuccess()) {
-//                        hotLabelList.clear();
-//                        hotLabelList.addAll(netHot.getData().getTags());
-//                        pinLabelRecyclerAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netHot.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.CATEGORY_LIST:
-//                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
-//                    if (netCategoryBean.isSuccess()) {
-//                        list.clear();
-//                        list.addAll(netCategoryBean.getList());
-//                        pinRecyclerAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    pullToRefreshView.onRefreshComplete();
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void refreshUI(ArrayList<Banner> list) {
@@ -427,6 +360,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fragment_wellgoods_allbrand:
+                startActivity(new Intent(getActivity(), AllBrandsActivity.class));
+                break;
             case R.id.fragment_wellgoods_search:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("t", "10");
@@ -445,15 +381,93 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         }
     }
 
+    private int animFlag = 0;
+    private ObjectAnimator downAnimator, upAnimator;
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+            if (isDown) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.moveToDown();
+                if (downAnimator == null) {
+                    initDownAnimator();
+                }
+                if (animFlag == 0) {
+                    downAnimator.start();
+                }
+            } else {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.moveToReset();
+                if (titlelayout.getTranslationY() >= 0) {
+                    return;
+                }
+                if (upAnimator == null) {
+                    initUpAnimator();
+                }
+                if (animFlag == 2) {
+                    upAnimator.start();
+                }
+            }
+        }
+    }
 
+    //初始化titlelayout的下滑动画
+    private void initUpAnimator() {
+        upAnimator = ObjectAnimator.ofFloat(titlelayout, "translationY", 0).setDuration(300);
+        upAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 0;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    //初始化titlelayout上滑的动画
+    private void initDownAnimator() {
+        downAnimator = ObjectAnimator.ofFloat(titlelayout, "translationY", -titlelayout.getMeasuredHeight()).setDuration(300);
+        downAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 2;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
-        if (visibleItemCount > 1 && (firstVisibleItem + visibleItemCount >= totalItemCount)
+        if (visibleItemCount > listView.getHeaderViewsCount() && (firstVisibleItem + visibleItemCount >= totalItemCount)
                 && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
                 ) {
             lastSavedFirstVisibleItem = firstVisibleItem;
@@ -462,6 +476,85 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             progressBar.setVisibility(View.VISIBLE);
             getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
+        //悬浮效果
+        Log.e("<<<", "firstVisible=" + firstVisibleItem);
+        if (firstVisibleItem >= 1) {
+//            goneLinear.setVisibility(View.VISIBLE);
+            if (secondCategoryRecycler.getTranslationY() >= 0) {
+                return;
+            }
+            if (secondDownAnimator == null) {
+                initSecondDownAnimator();
+            }
+            if (secondFlag == 0) {
+                secondDownAnimator.start();
+            }
+        } else {
+//            goneLinear.setVisibility(View.GONE);
+            if (secondCategoryRecycler.getTranslationY() <= -secondCategoryRecycler.getMeasuredHeight()) {
+                return;
+            }
+            if (secondUpAnimator == null) {
+                initSecondUpAnimator();
+            }
+            if (secondFlag == 2) {
+                secondUpAnimator.start();
+            }
+        }
+    }
+
+    private int secondFlag = 0;//悬浮分类动画标识
+    private ObjectAnimator secondDownAnimator, secondUpAnimator;//悬浮分类列表动画
+
+    //初始化动画
+    private void initSecondUpAnimator() {
+        secondUpAnimator = ObjectAnimator.ofFloat(secondCategoryRecycler, "translationY", -secondCategoryRecycler.getMeasuredHeight()).setDuration(300);
+        secondUpAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                secondFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                secondFlag = 0;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void initSecondDownAnimator() {
+        secondDownAnimator = ObjectAnimator.ofFloat(secondCategoryRecycler, "translationY", 0).setDuration(300);
+        secondDownAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                secondFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                secondFlag = 2;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     //产品
@@ -526,6 +619,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                     list.clear();
                     list.addAll(netCategoryBean.getData().getRows());
                     pinRecyclerAdapter.notifyDataSetChanged();
+                    seconCategoryAdapter.notifyDataSetChanged();
                 } else {
                     dialog.dismiss();
                     ToastUtils.showError(netCategoryBean.getMessage());

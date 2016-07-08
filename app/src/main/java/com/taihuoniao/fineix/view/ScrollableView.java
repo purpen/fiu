@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -107,11 +106,11 @@ public class ScrollableView extends RelativeLayout {
         public void onPageSelected(int position) {
             currentItem=position = position % size;//mPagerList.size()
             setCurFocus(position);
-            LogUtil.e("onPageSelected", position % size + "");
+//            LogUtil.e("onPageSelected", position % size + "");
         }
 
         private void setCurFocus(int position) {
-            LogUtil.e("setCurFocus", position + "");
+//            LogUtil.e("setCurFocus", position + "");
             for (int i = 0; i < size; i++) {
                 if (i == position) {
                     imageViews.get(i).setImageResource(R.drawable.shape_oval_sel);

@@ -22,14 +22,31 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-            android:id="@+id/activity_share_user_headimg"
+        <RelativeLayout
             android:layout_width="22dp"
             android:layout_height="22dp"
-            app:riv_border_color="@color/white"
-            app:riv_border_width="1dp"
-            app:riv_corner_radius="100dp"
-            />
+            >
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/activity_share_user_headimg"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                app:riv_border_color="@color/white"
+                app:riv_border_width="1dp"
+                app:riv_corner_radius="100dp"
+                />
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/riv_auth"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/v"
+                android:visibility="gone"
+                app:riv_corner_radius="@dimen/dp100" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/activity_share_user_right_relative"
@@ -194,7 +211,7 @@
             android:id="@+id/activity_share_fiu_img"
             android:layout_width="wrap_content"
             android:layout_height="15dp"
-            android:src="@mipmap/logo_gray"/>
+            android:src="@mipmap/logo"/>
 
         <TextView
             android:id="@+id/activity_share_fiu_tv"

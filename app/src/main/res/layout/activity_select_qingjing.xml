@@ -23,7 +23,11 @@
         android:layout_below="@id/top_line1"
         android:background="#f7f7f7"
         android:numColumns="2"
-        android:padding="5dp"/>
+        android:paddingLeft="2.5dp"
+        android:paddingRight="2.5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        />
 
     <ProgressBar
         android:id="@+id/activity_select_qingjing_progress"

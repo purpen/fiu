@@ -1,11 +1,12 @@
 package com.taihuoniao.fineix.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/18.
  */
-public class SceneListBean {
+public class SceneListBean implements Serializable{
     private String _id;
     private String title;
     private String user_id;
@@ -124,7 +125,7 @@ public class SceneListBean {
         this.address = address;
     }
 
-    public static class Products {
+    public static class Products implements Serializable{
         private String id;
         private String title;
         private String price;
@@ -172,7 +173,7 @@ public class SceneListBean {
         }
     }
 
-    public static class User {
+    public static class User implements Serializable {
         private String user_id;
         private String account;
         private String nickname;

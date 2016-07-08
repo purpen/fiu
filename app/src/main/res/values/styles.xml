@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="@style/AppBaseTheme" />
+    <style name="AppTheme" parent="@style/AppBaseTheme"/>
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -99,8 +99,8 @@
     </style>
     <!--自定义全局标题栏-->
     <declare-styleable name="GlobalTitleLayout">
-        <attr name="global_title_layout_title" format="reference|string" />
-        <attr name="global_title_layout_show_back" format="boolean" />
+        <attr name="global_title_layout_title" format="reference|string"/>
+        <attr name="global_title_layout_show_back" format="boolean"/>
     </declare-styleable>
     <!--自定义购物车中checkbox的图案样式-->
     <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
@@ -207,4 +207,6 @@
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">1</item>
     </style>
+
+    <item name="scene_list_tag" type="id"/>
 </resources>

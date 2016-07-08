@@ -88,7 +88,8 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:paddingLeft="19dp"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <ImageView
@@ -111,7 +112,7 @@
                 android:id="@+id/activity_goods_detail_buy_now"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_weight="3"
+                    android:layout_weight="1"
                 android:background="#bd8913"
                 android:text="@string/to_buy"
                 android:textColor="@color/white"
@@ -141,7 +142,6 @@
                 android:id="@+id/activity_goods_detail_scrollableView"
                 android:layout_width="match_parent"
                 android:layout_height="211dp"
-                android:background="@mipmap/default_background_750_1334"
                 />
 
             <TextView

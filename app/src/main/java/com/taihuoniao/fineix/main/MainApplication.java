@@ -10,18 +10,18 @@ import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
@@ -78,11 +78,6 @@ public class MainApplication extends Application {
         return instance;
     }
 
-    @Override
-    public void onLowMemory() {
-        System.gc();
-        super.onLowMemory();
-    }
 
     @Override
     public void onCreate() {
@@ -98,14 +93,14 @@ public class MainApplication extends Application {
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
         filterPicPath = getCacheDirPath() + "/filter";
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
     }
 
     public int getScreenHeight() {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
-        Log.e("<<<", "屏幕高度=" + this.displayMetrics.heightPixels);
+//        Log.e("<<<", "屏幕高度=" + this.displayMetrics.heightPixels);
         return this.displayMetrics.heightPixels;
     }
 
@@ -113,7 +108,7 @@ public class MainApplication extends Application {
         if (this.displayMetrics == null) {
             setDisplayMetrics(getResources().getDisplayMetrics());
         }
-        Log.e("<<<", "屏幕宽度=" + this.displayMetrics.widthPixels);
+//        Log.e("<<<", "屏幕宽度=" + this.displayMetrics.widthPixels);
         return this.displayMetrics.widthPixels;
     }
 
@@ -141,7 +136,9 @@ public class MainApplication extends Application {
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())
                 .diskCache(new UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
                 .diskCacheSize(100 * 1024 * 1024).tasksProcessingOrder(QueueProcessingType.LIFO)
-                .memoryCache(new WeakMemoryCache()).memoryCacheSize(4 * 1024 * 1024)
+                .memoryCache(new LruMemoryCache((int) (Runtime.getRuntime().maxMemory() / 10)))
+//                .memoryCacheSize(4 * 1024 * 1024)
+                .memoryCacheSize((int) (Runtime.getRuntime().maxMemory() / 10))
                 .threadPoolSize(5)
                 .build();
 //        ImageLoaderConfiguration config2 = new ImageLoaderConfiguration.Builder(
