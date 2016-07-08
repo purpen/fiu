@@ -17,21 +17,22 @@ import com.taihuoniao.fineix.view.ListViewForScrollView;
 public class AllLabelFragment extends BaseFragment {
     private int position;
     private AllLabelBean allLabelBean;
-    private static AllLabelListViewAdapter.MoreClick moreClick;//点击更多
-    private static HotLabelViewPagerAdapter.LabelClick labelClick;
+    private AllLabelListViewAdapter.MoreClick moreClick;//点击更多
+    private  HotLabelViewPagerAdapter.LabelClick labelClick;
     private static AllLabelViewPagerAdapter1 allLabelViewPagerAdapter;
 
     public static AllLabelFragment newInstance(int position, AllLabelBean allLabelBean,
                                                AllLabelListViewAdapter.MoreClick moreClick1,
                                                HotLabelViewPagerAdapter.LabelClick labelClick1,
                                                AllLabelViewPagerAdapter1 allLabelViewPagerAdapter1) {
-        moreClick = moreClick1;
-        labelClick = labelClick1;
+//        labelClick = labelClick1;
         allLabelViewPagerAdapter = allLabelViewPagerAdapter1;
         Bundle args = new Bundle();
         AllLabelFragment fragment = new AllLabelFragment();
         args.putInt("position", position);
+        args.putSerializable("labelClick",labelClick1);
         args.putSerializable("alllabel", allLabelBean);
+        args.putSerializable("moreClick", moreClick1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,8 +40,10 @@ public class AllLabelFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        labelClick = (HotLabelViewPagerAdapter.LabelClick) getArguments().getSerializable("labelClick");
         position = getArguments() != null ? getArguments().getInt("position") : 0;
         allLabelBean = getArguments() != null ? (AllLabelBean) getArguments().getSerializable("alllabel") : null;
+        moreClick = getArguments() != null ? (AllLabelListViewAdapter.MoreClick) getArguments().getSerializable("moreClick") : null;
     }
 
     @Override

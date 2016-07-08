@@ -18,8 +18,8 @@ import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.main.AppleWatchActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.ViewPagerActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
@@ -125,15 +125,14 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 pullToRefreshLayout.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                SceneList netSceneList = sceneL;
-                if (netSceneList.isSuccess()) {
+                if (sceneL.isSuccess()) {
                     pullToRefreshLayout.setLoadingTime();
                     if (currentPage == 1) {
                         sceneList.clear();
                         pullToRefreshLayout.lastTotalItem = -1;
                         pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
                     }
-                    sceneList.addAll(netSceneList.getSceneListBeanList());
+                    sceneList.addAll(sceneL.getSceneListBeanList());
                     if (currentPage == 1 && sceneList.size() > 0) {
                         sceneList.get(0).setStartAnim(true);
                     }
@@ -151,15 +150,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
 
@@ -193,20 +183,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     }
 
 
-//    private void getCurrentLocation() {
-//        dialog.show();
-//        MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
-//            @Override
-//            public void onReceiveLocation(BDLocation bdLocation) {
-//                if (location == null && bdLocation != null) {
-//                    location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-//                    MapUtil.destroyLocationClient();
-//
-//                }
-//            }
-//        });
-//    }
-
     @Override
     protected View initView() {
         fragment_view = View.inflate(getActivity(), R.layout.fragment_index, null);
@@ -222,41 +198,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         return fragment_view;
     }
 
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.SCENE_LIST:
-//                    pullToRefreshLayout.onRefreshComplete();
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    SceneList netSceneList = (SceneList) msg.obj;
-//                    if (netSceneList.isSuccess()) {
-//                        pullToRefreshLayout.setLoadingTime();
-//                        if (currentPage == 1) {
-//                            sceneList.clear();
-//                            pullToRefreshLayout.lastTotalItem = -1;
-//                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
-//                        }
-//                        sceneList.addAll(netSceneList.getSceneListBeanList());
-//                        if (currentPage == 1 && sceneList.size() > 0) {
-//                            sceneList.get(0).setStartAnim(true);
-//                        }
-//                        sceneListViewAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    pullToRefreshLayout.onRefreshComplete();
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-////                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -270,7 +211,8 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_index_subs:
-                startActivity(new Intent(getActivity(), AppleWatchActivity.class));
+//                startActivity(new Intent(getActivity(), AAAAAA.class));
+                startActivity(new Intent(getActivity(), ViewPagerActivity.class));
 //                if (!LoginInfo.isUserLogin()) {
 ////                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
 //                    MainApplication.which_activity = DataConstants.ElseActivity;
@@ -322,11 +264,13 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 }
 //                int i = getScrollY() / (listView.getChildAt(0).getHeight());
                 double move = Math.sqrt((nowP.x - startP.x) * (nowP.x - startP.x) + (nowP.y - startP.y) * (nowP.y - startP.y));
+                if (move < DensityUtils.dp2px(getActivity(), 12)) {
+                    return false;
+                }
                 //firstvisibleitem的偏移量
                 int s = getScrollY() % (listView.getChildAt(0).getHeight());
                 if (nowP.y < startP.y && s > 0.2 * listView.getChildAt(0).getHeight()) {
 //                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
-//                    listView.smoothScrollToPositionFromTop();
                     listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
                             -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
                     cancelChenjin();
@@ -343,11 +287,12 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
 //                    if (is16To9()) {
 //                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
 //                    } else {
+                    anim(listView.getFirstVisiblePosition());
                     listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
                             -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
 //                    }
                     chenjin();
-                    anim(listView.getFirstVisiblePosition());
+
                 } else if (nowP.y > startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
 //                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
                     listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
@@ -390,9 +335,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         getActivity().sendBroadcast(intent);
     }
 
-    private boolean is16To9() {
-        return MainApplication.getContext().getScreenHeight() * 9 == MainApplication.getContext().getScreenWidth() * 16;
-    }
 
     private PointF startP, nowP;
 }

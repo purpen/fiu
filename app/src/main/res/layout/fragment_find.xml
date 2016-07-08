@@ -7,12 +7,21 @@
                 tools:context="com.taihuoniao.fineix.main.fragment.FindFragment"
     >
 
+
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/fragment_find_scenelistview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <RelativeLayout
         android:id="@+id/fragment_find_titlelayout"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/fragment_find_logo"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
@@ -32,16 +41,10 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
-            android:visibility="visible"
             android:paddingRight="13dp"
-            android:src="@mipmap/location_39"/>
+            android:src="@mipmap/location_39"
+            android:visibility="visible"/>
     </RelativeLayout>
-
-    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
-        android:id="@+id/fragment_find_scenelistview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/fragment_find_titlelayout"/>
 
     <ProgressBar
         android:id="@+id/fragment_find_progress"

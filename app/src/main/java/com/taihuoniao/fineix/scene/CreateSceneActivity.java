@@ -78,7 +78,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private QingjingDetailBean qingjingDetails;
     //控件
     private GlobalTitleLayout titleLayout;
-    //    private ImageView sceneImg;
+    private TextView selectEnvirTv;
     private ImageView sceneImg;
     private Bitmap sceneBitmap;//图片
     private EditText contentEdt;
@@ -120,16 +120,14 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         setContentView(R.layout.activity_create_scene);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_create_scene_titlelayout);
+        selectEnvirTv = (TextView) findViewById(R.id.activity_create_scene_select_enviroment);
         sceneImg = (ImageView) findViewById(R.id.activity_create_scene_img);
         contentEdt = (EditText) findViewById(R.id.activity_create_scene_contentedt);
         titleEdt = (EditText) findViewById(R.id.activity_create_scene_titleedt);
         locationTv = (TextView) findViewById(R.id.activity_create_scene_location);
         addAddressLinear = (RelativeLayout) findViewById(R.id.activity_create_scene_add_addresslinear);
-//        addressRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_addressrelative);
         locationImg = (ImageView) findViewById(R.id.location);
         recyclerView = (RecyclerView) findViewById(R.id.activity_create_scene_recycler);
-//        addressTv = (TextView) findViewById(R.id.activity_create_scene_address);
-//        areaTv = (TextView) findViewById(R.id.activity_create_scene_area);
         deleteAddressImg = (ImageView) findViewById(R.id.activity_create_scene_deleteaddress);
         labelRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_labelrelative);
         labelHorizontal = (HorizontalScrollView) findViewById(R.id.activity_create_scene_label_horizontal);
@@ -138,6 +136,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         qingjingLinear = (LinearLayout) findViewById(R.id.activity_create_scene_qingjinglinear);
         if (MainApplication.tag == 2) {
             qingjingRelative.setVisibility(View.GONE);
+            selectEnvirTv.setVisibility(View.GONE);
+        } else {
+            selectEnvirTv.setVisibility(View.VISIBLE);
         }
         dialog = new SVProgressHUD(CreateSceneActivity.this);
         options = new DisplayImageOptions.Builder()
@@ -161,6 +162,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         titleLayout.setBackListener(this);
         titleLayout.setTitle(R.string.create_scene, getResources().getColor(R.color.black333333));
         titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.yellow_bd8913), this);
+        selectEnvirTv.setOnClickListener(this);
         titleEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -180,18 +182,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
-
-
-//        ImageUtils.asyncLoadImage(CreateSceneActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
-//            @Override
-//            public void callback(Bitmap result) {
-//                sceneBitmap = result;
-//                sceneImg.setImageBitmap(result);
-////                sceneImg.setCornerRadius(DensityUtils.dp2px(CreateSceneActivity.this, 5));
-//            }
-//        });
         addAddressLinear.setOnClickListener(this);
-//        addressRelative.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         poiInfoList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
@@ -254,7 +245,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                     ToastUtils.showError("图片加载失败，请返回重试");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
                 }
 
                 @Override
@@ -266,7 +256,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onLoadingCancelled(String imageUri, View view) {
                     ToastUtils.showError("图片加载失败，请返回重试");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
                 }
             });
         }
@@ -300,7 +289,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                 ToastUtils.showError("图片加载失败");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
 
             @Override
@@ -312,10 +300,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
                 ToastUtils.showError("图片加载失败");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
-//                scene_id = netScene.getData().getScene_id();
         selectList = new ArrayList<>();
         for (int i = 0; i < qingjingDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(qingjingDetails.getData().getTags().get(i) + "", qingjingDetails.getData().getTag_titles().get(i));
@@ -325,27 +311,13 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             UsedLabelBean labelBean = selectList.get(i);
             addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
         }
-//                MainApplication.tagInfoList = new ArrayList<TagItem>();
-//                for (int i = 0; i < netScene.getData().getProduct().size(); i++) {
-//                    TagItem tagItem = new TagItem();
-//                    tagItem.setId(netScene.getData().getProduct().get(i).getId());
-//                    tagItem.setName(netScene.getData().getProduct().get(i).getTitle());
-//                    tagItem.setPrice(netScene.getData().getProduct().get(i).getPrice());
-//                    tagItem.setX(netScene.getData().getProduct().get(i).getX());
-//                    tagItem.setY(netScene.getData().getProduct().get(i).getY());
-//                    MainApplication.tagInfoList.add(tagItem);
-//                }
         locationTv.setText(qingjingDetails.getData().getAddress());
         lng = qingjingDetails.getData().getLocation().getCoordinates().get(0);
         lat = qingjingDetails.getData().getLocation().getCoordinates().get(1);
-//                addQingjingToLinear(netScene.getData().getScene_title());
-//                Log.e("<<<编辑场景", lat + "," + lng);
-
     }
 
     //编辑情景时调用
     private void getSceneDetails() {
-//        dialog.show();
         sceneDetails = (SceneDetailsBean) getIntent().getSerializableExtra(SceneDetailActivity.class.getSimpleName());
         if (sceneDetails == null) {
             ToastUtils.showError("数据错误");
@@ -363,8 +335,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                ToastUtils.showError("图片加载失败");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
             }
 
             @Override
@@ -375,8 +346,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                ToastUtils.showError("图片加载失败");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
+                ToastUtils.showError("图片加载失败，请返回重试");
             }
         });
         scene_id = sceneDetails.getData().getScene_id();
@@ -403,8 +373,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         lng = sceneDetails.getData().getLocation().getCoordinates().get(0);
         lat = sceneDetails.getData().getLocation().getCoordinates().get(1);
         addQingjingToLinear(sceneDetails.getData().getScene_title());
-//                Log.e("<<<编辑场景", lat + "," + lng);
-
     }
 
     //获得当前位置信息
@@ -415,7 +383,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-                    Log.e("<<<获取位置", location[1] + "," + location[0]);
+//                    Log.e("<<<获取位置", location[1] + "," + location[0]);
 //                    getAddressByCoordinate();
                     dialog.dismiss();
                     MapUtil.destroyLocationClient();
@@ -461,6 +429,12 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.activity_create_scene_select_enviroment:
+//                Intent intent22 = new Intent(this, ShareCJSelectActivity.class);
+//                intent.putExtra("scene", null);
+//                startActivityForResult(intent22, 1);
+                ToastUtils.showError("跳转");
+                break;
             case R.id.activity_create_scene_add_addresslinear:
 //            case R.id.activity_create_scene_addressrelative:
             case R.id.location:
@@ -504,13 +478,17 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
+                if (sceneBitmap == null) {
+                    ToastUtils.showError("图片加载失败，请返回重试");
+                    return;
+                }
                 if (TextUtils.isEmpty(titleEdt.getText())) {
-                    dialog.showErrorWithStatus("请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景标题");
+                    dialog.showErrorWithStatus(MainApplication.tag == 2 ? "请填写地盘标题" : "请填写情景标题");
 //                    Toast.makeText(CreateSceneActivity.this, , Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(contentEdt.getText())) {
-                    dialog.showErrorWithStatus("请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述");
+                    dialog.showErrorWithStatus(MainApplication.tag == 2 ? "请填写地盘描述" : "请填写情景描述");
 //                    Toast.makeText(CreateSceneActivity.this, "请填写" + (MainApplication.tag == 2 ? "情" : "场") + "景描述", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -531,11 +509,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 if (tags.length() > 0) {
                     tags.deleteCharAt(0);
                 }
-                Log.e("<<<", "创建" + MainApplication.tag);
+//                Log.e("<<<", "创建" + MainApplication.tag);
                 if (MainApplication.tag == 1) {
                     if (scene_id == null) {
                         dialog.dismiss();
-                        dialog.showErrorWithStatus("请选择所属情景");
+                        dialog.showErrorWithStatus("请选择所属地盘");
 //                        Toast.makeText(CreateSceneActivity.this, "请选择所属情景", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -695,8 +673,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
                     PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
-                    String city = data.getStringExtra("city");
-                    String district = data.getStringExtra("district");
+//                    String city = data.getStringExtra("city");
+//                    String district = data.getStringExtra("district");
                     if (poiInfo != null) {
                         locationTv.setText(poiInfo.name);
                         deleteAddressImg.setVisibility(View.VISIBLE);

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -108,17 +107,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-            if(bottomLinear!=null){
+            if (bottomLinear != null) {
                 bottomLinear.setTranslationY(0);
                 animFlag = 0;
-            }else{
-                bottomLinear.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        bottomLinear.setTranslationY(0);
-                        animFlag = 0;
-                    }
-                });
             }
         }
         which2Switch();
@@ -143,17 +134,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-            if(bottomLinear!=null){
+            if (bottomLinear != null) {
                 bottomLinear.setTranslationY(0);
                 animFlag = 0;
-            }else{
-                bottomLinear.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        bottomLinear.setTranslationY(0);
-                        animFlag = 0;
-                    }
-                });
             }
         }
 
@@ -317,6 +300,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         try {
             switchImgAndTxtStyle(clazz);
             switchFragment(clazz);
+            if (bottomLinear != null) {
+                bottomLinear.setTranslationY(0);
+                animFlag = 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -401,30 +388,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
+//    private int getStatusBarHeight() {
+//        int result = 0;
+//        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+//        if (resourceId > 0) {
+//            result = getResources().getDimensionPixelSize(resourceId);
+//        }
+//        return result;
+//    }
+//
+//    private int getNavigationBarHeight() {
+//        int height = 0;
+//        Resources resources = getResources();
+//        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+//        if (resourceId > 0) {
+//            height = resources.getDimensionPixelSize(resourceId);
+//        }
+////        Log.e("<<<", "工具栏 height:" + height);
+//        return height;
+//    }
 
-    private int getNavigationBarHeight() {
-        int height = 0;
-        Resources resources = getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            height = resources.getDimensionPixelSize(resourceId);
-        }
-//        Log.e("<<<", "工具栏 height:" + height);
-        return height;
-    }
-
-    private boolean isMove() {
-        return false;
-//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -495,9 +478,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 8) {
                                 firstImg.setVisibility(View.GONE);
-                                if (isMove()) {
-                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
-                                }
+//                                if (isMove()) {
+//                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+//                                }
                                 firstRelative.setBackgroundResource(R.color.black_first);
                                 firstLeftImg.setImageResource(R.mipmap.wellgoods2);
                                 firstLeftImg.setVisibility(View.VISIBLE);
@@ -560,35 +543,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
 //            Log.e("<<<", "接收到广播");
             if (1 == intent.getIntExtra("index", -1)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    container.setSystemUiVisibility(View.INVISIBLE);
-                }
-//                WindowUtils.cancelChenjin(MainActivity.this);
-                ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(500);
-                downAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 2;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                if (animFlag == 0) {
-                    downAnimator.start();
-                }
+                moveToDown();
             } else if (2 == intent.getIntExtra("index", -1)) {
 //                WindowUtils.chenjin(MainActivity.this);
                 moveToReset();
@@ -596,14 +551,45 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
-    private void moveToReset() {
+    public void moveToDown() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            container.setSystemUiVisibility(View.INVISIBLE);
+        }
+        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(300);
+        downAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                animFlag = 1;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animFlag = 2;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        if (animFlag == 0) {
+            downAnimator.start();
+        }
+    }
+
+    public void moveToReset() {
         if (bottomLinear.getTranslationY() <= 0) {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(500);
+        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(300);
         upAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {

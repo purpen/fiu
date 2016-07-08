@@ -24,7 +24,6 @@ import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -65,7 +64,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        cancelNet();
+//        cancelNet();
         super.onDestroy();
     }
 
@@ -250,9 +249,9 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 //        }
 //    };
 
-    private void cancelNet() {
-        NetworkManager.getInstance().cancel("getAddressList");
-    }
+//    private void cancelNet() {
+//        NetworkManager.getInstance().cancel("getAddressList");
+//    }
 
     //获得收货地址列表
     private void getAddressList( String page) {

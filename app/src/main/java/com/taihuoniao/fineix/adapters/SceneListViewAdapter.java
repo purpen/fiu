@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -31,8 +29,10 @@ import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/19.
+ * 由于加载的图片过大过多。所以采用了滑动时不加载图片的方法
  */
-public class SceneListViewAdapter extends BaseAdapter {
+public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+    private SceneListAdapterScrollListener sceneListAdapterScrollListener;//外界用来调用的滑动监听
     private Context context;
     private List<SceneListBean> list;
     private List<LoveSceneBean.LoveSceneItem> loveList;
@@ -61,6 +61,24 @@ public class SceneListViewAdapter extends BaseAdapter {
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
+    }
+
+    /**
+     * 设置listview用来监听listview的滑动状态
+     *
+     * @param listView 设置监听滑动状态的listview
+     */
+    public void setListView(AbsListView listView) {
+        listView.setOnScrollListener(this);
+    }
+
+    /**
+     * 设置滑动监听,是外部可以调用
+     *
+     * @param sceneListAdapterScrollListener 外部调用用来替换onscrolllisttener的监听
+     */
+    public void setSceneListAdapterScrollListener(SceneListAdapterScrollListener sceneListAdapterScrollListener) {
+        this.sceneListAdapterScrollListener = sceneListAdapterScrollListener;
     }
 
     @Override
@@ -100,6 +118,7 @@ public class SceneListViewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
+//            Log.e("<<<", "创建布局");
             convertView = View.inflate(context, R.layout.item_scenelist, null);
             holder = new ViewHolder();
             holder.container = (RelativeLayout) convertView.findViewById(R.id.item_scenelist_container);
@@ -116,45 +135,47 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.suoshuQingjing = (TextView) convertView.findViewById(R.id.item_scenelist_suoshuqingjing);
             holder.location = (TextView) convertView.findViewById(R.id.item_scenelist_location);
             holder.time = (TextView) convertView.findViewById(R.id.item_scenelist_time);
-//            ViewGroup.LayoutParams lp = holder.container.getLayoutParams();
-//            lp.width = MainApplication.getContext().getScreenWidth();
-//            lp.height = lp.width * 16 / 9;
-//            holder.container.setLayoutParams(lp);
-            holder.container.setLayoutParams(new AbsListView.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9));
+            holder.container.setLayoutParams(new AbsListView.LayoutParams(
+                    MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 16 / 9));
             holder.bottomLinear = (LinearLayout) convertView.findViewById(R.id.item_scenedetails_bottomlinear);
-//            RelativeLayout.LayoutParams bLp = (RelativeLayout.LayoutParams) holder.bottomLinear.getLayoutParams();
-//            bLp.height = lp.height / 2;
-//            holder.bottomLinear.setLayoutParams(bLp);
-            holder.bottomLinear.setLayoutParams(new RelativeLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 8 / 9));
-//            holder.bottomLinear.getPaddingBottom()
+            holder.bottomLinear.setLayoutParams(new RelativeLayout.LayoutParams(
+                    MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth() * 8 / 9));
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        for (int i = 0; i < holder.pointContainer.getChildCount(); i++) {
-            View view = holder.pointContainer.getChildAt(i);
-            if (view instanceof LabelView) {
-                LabelView labelView = (LabelView) view;
-                labelView.stopAnim();
+        if (holder.backgroundImg.getTag() != null &&  holder.backgroundImg.getTag().toString().equals(list.get(position).getCover_url())) {
+            if (list != null && list.get(position).isStartAnim()) {
+                holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+                ObjectAnimator.ofFloat(holder.bottomLinear, "translationY", 0).setDuration(600).start();
+                list.get(position).setStartAnim(false);
+//                }
+//            });
             }
+            return convertView;
         }
+        holder.backgroundImg.setImageResource(R.mipmap.default_background_750_1334);
         holder.pointContainer.removeAllViews();
         if (list != null) {
-            if (list.get(position).getProductsList() != null && list.get(position).getProductsList().size() > 0) {
-                addProductToImg(list.get(position).getProductsList(), holder.pointContainer);
+            if (!isScrolling) {
+                ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+                holder.backgroundImg.setTag(list.get(position).getCover_url());
+                if (list.get(position).getProductsList() != null && list.get(position).getProductsList().size() > 0) {
+                    addProductToImg(list.get(position).getProductsList(), holder.pointContainer);
+                }
             }
-//            holder.backgroundImg.setTag(list.get(position).getCover_url());
-//            holder.backgroundImg.setImageResource(R.mipmap.ic_launcher);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg, options750_1334);
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
-            if (list.get(position).getUser_info().is_expert == 0) {
-                holder.userInfo.setText(list.get(position).getUser_info().getSummary());
-                holder.vImg.setVisibility(View.GONE);
-            } else {
+            if (list.get(position).getUser_info().is_expert == 1) {
                 holder.userInfo.setText(list.get(position).getUser_info().expert_label + " | " + list.get(position).getUser_info().expert_info);
                 holder.vImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.userInfo.setText(list.get(position).getUser_info().getSummary());
+                holder.vImg.setVisibility(View.GONE);
             }
             holder.viewCount.setText(list.get(position).getView_count());
             holder.loveCount.setText(list.get(position).getLove_count());
@@ -170,12 +191,12 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(loveList.get(position).getUser_info().getAvatar_ur(), holder.userHeadImg, options500_500);
             holder.userName.setText(loveList.get(position).getUser_info().getNickname());
-            if (loveList.get(position).getUser_info().getIs_expert() == 0) {
-                holder.userInfo.setText(loveList.get(position).getUser_info().getSummary());
-                holder.vImg.setVisibility(View.GONE);
-            } else {
+            if (loveList.get(position).getUser_info().getIs_expert() == 1) {
                 holder.userInfo.setText(loveList.get(position).getUser_info().getExpert_label() + " | " + loveList.get(position).getUser_info().getExpert_info());
                 holder.vImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.userInfo.setText(loveList.get(position).getUser_info().getSummary());
+                holder.vImg.setVisibility(View.GONE);
             }
 //            isSpertAndSummary(holder.userInfo, loveList.get(position).getUser_info().getLabel(), loveList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(loveList.get(position).getView_count());
@@ -189,12 +210,12 @@ public class SceneListViewAdapter extends BaseAdapter {
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(searchList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(searchList.get(position).getUser_info().getNickname());
-            if (searchList.get(position).getUser_info().getIs_expert() == 0) {
-                holder.userInfo.setText(searchList.get(position).getUser_info().getSummary());
-                holder.vImg.setVisibility(View.GONE);
-            } else {
+            if (searchList.get(position).getUser_info().getIs_expert() == 1) {
                 holder.userInfo.setText(searchList.get(position).getUser_info().getExpert_label() + " | " + searchList.get(position).getUser_info().getExpert_info());
                 holder.vImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.userInfo.setText(searchList.get(position).getUser_info().getSummary());
+                holder.vImg.setVisibility(View.GONE);
             }
 //            isSpertAndSummary(holder.userInfo, searchList.get(position).getUser_info().getLabel(), searchList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(searchList.get(position).getView_count());
@@ -207,16 +228,17 @@ public class SceneListViewAdapter extends BaseAdapter {
             if (subsList.get(position).getProduct() != null && subsList.get(position).getProduct().size() > 0) {
                 addProductToImg(subsList.get(position).getProduct(), holder.pointContainer);
             }
+
             ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
 //            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
             ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(subsList.get(position).getUser_info().getNickname());
-            if (subsList.get(position).getUser_info().getIs_expert() == 0) {
-                holder.userInfo.setText(subsList.get(position).getUser_info().getSummary());
-                holder.vImg.setVisibility(View.GONE);
-            } else {
+            if (subsList.get(position).getUser_info().getIs_expert() == 1) {
                 holder.userInfo.setText(subsList.get(position).getUser_info().getExpert_label() + " | " + subsList.get(position).getUser_info().getExpert_info());
                 holder.vImg.setVisibility(View.VISIBLE);
+            } else {
+                holder.userInfo.setText(subsList.get(position).getUser_info().getSummary());
+                holder.vImg.setVisibility(View.GONE);
             }
 //            isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getLabel(), subsList.get(position).getUser_info().getSummary());
             holder.viewCount.setText(subsList.get(position).getView_count());
@@ -226,24 +248,14 @@ public class SceneListViewAdapter extends BaseAdapter {
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-        Log.e("<<<首页动画", "getView...position=" + position);
+//        Log.e("<<<首页动画", "getView...position=" + position);
         SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21, 1);
-        if (list != null && list.get(position).isStartAnim()) {
-            holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    ObjectAnimator.ofFloat(holder.bottomLinear, "translationY", 0).setDuration(500).start();
-                    list.get(position).setStartAnim(false);
-                }
-            });
-        }
+
         return convertView;
     }
 
 
     private void addProductToImg(List<SceneListBean.Products> productList, RelativeLayout container) {
-
         for (final SceneListBean.Products product : productList) {
 //            Log.e("<<<", productList.toString());
             final LabelView labelView = new LabelView(context);
@@ -263,6 +275,28 @@ public class SceneListViewAdapter extends BaseAdapter {
         }
     }
 
+    private boolean isScrolling;//用来判断listview是否正在滑动的标识
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (sceneListAdapterScrollListener != null) {
+            sceneListAdapterScrollListener.onScrollStateChanged(view, scrollState);
+        }
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            isScrolling = false;
+            SceneListViewAdapter.this.notifyDataSetChanged();
+        } else {
+            isScrolling = true;
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (sceneListAdapterScrollListener != null) {
+            sceneListAdapterScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
+    }
+
     public static class ViewHolder {
         RelativeLayout container;
         RelativeLayout pointContainer;
@@ -279,5 +313,9 @@ public class SceneListViewAdapter extends BaseAdapter {
         TextView location;
         TextView time;
         public LinearLayout bottomLinear;
+    }
+
+    public interface SceneListAdapterScrollListener extends AbsListView.OnScrollListener {
+
     }
 }

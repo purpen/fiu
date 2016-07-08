@@ -164,6 +164,8 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     }
 
     public Map<String, AlbumBean> findGalleries(Context context) {
+//        List<HashMap<String, String>> list = FileUtils.getAllPictures(context);
+//        Log.e("<<<所有图片", list.toString());
         albumPaths.clear();
         albumPaths.add(MainApplication.systemPhotoPath);
         String[] projection = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA,
@@ -195,7 +197,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             }
 //            Log.e("<<<图片路径", data);
 //            if (data.endsWith(".png") || data.endsWith(".jpg") || data.endsWith(".jpeg")) {
-                galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
+            galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
 //            }
         }
         //系统相机照片

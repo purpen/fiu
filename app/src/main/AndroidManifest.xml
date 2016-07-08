@@ -46,10 +46,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.AppleWatchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -122,7 +118,7 @@
 
         <activity
             android:name=".user.CollectionsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".user.ImageCropActivity"
@@ -138,9 +134,15 @@
             android:name=".scene.SearchActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".product.WebActivity"
+            android:name=".product.AllFiuerActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".product.AllBrandsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".main.ViewPagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
@@ -407,6 +409,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
+            android:name=".scene.SelectSearchQingjingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".map.MapNearByCJActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
@@ -423,14 +428,14 @@
         </service>
 
         <!--此处为测试value，线上版本务必更换-->
-         <meta-data
-             android:name="com.baidu.lbsapi.API_KEY"
-             android:value="muQDLN6lCST6qMDvTAydAilM"/>
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="muQDLN6lCST6qMDvTAydAilM"/>
 
         <!--百度地图线上API_KEY-->
         <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
 
         <activity
             android:name="com.mob.tools.MobUIShell"

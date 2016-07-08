@@ -130,7 +130,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
 //        img.setOnClickListener(this);
-        container.setOnClickListener(this);
+//        container.setOnClickListener(this);
     }
 
     private View initPop() {
@@ -249,17 +249,17 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_share_container:
-                dialog.show();
-                if (netScene == null) {
-                    requestNet();
-                    return;
-                }
-                Intent intent = new Intent(TestShare.this, ShareCJSelectActivity.class);
-                intent.putExtra("scene", netScene);
-                startActivityForResult(intent, 1);
-                dialog.dismiss();
-                break;
+//            case R.id.activity_share_container:
+//                dialog.show();
+//                if (netScene == null) {
+//                    requestNet();
+//                    return;
+//                }
+//                Intent intent = new Intent(TestShare.this, ShareCJSelectActivity.class);
+//                intent.putExtra("scene", netScene);
+//                startActivityForResult(intent, 1);
+//                dialog.dismiss();
+//                break;
             case R.id.title_share:
                 if (imgHeight == 0 || imgWidth == 0) {
                     if (netScene == null) {

@@ -221,6 +221,8 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
+//        seekBar.setOnSeekBarChangeListener(this);
+//        backBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
         productsRelative.setVisibility(View.GONE);
         chainingRelative.setVisibility(View.GONE);
@@ -283,6 +285,12 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
                 dialog.show();
                 savePicture();
                 break;
+            case R.id.activity_edit_back:
+                recyclerView.setVisibility(View.VISIBLE);
+                seekBar.setVisibility(View.GONE);
+                backBtn.setVisibility(View.GONE);
+                break;
+
         }
     }
 

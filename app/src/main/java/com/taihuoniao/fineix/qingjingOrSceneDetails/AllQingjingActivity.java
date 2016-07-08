@@ -21,13 +21,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -234,15 +230,17 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 onBackPressed();
                 break;
             case R.id.activity_all_qingjing_createqinjing:
-                if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
-                    MainApplication.which_activity = DataConstants.ElseActivity;
-                    startActivity(new Intent(this, OptRegisterLoginActivity.class));
-                    return;
-                }
-                MainApplication.tag = 2;
-                startActivity(new Intent(AllQingjingActivity.this, SelectPhotoOrCameraActivity.class));
+                ToastUtils.showError("创建地盘暂不开放");
                 break;
+//            if (!LoginInfo.isUserLogin()) {
+////                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+//                MainApplication.which_activity = DataConstants.ElseActivity;
+//                startActivity(new Intent(this, OptRegisterLoginActivity.class));
+//                return;
+//            }
+//            MainApplication.tag = 2;
+//            startActivity(new Intent(AllQingjingActivity.this, SelectPhotoOrCameraActivity.class));
+//            break;
         }
     }
 

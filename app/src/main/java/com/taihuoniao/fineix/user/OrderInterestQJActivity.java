@@ -59,7 +59,7 @@ public class OrderInterestQJActivity extends BaseActivity<QingJingListBean.QingJ
     @Override
     protected void initView() {
         instance = OrderInterestQJActivity.this;
-        custom_head.setHeadCenterTxtShow(true, "订阅的情景");
+        custom_head.setHeadCenterTxtShow(true, "订阅的地盘");
         dialog = new WaittingDialog(this);
     }
 

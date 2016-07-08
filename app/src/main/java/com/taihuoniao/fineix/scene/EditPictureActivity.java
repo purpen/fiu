@@ -447,10 +447,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
-                if (labels.size() <= 0) {
-                    ToastUtils.showError("请最少添加一个产品");
-                    return;
-                }
                 dialog.show();
                 savePicture();
                 break;
@@ -707,7 +703,14 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
+    public void finish() {
+        EditPictureActivity.instance = null;
+        super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
+        EditPictureActivity.instance = null;
         for (LabelView labelView : labels) {
             labelView.stopAnim();
         }

@@ -121,9 +121,6 @@ public class GPUImageFilterTools {
         filters.addFilter("暮光", FilterType.SEPIA);
 
 
-
-
-
 //        filters.addFilter("摩卡", FilterType.SEPIA);
 
 
@@ -132,12 +129,8 @@ public class GPUImageFilterTools {
 //        filters.addFilter("候鸟", FilterType.DILATION);
 
 
-
-
 //        filters.addFilter("佳人", FilterType.BRIGHTNESS);
 //        filters.addFilter("佳人", FilterType.TONE_CURVE);
-
-
 
 
         //反差
@@ -296,6 +289,7 @@ public class GPUImageFilterTools {
                 return new GPUImageRGBFilter(1.0f, 1.0f, 1.0f);
             case WHITE_BALANCE:
                 return new GPUImageWhiteBalanceFilter(5000.0f, 0.0f);
+//                return new GPUImageWhiteBalanceFilter(0.0f, 0.0f);
             case VIGNETTE:
                 PointF centerPoint = new PointF();
                 centerPoint.x = 0.5f;
@@ -434,7 +428,7 @@ public class GPUImageFilterTools {
     }
 
     public interface OnGpuImageFilterChosenListener {
-        void onGpuImageFilterChosenListener(GPUImageFilter filter,int position);
+        void onGpuImageFilterChosenListener(GPUImageFilter filter, int position);
     }
 
     public enum FilterType {

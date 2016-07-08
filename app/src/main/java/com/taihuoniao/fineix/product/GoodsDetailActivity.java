@@ -30,12 +30,15 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.GoodsDetailBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -129,7 +132,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         id = getIntent().getStringExtra("id");
         Log.e("<<<", "商品id=" + id);
         if (id == null) {
-            ToastUtils.showError("产品不存在");
+            ToastUtils.showError("好货不存在");
 //            dialog.showErrorWithStatus("产品不存在");
 //            Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
             finish();
@@ -199,6 +202,12 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_goods_detail_shoucang:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    Intent in = new Intent(GoodsDetailActivity.this, OptRegisterLoginActivity.class);
+                    startActivity(in);
+                    return;
+                }
                 if (isFavourate) {
                     cancelFavorite();
                 } else {
@@ -642,16 +651,17 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>(){}.getType();
-                    netBean = gson.fromJson(responseInfo.result,type);
-                }catch (JsonSyntaxException e){
-                    Log.e("<<<收藏","数据解析异常"+e.toString());
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<收藏", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
-                if(netBean.isSuccess()){
-                    isFavourate=true;
+                if (netBean.isSuccess()) {
+                    isFavourate = true;
                     shoucangImg.setImageResource(R.mipmap.star_yellow_width_42px);
-                }else{
+                } else {
                     ToastUtils.showError(netBean.getMessage());
                 }
 
@@ -684,7 +694,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 if (netBean.isSuccess()) {
                     isFavourate = false;
                     shoucangImg.setImageResource(R.mipmap.star_gray_width_42px);
-                }else{
+                } else {
                     ToastUtils.showError(netBean.getMessage());
                 }
 

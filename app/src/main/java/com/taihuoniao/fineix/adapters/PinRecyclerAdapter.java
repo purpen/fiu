@@ -4,14 +4,13 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
                 .showImageOnFail(R.mipmap.default_background_750_1334)
                 .cacheInMemory(true)
                 .cacheOnDisk(true).considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360)).build();
+                .build();
     }
 
     @Override
@@ -62,12 +61,12 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        ImageView img;
+        RoundedImageView img;
         TextView tv;
 
         public VH(View itemView) {
             super(itemView);
-            img = (ImageView) itemView.findViewById(R.id.item_fragment_pin_recycler_img);
+            img = (RoundedImageView) itemView.findViewById(R.id.item_fragment_pin_recycler_img);
             tv = (TextView) itemView.findViewById(R.id.item_fragment_pin_recycler_tv);
         }
     }

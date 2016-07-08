@@ -144,6 +144,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private View activity_view;
+//    选择情景点击没反应
 
     @Override
     protected void initView() {
@@ -207,7 +208,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             backImg.setImageResource(R.mipmap.cancel_black);
         }
         if (id == null) {
-            ToastUtils.showError("没有这个情景");
+            ToastUtils.showError("没有这个地盘");
 //            new SVProgressHUD(this).showErrorWithStatus("没有这个情景");
 //            Toast.makeText(QingjingDetailActivity.this, "没有这个情景", Toast.LENGTH_SHORT).show();
             finish();
@@ -315,14 +316,13 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                SceneList netSceneList = sceneList1;
-                if (netSceneList.isSuccess()) {
+                if (sceneList1.isSuccess()) {
                     if (currentPage == 1) {
                         sceneList.clear();
                         lastSavedFirstVisibleItem = -1;
                         lastTotalItem = -1;
                     }
-                    sceneList.addAll(netSceneList.getSceneListBeanList());
+                    sceneList.addAll(sceneList1.getSceneListBeanList());
                     if (sceneList.size() == 0) {
                         emptyView.setVisibility(View.VISIBLE);
                     } else {
@@ -405,12 +405,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
                     netUserInfo = netQingjingDetailBean.getData().getUser_info();
                     ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
-                    if (netQingjingDetailBean.getData().getUser_info().getIs_expert() == 0) {
-                        vImg.setVisibility(View.GONE);
-                        userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
-                    } else {
+                    if (netQingjingDetailBean.getData().getUser_info().getIs_expert() == 1) {
                         vImg.setVisibility(View.VISIBLE);
                         userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label() + " | " + netQingjingDetailBean.getData().getUser_info().getExpert_info());
+                    } else {
+                        vImg.setVisibility(View.GONE);
+                        userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
                     }
                     userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
 //                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
@@ -660,6 +660,12 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         instance = null;
         unregisterReceiver(qingjingReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    public void finish() {
+        instance = null;
+        super.finish();
     }
 
     @Override

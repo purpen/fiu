@@ -1,14 +1,19 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
-import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +23,6 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -37,20 +41,19 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by taihuoniao on 2016/5/9.
+ * Created by taihuoniao on 2016/7/7.
  */
-public class SelectAllQingjingActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SelectSearchQingjingActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     //上个界面传递过来的数据
     private String isSearch;//判断是搜索还是展示 0展示 1搜索
-    private LatLng latLng;//当前位置经纬度
     @Bind(R.id.activity_select_allqj_titlelayout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_select_allqj_searchlinear)
-    LinearLayout searchLinear;
-//    @Bind(R.id.activity_select_allqj_edit)
-//    EditText editText;
-//    @Bind(R.id.activity_select_allqj_cancel)
-//    ImageView cancelImg;
+    RelativeLayout searchLinear;
+    @Bind(R.id.activity_select_allqj_edit)
+    EditText editText;
+    @Bind(R.id.activity_select_allqj_cancel)
+    ImageView cancelImg;
     @Bind(R.id.activity_select_allqj_pullrefreshview)
     PullToRefreshGridView pullToRefreshView;
     GridView gridView;
@@ -69,20 +72,13 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     @Override
     protected void getIntentData() {
         isSearch = getIntent().getStringExtra("isSearch");
-        latLng = getIntent().getParcelableExtra("latLng");
         if (isSearch == null) {
             isSearch = "0";
         }
-        if (latLng == null) {
-            ToastUtils.showError("无法获得您当前位置信息");
-//            dialog.showErrorWithStatus("无法获得您当前位置信息");
-//            Toast.makeText(SelectAllQingjingActivity.this, "无法获得您当前位置信息", Toast.LENGTH_SHORT).show();
-            finish();
-        }
     }
 
-    public SelectAllQingjingActivity() {
-        super(R.layout.activity_select_allqj);
+    public SelectSearchQingjingActivity() {
+        super(R.layout.activity_select_search_qj);
     }
 
     @Override
@@ -91,52 +87,51 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         titleLayout.setTitle(R.string.select_qingjing, getResources().getColor(R.color.black333333));
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), this);
-//        switch (isSearch) {
-//            case "0":
-//                searchLinear.setVisibility(View.GONE);
-//                break;
-//            case "1":
+        switch (isSearch) {
+            case "0":
+                searchLinear.setVisibility(View.GONE);
+                break;
+            case "1":
                 searchLinear.setVisibility(View.VISIBLE);
-//                break;
-//        }
-        searchLinear.setOnClickListener(this);
-//        cancelImg.setOnClickListener(this);
-//        editText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (s.length() > 0) {
-//                    cancelImg.setVisibility(View.VISIBLE);
-//                } else {
-//                    cancelImg.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        editText.setOnKeyListener(new View.OnKeyListener() {
-//
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-//                    if (SelectAllQingjingActivity.this.getCurrentFocus() != null) {
-//                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SelectAllQingjingActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                    }
-//                    //开始搜索
-//                    q = editText.getText().toString().trim();
-//                    page = 1;
-//                    dialog.show();
-//                    search(q, 8 + "", page + "", "tag", null);
-//                }
-//                return false;
-//            }
-//        });
+                break;
+        }
+        cancelImg.setOnClickListener(this);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    cancelImg.setVisibility(View.VISIBLE);
+                } else {
+                    cancelImg.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editText.setOnKeyListener(new View.OnKeyListener() {
+
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (SelectSearchQingjingActivity.this.getCurrentFocus() != null) {
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SelectSearchQingjingActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    //开始搜索
+                    q = editText.getText().toString().trim();
+                    page = 1;
+                    dialog.show();
+                    search(q, 8 + "", page + "", "tag", null);
+                }
+                return false;
+            }
+        });
         gridView = pullToRefreshView.getRefreshableView();
         pullToRefreshView.setPullToRefreshEnabled(false);
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -145,33 +140,33 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
                 if (isSearch.equals("0")) {
-                    qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+                    qingjingList(page + "", 1 + "", 0 + "", distance + "", null, null);
                 } else if (isSearch.equals("1")) {
                     search(q, 8 + "", page + "", "tag", null);
                 }
             }
         });
         gridView.setNumColumns(2);
-        int space = DensityUtils.dp2px(SelectAllQingjingActivity.this, 5);
+        int space = DensityUtils.dp2px(SelectSearchQingjingActivity.this, 5);
 //        gridView.setHorizontalSpacing(space);
         gridView.setVerticalSpacing(space);
         if (isSearch.equals("0")) {
             qingjingList = new ArrayList<>();
-            allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, SelectAllQingjingActivity.this, space);
+            allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, SelectSearchQingjingActivity.this, space);
         } else if (isSearch.equals("1")) {
             searchList = new ArrayList<>();
-            allQingjingGridAdapter = new AllQingjingGridAdapter(null, searchList, SelectAllQingjingActivity.this, space);
+            allQingjingGridAdapter = new AllQingjingGridAdapter(null, searchList, SelectSearchQingjingActivity.this, space);
         }
         gridView.setAdapter(allQingjingGridAdapter);
         gridView.setOnItemClickListener(this);
-        dialog = new WaittingDialog(SelectAllQingjingActivity.this);
+        dialog = new WaittingDialog(SelectSearchQingjingActivity.this);
     }
 
     @Override
     protected void requestNet() {
         if (isSearch.equals("0")) {
             dialog.show();
-            qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+            qingjingList(page + "", 1 + "", 0 + "", distance + "", null, null);
         }
     }
 
@@ -225,13 +220,8 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_select_allqj_searchlinear:
-                Intent intent2 = new Intent(SelectAllQingjingActivity.this, SelectSearchQingjingActivity.class);
-                intent2.putExtra("isSearch", "1");
-                startActivityForResult(intent2, DataConstants.REQUESTCODE_SELECTQJ_ALLQJ);
-                break;
             case R.id.activity_select_allqj_cancel:
-//                editText.setText("");
+                editText.setText("");
                 break;
             case R.id.title_continue:
                 if (isSearch.equals("0")) {
@@ -361,40 +351,5 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
             }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            switch (resultCode) {
-                case DataConstants.RESULTCODE_MAP:
-                    QingJingItem qingJing = (QingJingItem) data.getSerializableExtra("qingjing");
-                    if (qingJing != null) {
-                        Intent intent1 = new Intent();
-                        intent1.putExtra("qingjing", qingJing);
-                        setResult(DataConstants.RESULTCODE_MAP_SELECTQJ, intent1);
-                        finish();
-                    }
-                    break;
-                case DataConstants.RESULTCODE_SELECTQJ_ALLQJ:
-                    QingJingListBean.QingJingItem qingJingItem = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
-                    if (qingJingItem != null) {
-                        Intent intent = new Intent();
-//                        Log.e("<<<>>>", qingJingItem.getTitle());
-                        intent.putExtra("qingjing", qingJingItem);
-                        setResult(DataConstants.RESULTCODE_CREATESCENE_SELECTQJ, intent);
-                        finish();
-                    }
-                    break;
-                case DataConstants.RESULTCODE_SELECTQJ_SALLQJ:
-                    SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
-                    if (searchItem != null) {
-                        Intent intent = new Intent();
-                        Log.e("<<<>>>", searchItem.getTitle());
-                        intent.putExtra("searchqj", searchItem);
-                        setResult(DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ, intent);
-                        finish();
-                    }
-                    break;
-            }
-        }
-    }
+
 }

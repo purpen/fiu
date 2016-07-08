@@ -292,7 +292,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //TODO 跳转详情页
-                Util.makeToast(activity, "跳转情景详情");
+                Util.makeToast(activity, "跳转地盘详情");
             }
         });
         tv_all.setOnClickListener(this);
@@ -314,7 +314,7 @@ public class SelectOrSearchQJActivity extends BaseActivity<QingJingItem> impleme
         switch (view.getId()) {
             case R.id.tv_all:
                 //TODO 跳转全部场景界面
-                Util.makeToast(activity, "跳转情景列表");
+                Util.makeToast(activity, "跳转地盘列表");
                 break;
         }
     }

@@ -21,6 +21,7 @@ public class TestShareUtils {
     static Context context;
     private static ImageView img;
     static RoundedImageView userHeadImg;
+    static RoundedImageView vImg;
     static RelativeLayout userRightRelative;
     static TextView userName;
     static TextView userInfo;
@@ -63,6 +64,7 @@ public class TestShareUtils {
         img = (ImageView) view.findViewById(R.id.activity_share_img);
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), img, options750_1334);
         userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
+        vImg = (RoundedImageView) view.findViewById(R.id.riv_auth);
         userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
         userName = (TextView) view.findViewById(R.id.activity_share_user_name);
         userInfo = (TextView) view.findViewById(R.id.activity_share_user_info);
@@ -82,14 +84,16 @@ public class TestShareUtils {
         }
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getUser_info().getAvatar_url(), userHeadImg, options500_500);
         userName.setText(sceneDetails.getData().getUser_info().getNickname());
-        userInfo.setText(sceneDetails.getData().getUser_info().getSummary());
+        if(sceneDetails.getData().getUser_info().getIs_expert()==1){
+            vImg.setVisibility(View.VISIBLE);
+            userInfo.setText(sceneDetails.getData().getUser_info().getExpert_label() + " | " + sceneDetails.getData().getUser_info().getExpert_info());
+        }else{
+            vImg.setVisibility(View.GONE);
+            userInfo.setText(sceneDetails.getData().getUser_info().getSummary());
+        }
         locationTv.setText(sceneDetails.getData().getAddress());
         sceneTitle.setText(sceneDetails.getData().getTitle());
         desTv.setText(sceneDetails.getData().getDes());
-//        SpannableString spannableString = new SpannableString(desTv.getText().toString());
-//        ImageSpan imageSpan = new ImageSpan(ContextCompat.getDrawable(context1,R.mipmap.share_des_add));
-//        spannableString.setSpan(imageSpan, desTv.getText().toString().length() - 1, desTv.getText().toString().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//        desTv.setText(spannableString);
         desTv.post(new Runnable() {
             @Override
             public void run() {

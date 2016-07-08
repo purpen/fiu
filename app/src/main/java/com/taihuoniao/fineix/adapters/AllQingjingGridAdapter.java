@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
 
@@ -76,7 +77,8 @@ public class AllQingjingGridAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.backgroundImg = (ImageView) convertView.findViewById(R.id.item_qingjing_list_background);
             ViewGroup.LayoutParams lp = holder.backgroundImg.getLayoutParams();
-            lp.width = (parent.getWidth() - horizontalSpace) / 2;
+//            Log.e("<<<", "总宽度=" + (parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight()));
+            lp.width = (parent.getWidth() - DensityUtils.dp2px(context, 15)) / 2;
             lp.height = lp.width * 16 / 9;
             holder.backgroundImg.setLayoutParams(lp);
             holder.addressTv = (TextView) convertView.findViewById(R.id.item_qingjing_list_address);
@@ -94,7 +96,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
         if (list != null) {
             ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg, options);
             holder.addressTv.setText(list.get(position).getAddress());
-            SpannableStringBuilder style=new SpannableStringBuilder(list.get(position).getTitle());
+            SpannableStringBuilder style = new SpannableStringBuilder(list.get(position).getTitle());
             BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
             style.setSpan(backgroundColorSpan, 0, list.get(position).getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             holder.title.setText(style);
@@ -104,9 +106,9 @@ public class AllQingjingGridAdapter extends BaseAdapter {
                 holder.selectImg.setVisibility(View.GONE);
             }
         } else if (searchList != null) {
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg,options);
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.backgroundImg, options);
             holder.addressTv.setText(searchList.get(position).getAddress());
-            SpannableStringBuilder style=new SpannableStringBuilder(searchList.get(position).getTitle());
+            SpannableStringBuilder style = new SpannableStringBuilder(searchList.get(position).getTitle());
             BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(context.getResources().getColor(R.color.black));
             style.setSpan(backgroundColorSpan, 0, searchList.get(position).getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             holder.title.setText(style);

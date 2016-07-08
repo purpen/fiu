@@ -19,34 +19,38 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     private GPUImageFilterTools.FilterList filterList;
     private GPUImageFilterTools.OnGpuImageFilterChosenListener listener;
     private int lastClick = -1;//上次点击的item
-//    private ItemClick itemClick;
+    private ItemClick itemClick;
 
     public EditRecyclerAdapter(Context context, GPUImageFilterTools.OnGpuImageFilterChosenListener listener, ItemClick itemClick) {
 //        this.imageUri = imageUri;
         this.context = context;
         this.filterList = GPUImageFilterTools.getList();
         this.listener = listener;
-//        this.itemClick = itemClick;
+        this.itemClick = itemClick;
     }
 
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(context, R.layout.item_edit_recycler, null);
-        //小图的滤镜预览效果
-        VH holder = new VH(view);
-//        holder.imageView.setScaleType(GPUImage.ScaleType.CENTER_CROP);
-//        ImageUtils.asyncLoadImage(context, imageUri, new ImageUtils.LoadImageCallback() {
-//            @Override
-//            public void callback(Bitmap result) {
-//                holder.imageView.setImage(result);
-//            }
-//        });
-        return holder;
+        return new VH(view);
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (position != lastClick) {
+                    filterList.selectFilter(position);
+                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(position)), position);
+                    notifyDataSetChanged();
+                    lastClick = position;
+                } else {
+                    itemClick.click(position);
+                }
+            }
+        });
 //        holder.imageView.setImage(imageUri);
 //        final GPUImageFilter filter = GPUImageFilterTools.createFilterForType(context, filterList.filters.get(position));
 //        final GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
@@ -123,14 +127,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
             imageView = (ImageView) itemView.findViewById(R.id.item_edit_recycler_filterimg);
             textView = (TextView) itemView.findViewById(R.id.item_edit_recycler_textview);
             redTv = (TextView) itemView.findViewById(R.id.item_edit_recycler_red);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    filterList.selectFilter(getPosition());
-                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(getPosition())),getPosition());
-                    notifyDataSetChanged();
-                }
-            });
+
         }
     }
 
