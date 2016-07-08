@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/logo"/>
+            android:src="@mipmap/head_logo" />
 
         <ImageView
             android:id="@+id/fragment_index_search"

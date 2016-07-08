@@ -136,7 +136,7 @@
             android:layout_alignBottom="@+id/activity_share_scene_line"
             android:layout_below="@id/activity_share_scene_des_relative"
             android:layout_marginTop="7dp"
-            android:src="@mipmap/logo"/>
+            android:src="@mipmap/head_logo" />
 
         <TextView
             android:id="@+id/activity_share_scene_line"
