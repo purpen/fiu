@@ -230,6 +230,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
             LogUtil.e("LatLng", "lat==" + item.location.coordinates.get(1) + "&&lng==" + item.location.coordinates.get(0));
             ll = new LatLng(item.location.coordinates.get(1), item.location.coordinates.get(0));
             option = new MarkerOptions().position(ll).icon(bitmapDescripter);
+            option.animateType(MarkerOptions.MarkerAnimateType.grow);
             Marker marker = (Marker) mBDMap.addOverlay(option);
             markers.add(marker);
             if (this.ll.longitude == ll.longitude && this.ll.latitude == ll.latitude) {
