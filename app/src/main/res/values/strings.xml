@@ -366,4 +366,5 @@
     <string name="no_product">暂无商品</string>
     <string name="fiu_descrip"> | 创新产品情景式购物平台</string>
     <string name="no_this_sight">没有这个地盘</string>
+    <string name="position">位置</string>
 </resources>

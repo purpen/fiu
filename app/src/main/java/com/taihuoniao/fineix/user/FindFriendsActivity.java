@@ -141,14 +141,12 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
-//                dialog.showErrorWithStatus(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常,请确认网络畅通");
             }
         });
     }

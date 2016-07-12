@@ -418,7 +418,7 @@ public class MineFragment extends MyBaseFragment {
 //                Util.makeToast(activity, "合作伙伴");
 //                break;
             case R.id.btn:
-//                startActivity(new Intent(activity, BDSearchAddressActivity.class));
+//                startActivity(new Intent(activity, MapSearchAddressActivity.class));
 //                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
         }
     }

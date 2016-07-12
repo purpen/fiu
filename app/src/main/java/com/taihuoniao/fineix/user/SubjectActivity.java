@@ -84,20 +84,6 @@ public class SubjectActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, title);
         dialog = new WaittingDialog(this);
-        webViewAbout.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                if (!activity.isFinishing() && dialog != null) dialog.show();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-            }
-        });
-
         WebSettings webSettings = webViewAbout.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
@@ -172,10 +158,12 @@ public class SubjectActivity extends BaseActivity {
         public void onPageFinished(WebView view, String url) {
             view.getSettings().setJavaScriptEnabled(true);
             super.onPageFinished(view, url);
+            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            if (!activity.isFinishing() && dialog != null) dialog.show();
             view.getSettings().setJavaScriptEnabled(true);
             super.onPageStarted(view, url, favicon);
         }
@@ -183,7 +171,7 @@ public class SubjectActivity extends BaseActivity {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-
+            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     }
 

@@ -51,7 +51,7 @@ import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.map.BDSearchAddressActivity;
+import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
@@ -442,7 +442,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     getCurrentLocation();
                     return;
                 }
-                Intent intent = new Intent(CreateSceneActivity.this, BDSearchAddressActivity.class);
+                Intent intent = new Intent(CreateSceneActivity.this, MapSearchAddressActivity.class);
                 intent.putExtra("latLng", new LatLng(location[1], location[0]));
                 startActivityForResult(intent, DataConstants.REQUESTCODE_CREATESCENE_BDSEARCH);
                 break;
