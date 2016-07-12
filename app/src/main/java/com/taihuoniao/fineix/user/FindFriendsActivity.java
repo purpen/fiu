@@ -215,7 +215,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                 params.setShareType(Platform.SHARE_TEXT);
 //                params.setUrl("http://m.taihuoniao.com/guide/fiu");
 //                params.setTitle(getResources().getString(R.string.share_title_url));
-                params.setText(getResources().getString(R.string.share_title_url));
+                params.setText(getResources().getString(R.string.share_txt));
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 wechat.setPlatformActionListener(this);
                 wechat.share(params);
@@ -224,7 +224,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                 params = new Platform.ShareParams();
                 params.setShareType(Platform.SHARE_TEXT);
 //                params.setTitle("有Fiu才有意思！");
-                params.setText(getResources().getString(R.string.share_title_url));
+                params.setText(getResources().getString(R.string.share_txt));
                 Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 weibo.setPlatformActionListener(this); // 设置分享事件回调
                 weibo.share(params);
@@ -232,7 +232,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             case R.id.item_contacts:
                 Uri sms = Uri.parse("smsto:");
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW, sms);
-                sendIntent.putExtra("sms_body", getResources().getString(R.string.share_title_url));
+                sendIntent.putExtra("sms_body", getResources().getString(R.string.share_txt));
                 sendIntent.setType("vnd.android-dir/mms-sms");
                 startActivity(sendIntent);
                 break;

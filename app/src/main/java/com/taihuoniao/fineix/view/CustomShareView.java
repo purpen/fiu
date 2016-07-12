@@ -30,10 +30,9 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * @author lilin
- * created at 2016/5/15 23:46
+ *         created at 2016/5/15 23:46
  */
 public class CustomShareView extends RelativeLayout implements PlatformActionListener {
-    private Context context;
     private ShareContent content;
 
     public CustomShareView(Context context, ShareContent content) {
@@ -46,25 +45,24 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
 
     public CustomShareView(Context context, AttributeSet attrs, int defStyleAttr, ShareContent content) {
         super(context, attrs, defStyleAttr);
-        this.context=context;
         this.content = content;
         initView(context);
     }
 
-    private void initView(Context context){
+    private void initView(Context context) {
         View view = Util.inflateView(R.layout.share_layout, this);
         GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
         View tv_cancel = view.findViewById(R.id.tv_cancel);
-        int[] image={R.mipmap.wechat,R.mipmap.wechatmoment,R.mipmap.sina,R.mipmap.qqzone};
-        String[] name={"微信好友","微信朋友圈","新浪微博","QQ空间",};
+        int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone};
+        String[] name = {"微信好友", "微信朋友圈", "新浪微博", "QQ空间",};
         List<HashMap<String, Object>> shareList = new ArrayList<>();
-        for(int i=0;i<image.length;i++){
+        for (int i = 0; i < image.length; i++) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("image", image[i]);
             map.put("text", name[i]);
             shareList.add(map);
         }
-        SimpleAdapter adapter=new SimpleAdapter(context, shareList, R.layout.share_item_layout,new String[] {"image","text"}, new int[] {R.id.iv_plat_logo,R.id.tv_plat_name});
+        SimpleAdapter adapter = new SimpleAdapter(context, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
         gv_share.setAdapter(adapter);
         gv_share.setOnItemClickListener(itemClicklistener);
         tv_cancel.setOnClickListener(new OnClickListener() {
@@ -75,11 +73,11 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         });
     }
 
-    private AdapterView.OnItemClickListener itemClicklistener=new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Platform.ShareParams params;
-            switch (position){
+            switch (position) {
 //                case 0:
 //                    //qq
 //                    params=new Platform.ShareParams();
@@ -93,23 +91,18 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
 //                    break;
                 case 3:
                     //qqzong
-                    params= new Platform.ShareParams();
+                    params = new Platform.ShareParams();
                     if (TextUtils.isEmpty(content.url)) {
                         params.setText(content.shareTxt);
                     } else {
                         params.setText(content.shareTxt + content.url);
                     }
-
-                    if (!TextUtils.isEmpty(content.imageUrl)) {
-                        params.setImageUrl(content.imageUrl);
-                    }
-//                    params.setTitle(content.title);
-//                    params.setTitleUrl(content.titleUrl); // 标题的超链接
-//                    params.setImageUrl();
-//                    params.setSite(context.getString(R.string.app_name));
-//                    params.setSiteUrl(content.url);
-                    Platform qzone = ShareSDK.getPlatform (QZone.NAME);
-                    qzone.setPlatformActionListener (CustomShareView.this); // 设置分享事件回调
+                    params.setTitle(content.shareTxt);
+                    params.setTitleUrl(content.titleUrl); // 标题的超链接
+                    params.setSite(content.site);
+                    params.setSiteUrl(content.siteUrl);
+                    Platform qzone = ShareSDK.getPlatform(QZone.NAME);
+                    qzone.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     qzone.share(params);
                     break;
                 case 2:
@@ -134,7 +127,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_TEXT);
 //                params.setUrl("http://m.taihuoniao.com/guide/fiu");
-//                params.setTitle(getResources().getString(R.string.share_title_url));
+                    params.setTitle(content.shareTxt);
                     if (TextUtils.isEmpty(content.url)) {
                         params.setText(content.shareTxt);
                     } else {
@@ -152,7 +145,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_TEXT);
 //                    params.setUrl("http://www.taihuoniao.com/");
-//                    params.setTitle(getResources().getString(R.string.share_title_url));
+                    params.setTitle(content.shareTxt);
                     if (TextUtils.isEmpty(content.url)) {
                         params.setText(content.shareTxt);
                     } else {
@@ -179,18 +172,18 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         }
     };
 
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 3:
-                    Util.makeToast(context,"对不起，分享出错");
+                    Util.makeToast("对不起，分享出错");
                     break;
                 case 2:
-                    Util.makeToast(context,"您取消了分享");
+                    Util.makeToast("您取消了分享");
                     break;
                 case 1:
-                    Util.makeToast(context,"分享成功");
+                    Util.makeToast("分享成功");
                     break;
             }
         }
@@ -208,6 +201,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
+        throwable.printStackTrace();
         handler.sendEmptyMessage(3);
     }
 }

@@ -114,7 +114,10 @@ public class SystemSettingsActivity extends BaseActivity{
                 break;
             case R.id.item_share:
                 ShareContent content = new ShareContent();
-                content.shareTxt = getResources().getString(R.string.share_title_url);
+                content.shareTxt = getResources().getString(R.string.share_txt);
+                content.titleUrl = getResources().getString(R.string.title_url);
+                content.site = getResources().getString(R.string.app_name);
+                content.siteUrl = "http://www.taihuoniao.com/";
                 PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
         }
