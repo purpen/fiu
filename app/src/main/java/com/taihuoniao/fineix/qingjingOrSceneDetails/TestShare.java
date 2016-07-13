@@ -3,15 +3,23 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -35,6 +43,7 @@ import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataPaser;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
@@ -73,6 +82,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     RelativeLayout relativeLayout;
     @Bind(R.id.activity_share_container)
     RelativeLayout container;
+    private View activity_view;
     //网络请求对话框
     private WaittingDialog dialog;
     private DisplayImageOptions options750_1334, options500_500;
@@ -80,9 +90,11 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private List<ShareDemoBean> shareList;
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
     private SceneDetailsBean netScene;
+    //分享成功后的popwindow
+    private PopupWindow popupWindow;
 
     public TestShare() {
-        super(R.layout.activity_test_share);
+        super(0);
     }
 
     @Override
@@ -93,6 +105,12 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 //            dialog.showErrorWithStatus("数据异常");
             finish();
         }
+    }
+
+    @Override
+    protected void setContenttView() {
+        activity_view = View.inflate(this, R.layout.activity_test_share, null);
+        setContentView(activity_view);
     }
 
     @Override
@@ -129,8 +147,49 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
-//        img.setOnClickListener(this);
-//        container.setOnClickListener(this);
+        initPopupWindow();
+    }
+
+    private void initPopupWindow() {
+        WindowManager windowManager = this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(this, R.layout.pop_share_success, null);
+        Button button = (Button) popup_view.findViewById(R.id.pop_share_success_btn);
+        popupWindow = new PopupWindow(popup_view, DensityUtils.dp2px(this,300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popup_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        button.setOnClickListener(this);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(TestShare.this,
+                R.drawable.corner_white_4dp));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(activity_view, Gravity.CENTER, 0, 0);
     }
 
     private View initPop() {
@@ -167,37 +226,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     }
 
     private Bitmap loadImg = null;
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            dialog.dismiss();
-//            switch (msg.what) {
-//                case DataConstants.SCENE_DETAILS:
-//                    SceneDetailsBean netScene = (SceneDetailsBean) msg.obj;
-//                    if (netScene.isSuccess()) {
-//                        TestShare.this.netScene = netScene;
-//                        setImgParams();
-//                        recyclerView.setVisibility(View.VISIBLE);
-//                        new Handler().post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                click(0);
-//                            }
-//                        });
-////                        click(0);
-//                    } else {
-//                        ToastUtils.showError(netScene.getMessage());
-//                        finish();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    ToastUtils.showError("网络错误，请重试");
-//                    finish();
-//                    break;
-//            }
-//        }
-//    };
-
 
 
     //动态设置container和imgview的宽高
@@ -260,6 +288,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 //                startActivityForResult(intent, 1);
 //                dialog.dismiss();
 //                break;
+            case R.id.pop_share_success_btn:
+                popupWindow.dismiss();
+                break;
             case R.id.title_share:
                 if (imgHeight == 0 || imgWidth == 0) {
                     if (netScene == null) {
@@ -277,7 +308,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         }
     }
 
-    //    private Bitmap bit1;
     private View view;
 
     //动态改变分享的样式
@@ -454,6 +484,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     wechatMoments.share(params);
                     break;
             }
+            PopupWindowUtil.dismiss();
         }
     };
 
@@ -464,8 +495,10 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             @Override
             public void run() {
                 dialog.dismiss();
-                ToastUtils.showSuccess("分享成功");
+//                ToastUtils.showSuccess("分享成功");
+                showPopup();
                 DataPaser.getBonus(2 + "", 1 + "", id);
+
             }
         });
     }
@@ -526,7 +559,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                            dialog.dismiss();
+                        dialog.dismiss();
                         ToastUtils.showError(R.string.net_fail);
                     }
                 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corner_white_4dp"
+                android:paddingBottom="54dp"
+    >
+
+    <ImageView
+        android:id="@+id/pop_share_scene_detail_cancel"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
+        android:src="@mipmap/cancel_grey"/>
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pop_share_scene_detail_cancel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="分享给好友即可获得积分奖励~"
+        android:textColor="#222222"
+        android:textSize="14sp"/>
+
+    <Button
+        android:id="@+id/pop_share_scene_detail_share_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="47dp"
+        android:background="@drawable/corner_yellow"
+        android:text="分享"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/pop_share_scene_detail_share_btn"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="33dp"
+        android:background="#cccccc"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:orientation="horizontal">
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/pop_share_scene_detail_wechat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/wechat_round"
+            app:riv_corner_radius="100dp"/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/pop_share_scene_detail_wechatmoment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="31dp"
+            android:src="@mipmap/wechat_moment_round"
+            app:riv_corner_radius="100dp"/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/pop_share_scene_detail_sina"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="31dp"
+            android:src="@mipmap/sina_round"
+            app:riv_corner_radius="100dp"/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/pop_share_scene_detail_qq"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="31dp"
+            android:src="@mipmap/qq_round"
+            app:riv_corner_radius="100dp"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="13dp"
+    >
+
+    <ImageView
+        android:id="@+id/item_all_fiuer_rank_img"
+        android:layout_width="31dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/jiang1"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/item_all_fiuer_rank_tv"
+        android:layout_width="31dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="4"
+        android:textColor="#999999"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="51dp"
+        >
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/item_all_fiuer_headimg"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            app:riv_border_color="#a5a6a5"
+            app:riv_border_width="1dp"
+            app:riv_corner_radius="@dimen/dp100"/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/item_all_fiuer_vimg"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/v"
+            android:visibility="gone"
+            app:riv_corner_radius="@dimen/dp100"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/relative">
+
+        <TextView
+            android:id="@+id/item_all_fiuer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="狗蛋"
+            android:textColor="#222222"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/item_all_fiuer_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_all_fiuer_name"
+            android:layout_marginTop="4dp"
+            android:text="LV12"
+            android:textColor="@color/yellow_bd8913"
+            android:textSize="9sp"/>
+
+        <TextView
+            android:id="@+id/item_all_fiuer_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_all_fiuer_name"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/item_all_fiuer_rank"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="狗蛋 | 哈哈"
+            android:textColor="#999999"
+            android:textSize="9sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/relative"
+        android:layout_marginTop="13dp"
+        android:background="#e6e6e6"/>
+</RelativeLayout>

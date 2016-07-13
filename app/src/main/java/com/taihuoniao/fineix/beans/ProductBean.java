@@ -3,13 +3,14 @@ package com.taihuoniao.fineix.beans;
 import com.taihuoniao.fineix.base.NetBean;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/4/13.
  */
-public class ProductBean extends NetBean implements Serializable{
+public class ProductBean extends NetBean implements Serializable {
     private Data data;
 
     public Data getData() {
@@ -20,7 +21,7 @@ public class ProductBean extends NetBean implements Serializable{
         this.data = data;
     }
 
-    public static class Data{
+    public static class Data {
         private List<ProductListItem> rows;
 
         public List<ProductListItem> getRows() {
@@ -31,12 +32,13 @@ public class ProductBean extends NetBean implements Serializable{
             this.rows = rows;
         }
     }
-    public static class ProductListItem{
+
+    public static class ProductListItem {
         private int pos;
         private String _id;
         private String title;
-        private String sale_price;
-        private String market_price;
+        private double sale_price;
+        private double market_price;
         private String love_count;
         private String cover_url;
         private String attrbute;
@@ -118,18 +120,18 @@ public class ProductBean extends NetBean implements Serializable{
         }
 
         public String getMarket_price() {
-            return market_price;
+            return new DecimalFormat("######0.00").format(market_price);
         }
 
-        public void setMarket_price(String market_price) {
+        public void setMarket_price(double market_price) {
             this.market_price = market_price;
         }
 
         public String getSale_price() {
-            return sale_price;
+            return new DecimalFormat("######0.00").format(sale_price);
         }
 
-        public void setSale_price(String sale_price) {
+        public void setSale_price(double sale_price) {
             this.sale_price = sale_price;
         }
 
@@ -149,7 +151,8 @@ public class ProductBean extends NetBean implements Serializable{
             this.title = title;
         }
     }
-    public static class Sight{
+
+    public static class Sight {
         private String id;
         private String title;
         private String cover_url;

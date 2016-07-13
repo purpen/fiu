@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -24,6 +25,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -41,6 +43,7 @@ import java.util.List;
 public class AllQingjingActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
     private ImageView searchQJImg;
     private ImageView createQingjingImg;
+    private LinearLayout searchLinear;
     private PullToRefreshGridView pullToRefreshView;
     private GridView qingjingGrid;
     private List<QingJingListBean.QingJingItem> qingjingList;
@@ -65,6 +68,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         setContentView(R.layout.activity_all_qingjing);
         searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);
+        searchLinear = (LinearLayout) findViewById(R.id.search_linear);
         pullToRefreshView = (PullToRefreshGridView) findViewById(R.id.activity_all_qingjing_pullrefreshview);
         qingjingGrid = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) findViewById(R.id.activity_all_qingjing_progress);
@@ -77,6 +81,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 //        isSelect = getIntent().getIntExtra("isSelect", 0);
         searchQJImg.setOnClickListener(this);
         createQingjingImg.setOnClickListener(this);
+        searchLinear.setOnClickListener(this);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -87,7 +92,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 //                progressBar.setVisibility(View.VISIBLE);
                 dialog.show();
                 page = 1;
-                getQJList(page + "", 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
+                getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
             }
         });
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -99,7 +104,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
-                getQJList(page + "", 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
+                getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
             }
         });
         qingjingGrid.setNumColumns(2);
@@ -121,7 +126,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                     dialog.show();
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
-                    getQJList(page + "", 1 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
+                    getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
                 }
             }
         });
@@ -169,63 +174,21 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         });
     }
 
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.QINGJING_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    pullToRefreshView.onRefreshComplete();
-//                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
-//                    if (netQingjingListBean.isSuccess()) {
-//                        if (page == 1) {
-//                            qingjingList.clear();
-//                            pullToRefreshView.lastTotalItem = -1;
-//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-//                        }
-//                        qingjingList.addAll(netQingjingListBean.getData().getRows());
-//                        pullToRefreshView.setLoadingTime();
-//                        allQingjingGridAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    pullToRefreshView.onRefreshComplete();
-//                    break;
-//            }
-//        }
-//    };
-
-//    @Override
-//    protected void onDestroy() {
-//        //cancelNet();
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//            handler = null;
-//        }
-//        super.onDestroy();
-//    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        if (isSelect == 1) {
-//            Intent intent = new Intent();
-//            intent.putExtra("qingjing", qingjingList.get(position));
-//            Log.e("<<<>>>", qingjingList.get(position).getTitle());
-//            setResult(DataConstants.RESULTCODE_SELECTQJ_ALLQJ, intent);
-//            finish();
-//        } else {
         Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
         intent.putExtra("id", qingjingList.get(position).get_id());
         startActivity(intent);
-//        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.search_linear:
+                Intent intent1 = new Intent(this, SearchActivity.class);
+                intent1.putExtra("t", "8");
+                startActivity(intent1);
+                break;
             case R.id.activity_all_qingjing_search:
                 onBackPressed();
                 break;

@@ -44,16 +44,15 @@ import com.taihuoniao.fineix.beans.FiuUserListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.beans.SerSceneListBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.main.ViewPagerActivity;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -243,7 +242,8 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), UserCenterActivity.class);
-                intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUsers.getData().getUsers().get(position).get_id()));
+                long _id = netUsers.getData().getRows().get(position).get_id();
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, _id);
                 startActivity(intent);
             }
         });
@@ -383,7 +383,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     @Override
     protected void requestNet() {
         dialog.show();
-        ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", null, null, 1 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 FiuUserListBean fiuUserListBean = new FiuUserListBean();
@@ -536,22 +536,24 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
-        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-        int a = -1;//这个id在数据中位置
-        SceneListBean sceneListBean = (SceneListBean) parent.getAdapter().getItem(position);
-        for (int i = 0; i < sceneList.size(); i++) {
-            if (sceneList.get(i).get_id().equals(sceneListBean.get_id())) {
-                a = i;
-                break;
-            }
-        }
-        SerSceneListBean serSceneListBean = new SerSceneListBean();
-        serSceneListBean.setSceneList(sceneList);
-        intent.putExtra("page", currentPage);
-        intent.putExtra("position", a + "");
-        intent.putExtra("bean", serSceneListBean);
-        intent.putExtra(FindFragment.class.getSimpleName(), false);
+        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+        SceneListBean sceneListBean = (SceneListBean) sceneListView.getAdapter().getItem(position);
+        intent.putExtra("id", sceneListBean.get_id());
+//        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+//        int a = -1;//这个id在数据中位置
+//        SceneListBean sceneListBean = (SceneListBean) parent.getAdapter().getItem(position);
+//        for (int i = 0; i < sceneList.size(); i++) {
+//            if (sceneList.get(i).get_id().equals(sceneListBean.get_id())) {
+//                a = i;
+//                break;
+//            }
+//        }
+//        SerSceneListBean serSceneListBean = new SerSceneListBean();
+//        serSceneListBean.setSceneList(sceneList);
+//        intent.putExtra("page", currentPage);
+//        intent.putExtra("position", a + "");
+//        intent.putExtra("bean", serSceneListBean);
+//        intent.putExtra(FindFragment.class.getSimpleName(), false);
         getActivity().startActivity(intent);
     }
 

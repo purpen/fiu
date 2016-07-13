@@ -230,8 +230,8 @@ public class DataPaser {
                     if (goodsDetailsBean.isSuccess()) {
                         goodsDetailsBean.set_id(data.optString("_id"));
                         goodsDetailsBean.setTitle(data.optString("title"));
-                        goodsDetailsBean.setSale_price(data.optString("sale_price"));
-                        goodsDetailsBean.setMarket_price(data.optString("market_price"));
+                        goodsDetailsBean.setSale_price(data.optDouble("sale_price"));
+                        goodsDetailsBean.setMarket_price(data.optDouble("market_price"));
                         goodsDetailsBean.setIs_love(data.optString("is_love"));
                         goodsDetailsBean.setShare_view_url(data.optString("share_view_url"));
                         goodsDetailsBean.setShare_desc(data.optString("share_desc"));
@@ -250,7 +250,7 @@ public class DataPaser {
                             relationProductsBean.set_id(job.optString("_id"));
                             relationProductsBean.setCover_url(job.optString("cover_url"));
                             relationProductsBean.setTitle(job.optString("title"));
-                            relationProductsBean.setSale_price(job.optString("sale_price"));
+                            relationProductsBean.setSale_price(job.optDouble("sale_price"));
                             relationProductsList.add(relationProductsBean);
                         }
                         goodsDetailsBean.setRelationProductsList(relationProductsList);
@@ -1177,8 +1177,8 @@ public class DataPaser {
 
     //公共
     //品牌列表
-    public static void brandList(int page, int size, final Handler handler) {
-        ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
+    public static void brandList(int page, int size, String mark, String self_run, String stick, final Handler handler) {
+        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<品牌列表", responseInfo.result);
@@ -1320,8 +1320,8 @@ public class DataPaser {
                         product.set_id(jsonObject3.optString("_id"));
                         product.setTitle(jsonObject3.optString("title"));
                         product.setOid(jsonObject3.optString("oid"));
-                        product.setSale_price(jsonObject3.optString("sale_price"));
-                        product.setMarket_price(jsonObject3.optString("market_price"));
+                        product.setSale_price(jsonObject3.optDouble("sale_price"));
+                        product.setMarket_price(jsonObject3.optDouble("market_price"));
                         product.setLink(jsonObject3.optString("link"));
                         product.setAttrbute(jsonObject3.optString("attrbute"));
                         product.setCover_url(jsonObject3.optString("cover_url"));
@@ -2232,7 +2232,7 @@ public class DataPaser {
                         products.setPrice(productsArr.optString("price"));
                         products.setProduct_id(productsArr.optString("product_id"));
                         products.setQuantity(productsArr.optString("quantity"));
-                        products.setSale_price(productsArr.optString("sale_price"));
+                        products.setSale_price(productsArr.optDouble("sale_price"));
                         products.setSku(productsArr.optString("sku"));
                         products.setSku_name(productsArr.optString("sku_name"));
                         productsList.add(products);
@@ -2432,7 +2432,7 @@ public class DataPaser {
 
     //最fiu伙伴
     public static void fiuUserList(String page, String size, String type, String sight_count, String sort, final Handler handler) {
-        ClientDiscoverAPI.fiuUserList(page, size, type, sight_count, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.fiuUserList(page, size, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<fiu",responseInfo.result);

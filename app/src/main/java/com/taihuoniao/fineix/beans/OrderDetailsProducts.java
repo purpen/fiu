@@ -1,12 +1,14 @@
 package com.taihuoniao.fineix.beans;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 /**
  * Created by android on 2016/3/13.
  */
 public class OrderDetailsProducts implements Serializable {
-    private String sku, product_id, quantity, price, sale_price, name, sku_name, cover_url;
+    private String sku, product_id, quantity, price, name, sku_name, cover_url;
+    private double sale_price;
 
     @Override
     public String toString() {
@@ -55,10 +57,10 @@ public class OrderDetailsProducts implements Serializable {
     }
 
     public String getSale_price() {
-        return sale_price;
+        return new DecimalFormat("######0.00").format(sale_price);
     }
 
-    public void setSale_price(String sale_price) {
+    public void setSale_price(double sale_price) {
         this.sale_price = sale_price;
     }
 

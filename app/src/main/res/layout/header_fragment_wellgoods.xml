@@ -23,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:background="@color/white"
             android:gravity="center"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
