@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
@@ -28,7 +29,6 @@ import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
-import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -36,8 +36,6 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
-
-//import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -49,7 +47,7 @@ import java.util.UUID;
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
-    public LocationService locationService;
+    //    public LocationService locationService;
     public Vibrator mVibrator;
     public static int which_activity;//0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
@@ -83,7 +81,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        locationService = new LocationService(getApplicationContext());
+//        locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         instance = this;
@@ -94,7 +92,8 @@ public class MainApplication extends Application {
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
         filterPicPath = getCacheDirPath() + "/filter";
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
+
     }
 
     public int getScreenHeight() {

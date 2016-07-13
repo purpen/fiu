@@ -378,7 +378,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //获得当前位置信息
     private void getCurrentLocation() {
         dialog.show();
-        MapUtil.getCurrentLocation(CreateSceneActivity.this, new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {

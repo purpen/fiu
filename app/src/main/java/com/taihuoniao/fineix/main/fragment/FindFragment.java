@@ -218,7 +218,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             }
         });
         sceneListView.setOnItemClickListener(this);
-        MapUtil.getCurrentLocation(getActivity(), new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {

@@ -123,7 +123,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     }
 
     private void getCurrentLocation() {
-        MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (bdLocation == null) {

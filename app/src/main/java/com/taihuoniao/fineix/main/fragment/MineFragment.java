@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -58,13 +59,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MineFragment extends MyBaseFragment {
-    public interface onMessageCountChangeListener {
-        void onMessageCountChange(int count);
-    }
+    private static OnMessageCountChangeListener listener;
 
-    private static onMessageCountChangeListener listener;
-
-    public static void setOnMessageCountChangeListener(onMessageCountChangeListener listener) {
+    public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
         MineFragment.listener = listener;
     }
 
@@ -474,4 +471,9 @@ public class MineFragment extends MyBaseFragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        listener = null;
+        super.onDestroy();
+    }
 }

@@ -137,4 +137,10 @@ public class CertificateStatusActivity extends BaseActivity{
         intent.putExtra(AuthData.class.getSimpleName(),authData);
         startActivity(intent);
     }
+
+    @Override
+    protected void onDestroy() {
+        instance = null;
+        super.onDestroy();
+    }
 }

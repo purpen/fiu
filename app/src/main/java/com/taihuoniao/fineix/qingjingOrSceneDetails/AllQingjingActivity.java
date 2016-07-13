@@ -114,7 +114,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     }
 
     private void getCurrentLocation() {
-        MapUtil.getCurrentLocation(AllQingjingActivity.this, new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {

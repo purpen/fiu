@@ -200,16 +200,16 @@ public class EditUserInfoActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_take_photo:
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     getImageFromCamera();
                     break;
                 case R.id.tv_album:
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     getImageFromAlbum();
                     break;
                 case R.id.tv_cancel:
                 default:
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     break;
             }
         }
@@ -293,7 +293,7 @@ public class EditUserInfoActivity extends BaseActivity {
                         custom_area.setTvArrowLeftStyle(true,addr, R.color.color_333);
                     case R.id.tv_cancel_select:
                     default:
-                        PopupWindowUtil.dismiss();
+                        PopupWindowUtil.dismiss(activity);
                         break;
                 }
             }
@@ -314,7 +314,7 @@ public class EditUserInfoActivity extends BaseActivity {
                         custom_user_birthday.setTvArrowLeftStyle(true, cbsv.getBithday(), R.color.color_333);
                     case R.id.tv_cancel_select:
                     default:
-                        PopupWindowUtil.dismiss();
+                        PopupWindowUtil.dismiss(activity);
                         break;
                 }
             }
@@ -327,7 +327,7 @@ public class EditUserInfoActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tv_cancel_select:
-                        PopupWindowUtil.dismiss();
+                        PopupWindowUtil.dismiss(activity);
                         break;
                     case R.id.tv_confirm_select:
                         switch (id) {
@@ -346,10 +346,10 @@ public class EditUserInfoActivity extends BaseActivity {
                                 custom_user_sex.setTvArrowLeftStyle(true,sex, R.color.color_333);
                                 break;
                         }
-                        PopupWindowUtil.dismiss();
+                        PopupWindowUtil.dismiss(activity);
                         break;
                     default:
-                        PopupWindowUtil.dismiss();
+                        PopupWindowUtil.dismiss(activity);
                         break;
                 }
             }

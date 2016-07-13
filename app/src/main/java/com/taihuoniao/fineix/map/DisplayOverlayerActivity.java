@@ -118,7 +118,7 @@ public class DisplayOverlayerActivity extends BaseActivity<QingJingItem> {
     }
 
     private void startLocate() {
-        MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (bdLocation == null && mv == null) {

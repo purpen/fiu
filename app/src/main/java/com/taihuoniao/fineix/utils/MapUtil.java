@@ -1,5 +1,5 @@
 package com.taihuoniao.fineix.utils;
-import android.app.Activity;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -16,6 +16,7 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.poi.PoiSortType;
+import com.taihuoniao.fineix.main.MainApplication;
 
 /**
  * @author lilin
@@ -120,8 +121,8 @@ public class MapUtil {
         void onReceiveLocation(BDLocation bdLocation);
     }
 
-    public static void getCurrentLocation(Activity activity,final OnReceiveLocationListener locationListener){
-        mLocationClient = new LocationClient(activity);
+    public static void getCurrentLocation(final OnReceiveLocationListener locationListener) {
+        mLocationClient = new LocationClient(MainApplication.getContext());
         mLocationClient.registerLocationListener(new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {

@@ -220,20 +220,18 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
             case R.id.tv_take_photo:
                 if (FileUtils.bitmapToFile(bitmap_2code, FileUtils.getSavePath(getPackageName()) + "/bar_code.png")) {
                     ToastUtils.showSuccess("二维码已保存到" + getPackageName() + "文件夹下");
-//                    svProgressHUD.showSuccessWithStatus("二维码已保存到"+getPackageName()+"文件夹下");
                 } else {
                     ToastUtils.showError("SD卡不可写，二维码保存失败");
-//                    svProgressHUD.showErrorWithStatus("SD卡不可写，二维码保存失败");
                 }
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
             case R.id.tv_album:
                 startActivity(new Intent(activity, CaptureActivity.class));
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
             case R.id.tv_cancel:
             default:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
         }
     }
