@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -56,9 +57,7 @@ public class ViewPagerActivity extends BaseActivity {
         if (serSceneListBean != null) {
             list.addAll(serSceneListBean.getSceneList());
         }
-        if (position != null) {
-            viewpager.setCurrentItem(Integer.parseInt(position));
-        }
+
         vAdapter = new VAdapter(getSupportFragmentManager(), list);
         viewpager.setAdapter(vAdapter);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -85,6 +84,10 @@ public class ViewPagerActivity extends BaseActivity {
 
             }
         });
+        if (position != null) {
+            Log.e("<<<", "position=" + position);
+            viewpager.setCurrentItem(Integer.parseInt(position));
+        }
     }
 
     private void getNextPageData() {

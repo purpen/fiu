@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -44,8 +45,8 @@ private String oid;
         private String title;
         private String cover_url;
         private List<String> banners_url;
-        private String market_price;
-        private String sale_price;
+        private double market_price;
+        private double sale_price;
         private String link;
 
         public List<String> getBanners_url() {
@@ -73,10 +74,10 @@ private String oid;
         }
 
         public String getMarket_price() {
-            return market_price;
+            return new DecimalFormat("######0.00").format(market_price);
         }
 
-        public void setMarket_price(String market_price) {
+        public void setMarket_price(double market_price) {
             this.market_price = market_price;
         }
 
@@ -89,10 +90,10 @@ private String oid;
         }
 
         public String getSale_price() {
-            return sale_price;
+            return new DecimalFormat("######0.00").format(sale_price);
         }
 
-        public void setSale_price(String sale_price) {
+        public void setSale_price(double sale_price) {
             this.sale_price = sale_price;
         }
 

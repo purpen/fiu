@@ -35,6 +35,11 @@
         <item name="android:windowExitAnimation">@anim/up_to_bottom</item>
     </style>
 
+    <style name="popup_style" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/small_to_big</item>
+        <item name="android:windowExitAnimation">@anim/big_to_small</item>
+    </style>
+
     <!-- 网络请求时的ProgressDialog -->
     <style name="CustomDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

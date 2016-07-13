@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.beans;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by taihuoniao on 2016/2/23.
  */
@@ -7,7 +9,7 @@ public class RelationProductsBean {
     private String _id;
     private String title;
     private String cover_url;
-    private String sale_price;
+    private double sale_price;
 
     public String getCover_url() {
         return cover_url;
@@ -26,10 +28,10 @@ public class RelationProductsBean {
     }
 
     public String getSale_price() {
-        return sale_price;
+        return new DecimalFormat("######0.00").format(sale_price);
     }
 
-    public void setSale_price(String sale_price) {
+    public void setSale_price(double sale_price) {
         this.sale_price = sale_price;
     }
 

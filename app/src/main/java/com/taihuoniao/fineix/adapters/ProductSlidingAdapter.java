@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,11 +22,13 @@ public class ProductSlidingAdapter extends BaseAdapter {
     private ProductBean.ProductListItem productListItem;
     private SearchBean.SearchItem searchItem;
     private DisplayImageOptions options;
+    private boolean isScrolling;
 
-    public ProductSlidingAdapter(Activity activity, ProductBean.ProductListItem productListItem, SearchBean.SearchItem searchItem) {
+    public ProductSlidingAdapter(Activity activity, ProductBean.ProductListItem productListItem, SearchBean.SearchItem searchItem, boolean isScrolling) {
         this.activity = activity;
         this.productListItem = productListItem;
         this.searchItem = searchItem;
+        this.isScrolling = isScrolling;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -79,89 +80,146 @@ public class ProductSlidingAdapter extends BaseAdapter {
             convertView.setTag(holder);
             holder.left = (ImageView) convertView.findViewById(R.id.view_sliding_focus_left);
             holder.iv = (ImageView) convertView.findViewById(R.id.view_sliding_focus_img);
-            holder.zhezhaoTv = (TextView) convertView.findViewById(R.id.view_sliding_focus_zhezhao);
+//            holder.zhezhaoTv = (TextView) convertView.findViewById(R.id.view_sliding_focus_zhezhao);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         if (productListItem != null) {
 //            Log.e("<<<遮罩", position + "," + productListItem.getPos());
-            if (position == productListItem.getPos()) {
-                holder.zhezhaoTv.setVisibility(View.GONE);
-            } else {
-                holder.zhezhaoTv.setVisibility(View.VISIBLE);
+//            if (position == productListItem.getPos()) {
+//                holder.zhezhaoTv.setVisibility(View.GONE);
+//            } else {
+//                holder.zhezhaoTv.setVisibility(View.VISIBLE);
+//            }
+            if (isScrolling) {
+                holder.iv.setImageResource(R.mipmap.default_background_750_1334);
             }
             if (productListItem.getSights() != null && productListItem.getSights().size() > 0 && productListItem.getSights().get(0) != null) {
                 if (position % (1 + productListItem.getBanner_asset().size()) == productListItem.getBanner_asset().size()) {
                     convertView.setLayoutParams(new Gallery.LayoutParams(activity.getResources().getDimensionPixelSize(R.dimen.dp90), activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-                    ImageLoader.getInstance().displayImage(productListItem.getSights().get(0).getCover_url(), holder.iv);
+                    if (!isScrolling) {
+                        ImageLoader.getInstance().displayImage(productListItem.getSights().get(0).getCover_url(), holder.iv);
+                    }
                     holder.left.setVisibility(View.GONE);
                     return convertView;
                 }
-                ImageLoader.getInstance().displayImage(productListItem.getBanner_asset().get(position % (1 + productListItem.getBanner_asset().size())), holder.iv);
-                if (position % 2 == 0) {
+                if (!isScrolling) {
+                    ImageLoader.getInstance().displayImage(productListItem.getBanner_asset().get(position % (1 + productListItem.getBanner_asset().size())), holder.iv);
+                }
+                switch (productListItem.getBanner_asset().size()) {
+                    case 2:
+                        if (position % 3 == 1) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 3:
+                        if (position % 4 == 1) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 4:
+                        if (position % 5 == 1 || position % 5 == 3) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 5:
+                        if (position % 6 == 1 || position % 6 == 3) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    default:
+                        holder.left.setVisibility(View.GONE);
+                        break;
+                }
+                convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+                return convertView;
+            } else if (productListItem.getCover_url() != null) {
+                if (position % (1 + productListItem.getBanner_asset().size()) == productListItem.getBanner_asset().size()) {
+                    convertView.setLayoutParams(new Gallery.LayoutParams(activity.getResources().getDimensionPixelSize(R.dimen.dp90), activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+                    if (!isScrolling) {
+                        ImageLoader.getInstance().displayImage(productListItem.getCover_url(), holder.iv);
+                    }
                     holder.left.setVisibility(View.GONE);
-                } else {
-                    holder.left.setVisibility(View.VISIBLE);
+                    return convertView;
+                }
+                if (!isScrolling) {
+                    ImageLoader.getInstance().displayImage(productListItem.getBanner_asset().get(position % (1 + productListItem.getBanner_asset().size())), holder.iv);
+                }
+                switch (productListItem.getBanner_asset().size()) {
+                    case 2:
+                        if (position % 3 == 1) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 3:
+                        if (position % 4 == 1) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 4:
+                        if (position % 5 == 1 || position % 5 == 3) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 5:
+                        if (position % 6 == 1 || position % 6 == 3) {
+                            holder.left.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.left.setVisibility(View.GONE);
+                        }
+                        break;
+                    default:
+                        holder.left.setVisibility(View.GONE);
+                        break;
                 }
                 convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
                 return convertView;
             }
-            ImageLoader.getInstance().displayImage(productListItem.getBanner_asset().get(position % (productListItem.getBanner_asset().size())), holder.iv);
-            if (position % 2 == 0) {
-                holder.left.setVisibility(View.GONE);
-            } else {
-                holder.left.setVisibility(View.VISIBLE);
+            if (!isScrolling) {
+                ImageLoader.getInstance().displayImage(productListItem.getBanner_asset().get(position % (productListItem.getBanner_asset().size())), holder.iv);
             }
             convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+            if (position % 2 == 1) {
+                holder.left.setVisibility(View.VISIBLE);
+            } else {
+                holder.left.setVisibility(View.GONE);
+            }
             return convertView;
         } else if (searchItem != null) {
-            if (position == searchItem.pos) {
-                holder.zhezhaoTv.setVisibility(View.GONE);
-            } else {
-                holder.zhezhaoTv.setVisibility(View.VISIBLE);
-            }
+//            if (position == searchItem.pos) {
+//                holder.zhezhaoTv.setVisibility(View.GONE);
+//            } else {
+//                holder.zhezhaoTv.setVisibility(View.VISIBLE);
+//            }
             ImageLoader.getInstance().displayImage(searchItem.getBanners().get(position % (searchItem.getBanners().size())), holder.iv);
-            if (position % 2 == 0) {
-                holder.left.setVisibility(View.GONE);
-            } else {
+            if (position % 2 == 1) {
                 holder.left.setVisibility(View.VISIBLE);
+            } else {
+                holder.left.setVisibility(View.GONE);
             }
             convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
             return convertView;
         }
-        return null;
-//        if (sights != null && sights.size() > 0 && sights.get(0) != null) {
-//            if (position % (1 + list.size()) == list.size()) {
-//                ImageView imageView = new ImageView(parent.getContext());
-//                imageView.setLayoutParams(new Gallery.LayoutParams(activity.getResources().getDimensionPixelSize(R.dimen.dp85), activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                ImageLoader.getInstance().displayImage(sights.get(0).getCover_url(), imageView, options);
-//                return imageView;
-//            }
-//            item = list.get(position % (1 + list.size()));
-//        } else {
-//            item = list.get(position % list.size());
-//        }
-//
-//
-//        if (item instanceof String) {
-//            ImageLoader.getInstance().displayImage((String) item, holder.iv, options);
-//        }
-//        if (item instanceof Integer) {
-//            ImageLoader.getInstance().displayImage("drawable://" + (Integer) item, holder.iv, options);
-//        }
-//        if (position % 2 == 0) {
-//            holder.left.setVisibility(View.GONE);
-//        } else {
-//            holder.left.setVisibility(View.VISIBLE);
-//        }
-//        convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-//        return convertView;
+        return convertView;
     }
 
     static class ViewHolder {
         ImageView left;
         ImageView iv;
-        TextView zhezhaoTv;
+//        TextView zhezhaoTv;
     }
 }

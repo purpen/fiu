@@ -24,12 +24,12 @@ public class FiuUsersAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return fiuUserListBean.getData().getUsers() == null ? 0 : fiuUserListBean.getData().getUsers().size();
+        return fiuUserListBean.getData().getRows() == null ? 0 : fiuUserListBean.getData().getRows().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return fiuUserListBean.getData().getUsers().get(position);
+        return fiuUserListBean.getData().getRows().get(position);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FiuUsersAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 //            FileManagerImageLoader.getInstance().addTask(getItem(position).getMedium_avatar_url(), itemRound, null, 48, 48, false);
-        ImageLoader.getInstance().displayImage(fiuUserListBean.getData().getUsers().get(position).getMedium_avatar_url(), holder.img);
+        ImageLoader.getInstance().displayImage(fiuUserListBean.getData().getRows().get(position).getAvatar_url(), holder.img);
         return convertView;
     }
 

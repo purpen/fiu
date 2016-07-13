@@ -2,10 +2,10 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -23,17 +23,35 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/5/5.
  */
-public class GoodListAdapter extends BaseAdapter {
+public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private Activity activity;
     private List<ProductBean.ProductListItem> list;
     private List<SearchBean.SearchItem> searchList;
-    //    private ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity,0, null, null);
-//    private int pos;
+    private boolean isScrolling;//用来判断listview是否正在滑动的标识
+    private SceneListViewAdapter.SceneListAdapterScrollListener sceneListAdapterScrollListener;//外界用来调用的滑动监听
 
     public GoodListAdapter(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
         this.activity = activity;
         this.list = list;
         this.searchList = searchList;
+    }
+
+    /**
+     * 设置listview用来监听listview的滑动状态
+     *
+     * @param listView 设置监听滑动状态的listview
+     */
+    public void setListView(AbsListView listView) {
+        listView.setOnScrollListener(this);
+    }
+
+    /**
+     * 设置滑动监听,是外部可以调用
+     *
+     * @param sceneListAdapterScrollListener 外部调用用来替换onscrolllisttener的监听
+     */
+    public void setSceneListAdapterScrollListener(SceneListViewAdapter.SceneListAdapterScrollListener sceneListAdapterScrollListener) {
+        this.sceneListAdapterScrollListener = sceneListAdapterScrollListener;
     }
 
     @Override
@@ -62,7 +80,7 @@ public class GoodListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView( int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_good_listview, null);
@@ -75,40 +93,50 @@ public class GoodListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        if (holder.slidingFocusImageView.getTag() != null) {
+            int pa = (int) holder.slidingFocusImageView.getTag();
+            if (pa == position) {
+                return convertView;
+            }
+        }
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         final int p = position;
-        holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//        holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int posi, long id) {
+////                pos = position;
+//                if(list!=null){
+//                    list.get(p).setPos(posi);
+//                }else{
+//                    searchList.get(p).pos = posi;
+//                }
+//                ProductSlidingAdapter productSlidingAdapter = (ProductSlidingAdapter) holder.slidingFocusImageView.getTag();
+//                productSlidingAdapter.notifyDataSetChanged();
+////                Log.e("<<<切换焦点", p + "," + list.get(p).getPos()+",适配器"+productSlidingAdapter);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int posi, long id) {
-//                pos = position;
-                if(list!=null){
-                    list.get(p).setPos(posi);
-                }else{
-                    searchList.get(p).pos = posi;
-                }
-                ProductSlidingAdapter productSlidingAdapter = (ProductSlidingAdapter) holder.slidingFocusImageView.getTag();
-                productSlidingAdapter.notifyDataSetChanged();
-//                Log.e("<<<切换焦点", p + "," + list.get(p).getPos()+",适配器"+productSlidingAdapter);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         if (list != null) {
             holder.nameTv.setText(list.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
             if (list.get(position).getBanner_asset().size() > 0) {
-//                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter<String>(holder.slidingFocusImageView, list.get(position).getSights(), list.get(position).getBanner_asset(), activity));
-                ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity,list.get(position), null);
-                holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
-                holder.slidingFocusImageView.setTag(productSlidingAdapter1);
+                //设置滑动锁
+                if (isScrolling) {
+                    holder.slidingFocusImageView.setAdapter(new ProductSlidingAdapter(activity, list.get(position), null, true));
+                } else {
+                    holder.slidingFocusImageView.setAdapter(new ProductSlidingAdapter(activity, list.get(position), null, false));
+                    holder.slidingFocusImageView.setTag(position);
+                }
 //                Log.e("<<<适配器",productSlidingAdapter1.toString());
-                if (list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) {
+                if ((list.get(position).getSights() != null && list.get(position).getSights().size() > 0 && list.get(position).getSights().get(0) != null) || list.get(position).getCover_url() != null) {
                     switch (list.get(position).getBanner_asset().size()) {
                         case 2:
                             holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
@@ -152,7 +180,7 @@ public class GoodListAdapter extends BaseAdapter {
             holder.priceTv.setText(String.format("¥%s", searchList.get(position).getSale_price()));
             if (searchList.get(position).getBanners().size() > 0) {
 //                holder.slidingFocusImageView.setAdapter(new SlidingFocusAdapter<String>(holder.slidingFocusImageView, null, searchList.get(position).getBanners(), activity));
-                ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity, null, searchList.get(position));
+                ProductSlidingAdapter productSlidingAdapter1 = new ProductSlidingAdapter(activity, null, searchList.get(position), false);
                 holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
                 holder.slidingFocusImageView.setTag(productSlidingAdapter1);
                 holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
@@ -181,6 +209,26 @@ public class GoodListAdapter extends BaseAdapter {
             holder.img.setOnClickListener(clickListener);
         }
         return convertView;
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (sceneListAdapterScrollListener != null) {
+            sceneListAdapterScrollListener.onScrollStateChanged(view, scrollState);
+        }
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            isScrolling = false;
+            notifyDataSetChanged();
+        } else {
+            isScrolling = true;
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (sceneListAdapterScrollListener != null) {
+            sceneListAdapterScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
     }
 
     static class ClickListener implements View.OnClickListener, AdapterView.OnItemClickListener {

@@ -93,6 +93,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
         this(context, attrs, 0);
     }
 
+    @SuppressWarnings("ResourceType")
     public CustomSlidingTab(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
@@ -233,7 +234,7 @@ public class CustomSlidingTab extends HorizontalScrollView {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(position);
-                if(isSearch){
+                if (isSearch) {
                     cancelSearch.cancelSearch();
                 }
             }
@@ -242,10 +243,12 @@ public class CustomSlidingTab extends HorizontalScrollView {
         tab.setPadding(tabPadding, 0, tabPadding, 0);
         tabsContainer.addView(tab, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
     }
+
     private boolean isSearch = false;
     private AddProductActivity.CancelSearch cancelSearch;
-    public void setAddProductActivity(boolean isSearch,AddProductActivity.CancelSearch cancelSearch){
-        this.isSearch  = isSearch;
+
+    public void setAddProductActivity(boolean isSearch, AddProductActivity.CancelSearch cancelSearch) {
+        this.isSearch = isSearch;
         this.cancelSearch = cancelSearch;
     }
 

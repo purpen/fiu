@@ -94,6 +94,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), this);
         View header = View.inflate(SelectQingjingActivity.this, R.layout.header_select_qingjing, null);
         searchLinear = (LinearLayout) header.findViewById(R.id.activity_select_qingjing_searchlinear);
+        searchLinear.setVisibility(View.GONE);
         mapRelative = (RelativeLayout) header.findViewById(R.id.rl_box);
 //        mapView = (MapView) header.findViewById(R.id.mv);
         nearTv = (TextView) header.findViewById(R.id.tv);

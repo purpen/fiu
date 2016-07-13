@@ -787,8 +787,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                     if (goodsDetails.isSuccess()) {
                         goodsDetails.set_id(data.optString("_id"));
                         goodsDetails.setTitle(data.optString("title"));
-                        goodsDetails.setSale_price(data.optString("sale_price"));
-                        goodsDetails.setMarket_price(data.optString("market_price"));
+                        goodsDetails.setSale_price(data.optDouble("sale_price"));
+                        goodsDetails.setMarket_price(data.optDouble("market_price"));
                         goodsDetails.setIs_love(data.optString("is_love"));
                         goodsDetails.setShare_view_url(data.optString("share_view_url"));
                         goodsDetails.setShare_desc(data.optString("share_desc"));
@@ -807,7 +807,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                             relationProductsBean.set_id(job.optString("_id"));
                             relationProductsBean.setCover_url(job.optString("cover_url"));
                             relationProductsBean.setTitle(job.optString("title"));
-                            relationProductsBean.setSale_price(job.optString("sale_price"));
+                            relationProductsBean.setSale_price(job.optDouble("sale_price"));
                             relationProductsList.add(relationProductsBean);
                         }
                         goodsDetails.setRelationProductsList(relationProductsList);

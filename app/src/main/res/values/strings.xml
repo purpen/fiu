@@ -267,6 +267,7 @@
     <string name="share">分享</string>
     <string name="to_buy">去购买</string>
     <string name="brand">品牌</string>
+    <string name="mine_brand">自营品牌</string>
     <string name="product_lightspot">产品亮点</string>
     <string name="belong_what_changjing">所属情景</string>
     <string name="related_recommend">相关推荐</string>
@@ -310,6 +311,7 @@
     <string name="add_new_address">+添加新地址</string>
     <string name="no_address">你还没有收货地址</string>
     <string name="search_scene">搜索地盘</string>
+    <string name="search_user">搜索用户</string>
     <string name="search_text">搜索文字</string>
     <string name="select_all">全选</string>
     <string name="account">结算</string>
@@ -368,4 +370,11 @@
     <string name="fiu_descrip"> | 创新产品情景式购物平台</string>
     <string name="no_this_sight">没有这个地盘</string>
     <string name="position">位置</string>
+    <string name="ranking_list_users">用户排行</string>
+    <!-- 品牌列表 -->
+    <string name="action_fastscroll">Fast scroll</string>
+    <string name="action_addpadding">Add padding</string>
+    <string name="action_showShadow">Show shadow</string>
+    <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
+    <string name="action_updateDataset">Update dataset</string>
 </resources>

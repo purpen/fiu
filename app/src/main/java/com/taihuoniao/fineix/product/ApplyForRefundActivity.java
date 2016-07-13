@@ -154,7 +154,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                         products.setPrice(productsArr.optString("price"));
                         products.setProduct_id(productsArr.optString("product_id"));
                         products.setQuantity(productsArr.optString("quantity"));
-                        products.setSale_price(productsArr.optString("sale_price"));
+                        products.setSale_price(productsArr.optDouble("sale_price"));
                         products.setSku(productsArr.optString("sku"));
                         products.setSku_name(productsArr.optString("sku_name"));
                         productsList.add(products);

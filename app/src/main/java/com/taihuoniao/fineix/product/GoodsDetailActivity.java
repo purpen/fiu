@@ -517,8 +517,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         product.set_id(jsonObject3.optString("_id"));
                         product.setTitle(jsonObject3.optString("title"));
                         product.setOid(jsonObject3.optString("oid"));
-                        product.setSale_price(jsonObject3.optString("sale_price"));
-                        product.setMarket_price(jsonObject3.optString("market_price"));
+                        product.setSale_price(jsonObject3.optDouble("sale_price"));
+                        product.setMarket_price(jsonObject3.optDouble("market_price"));
                         product.setLink(jsonObject3.optString("link"));
                         product.setAttrbute(jsonObject3.optString("attrbute"));
                         product.setCover_url(jsonObject3.optString("cover_url"));
@@ -591,7 +591,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                     netGood = netGoodsDetailBean;
                     ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
                     name.setText(netGoodsDetailBean.getData().getTitle());
-                    price.setText("¥ " + df.format(Double.valueOf(netGoodsDetailBean.getData().getSale_price())));
+                    price.setText("¥ " + netGoodsDetailBean.getData().getSale_price());
                     if (netGoodsDetailBean.getData().getBrand() != null) {
                         ImageLoader.getInstance().displayImage(netGoodsDetailBean.getData().getBrand().getCover_url(), brandImg, option);
                         brandTitle.setText(netGoodsDetailBean.getData().getBrand().getTitle());

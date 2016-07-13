@@ -418,11 +418,14 @@ public class ClientDiscoverAPI {
 
     //公共
     //品牌列表
-    public static void brandList(int page, int size, RequestCallBack<String> callBack) {
+    public static void brandList(int page, int size, String mark, String self_run, String stick, RequestCallBack<String> callBack) {
         String url = NetworkConstance.brand_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page + "");
         params.addQueryStringParameter("size", size + "");
+        params.addQueryStringParameter("mark", mark);
+        params.addQueryStringParameter("self_run", self_run );
+        params.addQueryStringParameter("stick", stick );
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1129,13 +1132,11 @@ public class ClientDiscoverAPI {
     }
 
     //最fiu伙伴
-    public static void fiuUserList(String page, String size, String type, String sight_count, String sort, RequestCallBack<String> callBack) {
+    public static void fiuUserList(String page, String size, String sort, RequestCallBack<String> callBack) {
         String url = NetworkConstance.fiu_user_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
-        params.addQueryStringParameter("type", type);
-        params.addQueryStringParameter("sight_count", sight_count);
         params.addQueryStringParameter("sort", sort);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
@@ -1282,12 +1283,12 @@ public class ClientDiscoverAPI {
     }
 
     //送积分
-    public static void getBonus(String type,String evt,String target_id,RequestCallBack<String>callBack){
+    public static void getBonus(String type, String evt, String target_id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.GET_BONUS;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("type",type);
-        params.addQueryStringParameter("evt",evt);
-        params.addQueryStringParameter("target_id",target_id);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("evt", evt);
+        params.addQueryStringParameter("target_id", target_id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

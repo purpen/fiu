@@ -35,6 +35,7 @@ import com.taihuoniao.fineix.adapters.FiuBrandsAdapter;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.adapters.PinLabelRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.PinRecyclerAdapter;
+import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
 import com.taihuoniao.fineix.adapters.SeconCategoryAdapter;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
@@ -72,10 +73,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener {
+public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyclerAdapter.ItemClick, View.OnClickListener, AbsListView.OnScrollListener, SceneListViewAdapter.SceneListAdapterScrollListener {
     //界面下的控件
     private RelativeLayout titlelayout;
-//    private LinearLayout goneLinear;
+    //    private LinearLayout goneLinear;
     private RecyclerView secondCategoryRecycler;
     private ImageView searchImg;
     private RelativeLayout cartRelative;
@@ -243,13 +244,15 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         secondCategoryRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         pinRecyclerAdapter = new PinRecyclerAdapter(getActivity(), list, this);
         recyclerView.setAdapter(pinRecyclerAdapter);
-        seconCategoryAdapter = new SeconCategoryAdapter(getActivity(), list,this);
+        seconCategoryAdapter = new SeconCategoryAdapter(getActivity(), list, this);
         secondCategoryRecycler.setAdapter(seconCategoryAdapter);
         productList = new ArrayList<>();
         goodListAdapter = new GoodListAdapter(getActivity(), productList, null);
         listView.setAdapter(goodListAdapter);
+        goodListAdapter.setListView(listView);
+        goodListAdapter.setSceneListAdapterScrollListener(this);
         listView.setDividerHeight(0);
-        listView.setOnScrollListener(this);
+//        listView.setOnScrollListener(this);
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -354,7 +357,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         startActivity(intent);
     }
 
-    private List<BrandListBean.BrandItem> brandItemList;
+    private List<BrandListBean.DataBean.RowsBean> brandItemList;
 
 
     @Override
@@ -477,7 +480,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
         //悬浮效果
-        Log.e("<<<", "firstVisible=" + firstVisibleItem);
+//        Log.e("<<<", "firstVisible=" + firstVisibleItem);
         if (firstVisibleItem >= 1) {
 //            goneLinear.setVisibility(View.VISIBLE);
             if (secondCategoryRecycler.getTranslationY() >= 0) {
@@ -564,6 +567,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<商品列表", responseInfo.result);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
@@ -674,7 +678,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     //品牌列表
     private void brandList(int page, int size) {
-        ClientDiscoverAPI.brandList(page, size, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(page, size, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 BrandListBean brandListBean = new BrandListBean();

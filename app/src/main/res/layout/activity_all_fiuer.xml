@@ -9,8 +9,50 @@
         android:layout_height="wrap_content"/>
 
     <TextView
+        android:id="@+id/line8"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@id/titlelayout"
         android:background="#e2e2e2"/>
+
+    <LinearLayout
+        android:id="@+id/searchlinear"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_below="@id/line8"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_corner_gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="8dp"
+            android:src="@mipmap/search_height_26px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_user"
+            android:textColor="#666666"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/line9"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/searchlinear"
+        android:background="#e2e2e2"/>
+
+    <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/pull_refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line9"/>
 </RelativeLayout>

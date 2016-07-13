@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -76,8 +77,8 @@ public class ProductAndSceneListBean extends NetBean {
         private String _id;
         private String title;
         private String oid;
-        private String sale_price;
-        private String market_price;
+        private double sale_price;
+        private double market_price;
         private String link;
         private String attrbute;
         private String cover_url;
@@ -124,18 +125,18 @@ public class ProductAndSceneListBean extends NetBean {
         }
 
         public String getMarket_price() {
-            return market_price;
+            return new DecimalFormat("######0.00").format(market_price);
         }
 
-        public void setMarket_price(String market_price) {
+        public void setMarket_price(double market_price) {
             this.market_price = market_price;
         }
 
         public String getSale_price() {
-            return sale_price;
+            return new DecimalFormat("######0.00").format(sale_price);
         }
 
-        public void setSale_price(String sale_price) {
+        public void setSale_price(double sale_price) {
             this.sale_price = sale_price;
         }
 

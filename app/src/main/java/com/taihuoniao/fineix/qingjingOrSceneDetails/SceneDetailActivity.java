@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,9 +82,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean isCreate;//判断是不是从创建界面跳转过来的
     //界面下的控件
     private View activity_view;
-    //    private ListView nearListView;
     private MyScrollView scrollView;
-    //    private RelativeLayout loveRelative;
     private RelativeLayout titleRelative;
     private ImageView backImg;
     private ImageView shareImg;
@@ -127,7 +126,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //    private TextView loveTv;
     private ListViewForScrollView productListView;
     private ListViewForScrollView nearProductListView;
-    private PopupWindow popupWindow;
+    private PopupWindow sharePop, popupWindow;
     //popupwindow下的控件
     private TextView pinglunTv;
     private TextView shareTv;
@@ -165,10 +164,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         instance = SceneDetailActivity.this;
         activity_view = View.inflate(SceneDetailActivity.this, R.layout.activity_scenedetails, null);
         setContentView(activity_view);
-//        nearListView = (ListView) findViewById(R.id.activity_scenedetails_nearlistview);
-//        View header = View.inflate(SceneDetailActivity.this,R.layout.header_scenedetails,null);
         scrollView = (MyScrollView) findViewById(R.id.activity_scenedetails_scrollview);
-//        loveRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_loverelative);
         titleRelative = (RelativeLayout) findViewById(R.id.activity_scenedetails_title);
         backImg = (ImageView) findViewById(R.id.activity_scenedetails_back);
         shareImg = (ImageView) findViewById(R.id.activity_scenedetails_share);
@@ -187,7 +183,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         vImg = (RoundedImageView) findViewById(R.id.riv_auth);
         userName = (TextView) findViewById(R.id.activity_scenedetails_username);
         userInfo = (TextView) findViewById(R.id.activity_scenedetails_userinfo);
-//        bottomLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_bottomlinear);
         loveCount = (TextView) findViewById(R.id.activity_scenedetails_lovecount);
         goneLayout = (LinearLayout) findViewById(R.id.activity_scenedetails_gonelinear);
         desTv = (TextView) findViewById(R.id.activity_scenedetails_changjing_des);
@@ -204,8 +199,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         commentsListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_commentlistview);
         allComment = (TextView) findViewById(R.id.activity_scenedetails_allcomment);
         moreComment = (ImageView) findViewById(R.id.activity_scenedetails_morecomment);
-//        love = (ImageView) findViewById(R.id.activity_scenedetails_love);
-//        loveTv = (TextView) findViewById(R.id.activity_scenedetails_lovetv);
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
         dialog = new WaittingDialog(SceneDetailActivity.this);
@@ -222,12 +215,41 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         isCreate = getIntent().getBooleanExtra("create", false);
         if (id == null) {
             ToastUtils.showError(getString(R.string.no_this_sight));
-//            new SVProgressHUD(this).showErrorWithStatus("没有这个场景");
-//            Toast.makeText(SceneDetailActivity.this, "没有这个场景", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (isCreate) {
             backImg.setImageResource(R.mipmap.cancel_black);
+            View popup_view = View.inflate(SceneDetailActivity.this, R.layout.pop_share_scene_detail, null);
+            ImageView cancelImg = (ImageView) popup_view.findViewById(R.id.pop_share_scene_detail_cancel);
+            Button shareBtn = (Button) popup_view.findViewById(R.id.pop_share_scene_detail_share_btn);
+            cancelImg.setOnClickListener(this);
+            shareBtn.setOnClickListener(this);
+            sharePop = new PopupWindow(popup_view, DensityUtils.dp2px(this, 300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            // 设置动画效果
+            sharePop.setAnimationStyle(R.style.popup_style);
+            sharePop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+            sharePop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    WindowManager.LayoutParams params = getWindow().getAttributes();
+                    params.alpha = 1f;
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                    getWindow().setAttributes(params);
+                    sharePop = null;
+                }
+            });
+            sharePop.setBackgroundDrawable(ContextCompat.getDrawable(SceneDetailActivity.this,
+                    R.drawable.corner_white_4dp));
+            sharePop.setTouchInterceptor(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                    // 这里如果返回true的话，touch事件将被拦截
+                    // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+                }
+            });
         }
         scrollView.setOnScrollListener(this);
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
@@ -238,15 +260,11 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         rLp.width = lp.width;
         rLp.height = lp.height;
         imgRelative.setLayoutParams(rLp);
-//        imgRelative.setFocusable(true);
-//        imgRelative.setFocusableInTouchMode(true);
-//        imgRelative.requestFocus();
         backgroundImg.setFocusable(true);
         backgroundImg.setFocusableInTouchMode(true);
         backgroundImg.requestFocus();
         backImg.setOnClickListener(this);
         shareImg.setOnClickListener(this);
-//        backgroundImg.setOnClickListener(this);
         locationImg.setOnClickListener(this);
         locationTv.setOnClickListener(this);
         leftLabelLinear.setOnClickListener(this);
@@ -263,13 +281,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         sceneDetailCommentAdapter = new SceneDetailCommentAdapter(SceneDetailActivity.this, commentList);
         commentsListView.setAdapter(sceneDetailCommentAdapter);
         commentsListView.setOnItemClickListener(this);
-//        commentsLinear.setOnClickListener(this);
         allComment.setOnClickListener(this);
         moreComment.setOnClickListener(this);
         loveCount.setOnClickListener(this);
-//        loveRelative.setOnClickListener(this);
-//        love.setOnClickListener(this);
-//        loveTv.setOnClickListener(this);
         sceneProductList = new ArrayList<>();
         sceneProductAdapter = new GoodListAdapter(SceneDetailActivity.this, sceneProductList, null);
         productListView.setAdapter(sceneProductAdapter);
@@ -293,8 +307,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BroadSceneDetail);
         registerReceiver(sceneDetailReceiver, filter);
-//        Log.e("<<<高度差", lp.height - MainApplication.getContext().getScreenHeight() + "");
-//        scrollView.scrollTo(0, lp.height - MainApplication.getContext().getScreenHeight());
     }
 
     @Override
@@ -303,88 +315,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         sceneDetails(id);
         commentsList(1 + "", 3 + "", id, null, 12 + "");
         commonList(1 + "", 14 + "", id, null, "sight", "love");
-//        关联列表数据异常
-//        DataPaser.productAndScene(1 + "", 4 + "", id, null, handler);
-//        ToastUtils.showSuccess("测试数据");
     }
-
-    private void commonList(String page, String size, String id, String user_id, String type, String event) {
-        ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                CommonBean commonBean = new CommonBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CommonBean>() {
-                    }.getType();
-                    commonBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<通用列表>>>", "数据解析异常" + e.toString());
-                }
-                dialog.dismiss();
-                CommonBean netCommonBean = commonBean;
-                if (netCommonBean.isSuccess()) {
-                    headList.clear();
-                    headList.addAll(netCommonBean.getData().getRows());
-                    if (headList.size() <= 0) {
-                        headRelative.setVisibility(View.GONE);
-                    } else {
-                        headRelative.setVisibility(View.VISIBLE);
-                    }
-                    sceneDetailUserHeadAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    private void commentsList(String page, String size, String target_id, String target_user_id, String type) {
-        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                CommentsBean commentsBean = new CommentsBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CommentsBean>() {
-                    }.getType();
-                    commentsBean = gson.<CommentsBean>fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
-                }
-                dialog.dismiss();
-//                    Log.e("<<<", "评论列表");
-                CommentsBean netCommentBean = commentsBean;
-                if (netCommentBean.isSuccess()) {
-//                        commentList.clear();
-                    commentList.addAll(netCommentBean.getData().getRows());
-                    if (netCommentBean.getData().getRows().size() > 3) {
-                        allComment.setVisibility(View.VISIBLE);
-                        moreComment.setVisibility(View.VISIBLE);
-                    }
-                    sceneDetailCommentAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netCommentBean.getMessage());
-                }
-
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Log.e("<<<", "请求失败 ");
-            }
-        });
-    }
-
-
-
 
     private void initPopupWindow() {
         WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
@@ -440,50 +371,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
     }
 
-    //获取场景下产品列表
-    private void getProductList() {
-        if (productList == null || productList.size() <= 0) {
-            return;
-        }
-        StringBuilder ids = new StringBuilder();
-        for (int i = 0; i < productList.size(); i++) {
-            ids.append(",").append(productList.get(i).getId());
-        }
-        ids.deleteCharAt(0);
-//        Log.e("<<<场景下商品id", ids.toString());
-        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                ProductBean netProductBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    netProductBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
-                    dialog.dismiss();
-                    sceneProductList.clear();
-                    sceneProductList.addAll(netProductBean.getData().getRows());
-//                    Log.e("<<<场景产品",sceneProductList.size()+","+sceneProductList.toString());
-                    sceneProductAdapter.notifyDataSetChanged();
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netProductBean.getMessage());
-//                        dialog.showErrorWithStatus(netProductBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-//        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", ids.toString(), null, null, null, handler);
-    }
 
     //获取相近产品
     private void getNearProductList() {
@@ -499,40 +386,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         getProducts(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null);
     }
 
-    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
-                             String stick, String fine) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                ProductBean netProductBean = productBean;
-                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
-                    dialog.dismiss();
-                    nearProductList.clear();
-                    nearProductList.addAll(netProductBean.getData().getRows());
-                    goodListAdapter.notifyDataSetChanged();
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netProductBean.getMessage());
-//                        dialog.showErrorWithStatus(netProductBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
 
     private void addProductToImg() {
         if (productList == null || productList.size() == 0) {
@@ -598,6 +451,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.pop_share_scene_detail_cancel:
+                sharePop.dismiss();
+                break;
             case R.id.activity_scenedetails_left_label:
                 if (netUserInfo == null) {
                     dialog.show();
@@ -608,15 +464,18 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
                 startActivity(intent);
                 break;
+            case R.id.pop_share_scene_detail_share_btn:
             case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
+                if (sharePop != null) {
+                    sharePop.dismiss();
+                }
                 Intent intent4 = new Intent(SceneDetailActivity.this, TestShare.class);
                 intent4.putExtra("id", id);
                 startActivity(intent4);
                 break;
             case R.id.popup_scene_detail_more_jubao:
                 if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(SceneDetailActivity.this,"请先登录",Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
                     LoginCompleteUtils.id = id;
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
@@ -766,134 +625,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void loveScene(String i) {
-        ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                SceneLoveBean netSceneLoveBean = sceneLoveBean;
-//                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                if (netSceneLoveBean.isSuccess()) {
-                    commonList(1 + "", 14 + "", id, null, "sight", "love");
-                    isLove = 1;
-                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
-//                        love.setImageResource(R.mipmap.love_yes);
-                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
-                    loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
-                    moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
-                    if (netSceneLoveBean.getData().getLove_count() > 14) {
-                        moreUser.setVisibility(View.VISIBLE);
-                    } else {
-                        moreUser.setVisibility(View.GONE);
-                    }
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netSceneLoveBean.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    private void cancelLoveScene(String i) {
-        ClientDiscoverAPI.cancelLoveScene(i, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                //                case DataConstants.CANCEL_LOVE_SCENE:
-                SceneLoveBean netSceneLoveBean1 = sceneLoveBean;
-                if (netSceneLoveBean1.isSuccess()) {
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                    commonList(1 + "", 14 + "", id, null, "sight", "love");
-                    isLove = 0;
-                    loveCount.setBackgroundResource(R.mipmap.love_scene);
-//                        love.setImageResource(R.mipmap.like_height_43px);
-                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
-                    loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
-                    moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
-                    if (netSceneLoveBean1.getData().getLove_count() > 14) {
-                        moreUser.setVisibility(View.VISIBLE);
-                    } else {
-                        moreUser.setVisibility(View.GONE);
-                    }
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netSceneLoveBean1.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-//                    break;
-//                case DataConstants.LOVE_SCENE:
-//
-//                    break;
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    private void deleteScene(String i) {
-        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                NetBean netBean = new NetBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<NetBean>() {
-                    }.getType();
-                    netBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<删除场景", "数据解析异常");
-                }
-                dialog.dismiss();
-                if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    });
-//                        刷新列表
-                } else {
-                    ToastUtils.showError(netBean.getMessage());
-//                        dialog.showErrorWithStatus(netBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+//        Log.e("<<<", "hasFocus=" + hasFocus);
+        if (hasFocus && isCreate && sharePop != null) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.alpha = 0.4f;
+            getWindow().setAttributes(params);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            sharePop.showAtLocation(activity_view, Gravity.CENTER, 0, 0);
+        }
     }
 
     @Override
@@ -1071,6 +813,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
         }
     }
+
     private void sceneDetails(String i) {
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
@@ -1127,7 +870,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
                                 vImg.setVisibility(View.GONE);
                                 userInfo.setText(netSceneDetails.getData().getUser_info().getSummary());
-                                  }
+                            }
 //                        isSpertAndSummary(userInfo, netSceneDetails.getData().getUser_info().getIs_expert(), netSceneDetails.getData().getUser_info().getSummary());
                             loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
                             moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
@@ -1167,5 +910,286 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
 
         );
+    }
+
+    private void loveScene(String i) {
+        ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                SceneLoveBean netSceneLoveBean = sceneLoveBean;
+//                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+                if (netSceneLoveBean.isSuccess()) {
+                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+                    isLove = 1;
+                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
+//                        love.setImageResource(R.mipmap.love_yes);
+                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+                    loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+                    moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
+                    if (netSceneLoveBean.getData().getLove_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netSceneLoveBean.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void cancelLoveScene(String i) {
+        ClientDiscoverAPI.cancelLoveScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                //                case DataConstants.CANCEL_LOVE_SCENE:
+                SceneLoveBean netSceneLoveBean1 = sceneLoveBean;
+                if (netSceneLoveBean1.isSuccess()) {
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+                    isLove = 0;
+                    loveCount.setBackgroundResource(R.mipmap.love_scene);
+//                        love.setImageResource(R.mipmap.like_height_43px);
+                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
+                    loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
+                    moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
+                    if (netSceneLoveBean1.getData().getLove_count() > 14) {
+                        moreUser.setVisibility(View.VISIBLE);
+                    } else {
+                        moreUser.setVisibility(View.GONE);
+                    }
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netSceneLoveBean1.getMessage());
+//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+//                    break;
+//                case DataConstants.LOVE_SCENE:
+//
+//                    break;
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void deleteScene(String i) {
+        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除场景", "数据解析异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
+//                        刷新列表
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+//                        dialog.showErrorWithStatus(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void commonList(String page, String size, String id, String user_id, String type, String event) {
+        ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CommonBean commonBean = new CommonBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommonBean>() {
+                    }.getType();
+                    commonBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<通用列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                CommonBean netCommonBean = commonBean;
+                if (netCommonBean.isSuccess()) {
+                    headList.clear();
+                    headList.addAll(netCommonBean.getData().getRows());
+                    if (headList.size() <= 0) {
+                        headRelative.setVisibility(View.GONE);
+                    } else {
+                        headRelative.setVisibility(View.VISIBLE);
+                    }
+                    sceneDetailUserHeadAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    private void commentsList(String page, String size, String target_id, String target_user_id, String type) {
+        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CommentsBean commentsBean = new CommentsBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CommentsBean>() {
+                    }.getType();
+                    commentsBean = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                CommentsBean netCommentBean = commentsBean;
+                if (netCommentBean.isSuccess()) {
+                    commentList.addAll(netCommentBean.getData().getRows());
+                    if (netCommentBean.getData().getRows().size() > 3) {
+                        allComment.setVisibility(View.VISIBLE);
+                        moreComment.setVisibility(View.VISIBLE);
+                    }
+                    sceneDetailCommentAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netCommentBean.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    //获取场景下产品列表
+    private void getProductList() {
+        if (productList == null || productList.size() <= 0) {
+            return;
+        }
+        StringBuilder ids = new StringBuilder();
+        for (int i = 0; i < productList.size(); i++) {
+            ids.append(",").append(productList.get(i).getId());
+        }
+        ids.deleteCharAt(0);
+//        Log.e("<<<场景下商品id", ids.toString());
+        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean netProductBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    netProductBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
+                    dialog.dismiss();
+                    sceneProductList.clear();
+                    sceneProductList.addAll(netProductBean.getData().getRows());
+//                    Log.e("<<<场景产品",sceneProductList.size()+","+sceneProductList.toString());
+                    sceneProductAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
+//        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", ids.toString(), null, null, null, handler);
+    }
+
+    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+                             String stick, String fine) {
+        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                ProductBean netProductBean = productBean;
+                if (netProductBean.isSuccess() /*&& currentTime == 2*/) {
+                    dialog.dismiss();
+                    nearProductList.clear();
+                    nearProductList.addAll(netProductBean.getData().getRows());
+                    goodListAdapter.notifyDataSetChanged();
+                } else {
+                    dialog.dismiss();
+                    ToastUtils.showError(netProductBean.getMessage());
+//                        dialog.showErrorWithStatus(netProductBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
 }
