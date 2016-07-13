@@ -308,7 +308,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         }
     }
 
-    //    private Bitmap bit1;
     private View view;
 
     //动态改变分享的样式
