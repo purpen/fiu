@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -121,6 +120,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, SelectQingjingActivity.this, space);
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
+//        qingjingList(page + "", 2 + "", 1 + "", distance + "", null, null);
     }
 
     private void getCurrentLocation() {
@@ -130,20 +130,25 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
                 if (bdLocation == null) {
                     return;
                 }
-                if (isFirstLoc) {
+                if (ll==null) {
                     dialog.show();
                     isFirstLoc = false;
                     LatLng ll = new LatLng(bdLocation.getLatitude(),
                             bdLocation.getLongitude());
                     SelectQingjingActivity.this.ll = ll;
                     getNearByData(ll);
-                    MapStatus.Builder builder = new MapStatus.Builder();
-                    builder.target(ll).zoom(18);
-                    qingjingList(page + "", 2 + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "");
+//                    MapStatus.Builder builder = new MapStatus.Builder();
+//                    builder.target(ll).zoom(18);
+                    qingjingList(page + "", 2 + "", 1 + "", distance + "", null, null);
+//                    qingjingList(page + "", 2 + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "");
+                    MapUtil.destroyLocationClient();
+                    MapUtil.destroyPoiSearch();
+                    MapUtil.destroyGeoCoder();
                 }
             }
         });
     }
+
 
 
     @Override
@@ -220,14 +225,6 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        MapUtil.destroyLocationClient();
-//        if (bitmapDescripter != null) {
-//            bitmapDescripter.recycle();
-//        }
-        super.onDestroy();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

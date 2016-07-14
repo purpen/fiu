@@ -167,7 +167,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     @Override
     protected void requestNet() {
         dialog.show();
-        getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
+        getProductList(2 + "", null, null, null, productPage + "", 8 + "", null, null, null, null);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -477,7 +477,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             lastTotalItem = totalItemCount;
             productPage++;
             progressBar.setVisibility(View.VISIBLE);
-            getProductList(null, null, null, productPage + "", 8 + "", null, null, null, null);
+            getProductList(2 + "", null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
         //悬浮效果
 //        Log.e("<<<", "firstVisible=" + firstVisibleItem);
@@ -562,9 +562,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     //产品
     //列表
-    private void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+    private void getProductList(String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                 String stick, String fine) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(sort, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<商品列表", responseInfo.result);

@@ -124,6 +124,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView moreComment;
     //    private ImageView love;
 //    private TextView loveTv;
+    private LinearLayout productLinear;
+    private LinearLayout nearLinear;
     private ListViewForScrollView productListView;
     private ListViewForScrollView nearProductListView;
     private PopupWindow sharePop, popupWindow;
@@ -199,6 +201,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         commentsListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_commentlistview);
         allComment = (TextView) findViewById(R.id.activity_scenedetails_allcomment);
         moreComment = (ImageView) findViewById(R.id.activity_scenedetails_morecomment);
+        productLinear = (LinearLayout) findViewById(R.id.product_linear);
+        nearLinear = (LinearLayout) findViewById(R.id.near_linear);
         productListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_productlistview);
         nearProductListView = (ListViewForScrollView) findViewById(R.id.activity_scenedetails_nearproductlistview);
         dialog = new WaittingDialog(SceneDetailActivity.this);
@@ -252,6 +256,18 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             });
         }
         scrollView.setOnScrollListener(this);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        titleLinear.getTop();
+                        break;
+                }
+                return false;
+            }
+        });
         ViewGroup.LayoutParams lp = backgroundImg.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 16 / 9;
@@ -375,6 +391,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //获取相近产品
     private void getNearProductList() {
         if (productList == null || productList.size() <= 0) {
+            nearLinear.setVisibility(View.GONE);
             return;
         }
         StringBuilder ids = new StringBuilder();
@@ -1116,6 +1133,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     //获取场景下产品列表
     private void getProductList() {
         if (productList == null || productList.size() <= 0) {
+            productLinear.setVisibility(View.GONE);
             return;
         }
         StringBuilder ids = new StringBuilder();
@@ -1124,7 +1142,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         ids.deleteCharAt(0);
 //        Log.e("<<<场景下商品id", ids.toString());
-        ClientDiscoverAPI.getProductList(null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ProductBean netProductBean = new ProductBean();
@@ -1160,7 +1178,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                              String stick, String fine) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ProductBean productBean = new ProductBean();

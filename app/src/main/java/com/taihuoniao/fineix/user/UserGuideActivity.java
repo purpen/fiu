@@ -113,6 +113,14 @@ public class UserGuideActivity extends BaseActivity {
                 initGuide();
             }
         });
+        activityVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                initGuide();
+                return true;
+            }
+        });
+
     }
 
     private void showInvite() {

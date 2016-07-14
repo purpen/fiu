@@ -10,6 +10,11 @@ import android.widget.ScrollView;
  */
 public class MyScrollView extends ScrollView {
     private OnScrollListener onScrollListener;
+    private boolean isUp;
+
+    public boolean isUp() {
+        return isUp;
+    }
 
     public MyScrollView(Context context) {
         super(context);
@@ -27,6 +32,11 @@ public class MyScrollView extends ScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+        if (t > oldt) {
+            isUp = false;
+        } else if (t < oldt) {
+            isUp = true;
+        }
         if (onScrollListener != null) {
             onScrollListener.scroll(this, l, t, oldl, oldt);
         }

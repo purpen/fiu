@@ -170,7 +170,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void getProducts(String category_id, String brand_id, String category_tag_ids, String p, String size, String ids, String ignore_ids,
                              String stick, String fine) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, p, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,category_id, brand_id, category_tag_ids, p, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<商品列表", responseInfo.result);

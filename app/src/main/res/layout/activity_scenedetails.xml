@@ -417,6 +417,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/product_linear"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="#f0f0f0"
@@ -446,6 +447,7 @@
                     android:dividerHeight="0dp"/>
 
                 <LinearLayout
+                    android:id="@+id/near_linear"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="#f0f0f0"

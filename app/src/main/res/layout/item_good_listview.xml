@@ -11,7 +11,7 @@
         android:layout_height="161dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:spacing="10dp"
+        android:spacing="5dp"
         />
 
     <LinearLayout
@@ -31,6 +31,8 @@
             android:background="@mipmap/product_left_label"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+            android:text="啊是独立房间啊；类似的开发经理大家纷纷啊啊"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="12sp"

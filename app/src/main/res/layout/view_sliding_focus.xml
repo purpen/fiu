@@ -14,8 +14,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp">
+        android:layout_marginLeft="5dp"
+        >
 
         <ImageView
             android:id="@+id/view_sliding_focus_img"
@@ -29,8 +29,8 @@
             android:id="@+id/view_sliding_focus_zhezhao"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="#66000000"/>
+            android:background="#66000000"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>

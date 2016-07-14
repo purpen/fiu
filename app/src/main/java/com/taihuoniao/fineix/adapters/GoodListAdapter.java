@@ -99,6 +99,7 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
                 return convertView;
             }
         }
+        holder.slidingFocusImageView.setUnselectedAlpha(0.6f);
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
