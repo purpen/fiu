@@ -38,8 +38,6 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-//import com.squareup.leakcanary.LeakCanary;
-
 /**
  * Created by taihuoniao on 2016/3/14.
  * ¥
@@ -50,7 +48,7 @@ import java.util.UUID;
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
-    public LocationService locationService;
+    //    public LocationService locationService;
     public Vibrator mVibrator;
     public static int which_activity;//0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
@@ -84,7 +82,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        locationService = new LocationService(getApplicationContext());
+//        locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         instance = this;
@@ -95,7 +93,8 @@ public class MainApplication extends Application {
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
         filterPicPath = getCacheDirPath() + "/filter";
-//        LeakCanary.install(this);
+       // LeakCanary.install(this);
+
     }
 
     public int getScreenHeight() {

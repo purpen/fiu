@@ -12,9 +12,9 @@
         android:id="@+id/item_update_psd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp10"
         />
     <com.taihuoniao.fineix.view.CustomItemLayout
+        android:layout_marginTop="@dimen/dp5"
         android:id="@+id/item_push_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,14 +64,15 @@
         />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp40"
+        android:layout_width="@dimen/dp250"
+        android:layout_height="@dimen/dp45"
         android:id="@+id/btn_logout"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         style="?android:attr/borderlessButtonStyle"
         android:layout_margin="@dimen/dp16"
-        android:background="@drawable/shape_radius_white"
+        android:background="@drawable/logout_btn_style"
         android:text="退出当前账户"
         android:textSize="@dimen/sp12"
-        android:textColor="@color/color_af8323" />
+        android:textColor="@color/color_333" />
 </LinearLayout>

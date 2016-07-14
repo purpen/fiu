@@ -552,15 +552,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         Intent intent;
         switch (view.getId()) {
             case R.id.tv_take_photo:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 getImageFromCamera();
                 break;
             case R.id.tv_album:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 getImageFromAlbum();
                 break;
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
@@ -621,7 +621,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             bt_focus.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             if (responseInfo == null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             LogUtil.e("cancelFocusOperate", responseInfo.result);
@@ -639,7 +639,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             ToastUtils.showError("网络异常，请确认网络畅通");
 //                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }

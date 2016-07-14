@@ -78,12 +78,14 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private List<Uri> mSelected;
     private AuthData authData;
+    private CertificateStatusActivity certificateStatusActivity;
     public OfficialCertificateActivity() {
         super(R.layout.activity_official_certificate);
     }
 
     @Override
     protected void getIntentData() {
+        certificateStatusActivity = CertificateStatusActivity.instance;
         Intent intent = getIntent();
         if (intent.hasExtra(AuthData.class.getSimpleName())){
             authData=(AuthData) intent.getSerializableExtra(AuthData.class.getSimpleName());
@@ -234,8 +236,8 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (CertificateStatusActivity.instance!=null){
-                                CertificateStatusActivity.instance.finish();
+                            if (certificateStatusActivity != null) {
+                                certificateStatusActivity.finish();
                             }
                             finish();
                         }
@@ -270,15 +272,15 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_take_photo:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 getImageFromCamera();
                 break;
             case R.id.tv_album:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 getImageFromAlbum();
                 break;
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
         }
     }
@@ -340,6 +342,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
 
     @Override
     protected void onDestroy() {
+        certificateStatusActivity = null;
         if (bitmap_id != null) bitmap_id.recycle();
         if (bitmap_card != null) bitmap_card.recycle();
         super.onDestroy();

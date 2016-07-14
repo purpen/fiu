@@ -147,7 +147,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             button.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             if (responseInfo==null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             LogUtil.e("cancelFocusOperate",responseInfo.result);
@@ -157,9 +157,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                                 button.setText("关注");
                                 button.setTextColor(activity.getResources().getColor(R.color.color_333));
                                 button.setBackgroundResource(R.drawable.border_radius5);
-//                                Util.makeToast(response.getMessage());
                                 ToastUtils.showSuccess("已取消关注");
-//                                svProgressHUD.showSuccessWithStatus("已取消关注");
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
@@ -169,7 +167,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             ToastUtils.showError("网络异常，请确认网络畅通");
 //                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
                         }

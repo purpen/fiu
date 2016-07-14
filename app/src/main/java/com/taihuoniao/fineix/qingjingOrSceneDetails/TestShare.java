@@ -211,7 +211,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
             }
         });
         return view;

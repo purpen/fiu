@@ -117,7 +117,7 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
     }
 
     private void displayCurrentLocation() {
-        MapUtil.getCurrentLocation(activity, new MapUtil.OnReceiveLocationListener() {
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation location) {
                 if (location == null) {

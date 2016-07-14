@@ -24,6 +24,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.TabItem;
+import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
@@ -196,7 +197,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_nav2.setOnClickListener(this);
         ll_nav3.setOnClickListener(this);
         ll_nav4.setOnClickListener(this);
-        MineFragment.setOnMessageCountChangeListener(new MineFragment.onMessageCountChangeListener() {
+
+        MineFragment.setOnMessageCountChangeListener(new OnMessageCountChangeListener() {
             @Override
             public void onMessageCountChange(int count) {
                 if (count > 0) {

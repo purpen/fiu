@@ -118,7 +118,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -136,7 +136,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     ToastUtils.showError("网络异常，请确认网络畅通");
 //                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
@@ -166,7 +166,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss();
+                PopupWindowUtil.dismiss(activity);
                 break;
             case R.id.tv_album:
                 view.setEnabled(false);
@@ -177,7 +177,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             view.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             if (responseInfo == null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -196,7 +196,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         @Override
                         public void onFailure(HttpException e, String s) {
                             view.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            PopupWindowUtil.dismiss(activity);
                             ToastUtils.showError("网络异常，请确认网络畅通");
 //                            svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
@@ -248,7 +248,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -266,7 +266,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     ToastUtils.showError("网络异常，请确认网络畅通");
 //                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
@@ -276,28 +276,24 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()) {
                         item.follows.is_love = NOT_LOVE;
                         notifyDataSetChanged();
-//                        Util.makeToast(response.getMessage());
                         ToastUtils.showSuccess("已取消关注");
-//                        svProgressHUD.showSuccessWithStatus("已取消关注");
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-//                    svProgressHUD.showErrorWithStatus(response.getMessage());;
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    PopupWindowUtil.dismiss(activity);
                     ToastUtils.showError("网络异常，请确认网络畅通");
-//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                 }
             });
         }

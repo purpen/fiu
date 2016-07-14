@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -20,12 +19,11 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.HotCitiesAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.City;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
-import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -41,7 +39,7 @@ import butterknife.Bind;
 public class HotCitiesActivity extends BaseActivity<City> {
     @Bind(R.id.recycler_view)
     RecyclerView recycler_view;
-    private LocationService locationService;
+    //    private LocationService locationService;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.tv_location)
@@ -70,8 +68,8 @@ public class HotCitiesActivity extends BaseActivity<City> {
 
     @Override
     protected void onStop() {
-        locationService.unregisterListener(mListener); //注销掉监听
-        locationService.stop(); //停止定位服务
+//        locationService.unregisterListener(mListener); //注销掉监听
+//        locationService.stop(); //停止定位服务
         super.onStop();
     }
 
@@ -83,21 +81,31 @@ public class HotCitiesActivity extends BaseActivity<City> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startLocate();
+//        startLocate();
+        tv_location.setText(R.string.locating);
+        MapUtil.getCurrentLocation(new MapUtil.OnReceiveLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation location) {
+                if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                    setCurrentCity(location);
+                } else {
+                    tv_location.setText(R.string.location_error);
+                }
+            }
+        });
     }
 
     private void startLocate() {
-        tv_location.setText(R.string.locating);
-        locationService = ((MainApplication) getApplication()).locationService;
+//        locationService = ((MainApplication) getApplication()).locationService;
         int type = getIntent().getIntExtra("from", 0);
 
         if (type == 0) {
-            locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+//            locationService.setLocationOption(locationService.getDefaultLocationClientOption());
         } else if (type == 1) {
-            locationService.setLocationOption(locationService.getOption());
+//            locationService.setLocationOption(locationService.getOption());
         }
-        locationService.registerListener(mListener);
-        locationService.start();
+//        locationService.registerListener(mListener);
+//        locationService.start();
     }
     @Override
     protected void requestNet() {
@@ -121,7 +129,6 @@ public class HotCitiesActivity extends BaseActivity<City> {
             public void onFailure(HttpException e, String s) {
                 if (dialog!=null) dialog.dismiss();
                 ToastUtils.showError("网络异常,请确保网络畅通");
-//                dialog.showErrorWithStatus("网络异常,请确保网络畅通");
             }
         });
 
@@ -147,16 +154,9 @@ public class HotCitiesActivity extends BaseActivity<City> {
         }
     }
 
-    private BDLocationListener mListener = new BDLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                setCurrentCity(location);
-            }else {
-                tv_location.setText(R.string.location_error);
-            }
-        }
-
-    };
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MapUtil.destroyLocationClient();
+    }
 }

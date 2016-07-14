@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.base;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
@@ -82,8 +81,5 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
 
     protected void refreshUI(List<T> list) {
 
-    }
-
-    public void handMessage(Message msg) {
     }
 }

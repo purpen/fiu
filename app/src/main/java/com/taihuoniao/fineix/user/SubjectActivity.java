@@ -1,15 +1,10 @@
 package com.taihuoniao.fineix.user;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -88,36 +83,10 @@ public class SubjectActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
-        webViewAbout.setWebViewClient(new MyWebViewClient());
-//        // 为了让javascript中的alert()执行，必须设置以下语句
-        webViewAbout.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     final JsResult result) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(
-                        activity);
-                builder.setIcon(R.mipmap.ic_launcher);
-                builder.setTitle("提示：");
-                builder.setMessage(message);
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.cancel();
-                    }
-                });
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.confirm();
-                    }
-                });
-                builder.show();
-                return true;
-            }
-        });
+        webViewAbout.setWebViewClient(webViewClient);
     }
 
-    private class MyWebViewClient extends WebViewClient {
+    private WebViewClient webViewClient = new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             LogUtil.e("shouldOverrideUrlLoading", url);
@@ -173,7 +142,7 @@ public class SubjectActivity extends BaseActivity {
             super.onReceivedError(view, errorCode, description, failingUrl);
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
-    }
+    };
 
     @OnClick({R.id.ibtn_favorite, R.id.ibtn_share, R.id.ibtn_comment})
     void onClick(View v) {
@@ -327,9 +296,10 @@ public class SubjectActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        ViewGroup view = (ViewGroup) getWindow().getDecorView();
-        view.removeAllViews();
         super.onDestroy();
+        webViewAbout.removeAllViews();
+        webViewClient = null;
+        webViewAbout.destroy();
     }
 
 }
