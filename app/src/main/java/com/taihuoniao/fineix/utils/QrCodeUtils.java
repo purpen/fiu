@@ -52,8 +52,7 @@ public class QrCodeUtils {
 
 	/**
 	 * 生成二维码Bitmap
-	 *
-	 * @param txt  内容
+	 * @param txt    内容
 	 * @param logo 二维码中心的Logo图标（可以为null）
 	 * @return 生成二维码及保存文件是否成功
 	 */
