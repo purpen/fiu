@@ -1,1 +1,1 @@
-include ':app', ':Gpu-Image', ':pullrefreshlib', ':bubblecloud', ':library'
+include ':app', ':Gpu-Image', ':pullrefreshlib', ':bubblecloud', ':library', ':blurringview'

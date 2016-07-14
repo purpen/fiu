@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dodola.bubblecloud.BubbleCloudView;
+import com.fivehundredpx.android.blur.BlurringView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -77,6 +79,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     //界面下的控件
     private RelativeLayout titlelayout;
     //    private LinearLayout goneLinear;
+    private FrameLayout goneFrame;
+    private BlurringView blurringView;
     private RecyclerView secondCategoryRecycler;
     private ImageView searchImg;
     private RelativeLayout cartRelative;
@@ -118,6 +122,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
 //        goneLinear = (LinearLayout) view.findViewById(R.id.fragment_wellgoods_gone_linear);
+        goneFrame = (FrameLayout) view.findViewById(R.id.fragment_wellgoods_framelayout);
+        blurringView = (BlurringView) view.findViewById(R.id.fragment_wellgoods_blurring_view);
+
         secondCategoryRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_second_recycler);
         titlelayout = (RelativeLayout) view.findViewById(R.id.title_relative1);
         searchImg = (ImageView) view.findViewById(R.id.fragment_wellgoods_search);
@@ -214,6 +221,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     protected void initList() {
+        blurringView.setBlurredView(listView);
         searchImg.setOnClickListener(this);
 //        cartImg.setOnClickListener(this);
         allBrandTv.setOnClickListener(this);
@@ -483,7 +491,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //        Log.e("<<<", "firstVisible=" + firstVisibleItem);
         if (firstVisibleItem >= 1) {
 //            goneLinear.setVisibility(View.VISIBLE);
-            if (secondCategoryRecycler.getTranslationY() >= 0) {
+            if (goneFrame.getTranslationY() >= 0) {
                 return;
             }
             if (secondDownAnimator == null) {
@@ -494,7 +502,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             }
         } else {
 //            goneLinear.setVisibility(View.GONE);
-            if (secondCategoryRecycler.getTranslationY() <= -secondCategoryRecycler.getMeasuredHeight()) {
+            if (goneFrame.getTranslationY() <= -goneFrame.getMeasuredHeight()) {
                 return;
             }
             if (secondUpAnimator == null) {
@@ -504,6 +512,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 secondUpAnimator.start();
             }
         }
+        if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight()) {
+            blurringView.invalidate();
+        }
     }
 
     private int secondFlag = 0;//悬浮分类动画标识
@@ -511,7 +522,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     //初始化动画
     private void initSecondUpAnimator() {
-        secondUpAnimator = ObjectAnimator.ofFloat(secondCategoryRecycler, "translationY", -secondCategoryRecycler.getMeasuredHeight()).setDuration(300);
+        secondUpAnimator = ObjectAnimator.ofFloat(goneFrame, "translationY", -goneFrame.getMeasuredHeight()).setDuration(300);
         secondUpAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -536,7 +547,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     }
 
     private void initSecondDownAnimator() {
-        secondDownAnimator = ObjectAnimator.ofFloat(secondCategoryRecycler, "translationY", 0).setDuration(300);
+        secondDownAnimator = ObjectAnimator.ofFloat(goneFrame, "translationY", 0).setDuration(300);
         secondDownAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {

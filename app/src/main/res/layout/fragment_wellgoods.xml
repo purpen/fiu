@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -22,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/head_logo" />
+            android:src="@mipmap/head_logo"/>
 
         <ImageView
             android:id="@+id/fragment_wellgoods_search"
@@ -61,12 +62,27 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_wellgoods_second_recycler"
+    <FrameLayout
+        android:id="@+id/fragment_wellgoods_framelayout"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:background="@color/white"
-        android:translationY="-75dp"/>
+        android:translationY="-75dp">
+
+        <com.fivehundredpx.android.blur.BlurringView
+            android:id="@+id/fragment_wellgoods_blurring_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:blurRadius="11"
+            app:downsampleFactor="6"
+            app:overlayColor="#99FFFFFF"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_wellgoods_second_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
 
     <ProgressBar
         android:id="@+id/fragment_wellgoods_progress"

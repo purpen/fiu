@@ -44,10 +44,10 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:visibility="gone"
                     android:text="选择语境"
                     android:textColor="@color/black333333"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/activity_create_scene_titleedt"
@@ -182,15 +182,27 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:padding="14dp"
-                    android:src="@mipmap/arrow_right_gray"/>
+                    android:src="@mipmap/arrow_right_gray"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/label_create"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/label_create"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/label_create"
                     android:gravity="center_vertical"
                     android:text="@string/label"
                     android:textColor="@color/black333333"
                     android:textSize="13sp"/>
+
+
             </RelativeLayout>
 
             <TextView
@@ -236,9 +248,17 @@
                     android:padding="14dp"
                     android:src="@mipmap/arrow_right_gray"/>
 
+                <ImageView
+                    android:id="@+id/dipan_create"
+                    android:layout_width="13dp"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/dipan_create"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/dipan_create"
                     android:gravity="center_vertical"
                     android:text="@string/belong_what_qingjing"
                     android:textColor="@color/black333333"

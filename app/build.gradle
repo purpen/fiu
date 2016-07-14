@@ -31,8 +31,9 @@ android {
 
 dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
+    //    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
@@ -68,4 +69,5 @@ dependencies {
     compile project(':bubblecloud')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile project(':library')
+    compile project(':blurringview')
 }
