@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -69,7 +68,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
         tv_cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupWindowUtil.dismiss((Activity) v.getContext());
+                PopupWindowUtil.dismiss();
             }
         });
     }

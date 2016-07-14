@@ -55,6 +55,8 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
+    @Bind(R.id.item_exit)
+    CustomItemLayout item_exit;
     public SystemSettingsActivity(){
         super(R.layout.activity_system_settings);
     }
@@ -70,6 +72,7 @@ public class SystemSettingsActivity extends BaseActivity{
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
+        item_exit.setTVStyle(0, "退出当前账户", R.color.color_333);
         setCacheSize();
 //        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
 //        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
@@ -78,15 +81,12 @@ public class SystemSettingsActivity extends BaseActivity{
 //        LogUtil.e("ImageLoaderCache",ImageLoader.getInstance().getDiskCache().getDirectory().getAbsolutePath());
     }
 
-    @OnClick({R.id.item_update_psd,R.id.btn_logout,R.id.item_clear_cache,R.id.item_to_comment,R.id.item_welcome_page,R.id.item_about_us,R.id.item_feedback,R.id.item_share})
+    @OnClick({R.id.item_update_psd, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit})
     void onClick(View view){
         Intent intent;
         switch (view.getId()){
             case R.id.item_update_psd:
                 startActivity(new Intent(activity,UpdatePasswordActivity.class));
-                break;
-            case R.id.btn_logout:
-                logout();
                 break;
             case R.id.item_clear_cache:
                 new MyAsyncTask().execute();
@@ -120,6 +120,9 @@ public class SystemSettingsActivity extends BaseActivity{
                 content.siteUrl = "http://www.taihuoniao.com/";
                 PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
+            case R.id.item_exit:
+                logout();
+                break;
         }
     }
 
@@ -132,7 +135,6 @@ public class SystemSettingsActivity extends BaseActivity{
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()){//   退出成功跳转首页
                     ToastUtils.showSuccess("退出成功");
-//                    svProgressHUD.showSuccessWithStatus("退出成功");
                 }
                 SPUtil.remove(DataConstants.LOGIN_INFO);
                 Intent intent=new Intent(activity,MainActivity.class);

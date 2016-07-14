@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +27,6 @@ import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
@@ -68,7 +68,6 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     private String nickName;
     private String sex;
     private ArrayList<String> areas;
-    private WaittingDialog svProgressHUD;
     public MyBarCodeActivity() {
         super(R.layout.activity_bar_code);
     }
@@ -96,7 +95,6 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "二维码");
-        svProgressHUD=new WaittingDialog(this);
         custom_head.setRightImgBtnShow(true);
         if (!TextUtils.isEmpty(url)) {
             ImageLoader.getInstance().displayImage(url, riv);
@@ -117,8 +115,9 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         }
 
         try {
-            bitmap_2code = QrCodeUtils.Create2DCode(String.format(//13为用户类型
-                    "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s", 13, LoginInfo.getUserId()));
+            Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.share_logo);
+            bitmap_2code = QrCodeUtils.create2DCode(logo, String.format(//13为用户类型
+                    "http://m.taihuoniao.com/guide/appload?infoType=%s&infoId=%s", 13, LoginInfo.getUserId()), 800, 800);
             iv_bar_code.setImageBitmap(bitmap_2code);
         } catch (WriterException e) {
             e.printStackTrace();
@@ -223,15 +222,15 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
                 } else {
                     ToastUtils.showError("SD卡不可写，二维码保存失败");
                 }
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
             case R.id.tv_album:
                 startActivity(new Intent(activity, CaptureActivity.class));
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
             case R.id.tv_cancel:
             default:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
         }
     }

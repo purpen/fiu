@@ -116,7 +116,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         view.setEnabled(true);
-                        PopupWindowUtil.dismiss(activity);
+                        PopupWindowUtil.dismiss();
                         if (responseInfo == null) return;
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -133,7 +133,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     @Override
                     public void onFailure(HttpException e, String s) {
                         view.setEnabled(true);
-                        PopupWindowUtil.dismiss(activity);
+                        PopupWindowUtil.dismiss();
                         ToastUtils.showError("网络异常，请确认网络畅通");
                     }
                 });
@@ -162,7 +162,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
             case R.id.tv_album:
                 view.setEnabled(false);
@@ -174,7 +174,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             @Override
                             public void onSuccess(ResponseInfo<String> responseInfo) {
                                 view.setEnabled(true);
-                                PopupWindowUtil.dismiss(activity);
+                                PopupWindowUtil.dismiss();
                                 if (responseInfo == null) return;
                                 if (TextUtils.isEmpty(responseInfo.result)) return;
                                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -189,7 +189,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             @Override
                             public void onFailure(HttpException e, String s) {
                                 view.setEnabled(true);
-                                PopupWindowUtil.dismiss(activity);
+                                PopupWindowUtil.dismiss();
                                 ToastUtils.showError("网络异常，请确认网络畅通");
 //                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                             }
@@ -199,7 +199,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             @Override
                             public void onSuccess(ResponseInfo<String> responseInfo) {
                                 view.setEnabled(true);
-                                PopupWindowUtil.dismiss(activity);
+                                PopupWindowUtil.dismiss();
                                 if (responseInfo == null) return;
                                 if (TextUtils.isEmpty(responseInfo.result)) return;
                                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -216,7 +216,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                             @Override
                             public void onFailure(HttpException e, String s) {
                                 view.setEnabled(true);
-                                PopupWindowUtil.dismiss(activity);
+                                PopupWindowUtil.dismiss();
                                 ToastUtils.showError("网络异常，请确认网络畅通");
                             }
                         });
@@ -267,7 +267,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -282,7 +282,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     ToastUtils.showError("网络异常，请确认网络畅通");
                 }
             });
@@ -291,7 +291,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -307,7 +307,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     ToastUtils.showError("网络异常，请确认网络畅通");
                 }
             });

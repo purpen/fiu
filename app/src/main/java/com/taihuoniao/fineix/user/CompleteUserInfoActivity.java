@@ -101,16 +101,16 @@ public class CompleteUserInfoActivity extends BaseActivity {
             Intent intent = null;
             switch (v.getId()) {
                 case R.id.tv_take_photo:
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     getImageFromCamera();
                     break;
                 case R.id.tv_album:
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     getImageFromAlbum();
                     break;
                 case R.id.tv_cancel:
                 default:
-                    PopupWindowUtil.dismiss(activity);
+                    PopupWindowUtil.dismiss();
                     break;
             }
         }

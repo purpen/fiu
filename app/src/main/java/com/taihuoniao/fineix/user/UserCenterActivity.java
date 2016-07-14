@@ -552,15 +552,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         Intent intent;
         switch (view.getId()) {
             case R.id.tv_take_photo:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 getImageFromCamera();
                 break;
             case R.id.tv_album:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 getImageFromAlbum();
                 break;
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
@@ -602,18 +602,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.LOVE;
                                 bt_focus.setText("已关注");
-//                                Util.makeToast(response.getMessage());
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
-//                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
                             ToastUtils.showError("网络异常，请确认网络畅通");
-//                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 } else {
@@ -621,7 +618,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             bt_focus.setEnabled(true);
-                            PopupWindowUtil.dismiss(activity);
+                            PopupWindowUtil.dismiss();
                             if (responseInfo == null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             LogUtil.e("cancelFocusOperate", responseInfo.result);
@@ -629,19 +626,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
                                 bt_focus.setText("关注");
-//                                Util.makeToast(response.getMessage());
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
-//                            dialog.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
-                            PopupWindowUtil.dismiss(activity);
+                            PopupWindowUtil.dismiss();
                             ToastUtils.showError("网络异常，请确认网络畅通");
-//                            dialog.showErrorWithStatus("网络异常，请确认网络畅通");
                         }
                     });
                 }

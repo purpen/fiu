@@ -63,6 +63,12 @@
         android:layout_height="wrap_content"
         />
 
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_exit"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:layout_width="@dimen/dp250"
         android:layout_height="@dimen/dp45"
@@ -74,5 +80,6 @@
         android:background="@drawable/logout_btn_style"
         android:text="退出当前账户"
         android:textSize="@dimen/sp12"
-        android:textColor="@color/color_333" />
+        android:textColor="@color/color_333"
+        android:visibility="gone" />
 </LinearLayout>
