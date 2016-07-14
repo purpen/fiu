@@ -47,10 +47,11 @@ public class ClientDiscoverAPI {
 
     //产品
     //列表
-    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
+    public static void getProductList(String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                       String stick, String fine, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_productsList;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("category_id", category_id);
         params.addQueryStringParameter("brand_id", brand_id);
         params.addQueryStringParameter("category_tag_ids", category_tag_ids);
@@ -373,7 +374,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
-        NetworkManager.getInstance().add("getAddressList", httpHandler);
+//        NetworkManager.getInstance().add("getAddressList", httpHandler);
     }
 
     //收货地址
@@ -400,7 +401,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
-        NetworkManager.getInstance().add("deleteAddress", httpHandler);
+//        NetworkManager.getInstance().add("deleteAddress", httpHandler);
     }
 
     //公共
@@ -424,8 +425,8 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page + "");
         params.addQueryStringParameter("size", size + "");
         params.addQueryStringParameter("mark", mark);
-        params.addQueryStringParameter("self_run", self_run );
-        params.addQueryStringParameter("stick", stick );
+        params.addQueryStringParameter("self_run", self_run);
+        params.addQueryStringParameter("stick", stick);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

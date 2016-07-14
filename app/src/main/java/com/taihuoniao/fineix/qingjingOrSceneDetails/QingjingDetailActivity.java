@@ -730,6 +730,11 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.activity_qingjingdetail_createscene:
             case R.id.activity_qingjingdetail_create:
+                if (LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = 0;
+                    startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    return;
+                }
                 MainApplication.whichQingjing = QingjingDetailBean;
                 MainApplication.tag = 1;
                 startActivity(new Intent(QingjingDetailActivity.this, SelectPhotoOrCameraActivity.class));

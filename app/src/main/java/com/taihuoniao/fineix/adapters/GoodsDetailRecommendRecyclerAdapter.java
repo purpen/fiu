@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductBean;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
 
@@ -66,13 +66,13 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
     }
 
     public static class VH extends RecyclerView.ViewHolder {
-        ImageView img;
+        RoundedImageView img;
         TextView title;
         TextView price;
 
         public VH(View itemView) {
             super(itemView);
-            img = (ImageView) itemView.findViewById(R.id.item_goodsdetail_recommend_img);
+            img = (RoundedImageView) itemView.findViewById(R.id.item_goodsdetail_recommend_img);
             title = (TextView) itemView.findViewById(R.id.item_goodsdetail_recommend_title);
             price = (TextView) itemView.findViewById(R.id.item_goodsdetail_recommend_price);
         }

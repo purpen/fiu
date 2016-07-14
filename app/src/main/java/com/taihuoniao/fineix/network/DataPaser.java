@@ -117,7 +117,7 @@ public class DataPaser {
     //列表
     public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                       String stick, String fine, final Handler handler) {
-        ClientDiscoverAPI.getProductList(category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<商品列表", responseInfo.result);
