@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.Intent;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +16,6 @@ import com.taihuoniao.fineix.beans.CollectionData;
 import com.taihuoniao.fineix.beans.CollectionItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -83,14 +79,14 @@ public class CollectionsActivity extends BaseActivity<CollectionItem> {
             }
         });
 
-        pull_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(activity, QingjingDetailActivity.class);
-                intent.putExtra("id", mList.get(i)._id);
-                startActivity(intent);
-            }
-        });
+//        pull_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+//                intent.putExtra("id", mList.get(i)._id);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private void resetData() {

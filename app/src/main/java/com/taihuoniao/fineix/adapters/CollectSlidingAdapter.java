@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
@@ -46,47 +45,66 @@ public class CollectSlidingAdapter extends BaseAdapter {
             convertView.setTag(holder);
             holder.left = (ImageView) convertView.findViewById(R.id.view_sliding_focus_left);
             holder.iv = (ImageView) convertView.findViewById(R.id.view_sliding_focus_img);
-            holder.zhezhaoTv = (TextView) convertView.findViewById(R.id.view_sliding_focus_zhezhao);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (item != null) {
-            if (position == item.pos) {
-                holder.zhezhaoTv.setVisibility(View.GONE);
-            } else {
-                holder.zhezhaoTv.setVisibility(View.VISIBLE);
-            }
-            if (item.scene_product.sights != null && item.scene_product.sights.size() > 0 && item.scene_product.sights.get(0) != null) {
-                if (position % (1 + item.scene_product.banner_asset.size()) == item.scene_product.banner_asset.size()) {
-                    convertView.setLayoutParams(new Gallery.LayoutParams(activity.getResources().getDimensionPixelSize(R.dimen.dp90), activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-                    ImageLoader.getInstance().displayImage(item.scene_product.sights.get(0).cover_url, holder.iv);
-                    holder.left.setVisibility(View.GONE);
-                    return convertView;
-                }
-                ImageLoader.getInstance().displayImage(item.scene_product.banner_asset.get(position % (1 + item.scene_product.banner_asset.size())), holder.iv);
-                if (position % 2 == 0) {
-                    holder.left.setVisibility(View.GONE);
-                } else {
-                    holder.left.setVisibility(View.VISIBLE);
-                }
-                convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
-                return convertView;
-            }
-            ImageLoader.getInstance().displayImage(item.scene_product.banner_asset.get(position % (item.scene_product.banner_asset.size())), holder.iv);
-            if (position % 2 == 0) {
-                holder.left.setVisibility(View.GONE);
-            } else {
-                holder.left.setVisibility(View.VISIBLE);
-            }
-            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+
+        if (position % (1 + item.scene_product.banner_asset.size()) == item.scene_product.banner_asset.size()) {
+            convertView.setLayoutParams(new Gallery.LayoutParams(activity.getResources().getDimensionPixelSize(R.dimen.dp90), activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+            ImageLoader.getInstance().displayImage(item.scene_product.cover_url, holder.iv);
+            holder.left.setVisibility(View.GONE);
             return convertView;
         }
-        return null;
+        ImageLoader.getInstance().displayImage(item.scene_product.banner_asset.get(position % (1 + item.scene_product.banner_asset.size())), holder.iv);
+        switch (item.scene_product.banner_asset.size()) {
+            case 2:
+                if (position % 3 == 1) {
+                    holder.left.setVisibility(View.VISIBLE);
+                } else {
+                    holder.left.setVisibility(View.GONE);
+                }
+                break;
+            case 3:
+                if (position % 4 == 1) {
+                    holder.left.setVisibility(View.VISIBLE);
+                } else {
+                    holder.left.setVisibility(View.GONE);
+                }
+                break;
+            case 4:
+                if (position % 5 == 1 || position % 5 == 3) {
+                    holder.left.setVisibility(View.VISIBLE);
+                } else {
+                    holder.left.setVisibility(View.GONE);
+                }
+                break;
+            case 5:
+                if (position % 6 == 1 || position % 6 == 3) {
+                    holder.left.setVisibility(View.VISIBLE);
+                } else {
+                    holder.left.setVisibility(View.GONE);
+                }
+                break;
+            default:
+                holder.left.setVisibility(View.GONE);
+                break;
+        }
+        convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+//        if (item != null) {
+//            ImageLoader.getInstance().displayImage(item.scene_product.banner_asset.get(position % (item.scene_product.banner_asset.size())), holder.iv);
+//            if (position % 2 == 0) {
+//                holder.left.setVisibility(View.GONE);
+//            } else {
+//                holder.left.setVisibility(View.VISIBLE);
+//            }
+//            convertView.setLayoutParams(new Gallery.LayoutParams(Util.getScreenWidth() - 200, activity.getResources().getDimensionPixelSize(R.dimen.dp150)));
+//            return convertView;
+//        }
+        return convertView;
     }
 
     static class ViewHolder {
         ImageView left;
         ImageView iv;
-        TextView zhezhaoTv;
     }
 }

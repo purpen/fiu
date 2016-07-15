@@ -19,8 +19,6 @@ public class SceneProduct implements Parcelable {
     public String attrbute;
     public List<String> category_tags;
     public List<String> banner_asset;
-    public List<CjBean> sights;
-
     @Override
     public int describeContents() {
         return 0;
@@ -37,7 +35,6 @@ public class SceneProduct implements Parcelable {
         dest.writeString(this.attrbute);
         dest.writeStringList(this.category_tags);
         dest.writeStringList(this.banner_asset);
-        dest.writeTypedList(this.sights);
     }
 
     public SceneProduct() {
@@ -53,7 +50,6 @@ public class SceneProduct implements Parcelable {
         this.attrbute = in.readString();
         this.category_tags = in.createStringArrayList();
         this.banner_asset = in.createStringArrayList();
-        this.sights = in.createTypedArrayList(CjBean.CREATOR);
     }
 
     public static final Parcelable.Creator<SceneProduct> CREATOR = new Parcelable.Creator<SceneProduct>() {

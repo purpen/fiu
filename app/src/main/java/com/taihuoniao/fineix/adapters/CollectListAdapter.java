@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CollectionItem;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
 import java.util.List;
@@ -39,6 +38,8 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
         }
         holder.slidingFocusImageView.setAnimationDuration(500);
         holder.slidingFocusImageView.setFadingEdgeLength(200);
+        holder.slidingFocusImageView.setUnselectedAlpha(0.6f);
+        holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -63,8 +64,8 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
                 CollectSlidingAdapter productSlidingAdapter1 = new CollectSlidingAdapter(activity, item);
                 holder.slidingFocusImageView.setAdapter(productSlidingAdapter1);
                 holder.slidingFocusImageView.setTag(productSlidingAdapter1);
-                if (item.scene_product.sights != null && item.scene_product.sights.size() > 0 && item.scene_product.sights.get(0) != null) {
-                    switch (item.scene_product.sights.size()) {
+                if (list.get(position).scene_product.cover_url != null) {
+                    switch (list.get(position).scene_product.banner_asset.size()) {
                         case 2:
                             holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2);
                             break;
@@ -79,7 +80,6 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
                     holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
                 }
             }
-//            holder.slidingFocusImageView.setSelection(0);
             switch (item.scene_product.attrbute) {
                 case "1":
                     holder.img.setImageResource(R.mipmap.product_fiu);
@@ -119,31 +119,17 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
 
         @Override
         public void onClick(View v) {
+            if (list == null) return;
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            if (list != null) {
-                intent.putExtra("id", list.get(position)._id);
-            }
+            intent.putExtra("id", list.get(position).scene_product._id);
             activity.startActivity(intent);
         }
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (list == null) return;
             Intent intent = new Intent(activity, GoodsDetailActivity.class);
-            if (list != null) {
-                if (list.get(this.position).scene_product.sights != null && list.get(this.position).scene_product.sights.size() > 0 && list.get(this.position).scene_product.sights.get(0) != null) {
-                    if (position % (1 + list.get(this.position).scene_product.banner_asset.size()) == list.get(this.position).scene_product.banner_asset.size()) {
-                        Intent intent1 = new Intent(activity, SceneDetailActivity.class);
-                        intent1.putExtra("id", list.get(this.position).scene_product.sights.get(0).id);
-                        activity.startActivity(intent1);
-                        return;
-                    } else {
-                        intent.putExtra("id", list.get(this.position)._id);
-                    }
-                } else {
-                    intent.putExtra("id", list.get(this.position)._id);
-                }
-
-            }
+            intent.putExtra("id", list.get(this.position).scene_product._id);
             activity.startActivity(intent);
         }
     }

@@ -73,6 +73,7 @@ public class SystemSettingsActivity extends BaseActivity{
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
         item_exit.setTVStyle(0, "退出当前账户", R.color.color_333);
+        item_exit.setRightMoreImgStyle(false);
         setCacheSize();
 //        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
 //        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
