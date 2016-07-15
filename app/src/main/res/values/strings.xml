@@ -162,6 +162,7 @@
         <item>驴友</item>
         <item>吃货</item>
         <item>单身</item>
+        <item>文艺范</item>
     </string-array>
     <string name="select_tag_tip">选择一个标签或输入15字以内的描述</string>
     <string-array name="official_tags">
@@ -173,6 +174,7 @@
         <item>CEO</item>
         <item>设计狮</item>
         <item>红人</item>
+        <item>诗人</item>
     </string-array>
     <string name="user_center_qj_tip">每个地盘都有故事，来都来了，讲讲你的故事吧</string>
     <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
