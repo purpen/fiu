@@ -345,6 +345,7 @@
         <activity
             android:name=".scene.CreateSceneActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.ShareCJSelectActivity"

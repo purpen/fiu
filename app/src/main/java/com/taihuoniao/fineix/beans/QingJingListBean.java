@@ -51,6 +51,13 @@ public class QingJingListBean extends NetBean {
         private String created_on;
         private String cover_url;
 
+        @Override
+        public String toString() {
+            return "QingJingItem{" +
+                    "title='" + title + '\'' +
+                    '}';
+        }
+
         public boolean isSelect() {
             return isSelect;
         }

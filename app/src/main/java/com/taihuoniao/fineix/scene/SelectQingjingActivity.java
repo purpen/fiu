@@ -251,7 +251,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
             lastSavedFirstVisibleItem = firstVisibleItem;
             lastTotalItem = totalItemCount;
             page++;
-            progressBar.setVisibility(View.VISIBLE);
+//            progressBar.setVisibility(View.VISIBLE);
             qingjingList(page + "", 2 + "", 1 + "", distance + "", ll.longitude + "", ll.latitude + "");
         }
     }
@@ -259,7 +259,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
     private void getNearByData(LatLng ll) {//附近的情境
         mapPage = 1;
         pageSize = 3;
-        ClientDiscoverAPI.qingjingList(1 + "", null, null, null, ll.longitude + "", ll.latitude + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(1 + "",null, null, null, null, ll.longitude + "", ll.latitude + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 QingJingListBean qingJingListBean = new QingJingListBean();
@@ -296,7 +296,7 @@ public class SelectQingjingActivity extends BaseActivity<QingJingItem> implement
 
     //情景列表
     private void qingjingList(String p, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(p, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(p,null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 QingJingListBean qingJingListBean = new QingJingListBean();

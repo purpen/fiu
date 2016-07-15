@@ -275,7 +275,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 
     //搜索列表
     private void search(String q, String t, String page, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t,null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SearchBean searchBean = new SearchBean();

@@ -58,19 +58,29 @@
                 android:layout_toLeftOf="@id/activity_share_search_delete"
                 android:layout_toRightOf="@id/search1"
                 android:background="@null"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
                 android:gravity="center_vertical"
                 android:hint="@string/search_text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textColorHint="#cccccc"
                 android:textSize="12sp"/>
         </RelativeLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#8e222222"/>
+
         <TextView
+            android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1px"
+            android:layout_marginTop="25dp"
             android:background="@color/white"/>
+
     </LinearLayout>
+
 
     <ListView
         android:id="@+id/activity_share_select_listview"

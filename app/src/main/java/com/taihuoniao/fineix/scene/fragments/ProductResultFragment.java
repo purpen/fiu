@@ -122,7 +122,7 @@ public class ProductResultFragment extends BaseFragment {
     }
 
     private void search(String q, String t, String p, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t,null, p, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SearchBean searchBean = new SearchBean();

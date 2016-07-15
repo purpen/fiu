@@ -93,7 +93,7 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (holder.slidingFocusImageView.getTag() != null) {
+        if (holder.slidingFocusImageView.getTag() != null&&holder.slidingFocusImageView.getTag() instanceof Integer) {
             int pa = (int) holder.slidingFocusImageView.getTag();
             if (pa == position) {
                 return convertView;
@@ -104,26 +104,6 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         final int p = position;
-//        holder.slidingFocusImageView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int posi, long id) {
-////                pos = position;
-//                if(list!=null){
-//                    list.get(p).setPos(posi);
-//                }else{
-//                    searchList.get(p).pos = posi;
-//                }
-//                ProductSlidingAdapter productSlidingAdapter = (ProductSlidingAdapter) holder.slidingFocusImageView.getTag();
-//                productSlidingAdapter.notifyDataSetChanged();
-////                Log.e("<<<切换焦点", p + "," + list.get(p).getPos()+",适配器"+productSlidingAdapter);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
         if (list != null) {
             holder.nameTv.setText(list.get(position).getTitle());
