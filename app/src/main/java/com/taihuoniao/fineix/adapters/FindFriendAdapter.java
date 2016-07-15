@@ -147,7 +147,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             button.setEnabled(true);
-                            PopupWindowUtil.dismiss(activity);
+                            PopupWindowUtil.dismiss();
                             if (responseInfo==null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             LogUtil.e("cancelFocusOperate",responseInfo.result);
@@ -167,7 +167,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
-                            PopupWindowUtil.dismiss(activity);
+                            PopupWindowUtil.dismiss();
                             ToastUtils.showError("网络异常，请确认网络畅通");
 //                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
                         }

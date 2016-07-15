@@ -64,8 +64,8 @@
         </RelativeLayout>
         <ImageView
             android:id="@+id/iv_bar_code"
-            android:layout_width="266dp"
-            android:layout_height="266dp"
+            android:layout_width="267dp"
+            android:layout_height="267dp"
             android:layout_centerHorizontal="true"
             android:scaleType="fitXY"
             android:layout_below="@+id/rl"

@@ -272,15 +272,15 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_take_photo:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 getImageFromCamera();
                 break;
             case R.id.tv_album:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 getImageFromAlbum();
                 break;
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss(activity);
+                PopupWindowUtil.dismiss();
                 break;
         }
     }
