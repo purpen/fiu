@@ -4,6 +4,7 @@ import com.taihuoniao.fineix.base.NetBean;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +52,18 @@ public class SearchBean extends NetBean {
         private String content;
         private String oid;
         private String des;
+        private List<String> tags;
+
+        public List<String> getTags() {
+            if (tags == null) {
+                tags = new ArrayList<>();
+            }
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
 
         public String getDes() {
             return des;

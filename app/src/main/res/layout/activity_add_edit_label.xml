@@ -11,22 +11,13 @@
     <TextView
         android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="5dp"
         android:layout_below="@id/titlelayout"
-        android:background="#e1e1e1"/>
+        android:background="#e5e5e5"/>
 
-    <GridView
-        android:id="@+id/grid_view"
+    <com.taihuoniao.fineix.view.FlowLayout
+        android:id="@+id/flowlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/line"
-        android:horizontalSpacing="11dp"
-        android:numColumns="3"
-        android:paddingBottom="10dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp"
-        android:scrollbars="none"
-        android:verticalSpacing="11dp"/>
-
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"/>
 </RelativeLayout>

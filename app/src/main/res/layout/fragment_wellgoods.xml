@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/head_logo"/>
+            android:src="@mipmap/logo_no_word"/>
 
         <ImageView
             android:id="@+id/fragment_wellgoods_search"
@@ -68,19 +68,17 @@
         android:layout_height="75dp"
         android:translationY="-75dp">
 
-        <com.fivehundredpx.android.blur.BlurringView
+        <com.taihuoniao.fineix.blurview.BlurView
             android:id="@+id/fragment_wellgoods_blurring_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:blurRadius="11"
-            app:downsampleFactor="6"
-            app:overlayColor="#99FFFFFF"/>
+            app:blurOverlayColor="#50ffffff">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_wellgoods_second_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_wellgoods_second_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.taihuoniao.fineix.blurview.BlurView>
     </FrameLayout>
 
 

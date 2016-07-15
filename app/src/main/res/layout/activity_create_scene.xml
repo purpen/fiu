@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#f7f7f7"
@@ -42,11 +43,11 @@
                     android:layout_alignParentRight="true"
                     android:background="@color/white"
                     android:gravity="center"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
+                    android:paddingLeft="17dp"
+                    android:paddingRight="17dp"
                     android:text="选择语境"
-                    android:textColor="@color/black333333"
-                    android:textSize="13sp"
+                    android:textColor="#717171"
+                    android:textSize="11sp"
                     android:visibility="gone"/>
 
                 <EditText
@@ -171,10 +172,11 @@
             <RelativeLayout
                 android:id="@+id/activity_create_scene_labelrelative"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
-                android:paddingLeft="16dp">
+                android:minHeight="45dp"
+                >
 
                 <ImageView
                     android:layout_width="45dp"
@@ -189,18 +191,32 @@
                     android:id="@+id/label_create"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="15dp"
                     android:src="@mipmap/label_create"/>
 
                 <TextView
+                    android:id="@+id/activity_create_scene_label_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@id/label_create"
-                    android:gravity="center_vertical"
                     android:text="@string/label"
                     android:textColor="@color/black333333"
                     android:textSize="13sp"/>
+
+                <com.taihuoniao.fineix.view.FlowLayout
+                    android:id="@+id/activity_create_scene_label_flowlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@id/label_create"
+                    app:horizontalSpacing="10dp"
+                    app:verticalSpacing="10dp"/>
 
 
             </RelativeLayout>
@@ -209,6 +225,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#e2e2e2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginTop="7dp"
+                    android:text="推荐标签"
+                    android:textColor="#999999"
+                    android:textSize="11sp"/>
+
+                <com.taihuoniao.fineix.view.FlowLayout
+                    android:id="@+id/activity_create_scene_recommend_flowlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="23dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:horizontalSpacing="10dp"
+                    app:verticalSpacing="10dp"/>
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:id="@+id/activity_create_scene_label_horizontal"

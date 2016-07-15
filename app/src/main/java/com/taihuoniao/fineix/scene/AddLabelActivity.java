@@ -31,7 +31,6 @@ import com.taihuoniao.fineix.beans.AllLabelBean;
 import com.taihuoniao.fineix.beans.HotLabel;
 import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.DensityUtils;
@@ -165,11 +164,11 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         allLabelViewPagerAdapter = new AllLabelViewPagerAdapter1(getSupportFragmentManager(), AddLabelActivity.this, allLabelList, AddLabelActivity.this, AddLabelActivity.this);
         allLabelViewPager.setAdapter(allLabelViewPagerAdapter);
         selectList = new LinkedList<>();
-        if (MainApplication.selectList != null) {
-            for (UsedLabelBean usedLabelBean : MainApplication.selectList) {
-                addToLinear(usedLabelBean.getTitle_cn(), Integer.parseInt(usedLabelBean.get_id()));
-            }
-        }
+//        if (MainApplication.selectList != null) {
+//            for (UsedLabelBean usedLabelBean : MainApplication.selectList) {
+//                addToLinear(usedLabelBean.getTitle_cn(), Integer.parseInt(usedLabelBean.get_id()));
+//            }
+//        }
     }
 
     @Override
@@ -427,7 +426,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 selectList.clear();
                 break;
             case R.id.title_continue:
-                MainApplication.selectList = selectList;
+//                MainApplication.selectList = selectList;
                 setResult(DataConstants.RESULTCODE_CREATESCENE_ADDLABEL, new Intent());
                 finish();
                 break;

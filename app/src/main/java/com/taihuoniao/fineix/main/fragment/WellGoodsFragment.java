@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.main.fragment;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dodola.bubblecloud.BubbleCloudView;
-import com.fivehundredpx.android.blur.BlurringView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -49,6 +49,8 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ShopCartNumber;
+import com.taihuoniao.fineix.blurview.BlurView;
+import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -80,7 +82,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     private RelativeLayout titlelayout;
     //    private LinearLayout goneLinear;
     private FrameLayout goneFrame;
-    private BlurringView blurringView;
+    private BlurView blurringView;
     private RecyclerView secondCategoryRecycler;
     private ImageView searchImg;
     private RelativeLayout cartRelative;
@@ -123,7 +125,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         View view = View.inflate(getActivity(), R.layout.fragment_wellgoods, null);
 //        goneLinear = (LinearLayout) view.findViewById(R.id.fragment_wellgoods_gone_linear);
         goneFrame = (FrameLayout) view.findViewById(R.id.fragment_wellgoods_framelayout);
-        blurringView = (BlurringView) view.findViewById(R.id.fragment_wellgoods_blurring_view);
+        blurringView = (BlurView) view.findViewById(R.id.fragment_wellgoods_blurring_view);
 
         secondCategoryRecycler = (RecyclerView) view.findViewById(R.id.fragment_wellgoods_second_recycler);
         titlelayout = (RelativeLayout) view.findViewById(R.id.title_relative1);
@@ -217,11 +219,25 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //品牌列表
         brandList(1, 100);
     }
+    private void setupBlurView() {
+        final float radius = 16f;
 
+        final View decorView = getActivity().getWindow().getDecorView();
+        //Activity's root View. Can also be root View of your layout
+        final View rootView = decorView.findViewById(android.R.id.content);
+        //set background, if your root layout doesn't have one
+        final Drawable windowBackground = decorView.getBackground();
+
+        blurringView.setupWith(rootView)
+                .windowBackground(windowBackground)
+                .blurAlgorithm(new RenderScriptBlur(getActivity(), true)) //Preferable algorithm, needs RenderScript support mode enabled
+                .blurRadius(radius);
+    }
 
     @Override
     protected void initList() {
-        blurringView.setBlurredView(listView);
+        setupBlurView();
+//        blurringView.setBlurredView(pullToRefreshView);
         searchImg.setOnClickListener(this);
 //        cartImg.setOnClickListener(this);
         allBrandTv.setOnClickListener(this);
@@ -500,6 +516,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             if (secondFlag == 0) {
                 secondDownAnimator.start();
             }
+
         } else {
 //            goneLinear.setVisibility(View.GONE);
             if (goneFrame.getTranslationY() <= -goneFrame.getMeasuredHeight()) {
@@ -512,9 +529,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 secondUpAnimator.start();
             }
         }
-        if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight()) {
-            blurringView.invalidate();
-        }
+//        if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight() && goneFrame.getTranslationY() <= 0) {
+//        blurringView.invalidate();
+//        }
     }
 
     private int secondFlag = 0;//悬浮分类动画标识

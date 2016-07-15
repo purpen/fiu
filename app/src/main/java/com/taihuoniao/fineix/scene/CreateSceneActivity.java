@@ -56,12 +56,13 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareSearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.FlowLayout;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
@@ -96,12 +97,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout labelLinear;
     private RelativeLayout qingjingRelative;
     private LinearLayout qingjingLinear;
+    private FlowLayout labelFlow;
+    private FlowLayout recommendFlow;
+    private TextView labelTv;
     //图片上存储的地址信息
     private double[] location;
     //工具
     private SVProgressHUD dialog;
     //从选择标签界面返回的用户选择的标签
-    private List<UsedLabelBean> selectList;
+    private List<String> selectList;
     //地址列表数据
     private List<PoiInfo> poiInfoList;
     //位置信息
@@ -110,6 +114,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     //创建场景时所属情景
     private String scene_id;
     private DisplayImageOptions options;
+    private String imgUrl = null;//图片路径
 
 
     public CreateSceneActivity() {
@@ -134,6 +139,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         labelLinear = (LinearLayout) findViewById(R.id.activity_create_scene_labellinear);
         qingjingRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_qingjing);
         qingjingLinear = (LinearLayout) findViewById(R.id.activity_create_scene_qingjinglinear);
+        labelFlow = (FlowLayout) findViewById(R.id.activity_create_scene_label_flowlayout);
+        recommendFlow = (FlowLayout) findViewById(R.id.activity_create_scene_recommend_flowlayout);
+        labelTv = (TextView) findViewById(R.id.activity_create_scene_label_tv);
         if (MainApplication.tag == 2) {
             qingjingRelative.setVisibility(View.GONE);
             selectEnvirTv.setVisibility(View.GONE);
@@ -153,7 +161,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         Uri imageUri = getIntent().getData();
-
         titleLayout.setFocusable(true);
         titleLayout.setFocusableInTouchMode(true);
         titleLayout.requestFocus();
@@ -236,6 +243,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             getQingjingDetails();
         } else {
             imageUri = getIntent().getData();
+            imgUrl = imageUri.toString();
             ImageLoader.getInstance().loadImage(imageUri.toString(), options, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -261,7 +269,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         }
         //在情景下创建场景
         if (MainApplication.whichQingjing != null) {
-            scene_id = MainApplication.whichQingjing.getData().get_id();
+            scene_id = MainApplication.whichQingjing.getData().get_id()+"";
             qingjingLinear.removeAllViews();
             addQingjingToLinear(MainApplication.whichQingjing.getData().getTitle());
             qingjingRelative.setEnabled(false);
@@ -270,14 +278,13 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     //编辑场景时调用
     private void getQingjingDetails() {
-//        dialog.show();
         qingjingDetails = (QingjingDetailBean) getIntent().getSerializableExtra(QingjingDetailActivity.class.getSimpleName());
         if (qingjingDetails == null) {
             ToastUtils.showError("数据错误");
             finish();
             return;
         }
-
+        imgUrl = qingjingDetails.getData().getCover_url();
         titleEdt.setText(qingjingDetails.getData().getTitle());
         contentEdt.setText(qingjingDetails.getData().getDes());
         ImageLoader.getInstance().loadImage(qingjingDetails.getData().getCover_url(), options, new ImageLoadingListener() {
@@ -305,12 +312,13 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         selectList = new ArrayList<>();
         for (int i = 0; i < qingjingDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(qingjingDetails.getData().getTags().get(i) + "", qingjingDetails.getData().getTag_titles().get(i));
-            selectList.add(usedLabelBean);
+            selectList.add(qingjingDetails.getData().getTag_titles().get(i));
         }
-        for (int i = 0; i < selectList.size(); i++) {
-            UsedLabelBean labelBean = selectList.get(i);
-            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-        }
+        addToFlow(selectList, labelFlow);
+//        for (int i = 0; i < selectList.size(); i++) {
+//            UsedLabelBean labelBean = selectList.get(i);
+//            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
+//        }
         locationTv.setText(qingjingDetails.getData().getAddress());
         lng = qingjingDetails.getData().getLocation().getCoordinates().get(0);
         lat = qingjingDetails.getData().getLocation().getCoordinates().get(1);
@@ -324,7 +332,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             finish();
             return;
         }
-
+        imgUrl = sceneDetails.getData().getCover_url();
         titleEdt.setText(sceneDetails.getData().getTitle());
         contentEdt.setText(sceneDetails.getData().getDes());
         ImageLoader.getInstance().loadImage(sceneDetails.getData().getCover_url(), options, new ImageLoadingListener() {
@@ -349,22 +357,23 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError("图片加载失败，请返回重试");
             }
         });
-        scene_id = sceneDetails.getData().getScene_id();
+        scene_id = sceneDetails.getData().getScene_id()+"";
         selectList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(sceneDetails.getData().getTags().get(i) + "", sceneDetails.getData().getTag_titles().get(i));
-            selectList.add(usedLabelBean);
+            selectList.add(sceneDetails.getData().getTag_titles().get(i));
         }
-        for (int i = 0; i < selectList.size(); i++) {
-            UsedLabelBean labelBean = selectList.get(i);
-            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-        }
+        addToFlow(selectList, labelFlow);
+//        for (int i = 0; i < selectList.size(); i++) {
+//            UsedLabelBean labelBean = selectList.get(i);
+//            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
+//        }
         MainApplication.tagInfoList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getProduct().size(); i++) {
             TagItem tagItem = new TagItem();
-            tagItem.setId(sceneDetails.getData().getProduct().get(i).getId());
+            tagItem.setId(sceneDetails.getData().getProduct().get(i).getId()+"");
             tagItem.setName(sceneDetails.getData().getProduct().get(i).getTitle());
-            tagItem.setPrice(sceneDetails.getData().getProduct().get(i).getPrice());
+            tagItem.setPrice(sceneDetails.getData().getProduct().get(i).getPrice()+"");
             tagItem.setX(sceneDetails.getData().getProduct().get(i).getX());
             tagItem.setY(sceneDetails.getData().getProduct().get(i).getY());
             MainApplication.tagInfoList.add(tagItem);
@@ -383,8 +392,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
-//                    Log.e("<<<获取位置", location[1] + "," + location[0]);
-//                    getAddressByCoordinate();
                     dialog.dismiss();
                     MapUtil.destroyLocationClient();
                     MapUtil.destroyGeoCoder();
@@ -405,7 +412,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 city = result.getAddressDetail().city;
-//                    province = result.getAddressDetail().province;
                 district = result.getAddressDetail().district;
                 poiInfoList = result.getPoiList();
                 if (poiInfoList == null) {
@@ -430,13 +436,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_create_scene_select_enviroment:
-//                Intent intent22 = new Intent(this, ShareCJSelectActivity.class);
-//                intent.putExtra("scene", null);
-//                startActivityForResult(intent22, 1);
-                ToastUtils.showError("跳转");
+                Intent intent22 = new Intent(this, ShareSearchActivity.class);
+                intent22.putExtra("url", imgUrl);
+                startActivityForResult(intent22, 1);
                 break;
             case R.id.activity_create_scene_add_addresslinear:
-//            case R.id.activity_create_scene_addressrelative:
             case R.id.location:
                 if (location == null) {
                     getCurrentLocation();
@@ -451,25 +455,19 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 deleteAddressImg.setVisibility(View.GONE);
                 break;
             case R.id.activity_create_scene_qingjing:
-//                if (location == null) {
-//                    getCurrentLocation();
-//                    return;
-//                }
                 Intent intent1 = new Intent(CreateSceneActivity.this, SelectQingjingActivity.class);
-//                intent1.putExtra("latLng", new LatLng(location[1], location[0]));
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
-//                Intent intent1 = new Intent(CreateSceneActivity.this, SelectOrSearchQJActivity.class);
-//                startActivity(intent1);
                 break;
             case R.id.activity_create_scene_labelrelative:
-                if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
-                    MainApplication.which_activity = DataConstants.ElseActivity;
-                    startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
-                    return;
-                }
+//                if (!LoginInfo.isUserLogin()) {
+////                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    MainApplication.which_activity = DataConstants.ElseActivity;
+//                    startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
+//                    return;
+//                }
                 MainApplication.selectList = selectList;
-                startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
+//                startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
+
                 break;
             case R.id.title_continue:
                 if (!LoginInfo.isUserLogin()) {
@@ -503,8 +501,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 }
                 dialog.showWithMaskType(SVProgressHUD.SVProgressHUDMaskType.Black);
                 StringBuilder tags = new StringBuilder();
-                for (UsedLabelBean each : selectList) {
-                    tags.append(",").append(each.get_id());
+                for (String each : selectList) {
+                    tags.append(",").append(each);
                 }
                 if (tags.length() > 0) {
                     tags.deleteCharAt(0);
@@ -576,7 +574,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    createCJ(sceneDetails == null ? null : sceneDetails.getData().get_id(), tmp, titleEdt.getText().toString()
+                    createCJ(sceneDetails == null ? null : sceneDetails.getData().get_id()+"", tmp, titleEdt.getText().toString()
                             , contentEdt.getText().toString(), scene_id, tags.toString(),
                             products.toString(),
                             locationTv.getText().toString(),
@@ -601,7 +599,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id(), titleEdt.getText().toString(), contentEdt.getText().toString(),
+                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id()+"", titleEdt.getText().toString(), contentEdt.getText().toString(),
                             tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "");
                 } else {
                     dialog.dismiss();
@@ -642,11 +640,59 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         showDialog();
     }
 
+    private void addToFlow(List<String> list, FlowLayout flowLayout) {
+        if (list == null || list.size() <= 0) {
+            if (labelFlow.getChildCount() <= 0) {
+                labelTv.setVisibility(View.VISIBLE);
+            } else {
+                labelTv.setVisibility(View.GONE);
+            }
+            return;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            final TextView textView = (TextView) View.inflate(CreateSceneActivity.this, R.layout.view_horizontal_label_item, null);
+            textView.setText(list.get(i));
+            if (flowLayout.getId() == recommendFlow.getId()) {
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < labelFlow.getChildCount(); i++) {
+                            TextView textView1 = (TextView) labelFlow.getChildAt(i);
+                            if (textView1.getText().equals(textView.getText())) {
+                                return;
+                            }
+                        }
+                        List<String> list1 = new ArrayList<String>();
+                        list1.add(textView.getText().toString());
+                        addToFlow(list1, labelFlow);
+                    }
+                });
+            }
+            flowLayout.addView(textView);
+
+        }
+        if(flowLayout.getId()==labelFlow.getId()){
+            selectList = list;
+        }
+        if (labelFlow.getChildCount() > 0) {
+            labelTv.setVisibility(View.GONE);
+        } else {
+            labelTv.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case 222:
+                    SearchBean.SearchItem search = (SearchBean.SearchItem) data.getSerializableExtra("scene");
+                    titleEdt.setText(search.getTitle());
+                    contentEdt.setText(search.getDes());
+                    recommendFlow.removeAllViews();
+                    Log.e("<<<标签size", "size=" + search.getTags().size());
+                    addToFlow(search.getTags(), recommendFlow);
+                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ:
                     SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
                     if (searchItem != null) {
@@ -673,8 +719,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
                     PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
-//                    String city = data.getStringExtra("city");
-//                    String district = data.getStringExtra("district");
                     if (poiInfo != null) {
                         locationTv.setText(poiInfo.name);
                         deleteAddressImg.setVisibility(View.VISIBLE);
@@ -682,20 +726,20 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         lat = poiInfo.location.latitude;
                     }
                     break;
-                case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
-                    if (MainApplication.selectList != null) {
-                        if (selectList != null) {
-                            selectList.clear();
-                            labelLinear.removeAllViews();
-                        }
-                        selectList = MainApplication.selectList;
-                        MainApplication.selectList = null;
-                        for (int i = 0; i < selectList.size(); i++) {
-                            UsedLabelBean labelBean = selectList.get(i);
-                            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-                        }
-                    }
-                    break;
+//                case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
+//                    if (MainApplication.selectList != null) {
+//                        if (selectList != null) {
+//                            selectList.clear();
+//                            labelLinear.removeAllViews();
+//                        }
+//                        selectList = MainApplication.selectList;
+//                        MainApplication.selectList = null;
+//                        for (int i = 0; i < selectList.size(); i++) {
+//                            UsedLabelBean labelBean = selectList.get(i);
+//                            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
+//                        }
+//                    }
+//                    break;
             }
         }
     }
@@ -711,18 +755,18 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
 
     //标签
-    private void addToLinear(String str, int _id) {
-        labelHorizontal.setVisibility(View.VISIBLE);
-        View view = View.inflate(CreateSceneActivity.this, R.layout.view_horizontal_label_item, null);
-        TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
-        textView.setText(str);
-        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-        lp.rightMargin = DensityUtils.dp2px(CreateSceneActivity.this, 10);
-        view.setLayoutParams(lp);
-        view.setTag(_id);
-        labelLinear.addView(view);
-    }
+//    private void addToLinear(String str, int _id) {
+//        labelHorizontal.setVisibility(View.VISIBLE);
+//        View view = View.inflate(CreateSceneActivity.this, R.layout.view_horizontal_label_item, null);
+//        TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
+//        textView.setText(str);
+//        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+//        lp.rightMargin = DensityUtils.dp2px(CreateSceneActivity.this, 10);
+//        view.setLayoutParams(lp);
+//        view.setTag(_id);
+//        labelLinear.addView(view);
+//    }
 
     @Override
     public void click(int postion) {
@@ -840,88 +884,4 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 });
     }
 
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.CREATE_QINGJING:
-//                    dialog.dismiss();
-//                    AddProductBean netBean1 = (AddProductBean) msg.obj;
-//                    if (netBean1.isSuccess()) {
-//                        if (QingjingDetailActivity.instance != null) {
-//                            QingjingDetailActivity.instance.finish();
-//                        }
-//                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
-//                        Intent in = new Intent(CreateSceneActivity.this, QingjingDetailActivity.class);
-//                        in.putExtra("id", netBean1.getData().getId());
-//                        in.putExtra("create", true);
-//                        startActivity(in);
-//                        if (SelectPhotoOrCameraActivity.instance != null) {
-//                            SelectPhotoOrCameraActivity.instance.finish();
-//                        }
-//                        if (CropPictureActivity.instance != null) {
-//                            CropPictureActivity.instance.finish();
-//                        }
-//                        if (EditPictureActivity.instance != null) {
-//                            EditPictureActivity.instance.finish();
-//                        }
-//                        if (FilterActivity.instance != null) {
-//                            FilterActivity.instance.finish();
-//                        }
-//                        CreateSceneActivity.this.finish();
-//                    } else {
-//                        Toast.makeText(CreateSceneActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.CREATE_SCENE:
-//                    dialog.dismiss();
-//                    AddProductBean netBean = (AddProductBean) msg.obj;
-//                    if (netBean.isSuccess()) {
-//                        if (SceneDetailActivity.instance != null) {
-//                            SceneDetailActivity.instance.finish();
-//                        }
-//                        dialog.showSuccessWithStatus("您的" + (MainApplication.tag == 2 ? "情" : "场") + "景发布成功，品味又升级啦");
-//                        if (MainApplication.whichQingjing != null) {
-//                            sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-//                        }
-//                        MainApplication.whichQingjing = null;
-//                        MainApplication.tagInfoList = null;
-//                        Intent intent = new Intent(CreateSceneActivity.this, SceneDetailActivity.class);
-//                        intent.putExtra("id", netBean.getData().getId());
-//                        intent.putExtra("create", true);
-//                        startActivity(intent);
-//                        if (SelectPhotoOrCameraActivity.instance != null) {
-//                            SelectPhotoOrCameraActivity.instance.finish();
-//                        }
-//                        if (CropPictureActivity.instance != null) {
-//                            CropPictureActivity.instance.finish();
-//                        }
-//                        if (EditPictureActivity.instance != null) {
-//                            EditPictureActivity.instance.finish();
-//                        }
-//                        if (FilterActivity.instance != null) {
-//                            FilterActivity.instance.finish();
-//                        }
-//                        CreateSceneActivity.this.finish();
-//                    } else {
-//                        Toast.makeText(CreateSceneActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    break;
-//            }
-//        }
-//    };
-
-//    @Override
-//    protected void onDestroy() {
-//        //        cancelNet();
-//
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//            handler = null;
-//        }
-//        super.onDestroy();
-//    }
 }

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/head_logo" />
+            android:src="@mipmap/logo_no_word" />
 
         <ImageView
             android:id="@+id/fragment_find_search"

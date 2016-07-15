@@ -25,11 +25,9 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
-import com.taihuoniao.fineix.service.LocationService;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -62,7 +60,7 @@ public class MainApplication extends Application {
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
     //用户选择的标签列表
-    public static List<UsedLabelBean> selectList;
+    public static List<String> selectList;
     //创建场景或情景的标识
     public static int tag;//1,场景 2,情景
     //在哪个情景下创建场景

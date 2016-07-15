@@ -2,7 +2,7 @@
     <string name="app_name">Fiu浮游</string>
     <string name="qing">精选</string>
     <string name="jing">发现</string>
-    <string name="fiu">Fiu</string>
+    <string name="fiu">FIU 浮游</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
     <string name="about_us">关于Fiu</string>
@@ -363,7 +363,7 @@
     <string name="dropdown_update_data">下拉更新数据</string>
     <string name="continue_to">继续</string>
     <string name="no_product">暂无商品</string>
-    <string name="fiu_descrip"> | 创新产品情景式购物平台</string>
+    <string name="fiu_descrip"> | 你在发现 谁在惊呼？</string>
     <string name="no_this_sight">没有这个地盘</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>

@@ -166,14 +166,14 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
     //图片加载
     private DisplayImageOptions options, options750_1334;
     //图片上的商品
-    private List<SceneDetailsBean.SceneProductItem> productList;
+    private List<SceneDetailsBean.DataBean.ProductBean> productList;
     //是否显示标签和价格的标识
     private boolean isShowAll = false;
     //当前用户是否已经点赞
     private int isLove = 0;//0是未点赞，1是已点赞
     private SceneDetailsBean netScene = null;//网络请求返回数据
-    private SceneDetailsBean.UserInfo netUserInfo = null;//网络请求返回用户信息
-    private SceneDetailsBean.Locat location = null;//网络请求返回的经纬度
+    private SceneDetailsBean.DataBean.UserInfoBean netUserInfo = null;//网络请求返回用户信息
+    private SceneDetailsBean.DataBean.LocationBean location = null;//网络请求返回的经纬度
     //场景下的商品
     private List<ProductBean.ProductListItem> sceneProductList;
     private GoodListAdapter sceneProductAdapter;
@@ -553,11 +553,11 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
             return;
         }
         isShowAll = false;
-        for (final SceneDetailsBean.SceneProductItem product : productList) {
+        for (final SceneDetailsBean.DataBean.ProductBean product : productList) {
 //            Log.e("<<<", productList.toString());
             final LabelView labelView = new LabelView(getActivity());
             TagItem tagItem = new TagItem();
-            tagItem.setId(product.getId());
+            tagItem.setId(product.getId()+"");
             tagItem.setName(product.getTitle());
             tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
@@ -584,7 +584,7 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
         }
     }
 
-    private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
+    private void addLabelToLinear(final List<String> tagsTitleList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(getActivity(), R.layout.view_horizontal_label_item, null);
             TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
@@ -593,7 +593,6 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
             lp.rightMargin = DensityUtils.dp2px(getActivity(), 10);
             view.setLayoutParams(lp);
-            view.setTag(tagsList.get(i));
             final int finalI = i;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -619,7 +618,7 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
                     return;
                 }
                 Intent intent = new Intent(getActivity(), UserCenterActivity.class);
-                intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
                 startActivity(intent);
                 break;
             case R.id.popup_scene_detail_more_share:
@@ -1156,7 +1155,7 @@ public class ViewPagerFragment extends Fragment implements MyScrollView.OnScroll
                             moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
                             desTv.setText(netSceneDetails.getData().getDes());
                             //添加标签
-                            addLabelToLinear(netSceneDetails.getData().getTag_titles(), netSceneDetails.getData().getTags());
+                            addLabelToLinear(netSceneDetails.getData().getTags());
 
                             viewCount.setText(netSceneDetails.getData().getView_count());
                             loveCountTv.setText(String.format("%d", netSceneDetails.getData().getLove_count()));

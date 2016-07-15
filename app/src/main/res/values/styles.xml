@@ -214,4 +214,9 @@
     </style>
 
     <item name="scene_list_tag" type="id"/>
+    <declare-styleable name="BlurView">
+
+        <attr name="blurOverlayColor" format="color"/>
+
+    </declare-styleable>
 </resources>

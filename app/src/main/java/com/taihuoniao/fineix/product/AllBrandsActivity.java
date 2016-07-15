@@ -86,7 +86,7 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
     @Override
     protected void requestNet() {
         dialog.show();
-        brandList(1, 4, null, 1 + "", null);//自营品牌推荐列表
+        brandList(1, 6, null, 1 + "", null);//自营品牌推荐列表
         brandList(page, size, null, null, null);//全部品牌列表
     }
 

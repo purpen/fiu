@@ -149,9 +149,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             if (!totalList.isEmpty()) {
                                 mEmptyLayout.setVisibility(View.GONE);
                                 mFullLayout.setVisibility(View.VISIBLE);
-                                title.setRightButtomVisible(false);
-                            } else {
                                 title.setRightButtomVisible(true);
+                            } else {
+                                title.setRightButtomVisible(false);
                                 mEmptyLayout.setVisibility(View.VISIBLE);
                                 mFullLayout.setVisibility(View.GONE);
                             }

@@ -34,7 +34,7 @@ public class MineBrandGridAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (isFour) {
-            return brandList == null ? 0 : (brandList.size() > 4 ? 4 : brandList.size());
+            return brandList == null ? 0 : (brandList.size() > 6 ? 6 : brandList.size());
         }
         return brandList == null ? 0 : brandList.size();
     }
@@ -57,9 +57,9 @@ public class MineBrandGridAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.img = (RoundedImageView) convertView.findViewById(R.id.item_mine_brand_grid_img);
             ViewGroup.LayoutParams layoutParams = holder.img.getLayoutParams();
-            layoutParams.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 11) -
-                    gridViewForScrollView.getPaddingRight() - gridViewForScrollView.getPaddingLeft()) / 2;
-            layoutParams.height = layoutParams.width * 208 / 335;
+            layoutParams.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 22) -
+                    gridViewForScrollView.getPaddingRight() - gridViewForScrollView.getPaddingLeft()) / 3;
+            layoutParams.height = layoutParams.width;
             holder.img.setLayoutParams(layoutParams);
             convertView.setTag(holder);
         } else {

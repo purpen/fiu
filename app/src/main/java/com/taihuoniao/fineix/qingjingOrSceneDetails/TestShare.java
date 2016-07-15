@@ -300,9 +300,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     }
                     return;
                 }
-                if (netScene.getData().getOid() != null) {
-                    DataPaser.commitShareCJ(netScene.getData().getOid());
-                }
+//                if (netScene.getData().getOid() != null) {
+//                    DataPaser.commitShareCJ(netScene.getData().getOid());
+//                }
                 PopupWindowUtil.show(TestShare.this, initPop());
                 break;
         }

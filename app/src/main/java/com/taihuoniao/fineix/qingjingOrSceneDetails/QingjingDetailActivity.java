@@ -127,7 +127,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     private TextView loveTv;
     //网络请求对话框
     private WaittingDialog dialog;
-    private com.taihuoniao.fineix.beans.QingjingDetailBean.UserInfo netUserInfo;
+    private com.taihuoniao.fineix.beans.QingjingDetailBean.DataBean.UserInfoBean netUserInfo;
     private String[] locaiton = null;//服务器返回经纬度
     //图片加载
     private DisplayImageOptions options, options750_1334;
@@ -382,6 +382,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<情景详情", responseInfo.result);
                 QingjingDetailBean qingjingDetailBean = new QingjingDetailBean();
                 try {
                     Gson gson = new Gson();
@@ -420,7 +421,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
                             .getLocation().getCoordinates().get(1) + ""};
                     //添加标签
-                    addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
+                    addLabelToLinear(netQingjingDetailBean.getData().getTags());
                     is_subscript = netQingjingDetailBean.getData().getIs_subscript();
                     switch (is_subscript) {
                         case 1:
@@ -463,173 +464,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    //    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.DELETE_QINGJING:
-//                    dialog.dismiss();
-//                    NetBean netBean = (NetBean) msg.obj;
-//                    if (netBean.isSuccess()) {
-//                        ToastUtils.showSuccess("删除成功");
-//                        post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                finish();
-//                            }
-//                        });
-//                    } else {
-//                        ToastUtils.showError(netBean.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.CANCEL_SUBS_QINGJING:
-//                    QingjingSubsBean netQingjingSubs = (QingjingSubsBean) msg.obj;
-//                    if (netQingjingSubs.isSuccess()) {
-//                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-//                        is_subscript = 0;
-//                        subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
-////                        subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubs.getData().getSubscription_count()));
-//                        moreUser.setText(String.format("%d+", netQingjingSubs.getData().getSubscription_count()));
-//                        if (netQingjingSubs.getData().getSubscription_count() > 14) {
-//                            moreUser.setVisibility(View.VISIBLE);
-//                        } else {
-//                            moreUser.setVisibility(View.GONE);
-//                        }
-//                    } else {
-//                        dialog.dismiss();
-//                        ToastUtils.showError(netQingjingSubs.getMessage());
-////                        dialog.showErrorWithStatus(netQingjingSubs.getMessage());
-////                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubs.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.SUBS_QINGJING:
-//                    QingjingSubsBean netQingjingSubsBean = (QingjingSubsBean) msg.obj;
-//                    if (netQingjingSubsBean.isSuccess()) {
-//                        DataPaser.commonList(1 + "", 14 + "", id, null, "scene", "subscription", handler);
-//                        is_subscript = 1;
-//                        subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
-////                        subsImg.setImageResource(R.mipmap.subs_yes);
-//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingSubsBean.getData().getSubscription_count()));
-//                        moreUser.setText(String.format("%d+", netQingjingSubsBean.getData().getSubscription_count()));
-//                        if (netQingjingSubsBean.getData().getSubscription_count() > 14) {
-//                            moreUser.setVisibility(View.VISIBLE);
-//                        } else {
-//                            moreUser.setVisibility(View.GONE);
-//                        }
-//                    } else {
-//                        dialog.dismiss();
-//                        ToastUtils.showError(netQingjingSubsBean.getMessage());
-////                        dialog.showErrorWithStatus(netQingjingSubsBean.getMessage());
-////                        Toast.makeText(QingjingDetailActivity.this, netQingjingSubsBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.SCENE_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    SceneList netSceneList = (SceneList) msg.obj;
-//                    if (netSceneList.isSuccess()) {
-//                        if (currentPage == 1) {
-//                            sceneList.clear();
-//                            lastSavedFirstVisibleItem = -1;
-//                            lastTotalItem = -1;
-//                        }
-//                        sceneList.addAll(netSceneList.getSceneListBeanList());
-//                        if (sceneList.size() == 0) {
-//                            emptyView.setVisibility(View.VISIBLE);
-//                        } else {
-//                            emptyView.setVisibility(View.GONE);
-//                        }
-//                        sceneListViewAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.COMMON_LIST:
-//                    dialog.dismiss();
-//                    CommonBean netCommonBean = (CommonBean) msg.obj;
-//                    if (netCommonBean.isSuccess()) {
-//                        headList.clear();
-//                        headList.addAll(netCommonBean.getData().getRows());
-//                        if (headList.size() <= 0) {
-//                            headRelative.setVisibility(View.GONE);
-//                        } else {
-//                            headRelative.setVisibility(View.VISIBLE);
-//                        }
-//                        sceneDetailUserHeadAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.QINGJING_DETAILS:
-//                    dialog.dismiss();
-//                    QingjingDetailBean netQingjingDetailBean = (QingjingDetailBean) msg.obj;
-//                    if (netQingjingDetailBean.isSuccess()) {
-////                        Log.e("<<<", "cover_url=" + netQingjingDetailBean.getData().getCover_url());
-//                        QingjingDetailBean = netQingjingDetailBean;
-//                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getCover_url(), backgroundImg, options750_1334);
-//                        SpannableStringBuilder style = new SpannableStringBuilder(netQingjingDetailBean.getData().getTitle());
-//                        BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(getResources().getColor(R.color.black));
-//                        style.setSpan(backgroundColorSpan, 0, netQingjingDetailBean.getData().getTitle().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//                        qingjingTitle.setText(style);
-//                        locationTv.setText(netQingjingDetailBean.getData().getAddress());
-//                        timeTv.setText(netQingjingDetailBean.getData().getCreated_at());
-//                        netUserInfo = netQingjingDetailBean.getData().getUser_info();
-//                        ImageLoader.getInstance().displayImage(netQingjingDetailBean.getData().getUser_info().getAvatar_url(), userHead, options);
-//                        if(netQingjingDetailBean.getData().getUser_info().getIs_expert()==0){
-//                            vImg.setVisibility(View.GONE);
-//                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getSummary());
-//                        }else{
-//                            vImg.setVisibility(View.VISIBLE);
-//                            userInfo.setText(netQingjingDetailBean.getData().getUser_info().getExpert_label()+" | "+netQingjingDetailBean.getData().getUser_info().getExpert_info());
-//                        }
-//                        userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
-////                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
-//                        subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
-//                        moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
-//                        desTv.setText(netQingjingDetailBean.getData().getDes());
-//                        locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
-//                                .getLocation().getCoordinates().get(1) + ""};
-//                        //添加标签
-//                        addLabelToLinear(netQingjingDetailBean.getData().getTag_titles(), netQingjingDetailBean.getData().getTags());
-//                        is_subscript = netQingjingDetailBean.getData().getIs_subscript();
-//                        switch (is_subscript) {
-//                            case 1:
-//                                subscriptionCount.setBackgroundResource(R.mipmap.subed_qingjing);
-////                                subsImg.setImageResource(R.mipmap.subs_yes);
-////                                subsTv.setText("取消订阅");
-//                                break;
-//                            default:
-//                                subscriptionCount.setBackgroundResource(R.mipmap.sub_qingjing);
-////                                subsImg.setImageResource(R.mipmap.subscribe_height_49px);
-////                                subsTv.setText("+订阅此情景");
-//                                break;
-//                        }
-//                        if (netQingjingDetailBean.getData().getSubscription_count() <= 0) {
-//                            headRelative.setVisibility(View.GONE);
-//                        } else {
-//                            headRelative.setVisibility(View.VISIBLE);
-//                        }
-//                        if (netQingjingDetailBean.getData().getSubscription_count() > 14) {
-//                            moreUser.setVisibility(View.VISIBLE);
-//                        } else {
-//                            moreUser.setVisibility(View.GONE);
-//                        }
-//                        if (netQingjingDetailBean.getCurrent_user_id() != null && netQingjingDetailBean.getCurrent_user_id().equals(netQingjingDetailBean.getData().getUser_info().getUser_id())) {
-//                            more.setVisibility(View.VISIBLE);
-//                        }
-//                    } else {
-//                        ToastUtils.showError(netQingjingDetailBean.getMessage());
-////                        dialog.showErrorWithStatus(netQingjingDetailBean.getMessage());
-////                        Toast.makeText(QingjingDetailActivity.this, netQingjingDetailBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    break;
-//            }
-//        }
-//    };
     private QingjingDetailBean QingjingDetailBean;//网络请求返回数据
 
-    private void addLabelToLinear(final List<String> tagsTitleList, List<Integer> tagsList) {
+    private void addLabelToLinear(final List<String> tagsTitleList) {
         for (int i = 0; i < tagsTitleList.size(); i++) {
             View view = View.inflate(QingjingDetailActivity.this, R.layout.view_horizontal_label_item, null);
             TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
@@ -638,7 +475,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
             lp.rightMargin = DensityUtils.dp2px(QingjingDetailActivity.this, 10);
             view.setLayoutParams(lp);
-            view.setTag(tagsList.get(i));
             final int finalI = i;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -720,7 +556,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
-                intent1.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(netUserInfo.getUser_id()));
+                intent1.putExtra(FocusActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
                 startActivity(intent1);
                 break;
             case R.id.activity_qingjingdetail_back:

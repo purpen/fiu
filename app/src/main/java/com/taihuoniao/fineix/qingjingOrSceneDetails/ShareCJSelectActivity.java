@@ -241,7 +241,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 //        titleTv.setText(searchItem.getTitle());
 //        desTv.setText(searchItem.getDes());
         isSelect = true;
-        scene.getData().setOid(searchItem.getOid());
+//        scene.getData().setOid(searchItem.getOid());
         scene.getData().setTitle(searchItem.getTitle());
         scene.getData().setDes(searchItem.getDes());
         Intent intent = new Intent();

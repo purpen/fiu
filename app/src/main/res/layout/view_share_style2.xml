@@ -219,13 +219,14 @@
             android:id="@+id/activity_share_fiu_img"
             android:layout_width="wrap_content"
             android:layout_height="15dp"
-            android:src="@mipmap/head_logo" />
+            android:src="@mipmap/logo_share" />
 
         <TextView
             android:id="@+id/activity_share_fiu_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:visibility="gone"
             android:text="@string/fiu_to_buy"
             android:textColor="#000000"
             android:textSize="7sp"/>
