@@ -466,6 +466,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                    return;
 //                }
                 MainApplication.selectList = selectList;
+                startActivityForResult(new Intent(this,AddAndEditLabelActivity.class),1);
 //                startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
 
                 break;
@@ -726,20 +727,20 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         lat = poiInfo.location.latitude;
                     }
                     break;
-//                case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
-//                    if (MainApplication.selectList != null) {
-//                        if (selectList != null) {
-//                            selectList.clear();
-//                            labelLinear.removeAllViews();
-//                        }
-//                        selectList = MainApplication.selectList;
-//                        MainApplication.selectList = null;
-//                        for (int i = 0; i < selectList.size(); i++) {
+                case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
+                    if (MainApplication.selectList != null) {
+                        if (selectList != null) {
+                            selectList.clear();
+                            labelLinear.removeAllViews();
+                        }
+                        selectList = MainApplication.selectList;
+                        MainApplication.selectList = null;
+                        for (int i = 0; i < selectList.size(); i++) {
 //                            UsedLabelBean labelBean = selectList.get(i);
 //                            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-//                        }
-//                    }
-//                    break;
+                        }
+                    }
+                    break;
             }
         }
     }

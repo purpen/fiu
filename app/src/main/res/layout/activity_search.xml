@@ -81,31 +81,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/activity_search_qjrelative"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/activity_search_qjtv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/scene"
-                android:textColor="#333333"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/activity_search_qjline"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignLeft="@id/activity_search_qjtv"
-                android:layout_alignParentBottom="true"
-                android:layout_alignRight="@id/activity_search_qjtv"
-                android:background="@color/yellow_bd8913"
-                android:visibility="gone"/>
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/activity_search_cjrelative"
@@ -132,7 +108,31 @@
                 android:background="@color/yellow_bd8913"
                 android:visibility="gone"/>
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/activity_search_qjrelative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
+            <TextView
+                android:id="@+id/activity_search_qjtv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/scene"
+                android:textColor="#333333"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/activity_search_qjline"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignLeft="@id/activity_search_qjtv"
+                android:layout_alignParentBottom="true"
+                android:layout_alignRight="@id/activity_search_qjtv"
+                android:background="@color/yellow_bd8913"
+                android:visibility="gone"/>
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/activity_search_productrelative"
             android:layout_width="0dp"
