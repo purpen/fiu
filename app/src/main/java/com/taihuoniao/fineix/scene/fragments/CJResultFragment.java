@@ -117,7 +117,7 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void search(String q, String t, String p, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t,null, p, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索", responseInfo.result);

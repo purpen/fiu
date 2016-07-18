@@ -274,7 +274,7 @@ public class SelectSearchQingjingActivity extends BaseActivity implements View.O
 
     //搜索
     private void search(String q, String t, String p, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t,null, p, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SearchBean searchBean = new SearchBean();
@@ -315,7 +315,7 @@ public class SelectSearchQingjingActivity extends BaseActivity implements View.O
 
     //情景列表
     private void qingjingList(String p, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(p, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(p,null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 QingJingListBean qingJingListBean = new QingJingListBean();

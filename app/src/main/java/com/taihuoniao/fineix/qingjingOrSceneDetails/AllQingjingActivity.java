@@ -133,7 +133,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     }
 
     private void getQJList(String pa, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(pa, sort, fine, dis, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(pa,null, sort, fine, dis, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

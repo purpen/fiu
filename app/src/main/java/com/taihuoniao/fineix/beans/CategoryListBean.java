@@ -32,6 +32,7 @@ public class CategoryListBean extends NetBean implements Serializable {
     }
 
     public static class CategoryListItem implements Serializable {
+        private boolean isSelect;
         private String _id;
         private String title;
         private String name;
@@ -47,6 +48,14 @@ public class CategoryListBean extends NetBean implements Serializable {
         private List<String> tags;
         private String app_cover_s_url;
         private String back_url;
+
+        public boolean isSelect() {
+            return isSelect;
+        }
+
+        public void setIsSelect(boolean isSelect) {
+            this.isSelect = isSelect;
+        }
 
         public String getBack_url() {
             return back_url;

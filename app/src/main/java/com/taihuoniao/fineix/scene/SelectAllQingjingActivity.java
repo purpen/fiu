@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +19,10 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
+import com.taihuoniao.fineix.adapters.DipanCategoryAdapter;
+import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.QingJingItem;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
@@ -39,7 +44,7 @@ import butterknife.Bind;
 /**
  * Created by taihuoniao on 2016/5/9.
  */
-public class SelectAllQingjingActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SelectAllQingjingActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, EditRecyclerAdapter.ItemClick {
     //上个界面传递过来的数据
     private String isSearch;//判断是搜索还是展示 0展示 1搜索
     private LatLng latLng;//当前位置经纬度
@@ -47,16 +52,18 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_select_allqj_searchlinear)
     LinearLayout searchLinear;
-//    @Bind(R.id.activity_select_allqj_edit)
-//    EditText editText;
-//    @Bind(R.id.activity_select_allqj_cancel)
-//    ImageView cancelImg;
+    @Bind(R.id.recycler_view)
+    RecyclerView recyclerView;
     @Bind(R.id.activity_select_allqj_pullrefreshview)
     PullToRefreshGridView pullToRefreshView;
     GridView gridView;
     @Bind(R.id.activity_select_allqj_progress)
     ProgressBar progressBar;
     private WaittingDialog dialog;
+    //地盘分类
+    private String category_id = null;
+    private List<CategoryListBean.CategoryListItem> dipanList;
+    private DipanCategoryAdapter dipanCategoryAdapter;
     //情景列表
     private int page = 1;
     private double distance = 5000;//搜索范围
@@ -75,8 +82,6 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         }
         if (latLng == null) {
             ToastUtils.showError("无法获得您当前位置信息");
-//            dialog.showErrorWithStatus("无法获得您当前位置信息");
-//            Toast.makeText(SelectAllQingjingActivity.this, "无法获得您当前位置信息", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -91,52 +96,15 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         titleLayout.setTitle(R.string.select_qingjing, getResources().getColor(R.color.black333333));
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), this);
-//        switch (isSearch) {
-//            case "0":
-//                searchLinear.setVisibility(View.GONE);
-//                break;
-//            case "1":
-                searchLinear.setVisibility(View.VISIBLE);
-//                break;
-//        }
+        searchLinear.setVisibility(View.VISIBLE);
         searchLinear.setOnClickListener(this);
-//        cancelImg.setOnClickListener(this);
-//        editText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (s.length() > 0) {
-//                    cancelImg.setVisibility(View.VISIBLE);
-//                } else {
-//                    cancelImg.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        editText.setOnKeyListener(new View.OnKeyListener() {
-//
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-//                    if (SelectAllQingjingActivity.this.getCurrentFocus() != null) {
-//                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SelectAllQingjingActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                    }
-//                    //开始搜索
-//                    q = editText.getText().toString().trim();
-//                    page = 1;
-//                    dialog.show();
-//                    search(q, 8 + "", page + "", "tag", null);
-//                }
-//                return false;
-//            }
-//        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //地盘分类
+        dipanList = new ArrayList<>();
+        dipanCategoryAdapter = new DipanCategoryAdapter(this, dipanList, this);
+        recyclerView.setAdapter(dipanCategoryAdapter);
         gridView = pullToRefreshView.getRefreshableView();
         pullToRefreshView.setPullToRefreshEnabled(false);
         pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -145,7 +113,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
                 if (isSearch.equals("0")) {
-                    qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+                    qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
                 } else if (isSearch.equals("1")) {
                     search(q, 8 + "", page + "", "tag", null);
                 }
@@ -169,57 +137,12 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
 
     @Override
     protected void requestNet() {
+        dialog.show();
         if (isSearch.equals("0")) {
-            dialog.show();
-            qingjingList(page + "", 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+            qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
         }
+        categoryList(1 + "", 12 + "", null);
     }
-
-
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.SEARCH_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    SearchBean netSearch = (SearchBean) msg.obj;
-//                    if (netSearch.isSuccess()) {
-//                        if (page == 1) {
-//                            searchList.clear();
-//                            pullToRefreshView.lastTotalItem = -1;
-//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-//                        }
-//                        searchList.addAll(netSearch.getData().getRows());
-//                        allQingjingGridAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.QINGJING_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    QingJingListBean netQingjingListBean = (QingJingListBean) msg.obj;
-//                    if (netQingjingListBean.isSuccess()) {
-//                        if (page == 1) {
-//                            qingjingList.clear();
-//                            pullToRefreshView.lastTotalItem = -1;
-//                            pullToRefreshView.lastSavedFirstVisibleItem = -1;
-//                        }
-//                        qingjingList.addAll(netQingjingListBean.getData().getRows());
-//                        allQingjingGridAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netQingjingListBean.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-////                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
 
 
     @Override
@@ -282,85 +205,6 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         allQingjingGridAdapter.notifyDataSetChanged();
     }
 
-    //搜索
-    private void search(String q, String t, String p, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, p, evt, sort, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SearchBean searchBean = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    searchBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
-                }
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                SearchBean netSearch = searchBean;
-                if (netSearch.isSuccess()) {
-                    if (page == 1) {
-                        searchList.clear();
-                        pullToRefreshView.lastTotalItem = -1;
-                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                    }
-                    searchList.addAll(netSearch.getData().getRows());
-                    allQingjingGridAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netSearch.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(SelectAllQingjingActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    //情景列表
-    private void qingjingList(String p, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(p, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                QingJingListBean qingJingListBean = new QingJingListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<QingJingListBean>() {
-                    }.getType();
-                    qingJingListBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据异常：" + e.toString());
-                }
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                QingJingListBean netQingjingListBean = qingJingListBean;
-                if (netQingjingListBean.isSuccess()) {
-                    if (page == 1) {
-                        qingjingList.clear();
-                        pullToRefreshView.lastTotalItem = -1;
-                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
-                    }
-                    qingjingList.addAll(netQingjingListBean.getData().getRows());
-                    allQingjingGridAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netQingjingListBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -396,5 +240,132 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     break;
             }
         }
+    }
+
+    //搜索
+    private void search(String q, String t, String p, String evt, String sort) {
+        ClientDiscoverAPI.search(q, t,null, p, evt, sort, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                SearchBean searchBean = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    searchBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SearchBean netSearch = searchBean;
+                if (netSearch.isSuccess()) {
+                    if (page == 1) {
+                        searchList.clear();
+                        pullToRefreshView.lastTotalItem = -1;
+                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                    }
+                    searchList.addAll(netSearch.getData().getRows());
+                    allQingjingGridAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netSearch.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    //情景列表
+    private void qingjingList(String p, String category_id, String sort, String fine, String dis, String lng, String lat) {
+        ClientDiscoverAPI.qingjingList(p, category_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                QingJingListBean qingJingListBean = new QingJingListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QingJingListBean>() {
+                    }.getType();
+                    qingJingListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据异常：" + e.toString());
+                }
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                QingJingListBean netQingjingListBean = qingJingListBean;
+                if (netQingjingListBean.isSuccess()) {
+                    if (page == 1) {
+                        qingjingList.clear();
+                        pullToRefreshView.lastTotalItem = -1;
+                        pullToRefreshView.lastSavedFirstVisibleItem = -1;
+                    }
+                    Log.e("<<<情景列表", netQingjingListBean.getData().getRows().toString());
+                    qingjingList.addAll(netQingjingListBean.getData().getRows());
+                    allQingjingGridAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netQingjingListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError("网络错误");
+            }
+        });
+    }
+
+    //地盘分类列表
+    private void categoryList(String page, String domain, String show_all) {
+        ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<分类列表", responseInfo.result);
+                dialog.dismiss();
+                CategoryListBean categoryListBean = new CategoryListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
+                }
+                if (categoryListBean.isSuccess()) {
+                    dipanList.addAll(categoryListBean.getData().getRows());
+                    dipanCategoryAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(categoryListBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    @Override
+    public void click(int postion) {
+        dialog.show();
+        for (int i = 0; i < dipanList.size(); i++) {
+            if (i == postion) {
+                dipanList.get(i).setIsSelect(true);
+            } else {
+                dipanList.get(i).setIsSelect(false);
+            }
+        }
+        dipanCategoryAdapter.notifyDataSetChanged();
+        page = 1;
+        category_id = dipanList.get(postion).get_id();
+        qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
     }
 }

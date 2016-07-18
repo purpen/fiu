@@ -189,10 +189,11 @@ public class ClientDiscoverAPI {
 
     //情景
     //列表数据
-    public static void qingjingList(String page, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void qingjingList(String page, String category_id, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.qingjing_lists;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("category_id", category_id);
         params.addQueryStringParameter("size", 8 + "");
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("fine", fine);
@@ -445,7 +446,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.category_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
-        params.addQueryStringParameter("size", 30 + "");
+        params.addQueryStringParameter("size", 300 + "");
         params.addQueryStringParameter("show_all", show_all);
         params.addQueryStringParameter("domain", domain);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -453,11 +454,12 @@ public class ClientDiscoverAPI {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String page, String evt, String sort, RequestCallBack<String> callBack) {
+    public static void search(String q, String t, String cid, String page, String evt, String sort, RequestCallBack<String> callBack) {
         String url = NetworkConstance.search;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", t);
+        params.addQueryStringParameter("cid", cid);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("sort", sort);
@@ -1360,6 +1362,15 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", String.valueOf(LoginInfo.getUserId()));
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("event", event);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //创建情景时，根据标题和描述搜索标签
+    public static void searchLabel(String title, String content, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/gateway/fetch_chinese_word";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("title", title);
+        params.addQueryStringParameter("content", content);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

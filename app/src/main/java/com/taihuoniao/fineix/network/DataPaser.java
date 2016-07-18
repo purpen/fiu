@@ -530,7 +530,7 @@ public class DataPaser {
     //情景
     //列表数据
     public static void qingjingList(String page, String sort, String fine, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.qingjingList(page, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(page,null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -1264,7 +1264,7 @@ public class DataPaser {
     //公共
     //搜索列表
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t,null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索", responseInfo.result);

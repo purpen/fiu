@@ -11,12 +11,16 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +51,7 @@ import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.beans.SearchLabelBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.main.MainActivity;
@@ -78,6 +83,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private SceneDetailsBean sceneDetails;
     private QingjingDetailBean qingjingDetails;
     //控件
+    private View activityView;
+    private ScrollView scrollView;
     private GlobalTitleLayout titleLayout;
     private TextView selectEnvirTv;
     private ImageView sceneImg;
@@ -123,7 +130,9 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_create_scene);
+        activityView = View.inflate(this, R.layout.activity_create_scene, null);
+        setContentView(activityView);
+        scrollView = (ScrollView) findViewById(R.id.activity_create_scene_scrollview);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_create_scene_titlelayout);
         selectEnvirTv = (TextView) findViewById(R.id.activity_create_scene_select_enviroment);
         sceneImg = (ImageView) findViewById(R.id.activity_create_scene_img);
@@ -160,6 +169,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
+        selectList = new ArrayList<>();
         Uri imageUri = getIntent().getData();
         titleLayout.setFocusable(true);
         titleLayout.setFocusableInTouchMode(true);
@@ -187,6 +197,40 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+        titleEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (CreateSceneActivity.this.getCurrentFocus() != null) {
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(CreateSceneActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    //开始搜索
+                    if (titleEdt.getText().toString().length() > 0 && contentEdt.getText().toString().length() > 0) {
+                        searchLabel();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        contentEdt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                        if (CreateSceneActivity.this.getCurrentFocus() != null) {
+                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(CreateSceneActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                        }
+                        //开始搜索
+                        if (titleEdt.getText().toString().length() > 0 && contentEdt.getText().toString().length() > 0) {
+                            searchLabel();
+                        }
+                    }
+                    return true;
+                }
+                return false;
             }
         });
         addAddressLinear.setOnClickListener(this);
@@ -269,12 +313,45 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         }
         //在情景下创建场景
         if (MainApplication.whichQingjing != null) {
-            scene_id = MainApplication.whichQingjing.getData().get_id()+"";
+            scene_id = MainApplication.whichQingjing.getData().get_id() + "";
             qingjingLinear.removeAllViews();
             addQingjingToLinear(MainApplication.whichQingjing.getData().getTitle());
             qingjingRelative.setEnabled(false);
         }
     }
+
+    private void searchLabel() {
+        labelTv.setText("推荐标签中……");
+        ClientDiscoverAPI.searchLabel(titleEdt.getText().toString(), contentEdt.getText().toString(), new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<搜索标签中", responseInfo.result);
+                labelTv.setText("标签");
+                SearchLabelBean searchLabelBean = new SearchLabelBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchLabelBean>() {
+                    }.getType();
+                    searchLabelBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "搜索标签数据解析异常");
+                }
+                if (searchLabelBean.isSuccess()) {
+                    recommendFlow.removeAllViews();
+                    addToFlow(searchLabelBean.getData().getWord(), recommendFlow);
+                } else {
+                    ToastUtils.showError(searchLabelBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                labelTv.setText("标签");
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
 
     //编辑场景时调用
     private void getQingjingDetails() {
@@ -315,10 +392,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             selectList.add(qingjingDetails.getData().getTag_titles().get(i));
         }
         addToFlow(selectList, labelFlow);
-//        for (int i = 0; i < selectList.size(); i++) {
-//            UsedLabelBean labelBean = selectList.get(i);
-//            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-//        }
         locationTv.setText(qingjingDetails.getData().getAddress());
         lng = qingjingDetails.getData().getLocation().getCoordinates().get(0);
         lat = qingjingDetails.getData().getLocation().getCoordinates().get(1);
@@ -357,23 +430,19 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError("图片加载失败，请返回重试");
             }
         });
-        scene_id = sceneDetails.getData().getScene_id()+"";
+        scene_id = sceneDetails.getData().getScene_id() + "";
         selectList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getTags().size(); i++) {
             UsedLabelBean usedLabelBean = new UsedLabelBean(sceneDetails.getData().getTags().get(i) + "", sceneDetails.getData().getTag_titles().get(i));
             selectList.add(sceneDetails.getData().getTag_titles().get(i));
         }
         addToFlow(selectList, labelFlow);
-//        for (int i = 0; i < selectList.size(); i++) {
-//            UsedLabelBean labelBean = selectList.get(i);
-//            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-//        }
         MainApplication.tagInfoList = new ArrayList<>();
         for (int i = 0; i < sceneDetails.getData().getProduct().size(); i++) {
             TagItem tagItem = new TagItem();
-            tagItem.setId(sceneDetails.getData().getProduct().get(i).getId()+"");
+            tagItem.setId(sceneDetails.getData().getProduct().get(i).getId() + "");
             tagItem.setName(sceneDetails.getData().getProduct().get(i).getTitle());
-            tagItem.setPrice(sceneDetails.getData().getProduct().get(i).getPrice()+"");
+            tagItem.setPrice(sceneDetails.getData().getProduct().get(i).getPrice() + "");
             tagItem.setX(sceneDetails.getData().getProduct().get(i).getX());
             tagItem.setY(sceneDetails.getData().getProduct().get(i).getY());
             MainApplication.tagInfoList.add(tagItem);
@@ -459,18 +528,22 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
                 break;
             case R.id.activity_create_scene_labelrelative:
-//                if (!LoginInfo.isUserLogin()) {
-////                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
-//                    MainApplication.which_activity = DataConstants.ElseActivity;
-//                    startActivity(new Intent(CreateSceneActivity.this, OptRegisterLoginActivity.class));
-//                    return;
-//                }
+                selectList.clear();
+                for (int i = 0; i < labelFlow.getChildCount(); i++) {
+                    TextView textView = (TextView) labelFlow.getChildAt(i);
+                    selectList.add(textView.getText().toString());
+                }
                 MainApplication.selectList = selectList;
-                startActivityForResult(new Intent(this,AddAndEditLabelActivity.class),1);
+                startActivityForResult(new Intent(this, AddAndEditLabelActivity.class), 1);
 //                startActivityForResult(new Intent(CreateSceneActivity.this, AddLabelActivity.class), DataConstants.REQUESTCODE_CREATESCENE_ADDLABEL);
 
                 break;
             case R.id.title_continue:
+                selectList.clear();
+                for (int i = 0; i < labelFlow.getChildCount(); i++) {
+                    TextView textView = (TextView) labelFlow.getChildAt(i);
+                    selectList.add(textView.getText().toString());
+                }
                 if (!LoginInfo.isUserLogin()) {
 //                    Toast.makeText(CreateSceneActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
@@ -575,7 +648,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    createCJ(sceneDetails == null ? null : sceneDetails.getData().get_id()+"", tmp, titleEdt.getText().toString()
+                    createCJ(sceneDetails == null ? null : sceneDetails.getData().get_id() + "", tmp, titleEdt.getText().toString()
                             , contentEdt.getText().toString(), scene_id, tags.toString(),
                             products.toString(),
                             locationTv.getText().toString(),
@@ -600,7 +673,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
 //                        Log.e("<<<", "图片大小=" + stream.size());
                     } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                     String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id()+"", titleEdt.getText().toString(), contentEdt.getText().toString(),
+                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id() + "", titleEdt.getText().toString(), contentEdt.getText().toString(),
                             tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "");
                 } else {
                     dialog.dismiss();
@@ -670,15 +743,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 });
             }
             flowLayout.addView(textView);
-
         }
-        if(flowLayout.getId()==labelFlow.getId()){
-            selectList = list;
-        }
-        if (labelFlow.getChildCount() > 0) {
-            labelTv.setVisibility(View.GONE);
-        } else {
+        if (labelFlow.getChildCount() <= 0) {
             labelTv.setVisibility(View.VISIBLE);
+        } else {
+            labelTv.setVisibility(View.GONE);
         }
     }
 
@@ -729,16 +798,15 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
                     if (MainApplication.selectList != null) {
-                        if (selectList != null) {
-                            selectList.clear();
-                            labelLinear.removeAllViews();
-                        }
+                        labelFlow.removeAllViews();
                         selectList = MainApplication.selectList;
                         MainApplication.selectList = null;
-                        for (int i = 0; i < selectList.size(); i++) {
-//                            UsedLabelBean labelBean = selectList.get(i);
-//                            addToLinear(labelBean.getTitle_cn(), Integer.parseInt(labelBean.get_id()));
-                        }
+                        addToFlow(selectList, labelFlow);
+                    }
+                    if (labelFlow.getChildCount() > 0) {
+                        labelTv.setVisibility(View.GONE);
+                    } else {
+                        labelTv.setVisibility(View.VISIBLE);
                     }
                     break;
             }
