@@ -21,7 +21,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
@@ -36,6 +35,8 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
+
+//import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -92,7 +93,7 @@ public class MainApplication extends Application {
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
         filterPicPath = getCacheDirPath() + "/filter";
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
 
     }
 

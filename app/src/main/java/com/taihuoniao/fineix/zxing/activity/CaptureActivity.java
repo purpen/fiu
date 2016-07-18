@@ -264,7 +264,7 @@ public final class CaptureActivity extends BaseActivity implements
                 }
                 if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
                     intent=new Intent(CaptureActivity.this, UserCenterActivity.class);
-                    intent.putExtra(FocusActivity.USER_ID_EXTRA,infoId);
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.valueOf(infoId));
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
                     intent = new Intent(CaptureActivity.this, QingjingDetailActivity.class);
