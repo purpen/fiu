@@ -413,7 +413,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //            Log.e("<<<", productList.toString());
             final LabelView labelView = new LabelView(SceneDetailActivity.this);
             TagItem tagItem = new TagItem();
-            tagItem.setId(product.getId()+"");
+            tagItem.setId(product.getId() + "");
             tagItem.setName(product.getTitle());
             tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
@@ -603,7 +603,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 Intent intent3 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
                 intent3.putExtra("target_id", id);
                 intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id());
+                intent3.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id() + "");
                 startActivity(intent3);
                 break;
             case R.id.activity_scenedetails_moreuser:
@@ -894,9 +894,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                             //添加标签
                             addLabelToLinear(netSceneDetails.getData().getTags());
 
-                            viewCount.setText(netSceneDetails.getData().getView_count()+"");
-                            loveCountTv.setText(netSceneDetails.getData().getLove_count()+"");
-                            commentNum.setText(netSceneDetails.getData().getComment_count()+"");
+                            viewCount.setText(netSceneDetails.getData().getView_count() + "");
+                            loveCountTv.setText(netSceneDetails.getData().getLove_count() + "");
+                            commentNum.setText(netSceneDetails.getData().getComment_count() + "");
                             allComment.setText(String.format("全部%s条评论", netSceneDetails.getData().getComment_count()));
                             if (netSceneDetails.getData().getLove_count() > 14) {
                                 moreUser.setVisibility(View.VISIBLE);
@@ -1062,7 +1062,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<通用列表",responseInfo.result);
+                Log.e("<<<通用列表", responseInfo.result);
                 CommonBean commonBean = new CommonBean();
                 try {
                     Gson gson = new Gson();
@@ -1098,7 +1098,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<<评论",responseInfo.result);
+                Log.e("<<<<评论", responseInfo.result);
                 CommentsBean commentsBean = new CommentsBean();
                 try {
                     Gson gson = new Gson();
@@ -1115,6 +1115,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     if (netCommentBean.getData().getRows().size() > 3) {
                         allComment.setVisibility(View.VISIBLE);
                         moreComment.setVisibility(View.VISIBLE);
+                    }
+                    if (netCommentBean.getData().getRows().size() <= 0) {
+                        commentsLinear.setVisibility(View.GONE);
                     }
                     sceneDetailCommentAdapter.notifyDataSetChanged();
                 } else {

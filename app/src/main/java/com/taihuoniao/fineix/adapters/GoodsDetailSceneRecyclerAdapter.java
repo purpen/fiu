@@ -4,10 +4,15 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
 
@@ -27,20 +32,33 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_horizontal_address, null);
+        View view = View.inflate(context, R.layout.item_small_scene, null);
         VH holder = new VH(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemClick.click(position);
             }
         });
-        holder.textView.setText(list.get(position).getSight().getTitle());
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(DensityUtils.dp2px(context, 300) * 9 / 16, DensityUtils.dp2px(context, 280));
+        holder.itemView.setLayoutParams(layoutParams);
+        ImageLoader.getInstance().displayImage(list.get(position).getSight().getCover_url(), holder.imageView);
+        holder.titleTv.setText(list.get(position).getSight().getTitle());
+        holder.addressTv.setText(list.get(position).getSight().getAddress());
+        holder.titleTv.post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) holder.frameLayout.getLayoutParams();
+                layoutParams1.height = holder.titleTv.getMeasuredHeight();
+                layoutParams1.width = holder.titleTv.getMeasuredWidth();
+                holder.frameLayout.setLayoutParams(layoutParams1);
+            }
+        });
     }
 
     @Override
@@ -49,11 +67,17 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
     }
 
     public static class VH extends RecyclerView.ViewHolder {
-        TextView textView;
+        ImageView imageView;
+        FrameLayout frameLayout;
+        TextView titleTv;
+        TextView addressTv;
 
         public VH(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.item_horizontal_tv);
+            imageView = (ImageView) itemView.findViewById(R.id.iv_cover);
+            frameLayout = (FrameLayout) itemView.findViewById(R.id.item_frame);
+            titleTv = (TextView) itemView.findViewById(R.id.tv_title);
+            addressTv = (TextView) itemView.findViewById(R.id.tv_desc);
         }
     }
 }

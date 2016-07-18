@@ -26,7 +26,7 @@
             android:background="@color/white"
             android:gravity="center"
             android:paddingLeft="17dp"
-            android:paddingRight="17dp"
+            android:paddingRight="13dp"
             android:text="@string/look_all"
             android:textSize="10sp"/>
 
@@ -71,10 +71,6 @@
         android:background="#f0f0f0"/>
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#e4e4e4"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_wellgoods_label_recycler"

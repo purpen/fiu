@@ -2,7 +2,7 @@
     <string name="app_name">Fiu浮游</string>
     <string name="qing">精选</string>
     <string name="jing">发现</string>
-    <string name="fiu">FIU 浮游</string>
+    <string name="fiu">Fiu 浮游</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
     <string name="about_us">关于Fiu</string>
@@ -249,7 +249,7 @@
     <string name="no_redbag">无可用红包</string>
     <string name="used_a_redbag">您使用了一张5元红包，下单后将不可恢复</string>
     <string name="remark">备注：</string>
-    <string name="input_more_twenty">请输入20字以内的标题</string>
+    <string name="input_more_twenty">想省事？向右看，Fiu语境有你要的文字</string>
     <string name="add_des">添加描述</string>
     <string name="add_address">添加地点</string>
     <string name="label">标签</string>
@@ -266,7 +266,7 @@
     <string name="mine_brand">自营品牌</string>
     <string name="product_lightspot">产品亮点</string>
     <string name="belong_what_changjing">所属情景</string>
-    <string name="related_recommend">相关推荐</string>
+    <string name="related_recommend">相关好货推荐</string>
     <string name="add_to_cart">加入购物车</string>
     <string name="buy_now">立即购买</string>
     <string name="consignee">收货人</string>
@@ -296,8 +296,8 @@
     <string name="thank_for_report">感谢你的举报，如果此照片违反了我们的规定，我们会将其移除。</string>
     <string name="no_data">暂无数据！</string>
     <string name="number_300">300+</string>
-    <string name="products_of_sight">此情景下的产品</string>
-    <string name="near_products">相近的产品</string>
+    <string name="products_of_sight">此情景下的好货</string>
+    <string name="near_products">相近的好货</string>
     <string name="search">搜索</string>
     <string name="scene">地盘</string>
     <string name="sight">情景</string>
@@ -322,16 +322,16 @@
     <string name="hot_fiuer">热Fiuer</string>
     <string name="bigger_no_low_profile">[有Bigger不低调]</string>
     <string name="new_land">新Land</string>
-    <string name="enclosure_is_earnings">[圈地有收益]</string>
+    <string name="enclosure_is_earnings">[圈地盘有收益]</string>
     <string name="high_sight">High情景</string>
     <string name="whoever_with_addiction">[谁用谁上瘾]</string>
     <string name="severe_brands">牛Brands</string>
     <string name="good_here">[尖货这里找]</string>
-    <string name="fiu_things">Fiu东西</string>
+    <string name="fiu_things">Fiu好货</string>
     <string name="more_goods_more_brands">[东西不少，牌子不小]</string>
     <string name="sights_of_scene">此地盘下的情景</string>
     <string name="create_sight">创建新的情景</string>
-    <string name="create_sight_in_empty_scene">在这里上传图片、选一段文字，即刻开启你的地盘之路吧</string>
+    <string name="create_sight_in_empty_scene">在这里上传图片、选一段文字，即刻开启你的圈地之路吧</string>
     <string name="create_sight_empty_scene">+ 创建情景</string>
     <string name="near_scene">附近的地盘</string>
     <string name="recommend_scene">推荐地盘</string>
@@ -363,7 +363,7 @@
     <string name="dropdown_update_data">下拉更新数据</string>
     <string name="continue_to">继续</string>
     <string name="no_product">暂无商品</string>
-    <string name="fiu_descrip"> | 你在发现 谁在惊呼？</string>
+    <string name="fiu_descrip">  | 你在发现 谁在惊呼？</string>
     <string name="no_this_sight">没有这个地盘</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>

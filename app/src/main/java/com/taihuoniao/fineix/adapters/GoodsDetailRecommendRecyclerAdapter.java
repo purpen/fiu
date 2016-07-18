@@ -1,9 +1,10 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -17,16 +18,16 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/5/3.
  */
-public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<GoodsDetailRecommendRecyclerAdapter.VH> {
+public class GoodsDetailRecommendRecyclerAdapter extends BaseAdapter {
     private Context context;
     private List<ProductBean.ProductListItem> list;
-    private EditRecyclerAdapter.ItemClick itemClick;
+//    private EditRecyclerAdapter.ItemClick itemClick;
     private DisplayImageOptions options;
 
-    public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductBean.ProductListItem> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public GoodsDetailRecommendRecyclerAdapter(Context context, List<ProductBean.ProductListItem> list) {
         this.context = context;
         this.list = list;
-        this.itemClick = itemClick;
+//        this.itemClick = itemClick;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -36,45 +37,53 @@ public class GoodsDetailRecommendRecyclerAdapter extends RecyclerView.Adapter<Go
                 .build();
     }
 
-    @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_goodsdetail_recommend, null);
-        return new VH(view);
-    }
+
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClick.click(position);
-            }
-        });
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.img, options);
-        holder.title.setText(list.get(position).getTitle());
-        holder.price.setText(String.format("¥ %s", list.get(position).getSale_price()));
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
+        Log.e("<<<适配器","getCount="+list.size());
         return list.size();
     }
 
-    public int getItemHeight() {
-        int itemHeight = 0;
-        return itemHeight;
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
     }
 
-    public static class VH extends RecyclerView.ViewHolder {
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if(convertView==null){
+            holder = new ViewHolder();
+            convertView = View.inflate(context, R.layout.item_goodsdetail_recommend, null);
+            holder.img = (RoundedImageView) convertView.findViewById(R.id.item_goodsdetail_recommend_img);
+            holder.title = (TextView) convertView.findViewById(R.id.item_goodsdetail_recommend_title);
+            holder.price = (TextView) convertView.findViewById(R.id.item_goodsdetail_recommend_price);
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
+        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.img, options);
+        holder.title.setText(list.get(position).getTitle());
+        holder.price.setText(String.format("¥ %s", list.get(position).getSale_price()));
+        return convertView;
+    }
+
+    public static class ViewHolder {
         RoundedImageView img;
         TextView title;
         TextView price;
 
-        public VH(View itemView) {
-            super(itemView);
-            img = (RoundedImageView) itemView.findViewById(R.id.item_goodsdetail_recommend_img);
-            title = (TextView) itemView.findViewById(R.id.item_goodsdetail_recommend_title);
-            price = (TextView) itemView.findViewById(R.id.item_goodsdetail_recommend_price);
-        }
+//        public VH(View itemView) {
+//            super(itemView);
+//
+//
+//
+//        }
     }
 }

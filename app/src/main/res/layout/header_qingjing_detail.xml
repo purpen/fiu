@@ -146,8 +146,10 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/activity_qingjingdetail_username"
                             android:singleLine="true"
+                            android:paddingRight="5dp"
+                            android:ellipsize="end"
                             android:textColor="#212121"
-                            android:textSize="10sp"/>
+                            android:textSize="9sp"/>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -260,10 +262,6 @@
             />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#e4e4e4"/>
 
     <LinearLayout
         android:layout_width="match_parent"

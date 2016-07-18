@@ -104,7 +104,6 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
         holder.slidingFocusImageView.setFadingEdgeLength(200);
         holder.slidingFocusImageView.setGravity(Gravity.CENTER_VERTICAL);
         final int p = position;
-
         if (list != null) {
             holder.nameTv.setText(list.get(position).getTitle());
             holder.priceTv.setText(String.format("¥%s", list.get(position).getSale_price()));
@@ -136,7 +135,7 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
 //            holder.slidingFocusImageView.setSelection(0);
             switch (list.get(position).getAttrbute()) {
                 case "1":
-                    holder.img.setImageResource(R.mipmap.product_fiu);
+                    holder.img.setImageResource(R.mipmap.d3in);
                     break;
                 case "2":
                     holder.img.setImageResource(R.mipmap.product_taobao);
@@ -148,7 +147,8 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
                     holder.img.setImageResource(R.mipmap.product_jingdong);
                     break;
                 default:
-                    holder.img.setVisibility(View.INVISIBLE);
+                    holder.img.setImageResource(R.mipmap.product_fiu);
+//                    holder.img.setVisibility(View.INVISIBLE);
                     break;
             }
             ClickListener clickListener = new ClickListener(activity, list, null, position);

@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.beans;
 import com.taihuoniao.fineix.base.NetBean;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -603,8 +604,8 @@ public class SceneDetailsBean extends NetBean implements Serializable {
                 this.title = title;
             }
 
-            public int getPrice() {
-                return price;
+            public String getPrice() {
+                return new DecimalFormat("######0.00").format(price);
             }
 
             public void setPrice(int price) {

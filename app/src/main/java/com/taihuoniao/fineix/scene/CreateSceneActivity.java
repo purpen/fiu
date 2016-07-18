@@ -105,6 +105,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout qingjingRelative;
     private LinearLayout qingjingLinear;
     private FlowLayout labelFlow;
+    private LinearLayout recommendLinear;
     private FlowLayout recommendFlow;
     private TextView labelTv;
     //图片上存储的地址信息
@@ -149,6 +150,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         qingjingRelative = (RelativeLayout) findViewById(R.id.activity_create_scene_qingjing);
         qingjingLinear = (LinearLayout) findViewById(R.id.activity_create_scene_qingjinglinear);
         labelFlow = (FlowLayout) findViewById(R.id.activity_create_scene_label_flowlayout);
+        recommendLinear = (LinearLayout) findViewById(R.id.activity_create_scene_recommend_linear);
         recommendFlow = (FlowLayout) findViewById(R.id.activity_create_scene_recommend_flowlayout);
         labelTv = (TextView) findViewById(R.id.activity_create_scene_label_tv);
         if (MainApplication.tag == 2) {
@@ -165,6 +167,7 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 .cacheInMemory(false)
                 .cacheOnDisk(false).considerExifParams(true)
                 .build();
+        recommendLinear.setVisibility(View.GONE);
     }
 
     @Override
@@ -453,6 +456,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         addQingjingToLinear(sceneDetails.getData().getScene_title());
     }
 
+    private LatLng ll;
+
     //获得当前位置信息
     private void getCurrentLocation() {
         dialog.show();
@@ -460,6 +465,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
+                    ll = new LatLng(bdLocation.getLatitude(),
+                            bdLocation.getLongitude());
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     dialog.dismiss();
                     MapUtil.destroyLocationClient();
@@ -524,7 +531,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 deleteAddressImg.setVisibility(View.GONE);
                 break;
             case R.id.activity_create_scene_qingjing:
-                Intent intent1 = new Intent(CreateSceneActivity.this, SelectQingjingActivity.class);
+                Intent intent1 = new Intent(CreateSceneActivity.this, SelectAllQingjingActivity.class);
+                intent1.putExtra("latLng", ll);
                 startActivityForResult(intent1, DataConstants.REQUESTCODE_CREATESCENE_SELECTQJ);
                 break;
             case R.id.activity_create_scene_labelrelative:
@@ -721,6 +729,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
             } else {
                 labelTv.setVisibility(View.GONE);
             }
+            if (recommendFlow.getChildCount() <= 0) {
+                recommendLinear.setVisibility(View.GONE);
+            } else {
+                recommendLinear.setVisibility(View.VISIBLE);
+            }
             return;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -730,6 +743,8 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        textView.setTextColor(getResources().getColor(R.color.white));
+                        textView.setBackgroundResource(R.drawable.tags_yellow);
                         for (int i = 0; i < labelFlow.getChildCount(); i++) {
                             TextView textView1 = (TextView) labelFlow.getChildAt(i);
                             if (textView1.getText().equals(textView.getText())) {
@@ -749,6 +764,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         } else {
             labelTv.setVisibility(View.GONE);
         }
+        if (recommendFlow.getChildCount() <= 0) {
+            recommendLinear.setVisibility(View.GONE);
+        } else {
+            recommendLinear.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -761,7 +781,11 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                     contentEdt.setText(search.getDes());
                     recommendFlow.removeAllViews();
                     Log.e("<<<标签size", "size=" + search.getTags().size());
-                    addToFlow(search.getTags(), recommendFlow);
+                    List<String> strList = search.getTags();
+                    if(search.getTags().size()>10){
+                        strList = search.getTags().subList(0,10);
+                    }
+                    addToFlow(strList, recommendFlow);
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ:
                     SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
@@ -796,12 +820,29 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
                         lat = poiInfo.location.latitude;
                     }
                     break;
+                case DataConstants.RESULTCODE_SELECTQJ_ALLQJ:
+                    QingJingListBean.QingJingItem qingJingItem1 = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
+                    if (qingJingItem1 != null) {
+                        scene_id = qingJingItem1.get_id();
+                        qingjingLinear.removeAllViews();
+                        addQingjingToLinear(qingJingItem1.getTitle());
+                    }
+                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_ADDLABEL:
                     if (MainApplication.selectList != null) {
                         labelFlow.removeAllViews();
                         selectList = MainApplication.selectList;
                         MainApplication.selectList = null;
                         addToFlow(selectList, labelFlow);
+                    }
+                    for (int i = 0; i < recommendFlow.getChildCount(); i++) {
+                        TextView textView = (TextView) recommendFlow.getChildAt(i);
+                        for (String str : selectList) {
+                            if (textView.getText().toString().equals(str)) {
+                                textView.setBackgroundResource(R.drawable.tags_yellow);
+                                textView.setTextColor(getResources().getColor(R.color.white));
+                            }
+                        }
                     }
                     if (labelFlow.getChildCount() > 0) {
                         labelTv.setVisibility(View.GONE);
@@ -822,20 +863,6 @@ public class CreateSceneActivity extends BaseActivity implements View.OnClickLis
         qingjingLinear.addView(view);
     }
 
-
-    //标签
-//    private void addToLinear(String str, int _id) {
-//        labelHorizontal.setVisibility(View.VISIBLE);
-//        View view = View.inflate(CreateSceneActivity.this, R.layout.view_horizontal_label_item, null);
-//        TextView textView = (TextView) view.findViewById(R.id.view_horizontal_label_item_tv);
-//        textView.setText(str);
-//        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-//        lp.rightMargin = DensityUtils.dp2px(CreateSceneActivity.this, 10);
-//        view.setLayoutParams(lp);
-//        view.setTag(_id);
-//        labelLinear.addView(view);
-//    }
 
     @Override
     public void click(int postion) {

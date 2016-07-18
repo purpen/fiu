@@ -3,6 +3,8 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +23,10 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AllQingjingGridAdapter;
+import com.taihuoniao.fineix.adapters.DipanCategoryAdapter;
+import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -40,10 +45,11 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/4/25.
  */
-public class AllQingjingActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class AllQingjingActivity extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener, EditRecyclerAdapter.ItemClick {
     private ImageView searchQJImg;
     private ImageView createQingjingImg;
     private LinearLayout searchLinear;
+    private RecyclerView recyclerView;
     private PullToRefreshGridView pullToRefreshView;
     private GridView qingjingGrid;
     private List<QingJingListBean.QingJingItem> qingjingList;
@@ -57,6 +63,8 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     private double distance = 5000;//列表范围
     //网络请求对话框
     private WaittingDialog dialog;
+    private List<CategoryListBean.CategoryListItem> dipanList;
+    private DipanCategoryAdapter dipanCategoryAdapter;
 
     public AllQingjingActivity() {
         super(0);
@@ -69,6 +77,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         searchQJImg = (ImageView) findViewById(R.id.activity_all_qingjing_search);
         createQingjingImg = (ImageView) findViewById(R.id.activity_all_qingjing_createqinjing);
         searchLinear = (LinearLayout) findViewById(R.id.search_linear);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         pullToRefreshView = (PullToRefreshGridView) findViewById(R.id.activity_all_qingjing_pullrefreshview);
         qingjingGrid = pullToRefreshView.getRefreshableView();
         progressBar = (ProgressBar) findViewById(R.id.activity_all_qingjing_progress);
@@ -78,10 +87,16 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     protected void initList() {
-//        isSelect = getIntent().getIntExtra("isSelect", 0);
         searchQJImg.setOnClickListener(this);
         createQingjingImg.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //地盘分类
+        dipanList = new ArrayList<>();
+        dipanCategoryAdapter = new DipanCategoryAdapter(this, dipanList, this);
+        recyclerView.setAdapter(dipanCategoryAdapter);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -89,7 +104,6 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                     getCurrentLocation();
                     return;
                 }
-//                progressBar.setVisibility(View.VISIBLE);
                 dialog.show();
                 page = 1;
                 getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
@@ -109,13 +123,14 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         });
         qingjingGrid.setNumColumns(2);
         int space = DensityUtils.dp2px(AllQingjingActivity.this, 5);
-        qingjingGrid.setHorizontalSpacing(space);
+        qingjingGrid.setHorizontalSpacing(0);
         qingjingGrid.setVerticalSpacing(space);
         qingjingList = new ArrayList<>();
         allQingjingGridAdapter = new AllQingjingGridAdapter(qingjingList, null, AllQingjingActivity.this, space);
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
         getCurrentLocation();
+        categoryList(1 + "", 12 + "", true + "");
     }
 
     private void getCurrentLocation() {
@@ -132,14 +147,76 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         });
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
+        intent.putExtra("id", qingjingList.get(position).get_id());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_linear:
+                Intent intent1 = new Intent(this, SearchActivity.class);
+                intent1.putExtra("t", "8");
+                startActivity(intent1);
+                break;
+            case R.id.activity_all_qingjing_search:
+                onBackPressed();
+                break;
+            case R.id.activity_all_qingjing_createqinjing:
+                ToastUtils.showError("创建地盘暂不开放");
+                break;
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+            //判断是不是第一次进入Fiu界面
+            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
+            if (isFirstIn) {
+                firstRelative.setVisibility(View.VISIBLE);
+                firstRelative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        firstRelative.setVisibility(View.GONE);
+                    }
+                });
+                SharedPreferences.Editor editor = firstInSp.edit();
+                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
+                editor.apply();
+            }
+        }
+    }
+
+    @Override
+    public void click(int postion) {
+        dialog.show();
+        for (int i = 0; i < dipanList.size(); i++) {
+            if (i == postion) {
+                dipanList.get(i).setIsSelect(true);
+            } else {
+                dipanList.get(i).setIsSelect(false);
+            }
+        }
+        dipanCategoryAdapter.notifyDataSetChanged();
+        page = 1;
+        category_id = dipanList.get(postion).get_id();
+        getQJList(page + "", 0 + "", 0 + "", distance + "", null, null);
+    }
+
+    private String category_id = null;
+
     private void getQJList(String pa, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.qingjingList(pa,null, sort, fine, dis, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(pa, category_id, sort, fine, dis, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-//                Log.e("<<<情景列表", responseInfo.result);
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.QINGJING_LIST;
                 QingJingListBean netQingjing = new QingJingListBean();
                 try {
                     Gson gson = new Gson();
@@ -174,58 +251,36 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         });
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(AllQingjingActivity.this, QingjingDetailActivity.class);
-        intent.putExtra("id", qingjingList.get(position).get_id());
-        startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.search_linear:
-                Intent intent1 = new Intent(this, SearchActivity.class);
-                intent1.putExtra("t", "8");
-                startActivity(intent1);
-                break;
-            case R.id.activity_all_qingjing_search:
-                onBackPressed();
-                break;
-            case R.id.activity_all_qingjing_createqinjing:
-                ToastUtils.showError("创建地盘暂不开放");
-                break;
-//            if (!LoginInfo.isUserLogin()) {
-////                    Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
-//                MainApplication.which_activity = DataConstants.ElseActivity;
-//                startActivity(new Intent(this, OptRegisterLoginActivity.class));
-//                return;
-//            }
-//            MainApplication.tag = 2;
-//            startActivity(new Intent(AllQingjingActivity.this, SelectPhotoOrCameraActivity.class));
-//            break;
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-            //判断是不是第一次进入Fiu界面
-            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
-            if (isFirstIn) {
-                firstRelative.setVisibility(View.VISIBLE);
-                firstRelative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        firstRelative.setVisibility(View.GONE);
-                    }
-                });
-                SharedPreferences.Editor editor = firstInSp.edit();
-                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
-                editor.apply();
+    //地盘分类列表
+    private void categoryList(String page, String domain, String show_all) {
+        ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<分类列表", responseInfo.result);
+                dialog.dismiss();
+                CategoryListBean categoryListBean = new CategoryListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CategoryListBean>() {
+                    }.getType();
+                    categoryListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
+                }
+                if (categoryListBean.isSuccess()) {
+                    dipanList.addAll(categoryListBean.getData().getRows());
+                    dipanCategoryAdapter.notifyDataSetChanged();
+                    click(0);
+                } else {
+                    ToastUtils.showError(categoryListBean.getMessage());
+                }
             }
-        }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 }
