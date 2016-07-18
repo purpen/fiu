@@ -49,7 +49,7 @@
                     android:gravity="center"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
-                    android:text="选择语境"
+                    android:text="搜索语境"
                     android:textColor="#717171"
                     android:textSize="11sp"
                     android:visibility="gone"/>
@@ -62,9 +62,9 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:hint="@string/input_more_twenty"
+                    android:imeOptions="actionDone"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:imeOptions="actionDone"
                     android:singleLine="true"
                     android:textColorHint="#999999"
                     android:textSize="12sp"/>
@@ -102,8 +102,8 @@
                     android:layout_marginStart="23dp"
                     android:background="@null"
                     android:gravity="top"
-                    android:singleLine="false"
                     android:hint="@string/add_des"
+                    android:singleLine="false"
                     android:textColorHint="#999999"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -234,6 +234,7 @@
                 android:background="#e2e2e2"/>
 
             <LinearLayout
+                android:id="@+id/activity_create_scene_recommend_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"

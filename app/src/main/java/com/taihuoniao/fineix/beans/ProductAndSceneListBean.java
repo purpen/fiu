@@ -55,6 +55,24 @@ public class ProductAndSceneListBean extends NetBean {
     public static class Sight{
         private String title;
         private String _id;
+        private String cover_url;
+        private String address;
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getCover_url() {
+            return cover_url;
+        }
+
+        public void setCover_url(String cover_url) {
+            this.cover_url = cover_url;
+        }
 
         public String get_id() {
             return _id;

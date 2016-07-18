@@ -219,7 +219,12 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
             lastTotalItem = totalItemCount;
             page++;
             progressBar.setVisibility(View.VISIBLE);
-            search();
+            if (editText.getText().toString().length() > 0) {
+                search();
+            } else {
+                envirList();
+            }
+//            search();
         }
     }
 
@@ -236,6 +241,27 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
     }
 
     private String cid;
+
+
+    @Override
+    public void click(int postion) {
+        dialog.show();
+        for (int i = 0; i < envirList.size(); i++) {
+            if (i == postion) {
+                envirList.get(i).setIsSelect(true);
+            } else {
+                envirList.get(i).setIsSelect(false);
+            }
+        }
+        searchEnvirAdapter.notifyDataSetChanged();
+        cid = envirList.get(postion).get_id();
+        page = 1;
+        if (editText.getText().toString().length() > 0) {
+            search();
+        } else {
+            envirList();
+        }
+    }
 
     private void search() {
         ClientDiscoverAPI.search(searchStr, 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
@@ -298,6 +324,7 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                 if (categoryListBean.isSuccess()) {
                     envirList.addAll(categoryListBean.getData().getRows());
                     searchEnvirAdapter.notifyDataSetChanged();
+                    click(0);
                 } else {
                     ToastUtils.showError(categoryListBean.getMessage());
                 }
@@ -311,21 +338,43 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         });
     }
 
-    @Override
-    public void click(int postion) {
-        for (int i = 0; i < envirList.size(); i++) {
-            if (i == postion) {
-                envirList.get(i).setIsSelect(true);
-            } else {
-                envirList.get(i).setIsSelect(false);
+    //语境列表
+    private void envirList() {
+        ClientDiscoverAPI.envirList(page + "", 8 + "", null, cid, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<语境列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                SearchBean netSearch = new SearchBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SearchBean>() {
+                    }.getType();
+                    netSearch = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "数据解析异常" + e.toString());
+                }
+                if (netSearch.isSuccess()) {
+                    if (page == 1) {
+                        list.clear();
+                        lastTotalItem = -1;
+                        lastSavedFirstVisibleItem = -1;
+                    }
+                    list.addAll(netSearch.getData().getRows());
+                    shareCJSelectListAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netSearch.getMessage());
+//                    new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus(netSearch.getMessage());
+                }
             }
-        }
-        searchEnvirAdapter.notifyDataSetChanged();
-        if (editText.getText().toString().length() > 0) {
-            dialog.show();
-            cid = envirList.get(postion).get_id();
-            page = 1;
-            search();
-        }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 }

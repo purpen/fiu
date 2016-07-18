@@ -78,7 +78,7 @@ public class AllQingjingGridAdapter extends BaseAdapter {
             holder.backgroundImg = (ImageView) convertView.findViewById(R.id.item_qingjing_list_background);
             ViewGroup.LayoutParams lp = holder.backgroundImg.getLayoutParams();
 //            Log.e("<<<", "总宽度=" + (parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight()));
-            lp.width = (parent.getWidth() - DensityUtils.dp2px(context, 15)) / 2;
+            lp.width = (parent.getWidth() - DensityUtils.dp2px(context, 10)) / 2;
             lp.height = lp.width * 16 / 9;
             holder.backgroundImg.setLayoutParams(lp);
             holder.addressTv = (TextView) convertView.findViewById(R.id.item_qingjing_list_address);

@@ -141,7 +141,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         if (isSearch.equals("0")) {
             qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
         }
-        categoryList(1 + "", 12 + "", null);
+        categoryList(1 + "", 12 + "", true + "");
     }
 
 
@@ -206,6 +206,22 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     }
 
     @Override
+    public void click(int postion) {
+        dialog.show();
+        for (int i = 0; i < dipanList.size(); i++) {
+            if (i == postion) {
+                dipanList.get(i).setIsSelect(true);
+            } else {
+                dipanList.get(i).setIsSelect(false);
+            }
+        }
+        dipanCategoryAdapter.notifyDataSetChanged();
+        page = 1;
+        category_id = dipanList.get(postion).get_id();
+        qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
@@ -244,7 +260,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
 
     //搜索
     private void search(String q, String t, String p, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t,null, p, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t, null, p, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SearchBean searchBean = new SearchBean();
@@ -340,6 +356,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 if (categoryListBean.isSuccess()) {
                     dipanList.addAll(categoryListBean.getData().getRows());
                     dipanCategoryAdapter.notifyDataSetChanged();
+                    click(0);
                 } else {
                     ToastUtils.showError(categoryListBean.getMessage());
                 }
@@ -353,19 +370,5 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         });
     }
 
-    @Override
-    public void click(int postion) {
-        dialog.show();
-        for (int i = 0; i < dipanList.size(); i++) {
-            if (i == postion) {
-                dipanList.get(i).setIsSelect(true);
-            } else {
-                dipanList.get(i).setIsSelect(false);
-            }
-        }
-        dipanCategoryAdapter.notifyDataSetChanged();
-        page = 1;
-        category_id = dipanList.get(postion).get_id();
-        qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
-    }
+
 }

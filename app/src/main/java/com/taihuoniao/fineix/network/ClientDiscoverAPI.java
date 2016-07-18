@@ -1370,7 +1370,21 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/gateway/fetch_chinese_word";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
+        params.addQueryStringParameter("size", 10 + "");
         params.addQueryStringParameter("content", content);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //语境列表
+    public static void envirList(String page, String size, String sort, String category_id, String stick, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_context/getlist";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page",page);
+        params.addQueryStringParameter("size",size);
+        params.addQueryStringParameter("sort",sort);
+        params.addQueryStringParameter("category_id",category_id);
+        params.addQueryStringParameter("stick",stick);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+
     }
 }

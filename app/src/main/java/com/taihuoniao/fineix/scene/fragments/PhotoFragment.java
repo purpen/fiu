@@ -38,11 +38,6 @@ import java.util.Map;
  * Created by taihuoniao on 2016/3/14.
  */
 public class PhotoFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
-    //    private ImageView cancelImg;
-//    private LinearLayout titleLinear;
-//    private TextView titleTv;
-//    private ImageView titleImg;
-//    private TextView continueTv;
     private GlobalTitleLayout titleLayout;
     //        private ScrollView scrollView;
     private TopAndBottomLinear linear;

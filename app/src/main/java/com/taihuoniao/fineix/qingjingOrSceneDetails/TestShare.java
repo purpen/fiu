@@ -292,6 +292,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 popupWindow.dismiss();
                 break;
             case R.id.title_share:
+//                showPopup();
                 if (imgHeight == 0 || imgWidth == 0) {
                     if (netScene == null) {
                         requestNet();

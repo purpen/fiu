@@ -101,6 +101,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");
         if (target_id == null || type == null || target_user_id == null) {
+            Log.e("<<<评论界面", "target_id=" + target_id + ",type=" + type + ",user_id=" + target_user_id);
             ToastUtils.showError("数据错误");
 //            dialog.showErrorWithStatus("数据错误");
             if (dialog != null) {
@@ -193,7 +194,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         View popup_view = View.inflate(CommentListActivity.this, R.layout.popup_comment_delete, null);
         TextView deleteTv = (TextView) popup_view.findViewById(R.id.popup_comment_delete_delete);
 //        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
-        TextView  cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
@@ -315,10 +316,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<评论", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.COMMENTS_LIST;
                 CommentsBean netComments = new CommentsBean();
                 try {
                     Gson gson = new Gson();
@@ -358,77 +355,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    //    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.DELETE_COMMENT:
-//                    popupWindow.dismiss();
-//                    NetBean netBean1 = (NetBean) msg.obj;
-////                    Toast.makeText(CommentListActivity.this, netBean1.getMessage(), Toast.LENGTH_SHORT).show();
-//                    if (netBean1.isSuccess()) {
-//                        currentPage = 1;
-//                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
-//                    } else {
-//                        dialog.dismiss();
-//                        ToastUtils.showError(netBean1.getMessage());
-////                        dialog.showErrorWithStatus(netBean1.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.SEND_COMMENT:
-//                    NetBean netBean = (NetBean) msg.obj;
-////                    Toast.makeText(CommentListActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
-//                    if (netBean.isSuccess()) {
-//                        editText.setHint("评论一下");
-//                        is_reply = 0 + "";
-//                        reply_id = null;
-//                        reply_user_id = null;
-//                        editText.setText("");
-//                        currentPage = 1;
-//                        DataPaser.commentsList(currentPage + "", 8 + "", target_id, null, type, handler);
-//                    } else {
-//                        dialog.dismiss();
-//                        ToastUtils.showError(netBean.getMessage());
-////                        dialog.showErrorWithStatus(netBean.getMessage());
-//                        if ("0".equals(netBean.getCurrent_user_id())) {
-//                            MainApplication.which_activity = DataConstants.ElseActivity;
-//                            startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
-//                        }
-//                    }
-//                    break;
-//                case DataConstants.COMMENTS_LIST:
-//                    dialog.dismiss();
-//                    pullToRefreshLayout.onRefreshComplete();
-//                    progressBar.setVisibility(View.GONE);
-//                    CommentsBean netCommentsBean = (CommentsBean) msg.obj;
-//                    currentUserId = netCommentsBean.getCurrent_user_id();
-//                    if (netCommentsBean.isSuccess()) {
-//                        pullToRefreshLayout.setLoadingTime();
-//                        if (currentPage == 1) {
-//                            pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
-//                            pullToRefreshLayout.lastTotalItem = -1;
-//                            commentList.clear();
-//                        }
-//                        commentList.addAll(netCommentsBean.getData().getRows());
-//                        if (commentList.size() <= 0) {
-//                            nothingTv.setVisibility(View.VISIBLE);
-//                        } else {
-//                            nothingTv.setVisibility(View.GONE);
-//                        }
-//                        commentsListAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    pullToRefreshLayout.onRefreshComplete();
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-////                    Toast.makeText(CommentListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
     @Override
     public void onBackPressed() {
         if (commentList != null) {

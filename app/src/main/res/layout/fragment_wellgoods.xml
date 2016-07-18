@@ -35,7 +35,7 @@
 
         <RelativeLayout
             android:id="@+id/fragment_wellgoods_cart_relative"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             >
@@ -44,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="17dp"
+                android:layout_alignParentRight="true"
                 android:paddingRight="13dp"
                 android:src="@mipmap/cart"/>
 
@@ -52,7 +53,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="2dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/yellow_circle"
                 android:gravity="center"
@@ -65,8 +66,8 @@
     <FrameLayout
         android:id="@+id/fragment_wellgoods_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:translationY="-75dp">
+        android:layout_height="60dp"
+        android:translationY="-60dp">
 
         <com.taihuoniao.fineix.blurview.BlurView
             android:id="@+id/fragment_wellgoods_blurring_view"

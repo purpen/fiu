@@ -17,15 +17,15 @@
         android:layout_below="@id/titlelayout"
         android:background="#e1e1e1"/>
 
-    <!--<com.hb.views.PinnedSectionListView-->
-    <!--android:id="@android:id/list"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/line10"-->
-    <!--android:divider="@null"-->
-    <!--android:dividerHeight="0dp"-->
-    <!--android:footerDividersEnabled="false"-->
-    <!--android:headerDividersEnabled="false"/>-->
+    <com.hb.views.PinnedSectionListView
+    android:id="@android:id/list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/line10"
+    android:divider="@null"
+    android:dividerHeight="0dp"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="false"/>
 
     <ListView
         android:id="@+id/char_list_view"

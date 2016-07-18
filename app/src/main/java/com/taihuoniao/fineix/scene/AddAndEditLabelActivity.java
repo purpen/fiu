@@ -45,6 +45,32 @@ public class AddAndEditLabelActivity extends BaseActivity implements View.OnClic
 
     @Override
     protected void initList() {
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setCursorVisible(true);
+                for (int i = 0; i < flowlayout.getChildCount(); i++) {
+                    TextView textView1 = (TextView) flowlayout.getChildAt(i);
+                    textView1.setBackgroundResource(R.drawable.tags_gray);
+                    textView1.setTextColor(getResources().getColor(R.color.color_666));
+                }
+            }
+        });
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP) {
+                    for(int i=0;i<flowlayout.getChildCount();i++){
+                        TextView textView = (TextView) flowlayout.getChildAt(i);
+                        if((Boolean)textView.getTag()){
+                            flowlayout.removeView(textView);
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -59,19 +85,6 @@ public class AddAndEditLabelActivity extends BaseActivity implements View.OnClic
                 return false;
             }
         });
-//        editText.setOnKeyListener(new View.OnKeyListener() {
-//
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-//                    if (AddAndEditLabelActivity.this.getCurrentFocus() != null) {
-//                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(AddAndEditLabelActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                    }
-//                    addToFlow(editText.getText().toString(), flowlayout);
-//                    editText.setText("");
-//                }
-//                return false;
-//            }
-//        });
         if (MainApplication.selectList == null) {
             return;
         }
@@ -80,13 +93,24 @@ public class AddAndEditLabelActivity extends BaseActivity implements View.OnClic
         }
     }
 
-    private void addToFlow(String label, FlowLayout flowLayout) {
+    private void addToFlow(String label, final FlowLayout flowLayout) {
         final TextView textView = (TextView) View.inflate(this, R.layout.view_horizontal_label_item, null);
         textView.setText(label);
+        textView.setTag(false);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAndEditLabelActivity.this.flowlayout.removeView(v);
+                for (int i = 0; i < flowLayout.getChildCount(); i++) {
+                    TextView textView1 = (TextView) flowLayout.getChildAt(i);
+                    textView1.setBackgroundResource(R.drawable.tags_gray);
+                    textView1.setTextColor(getResources().getColor(R.color.color_666));
+                    textView1.setTag(false);
+                }
+                textView.setBackgroundResource(R.drawable.tags_yellow);
+                textView.setTextColor(getResources().getColor(R.color.white));
+                textView.setTag(true);
+                editText.setCursorVisible(false);
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(editText, InputMethodManager.SHOW_FORCED);
             }
         });
         flowLayout.addView(textView);

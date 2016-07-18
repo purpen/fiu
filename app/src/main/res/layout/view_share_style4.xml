@@ -45,7 +45,7 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/v"
                 android:visibility="gone"
-                app:riv_corner_radius="@dimen/dp100" />
+                app:riv_corner_radius="@dimen/dp100"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -71,6 +71,33 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
+
+            <LinearLayout
+                android:id="@+id/activity_share_location_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_share_user_name"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/activity_share_user_info"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/activity_share_location_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"
+                    android:src="@mipmap/location_white_width_16px"/>
+
+                <TextView
+                    android:id="@+id/activity_share_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="45dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="7sp"/>
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
@@ -87,61 +114,36 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="7dp"
             android:src="@mipmap/share_erweima"/>
 
-        <LinearLayout
-            android:id="@+id/activity_share_location_linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:layout_toLeftOf="@id/erweima"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/activity_share_location_img"
-                android:layout_width="wrap_content"
-                android:layout_height="8dp"
-                android:src="@mipmap/location_white_width_16px"/>
-
-            <TextView
-                android:id="@+id/activity_share_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="7sp"/>
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/activity_share_scene_des_relative"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/activity_share_location_linear"
             android:layout_marginRight="11dp"
             android:layout_toLeftOf="@id/erweima"
             android:layout_toStartOf="@id/erweima">
-
-            <ImageView
-                android:id="@+id/activity_share_scene_add_img"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
-                android:layout_alignBottom="@id/activity_share_scene_des"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/share_des_add"
-                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/activity_share_scene_des"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:layout_toLeftOf="@id/activity_share_scene_add_img"
                 android:maxLines="2"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>
-
+            <ImageView
+                android:id="@+id/activity_share_scene_add_img"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="1dp"
+                android:layout_alignBottom="@id/activity_share_scene_des"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/share_des_add"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 
@@ -153,7 +155,7 @@
             android:layout_alignBottom="@+id/activity_share_scene_line"
             android:layout_below="@id/activity_share_scene_des_relative"
             android:layout_marginTop="7dp"
-            android:src="@mipmap/head_logo" />
+            android:src="@mipmap/logo_no_word"/>
 
         <TextView
             android:id="@+id/activity_share_scene_line"
@@ -168,6 +170,7 @@
             android:layout_toStartOf="@id/erweima"
             android:gravity="center_vertical"
             android:singleLine="true"
+            android:layout_marginLeft="2dp"
             android:text="@string/fiu_descrip"
             android:textColor="@color/white"
             android:textSize="7sp"/>
@@ -211,7 +214,7 @@
             android:id="@+id/activity_share_fiu_img"
             android:layout_width="wrap_content"
             android:layout_height="15dp"
-            android:src="@mipmap/logo_share" />
+            android:src="@mipmap/logo_share"/>
 
         <TextView
             android:id="@+id/activity_share_fiu_tv"
@@ -219,8 +222,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="@string/fiu_to_buy"
-            android:visibility="gone"
             android:textColor="#000000"
-            android:textSize="7sp"/>
+            android:textSize="7sp"
+            android:visibility="gone"/>
     </LinearLayout>
 </RelativeLayout>

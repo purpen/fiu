@@ -142,6 +142,7 @@
                 android:id="@+id/activity_goods_detail_scrollableView"
                 android:layout_width="match_parent"
                 android:layout_height="211dp"
+                android:visibility="visible"
                 />
 
             <TextView
@@ -326,8 +327,9 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/activity_goods_detail_suoshuchangjing_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:paddingLeft="19dp"/>
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    />
             </LinearLayout>
 
             <TextView
@@ -343,7 +345,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingTop="15dp">
@@ -356,13 +358,16 @@
                     android:textColor="#212121"
                     android:textSize="13sp"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_marginTop="15dp"
+                <com.taihuoniao.fineix.view.GridViewForScrollView
                     android:id="@+id/activity_goods_detail_recommend_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:horizontalSpacing="5dp"
+                    android:numColumns="2"
+                    android:paddingLeft="19dp"
+                    android:paddingRight="19dp"
+                    android:verticalSpacing="5dp"
                     />
 
             </LinearLayout>
