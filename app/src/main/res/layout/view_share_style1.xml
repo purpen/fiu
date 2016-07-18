@@ -154,8 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="11dp"
-                android:layout_toLeftOf="@id/erweima"
-                android:layout_toStartOf="@id/erweima">
+              >
 
                 <TextView
                     android:id="@+id/activity_share_scene_des"

@@ -76,12 +76,10 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         endAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-//                Log.e("<<<进入几次","进入几次");
                 scrollMoveX = scrollX;
                 scrollMoveY = scrollY;
                 int steps = 16;
                 int step = (int) (steps * animation.getAnimatedFraction());
-//                Log.e("<<<动画", animation.getAnimatedFraction() + "");
                 int inertiaX = (int) (easeOutCubic
                         (step, 0, distanceX, steps) - easeOutCubic((step - 1), 0, distanceX, steps));
                 int inertiaY = (int) (easeOutCubic
@@ -89,26 +87,6 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
                 scrollX += inertiaX;
                 scrollY += inertiaY;
-//                for(int i=0;i<getChildCount();i++){
-//                    getChildAt(i).getTop()
-//                }
-                double r = Math.sqrt(((double) getChildCount() - 1) / 3 + 0.25) + 0.5;
-                int intR = 0;
-                if (r * 10 % 10 != 0) {
-                    intR = 1 + (int) r;
-                } else {
-                    intR = (int) r;
-                }
-                if (scrollX > (intR - 1) * itemSize) {
-                    scrollX -= (scrollX - (intR - 1) * itemSize) / 4;
-                } else if (scrollX < (1 - intR) * itemSize) {
-                    scrollX -= (scrollX - (1 - intR) * itemSize) / 4;
-                }
-                if (scrollY > Math.sqrt(3) / 2 * (intR - 1) * itemSize) {
-                    scrollY -= (scrollY - (Math.sqrt(3) / 2 * (intR - 1) * itemSize)) / 4;
-                } else if (scrollY < Math.sqrt(3) / 2 * (1 - intR) * itemSize) {
-                    scrollY -= (scrollY - (Math.sqrt(3) / 2 * (1 - intR) * itemSize)) / 4;
-                }
 //                if (scrollX > scrollRangeX) {
 //                    scrollX -= (scrollX - scrollRangeX) / 4;
 //                } else if (scrollX < -scrollRangeX) {
@@ -207,13 +185,13 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        double r = Math.sqrt(((double) getChildCount() - 1) / 3 + 0.25) + 0.5;
-        int intR = 0;
-        if (r * 10 % 10 != 0) {
-            intR = 1 + (int) r;
-        } else {
-            intR = (int) r;
-        }
+//        double r = Math.sqrt(((double) getChildCount() - 1) / 3 + 0.25) + 0.5;
+//        int intR = 0;
+//        if (r * 10 % 10 != 0) {
+//            intR = 1 + (int) r;
+//        } else {
+//            intR = (int) r;
+//        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startTouch(event);
@@ -270,7 +248,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 //                if (scrollY > Math.sqrt(3) / 2 * (intR - 1) * itemSize) {
 //                    endTouch();
 //                } else if (scrollY < Math.sqrt(3) / 2 * (1 - intR) * itemSize) {
-//                    endTouch();
+                    endTouch();
 //                }
                 break;
 
