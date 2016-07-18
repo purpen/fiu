@@ -55,8 +55,6 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_about_us;
     @Bind(R.id.item_share)
     CustomItemLayout item_share;
-    @Bind(R.id.item_exit)
-    CustomItemLayout item_exit;
     public SystemSettingsActivity(){
         super(R.layout.activity_system_settings);
     }
@@ -66,14 +64,12 @@ public class SystemSettingsActivity extends BaseActivity{
         custom_head.setHeadCenterTxtShow(true,"系统设置");
         item_update_psd.setTVStyle(0,"修改密码", R.color.color_333);
         item_push_setting.setTVStyle(0,"推送设置", R.color.color_333);
-        item_clear_cache.setTVStyle(0,"清空缓存", R.color.color_333);
+        item_clear_cache.setTVStyle(0, "清空缓存", R.color.color_af8323);
         item_to_comment.setTVStyle(0,"去评价", R.color.color_333);
         item_welcome_page.setTVStyle(0,"欢迎界面", R.color.color_333);
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
-        item_exit.setTVStyle(0, "退出当前账户", R.color.color_333);
-        item_exit.setRightMoreImgStyle(false);
         setCacheSize();
 //        LogUtil.e("getCacheDir",getCacheDir().getAbsolutePath());
 //        LogUtil.e("getCacheDirLen",getCacheDir().length()+"");
@@ -140,6 +136,7 @@ public class SystemSettingsActivity extends BaseActivity{
                 SPUtil.remove(DataConstants.LOGIN_INFO);
                 Intent intent=new Intent(activity,MainActivity.class);
                 intent.putExtra(IndexFragment.class.getSimpleName(),IndexFragment.class.getSimpleName());
+                intent.putExtra("exit", true);
                 startActivity(intent);
                 finish();
             }
@@ -177,7 +174,7 @@ public class SystemSettingsActivity extends BaseActivity{
 
     private void setCacheSize(){
         try {
-            item_clear_cache.setTvArrowLeftStyle(true,DataCleanUtil.getTotalCacheSize(activity),R.color.color_333);
+            item_clear_cache.setTvArrowLeftStyle(true, DataCleanUtil.getTotalCacheSize(activity), R.color.color_af8323);
         } catch (Exception e) {
             e.printStackTrace();
         }

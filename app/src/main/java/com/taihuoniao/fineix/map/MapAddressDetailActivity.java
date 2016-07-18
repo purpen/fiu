@@ -82,7 +82,7 @@ public class MapAddressDetailActivity extends BaseActivity implements View.OnCli
                         getNearByAddress();
                     }
                     MapStatus.Builder builder = new MapStatus.Builder();
-                    builder.target(latLng).zoom(18.0f);
+                    builder.target(latLng).zoom(19.0f);
                     mBDMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                 }
             }

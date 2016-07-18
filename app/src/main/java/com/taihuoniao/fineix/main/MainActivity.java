@@ -106,6 +106,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onNewIntent(Intent intent) {
         if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
             which = IndexFragment.class.getSimpleName();
+            boolean exit = intent.getBooleanExtra("exit", false);
+            if (exit) tv_msg_indicator.setVisibility(View.GONE);
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
             if (bottomLinear != null) {

@@ -164,7 +164,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
     }
 
     private View initPopView(int layout, String title) {
-        View view = Util.inflateView(layout, null);
+        View view = Util.inflateView(activity, layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
         View iv_take_photo = view.findViewById(R.id.tv_take_photo);
         View iv_take_album = view.findViewById(R.id.tv_album);
@@ -179,32 +179,27 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
         String label = tv_tag.getText().toString().trim();
         if (TextUtils.isEmpty(label)) {
             ToastUtils.showError("请选择认证身份");
-//            svProgressHUD.showErrorWithStatus("请选择认证身份");
             return;
         }
 
         String info = et_info.getText().toString().trim();
         if (TextUtils.isEmpty(info)) {
             ToastUtils.showError("请填写认证信息");
-//            svProgressHUD.showErrorWithStatus("请填写认证信息");
             return;
         }
 
         String contacts = et_contacts.getText().toString().trim();
         if (TextUtils.isEmpty(contacts)) {
             ToastUtils.showError("请填写联系方式");
-//            svProgressHUD.showErrorWithStatus("请填写联系方式");
             return;
         }
         if (authData==null){//如果是首次认证身份证和名片必传
             if (bitmap_id == null) {
                 ToastUtils.showError("请先选择身份证");
-//                svProgressHUD.showErrorWithStatus("请先选择身份证");
                 return;
             }
             if (bitmap_card == null) {
                 ToastUtils.showError("请先选择名片");
-//                svProgressHUD.showErrorWithStatus("请先选择名片");
                 return;
             }
         }
@@ -232,7 +227,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
                     ToastUtils.showSuccess("认证信息提交成功");
-//                    new SVProgressHUD(activity).showSuccessWithStatus("认证信息提交成功");
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -245,7 +239,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                     return;
                 }
                 ToastUtils.showError(response.getMessage());
-//                svProgressHUD.showErrorWithStatus(response.getMessage());
             }
 
             @Override
@@ -253,7 +246,6 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
                 setViewsEnable(true);
                 if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError("网络异常，请确保网络畅通");
-//                svProgressHUD.showErrorWithStatus("网络异常，请确保网络畅通");
             }
         });
 

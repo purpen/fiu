@@ -68,7 +68,6 @@ public class PopupWindowUtil {
 
 
     public static void dismiss() {
-        setWindowAlpha(1f);
         if (popupWindow != null) {
             popupWindow.dismiss();
             popupWindow = null;

@@ -36,7 +36,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<LoveSceneBean.LoveSceneI
         final LoveSceneBean.LoveSceneItem item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(R.layout.item_ordered_qj, null);
+            convertView = Util.inflateView(R.layout.item_support_qj, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

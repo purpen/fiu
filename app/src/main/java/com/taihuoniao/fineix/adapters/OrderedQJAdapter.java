@@ -3,14 +3,12 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QingJingListBean;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class OrderedQJAdapter extends CommonBaseAdapter<QingJingListBean.QingJin
         final QingJingListBean.QingJingItem item = list.get(position);
         ViewHolder holder;
         if (convertView==null){
-            convertView = Util.inflateView(R.layout.item_ordered_qj, null);
+            convertView = Util.inflateView(R.layout.item_ordered_dp, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
@@ -44,7 +42,7 @@ public class OrderedQJAdapter extends CommonBaseAdapter<QingJingListBean.QingJin
 
         imageLoader.displayImage(item.getCover_url(),holder.iv_cover,options);
         holder.tv_title.setText(item.getTitle());
-        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame);
+//        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame);
         holder.tv_desc.setText(item.getAddress());
         return convertView;
     }
@@ -56,8 +54,9 @@ public class OrderedQJAdapter extends CommonBaseAdapter<QingJingListBean.QingJin
         TextView tv_title;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
-        @Bind(R.id.item_frame)
-        FrameLayout item_frame;
+
+        //        @Bind(R.id.item_frame)
+//        FrameLayout item_frame;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
