@@ -171,10 +171,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         dialog = new WaittingDialog(this);
 
         lv_cj.addHeaderView(headView);
-        lv_qj.addHeaderView(headView);
+//        lv_qj.addHeaderView(headView);
 
         lv_cj.setAdapter(adapterCJ);
-        lv_qj.setAdapter(adapterQJ);
+//        lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.INVISIBLE);
         } else {

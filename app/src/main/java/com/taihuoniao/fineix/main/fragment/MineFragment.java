@@ -385,11 +385,11 @@ public class MineFragment extends MyBaseFragment {
                 startActivity(intent);
                 //
                 break;
-            case R.id.ll_cj:
-                intent = new Intent(activity, UserCenterActivity.class);
-                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
-                startActivity(intent);
-                break;
+//            case R.id.ll_cj:
+//                intent = new Intent(activity, UserCenterActivity.class);
+//                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
+//                startActivity(intent);
+//                break;
             case R.id.ll_focus:
                 intent = new Intent(activity, FocusActivity.class);
                 startActivity(intent);

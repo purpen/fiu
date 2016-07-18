@@ -11,8 +11,7 @@
             android:id="@+id/lv_cj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@android:color/white"
-            android:dividerHeight="4dp"
+            android:divider="@null"
             android:visibility="gone"
             />
         <ListView
