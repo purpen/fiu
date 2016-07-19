@@ -127,6 +127,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
         //注册短信内容监听
         this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, readSmsContent);
+
     }
 
     @Override

@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        android:layout_marginBottom="@dimen/dp80"
+        android:layout_marginBottom="@dimen/dp40"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_click_register"
@@ -39,9 +39,9 @@
             android:textColor="@android:color/white"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp30"
-            android:paddingTop="10dp"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp15"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -49,13 +49,12 @@
                 android:gravity="right"
                 android:text="已有帐号？"
                 android:textSize="13sp"
-                android:textColor="@color/color_666" />
+                android:textColor="@color/color_333" />
             <TextView
                 android:id="@+id/tv_click_login"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="立即登录"
-                android:paddingLeft="@dimen/dp5"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/color_333" />

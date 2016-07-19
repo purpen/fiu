@@ -1,10 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/login_or_regist"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:background="@mipmap/reg_login_blur">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,8 +31,7 @@
         android:id="@+id/ll_third"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -67,21 +65,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
+
         <EditText
             android:id="@+id/et_phone"
             style="@style/RegisterAndLogin"
             android:background="@drawable/shap_home_gridview"
             android:ems="8"
             android:hint="手机号"
-            android:maxLength="11"
             android:inputType="phone"
+            android:maxLength="11"
             android:paddingLeft="5dp"
-            android:singleLine="true"/>
+            android:singleLine="true" />
+
         <LinearLayout
             style="@style/RegisterAndLogin"
             android:background="@drawable/shap_home_gridview">
+
             <EditText
                 android:id="@+id/et_code"
                 android:layout_width="0dp"
@@ -90,10 +90,11 @@
                 android:background="@drawable/shap_home_gridview"
                 android:ems="5"
                 android:hint="验证码"
-                android:textSize="14sp"
-                android:maxLength="6"
                 android:inputType="text"
-                android:paddingLeft="5dp" />
+                android:maxLength="6"
+                android:paddingLeft="5dp"
+                android:textSize="14sp" />
+
             <Button
                 android:id="@+id/btn_verify"
                 android:layout_width="0dp"
@@ -113,9 +114,10 @@
             android:background="@drawable/shap_home_gridview"
             android:ems="12"
             android:hint="请输入6-20位数字或字符密码"
+            android:inputType="textPassword"
             android:maxLength="12"
-            android:paddingLeft="5dp"
-            android:inputType="textPassword" />
+            android:paddingLeft="5dp" />
+
         <Button
             android:id="@+id/btn_register"
             style="@style/RegisterAndLogin"
@@ -131,8 +133,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp20"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"

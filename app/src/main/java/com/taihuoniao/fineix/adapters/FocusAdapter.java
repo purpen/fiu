@@ -25,7 +25,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -44,12 +43,10 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
-    private WaittingDialog svProgressHUD;
     public FocusAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
-        this.svProgressHUD=new WaittingDialog(activity);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)
                 .showImageForEmptyUri(R.mipmap.default_focus_head)
@@ -76,8 +73,17 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         }
 
         imageLoader.displayImage(item.follows.avatar_url, holder.riv);
+        if (item.follows.is_expert == 1) {
+            holder.riv_auth.setVisibility(View.VISIBLE);
+        } else {
+            holder.riv_auth.setVisibility(View.GONE);
+        }
         holder.tv_name.setText(item.follows.nickname);
-        holder.tv_desc.setText(item.follows.summary);
+        if (!TextUtils.isEmpty(item.follows.expert_label) && !TextUtils.isEmpty(item.follows.expert_info)) {
+            holder.tv_desc.setText(String.format("%s | %s", item.follows.expert_label, item.follows.expert_info));
+        } else {
+            holder.tv_desc.setText(item.follows.summary);
+        }
 
         //关注界面
         if (userId == LoginInfo.getUserId()) { //是自己
@@ -318,6 +324,8 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     static class ViewHolder {
         @Bind(R.id.riv)
         ImageView riv;
+        @Bind(R.id.riv_auth)
+        RoundedImageView riv_auth;
         @Bind(R.id.tv_name)
         TextView tv_name;
         @Bind(R.id.tv_desc)

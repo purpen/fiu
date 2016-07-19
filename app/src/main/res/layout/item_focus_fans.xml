@@ -9,16 +9,32 @@
     android:paddingRight="@dimen/dp16"
     android:paddingTop="@dimen/dp5">
 
-    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-        android:id="@+id/riv"
+    <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
-        android:layout_centerVertical="true"
-        app:riv_border_width="@dimen/dp1"
-        app:riv_border_color="@color/color_eee"
-        android:src="@mipmap/default_focus_head"
-        app:riv_corner_radius="@dimen/dp100" />
+        android:layout_gravity="center_horizontal">
 
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/riv"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_centerVertical="true"
+            app:riv_border_width="@dimen/dp1"
+            app:riv_border_color="@color/color_eee"
+            android:src="@mipmap/default_focus_head"
+            app:riv_corner_radius="@dimen/dp100" />
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/riv_auth"
+            android:layout_width="@dimen/dp15"
+            android:layout_height="@dimen/dp15"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/v"
+            android:visibility="gone"
+            app:riv_corner_radius="@dimen/dp100" />
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +42,7 @@
         android:layout_marginLeft="@dimen/dp10"
         android:layout_marginRight="@dimen/dp10"
         android:layout_toLeftOf="@+id/btn"
-        android:layout_toRightOf="@+id/riv"
+        android:layout_toRightOf="@+id/rl"
         android:orientation="vertical">
 
         <TextView

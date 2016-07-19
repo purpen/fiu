@@ -22,6 +22,9 @@ public class FocusFansItem implements Serializable {
         public String avatar_url;
         public String summary;
         public int is_love;
-        //ans_ext
+        public int is_expert;
+        public String label;
+        public String expert_label;
+        public String expert_info;
     }
 }
