@@ -1,5 +1,8 @@
 package com.taihuoniao.fineix.user;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -7,11 +10,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +39,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
@@ -63,11 +67,11 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     private String nickName;
     private String token;
     @Bind(R.id.ll_register)
-    LinearLayout ll_register;
+    RelativeLayout rl_register;
     @Bind(R.id.ll_third)
     LinearLayout ll_third;
-    @Bind(R.id.ll_phone)
-    LinearLayout ll_phone;
+    @Bind(R.id.ll_third_box)
+    LinearLayout ll_third_box;
     @Bind(R.id.et_phone)
     EditText et_phone;
     @Bind(R.id.et_password)
@@ -76,6 +80,7 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     EditText et_code;
     @Bind(R.id.btn_verify)
     Button btn_verify;
+    private ObjectAnimator animator;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
@@ -127,7 +132,6 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
         //注册短信内容监听
         this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, readSmsContent);
-
     }
 
     @Override
@@ -306,10 +310,41 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_phone_number_toregister:
-                ll_phone.setVisibility(View.GONE);
-                ll_third.setVisibility(View.GONE);
-                ll_register.setVisibility(View.VISIBLE);
-                ll_register.setAnimation(Util.fromBottom2Top());
+                int[] location = new int[2];
+                ll_third_box.getLocationOnScreen(location);
+                int y = location[1];
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                lp.topMargin = y;
+//                lp.height=getResources().getDimensionPixelSize(R.dimen.dp300);
+                rl_register.setLayoutParams(lp);
+                animator = ObjectAnimator.ofFloat(ll_third_box, "translationY", ll_third_box.getTranslationY(), -y - ll_third.getMeasuredHeight());
+                animator.setDuration(300);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        rl_register.setAlpha(animation.getCurrentPlayTime() / 300);
+                    }
+                });
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        rl_register.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
+                animator.start();
+
                 break;
             case R.id.tv_qq_register:
                 if (mDialog!=null) {
@@ -341,12 +376,39 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
                 authorize(wechat);
                 break;
             case R.id.image_back_toregister:
-                if (ll_third.isShown()){
-                    finish();
+                if (rl_register.isShown()) {
+                    if (animator != null) {
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                rl_register.setAlpha(1 - animation.getCurrentPlayTime() / 300);
+                            }
+                        });
+                        animator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                rl_register.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        animator.reverse();
+                    }
                 }else {
-                    ll_register.setVisibility(View.GONE);
-                    ll_phone.setVisibility(View.VISIBLE);
-                    ll_third.setVisibility(View.VISIBLE);
+                    finish();
                 }
                 break;
             case R.id.image_close_toregister:

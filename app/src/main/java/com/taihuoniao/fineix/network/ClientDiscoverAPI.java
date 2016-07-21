@@ -814,11 +814,12 @@ public class ClientDiscoverAPI {
      * @param summary
      * @param callBack
      */
-    public static void updateNickNameSummary(String nickname, String summary, String sex, RequestCallBack<String> callBack) {
+    public static void updateNickNameSummary(String nickname, String summary, String sex, String label, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("nickname", nickname);
         params.addQueryStringParameter("summary", summary);
         params.addQueryStringParameter("sex", sex);
+        params.addQueryStringParameter("label", label);
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 

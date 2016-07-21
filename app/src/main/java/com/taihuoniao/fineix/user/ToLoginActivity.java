@@ -1,10 +1,14 @@
 package com.taihuoniao.fineix.user;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +33,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.HashMap;
@@ -61,13 +64,13 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     LinearLayout ll_login;
     @Bind(R.id.ll_third)
     LinearLayout ll_third;
-    @Bind(R.id.ll_phone)
-    LinearLayout ll_phone;
+    @Bind(R.id.ll_third_box)
+    LinearLayout ll_third_box;
     @Bind(R.id.et_phone)
     EditText et_phone;
     @Bind(R.id.et_password)
     EditText et_password;
-
+    private ObjectAnimator animator;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
@@ -192,18 +195,75 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 authorize(sina);
                 break;
             case R.id.tv_phone_number_tologin:
-                ll_phone.setVisibility(View.GONE);
-                ll_third.setVisibility(View.GONE);
-                ll_login.setVisibility(View.VISIBLE);
-                ll_login.setAnimation(Util.fromBottom2Top());
+                int[] location = new int[2];
+                ll_third_box.getLocationOnScreen(location);
+                int y = location[1];
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                lp.topMargin = y;
+                ll_login.setLayoutParams(lp);
+                animator = ObjectAnimator.ofFloat(ll_third_box, "translationY", ll_third_box.getTranslationY(), -y - ll_third.getMeasuredHeight());
+                animator.setDuration(300);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        ll_login.setAlpha(animation.getCurrentPlayTime() / 300);
+                    }
+                });
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        ll_login.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
+                animator.start();
+
                 break;
             case R.id.image_back_tologin:
-                if (ll_third.isShown()){
-                    finish();
+                if (ll_login.isShown()) {
+                    if (animator != null) {
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                ll_login.setAlpha(1 - animation.getCurrentPlayTime() / 300);
+                            }
+                        });
+                        animator.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                ll_login.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                        animator.reverse();
+                    }
                 }else {
-                    ll_login.setVisibility(View.GONE);
-                    ll_third.setVisibility(View.VISIBLE);
-                    ll_phone.setVisibility(View.VISIBLE);
+                    finish();
                 }
                 break;
             case R.id.image_close_tologin:
@@ -261,7 +321,6 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 //除QQ和微信两特例，其他的ID这样取就行了
                 userId = platDB.getUserId();
             }
-//            DataPaser.thirdLoginParser(userId, token, type + "", mHandler);
             doThirdLogin();
         }
     }
@@ -311,10 +370,10 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
                         instance.identify=thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
-//                        MainApplication.getIsLoginInfo().setIs_login("1");
                         if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
                             updateUserIdentity();
-                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+//                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
                         }else {
                             LoginCompleteUtils.goFrom(activity);
                         }

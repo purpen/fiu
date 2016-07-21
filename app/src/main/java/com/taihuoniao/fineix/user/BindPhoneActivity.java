@@ -3,15 +3,12 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -19,9 +16,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.BindPhone;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.SkipBind;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.HttpResponse;
@@ -46,42 +41,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     public BindPhoneActivity() {
         super(R.layout.activity_bind_phone);
     }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DataConstants.PARSER_THIRD_LOGIN_SKIP_PHONE:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof SkipBind) {
-                            SkipBind skipBind = (SkipBind) msg.obj;
-                            if ("true".equals(skipBind.getSuccess())) {
-//                                loginSuccess();
-                            } else {
-                                Toast.makeText(BindPhoneActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                    break;
-                case DataConstants.PARSER_THIRD_LOGIN_BIND_PHONE:
-                    if (msg.obj != null) {
-                        if (msg.obj instanceof BindPhone) {
-                            BindPhone bindPhone = (BindPhone) msg.obj;
-                            if ("true".equals(bindPhone.getSuccess())) {
-//                                loginSuccess();
-                            } else {
-                                Toast.makeText(BindPhoneActivity.this, "绑定失败，请核查手机号和密码是否正确", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                    break;
-                case DataConstants.NETWORK_FAILURE:
-                    Toast.makeText(BindPhoneActivity.this, "登录失败，请检查网络", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,7 +195,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         mDialog.dismiss();
         if (loginInfo.identify.is_scene_subscribe == 0) { //未订阅
             updateUserIdentity();
-            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+//            startActivity(new Intent(activity, OrderInterestQJActivity.class));
+            startActivity(new Intent(activity, CompleteUserInfoActivity.class));
         } else {
             LoginCompleteUtils.goFrom(this);
         }
