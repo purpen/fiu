@@ -711,7 +711,7 @@ public class ClientDiscoverAPI {
     public static void getBanners(String page_name, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("page", String.valueOf(1));
-        params.addBodyParameter("size", String.valueOf(10));
+        params.addBodyParameter("size", String.valueOf(6));
         params.addBodyParameter("name", page_name);
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }

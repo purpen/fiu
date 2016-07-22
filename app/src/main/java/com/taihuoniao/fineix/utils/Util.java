@@ -266,8 +266,9 @@ public class Util {
      */
 	public static String getAppMetaData(String key) {
 		Context context = MainApplication.getContext();
-		String resultData = context.getResources().getString(R.string.default_channel_value);
-		if (TextUtils.isEmpty(key)) return resultData;
+		String defaultValue = context.getResources().getString(R.string.default_channel_value);
+		if (TextUtils.isEmpty(key)) return defaultValue;
+		String resultData = null;
 		try {
 			PackageManager packageManager = context.getPackageManager();
 			if (packageManager != null) {
@@ -282,6 +283,7 @@ public class Util {
 			e.printStackTrace();
 		}
 
+		if (TextUtils.isEmpty(resultData)) return defaultValue;
 		return resultData;
 	}
 }

@@ -44,16 +44,16 @@
 
                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                     android:id="@+id/riv"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="@dimen/dp60"
+                    android:layout_width="@dimen/dp80"
+                    android:layout_height="@dimen/dp80"
                     android:src="@mipmap/default_head"
                     app:riv_border_color="@color/color_eee"
                     app:riv_border_width="@dimen/dp1"
                     app:riv_corner_radius="@dimen/dp100" />
 
                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-                    android:layout_width="@dimen/dp20"
-                    android:layout_height="@dimen/dp20"
+                    android:layout_width="@dimen/dp15"
+                    android:layout_height="@dimen/dp15"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:src="@mipmap/camera"
@@ -106,30 +106,45 @@
                     android:textSize="@dimen/sp12" />
             </com.taihuoniao.fineix.view.SegmentedGroup>
 
-            <EditText
-                android:id="@+id/et_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp40"
+            <LinearLayout
+                android:id="@+id/et_box"
                 android:layout_below="@+id/radioGroup"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/dp40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp25"
                 android:layout_marginRight="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp30"
-                android:background="@drawable/border_radius5"
-                android:gravity="center"
-                android:hint="昵称"
-                android:maxLength="20"
-                android:singleLine="true"
-                android:textColor="@color/color_333"
-                android:textColorHint="@color/color_666"
-                android:textSize="@dimen/sp12" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="@dimen/dp10"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="@dimen/sp12"
+                    android:layout_marginRight="@dimen/dp5" />
+
+                <EditText
+                    android:id="@+id/et_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/border_radius5"
+                    android:gravity="center"
+                    android:hint="昵称"
+                    android:maxLength="20"
+                    android:singleLine="true"
+                    android:textColor="@color/color_333"
+                    android:textColorHint="@color/color_666"
+                    android:textSize="@dimen/sp12" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_sign"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
-                android:layout_below="@+id/et_nickname"
+                android:layout_below="@+id/et_box"
                 android:layout_marginLeft="@dimen/dp40"
                 android:layout_marginRight="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp15"

@@ -141,20 +141,20 @@ public class UserGuideActivity extends BaseActivity {
 
     private void initGuide() {
         String idfa = Util.getAppMetaData(getResources().getString(R.string.channel_name));
-        LogUtil.e(TAG, idfa);
+        LogUtil.e(TAG, "渠道为:" + idfa);
         ClientDiscoverAPI.activeStatus(idfa, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (!response.isSuccess()) {
-                    LogUtil.e(TAG, response.getMessage());
+                    LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                LogUtil.e(TAG, s);
+                LogUtil.e(TAG, "网络异常,请确保网络畅通");
             }
         });
         scrollableView.setVisibility(View.VISIBLE);
