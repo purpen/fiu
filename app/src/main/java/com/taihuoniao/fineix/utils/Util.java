@@ -1,4 +1,5 @@
 package com.taihuoniao.fineix.utils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -8,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -15,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -261,14 +261,27 @@ public class Util {
 	}
 
 	/**
-	 * View的Bottom to top
+	 * @param key
 	 * @return
      */
-	public static TranslateAnimation fromBottom2Top() {
-		TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-				1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-		animation.setDuration(400);
-		return animation;
+	public static String getAppMetaData(String key) {
+		Context context = MainApplication.getContext();
+		String resultData = context.getResources().getString(R.string.default_channel_value);
+		if (TextUtils.isEmpty(key)) return resultData;
+		try {
+			PackageManager packageManager = context.getPackageManager();
+			if (packageManager != null) {
+				ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+				if (applicationInfo != null) {
+					if (applicationInfo.metaData != null) {
+						resultData = applicationInfo.metaData.getString(key);
+					}
+				}
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return resultData;
 	}
 }

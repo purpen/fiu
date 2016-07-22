@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -70,6 +72,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     EditText et_phone;
     @Bind(R.id.et_password)
     EditText et_password;
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
     private ObjectAnimator animator;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
@@ -124,6 +128,12 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         mWeChat.setOnClickListener(this);
         mSinaWeiBo = (TextView) findViewById(R.id.tv_weibo_tologin);
         mSinaWeiBo.setOnClickListener(this);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
 //    @Override

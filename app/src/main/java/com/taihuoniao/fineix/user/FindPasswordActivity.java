@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.EmailUtils;
+import com.taihuoniao.fineix.utils.ToastUtils;
 
 public class FindPasswordActivity extends BaseActivity implements View.OnClickListener {
 
@@ -165,8 +166,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
 
                     }.start();
                 } else {
-                    Toast.makeText(FindPasswordActivity.this, "请输入正确的手机号",
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtils.showInfo("请输入正确的手机号");
                 }
                 break;
 
@@ -184,17 +184,13 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
                             DataPaser.findPasswordParser(mHandler, phone1, newPassword, verifyCode);
 
                         } else {
-                            Toast.makeText(FindPasswordActivity.this,
-                                    "请输入正确的手机号", Toast.LENGTH_SHORT)
-                                    .show();
+                            ToastUtils.showInfo("请输入手机号");
                         }
                     } else {
-                        Toast.makeText(FindPasswordActivity.this, "请输入6-20位密码",
-                                Toast.LENGTH_SHORT).show();
+                        ToastUtils.showInfo("请输入6-20位密码");
                     }
                 } else {
-                    Toast.makeText(FindPasswordActivity.this, "请输入正确的手机号",
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtils.showInfo("请输入正确的手机号");
                 }
                 break;
         }

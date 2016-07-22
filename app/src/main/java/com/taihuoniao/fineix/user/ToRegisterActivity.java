@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -80,6 +82,8 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
     EditText et_code;
     @Bind(R.id.btn_verify)
     Button btn_verify;
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
     private ObjectAnimator animator;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
@@ -132,6 +136,12 @@ public class ToRegisterActivity extends BaseActivity implements View.OnClickList
         readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
         //注册短信内容监听
         this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, readSmsContent);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     @Override
