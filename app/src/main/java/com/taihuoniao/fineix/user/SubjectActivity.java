@@ -157,9 +157,11 @@ public class SubjectActivity extends BaseActivity {
                 break;
             case R.id.ibtn_share: //分享
                 ShareContent content = new ShareContent();
-                content.shareTxt = data.share_desc;
+                content.shareTxt = data.title;
                 content.url = data.content_view_url;
-                content.imageUrl = data.cover_url;
+                content.titleUrl = data.share_view_url;
+                content.site = getResources().getString(R.string.app_name);
+                content.siteUrl = "http://www.taihuoniao.com/";
                 PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
             case R.id.ibtn_comment: //去评论

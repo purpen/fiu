@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/image_close_reg_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp45"
         android:padding="@dimen/dp16"
         android:layout_gravity="right"
         android:src="@mipmap/close"/>
