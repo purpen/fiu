@@ -376,5 +376,4 @@
     <string name="action_updateDataset">Update dataset</string>
 
     <string name="channel_name">UMENG_CHANNEL</string>
-    <string name="default_channel_value">Fiu官网</string>
 </resources>

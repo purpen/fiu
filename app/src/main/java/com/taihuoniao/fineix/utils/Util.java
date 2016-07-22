@@ -266,7 +266,7 @@ public class Util {
      */
 	public static String getAppMetaData(String key) {
 		Context context = MainApplication.getContext();
-		String defaultValue = context.getResources().getString(R.string.default_channel_value);
+		String defaultValue = "10"; //默认官方渠道下载
 		if (TextUtils.isEmpty(key)) return defaultValue;
 		String resultData = null;
 		try {
