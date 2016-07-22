@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,11 +81,13 @@ public abstract class BaseFragment<T> extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override

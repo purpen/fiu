@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.interfaces.DialogControl;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.zxing.CommonToast;
 import com.taihuoniao.fineix.zxing.TDevice;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 
@@ -25,8 +26,8 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity extends ActionBarActivity implements
         DialogControl, View.OnClickListener, BaseViewInterface {
+    protected final String TAG = getClass().getSimpleName();
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
-
     private boolean _isVisible;
     private ProgressDialog _waitDialog;
 
@@ -147,11 +148,15 @@ public abstract class BaseActivity extends ActionBarActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
     }
 
     public void showToast(int msgResid, int icon, int gravity) {

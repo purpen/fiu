@@ -9,6 +9,7 @@ import android.view.Window;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -59,6 +60,19 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         initList();
         requestNet();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     protected void setContenttView(){}
 
     protected void getIntentData() {
@@ -81,5 +95,11 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
 
     protected void refreshUI(List<T> list) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MobclickAgent.onKillProcess(this);
     }
 }

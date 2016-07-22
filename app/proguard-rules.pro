@@ -39,3 +39,15 @@
 -keep class com.taihuoniao.fineix.beans.** { *; }
 
 ##---------------End: proguard configuration for Gson  ----------
+##START友盟
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep public class com.taihuoniao.fineix.R$*{
+public static final int *;
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+##END友盟

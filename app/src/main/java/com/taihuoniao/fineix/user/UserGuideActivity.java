@@ -24,7 +24,6 @@ import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ScrollableView;
 
 import java.util.ArrayList;
@@ -140,9 +139,7 @@ public class UserGuideActivity extends BaseActivity {
     }
 
     private void initGuide() {
-        String idfa = Util.getAppMetaData(getResources().getString(R.string.channel_name));
-        LogUtil.e(TAG, "渠道为:" + idfa);
-        ClientDiscoverAPI.activeStatus(idfa, new RequestCallBack<String>() {
+        ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;

@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -84,6 +85,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
         custom_head.setHeadCenterTxtShow(true, "完善个人资料");
         custom_head.setHeadGoBackShow(false);
         svProgressHUD = new WaittingDialog(this);
+        et_nickname.setText(LoginInfo.getLoginInfo().getNickname());
         rl_box.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

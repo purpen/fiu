@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -54,11 +56,11 @@ public abstract class MyBaseFragment<T> extends Fragment {
     }
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onPageStart(TAG);
     }
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPageEnd(TAG);
     }
     protected abstract void initViews();
     @Override

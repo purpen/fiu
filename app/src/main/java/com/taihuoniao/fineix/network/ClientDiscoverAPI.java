@@ -1390,10 +1390,9 @@ public class ClientDiscoverAPI {
     }
 
     //用户激活状态
-    public static void activeStatus(String idfa, RequestCallBack<String> callBack) {
+    public static void activeStatus(RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("idfa", idfa);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }
