@@ -43,7 +43,6 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -132,7 +131,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
-        Log.e("<<<", "商品id=" + id);
+//        Log.e("<<<", "商品id=" + id);
         if (id == null) {
             ToastUtils.showError("好货不存在");
 //            dialog.showErrorWithStatus("产品不存在");
@@ -359,7 +358,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     @Override
     public void click(int postion) {
         Intent intent = new Intent(GoodsDetailActivity.this, SceneDetailActivity.class);
-        Log.e("<<<场景详情", "id=" + changjingList.get(postion).getSight().get_id() + ",title=" + changjingList.get(postion).getSight().getTitle());
+//        Log.e("<<<场景详情", "id=" + changjingList.get(postion).getSight().get_id() + ",title=" + changjingList.get(postion).getSight().getTitle());
         intent.putExtra("id", changjingList.get(postion).getSight().get_id());
         startActivity(intent);
     }
@@ -370,7 +369,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         ClientDiscoverAPI.getProductList(null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<推荐商品", responseInfo.result);
+//                Log.e("<<<推荐商品", responseInfo.result);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
@@ -387,7 +386,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         recommendList.clear();
                     }
                     recommendList.addAll(netProductBean.getData().getRows());
-                    Log.e("<<<推荐数量", "size=" + recommendList.size());
+//                    Log.e("<<<推荐数量", "size=" + recommendList.size());
                     recommendRecyclerAdapter.notifyDataSetChanged();
                 } else {
                     ToastUtils.showError(netProductBean.getMessage());
@@ -407,8 +406,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         ClientDiscoverAPI.productAndScene(p, size, sight_id, product_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<关联列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<关联列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
                 try {
                     JSONObject jsonObject = new JSONObject(responseInfo.result);
@@ -487,8 +486,8 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品详情", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<商品详情", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 GoodsDetailBean goodsDetailBean = new GoodsDetailBean();
                 try {
                     Gson gson = new Gson();
@@ -560,7 +559,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         ClientDiscoverAPI.favorite(id, "10", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<收藏产品", responseInfo.result);
+//                Log.e("<<<收藏产品", responseInfo.result);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();
@@ -593,7 +592,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         ClientDiscoverAPI.cancelFavorite(id, "10", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<收藏产品", responseInfo.result);
+//                Log.e("<<<收藏产品", responseInfo.result);
                 NetBean netBean = new NetBean();
                 try {
                     Gson gson = new Gson();

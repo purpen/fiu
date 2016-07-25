@@ -115,7 +115,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 dialog.show();
-                Log.e("<<<start>>>", url);
+//                Log.e("<<<start>>>", url);
                 super.onPageStarted(view, url, favicon);
             }
 
@@ -131,7 +131,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 //https://www.amazon.cn/gp/aw/d/B01COLHX6Q?psc=1
                 //http://www.amazon.cn/gp/aw/d/B00WJSQOQU?ref=mh_cnm_waterfall_p11&pf_rd_p=260963472&pf_rd_s=mobile-11&pf_rd_t=36701&pf_rd_i=mobile&pf_rd_m=A1AJ19PSB66TGU&pf_rd_r=0H4WG8E8ST12T6MG49F7
                 //https://www.amazon.cn/b/ref=lp_1791114071_gbsl_ulm_l-1_2192_69a77115?rh=i%3Ababy%2Cn%3A1791114071%2Cn%3A1791114071&ie=UTF8&node=1791114071
-                Log.e("<<<finish>>>", url);
+//                Log.e("<<<finish>>>", url);
                 if (url.startsWith("http://item.m.jd.com/product/")) {
 
                     if (url.contains("id")) {

@@ -13,11 +13,12 @@ public class SceneTitleSetUtils {
 
     /**
      * 用于动态改变场景title的宽和高
-     * @param sceneTitle 设置文字的textview
-     * @param frameLayout 背景framelayout
+     *
+     * @param sceneTitle   设置文字的textview
+     * @param frameLayout  背景framelayout
      * @param maxTitleSize 没用
      * @param minTitleSize 没用
-     * @param b 用于在分享时设置当前图片的宽与屏幕宽的比，设置字体大小
+     * @param b            用于在分享时设置当前图片的宽与屏幕宽的比，设置字体大小
      */
     public static void setTitle(final TextView sceneTitle, FrameLayout frameLayout, int maxTitleSize, int minTitleSize, double b) {
 //        尝试动态改变bimap
@@ -49,14 +50,25 @@ public class SceneTitleSetUtils {
         ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
         int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         sceneTitle.measure(spec, spec);
-        sceneTitle.post(new Runnable() {
-            @Override
-            public void run() {
-                if(sceneTitle.getLineCount()==2){
-
-                }
-            }
-        });
+//        sceneTitle.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (sceneTitle.getLineCount() == 2) {
+//                    Bitmap bitmap = BitmapFactory.decodeResource(sceneTitle.getResources(), R.drawable.scene_title_background).copy(Bitmap.Config.ARGB_8888, true);
+//                    Bitmap bitmap1 = Bitmap.createBitmap(sceneTitle.getMeasuredWidth(), sceneTitle.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+//                    Canvas canvas = new Canvas(bitmap1);
+//                    canvas.drawColor(Color.argb(0, 0, 0, 0));
+//                    canvas.clipRect(0, 0, sceneTitle.getMeasuredWidth(), sceneTitle.getMeasuredHeight() / 2);
+//                    canvas.clipRect(0, 0, sceneTitle.getText().subSequence(13, sceneTitle.getText().length()).length() * sceneTitle.getTextSize(), sceneTitle.getMeasuredHeight(), Region.Op.UNION);
+//                    Paint paint = new Paint();
+//                    canvas.drawBitmap(bitmap, 0, 0, paint);
+//                    canvas.save();
+//                    canvas.restore();
+////                    sceneTitle.setBackground(new BitmapDrawable(bitmap1));
+//                    sceneTitle.setBackgroundDrawable(new BitmapDrawable(bitmap1));
+//                }
+//            }
+//        });
 //        Log.e("<<<测量","measureWidth="+sceneTitle.getMeasuredWidth()+",measureHeight="+sceneTitle.getMeasuredHeight());
         lp.width = sceneTitle.getMeasuredWidth();
         lp.height = sceneTitle.getMeasuredHeight();

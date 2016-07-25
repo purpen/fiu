@@ -194,8 +194,8 @@ public final class CaptureActivity extends BaseActivity implements
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (holder == null) {
-            Log.e(TAG,
-                    "*** WARNING *** surfaceCreated() gave us a null surface!");
+//            Log.e(TAG,
+//                    "*** WARNING *** surfaceCreated() gave us a null surface!");
         }
         if (!isHasSurface) {
             isHasSurface = true;

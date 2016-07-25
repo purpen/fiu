@@ -257,7 +257,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
+//                Log.e("<<<分类列表", responseInfo.result);
 //                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {

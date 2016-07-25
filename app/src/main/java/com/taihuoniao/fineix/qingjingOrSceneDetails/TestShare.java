@@ -562,7 +562,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                             }.getType();
                             sceneDetails = gson.fromJson(responseInfo.result, type);
                         } catch (JsonSyntaxException e) {
-                            Log.e("<<<", "解析异常");
+                            Log.e("<<<场景详情", "解析异常");
                         }
                         dialog.dismiss();
                         SceneDetailsBean netScene = sceneDetails;

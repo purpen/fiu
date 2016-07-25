@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,7 +40,7 @@ public class GoodsDetailRecommendRecyclerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.e("<<<适配器","getCount="+list.size());
+//        Log.e("<<<适配器","getCount="+list.size());
         return list.size();
     }
 

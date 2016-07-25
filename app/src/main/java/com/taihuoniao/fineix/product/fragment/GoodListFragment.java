@@ -81,7 +81,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     protected View initView() {
         categoryBean = (CategoryListBean) getArguments().getSerializable("categoryBean");
         position = getArguments().getInt("position", 0);
-        Log.e("<<<产品分类", position + "");
+//        Log.e("<<<产品分类", position + "");
         if (position >= 0)
             tag_id = categoryBean == null ? "0" : categoryBean.getData().getRows().get(position).getTag_id();
         View view = View.inflate(getActivity(), R.layout.fragment_good_list, null);
@@ -205,7 +205,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
 
 //        progressBar.setVisibility(View.VISIBLE);
         dialog.show();
-        Log.e("<<<", "tag_id = " + tag_id);
+//        Log.e("<<<", "tag_id = " + tag_id);
 //        progressBar.setVisibility(View.VISIBLE);
         if (position == 0) {
             recyclerView.setVisibility(View.GONE);
@@ -281,7 +281,7 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
         goodListAdapter.notifyDataSetChanged();
 //        dialog.show();
 
-        Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
+//        Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
         getProducts(categoryBean.getData().getRows().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null);
     }
 

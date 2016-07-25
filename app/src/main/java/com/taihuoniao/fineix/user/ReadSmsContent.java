@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
 import java.util.regex.Matcher;
@@ -32,7 +31,7 @@ public class ReadSmsContent extends ContentObserver {
     @Override
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
-        Log.e("tag", "onChange");
+//        Log.e("tag", "onChange");
         // 读取收件箱中指定号码的短信
         cursor = mActivity.managedQuery(Uri.parse("content://sms/inbox"), new String[]{"_id", "address", "body", "read"}, null, null, "_id desc");
 
@@ -42,7 +41,7 @@ public class ReadSmsContent extends ContentObserver {
             cursor.moveToNext();
             int smsbodyColumn = cursor.getColumnIndex("body");
             String smsBody = cursor.getString(smsbodyColumn);
-            Log.e("399", "smsBody :" + smsBody);
+//            Log.e("399", "smsBody :" + smsBody);
             String verifyCode = getDynamicPassword(smsBody);
             if (TextUtils.isEmpty(verifyCode)) {
                 return;

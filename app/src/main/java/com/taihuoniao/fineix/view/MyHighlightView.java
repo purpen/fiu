@@ -528,7 +528,7 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         Log.d(LOG_TAG, "computeLayout: " + mDrawRect);
 
         if (mDrawRect != null && mDrawRect.left > 1200) {
-            Log.e(LOG_TAG, "computeLayout: " + mDrawRect);
+//            Log.e(LOG_TAG, "computeLayout: " + mDrawRect);
         }
         mRotateMatrix.reset();
         mRotateMatrix.postTranslate(-mDrawRect.centerX(), -mDrawRect.centerY());

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,7 +40,7 @@ public class VPAdapter extends FragmentStatePagerAdapter {
             }
             fragmentList.addAll(cList);
         }
-        Log.e("<<<", "fragmentList.size=" + fragmentList.size() + ",position=" + position + ",list.size=" + list.size());
+//        Log.e("<<<", "fragmentList.size=" + fragmentList.size() + ",position=" + position + ",list.size=" + list.size());
         ViewPagerFragment viewPagerFragment = ViewPagerFragment.newInstance(list.get(position).get_id());
         fragmentList.set(position, viewPagerFragment);
         return viewPagerFragment;

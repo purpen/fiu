@@ -148,9 +148,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(AddProductActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                     //开始搜索
-                    Log.e("<<", "点击搜索");
+//                    Log.e("<<", "点击搜索");
                     if (TextUtils.isEmpty(editText.getText().toString().trim())) {
-                        Log.e("<<<", "为空");
+//                        Log.e("<<<", "为空");
                         return false;
                     } else {
                         isSearch = true;
@@ -159,7 +159,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         intent.putExtra("q", editText.getText().toString().trim());
                         intent.putExtra("search", isSearch);
                         sendBroadcast(intent);
-                        Log.e("<<<", "发送广播");
+//                        Log.e("<<<", "发送广播");
 //                        DataPaser.search(editText.getText().toString().trim(), searchPage + "", "10", null, handler);
                     }
                 }

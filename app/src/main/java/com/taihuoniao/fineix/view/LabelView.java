@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +129,7 @@ public class LabelView extends LinearLayout {
 //        setImageWidth((int) parentWidth);
         this.parentHeight = overlay.getHeight();
         double bi = (double) overlay.getWidth() / (double) parent.getWidth();
-        Log.e("<<<添加labelview", "bi=" + bi);
+//        Log.e("<<<添加labelview", "bi=" + bi);
         priceRight.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 63));
         priceRight.getLayoutParams().height = (int) (bi * DensityUtils.dp2px(getContext(), 24));
         nameLeft.getLayoutParams().width = (int) (bi * DensityUtils.dp2px(getContext(), 114));
@@ -183,8 +182,8 @@ public class LabelView extends LinearLayout {
         // x=0.3968957871396896,y=0.5748129675810474
         labelParams.setMargins(left + (gpuRelative.getWidth() - mImageView.getWidth()) / 2, top, 0, 0);
 //        if (tagInfo.isLeft()) {
-        Log.e("<<<", "left=" + left + ",top=" + top + ",画布宽=" + mImageView.getWidth()
-                + ",画布高=" + mImageView.getHeight());
+//        Log.e("<<<", "left=" + left + ",top=" + top + ",画布宽=" + mImageView.getWidth()
+//                + ",画布高=" + mImageView.getHeight());
         //0.2641975308641975,0.5
         tagInfo.setX(than(left, mImageView.getWidth()));
         tagInfo.setY(than(top, mImageView.getHeight()));
@@ -192,7 +191,7 @@ public class LabelView extends LinearLayout {
 //            tagInfo.setX(than(left + nameLeft.getWidth() - DensityUtils.dp2px(getContext(), 15) - DensityUtils.dp2px(getContext(), 2), params.width));
 //            tagInfo.setY(than(top + DensityUtils.dp2px(getContext(), 4), params.height));
 //        }
-        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
+//        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
         setLayoutParams(labelParams);
     }
 

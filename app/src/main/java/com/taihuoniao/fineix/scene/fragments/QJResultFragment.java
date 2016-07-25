@@ -108,7 +108,7 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
 
     @Override
     protected void requestNet() {
-        Log.e("<<<qjresult", "q=" + q + ",t=" + t);
+//        Log.e("<<<qjresult", "q=" + q + ",t=" + t);
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }

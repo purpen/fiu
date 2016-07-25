@@ -59,7 +59,6 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -571,8 +570,8 @@ public class ViewPagerFragment extends Fragment implements View.OnClickListener,
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<场景详情", responseInfo.result);
-                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                        Log.e("<<<场景详情", responseInfo.result);
+//                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         SceneDetailsBean sceneDetails = new SceneDetailsBean();
                         try {
                             Gson gson = new Gson();
@@ -873,7 +872,7 @@ public class ViewPagerFragment extends Fragment implements View.OnClickListener,
         ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<通用列表", responseInfo.result);
+//                Log.e("<<<通用列表", responseInfo.result);
                 CommonBean commonBean = new CommonBean();
                 try {
                     Gson gson = new Gson();
@@ -909,7 +908,7 @@ public class ViewPagerFragment extends Fragment implements View.OnClickListener,
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<<评论", responseInfo.result);
+//                Log.e("<<<<评论", responseInfo.result);
                 CommentsBean commentsBean = new CommentsBean();
                 try {
                     Gson gson = new Gson();

@@ -93,7 +93,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         ClientDiscoverAPI.subsCJList(page + "", 8 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<订阅",responseInfo.result);
+//                Log.e("<<<订阅",responseInfo.result);
                 pullToRefreshView.onRefreshComplete();
                 SubsCjListBean subsCjListBean = new SubsCjListBean();
                 try {
@@ -123,7 +123,7 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
             @Override
             public void onFailure(HttpException error, String msg) {
                 pullToRefreshView.onRefreshComplete();
-                Log.e("<<<failure>>>", "请求失败" + error.toString());
+//                Log.e("<<<failure>>>", "请求失败" + error.toString());
             }
         });
     }

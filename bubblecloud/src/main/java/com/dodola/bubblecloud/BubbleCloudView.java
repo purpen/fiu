@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Adapter;
@@ -253,8 +252,8 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
                 }
                 if (mTouchState == TOUCH_STATE_SCROLL) {
                     scrollContainer((int) event.getX(), (int) event.getY());
-                    Log.e("<<<appleWatchView滑动", "scrollX=" + scrollX + ",scrollY" + scrollY + ",scrollMoveX=" + scrollMoveX
-                            + ",scrollMoveY=" + scrollMoveY);
+//                    Log.e("<<<appleWatchView滑动", "scrollX=" + scrollX + ",scrollY" + scrollY + ",scrollMoveX=" + scrollMoveX
+//                            + ",scrollMoveY=" + scrollMoveY);
                 }
                 break;
 
@@ -345,9 +344,9 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
     }
 
     private void clickChildAt(final int x, final int y) {
-        Log.e("<<<bubble点击", "x=" + x + ",y=" + y);
+//        Log.e("<<<bubble点击", "x=" + x + ",y=" + y);
         final int index = getContainingChildIndex(x, y);
-        Log.e("<<<bubble角标", "index=" + index + ",INVALID_INDEX=" + INVALID_INDEX);
+//        Log.e("<<<bubble角标", "index=" + index + ",INVALID_INDEX=" + INVALID_INDEX);
         if (index != INVALID_INDEX) {
             final View itemView = getChildAt(index);
             final long id = mAdapter.getItemId(index);
@@ -444,8 +443,8 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         this.edgeSize = getResources().getDimensionPixelSize(R.dimen.edge_size);
         this.centerW = this.screenW / 2;
         this.centerH = this.screenH / 2;
-        Log.e("<<<bubble控件", "screenW=" + screenW + ",screenH=" + screenH + ",sphereR=" + sphereR + ",hexR=" + hexR + ",itemSize=" + itemSize
-                + ",edgeSize=" + edgeSize);
+//        Log.e("<<<bubble控件", "screenW=" + screenW + ",screenH=" + screenH + ",sphereR=" + sphereR + ",hexR=" + hexR + ",itemSize=" + itemSize
+//                + ",edgeSize=" + edgeSize);
         //是圆与圆之间的距离变大
         iconMapRefresh(sphereR, hexR + 10,
                 0,
@@ -521,7 +520,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
         for (int i = 0; i < hexCubeOrtho.size(); i++) {
             final XY xy = hexCubeOrtho.get(i);
-            xy.x = Math.round(xy.x * 10) / 10;//round四舍五入
+            xy.x = (float) (Math.round(xy.x * 10) / 10*1.1);//round四舍五入
 //            xy.y = (float) (Math.round(xy.y * 10) / 10 * 1.14);
             xy.y = (float) (Math.round(xy.y * 10) / 10);
         }

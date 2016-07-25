@@ -12,9 +12,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -152,6 +152,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewGroup.LayoutParams layoutParams = firstImg.getLayoutParams();
+        layoutParams.width = MainApplication.getContext().getScreenWidth();
+        layoutParams.height = layoutParams.width * 1013 / 750;
+        firstImg.setLayoutParams(layoutParams);
         if (fragments == null) {
             fragments = new ArrayList<>();
         }
@@ -251,7 +255,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
                 if (first) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstImg.setImageResource(R.mipmap.first_in_fiu);
                     firstRelative.setTag(2);
                     firstImg.setVisibility(View.VISIBLE);
@@ -285,7 +289,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
-                Log.e("<<<", "点击切换");
+//                Log.e("<<<", "点击切换");
                 switchFragmentandImg(WellGoodsFragment.class);
                 onWindowFocusChanged(true);
                 break;
@@ -427,7 +431,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstImg.setImageResource(R.mipmap.first_in_index);
                     firstImg.setVisibility(View.VISIBLE);
                     firstRelative.setTag(1);
@@ -456,7 +460,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstImg.setImageResource(R.mipmap.first_in_find);
                     firstRelative.setTag(7);
                     firstImg.setVisibility(View.VISIBLE);
@@ -476,7 +480,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof WellGoodsFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_wellgood);
                     firstImg.setVisibility(View.VISIBLE);
@@ -515,7 +519,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof MineFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.nothing);
+                    firstRelative.setBackgroundResource(R.color.black_first);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_mine);
                     firstImg.setVisibility(View.VISIBLE);
@@ -637,7 +641,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return false;
     }
 
-    private  Boolean isExit = false;
+    private Boolean isExit = false;
 
     private void exitBy2Click() {
         Timer tExit = null;

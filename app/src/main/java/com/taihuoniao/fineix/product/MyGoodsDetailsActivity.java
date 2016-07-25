@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -25,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -225,7 +223,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private void setData() {
         MainApplication.which_activity = DataConstants.MyGoodsDetailsActivity;
         id = getIntent().getStringExtra("id");
-        Log.e("<<<自营商品id", "id=" + id);
+//        Log.e("<<<自营商品id", "id=" + id);
         if (id == null) {
             ToastUtils.showError("暂无此好货");
 //            dialog.showErrorWithStatus("暂无此商品");
@@ -301,7 +299,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         //bottomview下的控件
         webView = new WebView(MyGoodsDetailsActivity.this);
         webView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -838,7 +836,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 goodsDetailsBean = goodsDetails;
                 dialog.dismiss();
                 if (goodsDetailsBean.getImgUrlList() == null) {
-                    Toast.makeText(MyGoodsDetailsActivity.this, "访问的好货不存在", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showError("访问的好货不存在");
+//                    Toast.makeText(MyGoodsDetailsActivity.this, "访问的好货不存在", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }

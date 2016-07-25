@@ -522,6 +522,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     private  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
+
     @Override
     public void onShow() {
 

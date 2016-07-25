@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -935,7 +934,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                         mContainerLayout.removeAllViews();
                     }
                     for (int k = 0; k < mDetailsList.get(i).getProducts().size(); k++) {
-                        mItemView = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.item_order_content, null);
+                        mItemView = View.inflate(OrderDetailsActivity.this,R.layout.item_order_content,null);
+//                        mItemView = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.item_order_content, null);
                         TextView mTitleItem = (TextView) mItemView.findViewById(R.id.tv_title_order_inner);
                         TextView mColorItem = (TextView) mItemView.findViewById(R.id.tv_color_order_inner);
                         TextView mMoneyItem = (TextView) mItemView.findViewById(R.id.tv_money_order_inner);

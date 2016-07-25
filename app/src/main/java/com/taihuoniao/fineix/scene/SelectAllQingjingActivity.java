@@ -249,7 +249,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
                     if (searchItem != null) {
                         Intent intent = new Intent();
-                        Log.e("<<<>>>", searchItem.getTitle());
+//                        Log.e("<<<>>>", searchItem.getTitle());
                         intent.putExtra("searchqj", searchItem);
                         setResult(DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ, intent);
                         finish();
@@ -321,7 +321,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                         pullToRefreshView.lastTotalItem = -1;
                         pullToRefreshView.lastSavedFirstVisibleItem = -1;
                     }
-                    Log.e("<<<情景列表", netQingjingListBean.getData().getRows().toString());
+//                    Log.e("<<<情景列表", netQingjingListBean.getData().getRows().toString());
                     qingjingList.addAll(netQingjingListBean.getData().getRows());
                     allQingjingGridAdapter.notifyDataSetChanged();
                 } else {
@@ -343,7 +343,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
+//                Log.e("<<<分类列表", responseInfo.result);
                 dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {

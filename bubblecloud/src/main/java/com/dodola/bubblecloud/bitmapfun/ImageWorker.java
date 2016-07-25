@@ -393,7 +393,7 @@ public abstract class ImageWorker {
             // Transition drawable with a transparent drawable and the final drawable
             final TransitionDrawable td =
                     new TransitionDrawable(new Drawable[]{
-                            new ColorDrawable(android.R.color.transparent),
+                            new ColorDrawable(imageView.getContext().getResources().getColor(android.R.color.transparent)),
                             drawable
                     });
             // Set background to loading bitmap

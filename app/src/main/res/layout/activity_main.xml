@@ -1,8 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/activity_main_container"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/activity_main_container"
                 tools:context="com.taihuoniao.fineix.main.MainActivity">
 
     <!--<com.taihuoniao.fineix.view.CustomHeadView-->
@@ -26,9 +26,9 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:id="@+id/ll_nav0"
-            style="@style/MainButtonStyle">
+            style="@style/MainButtonStyle"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/activity_main_homepagebtn"
@@ -43,13 +43,13 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/qing"
-                android:textSize="10sp"/>
+                android:textSize="11sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:id="@+id/ll_nav1"
-            style="@style/MainButtonStyle">
+            style="@style/MainButtonStyle"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/activity_main_findbtn"
@@ -64,7 +64,7 @@
                 android:layout_marginTop="7dp"
                 android:gravity="center_horizontal"
                 android:text="@string/jing"
-                android:textSize="10sp"/>
+                android:textSize="11sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -83,7 +83,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
                 android:textColor="#999999"
-                android:textSize="10sp"/>
+                android:textSize="11sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -103,27 +103,30 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/pin"
-                android:textSize="10sp"/>
+                android:textSize="11sp"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_nav4"
             style="@style/MainButtonStyle">
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/activity_main_minebtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/mine_gray"/>
+
                 <TextView
                     android:id="@+id/tv_msg_indicator"
                     android:layout_width="@dimen/dp8"
                     android:layout_height="@dimen/dp8"
+                    android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@drawable/msg_indicator"
-                    android:layout_alignParentRight="true"
                     android:visibility="gone"
                     />
             </RelativeLayout>
@@ -135,7 +138,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/mine"
-                android:textSize="10sp"/>
+                android:textSize="11sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -166,7 +169,7 @@
         <ImageView
             android:id="@+id/activity_main_first_img"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:scaleType="fitXY"
             android:visibility="gone"

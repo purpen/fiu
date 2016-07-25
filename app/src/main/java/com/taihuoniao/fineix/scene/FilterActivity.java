@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -324,7 +323,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
             //传递数据
             Intent intent = new Intent(FilterActivity.this, CreateActivity.class);
             intent.setData(Uri.parse("file://" + fileName));
-            Log.e("<<<filter","uri="+intent.getData().toString());
+//            Log.e("<<<filter","uri="+intent.getData().toString());
             startActivity(intent);
         }
     }

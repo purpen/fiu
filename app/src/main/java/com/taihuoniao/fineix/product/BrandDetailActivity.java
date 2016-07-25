@@ -19,7 +19,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -29,6 +28,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private ProgressBar progressBar;
     private ImageView backgroundImg;
     private TextView zhezhaoTv;
-    private ImageView brandImg;
+    private RoundedImageView brandImg;
     private TextView desTv;
     //加载圆图
     private DisplayImageOptions option, options750_422;
@@ -74,7 +74,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         View header = View.inflate(BrandDetailActivity.this, R.layout.header_brand_detail, null);
         backgroundImg = (ImageView) header.findViewById(R.id.header_brand_detail_backgroundimg);
         zhezhaoTv = (TextView) header.findViewById(R.id.header_brand_detail_zhezhao);
-        brandImg = (ImageView) header.findViewById(R.id.header_brand_detail_titleimg);
+        brandImg = (RoundedImageView) header.findViewById(R.id.header_brand_detail_titleimg);
         desTv = (TextView) header.findViewById(R.id.header_brand_detail_des);
         listView.addHeaderView(header);
         dialog = new WaittingDialog(BrandDetailActivity.this);
@@ -86,7 +86,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)
-                .displayer(new RoundedBitmapDisplayer(360))
                 .build();
         options750_422 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
@@ -301,7 +300,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
      * 柔化效果(高斯模糊)
      */
     private Bitmap blurImageAmeliorate(Bitmap bmp) {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         // 高斯矩阵
         int[] gauss = new int[]{1, 2, 1, 2, 4, 2, 1, 2, 1};
 
@@ -358,8 +357,8 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         }
 
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        long end = System.currentTimeMillis();
-        Log.e("<<<mohu", "used time=" + (end - start));
+//        long end = System.currentTimeMillis();
+//        Log.e("<<<mohu", "used time=" + (end - start));
         return bitmap;
     }
 }

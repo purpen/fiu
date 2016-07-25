@@ -28,7 +28,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -95,8 +94,8 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
         ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<品牌列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<品牌列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 BrandListBean brandListBean = new BrandListBean();
                 try {
                     Gson gson = new Gson();

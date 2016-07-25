@@ -167,10 +167,12 @@
             android:layout_marginTop="7dp"
             android:layout_toLeftOf="@id/erweima"
             android:layout_toRightOf="@id/logo_white"
+            android:layout_toEndOf="@id/logo_white"
+            android:layout_marginStart="4dp"
             android:layout_toStartOf="@id/erweima"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="4dp"
             android:text="@string/fiu_descrip"
             android:textColor="@color/white"
             android:textSize="7sp"/>

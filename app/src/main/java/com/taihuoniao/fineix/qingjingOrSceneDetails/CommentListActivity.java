@@ -101,7 +101,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");
         if (target_id == null || type == null || target_user_id == null) {
-            Log.e("<<<评论界面", "target_id=" + target_id + ",type=" + type + ",user_id=" + target_user_id);
+//            Log.e("<<<评论界面", "target_id=" + target_id + ",type=" + type + ",user_id=" + target_user_id);
             ToastUtils.showError("数据错误");
 //            dialog.showErrorWithStatus("数据错误");
             if (dialog != null) {
@@ -152,7 +152,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         isOpen = false;
                     }
                 }
-                Log.e("<<<布局", isOpen + "");
+//                Log.e("<<<布局", isOpen + "");
             }
         });
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -428,13 +428,13 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             requestNet();
             return;
         }
-        Log.e("<<<", "currentUserId=" + currentUserId + ",user_id=" + commentList.get(position).getUser().get_id());
+//        Log.e("<<<", "currentUserId=" + currentUserId + ",user_id=" + commentList.get(position).getUser().get_id());
         if (currentUserId.equals(commentList.get(position).getUser().get_id())) {
             return;
         }
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //获取状态信息
-        Log.e("<<<点击", isOpen + "");
+//        Log.e("<<<点击", isOpen + "");
         if (!isOpen) {
             String name = commentList.get(position).getUser().getNickname();
             editText.setHint("回复  " + name + ":");

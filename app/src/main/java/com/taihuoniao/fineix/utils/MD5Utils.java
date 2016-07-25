@@ -84,7 +84,7 @@ public class MD5Utils {
         sign1 = getMD5(getMD5(sign.toString() + "545d9f8aac6b7a4d04abffe51415289600"));
 
         params.addQueryStringParameter("sign", sign1);
-        Log.e("<<<", params.getQueryStringParams().toString());
+//        Log.e("<<<", params.getQueryStringParams().toString());
         params.addBodyParameter(list);
         params.getQueryStringParams().clear();
         HttpUtils httpUtils = new HttpUtils(NetworkConstance.CONN_TIMEOUT);

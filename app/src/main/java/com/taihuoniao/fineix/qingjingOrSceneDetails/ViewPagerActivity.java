@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -58,10 +57,10 @@ public class ViewPagerActivity extends BaseActivity implements ViewPager.OnPageC
         serSceneListBean = (SerSceneListBean) getIntent().getSerializableExtra("list");
         if (serSceneListBean == null) {
             list = new ArrayList<>();
-            Log.e("<<<", "场景列表为空");
+//            Log.e("<<<", "场景列表为空");
         } else {
             list = serSceneListBean.getSceneList();
-            Log.e("<<<", "场景列表不为空");
+//            Log.e("<<<", "场景列表不为空");
         }
         vpAdapter = new VPAdapter(getSupportFragmentManager(), this, list);
         viewpager.setAdapter(vpAdapter);

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -326,7 +325,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 
             case MotionEvent.ACTION_MOVE: {
                 if (isBeingDragged) {
-                    Log.e("<<<下拉", "内部" + getPaddingTop() + "," + getScrollY());
+//                    Log.e("<<<下拉", "内部" + getPaddingTop() + "," + getScrollY());
                     double bi = (double) (-getScrollY()) / (MainApplication.getContext().getScreenHeight() / 2);
                     int pngId = (int) (bi * 47);
                     int resID = getResources().getIdentifier("refresh_0" + pngId, "mipmap", "com.taihuoniao.fineix");

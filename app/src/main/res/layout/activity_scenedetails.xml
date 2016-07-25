@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
 
@@ -72,10 +72,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
+                            android:maxEms="11"
                             android:maxLines="2"
-                            android:maxWidth="300dp"
                             android:textColor="@color/white"
-                            android:textSize="40sp"/>
+                            android:textSize="20sp"/>
                     </FrameLayout>
 
                     <LinearLayout
@@ -173,7 +173,7 @@
                                     android:layout_height="32dp"
                                     app:riv_border_color="#eeeeee"
                                     app:riv_border_width="1dp"
-                                    app:riv_corner_radius="@dimen/dp100" />
+                                    app:riv_corner_radius="@dimen/dp100"/>
 
                                 <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                                     android:id="@+id/riv_auth"
@@ -184,7 +184,7 @@
                                     android:scaleType="fitXY"
                                     android:src="@mipmap/v"
                                     android:visibility="gone"
-                                    app:riv_corner_radius="@dimen/dp100" />
+                                    app:riv_corner_radius="@dimen/dp100"/>
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -257,7 +257,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="8dp"
-                         android:textColor="#212121"
+                        android:textColor="#212121"
                         android:textSize="11sp"/>
 
                     <HorizontalScrollView
@@ -329,8 +329,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="6dp"
-                            android:textColor="#999999"
                             android:layout_marginTop="2dp"
+                            android:textColor="#999999"
                             android:textSize="12sp"/>
 
                         <ImageView
@@ -345,8 +345,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="6dp"
-                            android:textColor="#999999"
                             android:layout_marginTop="2dp"
+                            android:textColor="#999999"
                             android:textSize="12sp"/>
 
                     </LinearLayout>
@@ -397,8 +397,8 @@
                         android:id="@+id/activity_scenedetails_commentlistview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:listSelector="@color/nothing"
                         android:layout_marginTop="18dp"
+                        android:listSelector="@color/nothing"
                         android:paddingLeft="18dp"
                         />
 
@@ -495,7 +495,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/logo_no_word" />
+            android:src="@mipmap/logo_no_word"/>
 
         <ImageView
             android:id="@+id/activity_scenedetails_back"

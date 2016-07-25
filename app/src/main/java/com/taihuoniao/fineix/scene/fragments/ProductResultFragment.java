@@ -101,7 +101,7 @@ public class ProductResultFragment extends BaseFragment {
 
     @Override
     protected void requestNet() {
-        Log.e("<<<productresult", "q=" + q + ",t=" + t);
+//        Log.e("<<<productresult", "q=" + q + ",t=" + t);
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }

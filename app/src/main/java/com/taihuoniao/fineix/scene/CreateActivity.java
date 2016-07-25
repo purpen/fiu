@@ -1,8 +1,10 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -46,10 +48,12 @@ import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SearchLabelBean;
 import com.taihuoniao.fineix.beans.TagItem;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareSearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -136,6 +140,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     protected void initView() {
         titleLayout.setBackgroundResource(R.drawable.jianbian_head);
         titleLayout.setTitle(R.string.create_scene);
+        titleLayout.setBackListener(this);
         titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.yellow_bd8913), this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -260,7 +265,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
             });
         }
 //        ImageLoader.getInstance().clearMemoryCache();
-        Log.e("<<<", "create>>>url=" + imgUrl + ",Uri=" + getIntent().getData());
+//        Log.e("<<<", "create>>>url=" + imgUrl + ",Uri=" + getIntent().getData());
 
 
         location = ImageUtils.location;
@@ -371,6 +376,9 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.title_back:
+                onBackPressed();
+                break;
             case R.id.edit_text:
                 editText.setCursorVisible(true);
 
@@ -552,6 +560,32 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getIntent().hasExtra(SceneDetailActivity.class.getSimpleName()) || getIntent().hasExtra(QingjingDetailActivity.class.getSimpleName())) {
+            finish();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateActivity.this);
+            builder.setMessage("返回上一步？");
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    CreateActivity.this.finish();
+                }
+            });
+            builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startActivity(new Intent(CreateActivity.this, MainActivity.class));
+                }
+            });
+            builder.create().show();
+        }
+
     }
 
     @Override

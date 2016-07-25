@@ -61,7 +61,6 @@ import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -502,7 +501,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id);
                     return;
                 }
-                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id()+"")) {
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id() + "")) {
                     popupWindow.dismiss();
                     dialog.show();
                     deleteScene(id);
@@ -631,9 +630,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id + "");
                     return;
                 }
-                Log.e("<<<","当前id="+netScene.getCurrent_user_id()+","+netScene.getData().getUser_info().getUser_id()+","+netScene.getData().getUser_id());
+//                Log.e("<<<", "当前id=" + netScene.getCurrent_user_id() + "," + netScene.getData().getUser_info().getUser_id() + "," + netScene.getData().getUser_id());
 //                if(netScene.getUser_info().getUser_id().equals(netScene.getCurrent_user_id()))
-                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id()+"")) {
+                if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id() + "")) {
                     bianjiLinear.setVisibility(View.VISIBLE);
                     jubaoTv.setText("删除");
                 }
@@ -673,7 +672,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 Intent intent2 = new Intent(SceneDetailActivity.this, CommentListActivity.class);
                 intent2.putExtra("target_id", this.id);
                 intent2.putExtra("type", 12 + "");
-                intent2.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id()+"");
+                intent2.putExtra("target_user_id", netScene.getData().getUser_info().getUser_id() + "");
                 startActivity(intent2);
                 break;
         }
@@ -835,8 +834,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<场景详情", responseInfo.result);
-                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                        Log.e("<<<场景详情", responseInfo.result);
+//                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         SceneDetailsBean sceneDetails = new SceneDetailsBean();
                         try {
                             Gson gson = new Gson();
@@ -892,7 +891,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                             loveCount.setText(String.format("%d人赞过", netSceneDetails.getData().getLove_count()));
                             moreUser.setText(String.format("%d+", netSceneDetails.getData().getLove_count()));
                             String des = netSceneDetails.getData().getDes().replace("\n", "\n\t");
-                            desTv.setText(des);
+                            desTv.setText("\t" + des);
                             //添加标签
                             addLabelToLinear(netSceneDetails.getData().getTags());
 
@@ -1064,7 +1063,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commonList(page, size, id, user_id, type, event, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<通用列表", responseInfo.result);
+//                Log.e("<<<通用列表", responseInfo.result);
                 CommonBean commonBean = new CommonBean();
                 try {
                     Gson gson = new Gson();
@@ -1100,7 +1099,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<<评论", responseInfo.result);
+//                Log.e("<<<<评论", responseInfo.result);
                 CommentsBean commentsBean = new CommentsBean();
                 try {
                     Gson gson = new Gson();

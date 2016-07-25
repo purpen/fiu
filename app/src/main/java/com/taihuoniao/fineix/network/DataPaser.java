@@ -70,7 +70,6 @@ import com.taihuoniao.fineix.beans.UsedLabel;
 import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.beans.UserListBean;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +106,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -142,7 +141,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -155,8 +154,8 @@ public class DataPaser {
         ClientDiscoverAPI.addProduct(attrbute, oid, sku_id, title, market_price, sale_price, link, cover_url, banners_url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<addproduct", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<addproduct", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.ADD_PRODUCT;
                 msg.obj = new AddProductBean();
@@ -173,7 +172,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -204,7 +203,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -218,8 +217,8 @@ public class DataPaser {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();
-                Log.e("<<<chanpin", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<chanpin", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 msg.what = DataConstants.GOODS_DETAILS;
                 try {
                     JSONObject obj = new JSONObject(responseInfo.result);
@@ -312,7 +311,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -342,7 +341,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -376,7 +375,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -388,7 +387,7 @@ public class DataPaser {
         ClientDiscoverAPI.subsQingjing(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+//                Log.e("<<<", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SUBS_QINGJING;
                 msg.obj = new QingjingSubsBean();
@@ -405,7 +404,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -417,7 +416,7 @@ public class DataPaser {
         ClientDiscoverAPI.cancelSubsQingjing(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+//                Log.e("<<<", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.CANCEL_SUBS_QINGJING;
                 msg.obj = new QingjingSubsBean();
@@ -434,7 +433,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -463,7 +462,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -491,7 +490,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -503,8 +502,8 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<>>>", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<>>>", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_DETAILS;
                 msg.obj = new QingjingDetailBean();
@@ -521,7 +520,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -533,7 +532,7 @@ public class DataPaser {
         ClientDiscoverAPI.qingjingList(page, null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<情景列表", responseInfo.result);
+//                Log.e("<<<情景列表", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.QINGJING_LIST;
                 msg.obj = new QingJingListBean();
@@ -550,7 +549,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -564,7 +563,7 @@ public class DataPaser {
                 lat, lng, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<创建场景", responseInfo.result);
+//                        Log.e("<<<创建场景", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.CREATE_SCENE;
                         msg.obj = new AddProductBean();
@@ -581,7 +580,7 @@ public class DataPaser {
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                         handler.sendEmptyMessage(DataConstants.NET_FAIL);
                     }
                 });
@@ -593,8 +592,8 @@ public class DataPaser {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        Log.e("<<<场景详情", responseInfo.result);
-                        WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                        Log.e("<<<场景详情", responseInfo.result);
+//                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         Message msg = handler.obtainMessage();
                         msg.what = DataConstants.SCENE_DETAILS;
                         SceneDetailsBean sceneDetails = new SceneDetailsBean();
@@ -613,7 +612,7 @@ public class DataPaser {
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                         handler.sendEmptyMessage(DataConstants.NET_FAIL);
                     }
                 }
@@ -654,7 +653,7 @@ public class DataPaser {
         ClientDiscoverAPI.loveScene(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+//                Log.e("<<<", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.LOVE_SCENE;
                 msg.obj = new SceneLoveBean();
@@ -671,7 +670,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -683,7 +682,7 @@ public class DataPaser {
         ClientDiscoverAPI.cancelLoveScene(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", responseInfo.result);
+//                Log.e("<<<", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.CANCEL_LOVE_SCENE;
                 msg.obj = new SceneLoveBean();
@@ -700,7 +699,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -713,8 +712,8 @@ public class DataPaser {
         ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<场景列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<场景列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SCENE_LIST;
                 SceneList sceneList = new SceneList();
@@ -781,7 +780,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -808,7 +807,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -821,8 +820,8 @@ public class DataPaser {
         ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<用过的标签", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<用过的标签", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.USED_LABEL_LIST;
                 UsedLabel usedLabel = new UsedLabel();
@@ -864,7 +863,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -876,8 +875,8 @@ public class DataPaser {
         ClientDiscoverAPI.labelList(parent_id, page, size, sort, is_hot, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<全部标签", responseInfo.result);
-                WriteJsonToSD.writeToSD("quanbubiaoqian", responseInfo.result);
+//                Log.e("<<<全部标签", responseInfo.result);
+//                WriteJsonToSD.writeToSD("quanbubiaoqian", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.LABEL_LIST;
                 AllLabel allLabel = new AllLabel();
@@ -938,7 +937,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1064,8 +1063,8 @@ public class DataPaser {
         ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<收货地址列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<收货地址列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.GET_ADDRESS_LIST;
                 AddressListBean addressListBean = new AddressListBean();
@@ -1169,7 +1168,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1181,8 +1180,8 @@ public class DataPaser {
         ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<品牌列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<品牌列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.BRAND_LIST;
                 msg.obj = new BrandListBean();
@@ -1199,7 +1198,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1211,8 +1210,8 @@ public class DataPaser {
         ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<品牌详情", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<品牌详情", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.BRAND_DETAIL;
                 msg.obj = new BrandDetailBean();
@@ -1229,7 +1228,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1267,8 +1266,8 @@ public class DataPaser {
         ClientDiscoverAPI.search(q, t, null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<搜索", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<搜索", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.SEARCH_LIST;
                 msg.obj = new SearchBean();
@@ -1285,7 +1284,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1297,8 +1296,8 @@ public class DataPaser {
         ClientDiscoverAPI.productAndScene(page, size, sight_id, product_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<关联列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<关联列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.PRODUCT_AND_SCENE;
                 ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
@@ -1359,7 +1358,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1387,7 +1386,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1416,7 +1415,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                Log.e("<<<failure>>>", "error = " + e.toString() + ",msg = " + s);
+//                Log.e("<<<failure>>>", "error = " + e.toString() + ",msg = " + s);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1428,8 +1427,8 @@ public class DataPaser {
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<评论", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<评论", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 Message msg = handler.obtainMessage();
                 msg.what = DataConstants.COMMENTS_LIST;
                 msg.obj = new CommentsBean();
@@ -1447,7 +1446,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1475,7 +1474,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -1585,7 +1584,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -2258,7 +2257,7 @@ public class DataPaser {
         ClientDiscoverAPI.applyForRefundNet(rid, option, content, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<申请退款", responseInfo.result);
+//                Log.e("<<<申请退款", responseInfo.result);
                 ApplyForRefund refund = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_APPLY_REFUND;
@@ -2344,7 +2343,7 @@ public class DataPaser {
         ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<个人信息", responseInfo.result);
+//                Log.e("<<<个人信息", responseInfo.result);
                 UserInfo userInfo = null;
                 Message msg = new Message();
                 msg.what = DataConstants.PARSER_USER_INFO;
@@ -2452,7 +2451,7 @@ public class DataPaser {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
+//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
                 handler.sendEmptyMessage(DataConstants.NET_FAIL);
             }
         });
@@ -2489,7 +2488,7 @@ public class DataPaser {
         ClientDiscoverAPI.getBonus(type, evt, target_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<送积分", responseInfo.result);
+//                Log.e("<<<送积分", responseInfo.result);
             }
 
             @Override

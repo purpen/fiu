@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -55,7 +54,7 @@ public class ShareCJUtils {
                 .cacheOnDisk(true).considerExifParams(true)
                 .build();
         context = container.getContext();
-        Log.e("<<<选择样式", "bi=" + bi);
+//        Log.e("<<<选择样式", "bi=" + bi);
         bi = b;
         selectStyle(position);
         View view = View.inflate(context, layout, null);
