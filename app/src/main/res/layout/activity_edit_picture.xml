@@ -51,6 +51,15 @@
                 android:text="@string/mark_product"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
+            <ImageView
+                android:layout_width="13dp"
+                android:src="@mipmap/touch"
+                android:visibility="gone"
+                android:id="@+id/touch"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="6dp"
+                android:layout_toLeftOf="@+id/activity_edit_products_tv"
+                android:layout_height="match_parent"/>
         </RelativeLayout>
 
         <RelativeLayout

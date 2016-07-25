@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -146,29 +147,6 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
 //                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
-//        ImageUtils.asyncLoadImage(FilterActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
-//            @Override
-//            public void callback(Bitmap result) {
-//                currentBitmap = result;
-//                gpuImageView.setImage(result);
-//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-//                if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
-//                    int containerHeight = gpuRelative.getHeight();
-//                    int systemHeight = MainApplication.getContext().getScreenHeight() - getNavigationBarHeight();
-//                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
-//                    lp.width = lp.height * 9 / 16;
-//                } else {
-//                    int containerWidth = gpuRelative.getWidth();
-//                    int systemWidth = MainApplication.getContext().getScreenWidth();
-//                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
-//                    lp.height = lp.width * 16 / 9;
-//                }
-////                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//                picWidth = lp.width;
-//                picHeight = lp.height;
-//                gpuImageView.setLayoutParams(lp);
-//            }
-//        });
         //设置布局大小一样
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -215,9 +193,9 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         }, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
-                recyclerView.setVisibility(View.GONE);
-                seekBar.setVisibility(View.VISIBLE);
-                backBtn.setVisibility(View.VISIBLE);
+//                recyclerView.setVisibility(View.GONE);
+//                seekBar.setVisibility(View.VISIBLE);
+//                backBtn.setVisibility(View.VISIBLE);
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -260,14 +238,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
-        TextView productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
-        TextView chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
-        TextView filterTv = (TextView) findViewById(R.id.activity_edit_filter_tv);
-        TextView productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
-        TextView chainingRedline = (TextView) findViewById(R.id.activity_edit_chaining_redline);
-        TextView filterRedline = (TextView) findViewById(R.id.activity_edit_filter_redline);
         dialog = new WaittingDialog(FilterActivity.this);
-        ImageLoader imageLoader = ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -310,8 +281,6 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
         } catch (InterruptedException e) {
             e.printStackTrace();
             ToastUtils.showError("图片处理异常，请重试");
-//            dialog.showErrorWithStatus("图片处理异常，请重试");
-//            Toast.makeText(FilterActivity.this, "图片处理异常，请重试", Toast.LENGTH_SHORT).show();
             return;
         }
         //加商品
@@ -337,7 +306,7 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
                 fileName = ImageUtils.saveToFile(MainApplication.filterPicPath, false, bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
-//                Toast.makeText(EditPictureActivity.this, "图片存储错误，请重试", Toast.LENGTH_SHORT).show();
+                ToastUtils.showError("图片存储失败,请重试");
             }
             return fileName;
         }
@@ -353,8 +322,9 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
                 return;
             }
             //传递数据
-            Intent intent = new Intent(FilterActivity.this, CreateSceneActivity.class);
+            Intent intent = new Intent(FilterActivity.this, CreateActivity.class);
             intent.setData(Uri.parse("file://" + fileName));
+            Log.e("<<<filter","uri="+intent.getData().toString());
             startActivity(intent);
         }
     }

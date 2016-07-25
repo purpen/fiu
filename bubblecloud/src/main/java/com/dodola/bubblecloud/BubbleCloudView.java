@@ -66,27 +66,27 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         mTouchState = TOUCH_STATE_CLICK;
     }
 
-    private void endTouch() {
-        int veloX = deltaX;
-        int veloY = deltaY;
-        final int distanceX = veloX * 10;
-        final int distanceY = veloY * 10;
-
-        ValueAnimator endAnim = ValueAnimator.ofFloat(0, 1);
-        endAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                scrollMoveX = scrollX;
-                scrollMoveY = scrollY;
-                int steps = 16;
-                int step = (int) (steps * animation.getAnimatedFraction());
-                int inertiaX = (int) (easeOutCubic
-                        (step, 0, distanceX, steps) - easeOutCubic((step - 1), 0, distanceX, steps));
-                int inertiaY = (int) (easeOutCubic
-                        (step, 0, distanceY, steps) - easeOutCubic((step - 1), 0, distanceY, steps));
-
-                scrollX += inertiaX;
-                scrollY += inertiaY;
+//    private void endTouch() {
+//        int veloX = deltaX;
+//        int veloY = deltaY;
+//        final int distanceX = veloX * 10;
+//        final int distanceY = veloY * 10;
+//
+//        ValueAnimator endAnim = ValueAnimator.ofFloat(0, 1);
+//        endAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                scrollMoveX = scrollX;
+//                scrollMoveY = scrollY;
+//                int steps = 16;
+//                int step = (int) (steps * animation.getAnimatedFraction());
+//                int inertiaX = (int) (easeOutCubic
+//                        (step, 0, distanceX, steps) - easeOutCubic((step - 1), 0, distanceX, steps));
+//                int inertiaY = (int) (easeOutCubic
+//                        (step, 0, distanceY, steps) - easeOutCubic((step - 1), 0, distanceY, steps));
+//
+//                scrollX += inertiaX;
+//                scrollY += inertiaY;
 //                if (scrollX > scrollRangeX) {
 //                    scrollX -= (scrollX - scrollRangeX) / 4;
 //                } else if (scrollX < -scrollRangeX) {
@@ -98,16 +98,91 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 //                } else if (scrollY < -scrollRangeY) {
 //                    scrollY -= (scrollY + scrollRangeY) / 4;
 //                }
-//                Log.e("<<<动画", "scrollX=" + scrollX + ",scrollY=" + scrollY);
-                iconMapRefresh(sphereR, hexR, scrollX, scrollY);
-                requestLayout();
+////                Log.e("<<<动画", "scrollX=" + scrollX + ",scrollY=" + scrollY);
+//                iconMapRefresh(sphereR, hexR, scrollX, scrollY);
+//                requestLayout();
+//
+//            }
+//        });
+//        endAnim.setDuration(300);
+//        endAnim.start();
+//
+//        mTouchState = TOUCH_STATE_RESTING;
+//    }
 
+    private void endTouch() {
+        int top = Integer.MAX_VALUE, left = Integer.MAX_VALUE, right = -Integer.MAX_VALUE, bottom = -Integer.MAX_VALUE;
+        for (int i = 0; i < getChildCount(); i++) {
+            if (getChildAt(i).getTop() < top) {
+                top = getChildAt(i).getTop();
             }
-        });
-        endAnim.setDuration(300);
-        endAnim.start();
+            if (getChildAt(i).getLeft() < left) {
+                left = getChildAt(i).getLeft();
+            }
+            if (getChildAt(i).getRight() > right) {
+                right = getChildAt(i).getRight();
+            }
+            if (getChildAt(i).getBottom() > bottom) {
+                bottom = getChildAt(i).getBottom();
+            }
+        }
+        final int t = top, l = left, r = right, b = bottom;
+        if (t > 0 || l > 0 || r < getWidth() || b < getHeight()) {
+            ValueAnimator endAnim = ValueAnimator.ofFloat(0, 1);
+            final int currentScrollX = scrollX;
+            final int currentScrollY = scrollY;
+            endAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int xx = 0;
+                    int yy = 0;
+                    if (t > 0) {
+                        yy = (int) (-t * animation.getAnimatedFraction() + currentScrollY);
+                        scrollY = yy;
+                    }
+                    if (l > 0) {
+                        xx = (int) (-l * animation.getAnimatedFraction() + currentScrollX);
+                        scrollX = xx;
+                    }
+                    if (r < getWidth()) {
+                        xx = (int) ((getWidth() - r) * animation.getAnimatedFraction() + currentScrollX);
+                        scrollX = xx;
+                    }
+                    if (b < getHeight()) {
+                        yy = (int) ((getHeight() - b) * animation.getAnimatedFraction() + currentScrollY);
+                        scrollY = yy;
+                    }
+                    if (scrollX > 0) {
+                        scrollMoveX = scrollX * 2 - scrollRangeX;
+                        if (scrollMoveX <= 0) {
+                            scrollMoveX = scrollX;
+                        }
+                    } else {
+                        scrollMoveX = scrollX * 2 + scrollRangeX;
+                        if (scrollMoveX >= 0) {
+                            scrollMoveX = scrollX;
+                        }
+                    }
+                    if (scrollY > 0) {
+                        scrollMoveY = scrollY * 2 - scrollRangeY;
+                        if (scrollMoveY <= 0) {
+                            scrollMoveY = scrollY;
+                        }
+                    } else {
+                        scrollMoveY = scrollY * 2 + scrollRangeY;
+                        if (scrollMoveY >= 0) {
+                            scrollMoveY = scrollY;
+                        }
+                    }
+                    iconMapRefresh(sphereR, hexR, scrollX, scrollY);
+                    requestLayout();
+                }
+            });
+            endAnim.setDuration(300);
+            endAnim.start();
 
-        mTouchState = TOUCH_STATE_RESTING;
+            mTouchState = TOUCH_STATE_RESTING;
+        }
     }
 
 
@@ -160,75 +235,27 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
                 return startScrollIfNeeded(event);
 
             default:
-//                回弹效果，待调整
-//                double r = Math.sqrt(((double) getChildCount() - 1) / 3 + 0.25) + 0.5;
-//                int intR = 0;
-//                if (r * 10 % 10 != 0) {
-//                    intR = 1 + (int) r;
-//                } else {
-//                    intR = (int) r;
-//                }
-//                if (scrollX > (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollX < (1 - intR) * itemSize) {
-//                    endTouch();
-//                }
-//                if (scrollY > Math.sqrt(3) / 2 * (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollY < Math.sqrt(3) / 2 * (1 - intR) * itemSize) {
-//                    endTouch();
-//                }
-//                endTouch();
+                endTouch();
                 return false;
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//        double r = Math.sqrt(((double) getChildCount() - 1) / 3 + 0.25) + 0.5;
-//        int intR = 0;
-//        if (r * 10 % 10 != 0) {
-//            intR = 1 + (int) r;
-//        } else {
-//            intR = (int) r;
-//        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startTouch(event);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-//                Log.d("BubbleCloudView", "===ActionMove===");
-
                 if (mTouchState == TOUCH_STATE_CLICK) {
                     startScrollIfNeeded(event);
                 }
                 if (mTouchState == TOUCH_STATE_SCROLL) {
                     scrollContainer((int) event.getX(), (int) event.getY());
-//                    Log.d("BubbleCloudView", "===mTouchScroll===");
-                    Log.e("<<<appleWatchView滑动", "scrollX=" + scrollX + ",scrollY" + scrollY + ",scrollMoveX=" + scrollMoveX + ",scrollMoveY=" + scrollMoveY +
-                            ",scrollRangeX=" + scrollRangeX + ",scrollRangeY=" + scrollRangeY);
+                    Log.e("<<<appleWatchView滑动", "scrollX=" + scrollX + ",scrollY" + scrollY + ",scrollMoveX=" + scrollMoveX
+                            + ",scrollMoveY=" + scrollMoveY);
                 }
-//                for (int i = 0; i < getChildCount(); i++) {
-//                    if (getChildAt(i).getTop() < mTop) {
-//                        mTop = getChildAt(i).getTop();
-//                        topIndex = i;
-//                    }
-//                    if (getChildAt(i).getRight() > mRight) {
-//                        mRight = getChildAt(i).getRight();
-//                        rightIndex = i;
-//                    }
-//                    if (getChildAt(i).getBottom() > mBottom) {
-//                        mBottom = getChildAt(i).getBottom();
-//                        bottomIndex = i;
-//                    }
-//                    if (getChildAt(i).getLeft() < mLeft) {
-//                        mLeft = getChildAt(i).getLeft();
-//                        leftIndex = i;
-//                    }
-//                }
-//                Log.e("<<<边界", "top=" + mTop + ",right=" + mRight + ",bottom=" + mBottom + ",left=" + mLeft+",scrollY="+getScrollY()+",scrollX="+getScrollX());
-
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -236,38 +263,33 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
                 if (mTouchState == TOUCH_STATE_CLICK) {
                     clickChildAt((int) event.getX(), (int) event.getY());
                 }
-                //                Log.e("<<<appleWatchView抬起", "scrollX=" + scrollX + ",scrollY" + scrollY + ",scrollMoveX=" + scrollMoveX + ",scrollMoveY=" + scrollMoveY +
-//                        ",scrollRangeX=" + scrollRangeX + ",scrollRangeY=" + scrollRangeY);
-//                endTouch();
-
-//                if (scrollX > (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollX < (1 - intR) * itemSize) {
-//                    endTouch();
-//                }
-//                if (scrollY > Math.sqrt(3) / 2 * (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollY < Math.sqrt(3) / 2 * (1 - intR) * itemSize) {
-                    endTouch();
-//                }
+                endTouch();
                 break;
 
             default:
-//                endTouch();
-//                if (scrollX > (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollX < (1 - intR) * itemSize) {
-//                    endTouch();
-//                }
-//                if (scrollY > Math.sqrt(3) / 2 * (intR - 1) * itemSize) {
-//                    endTouch();
-//                } else if (scrollY < Math.sqrt(3) / 2 * (1 - intR) * itemSize) {
-//                    endTouch();
-//                }
+                endTouch();
                 break;
         }
         return true;
 
+    }
+
+    //根据总数获得半径
+    private int getR() {
+        int num = getChildCount();
+        if (num == 1) {
+            return 1;
+        }
+        for (int r = 1; ; r++) {
+            if (num > getNum(r) && num <= getNum(r + 1)) {
+                return r + 1;
+            }
+        }
+    }
+
+    //根据半径获得总数
+    private int getNum(int r) {
+        return 3 * r * r - 3 * r + 1;
     }
 
     private int mTop = Integer.MAX_VALUE, mLeft = Integer.MAX_VALUE, mRight, mBottom;
@@ -314,7 +336,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
             scrollY = -scrollRangeY + (scrollMoveY + scrollRangeY) / 2;
         }
 
-
+//        Log.e("<<<动画", "scrollX=" + scrollX + ",scrollY=" + scrollY);
         iconMapRefresh(sphereR, hexR,
                 scrollX,
                 scrollY
@@ -398,17 +420,20 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
     }
 
+    private List<double[]> list = new ArrayList<>();
+
     private void init() {
         this.hexCube = new ArrayList<>();
-        for (int i = 0; i < 20; i++)//i表示六边形的边长。大了没事。小了会限制个数
-            for (int j = -i; j <= i; j++)
-                for (int k = -i; k <= i; k++)
-                    for (int l = -i; l <= i; l++)
-                        if (Math.abs(j) + Math.abs(k) + Math.abs(l) == i * 2 && j + k + l == 0) {
-                            final Integer[] integers = {j, k, l};
-                            this.hexCube.add(integers);
-                            //这个里面放的是控件的位置信息
-                        }
+        list.addAll(num2List(20));
+//        for (int i = 0; i < 20; i++)//i表示六边形的边长。大了没事。小了会限制个数
+//            for (int j = -i; j <= i; j++)
+//                for (int k = -i; k <= i; k++)
+//                    for (int l = -i; l <= i; l++)
+//                        if (Math.abs(j) + Math.abs(k) + Math.abs(l) == i * 2 && j + k + l == 0) {
+//                            final Integer[] integers = {j, k, l};
+//                            this.hexCube.add(integers);
+//                            //这个里面放的是控件的位置信息
+//                        }
 //        this.screenW = getResources().getDimensionPixelSize(R.dimen.screenw);
         this.screenH = getResources().getDimensionPixelSize(R.dimen.screenh);
         this.screenW = getResources().getDisplayMetrics().widthPixels - getResources().getDimensionPixelSize(R.dimen.dp30);
@@ -434,22 +459,34 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         startEnterAnim();
     }
 
+    /**
+     * @param sphereR 球体半径?
+     * @param hexR    16进制半径?
+     * @param scrollX
+     * @param scrollY
+     */
     private void iconMapRefresh(float sphereR, float hexR, float scrollX, float scrollY) {
 //        Log.d("BubbleCloudView", "sphereR:" + sphereR + ",hexR:" + hexR + ",scrollX:" + scrollX + ",scrollY:" + scrollY);
 
         hexCubeOrtho.clear();
         hexCubePolar.clear();
         hexCubeSphere.clear();
-
-        for (int i = 0; i < hexCube.size(); i++) {
-            final Integer[] integers = this.hexCube.get(i);
-//            double[] doubles = hexCube.get(i);
+        //给每个控件分配x.y值
+//        for (int i = 0; i < hexCube.size(); i++) {
+//            final Integer[] integers = this.hexCube.get(i);
+//            XY tempxy = new XY();
+//            tempxy.x = (integers[1] + integers[0] / 2f) * hexR + scrollX;
+//            tempxy.y = (float) (Math.sqrt(3) / 2 * integers[0] * hexR + scrollY);
+//            hexCubeOrtho.add(tempxy);
+//        }
+        for (int i = 0; i < list.size(); i++) {
             XY tempxy = new XY();
-            tempxy.x = (integers[1] + integers[0] / 2f) * hexR + scrollX;
-            tempxy.y = (float) (Math.sqrt(3) / 2 * integers[0] * hexR + scrollY);
+            double[] doubles = list.get(i);
+            tempxy.x = (float) (doubles[0] * hexR + scrollX);
+            tempxy.y = (float) (doubles[1] * hexR + scrollY);
             hexCubeOrtho.add(tempxy);
         }
-
+        //分配圆到中心点的半径和弧度
         for (int i = 0; i < hexCubeOrtho.size(); i++) {
             final XY hexCubexy = hexCubeOrtho.get(i);
             hexCubePolar.add(ortho2polar(hexCubexy.x, hexCubexy.y));
@@ -476,8 +513,6 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
             rdr.rad = rrad.rad;
             hexCubeSphere.add(rdr);
         }
-//        Log.d("BubbleCloudView", "iconMapRefresh:resultMap1====" + hexCubeSphere);
-
         hexCubeOrtho.clear();
         for (int i = 0; i < hexCubeSphere.size(); i++) {
             final Rdr rdr = hexCubeSphere.get(i);
@@ -486,8 +521,9 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
         for (int i = 0; i < hexCubeOrtho.size(); i++) {
             final XY xy = hexCubeOrtho.get(i);
-            xy.x = Math.round(xy.x * 10) / 10;
-            xy.y = (float) (Math.round(xy.y * 10) / 10 * 1.14);
+            xy.x = Math.round(xy.x * 10) / 10;//round四舍五入
+//            xy.y = (float) (Math.round(xy.y * 10) / 10 * 1.14);
+            xy.y = (float) (Math.round(xy.y * 10) / 10);
         }
 
 
@@ -527,14 +563,17 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
 
     }
 
+    //轻松？在正弦中
     private float easeInSine(float t, float b, float c, float d) {
         return (float) (-c * Math.cos(t / d * (Math.PI / 2)) + c + b);
     }
 
+    //摇晃的？
     private float swing(float t, float b, float c, float d) {
         return -c * (t /= d) * (t - 2) + b;
     }
 
+    //轻松？在立方中
     private float easeInOutCubic(float t, float b, float c, float d) {
         if ((t /= d / 2) < 1)
             return c / 2 * t * t * t + b;
@@ -578,7 +617,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
                 requestLayout();
             }
         });
-        startAnim.setDuration(1000);
+        startAnim.setDuration(2000);
         startAnim.start();
     }
 
@@ -587,7 +626,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
     }
 
     private class XY {
-        //圆的中心点的坐标
+        //圆的中心点的坐标,和放大倍数
         float x, y, scale;
 
         @Override
@@ -601,7 +640,7 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
     }
 
     private class Rrad {
-        float r, rad;
+        float r, rad;//半径和弧度
 
         @Override
         public String toString() {
@@ -666,10 +705,18 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         list.add(new double[]{1, 0});
         list.add(new double[]{-2, 0});
         list.add(new double[]{2, 0});
+        list.add(new double[]{-3, 0});
+        list.add(new double[]{3, 0});
+        list.add(new double[]{-4, 0});
+        list.add(new double[]{4, 0});
         list.add(new double[]{-0.5, Math.sqrt(3) / 2});
         list.add(new double[]{0.5, Math.sqrt(3) / 2});
         list.add(new double[]{-1.5, Math.sqrt(3) / 2});
         list.add(new double[]{1.5, Math.sqrt(3) / 2});
+        list.add(new double[]{-2.5, Math.sqrt(3) / 2});
+        list.add(new double[]{2.5, Math.sqrt(3) / 2});
+        list.add(new double[]{-3.5, Math.sqrt(3) / 2});
+        list.add(new double[]{3.5, Math.sqrt(3) / 2});
         return list;
     }
 
@@ -680,11 +727,19 @@ public class BubbleCloudView<T extends Adapter> extends AdapterView<T> {
         list.add(new double[]{0.5, Math.sqrt(3) / 2});
         list.add(new double[]{-1.5, Math.sqrt(3) / 2});
         list.add(new double[]{1.5, Math.sqrt(3) / 2});
+        list.add(new double[]{-2.5, Math.sqrt(3) / 2});
+        list.add(new double[]{2.5, Math.sqrt(3) / 2});
+        list.add(new double[]{-3.5, Math.sqrt(3) / 2});
+        list.add(new double[]{3.5, Math.sqrt(3) / 2});
         list.add(new double[]{0, 0});
         list.add(new double[]{-1, 0});
         list.add(new double[]{1, 0});
         list.add(new double[]{-2, 0});
         list.add(new double[]{2, 0});
+        list.add(new double[]{-3, 0});
+        list.add(new double[]{3, 0});
+        list.add(new double[]{-4, 0});
+        list.add(new double[]{4, 0});
         return list;
     }
 }

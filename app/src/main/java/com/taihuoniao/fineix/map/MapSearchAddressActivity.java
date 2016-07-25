@@ -125,7 +125,7 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
                 }
                 MyLocationData locData = new MyLocationData.Builder()
                         .accuracy(location.getRadius())
-                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                                // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(100).latitude(location.getLatitude())
                         .longitude(location.getLongitude()).build();
                 mBDMap.setMyLocationData(locData);
@@ -157,7 +157,9 @@ public class MapSearchAddressActivity extends BaseActivity implements View.OnCli
                 } else {
                     list.clear();
                 }
-                list.addAll(result.getPoiList());
+                if(result.getPoiList()!=null){
+                    list.addAll(result.getPoiList());
+                }
                 if (list.size() > 0) {
                     if (adapter == null) {
                         adapter = new BDAddressListAdapter(activity, list);

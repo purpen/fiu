@@ -495,7 +495,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/head_logo" />
+            android:src="@mipmap/logo_no_word" />
 
         <ImageView
             android:id="@+id/activity_scenedetails_back"

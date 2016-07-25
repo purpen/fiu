@@ -13,12 +13,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -38,6 +40,8 @@ import com.taihuoniao.fineix.utils.MapUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 
@@ -247,7 +251,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
                 if (first) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.nothing);
                     firstImg.setImageResource(R.mipmap.first_in_fiu);
                     firstRelative.setTag(2);
                     firstImg.setVisibility(View.VISIBLE);
@@ -423,7 +427,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.nothing);
                     firstImg.setImageResource(R.mipmap.first_in_index);
                     firstImg.setVisibility(View.VISIBLE);
                     firstRelative.setTag(1);
@@ -452,7 +456,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.nothing);
                     firstImg.setImageResource(R.mipmap.first_in_find);
                     firstRelative.setTag(7);
                     firstImg.setVisibility(View.VISIBLE);
@@ -472,7 +476,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof WellGoodsFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.nothing);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_wellgood);
                     firstImg.setVisibility(View.VISIBLE);
@@ -511,7 +515,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof MineFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.nothing);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_mine);
                     firstImg.setVisibility(View.VISIBLE);
@@ -621,4 +625,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private int animFlag = 0;
+
+    /**
+     * 菜单、返回键响应
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitBy2Click(); //调用双击退出函数
+        }
+        return false;
+    }
+
+    private  Boolean isExit = false;
+
+    private void exitBy2Click() {
+        Timer tExit = null;
+        if (!isExit) {
+            isExit = true; // 准备退出
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false; // 取消退出
+                }
+            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
+
 }

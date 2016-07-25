@@ -117,7 +117,7 @@ public class DataPaser {
     //列表
     public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                       String stick, String fine, final Handler handler) {
-        ClientDiscoverAPI.getProductList(null,category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<商品列表", responseInfo.result);
@@ -530,7 +530,7 @@ public class DataPaser {
     //情景
     //列表数据
     public static void qingjingList(String page, String sort, String fine, String dis, String lng, String lat, final Handler handler) {
-        ClientDiscoverAPI.qingjingList(page,null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(page, null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -559,8 +559,8 @@ public class DataPaser {
     //场景
     //新增场景
     public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String products,
-                                   String address, String lat, String lng, final Handler handler) {
-        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, products, address,
+                                   String address,String city, String lat, String lng, final Handler handler) {
+        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, products, address,city,
                 lat, lng, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -1264,7 +1264,7 @@ public class DataPaser {
     //公共
     //搜索列表
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        ClientDiscoverAPI.search(q, t,null, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t, null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索", responseInfo.result);
@@ -2489,7 +2489,7 @@ public class DataPaser {
         ClientDiscoverAPI.getBonus(type, evt, target_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
+                Log.e("<<<送积分", responseInfo.result);
             }
 
             @Override

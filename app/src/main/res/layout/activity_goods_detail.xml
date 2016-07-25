@@ -367,7 +367,7 @@
                     android:numColumns="2"
                     android:paddingLeft="19dp"
                     android:paddingRight="19dp"
-                    android:verticalSpacing="5dp"
+                    android:verticalSpacing="10dp"
                     />
 
             </LinearLayout>

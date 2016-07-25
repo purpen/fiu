@@ -187,7 +187,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
             public void click(int postion) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra("q", hotLabelList.get(postion));
-                intent.putExtra("t", "8");
+                intent.putExtra("t", "9");
                 startActivity(intent);
             }
         });
@@ -344,7 +344,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
     }
 
     private void getQJList() {
-        ClientDiscoverAPI.qingjingList(1 + "",null, 2 + "", 1 + "", distance + "", location[0] + "", location[1] + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.qingjingList(1 + "", null, 2 + "", 1 + "", distance + "", null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 QingJingListBean qingJingListBean = new QingJingListBean();

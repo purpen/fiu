@@ -17,7 +17,7 @@
     <string name="crop_picture">剪切图片</string>
     <!-- EditPictureActivity -->
     <string name="tools">工具</string>
-    <string name="filter">滤镜</string>
+    <string name="filter">选择滤镜</string>
     <string name="more_three_products">您最多可以添加三个商品</string>
     <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->
@@ -368,6 +368,7 @@
     <string name="no_this_sight">没有这个地盘</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>
+    <string name="scene_category">情景分类</string>
     <!-- 品牌列表 -->
     <string name="action_fastscroll">Fast scroll</string>
     <string name="action_addpadding">Add padding</string>

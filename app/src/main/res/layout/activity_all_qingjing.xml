@@ -33,9 +33,16 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:paddingLeft="17dp"
+            android:visibility="gone"
             android:paddingRight="17dp"
             android:src="@mipmap/add"/>
     </RelativeLayout>
+
+    <TextView
+        android:layout_below="@id/activity_all_qingjing_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e4e4e4"/>
 
     <LinearLayout
         android:id="@+id/search_linear"

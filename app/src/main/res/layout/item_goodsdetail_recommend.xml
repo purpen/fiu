@@ -12,9 +12,8 @@
         android:id="@+id/item_goodsdetail_recommend_img"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="#f6f6f6"
         android:scaleType="centerCrop"
-        app:riv_border_color="#cccccc"
+        app:riv_border_color="#dddddd"
         app:riv_border_width="1dp"
         />
 

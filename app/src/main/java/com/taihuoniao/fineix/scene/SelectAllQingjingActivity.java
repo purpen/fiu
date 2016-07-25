@@ -48,6 +48,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     //上个界面传递过来的数据
     private String isSearch;//判断是搜索还是展示 0展示 1搜索
     private LatLng latLng;//当前位置经纬度
+    private int pos;
     @Bind(R.id.activity_select_allqj_titlelayout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.activity_select_allqj_searchlinear)
@@ -77,13 +78,14 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     protected void getIntentData() {
         isSearch = getIntent().getStringExtra("isSearch");
         latLng = getIntent().getParcelableExtra("latLng");
+        pos = getIntent().getIntExtra("pos",0);
         if (isSearch == null) {
             isSearch = "0";
         }
-        if (latLng == null) {
-            ToastUtils.showError("无法获得您当前位置信息");
-            finish();
-        }
+//        if (latLng == null) {
+//            ToastUtils.showError("无法获得您当前位置信息");
+//            finish();
+//        }
     }
 
     public SelectAllQingjingActivity() {
@@ -139,7 +141,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     protected void requestNet() {
         dialog.show();
         if (isSearch.equals("0")) {
-            qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+            qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", null, null);
         }
         categoryList(1 + "", 12 + "", true + "");
     }
@@ -218,7 +220,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
         dipanCategoryAdapter.notifyDataSetChanged();
         page = 1;
         category_id = dipanList.get(postion).get_id();
-        qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+        qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", null, null);
     }
 
     @Override
@@ -238,7 +240,6 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     QingJingListBean.QingJingItem qingJingItem = (QingJingListBean.QingJingItem) data.getSerializableExtra("qingjing");
                     if (qingJingItem != null) {
                         Intent intent = new Intent();
-//                        Log.e("<<<>>>", qingJingItem.getTitle());
                         intent.putExtra("qingjing", qingJingItem);
                         setResult(DataConstants.RESULTCODE_CREATESCENE_SELECTQJ, intent);
                         finish();
@@ -356,7 +357,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 if (categoryListBean.isSuccess()) {
                     dipanList.addAll(categoryListBean.getData().getRows());
                     dipanCategoryAdapter.notifyDataSetChanged();
-                    click(0);
+                    click(pos);
                 } else {
                     ToastUtils.showError(categoryListBean.getMessage());
                 }

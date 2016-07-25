@@ -100,9 +100,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".scene.AddAndEditLabelActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".scene.SelectAllQingjingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
@@ -140,7 +137,15 @@
             android:name=".product.AllFiuerActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".main.ViewPagerActivity"
+            android:name=".qingjingOrSceneDetails.ViewPagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".scene.CreateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".scene.CategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
@@ -175,10 +180,6 @@
             android:name=".user.HasSubsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-        <activity
-            android:name=".scene.SelectQingjingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.MyBarCodeActivity"
             android:keepScreenOn="true"
@@ -341,11 +342,6 @@
         <activity
             android:name=".scene.EditPictureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".scene.CreateSceneActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.ShareCJSelectActivity"
