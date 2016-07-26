@@ -36,8 +36,8 @@
 
             <RelativeLayout
                 android:id="@+id/rl"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="@dimen/dp80"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp60">
