@@ -240,7 +240,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             //搜索接口
             int pos = intent.getIntExtra("pos", -1);
             q = intent.getStringExtra("q");
-            Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
+//            Log.e("<<<", "传递过来的数据,pos=" + pos + ",q=" + q + ",search=" + search);
             if (q != null && intent.getBooleanExtra("search", false) && pos == position) {
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
@@ -279,7 +279,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-                Log.e("<<<商品详情", responseInfo.result);
+//                Log.e("<<<商品详情", responseInfo.result);
                 GoodsDetailBean netGood = new GoodsDetailBean();
                 try {
                     Gson gson = new Gson();

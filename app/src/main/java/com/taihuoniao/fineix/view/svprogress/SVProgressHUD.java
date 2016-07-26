@@ -56,7 +56,8 @@ public class SVProgressHUD {
     protected void initViews() {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
-        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_svprogresshud, null, false);
+//        rootView = (ViewGroup) layoutInflater.inflate(R.layout.layout_svprogresshud, null, false);
+        rootView = (ViewGroup) View.inflate(context,R.layout.layout_svprogresshud,null);
         rootView.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));

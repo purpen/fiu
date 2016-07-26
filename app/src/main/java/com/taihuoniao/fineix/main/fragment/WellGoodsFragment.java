@@ -595,7 +595,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         ClientDiscoverAPI.getProductList(sort, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品列表", responseInfo.result);
+//                Log.e("<<<商品列表", responseInfo.result);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();

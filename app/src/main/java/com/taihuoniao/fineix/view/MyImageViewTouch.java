@@ -612,12 +612,12 @@ public class MyImageViewTouch extends ImageViewTouch {
 
         if (mOverlayView != null && !mOverlayView.equals(newView)) {
             mOverlayView.setSelected(false);
-            Log.e("<<<", "oldView失去焦点");
+//            Log.e("<<<", "oldView失去焦点");
         }
 
         if (newView != null) {
             newView.setSelected(true);
-            Log.e("<<<", "newView获得焦点");
+//            Log.e("<<<", "newView获得焦点");
         }
 
         postInvalidate();

@@ -43,7 +43,6 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -267,8 +266,8 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         ClientDiscoverAPI.search(searchStr, 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<搜索标题", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<搜索标题", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 SearchBean netSearch = new SearchBean();
@@ -310,7 +309,7 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         ClientDiscoverAPI.categoryList(1 + "", 11 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
+//                Log.e("<<<分类列表", responseInfo.result);
                 dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {

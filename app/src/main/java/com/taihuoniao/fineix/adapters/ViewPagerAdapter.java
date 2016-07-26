@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,6 +136,11 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                     Banner banner = (Banner) content;
                     Intent intent;
                     switch (banner.type) {
+                        case 1:      //url地址
+                            Uri uri = Uri.parse(banner.web_url);
+                            intent = new Intent(Intent.ACTION_VIEW, uri);
+                            activity.startActivity(intent);
+                            break;
                         case 8:     //场景详情
                             intent = new Intent(activity, SceneDetailActivity.class);
                             intent.putExtra("id", banner.web_url);

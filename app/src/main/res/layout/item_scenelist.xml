@@ -135,6 +135,7 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
+                    android:visibility="visible"
                     android:layout_height="wrap_content"
                     android:scaleType="matrix"
                     android:src="@mipmap/scene_title_background"/>

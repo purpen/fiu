@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -146,7 +145,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
         ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<个人信息", responseInfo.result);
+//                Log.e("<<<个人信息", responseInfo.result);
                 UserInfo userInfo = null;
                 try {
                     JSONObject obj = new JSONObject(responseInfo.result);

@@ -43,7 +43,7 @@
             android:layout_alignTop="@id/img"
             android:layout_marginLeft="28dp"
             android:layout_toRightOf="@id/img"
-            android:text="+ 20"
+            android:text="+ 5"
             android:textColor="@color/yellow_bd8913"
             android:textSize="15sp"
             android:textStyle="bold"/>
@@ -76,9 +76,10 @@
             android:textSize="16sp"/>
 
         <TextView
+            android:id="@+id/exp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"
+            android:text="5"
             android:textColor="#222222"
             android:textSize="16sp"/>
 

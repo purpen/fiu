@@ -205,14 +205,16 @@ public class ClientDiscoverAPI {
 
     //场景
     //新增场景
-    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String products,
-                                   String address, String lat, String lng, RequestCallBack<String> callBack) {
+    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags,
+                                   String products, String address, String city, String lat, String lng,
+                                   RequestCallBack<String> callBack) {
         String url = NetworkConstance.create_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("tmp", tmp);
         params.addQueryStringParameter("title", title);
         params.addQueryStringParameter("des", des);
+        params.addQueryStringParameter("city", city);
         params.addQueryStringParameter("scene_id", scene_id);
         params.addQueryStringParameter("tags", tags);
         params.addQueryStringParameter("products", products);
@@ -711,7 +713,7 @@ public class ClientDiscoverAPI {
     public static void getBanners(String page_name, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addBodyParameter("page", String.valueOf(1));
-        params.addBodyParameter("size", String.valueOf(6));
+        params.addBodyParameter("size", String.valueOf(5));
         params.addBodyParameter("name", page_name);
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
@@ -1380,11 +1382,11 @@ public class ClientDiscoverAPI {
     public static void envirList(String page, String size, String sort, String category_id, String stick, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/scene_context/getlist";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("page",page);
-        params.addQueryStringParameter("size",size);
-        params.addQueryStringParameter("sort",sort);
-        params.addQueryStringParameter("category_id",category_id);
-        params.addQueryStringParameter("stick",stick);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("sort", sort);
+        params.addQueryStringParameter("category_id", category_id);
+        params.addQueryStringParameter("stick", stick);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
 
     }

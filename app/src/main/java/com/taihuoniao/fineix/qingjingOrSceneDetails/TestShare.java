@@ -37,12 +37,12 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.BonusBean;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
 import com.taihuoniao.fineix.beans.ShareCJRecyclerAdapter;
 import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -92,6 +92,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private SceneDetailsBean netScene;
     //分享成功后的popwindow
     private PopupWindow popupWindow;
+    private TextView textView, expTv;
 
     public TestShare() {
         super(0);
@@ -155,7 +156,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(this, R.layout.pop_share_success, null);
         Button button = (Button) popup_view.findViewById(R.id.pop_share_success_btn);
-        popupWindow = new PopupWindow(popup_view, DensityUtils.dp2px(this,300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        textView = (TextView) popup_view.findViewById(R.id.tv1);
+        expTv = (TextView) popup_view.findViewById(R.id.exp_tv);
+        popupWindow = new PopupWindow(popup_view, DensityUtils.dp2px(this, 300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popup_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -495,11 +498,32 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialog.dismiss();
-//                ToastUtils.showSuccess("分享成功");
-                showPopup();
-                DataPaser.getBonus(2 + "", 1 + "", id);
 
+//                ToastUtils.showSuccess("分享成功");
+//                DataPaser.getBonus(2 + "", 1 + "", id);
+                ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
+                        BonusBean bonusBean = new BonusBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BonusBean>() {
+                            }.getType();
+                            bonusBean = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+
+                        }
+                        textView.setText("+ " + bonusBean.getData().getExp());
+                        expTv.setText(bonusBean.getData().getExp() + "");
+                        showPopup();
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
     }
@@ -538,7 +562,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                             }.getType();
                             sceneDetails = gson.fromJson(responseInfo.result, type);
                         } catch (JsonSyntaxException e) {
-                            Log.e("<<<", "解析异常");
+                            Log.e("<<<场景详情", "解析异常");
                         }
                         dialog.dismiss();
                         SceneDetailsBean netScene = sceneDetails;

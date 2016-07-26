@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -213,7 +212,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                     }.getType();
                                     netBean = gson.fromJson(responseInfo.result, type);
                                 } catch (JsonSyntaxException e) {
-                                    Log.e("<<<提醒发货", "数据解析异常");
+//                                    Log.e("<<<提醒发货", "数据解析异常");
                                 }
                                 if (netBean.isSuccess()) {
 //                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
@@ -452,7 +451,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             mHolder.mItem.removeAllViews();
         }
         for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
-            mView = LayoutInflater.from(context).inflate(R.layout.item_order_content, null);
+//            mView = LayoutInflater.from(context).inflate(R.layout.item_order_content, null);
+            mView = View.inflate(context,R.layout.item_order_content,null);
             ImageView mImageView = (ImageView) mView.findViewById(R.id.image_order_inner);
             TextView mTitle = (TextView) mView.findViewById(R.id.tv_title_order_inner);
             TextView mColor = (TextView) mView.findViewById(R.id.tv_color_order_inner);

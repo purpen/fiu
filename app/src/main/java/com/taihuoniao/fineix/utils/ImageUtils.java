@@ -53,7 +53,7 @@ public class ImageUtils {
             jpgFile = new File(fileFolder, filename);
         } else {
             jpgFile = new File(fileFolderStr);
-            Log.e("<<<", "jpgfile.path = " + jpgFile.getAbsolutePath());
+//            Log.e("<<<", "jpgfile.path = " + jpgFile.getAbsolutePath());
             if (!jpgFile.getParentFile().exists()) { // 如果目录不存在，则创建一个名为"finger"的目录
                 mkdir(jpgFile.getParentFile());
             }
@@ -61,7 +61,7 @@ public class ImageUtils {
         FileOutputStream outputStream = new FileOutputStream(jpgFile); // 文件输出流
         croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         outputStream.close();
-        Log.e("<<<", "path = " + jpgFile.getPath());
+//        Log.e("<<<", "path = " + jpgFile.getPath());
         return jpgFile.getPath();
     }
 
@@ -76,7 +76,7 @@ public class ImageUtils {
 
     //获取图片的位置信息
     public static double[] picLocation(String fileName) {
-        Log.e("<<<", "getLocation.fileName = " + fileName);
+//        Log.e("<<<", "getLocation.fileName = " + fileName);
         ExifInterface exifInterface = null;
         try {
             exifInterface = new ExifInterface(fileName);
@@ -158,7 +158,7 @@ public class ImageUtils {
 
 
         }
-        Log.e("<<<压缩图片", "图片width=" + options.outWidth + ",height=" + options.outHeight + ",要求width=" + width + ",height=" + height+",压缩值="+options.inSampleSize);
+//        Log.e("<<<压缩图片", "图片width=" + options.outWidth + ",height=" + options.outHeight + ",要求width=" + width + ",height=" + height+",压缩值="+options.inSampleSize);
         options.inJustDecodeBounds = false;
         Bitmap sourceBm = BitmapFactory.decodeFile(pathName, options);
         return sourceBm;

@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.product;
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -261,8 +260,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     }
 
     private void initPopwindow() {
-        View view = LayoutInflater.from(this).inflate(
-                R.layout.popupwindow_refund, null);
+        View view = View.inflate(this,R.layout.popupwindow_refund,null);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow.setContentView(view);

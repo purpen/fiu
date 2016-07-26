@@ -217,7 +217,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 }
                 if (usedLabel.isSuccess()) {
                     if (usedLabel.getHas_tag() == 0) {
-                        Log.e("<<<", "没有用过的标签");
+//                        Log.e("<<<", "没有用过的标签");
                         return;
                     }
                     usedLabelList.addAll(usedLabel.getUsedLabelList());
@@ -339,7 +339,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
+//                Log.e("<<<", "请求失败" + error.toString() + ",msg=" + msg);
                 ToastUtils.showError("网络错误");
             }
         });

@@ -206,6 +206,17 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
         Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
         intent.putExtra("id", sceneList.get(position).get_id());
         startActivity(intent);
+//        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+//        intent.putExtra("position", position);
+////        private SerSceneListBean serSceneListBean;//封装场景数据的列表
+////        private int currentPage = 1;//场景列表的页码
+////        //来源..从哪个界面跳转过来的
+//        SerSceneListBean serSceneListBean = new SerSceneListBean();
+//        serSceneListBean.setSceneList(sceneList);
+//        intent.putExtra("list", serSceneListBean);
+//        intent.putExtra(IndexFragment.class.getSimpleName(), false);
+//        intent.putExtra("page", currentPage);
+//        startActivity(intent);
     }
 
 
@@ -215,7 +226,6 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             case R.id.fragment_index_subs:
 //                startActivity(new Intent(getActivity(), ViewPagerActivity.class));
                 if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;

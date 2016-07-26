@@ -36,7 +36,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         private int _id;
         private String title;
         private int user_id;
@@ -49,6 +49,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
 
         private LocationBean location;
         private String address;
+        private String city;
         private int used_count;
         private int view_count;
         private int love_count;
@@ -98,6 +99,14 @@ public class SceneDetailsBean extends NetBean implements Serializable {
         private List<ProductBean> product;
         private List<String> old_tags;
         private List<String> tag_titles;
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
 
         public int get_id() {
             return _id;
@@ -363,7 +372,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
             this.tag_titles = tag_titles;
         }
 
-        public static class LocationBean {
+        public static class LocationBean implements Serializable{
             private String type;
             private List<Double> coordinates;
 
@@ -384,7 +393,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
             }
         }
 
-        public static class UserInfoBean {
+        public static class UserInfoBean implements Serializable{
             private int user_id;
             private String nickname;
             private String avatar_url;
@@ -505,7 +514,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
                 this.expert_info = expert_info;
             }
 
-            public static class CounterBean {
+            public static class CounterBean implements Serializable{
                 private int message_count;
                 private int notice_count;
                 private int alert_count;
@@ -581,7 +590,7 @@ public class SceneDetailsBean extends NetBean implements Serializable {
             }
         }
 
-        public static class ProductBean {
+        public static class ProductBean implements Serializable{
             private int id;
             private String title;
             private int price;

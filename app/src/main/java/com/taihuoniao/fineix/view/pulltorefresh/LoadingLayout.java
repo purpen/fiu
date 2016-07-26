@@ -84,7 +84,9 @@ public class LoadingLayout extends FrameLayout {
 //        animationDrawable = (AnimationDrawable) ContextCompat.getDrawable(context, R.anim.pull_to_refresh_anim);
         animationDrawable = new AnimationDrawable();
         for(int i=0;i<48;i++){
+//            Log.e("<<<loadinglayout","i="+i);
             int resID = getResources().getIdentifier("refresh_0" + i, "mipmap", "com.taihuoniao.fineix");
+//            Log.e("<<<loadinglayout","resID="+resID);
             Drawable image = ContextCompat.getDrawable(getContext(), resID);
             animationDrawable.addFrame(image,80);
         }

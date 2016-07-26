@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,7 +27,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
@@ -130,7 +127,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         qingjingGrid.setAdapter(allQingjingGridAdapter);
         qingjingGrid.setOnItemClickListener(this);
         getCurrentLocation();
-        categoryList(1 + "", 12 + "", true + "");
+        categoryList(1 + "", 12 + "", 1 + "");
     }
 
     private void getCurrentLocation() {
@@ -167,36 +164,36 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                 onBackPressed();
                 break;
             case R.id.activity_all_qingjing_createqinjing:
-                ToastUtils.showError("创建地盘暂不开放");
+//                ToastUtils.showError("创建地盘暂不开放");
                 break;
         }
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-            //判断是不是第一次进入Fiu界面
-            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
-            if (isFirstIn) {
-                firstRelative.setVisibility(View.VISIBLE);
-                firstRelative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        firstRelative.setVisibility(View.GONE);
-                    }
-                });
-                SharedPreferences.Editor editor = firstInSp.edit();
-                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
-                editor.apply();
-            }
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//            //判断是不是第一次进入Fiu界面
+//            boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_ALL, true);
+//            if (isFirstIn) {
+//                firstRelative.setVisibility(View.VISIBLE);
+//                firstRelative.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        firstRelative.setVisibility(View.GONE);
+//                    }
+//                });
+//                SharedPreferences.Editor editor = firstInSp.edit();
+//                editor.putBoolean(DataConstants.FIRST_IN_ALL, false);
+//                editor.apply();
+//            }
+//        }
+//    }
 
     @Override
     public void click(int postion) {
-        dialog.show();
+//        dialog.show();
         for (int i = 0; i < dipanList.size(); i++) {
             if (i == postion) {
                 dipanList.get(i).setIsSelect(true);
@@ -213,6 +210,9 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
     private String category_id = null;
 
     private void getQJList(String pa, String sort, String fine, String dis, String lng, String lat) {
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.qingjingList(pa, category_id, sort, fine, dis, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -253,11 +253,12 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     //地盘分类列表
     private void categoryList(String page, String domain, String show_all) {
+        dialog.show();
         ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表", responseInfo.result);
-                dialog.dismiss();
+//                Log.e("<<<分类列表", responseInfo.result);
+//                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();

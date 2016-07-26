@@ -1,21 +1,23 @@
-package com.taihuoniao.fineix.main;
+package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.VPAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.beans.SerSceneListBean;
-import com.taihuoniao.fineix.main.fragment.FindFragment;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -29,86 +31,99 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by taihuoniao on 2016/7/8.
+ * Created by taihuoniao on 2016/7/19.
  */
-public class ViewPagerActivity extends BaseActivity {
-    //上个界面传递过来的数据
-    private SerSceneListBean serSceneListBean;
-    private String position;
-    private int page;
+public class ViewPagerActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    //上个界面接收到数据
+    private int position;//第几条数据
+    private SerSceneListBean serSceneListBean;//封装场景数据的列表
+    private int currentPage = 1;//场景列表的页码
+    //来源..从哪个界面跳转过来的
     @Bind(R.id.viewpager)
     ViewPager viewpager;
-    private WaittingDialog dialog;
     private List<SceneListBean> list;
-    private VAdapter vAdapter;
+    private VPAdapter vpAdapter;
+    private WaittingDialog dialog;
 
     public ViewPagerActivity() {
-        super(R.layout.aaaaaa);
+        super(R.layout.activity_view_pager);
     }
-
 
     @Override
     protected void initView() {
         dialog = new WaittingDialog(this);
-        serSceneListBean = (SerSceneListBean) getIntent().getSerializableExtra("bean");
-        position = getIntent().getStringExtra("position");
-        page = getIntent().getIntExtra("page", 1);
-        list = new ArrayList<>();
-        if (serSceneListBean != null) {
-            list.addAll(serSceneListBean.getSceneList());
+        position = getIntent().getIntExtra("position", 0);
+        currentPage = getIntent().getIntExtra("page", 1);
+        serSceneListBean = (SerSceneListBean) getIntent().getSerializableExtra("list");
+        if (serSceneListBean == null) {
+            list = new ArrayList<>();
+//            Log.e("<<<", "场景列表为空");
+        } else {
+            list = serSceneListBean.getSceneList();
+//            Log.e("<<<", "场景列表不为空");
         }
+        vpAdapter = new VPAdapter(getSupportFragmentManager(), this, list);
+        viewpager.setAdapter(vpAdapter);
+        viewpager.setCurrentItem(position, false);
+        viewpager.addOnPageChangeListener(this);
 
-        vAdapter = new VAdapter(getSupportFragmentManager(), list);
-        viewpager.setAdapter(vAdapter);
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                Log.e("<<<pagescrolled", "position=" + position + ",offset=" + positionOffset + ",pixels=" + positionOffsetPixels);
-//                vAdapter.getView(position).setTranslationX(positionOffsetPixels);
-                ViewPagerFragment viewPagerFragment = (ViewPagerFragment) vAdapter.getItem(position);
-                if (viewPagerFragment != null && viewPagerFragment.getMoveView() != null) {
-                    viewPagerFragment.getMoveView().setTranslationX(positionOffsetPixels);
-                }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DataConstants.BroadViewPager);
+        registerReceiver(sceneDetailReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(sceneDetailReceiver);
+        super.onDestroy();
+    }
+
+    //广播接收器
+    private BroadcastReceiver sceneDetailReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            vpAdapter.notifyDataSetChanged();
+        }
+    };
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        vpAdapter.getView(position).setTranslationX(positionOffsetPixels);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position == list.size() - 1) {
+            if (!dialog.isShowing()) {
+                dialog.show();
             }
-
-            @Override
-            public void onPageSelected(int position) {
-//                Log.e("<<<selected", "size=" + list.size() + ",position=" + position);
-                if (list.size() > 0 && position == list.size() - 1) {
-                    getNextPageData();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        if (position != null) {
-            Log.e("<<<", "position=" + position);
-            viewpager.setCurrentItem(Integer.parseInt(position));
+            currentPage++;
+            getSceneList();
         }
     }
 
-    private void getNextPageData() {
-        page++;
-        dialog.show();
-        if (getIntent().hasExtra(FindFragment.class.getSimpleName())) {
-            getCJList(page + "", null, null, 0 + "", 0 + "");
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void getSceneList() {
+        if (getIntent().hasExtra(IndexFragment.class.getSimpleName())) {
+            sc(currentPage + "", 8 + "", null, 2 + "", 1 + "");
         }
     }
 
-    private void getCJList(String page, String size, String scene_id, String sort, String fine) {
+    private void sc(String page, String size, String scene_id, String sort, String fine) {
         ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneList sceneList1 = new SceneList();
+                SceneList sceneL = new SceneList();
                 try {
                     JSONObject jsonObject = new JSONObject(responseInfo.result);
-                    sceneList1.setSuccess(jsonObject.optBoolean("success"));
-                    sceneList1.setMessage(jsonObject.optString("message"));
-//                    sceneList.setStatus(jsonObject.optString("status"));
-                    if (sceneList1.isSuccess()) {
+                    sceneL.setSuccess(jsonObject.optBoolean("success"));
+                    sceneL.setMessage(jsonObject.optString("message"));
+                    if (sceneL.isSuccess()) {
                         JSONObject data = jsonObject.getJSONObject("data");
                         JSONArray rows = data.getJSONArray("rows");
                         List<SceneListBean> list = new ArrayList<>();
@@ -127,7 +142,6 @@ public class ViewPagerActivity extends BaseActivity {
                             JSONObject us = job.getJSONObject("user_info");
                             SceneListBean.User user = new SceneListBean.User();
                             user.setAccount(us.optString("account"));
-//                            user.setLabel(us.optString("label"));
                             user.is_expert = us.optInt("is_expert");
                             user.expert_info = us.optString("expert_info");
                             user.expert_label = us.optString("expert_label");
@@ -137,7 +151,6 @@ public class ViewPagerActivity extends BaseActivity {
                             user.setLove_count(us.optString("love_count"));
                             user.setFollow_count(us.optString("follow_count"));
                             user.setFans_count(us.optString("fans_count"));
-//                            user.setCounter(us.optString("counter"));
                             user.setAvatar_url(us.optString("avatar_url"));
                             sceneListBean.setUser_info(user);
                             JSONArray product = job.getJSONArray("product");
@@ -155,20 +168,18 @@ public class ViewPagerActivity extends BaseActivity {
                             sceneListBean.setProductsList(productsList);
                             list.add(sceneListBean);
                         }
-                        sceneList1.setSceneListBeanList(list);
+                        sceneL.setSceneListBeanList(list);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 dialog.dismiss();
-                if (sceneList1.isSuccess()) {
-//                    lastSceneSize = sceneList.size();
-                    list.addAll(sceneList1.getSceneListBeanList());
-//                        Toast.makeText(getActivity(), "测试，场景数据个数=" + sceneList.size(), Toast.LENGTH_SHORT).show();
-                    vAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(sceneList1.getMessage());
-//                        dialog.showErrorWithStatus(netSceneList.getMessage());
+                if (sceneL.isSuccess()) {
+                    if (currentPage == 1) {
+                        list.clear();
+                    }
+                    list.addAll(sceneL.getSceneListBeanList());
+                    vpAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -178,45 +189,6 @@ public class ViewPagerActivity extends BaseActivity {
                 ToastUtils.showError("网络错误");
             }
         });
-    }
-
-    static class VAdapter extends FragmentStatePagerAdapter {
-        private List<SceneListBean> list;
-
-        public VAdapter(FragmentManager fm, List<SceneListBean> list) {
-            super(fm);
-            this.list = list;
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-
-//        @Override
-//        public boolean isViewFromObject(View view, Object object) {
-//            return view == object;
-//        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return ViewPagerFragment.newInstance(list.get(position).get_id());
-        }
-
-//        @Override
-//        public Object instantiateItem(ViewGroup container, int position) {
-//            if (list.get(position).getParent() == null) {
-//                container.addView(list.get(position));
-//            }
-//            return list.get(position);
-//        }
-//
-//        @Override
-//        public void destroyItem(ViewGroup container, int position, Object object) {
-//            container.removeView(list.get(position));
-////            super.destroyItem(container, position, object);
-//        }
     }
 
 }

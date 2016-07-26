@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_touming">
+
+    <ImageView
+        android:id="@+id/background_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/jianbian_scenelist"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <FrameLayout
+            android:id="@+id/framelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="matrix"
+                android:src="@mipmap/scene_title_background"/>
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:text="点击添加情景标题"
+                android:maxWidth="300dp"
+                android:textColor="@color/white"
+                android:textSize="30sp"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/des_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            android:paddingTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="9sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"/>
+
+        <RelativeLayout
+            android:id="@+id/label_relative"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="45dp">
+
+            <ImageView
+                android:id="@+id/img2"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/add_tags"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="12dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/img2"
+                android:visibility="visible"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/location_white_20_30"/>
+
+            <ImageView
+                android:id="@+id/delete_address"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:src="@mipmap/cancel_gray"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/add_location_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/delete_address"
+                android:layout_toRightOf="@id/img"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/location_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginRight="10dp"
+                    android:singleLine="true"
+                    android:text="添加情景地点"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/city_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginLeft="11dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="7dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="添加情景地点"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/category_linear"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/img1"
+                android:layout_width="11dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/category_create_sight"/>
+
+            <TextView
+                android:id="@+id/category_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/img1"
+                android:singleLine="true"
+                android:text="选择地盘"
+                android:textColor="@color/white"
+                android:textSize="11sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

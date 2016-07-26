@@ -6,10 +6,12 @@ package com.taihuoniao.fineix.network;
  */
 public class DataConstants {
     //判断从哪个activity跳转到登录界面
+    public static final int ViewPagerActivity = 105;
     public static final int SceneDetailActivity = 101;
     public static final int ElseActivity = 102;//其他不需要刷新界面的activity
     public static final int QingjingDetailActivity = 103;
     public static final int MyGoodsDetailsActivity = 104;
+    public static final String BroadViewPager = "com.taihuoniao.fiu.viewpager";
     //场景详情界面跳转到注册界面广播Action
     public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";
     //情景详情界面跳转到注册界面广播action
@@ -221,5 +223,5 @@ public class DataConstants {
     public static final int PARSER_MY_REDBAG_UNTIMEOUT = 19;
     //帐户处我的红包已过期
     public static final int PARSER_MY_REDBAG_TIMEOUT = 20;
-    public static final int DIALOG_DELAY=400;
+    public static final int DIALOG_DELAY = 400;
 }

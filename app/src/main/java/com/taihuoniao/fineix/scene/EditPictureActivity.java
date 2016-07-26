@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,6 +85,7 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout filterRelative;
     private TextView filterTv;
     private TextView filterRedline;
+    private PopupWindow clickPop;
     //popupwindow下的控件
     private PopupWindow popupWindow;
     private ImageView productImg;
@@ -131,9 +133,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         Uri imageUri = getIntent().getData();
-        titleLayout.setTitle(R.string.tools);
         titleLayout.setBackgroundResource(R.color.black_touming);
         titleLayout.setContinueListener(this);
+        titleLayout.setTitle("标记产品");
         EffectUtil.clear();
         ImageLoader.getInstance().loadImage(imageUri.toString(), options750_1334, new ImageLoadingListener() {
             @Override
@@ -143,7 +145,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
                 ToastUtils.showError("图片加载失败，请重试");
             }
 
@@ -162,7 +163,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     lp.width = containerWidth > 0 ? containerWidth : systemWidth;
                     lp.height = lp.width * 16 / 9;
                 }
-//                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 picWidth = lp.width;
                 picHeight = lp.height;
                 gpuImageView.setLayoutParams(lp);
@@ -172,33 +172,8 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
                 ToastUtils.showError("图片加载失败，请重试");
-//                dialog.showErrorWithStatus("图片加载失败，请返回重试");
             }
         });
-//        ImageUtils.asyncLoadImage(EditPictureActivity.this, imageUri, new ImageUtils.LoadImageCallback() {
-//            @Override
-//            public void callback(Bitmap result) {
-//                gpuImageView.setImage(result);
-//                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) gpuImageView.getLayoutParams();
-//                if (gpuImageView.getWidth() * 16 > 9 * gpuImageView.getHeight()) {
-//                    int containerHeight = gpuRelative.getHeight();
-//                    int systemHeight = MainApplication.getContext().getScreenHeight() - getNavigationBarHeight();
-//                    lp.height = containerHeight > 0 ? containerHeight : systemHeight;
-//                    lp.width = lp.height * 9 / 16;
-//                } else {
-//                    int containerWidth = gpuRelative.getWidth();
-//                    int systemWidth = MainApplication.getContext().getScreenWidth();
-//                    lp.width = containerWidth > 0 ? containerWidth : systemWidth;
-//                    lp.height = lp.width * 16 / 9;
-//                }
-////                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//                picWidth = lp.width;
-//                picHeight = lp.height;
-//                gpuImageView.setLayoutParams(lp);
-//                initEditView();
-//
-//            }
-//        });
         //设置布局大小一样
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -264,7 +239,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         if (resourceId > 0) {
             height = resources.getDimensionPixelSize(resourceId);
         }
-//        Log.e("<<<", "工具栏 height:" + height);
         return height;
     }
 
@@ -283,7 +257,11 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         productsRelative = (RelativeLayout) findViewById(R.id.activity_edit_products_relative);
         chainingRelative = (RelativeLayout) findViewById(R.id.activity_edit_chaining_relative);
         filterRelative = (RelativeLayout) findViewById(R.id.activity_edit_filter_relative);
+        ImageView touchImg = (ImageView) findViewById(R.id.touch);
+        touchImg.setVisibility(View.VISIBLE);
         TextView productsTv = (TextView) findViewById(R.id.activity_edit_products_tv);
+        productsTv.setTextSize(14);
+        productsTv.setText("标记情景中的产品或产品链接");
         TextView chainingTv = (TextView) findViewById(R.id.activity_edit_chaining_tv);
         filterTv = (TextView) findViewById(R.id.activity_edit_filter_tv);
         TextView productsRedline = (TextView) findViewById(R.id.activity_edit_products_redline);
@@ -306,8 +284,55 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 .cacheOnDisk(false).considerExifParams(true)
                 .build();
         initPopupWindow();
+        initClickPopup();
+        chainingRelative.setVisibility(View.GONE);
         filterRelative.setVisibility(View.GONE);
     }
+
+    private void initClickPopup() {
+        WindowManager windowManager = EditPictureActivity.this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        View popup_view = View.inflate(EditPictureActivity.this, R.layout.pop_click, null);
+        LinearLayout exitLinear = (LinearLayout) popup_view.findViewById(R.id.exit_linear);
+        LinearLayout productLinear = (LinearLayout) popup_view.findViewById(R.id.add_product_linear);
+        LinearLayout chainLinear = (LinearLayout) popup_view.findViewById(R.id.add_chain_linear);
+        exitLinear.setOnClickListener(this);
+        productLinear.setOnClickListener(this);
+        chainLinear.setOnClickListener(this);
+        clickPop = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        // 设置动画效果
+        clickPop.setAnimationStyle(R.style.alpha);
+        clickPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        clickPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = EditPictureActivity.this.getWindow().getAttributes();
+                params.alpha = 1f;
+//                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+            }
+        });
+        clickPop.setBackgroundDrawable(ContextCompat.getDrawable(EditPictureActivity.this,
+                R.color.nothing));
+        clickPop.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+
+    }
+
+    private void showClickPopup() {
+        WindowManager.LayoutParams params = EditPictureActivity.this.getWindow().getAttributes();
+        params.alpha = 0.1f;
+        getWindow().setAttributes(params);
+        clickPop.showAtLocation(activity_view, Gravity.CENTER, 0, 0);
+    }
+
 
     private void initPopupWindow() {
         WindowManager windowManager = EditPictureActivity.this.getWindowManager();
@@ -357,7 +382,6 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
         WindowManager.LayoutParams params = EditPictureActivity.this.getWindow().getAttributes();
         params.alpha = 0.1f;
         getWindow().setAttributes(params);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         popupWindow.showAtLocation(activity_view, Gravity.BOTTOM, 0, 0);
     }
 
@@ -446,6 +470,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.exit_linear:
+                clickPop.dismiss();
+                break;
             case R.id.title_continue:
                 dialog.show();
                 savePicture();
@@ -511,16 +538,28 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 backBtn.setVisibility(View.GONE);
                 break;
             case R.id.activity_edit_products_relative:
+            case R.id.activity_edit_chaining_relative:
+                showClickPopup();
+                break;
+            case R.id.add_product_linear:
                 if (labels.size() >= 3) {
                     ToastUtils.showInfo("您最多可以添加三个产品");
 //                    dialog.showInfoWithStatus("您最多可以添加三个产品");
 //                    Toast.makeText(EditPictureActivity.this, R.string.more_three_products, Toast.LENGTH_SHORT).show();
                     return;
                 }
+                clickPop.dismiss();
                 Intent intent = new Intent(EditPictureActivity.this, AddProductActivity.class);
                 startActivityForResult(intent, DataConstants.REQUESTCODE_EDIT_ADDPRODUCT);
                 break;
-            case R.id.activity_edit_chaining_relative:
+            case R.id.add_chain_linear:
+                if (labels.size() >= 3) {
+                    ToastUtils.showInfo("您最多可以添加三个产品");
+//                    dialog.showInfoWithStatus("您最多可以添加三个产品");
+//                    Toast.makeText(EditPictureActivity.this, R.string.more_three_products, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                clickPop.dismiss();
                 startActivityForResult(new Intent(EditPictureActivity.this, SelectStoreActivity.class), DataConstants.REQUESTCODE_EDIT_SEARCHSTORE);
                 break;
             case R.id.activity_edit_filter_relative:

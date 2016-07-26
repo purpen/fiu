@@ -23,7 +23,6 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -129,8 +128,8 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
         ClientDiscoverAPI.commonList(page + "", 8 + "", null, user._id + "", "sight", "love", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<赞过的", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                Log.e("<<<赞过的", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 try {
@@ -162,7 +161,7 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                Log.e("<<<", "请求失败" + error.toString());
+//                Log.e("<<<", "请求失败" + error.toString());
             }
         });
     }

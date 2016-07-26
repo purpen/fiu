@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -84,7 +83,7 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
         if (resourceId > 0) {
             height = resources.getDimensionPixelSize(resourceId);
         }
-        Log.e("<<<", "工具栏 height:" + height);
+//        Log.e("<<<", "工具栏 height:" + height);
         return height;
     }
 

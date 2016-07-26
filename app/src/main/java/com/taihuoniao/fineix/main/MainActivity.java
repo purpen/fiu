@@ -12,13 +12,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -38,6 +40,8 @@ import com.taihuoniao.fineix.utils.MapUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 
@@ -148,6 +152,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewGroup.LayoutParams layoutParams = firstImg.getLayoutParams();
+        layoutParams.width = MainApplication.getContext().getScreenWidth();
+        layoutParams.height = layoutParams.width * 1013 / 750;
+        firstImg.setLayoutParams(layoutParams);
         if (fragments == null) {
             fragments = new ArrayList<>();
         }
@@ -281,7 +289,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 onWindowFocusChanged(true);
                 break;
             case R.id.ll_nav3:  //品
-                Log.e("<<<", "点击切换");
+//                Log.e("<<<", "点击切换");
                 switchFragmentandImg(WellGoodsFragment.class);
                 onWindowFocusChanged(true);
                 break;
@@ -621,4 +629,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private int animFlag = 0;
+
+    /**
+     * 菜单、返回键响应
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitBy2Click(); //调用双击退出函数
+        }
+        return false;
+    }
+
+    private Boolean isExit = false;
+
+    private void exitBy2Click() {
+        Timer tExit = null;
+        if (!isExit) {
+            isExit = true; // 准备退出
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false; // 取消退出
+                }
+            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
+
 }

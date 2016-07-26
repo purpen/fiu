@@ -223,8 +223,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 lp.width = surfaceView.getWidth();
                 lp.height = lp.width * previewSize.width / previewSize.height;
                 surfaceView.setLayoutParams(lp);
-                Log.e("<<<最终的预览参数", "width=" + previewSize.width + ",height=" + previewSize.height + ",surface.width="
-                        + surfaceView.getWidth() + ",surface.height=" + surfaceView.getHeight());
+//                Log.e("<<<最终的预览参数", "width=" + previewSize.width + ",height=" + previewSize.height + ",surface.width="
+//                        + surfaceView.getWidth() + ",surface.height=" + surfaceView.getHeight());
             }
         }
 
@@ -272,7 +272,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
             downPolymorphic = camera.getClass().getMethod("setDisplayOrientation",
                     int.class);
             if (downPolymorphic != null) {
-                Log.e("<<<", "调整方向");
+//                Log.e("<<<", "调整方向");
                 downPolymorphic.invoke(camera, 90);
             }
         } catch (Exception e) {
@@ -358,8 +358,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
 
         Camera.Size defaultPictureResolution = cameraParameters.getPictureSize();
-        Log.e("<<<", "default picture resolution " + defaultPictureResolution.width + "x"
-                + defaultPictureResolution.height);
+//        Log.e("<<<", "default picture resolution " + defaultPictureResolution.width + "x"
+//                + defaultPictureResolution.height);
 
         // 排序
         List<Camera.Size> sortedSupportedPicResolutions = new ArrayList<>(
@@ -380,14 +380,14 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         });
         // 如果没有找到合适的，并且还有候选的像素，对于照片，则取其中最大比例的，而不是选择与屏幕分辨率相同的
         if (!sortedSupportedPicResolutions.isEmpty()) {
-            Log.e("<<<拍照图片最大像素", "预览像素=" + sortedSupportedPicResolutions.get(0).height + "," + sortedSupportedPicResolutions.get(0).width
-                    + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
+//            Log.e("<<<拍照图片最大像素", "预览像素=" + sortedSupportedPicResolutions.get(0).height + "," + sortedSupportedPicResolutions.get(0).width
+//                    + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
             return sortedSupportedPicResolutions.get(0);
         }
 
         // 没有找到合适的，就返回默认的
-        Log.e("<<<拍照图片默认像素", "预览像素=" + defaultPictureResolution.height + "," + defaultPictureResolution.width
-                + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
+//        Log.e("<<<拍照图片默认像素", "预览像素=" + defaultPictureResolution.height + "," + defaultPictureResolution.width
+//                + ",预览界面大小=" + surfaceView.getHeight() + "," + surfaceView.getWidth());
         return defaultPictureResolution;
     }
 
@@ -511,7 +511,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         Rect r = new Rect(0, 0, options.outWidth, options.outHeight);
         try {
             croppedImage = decodeRegionCrop(data, r);
-            Log.e("<<<", "拍照保存的图片=" + croppedImage.getWidth() + "," + croppedImage.getHeight());
+//            Log.e("<<<", "拍照保存的图片=" + croppedImage.getWidth() + "," + croppedImage.getHeight());
         } catch (Exception e) {
             return null;
         }
@@ -546,13 +546,13 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
         Matrix m = new Matrix();
         m.setRotate(90, options.outWidth, options.outHeight);
-        Log.e("<<<图片大小", "图片=" + data.length);
+//        Log.e("<<<图片大小", "图片=" + data.length);
         Bitmap rotatedImage = null;
         try {
             rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, options.outWidth, options.outHeight, m, true);
         } catch (OutOfMemoryError e) {
             System.gc();
-            Log.e("<<<内存溢出", e.toString());
+//            Log.e("<<<内存溢出", e.toString());
         }
 
         if (rotatedImage != croppedImage && croppedImage != null)
@@ -564,7 +564,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             if (null == cameraInst) {
-                Log.e("<<<", "surfaceCreate");
+//                Log.e("<<<", "surfaceCreate");
                 try {
                     cameraInst = Camera.open();
                     cameraInst.setPreviewDisplay(holder);
@@ -579,17 +579,17 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e("<<<", "surfaceChanged" + ",width=" + width + ",height=" + height + ",surfaceView.width=" + surfaceView.getWidth()
-                    + ",surfaceView.height=" + surfaceView.getHeight());
+//            Log.e("<<<", "surfaceChanged" + ",width=" + width + ",height=" + height + ",surfaceView.width=" + surfaceView.getWidth()
+//                    + ",surfaceView.height=" + surfaceView.getHeight());
             autoFocus();
-            Log.e("<<<显示出来的预览尺寸", ">>>width=" + cameraInst.getParameters().getPreviewSize().width + ",height=" + cameraInst.getParameters().getPreviewSize().height);
+//            Log.e("<<<显示出来的预览尺寸", ">>>width=" + cameraInst.getParameters().getPreviewSize().width + ",height=" + cameraInst.getParameters().getPreviewSize().height);
 //            parameters.setPreviewSize(surfaceView.getWidth(), surfaceView.getHeight());
 //            parameters.setPictureSize(surfaceView.getWidth(), surfaceView.getHeight());
         }
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            Log.e("<<<", "surfaceDestroyed");
+//            Log.e("<<<", "surfaceDestroyed");
             try {
                 if (cameraInst != null) {
                     cameraInst.stopPreview();

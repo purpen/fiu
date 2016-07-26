@@ -54,7 +54,6 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByQJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.scene.CreateSceneActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -382,7 +381,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         ClientDiscoverAPI.qingjingDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<情景详情", responseInfo.result);
+//                Log.e("<<<情景详情", responseInfo.result);
                 QingjingDetailBean qingjingDetailBean = new QingjingDetailBean();
                 try {
                     Gson gson = new Gson();
@@ -512,19 +511,19 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 dialog.show();
                 deleteQingjing(id);
                 break;
-            case R.id.popup_scene_detail_more_bianji_linear:
-                if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
-                    MainApplication.which_activity = DataConstants.QingjingDetailActivity;
-                    LoginCompleteUtils.id = id;
-                    startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
-                    return;
-                }
-                Intent intent5 = new Intent(QingjingDetailActivity.this, CreateSceneActivity.class);
-                MainApplication.tag = 2;
-                intent5.putExtra(QingjingDetailActivity.class.getSimpleName(), QingjingDetailBean);
-                startActivity(intent5);
-                break;
+//            case R.id.popup_scene_detail_more_bianji_linear:
+//                if (!LoginInfo.isUserLogin()) {
+////                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
+//                    MainApplication.which_activity = DataConstants.QingjingDetailActivity;
+//                    LoginCompleteUtils.id = id;
+//                    startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
+//                    return;
+//                }
+//                Intent intent5 = new Intent(QingjingDetailActivity.this, CreateActivity.class);
+//                MainApplication.tag = 2;
+//                intent5.putExtra(QingjingDetailActivity.class.getSimpleName(), QingjingDetailBean);
+//                startActivity(intent5);
+//                break;
             case R.id.popup_scene_detail_more_cancel:
                 popupWindow.dismiss();
                 break;
@@ -786,7 +785,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.activity_qingjingdetail_grid:
-                Log.e("<<<", "点击position=" + position);
+//                Log.e("<<<", "点击position=" + position);
                 Intent intent1 = new Intent(QingjingDetailActivity.this, UserCenterActivity.class);
                 intent1.putExtra(FocusActivity.USER_ID_EXTRA, Long.parseLong(headList.get(position).getUser().getUser_id()));
                 startActivity(intent1);
@@ -810,7 +809,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
             progressBar.setVisibility(View.VISIBLE);
             getSceneList(currentPage + "", null, id, null, null, null, null, null);
         }
-        Log.e("<<<", "没进来" + getScrollY());
+//        Log.e("<<<", "没进来" + getScrollY());
         backgroundImg.setTranslationY(getScrollY() / 3);
         if (backgroundImg.getTranslationY() >= backgroundImg.getMeasuredHeight() / 5) {
             backgroundImg.setTranslationY(backgroundImg.getMeasuredHeight() / 5 + getScrollY() - backgroundImg.getMeasuredHeight() * 3 / 5);

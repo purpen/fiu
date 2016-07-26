@@ -294,20 +294,14 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         }
         if (phoneEdt.getText().toString().isEmpty()) {
             ToastUtils.showError("手机号码不能为空!");
-//            dialog.showErrorWithStatus("手机号码不能为空!");
-//            Toast.makeText(AddNewAddressActivity.this, "手机号码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (detailsAddressEdt.getText().toString().isEmpty()) {
-            ToastUtils.showError("详细地址不能为空!");
-//            dialog.showErrorWithStatus("详细地址不能为空!");
-//            Toast.makeText(AddNewAddressActivity.this, "详细地址不能为空！", Toast.LENGTH_SHORT).show();
+            ToastUtils.showError(R.string.address_details_is_empty);
             return;
         }
         if (postcodeEdt.getText().toString().isEmpty()) {
             ToastUtils.showError("邮政编码不能为空!");
-//            dialog.showErrorWithStatus("邮政编码不能为空!");
-//            Toast.makeText(AddNewAddressActivity.this, "邮政编码不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         cityId = provinceList.get(provinceView.getCurrentItem()).getCityList().get(cityView.getCurrentItem()).get_id();
