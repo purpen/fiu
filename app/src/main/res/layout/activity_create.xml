@@ -172,7 +172,7 @@
                 android:id="@+id/img1"
                 android:layout_width="11dp"
                 android:layout_height="match_parent"
-                android:src="@mipmap/category_create_sight"/>
+                android:src="@mipmap/dipan_suoshu"/>
 
             <TextView
                 android:id="@+id/category_tv"

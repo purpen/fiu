@@ -7,7 +7,7 @@ package com.taihuoniao.fineix.network;
 public class NetworkConstance {
     public static final String ALI_PAY = "alipay";
     public static final String WX_PAY = "weichat";
-    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";
+    public static final String BASE_URL = "http://api.taihuoniao.com/app/api";
 
     //热门城市 暂用ESTORE的URL
     public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";

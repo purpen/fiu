@@ -133,7 +133,9 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         StringBuilder tags = new StringBuilder();
         for (int i = 0; i < scene.getData().getTag_titles().size(); i++) {
             tags.append(",").append(scene.getData().getTag_titles().get(i));

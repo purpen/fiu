@@ -113,7 +113,9 @@ public class PublishEvaluateActivity extends Activity {
 //                        dialog.showErrorWithStatus("评论内容不能为空!");
 //                        Toast.makeText(PublishEvaluateActivity.this, "评价内容不能为空！", Toast.LENGTH_LONG).show();
                     } else {
-                        dialog.show();
+                        if(!dialog.isShowing()){
+                            dialog.show();
+                        }
                         StringBuilder builder = new StringBuilder();
                         builder.append("[");
                         //拼接须注意，字段名要加双引号，字段内容如为字符串也得加双引号，整型则不加

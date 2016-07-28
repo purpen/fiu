@@ -115,7 +115,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                 progressBar.setVisibility(View.VISIBLE);
                 page++;
                 if (isSearch.equals("0")) {
-                    qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", latLng.longitude + "", latLng.latitude + "");
+                    qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", null, null);
                 } else if (isSearch.equals("1")) {
                     search(q, 8 + "", page + "", "tag", null);
                 }
@@ -139,7 +139,9 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         if (isSearch.equals("0")) {
             qingjingList(page + "", category_id, 1 + "", 0 + "", distance + "", null, null);
         }
@@ -209,7 +211,9 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
 
     @Override
     public void click(int postion) {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         for (int i = 0; i < dipanList.size(); i++) {
             if (i == postion) {
                 dipanList.get(i).setIsSelect(true);

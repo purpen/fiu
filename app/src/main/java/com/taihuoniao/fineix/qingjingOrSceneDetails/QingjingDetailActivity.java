@@ -245,7 +245,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         qingjingDetails(id);
         commonList(1 + "", 14 + "", id, null, "scene", "subscription");
         getSceneList(currentPage + "", null, id, null, null, null, null, null);
@@ -415,7 +417,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     userName.setText(netQingjingDetailBean.getData().getUser_info().getNickname());
 //                        isSpertAndSummary(userInfo, netQingjingDetailBean.getData().getUser_info().getIs_expert(), netQingjingDetailBean.getData().getUser_info().getSummary());
                     subscriptionCount.setText(String.format("%d人订阅", netQingjingDetailBean.getData().getSubscription_count()));
-                    moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()));
+                    moreUser.setText(String.format("%d+", netQingjingDetailBean.getData().getSubscription_count()%10*10));
                     desTv.setText(netQingjingDetailBean.getData().getDes());
                     locaiton = new String[]{netQingjingDetailBean.getData().getLocation().getCoordinates().get(0) + "", netQingjingDetailBean.getData()
                             .getLocation().getCoordinates().get(1) + ""};
@@ -508,7 +510,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.popup_scene_detail_more_jubao:
                 popupWindow.dismiss();
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 deleteQingjing(id);
                 break;
 //            case R.id.popup_scene_detail_more_bianji_linear:
@@ -532,12 +536,16 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.activity_qingjingdetail_addresslinear:
                 if (locaiton == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     qingjingDetails(id);
                     return;
                 }
                 if (QingjingDetailBean == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     qingjingDetails(id);
                     return;
                 }
@@ -583,7 +591,9 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                     startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 switch (is_subscript) {
                     case 1:
                         cancelSubsQingjing(id);
@@ -831,11 +841,15 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(IndexFragment.class.getSimpleName())) {
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 currentPage = 1;
                 getSceneList(currentPage + "", null, id, null, null, null, null, null);
             } else {
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 qingjingDetails(id);
                 currentPage = 1;
                 getSceneList(currentPage + "", null, id, null, null, null, null, null);

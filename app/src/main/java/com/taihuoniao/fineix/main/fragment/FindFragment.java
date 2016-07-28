@@ -48,7 +48,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
@@ -382,7 +382,9 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -423,6 +425,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<轮播图", responseInfo.result);
                 if (responseInfo == null) {
                     return;
                 }

@@ -104,7 +104,9 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     }
 
     private void getProvinceData() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        DataPaser.getProvinceList(mHandler);
         ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
@@ -307,7 +309,9 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         cityId = provinceList.get(provinceView.getCurrentItem()).getCityList().get(cityView.getCurrentItem()).get_id();
         provinceId = provinceList.get(provinceView.getCurrentItem()).get_id();
         //接口 25
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        DataPaser.commitAddressParser(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", mHandler);
         ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
@@ -410,7 +414,9 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            AddNewAddressActivity.this.dialog.show();
+                            if (! AddNewAddressActivity.this.dialog.isShowing()) {
+                                AddNewAddressActivity.this. dialog.show();
+                            }
 //                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
                             ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
                                 @Override

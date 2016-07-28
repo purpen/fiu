@@ -125,7 +125,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        DataPaser.brandDetail(id, handler);
         ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override

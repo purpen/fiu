@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * Created by android on 2016/1/20.
  */
 public class LoginInfo implements Serializable {
+
     private long _id;
     private String message;
     private String account;
@@ -32,7 +33,7 @@ public class LoginInfo implements Serializable {
     private static LoginInfo loginInfo;
     public Identify identify;
     public ArrayList<String> areas;
-    public class Identify{
+    public static class Identify implements Serializable{
         public int is_scene_subscribe;
     }
     private LoginInfo() {

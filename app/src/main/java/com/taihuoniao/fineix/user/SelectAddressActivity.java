@@ -58,7 +58,9 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_select_address);
         initView();
         setData();
-        dialog.show();
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
         getAddressList(currentPage + "");
     }
 
@@ -150,7 +152,9 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                 if (result == 1) {
                     list.clear();
                     currentPage = 1;
-                    dialog.show();
+                    if(!dialog.isShowing()){
+                        dialog.show();
+                    }
                     getAddressList(currentPage + "");
                 }
                 break;
@@ -172,7 +176,9 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     }
 
     public void deleteAddress(String id) {
-        dialog.show();
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
         ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

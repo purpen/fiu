@@ -326,7 +326,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         sceneDetails(id);
         commentsList(1 + "", 3 + "", id, null, 12 + "");
         commonList(1 + "", 14 + "", id, null, "sight", "love");
@@ -471,7 +473,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_scenedetails_left_label:
                 if (netUserInfo == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id);
                     return;
                 }
@@ -497,13 +501,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 if (netScene == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id);
                     return;
                 }
                 if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id() + "")) {
                     popupWindow.dismiss();
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     deleteScene(id);
                     return;
                 }
@@ -523,12 +531,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_location:
 //                跳转到地图界面，查看附近的场景
                 if (location == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id);
                     return;
                 }
                 if (netScene == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id);
                     return;
                 }
@@ -549,6 +561,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                         labelView.pointOrAll(false, isShowAll);
                     }
                 }
+
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) titleLinear.getLayoutParams();
 //                Log.e("<<<动画", "height=" + titleLinear.getHeight() + ",bottomMargin=" + lp.bottomMargin);
                 if (isShowAll) {
@@ -595,7 +608,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 popupWindow.dismiss();
 //                Log.e("<<<点击", "点击评论");
                 if (netScene == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id + "");
                     return;
                 }
@@ -626,7 +641,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.activity_scenedetails_more:
                 if (netScene == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     sceneDetails(id + "");
                     return;
                 }
@@ -714,7 +731,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private BroadcastReceiver sceneDetailReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            dialog.show();
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
             sceneDetails(id);
         }
     };
@@ -834,7 +853,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.sceneDetails(i, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-//                        Log.e("<<<场景详情", responseInfo.result);
+                        Log.e("<<<场景详情", responseInfo.result);
 //                        WriteJsonToSD.writeToSD("json", responseInfo.result);
                         SceneDetailsBean sceneDetails = new SceneDetailsBean();
                         try {
@@ -908,12 +927,12 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                        scrollView.scrollTo(0, container.getMeasuredHeight() - MainApplication.getContext().getScreenHeight());
                         } else {
                             ToastUtils.showError(netSceneDetails.getMessage());
-                            new Handler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finish();
-                                }
-                            });
+//                            new Handler().post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    finish();
+//                                }
+//                            });
                         }
                     }
 

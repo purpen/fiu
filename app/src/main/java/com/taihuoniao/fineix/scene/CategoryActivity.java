@@ -62,11 +62,13 @@ public class CategoryActivity extends BaseActivity implements AdapterView.OnItem
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.categoryList(1 + "", 12 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<情景分类", responseInfo.result);
+                Log.e("<<<情景分类", responseInfo.result);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();

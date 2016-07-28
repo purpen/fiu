@@ -75,15 +75,21 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_report_sexual_violence:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 report(target_id, type, 1 + "");
                 break;
             case R.id.activity_report_steal_picture:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 report(target_id, type, 2 + "");
                 break;
             case R.id.activity_report_advertising_cheat:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 report(target_id, type, 3 + "");
                 break;
             case R.id.title_continue:

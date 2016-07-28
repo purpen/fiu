@@ -26,7 +26,7 @@
                 android:id="@+id/tv_thn_redbag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fiu红包"
+                android:text="@string/fiu_redbag"
                 android:textColor="@color/color_af8323"
                 android:textSize="14sp" />
 
@@ -35,14 +35,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp5"
-                android:text="红包码：xxxxx"
+                android:text="@string/redbag_code"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_min_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="最低使用限额：99元"
+                android:text="@string/less_money"
                 android:layout_marginTop="@dimen/dp40"
                 android:textColor="@color/color_333"
                 android:textSize="12sp" />
@@ -57,7 +57,7 @@
                 android:id="@+id/tv_money_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¥"
+                android:text="@string/money"
                 android:textColor="@color/color_af8323"
                 android:textSize="14sp" />
 

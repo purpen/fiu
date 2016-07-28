@@ -244,7 +244,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
             @Override
             public void onClick(View v) {
                 if (change == 0) {
-                    mDialog.show();
+                    if (!mDialog.isShowing()) {
+                        mDialog.show();
+                    }
                     title.setRightButton("完成");
                     mDeleteCalculate.setText("删除");
                     mAllPrice.setVisibility(View.INVISIBLE);

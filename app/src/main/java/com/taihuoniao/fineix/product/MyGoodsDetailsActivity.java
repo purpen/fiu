@@ -136,7 +136,9 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         IntentFilter filter = new IntentFilter();
         filter.addAction(DataConstants.BROAD_GOODS_DETAILS);
         registerReceiver(goodsDetailsActivityReceiver, filter);
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         goodsDetail(id);
         int currentPage = 1;
         goodsComments(id, currentPage + "");
@@ -527,7 +529,9 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
             case R.id.activity_goodsdetails_buy:
                 if (goodsDetailsBean == null) {
                     cancelNet();
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     goodsDetail(id);
                     int currentPage = 1;
                     goodsComments(id, currentPage + "");
@@ -590,11 +594,15 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
 //                        dialog.showErrorWithStatus("请选择颜色/分类");
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
-                        dialog.show();
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
                         addToCart(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                     }
                 } else {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     addToCart(id, "1", numberTv.getText().toString());
                 }
                 break;
@@ -613,11 +621,15 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
 //                        dialog.showErrorWithStatus("请选择颜色/分类");
 //                        Toast.makeText(MyGoodsDetailsActivity.this, R.string.not_switch_sku, Toast.LENGTH_SHORT).show();
                     } else {
-                        dialog.show();
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
                         buyNow(goodsDetailsBean.getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                     }
                 } else {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     buyNow(id, "1", numberTv.getText().toString());
                 }
 

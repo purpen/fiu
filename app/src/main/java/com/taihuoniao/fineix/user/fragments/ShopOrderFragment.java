@@ -91,7 +91,9 @@ public class ShopOrderFragment extends Fragment {
         } else {
             mDialog = new WaittingDialog(getActivity());
             if (curPage == 1) {
-                mDialog.show();
+                if(!mDialog.isShowing()){
+                    mDialog.show();
+                }
             }
             curPage = 1;
             initData();

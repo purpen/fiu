@@ -19,6 +19,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -164,7 +165,9 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
             @Override
             public void onRefresh() {
                 currentPage = 1;
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 requestNet();
             }
         });
@@ -331,7 +334,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     private void cancelChenjin() {
         searchImg.setVisibility(View.GONE);
         subsImg.setVisibility(View.GONE);
-        Intent intent = new Intent();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("index", 1);
         intent.setAction(DataConstants.BroadShopCart);
         getActivity().sendBroadcast(intent);
@@ -340,7 +343,7 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     private void chenjin() {
         searchImg.setVisibility(View.VISIBLE);
         subsImg.setVisibility(View.VISIBLE);
-        Intent intent = new Intent();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("index", 2);
         intent.setAction(DataConstants.BroadShopCart);
         getActivity().sendBroadcast(intent);

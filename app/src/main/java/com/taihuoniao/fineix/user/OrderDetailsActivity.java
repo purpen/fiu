@@ -514,7 +514,9 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void initData() {
-        mDialog.show();
+        if(!mDialog.isShowing()){
+            mDialog.show();
+        }
         mProductId = getIntent().getStringExtra("productId");
         mSkuId = getIntent().getStringExtra("skuId");
         mRid = getIntent().getStringExtra("rid");
@@ -687,7 +689,9 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                             mLeftButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    mDialog.show();
+                                    if(!mDialog.isShowing()){
+                                        mDialog.show();
+                                    }
                                     ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                                         @Override
                                         public void onSuccess(ResponseInfo<String> responseInfo) {

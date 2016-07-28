@@ -80,9 +80,9 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
                     holder.slidingFocusImageView.setSelection(Integer.MAX_VALUE / 2 - 1);
                 }
             }
-            switch (item.scene_product.attrbute) {
+            switch (list.get(position).scene_product.attrbute) {
                 case "1":
-                    holder.img.setImageResource(R.mipmap.product_fiu);
+                    holder.img.setImageResource(R.mipmap.d3in);
                     break;
                 case "2":
                     holder.img.setImageResource(R.mipmap.product_taobao);
@@ -94,7 +94,8 @@ public class CollectListAdapter extends CommonBaseAdapter<CollectionItem> {
                     holder.img.setImageResource(R.mipmap.product_jingdong);
                     break;
                 default:
-                    holder.img.setVisibility(View.INVISIBLE);
+                    holder.img.setImageResource(R.mipmap.product_fiu);
+//                    holder.img.setVisibility(View.INVISIBLE);
                     break;
             }
             ClickListener clickListener = new ClickListener(activity, list, position);

@@ -611,7 +611,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         }
 
         protected void onPreExecute() {
-            dialog.show();
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
         }
 
         @Override

@@ -155,7 +155,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                         return false;
                     }
                     page = 1;
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     search();
                 }
                 return false;
@@ -244,7 +246,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
     @Override
     public void click(int postion) {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         for (int i = 0; i < envirList.size(); i++) {
             if (i == postion) {
                 envirList.get(i).setIsSelect(true);
@@ -305,8 +309,10 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
     //分类列表
     private void categoryList() {
-        dialog.show();
-        ClientDiscoverAPI.categoryList(1 + "", 11 + "", null, new RequestCallBack<String>() {
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
+        ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<分类列表", responseInfo.result);
@@ -339,7 +345,7 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
     //语境列表
     private void envirList() {
-        ClientDiscoverAPI.envirList(page + "", 8 + "", null, cid, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.envirList(page + "", 8 + "", 1+"", cid, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<语境列表", responseInfo.result);

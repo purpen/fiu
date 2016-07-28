@@ -192,7 +192,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         goodsDetails(id);
         productAndScene(page + "", 20 + "", null, id);
         getProducts(null, null, null, recommendPage + "", 4 + "", null, id, null, null);
@@ -218,7 +220,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 break;
             case R.id.activity_goods_detail_brand_relative:
                 if (netGood == null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     goodsDetails(id);
                     return;
                 }
@@ -237,7 +241,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                         break;
                     case "1":
                         if (netGood == null) {
-                            dialog.show();
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
                             goodsDetails(id);
                             return;
                         }
@@ -555,7 +561,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
 
     //收藏和取消收藏
     private void favorite() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.favorite(id, "10", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -588,7 +596,9 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
     }
 
     private void cancelFavorite() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.cancelFavorite(id, "10", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

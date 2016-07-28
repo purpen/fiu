@@ -224,7 +224,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         sceneDetails(id);
     }
 
@@ -317,7 +319,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     //动态改变分享的样式
     private void selectShareStyle(int position) {
         if (netScene == null) {
-            dialog.show();
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
             sceneDetails(id);
             return;
         }
@@ -422,9 +426,12 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.e("<<<","imgPath="+MainApplication.getContext().getCacheDirPath());
             Platform.ShareParams params;
             String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
-            dialog.show();
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
 //            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
 //            Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
 //            container.draw(canvas);//绘制画布上

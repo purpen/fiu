@@ -173,7 +173,9 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         //需要登录
 //        DataPaser.usedLabelList(handler);
         ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {

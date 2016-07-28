@@ -114,7 +114,9 @@ public class CropPictureActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 Bitmap bitmap = clipImageLayout.clip();
                 try {
                     ImageUtils.saveToFile(MainApplication.cropPicPath, false, bitmap);

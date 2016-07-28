@@ -84,7 +84,9 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         brandList(1, 6, null, 1 + "", null);//自营品牌推荐列表
         brandList(page, size, null, null, null);//全部品牌列表
     }
@@ -196,6 +198,12 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
                 item.sectionPosition = sectionPosition;
                 item.listPosition = listPosition++;
                 itemList.add(item);
+                Item item2 = new Item(Item.ITEM, brandList.get(0).getTitle());
+                item2.set_id(brandList.get(0).get_id());
+                item2.setUrl(brandList.get(0).getCover_url());
+                item2.sectionPosition = sectionPosition;
+                item2.listPosition = listPosition++;
+                itemList.add(item2);
                 if (brandList.size() > 1) {
                     for (int i = 1; i < brandList.size(); i++) {
                         if (brandList.get(i).getMark().equals(brandList.get(i - 1).getMark())) {
@@ -211,6 +219,12 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
                             item1.sectionPosition = sectionPosition;
                             item1.listPosition = listPosition++;
                             itemList.add(item1);
+                            Item item3 = new Item(Item.ITEM, brandList.get(i).getTitle());
+                            item3.set_id(brandList.get(i).get_id());
+                            item3.setUrl(brandList.get(i).getCover_url());
+                            item3.sectionPosition = sectionPosition;
+                            item3.listPosition = listPosition++;
+                            itemList.add(item3);
                         }
                     }
                 }

@@ -112,7 +112,9 @@ public class QJResultFragment extends BaseFragment implements AdapterView.OnItem
         if (TextUtils.isEmpty(q) || TextUtils.isEmpty(t)) {
             return;
         }
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        progressBar.setVisibility(View.VISIBLE);
         if (isContent) {
             search(q, t, page + "", "content", null);

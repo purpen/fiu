@@ -58,7 +58,9 @@ public class MineBrandActivity extends BaseActivity implements AdapterView.OnIte
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         //品牌列表
         ClientDiscoverAPI.brandList(1, Integer.MAX_VALUE, null, 1 + "", null, new RequestCallBack<String>() {
             @Override
