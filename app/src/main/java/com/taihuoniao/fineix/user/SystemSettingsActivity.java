@@ -16,7 +16,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;

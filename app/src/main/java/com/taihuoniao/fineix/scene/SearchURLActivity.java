@@ -109,12 +109,14 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightTv(R.string.close, getResources().getColor(R.color.black333333), this);
         titleLayout.setBackListener(this);
-        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
 //                Log.e("<<<start>>>", url);
                 super.onPageStarted(view, url, favicon);
             }
@@ -259,7 +261,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                             return;
                         }
                         if (netJingDong == null) {
-                            dialog.show();
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
                             getJDProductData(id);
                             return;
                         }
@@ -302,7 +306,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                 }
                 break;
             case R.id.activity_search_url_find:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 switch (type) {
                     case DataConstants.JINGDONG:
                         getJDProductData(id);
@@ -464,7 +470,9 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         if (netTaoBao == null) {
-            dialog.show();
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
             getTBProductData(id);
             return;
         }

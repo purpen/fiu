@@ -35,7 +35,7 @@
 
         <RelativeLayout
             android:id="@+id/fragment_wellgoods_cart_relative"
-            android:layout_width="wrap_content"
+            android:layout_width="55dp"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             >
@@ -64,6 +64,7 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:visibility="visible"
         android:id="@+id/fragment_wellgoods_framelayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"

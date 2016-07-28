@@ -204,7 +204,9 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     protected void requestNet() {
 
 //        progressBar.setVisibility(View.VISIBLE);
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        Log.e("<<<", "tag_id = " + tag_id);
 //        progressBar.setVisibility(View.VISIBLE);
         if (position == 0) {
@@ -266,7 +268,9 @@ public class GoodListFragment extends Fragment implements EditRecyclerAdapter.It
     @Override
     public void click(int postion) {
 //        progressBar.setVisibility(View.VISIBLE);
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         for (int i = 0; i < recyclerList.size(); i++) {
             if (i == postion) {
                 recyclerList.get(postion).setIsSelect(true);

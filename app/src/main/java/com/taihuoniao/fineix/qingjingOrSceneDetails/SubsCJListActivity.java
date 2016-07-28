@@ -64,7 +64,9 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
             @Override
             public void onRefresh() {
                 page = 1;
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 requestNet();
             }
         });
@@ -84,7 +86,9 @@ public class SubsCJListActivity extends BaseActivity implements AdapterView.OnIt
         sceneListViewAdapter = new SceneListViewAdapter(SubsCJListActivity.this, null, null, null, list);
         listView.setAdapter(sceneListViewAdapter);
         listView.setOnItemClickListener(this);
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override

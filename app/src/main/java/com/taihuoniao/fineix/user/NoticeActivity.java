@@ -15,7 +15,7 @@ import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.NoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;

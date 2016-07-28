@@ -55,7 +55,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.product.AllBrandsActivity;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
@@ -175,7 +175,9 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         getProductList(2 + "", null, null, null, productPage + "", 8 + "", null, null, null, null);
         ClientDiscoverAPI.getBanners(PAGE_NAME, new RequestCallBack<String>() {
             @Override

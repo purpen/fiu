@@ -120,7 +120,9 @@ public class HasLoveActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
         requestLoveSceneList();
     }
 

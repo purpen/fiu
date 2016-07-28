@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.beans.SupportData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;

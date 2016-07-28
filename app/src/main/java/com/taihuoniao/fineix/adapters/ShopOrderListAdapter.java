@@ -124,7 +124,9 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mdialog.show();
+                                if (!mdialog.isShowing()) {
+                                    mdialog.show();
+                                }
                                 ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -172,7 +174,9 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mdialog.show();
+                                if (!mdialog.isShowing()) {
+                                    mdialog.show();
+                                }
                                 ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -200,7 +204,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mdialog.show();
+                        if(!mdialog.isShowing()){
+                        mdialog.show();}
                         ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -452,7 +457,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         }
         for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
 //            mView = LayoutInflater.from(context).inflate(R.layout.item_order_content, null);
-            mView = View.inflate(context,R.layout.item_order_content,null);
+            mView = View.inflate(context, R.layout.item_order_content, null);
             ImageView mImageView = (ImageView) mView.findViewById(R.id.image_order_inner);
             TextView mTitle = (TextView) mView.findViewById(R.id.tv_title_order_inner);
             TextView mColor = (TextView) mView.findViewById(R.id.tv_color_order_inner);

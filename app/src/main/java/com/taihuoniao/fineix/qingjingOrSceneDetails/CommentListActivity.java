@@ -184,7 +184,9 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void requestNet() {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         getComments(currentPage + "", 8 + "", target_id, null, type);
     }
 
@@ -383,7 +385,9 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 if (po == -1) {
                     return;
                 }
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
 //                DataPaser.deleteComment(commentList.get(po).get_id(), handler);
                 deleteComment(commentList.get(po).get_id());
                 break;

@@ -474,7 +474,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                 clickPop.dismiss();
                 break;
             case R.id.title_continue:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 savePicture();
                 break;
             case R.id.pop_edit_delete:
@@ -703,7 +705,9 @@ public class EditPictureActivity extends BaseActivity implements View.OnClickLis
                     imageLoader.loadImage(url, new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
-                            dialog.show();
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
                         }
 
                         @Override

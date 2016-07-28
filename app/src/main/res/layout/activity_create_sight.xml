@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

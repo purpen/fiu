@@ -81,7 +81,9 @@ public class ReturnGoodsActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (curPage == 1) {
-            mDialog.show();
+            if(!mDialog.isShowing()){
+                mDialog.show();
+            }
         }
         mAdapter.notifyDataSetChanged();
         orderListParser(status, curPage + "", size + "");
@@ -163,7 +165,9 @@ public class ReturnGoodsActivity extends Activity {
         title.setBackButtonVisibility(true);
         mDialog = new WaittingDialog(this);
         if (curPage == 1) {
-            mDialog.show();
+            if(!mDialog.isShowing()){
+                mDialog.show();
+            }
         }
         pullToRefreshListView = (PullToRefreshListView) findViewById(R.id.pullToRefreshListView_return);
         progressBar = (ProgressBar) findViewById(R.id.return_progressBar);

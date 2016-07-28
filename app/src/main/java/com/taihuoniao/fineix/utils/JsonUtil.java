@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 
 import java.io.Reader;
 import java.util.List;

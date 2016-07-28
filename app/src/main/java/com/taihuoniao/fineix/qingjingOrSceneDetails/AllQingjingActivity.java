@@ -101,7 +101,9 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
                     getCurrentLocation();
                     return;
                 }
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 page = 1;
                 getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
             }
@@ -135,7 +137,9 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 if (location == null && bdLocation != null) {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     location = new double[]{bdLocation.getLongitude(), bdLocation.getLatitude()};
                     MapUtil.destroyLocationClient();
                     getQJList(page + "", 0 + "", 0 + "", distance + "", location[0] + "", location[1] + "");
@@ -253,7 +257,9 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
 
     //地盘分类列表
     private void categoryList(String page, String domain, String show_all) {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         ClientDiscoverAPI.categoryList(page, domain, show_all, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

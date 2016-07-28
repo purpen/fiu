@@ -204,7 +204,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onRefresh() {
                 currentPage = 1;
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 requestNet();
             }
         });
@@ -244,12 +246,16 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             if (q != null && intent.getBooleanExtra("search", false) && pos == position) {
                 search = intent.getBooleanExtra("search", false);
                 currentPage = 1;
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 search(q,"10",currentPage+"",null,null);
             } else if (search && !intent.getBooleanExtra("search", true)) {
                 search = false;
                 currentPage = 1;
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 requestNet();
             }
 
@@ -268,7 +274,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         String ids = null;
         if (productList.size() > 0) {
             ids = productList.get(position).get_id();

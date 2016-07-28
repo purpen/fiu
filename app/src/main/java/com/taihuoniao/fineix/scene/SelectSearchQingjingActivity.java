@@ -126,7 +126,9 @@ public class SelectSearchQingjingActivity extends BaseActivity implements View.O
                     //开始搜索
                     q = editText.getText().toString().trim();
                     page = 1;
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     search(q, 8 + "", page + "", "tag", null);
                 }
                 return false;

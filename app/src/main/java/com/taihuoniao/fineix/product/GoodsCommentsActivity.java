@@ -52,7 +52,9 @@ public class GoodsCommentsActivity extends Activity {
         setContentView(R.layout.activity_commentlists);
         initView();
         initData();
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         getComments(target_id, currentPage + "");
     }
 

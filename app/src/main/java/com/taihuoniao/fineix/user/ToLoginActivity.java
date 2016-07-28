@@ -28,7 +28,7 @@ import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -498,6 +498,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<LoginInfo> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<LoginInfo>>() {
                 });
+//                ToastUtils.showError(responseInfo.result);
                 LogUtil.e("LOGIN_INFO", responseInfo.result);
                 if (response.isSuccess()) {//登录界面登录成功
                     MainApplication.hasUser=true;

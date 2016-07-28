@@ -22,7 +22,7 @@ import com.taihuoniao.fineix.beans.IsInviteData;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.HttpResponse;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
@@ -234,6 +234,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
         ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+//                ToastUtils.showError(responseInfo.result);
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }

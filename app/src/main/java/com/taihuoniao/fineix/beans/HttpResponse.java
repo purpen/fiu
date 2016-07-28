@@ -1,10 +1,12 @@
-package com.taihuoniao.fineix.network;
+package com.taihuoniao.fineix.beans;
+
+import java.io.Serializable;
 
 /**
  * @author lilin
  * created at 2016/4/5 17:39
  */
-public class HttpResponse<T> {
+public class HttpResponse<T> implements Serializable {
     private boolean success;
     private boolean is_error;
     private String status;
@@ -30,4 +32,5 @@ public class HttpResponse<T> {
     public T getData() {
         return data;
     }
+
 }

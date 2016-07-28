@@ -5,7 +5,7 @@
     <string name="fiu">Fiu 浮游</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
-    <string name="about_us">关于Fiu</string>
+    <string name="about_us" translatable="false">关于Fiu</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
     <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
@@ -185,7 +185,7 @@
     <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
     <string name="fans_tips">给你一首歌的时间就回来哦，粉丝们还等着你的新动态呢</string>
     <string name="fans_tips1">众里寻他千百度，爱人之心不可无</string>
-    <string name="share_txt">我在Fiu浮游寻找同路人；希望和你一起用文字来记录内心情绪，用滤镜来表达情感色彩，用分享去变现原创价值；带你发现美学科技的力量和感性生活的温度！来吧，一起Fiu>>> http://m.taihuoniao.com/guide/fiu/</string>
+    <string name="share_txt">我在Fiu浮游[表情]寻找同路人；希望和你一起用文字来记录内心情绪，用滤镜来表达情感色彩，用分享去变现原创价值；带你发现美学科技的力量和感性生活的温度！来吧，去Fiu一下 >>> http://m.taihuoniao.com/fiu</string>
     <string name="title_url">http://m.taihuoniao.com/guide/fiu/</string>
     <string name="l_album_name_all">最近图片</string>
     <string name="l_album_name_selected">选择图片</string>
@@ -246,7 +246,7 @@
     <string name="free_shipping">免费配送</string>
     <string name="shipping_time">送货时间：</string>
     <string name="any_time">任意时间</string>
-    <string name="use_redbag">使用红包：</string>
+    <string name="use_redbag" translatable="false">使用红包：</string>
     <string name="no_redbag">无可用红包</string>
     <string name="used_a_redbag">您使用了一张5元红包，下单后将不可恢复</string>
     <string name="remark">备注：</string>
@@ -259,14 +259,14 @@
     <string name="add_chain">添加链接</string>
     <string name="back">返回</string>
     <string name="goods_category">好货分类</string>
-    <string name="goods_details">产品详情</string>
+    <string name="goods_details">好货详情</string>
     <string name="collect">收藏</string>
     <string name="share">分享</string>
     <string name="to_buy">去购买</string>
     <string name="brand">品牌</string>
     <string name="mine_brand">自营品牌</string>
-    <string name="product_lightspot">产品亮点</string>
-    <string name="belong_what_changjing">所属情景</string>
+    <string name="product_lightspot">好货描述/亮点</string>
+    <string name="belong_what_changjing">应用的情景</string>
     <string name="related_recommend">相关好货推荐</string>
     <string name="add_to_cart">加入购物车</string>
     <string name="buy_now">立即购买</string>
@@ -311,11 +311,11 @@
     <string name="search_user">搜索用户</string>
     <string name="search_text">搜索文字</string>
     <string name="select_all">全选</string>
-    <string name="account">结算</string>
+    <string name="account" translatable="false">结算</string>
     <string name="cart_is_empty">购物车又空啦，回“好货”入点新货吧</string>
     <string name="go_for_stroll">去逛逛</string>
     <string name="inventory">库存:</string>
-    <string name="color_category">颜色/分类</string>
+    <string name="color_category">颜色分类</string>
     <string name="defaul">默认</string>
     <string name="numbers">数量</string>
     <string name="number_1">1</string>
@@ -339,11 +339,11 @@
     <string name="default_address">默认地址</string>
     <string name="color_or_category">颜色/种类:</string>
     <string name="the_numbers">,数量*</string>
-    <string name="near_recommend">相关推荐</string>
+    <string name="near_recommend">相关好货推荐</string>
     <string name="products_comments">好货评价</string>
     <string name="more_comments"><![CDATA[更多评论>>]]></string>
     <string name="product_detail">产品详情</string>
-    <string name="up_to_look_more_detail">--上拉查看好货详情--</string>
+    <string name="up_to_look_more_detail" translatable="false">--上拉查看好货详情--</string>
     <string name="coment">评价</string>
     <string name="take_your_comment">写下您对商品的感受，对他人帮助很大</string>
     <string name="fiu_des">Fiu | 创新产品情景式购物平台</string>
@@ -365,10 +365,10 @@
     <string name="continue_to">继续</string>
     <string name="no_product">暂无商品</string>
     <string name="fiu_descrip">  | 你在发现 谁在惊呼？</string>
-    <string name="no_this_sight">没有这个地盘</string>
+    <string name="no_this_sight">没有这个情景</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>
-    <string name="scene_category">情景分类</string>
+    <string name="scene_category">地盘分类</string>
     <!-- 品牌列表 -->
     <string name="action_fastscroll">Fast scroll</string>
     <string name="action_addpadding">Add padding</string>

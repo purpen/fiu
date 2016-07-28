@@ -3,12 +3,15 @@ package com.taihuoniao.fineix.adapters;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -48,6 +51,9 @@ public class SceneCategoryAdapter extends BaseAdapter {
             convertView = View.inflate(context, R.layout.item_scene_category, null);
             holder = new ViewHolder();
             holder.img = (RoundedImageView) convertView.findViewById(R.id.img);
+            AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams((MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 15)) / 2,
+                    (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(context, 15)) * 100 / 325);
+            convertView.setLayoutParams(layoutParams);
             holder.tv = (TextView) convertView.findViewById(R.id.tv);
             convertView.setTag(holder);
         } else {

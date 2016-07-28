@@ -89,7 +89,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_confirmorder);
         initView();
         setData();
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
         getDefaultAddress();
     }
 
@@ -233,7 +235,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 break;
             case R.id.activity_confirmorder_paybtn:
 //                startActivity(new Intent(ConfirmOrderActivity.this, PayWayActivity.class));
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 if (addressListItem == null && addressDefaultBean == null) {
                     dialog.dismiss();
                     ToastUtils.showError("请选择收货地址!");
@@ -331,7 +335,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 if (addressListItem != null) {
                     setAddressData(addressListItem);
                 } else {
-                    dialog.show();
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
                     getDefaultAddress();
 //                    DataPaser.getDefaultAddress(mHandler);
                 }

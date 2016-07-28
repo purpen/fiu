@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.utils;
 
-import android.util.Log;
-
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.RequestParams;
@@ -69,7 +67,8 @@ public class MD5Utils {
             NameValuePair nameValuePair = list.get(i);
             String name = nameValuePair.getName();
             String value = nameValuePair.getValue();
-            if (name.equals("tmp") || value == null) {
+            if (name.equals("tmp") || name.equals("id_card_a_tmp") || name.equals("business_card_tmp")
+                    || name.equals("link") || name.equals("cover_url") || name.equals("banners_url") || value == null) {
                 continue;
             }
             if (firstIn) {

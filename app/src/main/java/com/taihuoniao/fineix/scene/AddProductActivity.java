@@ -60,7 +60,9 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void requestNet() {
         //获取分类列表
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
 //        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
         ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
             @Override

@@ -194,7 +194,7 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("category_id", category_id);
-        params.addQueryStringParameter("size", 8 + "");
+        params.addQueryStringParameter("size", 10 + "");
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("dis", 10000 + "");
@@ -712,9 +712,9 @@ public class ClientDiscoverAPI {
      */
     public static void getBanners(String page_name, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page", String.valueOf(1));
-        params.addBodyParameter("size", String.valueOf(5));
-        params.addBodyParameter("name", page_name);
+        params.addQueryStringParameter("page", String.valueOf(1));
+        params.addQueryStringParameter("size", String.valueOf(5));
+        params.addQueryStringParameter("name", page_name);
         MD5Utils.sign(params, NetworkConstance.BANNERS_URL, callBack, false);
     }
 
@@ -726,8 +726,8 @@ public class ClientDiscoverAPI {
      */
     public static void getProductList(String page, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page", String.valueOf(page));
-        params.addBodyParameter("size", String.valueOf(10));
+        params.addQueryStringParameter("page", String.valueOf(page));
+        params.addQueryStringParameter("size", String.valueOf(10));
 //        params.addBodyParameter("state",String.valueOf(1));
         MD5Utils.sign(params, NetworkConstance.PRODUCTS_URL, callBack, false);
     }
@@ -742,12 +742,12 @@ public class ClientDiscoverAPI {
      */
     public static void getFocusFansList(String userId, String page, String size, String find_type, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page", page);
-        params.addBodyParameter("size", size);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
 //        params.addBodyParameter("user_id", LoginInfo.getInstance().getId()+"");
-        params.addBodyParameter("user_id", userId);//924808
+        params.addQueryStringParameter("user_id", userId);//924808
 //        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
-        params.addBodyParameter("find_type", find_type);
+        params.addQueryStringParameter("find_type", find_type);
         MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
     }
 
@@ -759,7 +759,7 @@ public class ClientDiscoverAPI {
      */
     public static void focusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("follow_id", follow_id);
+        params.addQueryStringParameter("follow_id", follow_id);
         MD5Utils.sign(params, NetworkConstance.FOCUS_OPRATE_URL, callBack, false);
     }
 
@@ -771,7 +771,7 @@ public class ClientDiscoverAPI {
      */
     public static void cancelFocusOperate(String follow_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("follow_id", follow_id);
+        params.addQueryStringParameter("follow_id", follow_id);
         MD5Utils.sign(params, NetworkConstance.CANCEL_FOCUS_URL, callBack, false);
     }
 
@@ -801,8 +801,8 @@ public class ClientDiscoverAPI {
     public static void updateUserInfo(String key, String value, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         if (EditUserInfoActivity.isSubmitAddress) {
-            params.addBodyParameter("province_id", key);
-            params.addBodyParameter("district_id", value);
+            params.addQueryStringParameter("province_id", key);
+            params.addQueryStringParameter("district_id", value);
         } else {
             params.addQueryStringParameter(key, value);
         }
@@ -856,8 +856,8 @@ public class ClientDiscoverAPI {
      */
     public static void uploadImg(String tmp, String type, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("tmp", tmp);
-        params.addBodyParameter("type", type);
+        params.addQueryStringParameter("tmp", tmp);
+        params.addQueryStringParameter("type", type);
         MD5Utils.sign(params, NetworkConstance.UPLOAD_IMG_URL, callBack, false);
     }
 
@@ -868,7 +868,7 @@ public class ClientDiscoverAPI {
      */
     public static void uploadBgImg(String tmp, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("tmp", tmp);
+        params.addQueryStringParameter("tmp", tmp);
         HttpHandler<String> handler = MD5Utils.sign(params, NetworkConstance.UPLOAD_BG_URL, callBack, false);
         NetworkManager.getInstance().add(NetworkConstance.UPLOAD_BG_URL, handler);
     }
@@ -882,8 +882,8 @@ public class ClientDiscoverAPI {
      */
     public static void getSystemNotice(String page, String pageSize, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page", page);
-        params.addBodyParameter("size", pageSize);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", pageSize);
         MD5Utils.sign(params, NetworkConstance.SYSTEM_NOTICE, callBack, false);
     }
 
@@ -897,9 +897,9 @@ public class ClientDiscoverAPI {
      */
     public static void getPrivateMessageList(String page, String pageSize, String type, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("page", page);
-        params.addBodyParameter("size", pageSize);
-        params.addBodyParameter("type", type);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", pageSize);
+        params.addQueryStringParameter("type", type);
         MD5Utils.sign(params, NetworkConstance.MESSAGE_RECORD, callBack, false);
     }
 
@@ -912,8 +912,8 @@ public class ClientDiscoverAPI {
      */
     public static void sendMessage(String to_user_id, String content, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("to_user_id", to_user_id);
-        params.addBodyParameter("content", content);
+        params.addQueryStringParameter("to_user_id", to_user_id);
+        params.addQueryStringParameter("content", content);
         MD5Utils.sign(params, NetworkConstance.SEND_MESSAGE, callBack, false);
     }
 
@@ -925,7 +925,7 @@ public class ClientDiscoverAPI {
      */
     public static void messageDetailList(String to_user_id, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("to_user_id", to_user_id);
+        params.addQueryStringParameter("to_user_id", to_user_id);
         MD5Utils.sign(params, NetworkConstance.MESSAGE_DETAIL, callBack, false);
     }
 

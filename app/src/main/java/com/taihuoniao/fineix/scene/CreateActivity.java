@@ -312,7 +312,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                if (flowlayout.getChildAt(flowlayout.getChildCount() - 1) instanceof EditText) {
+                if (flowlayout.getChildCount() > 0 && flowlayout.getChildAt(flowlayout.getChildCount() - 1) instanceof EditText) {
                     flowlayout.removeView(flowlayout.getChildAt(flowlayout.getChildCount() - 1));
                 }
                 list.clear();
@@ -328,9 +328,11 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 }
+                Log.e("<<<", "标签list=" + list.toString());
+                labelRecycleAdapter.notifyDataSetChanged();
                 if (list.size() > 0) {
-                    labelRecycleAdapter.notifyDataSetChanged();
                     labelRelative.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
                 if (titleEditText.getText().toString().length() > 0) {
                     titleTv.setText(titleEditText.getText().toString());
@@ -691,7 +693,16 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                 if (searchLabelBean.isSuccess()) {
                     flowlayout.removeAllViews();
                     if (searchLabelBean.getData() != null && searchLabelBean.getData().getWord() != null) {
-                        list = searchLabelBean.getData().getWord();
+                        list.clear();
+                        list.addAll(searchLabelBean.getData().getWord());
+                        for (String str : list) {
+                            addToFlow(str, flowlayout, true);
+                        }
+                        if (list.size() > 0) {
+                            Log.e("<<<", "网络请求list=" + list.toString());
+                            labelRelative.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                         labelRecycleAdapter.notifyDataSetChanged();
                     }
                 } else {

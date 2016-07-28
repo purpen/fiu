@@ -252,7 +252,9 @@ public class FilterActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_continue:
-                dialog.show();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
                 savePicture();
                 break;
             case R.id.activity_edit_back:

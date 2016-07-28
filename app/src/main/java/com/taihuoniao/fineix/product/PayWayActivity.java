@@ -337,7 +337,9 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     //延时三秒再跳转去订单支付详情界面是为给服务器留时间以确保其及时更新数据
     private void delayThreeSeconds() {
         mBack = false;
-        mDialog.show();
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {

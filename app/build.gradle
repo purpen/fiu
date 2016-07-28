@@ -8,27 +8,50 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制
-//        multiDexEnabled true
+        multiDexEnabled true
         // AndroidManifest.xml 里面UMENG_CHANNEL的value为 ${UMENG_CHANNEL_VALUE}
-//        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "channel_name"]
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
+    }
+    signingConfigs {
+        debug {
+            // No debug config
+        }
+
+        release {
+            storeFile file("fiu.jks")
+            storePassword "taihuoniao798"
+            keyAlias "fiu"
+            keyPassword "taihuoniao798"
+        }
     }
     buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.debug
+        }
         release {
 // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
             //混淆
-            minifyEnabled false
+            minifyEnabled true
             //Zipalign优化
             zipAlignEnabled true
 
             // 移除无用的resource文件
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
         }
     }
     sourceSets {
@@ -36,6 +59,22 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+//    productFlavors {
+//        xiaomi {}
+//        _360 {}
+//        baidu {}
+//        wandoujia {}
+//    }
+//
+//    productFlavors.all {
+//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+//    }
 }
 
 dependencies {

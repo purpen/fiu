@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UsedAndHotLabelAdapter;
 import com.taihuoniao.fineix.beans.Label;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.scene.AddLabelActivity;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 
 /**
@@ -46,7 +47,8 @@ public class HotLabelFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(DataConstants.BroadLabelActivity);
+        Intent intent = new Intent(getActivity(),AddLabelActivity.class);
+        intent.setAction(DataConstants.BroadLabelActivity);
         if (label.getUsedLabelList().size() == 0) {
             for (int i = 0; i < label.getHotLabelList().size(); i++) {
                 if (i == position) {
