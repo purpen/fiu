@@ -11,7 +11,7 @@ public class NowConfirmBean implements Serializable{
     private String message;
     private boolean success;
     private String pay_money;
-
+    public int status;
     public String getPay_money() {
         return pay_money;
     }

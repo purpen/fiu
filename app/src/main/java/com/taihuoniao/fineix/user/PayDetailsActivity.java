@@ -15,10 +15,11 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.OrderDetails;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -146,10 +147,13 @@ public class PayDetailsActivity extends BaseActivity {
                         mSuccessOrFailed.setText("支付异常，请联系客服");
                         mImage.setImageResource(R.mipmap.fail);
                     }
-                    if (mPayway.equals("alipay")) {
+
+                    if (NetworkConstance.ALI_PAY.equals(mPayway)) {
                         mTvPayway.setText("支付宝");
-                    } else {
+                    } else if (NetworkConstance.WX_PAY.equals(mPayway)) {
                         mTvPayway.setText("微信");
+                    } else {
+                        mTvPayway.setText("无");
                     }
                     mOrderNum.setText(data.getRid());
                     mTradeTime.setText(data.getCreated_at());
@@ -199,7 +203,8 @@ public class PayDetailsActivity extends BaseActivity {
     void performClick(View v){
         switch (v.getId()){
             case R.id.tv_head_right:
-                toOrderDetailsActivity();
+                startActivity(new Intent(PayDetailsActivity.this, MainActivity.class));
+                finish();
                 break;
         }
     }

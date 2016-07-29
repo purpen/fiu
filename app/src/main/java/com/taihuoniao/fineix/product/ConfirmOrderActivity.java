@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.product;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +27,11 @@ import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkManager;
+import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -82,7 +85,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //跳转到红包界面
     //rid传递过去的临时订单编号
     //返回数据 money  code
-
+    private CustomDialogForPay mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,6 +189,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
 
     private void initView() {
 //        StatusBarChange.initWindow(ConfirmOrderActivity.this);
+        mDialog = new CustomDialogForPay(this);
         titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
         titleLayout.setBackgroundResource(R.color.white);
         titleLayout.setBackImg(R.mipmap.back_black);
@@ -266,6 +270,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     if (nowConfirmBean.isSuccess()) {
                         nowConfirmBean.setRid(data.optString("rid"));
                         nowConfirmBean.setPay_money(data.optString("pay_money"));
+                        nowConfirmBean.status = data.optInt("status");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -276,11 +281,26 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     ToastUtils.showSuccess(nowConfirmBean.getMessage());
 //                        dialog.showSuccessWithStatus(netConfirmBean.getMessage());
 //                        netConfirmBean.getRid();     //订单rid
-                    Intent intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
-                    intent.putExtra("paymoney", nowConfirmBean.getPay_money());
-                    intent.putExtra("orderId", nowConfirmBean.getRid());
-                    startActivity(intent);
-                    finish();
+                    Intent intent;
+                    switch (nowConfirmBean.status) {
+                        case 1:// 等待付款
+                            intent = new Intent(ConfirmOrderActivity.this, PayWayActivity.class);
+                            intent.putExtra("paymoney", nowConfirmBean.getPay_money());
+                            intent.putExtra("orderId", nowConfirmBean.getRid());
+                            startActivity(intent);
+                            finish();
+                            break;
+                        case 10: //10.等待发货(0元，跳过支付流程)
+//                            intent = new Intent(ConfirmOrderActivity.this, PayDetailsActivity.class);
+//                            intent.putExtra("rid",nowConfirmBean.getRid());
+//                            startActivity(intent);
+//                            finish();
+                            delayToPayDetail(nowConfirmBean);
+                            break;
+                        default:
+                            ToastUtils.showError("订单状态异常！");
+                            break;
+                    }
                 } else {
                     ToastUtils.showError(nowConfirmBean.getMessage());
 //                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
@@ -296,6 +316,28 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
 //                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //延时三秒再跳转去订单支付详情界面是为给服务器留时间以确保其及时更新数据
+    private void delayToPayDetail(final NowConfirmBean nowConfirmBean) {
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDialog.dismiss();
+                toPayDetailsActivity(nowConfirmBean);
+            }
+        }, 2000);
+    }
+
+    //跳到订单支付详情界面
+    private void toPayDetailsActivity(NowConfirmBean nowConfirmBean) {
+        Intent intent = new Intent(this, PayDetailsActivity.class);
+        intent.putExtra("rid", nowConfirmBean.getRid());
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -380,4 +422,5 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         NetworkManager.getInstance().cancel("getDefaultAddress");
         NetworkManager.getInstance().cancel("nowConfirmOrder");
     }
+
 }

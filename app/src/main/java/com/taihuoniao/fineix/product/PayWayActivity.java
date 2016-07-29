@@ -389,7 +389,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                 mDialog.dismiss();
                 toPayDetailsActivity();
             }
-        }, 3000);
+        }, 2000);
     }
 
     //跳到订单支付详情界面
