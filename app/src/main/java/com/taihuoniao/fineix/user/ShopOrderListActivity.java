@@ -17,6 +17,7 @@ import java.util.List;
 
 public class ShopOrderListActivity extends FragmentActivity implements TabLayout.OnTabSelectedListener {
 //    private WaittingDialog mDialog;
+
     private ViewPager mPager;
     private TabLayout.Tab mAllTab, mPayTab, mDeliverTab, mCriticalTab, mReceiverTab;
     private MyGlobalTitleLayout title;

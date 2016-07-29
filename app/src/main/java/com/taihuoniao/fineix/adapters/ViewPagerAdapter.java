@@ -32,6 +32,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.InputCodeDialog;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     private int size;
     private boolean isInfiniteLoop;
     private String code;
+    private WaittingDialog dialog;
 
     public int getSize() {
         return size;
@@ -62,6 +64,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
+        dialog = new WaittingDialog(activity);
     }
 
     @Override
@@ -231,9 +234,13 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
      * 判断是否需要输入邀请码
      */
     private void isNeedCode() {
+        if(!dialog.isShowing()){
+            dialog.show();
+        }
         ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
 //                ToastUtils.showError(responseInfo.result);
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
@@ -263,6 +270,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
 
             @Override
             public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
                 ToastUtils.showError("网络异常，请确保网络畅通");
             }
         });

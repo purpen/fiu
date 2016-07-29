@@ -66,8 +66,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private View mItemView;//动态商品的一条
     private String mRid;
     private String mOptFragmentFlag;//跳回碎片列表时，用该值选中跳来之前的那个碎片
-    private String mProductId;//跳去发表评价界面时所需
-    private String mSkuId;//跳去发表评价界面时所需
     private List<OrderDetails> mDetailsList = new ArrayList<>();
     private RelativeLayout mLogisticsCompanyLayout;//物流公司
     private RelativeLayout mLogisticsNumberLayout;//物流单号
@@ -517,8 +515,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         if(!mDialog.isShowing()){
             mDialog.show();
         }
-        mProductId = getIntent().getStringExtra("productId");
-        mSkuId = getIntent().getStringExtra("skuId");
         mRid = getIntent().getStringExtra("rid");
         mOptFragmentFlag = getIntent().getStringExtra("optFragmentFlag");
 //        DataPaser.orderPayDetailsParser(mRid, mHander);
@@ -845,8 +841,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                                 @Override
                                 public void onClick(View v) {
                                     Intent in = new Intent(OrderDetailsActivity.this, PublishEvaluateActivity.class);
-                                    in.putExtra("productId", mProductId);
-                                    in.putExtra("skuId", mSkuId);
                                     in.putExtra("rid", rid);
                                     OrderDetailsActivity.this.startActivity(in);
                                 }

@@ -1,24 +1,27 @@
 package com.taihuoniao.fineix.product;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.pay.alipay.AliPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
@@ -184,34 +187,74 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 //        unregisterReceiver(broadcastReceiver);
     }
 
+    private PopupWindow popupWindow;
+
     @Override
     public void onBackPressed() {
         if (mBack) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(PayWayActivity.this);
-            dialog.setTitle("您真的要放弃订单吗？");
-            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            dialog.setPositiveButton("放弃", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(PayWayActivity.this, MainActivity.class));
-                    finish();
-                }
-            });
-            dialog.show();
-
+            showPopup();
         }
     }
+
+    private void initPop() {
+        View view = View.inflate(this, R.layout.dialog_cancel_pay, null);
+        Button cancelBtn = (Button) view.findViewById(R.id.cancel_btn);
+        Button confirmBtn = (Button) view.findViewById(R.id.confirm_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                finish();
+            }
+        });
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.alpha);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = PayWayActivity.this.getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this,
+                R.color.nothing));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(params);
+        popupWindow.showAtLocation(activity_view, Gravity.CENTER, 0, 0);
+    }
+
+    private View activity_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        StatusBarChange.initWindow(this);
-        setContentView(R.layout.activity_pay_way);
+        activity_view = View.inflate(this, R.layout.activity_pay_way, null);
+        setContentView(activity_view);
         mDialog = new CustomDialogForPay(this);
         ActivityUtil.getInstance().addActivity(this);
 //        mWaittingDialog = new WaittingDialog(this);
@@ -219,7 +262,7 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         getIntentData();
         initData();
         initView();
-
+        initPop();
     }
 
 

@@ -1,56 +1,53 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.BitmapUtils;
-import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.RelationProductsBean;
-import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/2/23.
  */
-public class GoodsDetailsGridViewAdapter extends BaseAdapter {
+public class GoodsDetailsGridViewAdapter extends RecyclerView.Adapter<GoodsDetailsGridViewAdapter.VH> {
     private Context context;
     private List<RelationProductsBean> relationProductsBeanList;
-    private BitmapUtils bitmapUtils;
-
-    public GoodsDetailsGridViewAdapter(Context context, List<RelationProductsBean> relationProductsBeanList) {
+    private EditRecyclerAdapter.ItemClick itemClick;
+    public GoodsDetailsGridViewAdapter(Context context, List<RelationProductsBean> relationProductsBeanList,EditRecyclerAdapter.ItemClick itemClick) {
         this.context = context;
         this.relationProductsBeanList = relationProductsBeanList;
-        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-        bitmapUtils = new BitmapUtils(context, diskCachePath)
-                .configMemoryCacheEnabled(true)
-                .configDefaultCacheExpiry(1024 * 1024 * 4)
-                .configDefaultBitmapMaxSize(300, 300)
-                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-                .configDefaultLoadingImage(R.mipmap.default_background_750_1334)
-                .configDefaultLoadFailedImage(R.mipmap.default_background_750_1334)
-                .configThreadPoolSize(5)
-                .configDefaultImageLoadAnimation(
-                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
+        this.itemClick = itemClick;
+    }
+
+
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = View.inflate(context, R.layout.item_goodsdetails_gridview, null);
+        VH holder = new VH(view);
+        return holder;
     }
 
     @Override
-    public int getCount() {
-        return relationProductsBeanList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return relationProductsBeanList.get(position);
+    public void onBindViewHolder(VH holder, final int position) {
+        ImageLoader.getInstance().displayImage(relationProductsBeanList.get(position).getCover_url(), holder.img);
+        holder.titleTv.setText(relationProductsBeanList.get(position).getTitle());
+        holder.priceTv.setText("¥" + relationProductsBeanList.get(position).getSale_price());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClick.click(position);
+            }
+        });
     }
 
     @Override
@@ -59,40 +56,22 @@ public class GoodsDetailsGridViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            convertView = View.inflate(context, R.layout.item_goodsdetails_gridview, null);
-            holder.img = (ImageView) convertView.findViewById(R.id.item_goodsdetails_gridview_img);
-            holder.titleTv = (TextView) convertView.findViewById(R.id.item_goodsdetails_gridview_title);
-            holder.priceTv = (TextView) convertView.findViewById(R.id.item_goodsdetails_gridview_price);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        bitmapUtils.display(holder.img, relationProductsBeanList.get(position).getCover_url());
-        holder.titleTv.setText(relationProductsBeanList.get(position).getTitle());
-        holder.priceTv.setText("¥" + relationProductsBeanList.get(position).getSale_price());
-        final int i = position;
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-                    Intent intent = new Intent(context, MyGoodsDetailsActivity.class);
-//                intent.addFlags(Intent.F)
-                    intent.putExtra("id", relationProductsBeanList.get(i).get_id());
-                    context.startActivity(intent);
-
-            }
-        });
-        return convertView;
+    public int getItemCount() {
+        return relationProductsBeanList.size();
     }
 
-    class ViewHolder {
-        private ImageView img;
-        private TextView titleTv;
-        private TextView priceTv;
+    static class VH extends RecyclerView.ViewHolder {
+        @Bind(R.id.item_goodsdetails_gridview_img)
+        ImageView img;
+        @Bind(R.id.item_goodsdetails_gridview_title)
+        TextView titleTv;
+        @Bind(R.id.item_goodsdetails_gridview_price)
+        TextView priceTv;
+
+        public VH(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
 }

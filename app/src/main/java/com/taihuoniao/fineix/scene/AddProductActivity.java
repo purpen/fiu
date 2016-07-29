@@ -67,7 +67,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+//                dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();

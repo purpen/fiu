@@ -197,7 +197,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
         }
         goodsDetails(id);
         productAndScene(page + "", 20 + "", null, id);
-        getProducts(null, null, null, recommendPage + "", 4 + "", null, id, null, null);
+
 //        DataPaser.getProductList(null, null, null, 1 + "", 3 + "", null, ids.toString(), null, null, handler);
     }
 
@@ -507,6 +507,7 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
                 GoodsDetailBean netGoodsDetailBean = goodsDetailBean;
                 if (netGoodsDetailBean.isSuccess()) {
                     netGood = netGoodsDetailBean;
+                    getProducts(netGood.getData().getCategory_id(), null, null, 1 + "", 4 + "", null, netGoodsDetailBean.getData().get_id(), null, null);
                     ArrayList<String> banner = (ArrayList<String>) netGoodsDetailBean.getData().getBanner_asset();
                     name.setText(netGoodsDetailBean.getData().getTitle());
                     price.setText("¥ " + netGoodsDetailBean.getData().getSale_price());

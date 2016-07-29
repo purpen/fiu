@@ -10,6 +10,8 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -34,6 +36,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailsGridViewAdapter;
 import com.taihuoniao.fineix.adapters.GoodsDetailsViewPagerAdapter;
@@ -57,7 +60,6 @@ import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomScrollView;
-import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -74,7 +76,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/2/22.
  * 商品详情界面
  */
-public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, EditRecyclerAdapter.ItemClick {
     //上个界面传递过来的数据
     private String id;
     //界面中的控件
@@ -95,7 +97,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     private Bitmap pointY, pointN;
     private TextView nameTv, salepriceTv, marketpriceTv;
     private RelativeLayout moreColorRelative;
-    private GridViewForScrollView gridView;
+    private RecyclerView recyclerView;
     private RelativeLayout moreCommentsRelative;
     private ListViewForScrollView listView;
     private GoodsDetailsCommentListsAdapter commentListsAdapter;
@@ -165,7 +167,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
             }
         });
     }
-
 
 
     @Override
@@ -261,10 +262,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightSearchButton(false);
-//        loveRelative = (RelativeLayout) findViewById(R.id.activity_goodsdetails_loverelative);
-//        loveImg = (ImageView) findViewById(R.id.activity_goodsdetails_loveimg);
-//        shareRelative = (RelativeLayout) findViewById(R.id.activity_goodsdetails_sharerelative);
-//        ImageView shareImg = (ImageView) findViewById(R.id.activity_goodsdetails_shareimg);
         cartTv = (TextView) findViewById(R.id.activity_goodsdetails_cart);
         buyTv = (TextView) findViewById(R.id.activity_goodsdetails_buy);
         scrollView = (CustomScrollView) findViewById(R.id.activity_goodsdetails_scrollview);
@@ -281,10 +278,8 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         salepriceTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_saleprice);
         marketpriceTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_marketprice);
         moreColorRelative = (RelativeLayout) topView.findViewById(R.id.activity_goodsdetails_morecolor);
-        gridView = (GridViewForScrollView) topView.findViewById(R.id.activity_goodsdetails_gridview);
+        recyclerView = (RecyclerView) topView.findViewById(R.id.activity_goodsdetails_gridview);
         moreCommentsRelative = (RelativeLayout) topView.findViewById(R.id.activity_goodsdetails_comments);
-//        pullToRefreshView = (PullToRefreshListView) topView.findViewById(R.id.activity_goodsdetails_listview);
-//        listView = pullToRefreshView.getRefreshableView();
         listView = (ListViewForScrollView) topView.findViewById(R.id.activity_gooddetails_listview);
         TextView emptyTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_emptytv);
         listView.setEmptyView(emptyTv);
@@ -293,11 +288,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         listView.setAdapter(commentListsAdapter);
         moreCommentsTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_morecommentstv);
         goodsRelative = (RelativeLayout) topView.findViewById(R.id.activity_goodsdetails_goodsrelative);
-        TextView goodsDetailsTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_goodstv);
-        TextView goodsRedLine = (TextView) topView.findViewById(R.id.activity_goodsdetails_goodsredline);
         commentsRelative = (RelativeLayout) topView.findViewById(R.id.activity_goodsdetails_commentsrelative);
-        TextView commentsTv = (TextView) topView.findViewById(R.id.activity_goodsdetails_commentstv);
-        TextView commentsRedLine = (TextView) topView.findViewById(R.id.activity_goodsdetails_commentsredline);
         //bottomview下的控件
         webView = new WebView(MyGoodsDetailsActivity.this);
         webView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -326,100 +317,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 .build();
         imageLoader = ImageLoader.getInstance();
     }
-
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.PARSER_SHOP_CART_NUMBER:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof ShopCartNumber) {
-//                            ShopCartNumber numberCart;
-//                            numberCart = (ShopCartNumber) msg.obj;
-//                            if (numberCart.isSuccess() && !numberCart.getCount().equals("0")) {
-//                                titleLayout.setRightShopCartButton(true);
-//                                titleLayout.setShopCartCountertext(numberCart.getCount() + "");
-//                            }else{
-//                                titleLayout.setRightShopCartButton(false);
-//                            }
-//                        }
-//                    }
-//                    break;
-//                case DataConstants.BUY_NOW:
-//                    dialog.dismiss();
-//                    NowBuyBean netNowBuy = (NowBuyBean) msg.obj;
-//                    if (netNowBuy.getSuccess()) {
-//                        Intent intent = new Intent(MyGoodsDetailsActivity.this, ConfirmOrderActivity.class);
-//                        intent.putExtra("NowBuyBean", netNowBuy);
-//                        startActivity(intent);
-//                    } else {
-//                        ToastUtils.showError(netNowBuy.getMessage());
-//                    }
-//                    popupWindow.dismiss();
-//                    break;
-//                case DataConstants.ADD_TO_CART:
-//                    dialog.dismiss();
-//                    NetBean netBean = (NetBean) msg.obj;
-//                    if(netBean.isSuccess()){
-//                        ToastUtils.showSuccess(netBean.getMessage());
-////                        dialog.showSuccessWithStatus(netBean.getMessage());
-//                    }else{
-//                        ToastUtils.showError(netBean.getMessage());
-////                        dialog.showErrorWithStatus(netBean.getMessage());
-//                    }
-//                    popupWindow.dismiss();
-//                    DataPaser.shopCartNumberParser(mHandler);
-//                    break;
-//                case DataConstants.GOODS_DETAILS_COMMENTS:
-//                    List<TryCommentsBean> netList = (List<TryCommentsBean>) msg.obj;
-//                    commentsList.addAll(netList);
-//                    if (commentsList.size() > 3) {
-//                        moreCommentsTv.setVisibility(View.VISIBLE);
-//                    } else {
-//                        moreCommentsTv.setVisibility(View.GONE);
-//                    }
-//                    commentListsAdapter.notifyDataSetChanged();
-//                    break;
-//                case DataConstants.GOODS_DETAILS:
-//                    dialog.dismiss();
-//                    goodsDetailsBean = (GoodsDetailsBean) msg.obj;
-//                    if (goodsDetailsBean == null || goodsDetailsBean.getImgUrlList() == null) {
-//                        Toast.makeText(MyGoodsDetailsActivity.this, "访问的商品不存在", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                        return;
-//                    }
-//                    imgList.clear();
-//                    pointLinear.removeAllViews();
-//                    for (int i = 0; i < goodsDetailsBean.getImgUrlList().size(); i++) {
-//                        ImageView img = new ImageView(MyGoodsDetailsActivity.this);
-//                        img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//                        img.setScaleType(ImageView.ScaleType.FIT_XY);
-//                        imageLoader.displayImage(goodsDetailsBean.getImgUrlList().get(i), img, optionsCoverUrl);
-//                        imgList.add(img);
-//                    }
-//                    viewPager.setAdapter(new GoodsDetailsViewPagerAdapter(MyGoodsDetailsActivity.this, imgList));
-//                    addPointToLinear();
-//                    nameTv.setText(goodsDetailsBean.getTitle());
-//                    salepriceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-//                    priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
-//                    marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
-//                    marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-//                    GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
-//                    gridView.setAdapter(gridViewAdapter);
-//                    webView.loadUrl(goodsDetailsBean.getContent_view_url());
-//                    imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
-//                    productsTitle.setText(goodsDetailsBean.getTitle());
-//                    maxNumber = Integer.parseInt(goodsDetailsBean.getInventory());
-//                    quantity.setText(maxNumber + "");
-//                    addSkuToLinear();
-//                    break;
-//                case DataConstants.NETWORK_FAILURE:
-//                    dialog.dismiss();
-//                    ToastUtils.showError("网络错误");
-//                    break;
-//            }
-//        }
-//    };
 
     private void addSkuToLinear() {
         if (Integer.parseInt(goodsDetailsBean.getSkus_count()) > 0) {
@@ -494,36 +391,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.activity_goodsdetails_loverelative:
-//                if (LoginInfo.isUserLogin()) {
-//                    dialog.show();
-//                    if (isLove) {
-//                        DataPaser.parserCancelLove(id, "1", mHandler);
-//                    } else {
-//                        DataPaser.parserLove(id, "1", mHandler);
-//                    }
-//                } else {
-//                    Toast.makeText(MyGoodsDetailsActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
-//                    //在此跳转到登录界面
-//                    Intent intent = new Intent(MyGoodsDetailsActivity.this, OptRegisterLoginActivity.class);
-//                    startActivity(intent);
-//                }
-//                break;
-//            case R.id.activity_goodsdetails_sharerelative:
-//                if (goodsDetailsBean == null) {
-////                    Toast.makeText(GoodsDetailsActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-//                    cancelNet();
-//                    dialog.show();
-//                    DataPaser.goodsDetails(id, mHandler);
-//                    int currentPage = 1;
-//                    DataPaser.getGoodsDetailsCommentsList(id, currentPage + "", mHandler);
-//                    return;
-//                }
-//                Toast.makeText(MyGoodsDetailsActivity.this, "分享", Toast.LENGTH_SHORT).show();
-////                Share.showShareWindow(GoodsDetailsActivity.this, activity_view,
-////                        goodsDetailsBean.getTitle(), goodsDetailsBean.getShare_desc(),
-////                        goodsDetailsBean.getCover_url(), goodsDetailsBean.getShare_view_url(), true);
-//                break;
             case R.id.activity_goodsdetails_morecolor:
             case R.id.activity_goodsdetails_cart:
             case R.id.activity_goodsdetails_buy:
@@ -696,8 +563,6 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
     }
 
 
-
-
     private void initPopuptWindow() {
         WindowManager windowManager = MyGoodsDetailsActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
@@ -784,6 +649,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
         NetworkManager.getInstance().cancel("addToCart");
         NetworkManager.getInstance().cancel("buyNow");
     }
+
     private void goodsDetail(String id) {
         ClientDiscoverAPI.goodsDetailsNet(id, new RequestCallBack<String>() {
             @Override
@@ -869,8 +735,10 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
                 priceTv.setText("¥ " + goodsDetailsBean.getSale_price());
                 marketpriceTv.setText("¥ " + goodsDetailsBean.getMarket_price());
                 marketpriceTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList());
-                gridView.setAdapter(gridViewAdapter);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MyGoodsDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                GoodsDetailsGridViewAdapter gridViewAdapter = new GoodsDetailsGridViewAdapter(MyGoodsDetailsActivity.this, goodsDetailsBean.getRelationProductsList(), MyGoodsDetailsActivity.this);
+                recyclerView.setAdapter(gridViewAdapter);
                 webView.loadUrl(goodsDetailsBean.getContent_view_url());
                 imageLoader.displayImage(goodsDetailsBean.getCover_url(), productsImg, options500_500);
                 productsTitle.setText(goodsDetailsBean.getTitle());
@@ -886,6 +754,7 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
     private void addToCart(String target_id, String type, String n) {
         ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
@@ -916,5 +785,13 @@ public class MyGoodsDetailsActivity extends BaseActivity implements View.OnClick
 
             }
         });
+    }
+
+    //相关推荐
+    @Override
+    public void click(int postion) {
+        Intent intent = new Intent(this, MyGoodsDetailsActivity.class);
+        intent.putExtra("id", goodsDetailsBean.getRelationProductsList().get(postion).get_id());
+        startActivity(intent);
     }
 }

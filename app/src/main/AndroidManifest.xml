@@ -145,6 +145,7 @@
         <activity
             android:name=".scene.CreateActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.CategoryActivity"

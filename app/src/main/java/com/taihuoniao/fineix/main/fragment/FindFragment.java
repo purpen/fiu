@@ -41,14 +41,13 @@ import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.CJHotLabelBean;
 import com.taihuoniao.fineix.beans.FiuUserListBean;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.map.HotCitiesActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.AllQingjingActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
@@ -574,10 +573,10 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                 intent1.putExtra("t", "8");
                 startActivity(intent1);
                 break;
-            case R.id.fragment_find_location:
-                Intent intent = new Intent(getActivity(), HotCitiesActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.fragment_find_location:
+//                Intent intent = new Intent(getActivity(), HotCitiesActivity.class);
+//                startActivity(intent);
+//                break;
             case R.id.fragment_find_allqingjing:
                 startActivity(new Intent(getActivity(), AllQingjingActivity.class));
                 break;
