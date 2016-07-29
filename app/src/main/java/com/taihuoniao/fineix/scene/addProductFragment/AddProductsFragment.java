@@ -91,7 +91,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
-                dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
                 progressBar.setVisibility(View.GONE);
                 if (searchBean.isSuccess()) {

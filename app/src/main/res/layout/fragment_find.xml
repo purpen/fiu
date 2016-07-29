@@ -43,7 +43,7 @@
             android:paddingLeft="17dp"
             android:paddingRight="13dp"
             android:src="@mipmap/location_39"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <ProgressBar

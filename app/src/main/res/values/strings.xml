@@ -368,7 +368,7 @@
     <string name="no_this_sight">没有这个情景</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>
-    <string name="scene_category">地盘分类</string>
+    <string name="scene_category">选择地盘分类</string>
     <!-- 品牌列表 -->
     <string name="action_fastscroll">Fast scroll</string>
     <string name="action_addpadding">Add padding</string>

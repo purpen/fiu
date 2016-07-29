@@ -43,8 +43,6 @@ public class PublishEvaluateActivity extends Activity {
     private List<OrderDetailsProducts> mListProducts = new ArrayList<>();
     private TextView mCommit;
     private String mRid;
-    private String mSkuId;
-    private String mTargetId;
     private String mEvaluateContent;
     private String mRatingBarNum;
     private View mView;
@@ -166,8 +164,6 @@ public class PublishEvaluateActivity extends Activity {
     }
 
     private void initData() {
-        mTargetId = getIntent().getStringExtra("productId");
-        mSkuId = getIntent().getStringExtra("skuId");
         mRid = getIntent().getStringExtra("rid");
 //        DataPaser.orderPayDetailsParser(mRid, mHandler);
         //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取

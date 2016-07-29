@@ -73,7 +73,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp">
 
         <ImageView
             android:id="@+id/img2"
@@ -83,28 +84,11 @@
             android:layout_marginTop="13dp"
             android:src="@mipmap/add_tags"/>
 
-        <TextView
-            android:id="@+id/add_label_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:paddingBottom="6dp"
-            android:paddingLeft="7dp"
-            android:paddingRight="26dp"
-            android:paddingTop="11dp"
-            android:text="添加标签"
-            android:textColor="@color/yellow_bd8913"
-            android:textSize="12sp"/>
-
         <com.taihuoniao.fineix.view.FlowLayout
             android:id="@+id/flowlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@id/add_label_tv"
+            android:layout_margin="10dp"
             android:layout_toRightOf="@id/img2"
             app:horizontalSpacing="10dp"
             app:verticalSpacing="10dp"/>

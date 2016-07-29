@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -81,11 +83,14 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     private SceneDetailsBean sceneDetails;//情景详情界面跳转过来
     //上个界面传递过来的图片路径
     private String imgUrl;
+    //添加标签pop
+    private FlowLayout editFlow;
+    private EditText editText;
+    //添加标题pop
     TextView selectEnvirTv;
     EditText titleEditText;
     EditText desEditText;
     FlowLayout flowlayout;
-    TextView addLabelTv;
     @Bind(R.id.background_img)
     ImageView backgroundImg;
     @Bind(R.id.title_layout)
@@ -102,6 +107,8 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     RelativeLayout labelRelative;
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
+    @Bind(R.id.add_label_tv)
+    TextView addLabelTv;
     @Bind(R.id.delete_address)
     ImageView deleteAddress;
     @Bind(R.id.add_location_linear)
@@ -124,7 +131,6 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     private List<String> list;//已选择的标签
     private LabelRecycleAdapter labelRecycleAdapter;//已经选择的标签
     private String dipanId;//所属地盘id
-    private EditText editText;//添加标签时编辑标签
 
     public CreateActivity() {
         super(0);
@@ -138,6 +144,54 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initView() {
+        editText = (EditText) View.inflate(this, R.layout.add_label_edit_text, null);
+        editText.setOnClickListener(this);
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP) {
+                    for (int i = 0; i < editFlow.getChildCount(); i++) {
+                        if (i == editFlow.getChildCount() - 1) {
+                            continue;
+                        }
+                        TextView textView = (TextView) editFlow.getChildAt(i);
+                        if (textView.getTag() == null) {
+                            continue;
+                        }
+                        if ((Boolean) textView.getTag()) {
+                            editFlow.removeView(textView);
+                            onClick(editText);
+                            return true;
+                        }
+                    }
+                    if (editText.getText().toString().length() <= 0 && editFlow.getChildCount() > 1) {
+                        TextView textView = (TextView) editFlow.getChildAt(editFlow.getChildCount() - 2);
+                        textView.setBackgroundResource(R.drawable.tags_yellow);
+                        textView.setTextColor(getResources().getColor(R.color.white));
+                        textView.setPadding(DensityUtils.dp2px(CreateActivity.this, 10), 0,
+                                DensityUtils.dp2px(CreateActivity.this, 18), 0);
+                        textView.setTag(true);
+                        editText.setCursorVisible(false);
+                    }
+                    return true;
+                } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (editText.getText().toString().length() <= 0) {
+                        return false;
+                    }
+                    if (editFlow.getChildCount() > 0) {
+                        editFlow.removeView(editText);
+                    }
+                    addToFlow(editText.getText().toString(), editFlow, false);
+                    editFlow.addView(editText);
+                    editText.setText("");
+                    editText.setFocusable(true);
+                    editText.setFocusableInTouchMode(true);
+                    editText.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
         titleLayout.setBackgroundResource(R.drawable.jianbian_head);
         titleLayout.setTitle(R.string.create_scene);
         titleLayout.setBackListener(this);
@@ -156,54 +210,15 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                 .cacheOnDisk(false).considerExifParams(true)
                 .build();
         initPopuptWindow();
+        initEditPop();
         titleTv.setOnClickListener(this);
         addLocationLinear.setOnClickListener(this);
         categoryLinear.setOnClickListener(this);
         deleteAddress.setOnClickListener(this);
+        addLabelTv.setOnClickListener(this);
         desTv.setOnClickListener(this);
         recyclerView.setOnClickListener(this);
         SceneTitleSetUtils.setTitle(titleTv, frameLayout, 0, 0, 1);
-        editText = (EditText) View.inflate(this, R.layout.add_label_edit_text, null);
-        editText.setOnClickListener(this);
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (flowlayout.getChildCount() <= 1) {
-                        return false;
-                    }
-                    for (int i = flowlayout.getChildCount() - 2; i >= 0; i--) {
-                        TextView textView = (TextView) flowlayout.getChildAt(i);
-                        if (textView.getTag() == null) {
-                            continue;
-                        }
-                        if ((Boolean) textView.getTag()) {
-                            flowlayout.removeView(textView);
-                            onClick(editText);
-                            return true;
-                        }
-                    }
-                    if (editText.getText().toString().length() <= 0 && flowlayout.getChildCount() > 1) {
-                        TextView textView = (TextView) flowlayout.getChildAt(flowlayout.getChildCount() - 2);
-                        textView.setBackgroundResource(R.drawable.tags_yellow);
-                        textView.setTextColor(getResources().getColor(R.color.white));
-                        textView.setTag(true);
-                        editText.setCursorVisible(false);
-                    }
-                    return true;
-                } else if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP && editText.getText().toString().length() > 0) {
-                    flowlayout.removeView(editText);
-                    addToFlow(editText.getText().toString(), flowlayout, true);
-                    flowlayout.addView(editText);
-                    editText.setText("");
-                    editText.setFocusable(true);
-                    editText.setFocusableInTouchMode(true);
-                    editText.requestFocus();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -294,6 +309,61 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
+    private PopupWindow editPop;//编辑标签popupwindow
+
+    private void initEditPop() {
+        View view = View.inflate(this, R.layout.pop_edit_label, null);
+        editFlow = (FlowLayout) view.findViewById(R.id.flowlayout);
+        editPop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        editPop.setAnimationStyle(R.style.alpha);
+        editPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        editPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                list.clear();
+                for (int i = 0; i < editFlow.getChildCount(); i++) {
+                    if (i == editFlow.getChildCount() - 1) {
+                        break;
+                    }
+                    TextView textView = (TextView) editFlow.getChildAt(i);
+                    list.add(textView.getText().toString());
+                }
+                labelRecycleAdapter.notifyDataSetChanged();
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.alpha = 1f;
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(params);
+            }
+        });
+        editPop.setBackgroundDrawable(ContextCompat.getDrawable(this,
+                R.color.nothing));
+        editPop.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+        editFlow.addView(editText);
+    }
+
+    private void showEditPop() {
+        editFlow.removeAllViews();
+        for (String str : list) {
+            addToFlow(str, editFlow, false);
+        }
+        editFlow.addView(editText);
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
+        editPop.showAtLocation(activityView, Gravity.TOP, 0, 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+    }
 
     private void initPopuptWindow() {
         View popup_view = View.inflate(this, R.layout.pop_create, null);
@@ -301,10 +371,8 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         titleEditText = (EditText) popup_view.findViewById(R.id.title_edit_text);
         desEditText = (EditText) popup_view.findViewById(R.id.des_edit_text);
         flowlayout = (FlowLayout) popup_view.findViewById(R.id.flowlayout);
-        addLabelTv = (TextView) popup_view.findViewById(R.id.add_label_tv);
         popupWindow = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         selectEnvirTv.setOnClickListener(this);
-        addLabelTv.setOnClickListener(this);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.alpha);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -312,9 +380,6 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                if (flowlayout.getChildCount() > 0 && flowlayout.getChildAt(flowlayout.getChildCount() - 1) instanceof EditText) {
-                    flowlayout.removeView(flowlayout.getChildAt(flowlayout.getChildCount() - 1));
-                }
                 list.clear();
                 if (flowlayout.getChildCount() <= 0
                         && titleEditText.getText().toString().length() > 0
@@ -373,6 +438,8 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         getWindow().setAttributes(params);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
         popupWindow.showAtLocation(activityView, Gravity.TOP, 0, 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(titleEditText, InputMethodManager.SHOW_FORCED);
     }
 
     @Override
@@ -408,15 +475,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                 startActivityForResult(intent22, 1);
                 break;
             case R.id.add_label_tv:
-                try {
-                    flowlayout.addView(editText);
-                    editText.setCursorVisible(true);
-                    editText.setFocusable(true);
-                    editText.setFocusableInTouchMode(true);
-                    editText.requestFocus();
-                } catch (Exception e) {
-
-                }
+                showEditPop();
                 break;
             case R.id.recycler_view:
             case R.id.des_tv:
@@ -536,27 +595,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                             locationTv.getText().toString(), cityTv.getText().toString(),
                             lat + "", lng + "");
                 } else if (MainApplication.tag == 2) {
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    int sapleSize = 100;
-//                    do {
-//                        stream.reset();
-//                        if (sapleSize > 10) {
-//                            sapleSize -= 10;
-//                        } else {
-//                            sapleSize--;
-//                        }
-//                        if (sapleSize > 100 || sapleSize <= 0) {
-//                            dialog.dismiss();
-//                            dialog.showErrorWithStatus("图片过大");
-////                            Toast.makeText(CreateSceneActivity.this, "图片过大", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        sceneBitmap.compress(Bitmap.CompressFormat.JPEG, sapleSize, stream);
-////                        Log.e("<<<", "图片大小=" + stream.size());
-//                    } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
-//                    String tmp = Base64Utils.encodeLines(stream.toByteArray());
-//                    createQJ(qingjingDetails == null ? null : qingjingDetails.getData().get_id() + "", titleEdt.getText().toString(), contentEdt.getText().toString(),
-//                            tags.toString(), locationTv.getText().toString(), tmp, lat + "", lng + "");
+
                 } else {
                     dialog.dismiss();
                 }

@@ -109,7 +109,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
         titleLayout.setBackImg(R.mipmap.back_black);
         titleLayout.setRightTv(R.string.close, getResources().getColor(R.color.black333333), this);
         titleLayout.setBackListener(this);
-//        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override

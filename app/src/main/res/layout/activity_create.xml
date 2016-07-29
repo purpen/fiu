@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:maxLines="2"
-                android:text="点击添加情景标题"
                 android:maxWidth="300dp"
+                android:text="点击添加情景标题"
                 android:textColor="@color/white"
                 android:textSize="30sp"/>
         </FrameLayout>
@@ -55,10 +55,10 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5dp"
             android:paddingRight="10dp"
-            android:visibility="gone"
             android:paddingTop="10dp"
             android:textColor="@color/white"
-            android:textSize="9sp"/>
+            android:textSize="9sp"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -69,8 +69,8 @@
         <RelativeLayout
             android:id="@+id/label_relative"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/img2"
@@ -79,15 +79,25 @@
                 android:layout_centerVertical="true"
                 android:src="@mipmap/add_tags"/>
 
+            <TextView
+                android:id="@+id/add_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="添加标签"
+                android:textColor="@color/yellow_bd8913"
+                android:textSize="13sp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:paddingTop="12dp"
-                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/add_label_tv"
                 android:layout_toRightOf="@id/img2"
+                android:paddingTop="12dp"
                 android:visibility="visible"/>
 
             <TextView
@@ -138,7 +148,6 @@
                     android:textSize="11sp"/>
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/city_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,7 +160,8 @@
                     android:singleLine="true"
                     android:text="添加情景地点"
                     android:textColor="@color/white"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <TextView

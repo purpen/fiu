@@ -96,9 +96,10 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
         }
         mHolder.mTradeStatus.setText(list.get(position).getStatus_label());
         mHolder.mProductCounts.setText("共" + list.get(position).getItems_count() + "件好货");
-        mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money());
+        double p  = Double.parseDouble(list.get(position).getTotal_money())-Double.parseDouble(list.get(position).getPay_money());
+        mHolder.mTotalMoney.setText("合计：¥" + list.get(position).getTotal_money()+" 优惠：¥"+p);
         mHolder.mPayMoney.setText("实付：¥" + list.get(position).getPay_money());
-        mHolder.mFreight.setText("（含运费¥" + list.get(position).getFreight() + "）");
+        mHolder.mFreight.setText("");
         mHolder.mDate.setText(list.get(position).getCreated_at());
 
         final int status = Integer.parseInt(list.get(position).getStatus());
@@ -478,15 +479,10 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(context, OrderDetailsActivity.class);
-                for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
-
-                    // "productId","skuId"是为了去评价界面准备的
-                    in.putExtra("productId", list.get(position).getOrderItem().get(i).getProduct_id());
-                    in.putExtra("skuId", list.get(position).getOrderItem().get(i).getSku());
+//                for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
                     in.putExtra("rid", list.get(position).getRid());
                     in.putExtra("optFragmentFlag", optFragmentFlag);
-
-                }
+//                }
                 context.startActivity(in);
             }
         });

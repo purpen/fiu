@@ -54,14 +54,14 @@
         android:padding="5dp"
         android:textSize="14sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:text="加入太火鸟交流群：226541167"
-        android:textSize="14sp"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="28dp"-->
+        <!--android:text="加入太火鸟交流群：226541167"-->
+        <!--android:textSize="14sp"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:paddingBottom="10dp"/>-->
     <Button
         android:id="@+id/bt_commit"
         android:layout_width="match_parent"

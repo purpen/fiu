@@ -2,29 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp">
 
     <ImageView
         android:id="@+id/item_goodsdetails_gridview_img"
-        android:layout_width="112dp"
-        android:layout_height="112dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         />
 
     <TextView
         android:id="@+id/item_goodsdetails_gridview_title"
-        android:layout_width="112dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:lineSpacingExtra="5dp"
+        android:lineSpacingExtra="3dp"
         android:maxLines="2"
-         android:textColor="#999999"
+        android:textColor="#999999"
         android:textSize="10sp"/>
 
     <TextView
         android:id="@+id/item_goodsdetails_gridview_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/yellow_bd8913"
         android:textSize="10sp"/>
 </LinearLayout>

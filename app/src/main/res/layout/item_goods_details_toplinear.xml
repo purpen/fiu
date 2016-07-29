@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@mipmap/default_background_750_1334"
         >
 
         <android.support.v4.view.ViewPager
@@ -113,17 +112,13 @@
             android:textColor="#000000"
             android:textSize="14sp"/>
 
-        <com.taihuoniao.fineix.view.GridViewForScrollView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/activity_goodsdetails_gridview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="10dp"
-            android:horizontalSpacing="5dp"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="3"/>
+            android:layout_height="220dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
     </LinearLayout>
 
     <LinearLayout
