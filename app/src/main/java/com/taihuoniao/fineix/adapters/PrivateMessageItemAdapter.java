@@ -72,6 +72,11 @@ public class PrivateMessageItemAdapter extends CommonBaseAdapter<MessageDetailDa
         }
         holder.tv_msg.setText(item.content);
         holder.tv_time.setText(item.created_at);
+        if(position>0&&list.get(position).created_at.equals(list.get(position-1).created_at)){
+            holder.tv_time.setVisibility(View.GONE);
+        }else{
+            holder.tv_time.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 

@@ -31,6 +31,7 @@ public class TestShareUtils {
     static ImageView erweima;
     static TextView line;
     static FrameLayout frameLayout;
+    static ImageView titleImg;
     static TextView sceneTitle;
     static TextView desTv;
     static ImageView addImg;
@@ -74,6 +75,7 @@ public class TestShareUtils {
         erweima = (ImageView) view.findViewById(R.id.erweima);
         line = (TextView) view.findViewById(R.id.activity_share_scene_line);
         frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
+        titleImg = (ImageView) view.findViewById(R.id.activity_share_title_img);
         sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
         desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
         addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
@@ -137,7 +139,7 @@ public class TestShareUtils {
     }
 
     private static void selectTitleSize(int position) {
-        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21, bi);
+                SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg,12, bi);
     }
 
 

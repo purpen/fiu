@@ -67,7 +67,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp2"
-                android:text="300"
                 android:textColor="@color/color_af8323"
                 android:textSize="40sp" />
         </LinearLayout>

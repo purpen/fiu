@@ -41,7 +41,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_grid_qj, null);
             holder = new ViewHolder(convertView);
@@ -61,13 +61,14 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
             holder.tv_title_right.setText(right_qj.getTitle());
-            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame);
+            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame, holder.rightTitleImg, 11, -1);
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
         holder.tv_title_left.setText(left_qj.getTitle());
-        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame);
+        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame, holder.leftTitleImg, 11, -1);
+
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +115,10 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         TextView tv_title_right;
         @Bind(R.id.tv_desc_right)
         TextView tv_desc_right;
+        @Bind(R.id.left_title_img)
+        ImageView leftTitleImg;
+        @Bind(R.id.right_title_img)
+        ImageView rightTitleImg;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

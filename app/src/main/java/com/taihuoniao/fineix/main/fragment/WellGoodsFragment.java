@@ -221,6 +221,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 //品牌列表
         brandList(1, 100);
     }
+
     private void setupBlurView() {
         final float radius = 16f;
 
@@ -428,6 +429,15 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             } else {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.moveToReset();
+                if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight()) {
+                    if (secondUpAnimator == null) {
+                        initSecondUpAnimator();
+                    }
+                    if (secondFlag == 2) {
+                        secondUpAnimator.start();
+                        return;
+                    }
+                }
                 if (titlelayout.getTranslationY() >= 0) {
                     return;
                 }
@@ -479,6 +489,18 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             @Override
             public void onAnimationEnd(Animator animation) {
                 animFlag = 2;
+                if (firstVisible <= 0) {
+                    return;
+                }
+                if (goneFrame.getTranslationY() >= 0) {
+                    return;
+                }
+                if (secondDownAnimator == null) {
+                    initSecondDownAnimator();
+                }
+                if (secondFlag == 0) {
+                    secondDownAnimator.start();
+                }
             }
 
             @Override
@@ -493,6 +515,8 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
         });
     }
 
+    private int firstVisible = 0;
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         //由于添加了headerview的原因，所以visibleitemcount要大于1，正常只需要大于0就可以
@@ -505,35 +529,17 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             progressBar.setVisibility(View.VISIBLE);
             getProductList(2 + "", null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
-        //悬浮效果
-//        Log.e("<<<", "firstVisible=" + firstVisibleItem);
-        if (firstVisibleItem >= 1) {
-//            goneLinear.setVisibility(View.VISIBLE);
-            if (goneFrame.getTranslationY() >= 0) {
-                return;
-            }
-            if (secondDownAnimator == null) {
-                initSecondDownAnimator();
-            }
-            if (secondFlag == 0) {
-                secondDownAnimator.start();
-            }
-
-        } else {
-//            goneLinear.setVisibility(View.GONE);
-            if (goneFrame.getTranslationY() <= -goneFrame.getMeasuredHeight()) {
-                return;
-            }
-            if (secondUpAnimator == null) {
-                initSecondUpAnimator();
-            }
-            if (secondFlag == 2) {
-                secondUpAnimator.start();
+        firstVisible = firstVisibleItem;
+        if(firstVisibleItem<=0){
+            if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight()) {
+                if (secondUpAnimator == null) {
+                    initSecondUpAnimator();
+                }
+                if (secondFlag == 2) {
+                    secondUpAnimator.start();
+                }
             }
         }
-//        if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight() && goneFrame.getTranslationY() <= 0) {
-//        blurringView.invalidate();
-//        }
     }
 
     private int secondFlag = 0;//悬浮分类动画标识
@@ -551,6 +557,15 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             @Override
             public void onAnimationEnd(Animator animation) {
                 secondFlag = 0;
+                if (titlelayout.getTranslationY() >= 0) {
+                    return;
+                }
+                if (upAnimator == null) {
+                    initUpAnimator();
+                }
+                if (animFlag == 2) {
+                    upAnimator.start();
+                }
             }
 
             @Override
