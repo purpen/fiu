@@ -31,7 +31,7 @@
         android:layout_height="44dp"
         android:layout_below="@id/flowlayout"
         android:background="@null"
-        android:hint="添加标签"
+        android:hint="@string/add_label"
         android:visibility="gone"
         android:imeOptions="actionDone"
         android:singleLine="true"/>

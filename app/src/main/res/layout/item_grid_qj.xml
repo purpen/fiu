@@ -37,6 +37,7 @@
                 android:layout_marginBottom="@dimen/dp5">
 
                 <ImageView
+                    android:id="@+id/left_title_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="matrix"
@@ -101,6 +102,7 @@
                 android:layout_marginBottom="@dimen/dp5">
 
                 <ImageView
+                    android:id="@+id/right_title_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="matrix"

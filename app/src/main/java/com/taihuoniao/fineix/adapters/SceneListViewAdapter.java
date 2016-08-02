@@ -131,6 +131,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             holder.viewCount = (TextView) convertView.findViewById(R.id.item_scenelist_view_count);
             holder.loveCount = (TextView) convertView.findViewById(R.id.item_scenelist_love_count);
             holder.frameLayout = (FrameLayout) convertView.findViewById(R.id.item_scenelist_frame);
+            holder.sceneImg = (ImageView) convertView.findViewById(R.id.item_scenelist_title_img);
             holder.sceneTitle = (TextView) convertView.findViewById(R.id.item_scenelist_scene_title);
             holder.suoshuQingjing = (TextView) convertView.findViewById(R.id.item_scenelist_suoshuqingjing);
             holder.location = (TextView) convertView.findViewById(R.id.item_scenelist_location);
@@ -144,7 +145,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (holder.backgroundImg.getTag() != null &&  holder.backgroundImg.getTag().toString().equals(list.get(position).getCover_url())) {
+        if (holder.backgroundImg.getTag() != null && holder.backgroundImg.getTag().toString().equals(list.get(position).getCover_url())) {
             if (list != null && list.get(position).isStartAnim()) {
                 holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
 //            new Handler().post(new Runnable() {
@@ -248,9 +249,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             holder.location.setText(subsList.get(position).getAddress());
             holder.time.setText(subsList.get(position).getCreated_at());
         }
-//        Log.e("<<<首页动画", "getView...position=" + position);
-        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, 42, 21, 1);
-
+        SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, holder.sceneImg, 12, 1);
         return convertView;
     }
 
@@ -297,7 +296,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
         }
     }
 
-    public static class ViewHolder {
+    static class ViewHolder {
         RelativeLayout container;
         RelativeLayout pointContainer;
         ImageView backgroundImg;
@@ -308,6 +307,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
         TextView viewCount;
         TextView loveCount;
         FrameLayout frameLayout;
+        ImageView sceneImg;
         TextView sceneTitle;
         TextView suoshuQingjing;
         TextView location;

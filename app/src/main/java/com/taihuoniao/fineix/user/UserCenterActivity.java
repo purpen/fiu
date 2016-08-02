@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -110,6 +111,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     private boolean isFirstLoad = true;
     private String flag;
+
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -124,6 +126,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (intent.hasExtra(FocusActivity.USER_ID_EXTRA)) {
             userId = intent.getLongExtra(FocusActivity.USER_ID_EXTRA, LoginInfo.getUserId());
         }
+        Log.e("<<<", "接收到的userId=" + userId);
     }
 
     @Override
@@ -144,7 +147,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initView() {
         View headView = Util.inflateView(R.layout.user_center_headview, null);
-        if (LoginInfo.getUserId()!=userId){
+        if (LoginInfo.getUserId() != userId) {
             iv_right.setVisibility(View.GONE);
         }
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
@@ -211,7 +214,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 }
 
                 try {
-                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
+                    user = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    });
                     refreshUI();
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
@@ -259,7 +263,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     public void run() {
                         if (dialog != null) dialog.dismiss();
                     }
-                },DataConstants.DIALOG_DELAY);
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
@@ -294,9 +298,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (isFirstLoad) {
                 isFirstLoad = false;
                 ll_tips.setVisibility(View.VISIBLE);
-                if (LoginInfo.getUserId()==userId){
+                if (LoginInfo.getUserId() == userId) {
                     tv_tips.setText(R.string.user_center_cj_tip);
-                }else {
+                } else {
                     tv_tips.setText(R.string.user_center_cj_tip1);
                 }
             } else {
@@ -336,7 +340,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     public void run() {
                         if (dialog != null) dialog.dismiss();
                     }
-                },DataConstants.DIALOG_DELAY);
+                }, DataConstants.DIALOG_DELAY);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getQJList", responseInfo.result);
@@ -366,9 +370,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (isFirstLoad) {
                 isFirstLoad = false;
                 ll_tips.setVisibility(View.VISIBLE);
-                if (LoginInfo.getUserId()==userId){
+                if (LoginInfo.getUserId() == userId) {
                     tv_tips.setText(R.string.user_center_qj_tip);
-                }else {
+                } else {
                     tv_tips.setText(R.string.user_center_qj_tip1);
                 }
             } else {
@@ -408,46 +412,46 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
 //        if (!TextUtils.isEmpty(user.head_pic_url)) {
-            ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
+        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
 //        }
 
-        if (user.identify.is_expert==1){
+        if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             riv_auth.setVisibility(View.GONE);
         }
 
         if (TextUtils.isEmpty(user.summary)) {
-            if (LoginInfo.getUserId()==userId){
+            if (LoginInfo.getUserId() == userId) {
                 tv_real.setText(String.format(" | %s", "说说你是什么人，来自哪片山川湖海！"));
-            }else {
+            } else {
                 tv_real.setText(String.format(" | %s", "这人好神秘，什么都不说"));
             }
         } else {
             tv_real.setText(String.format(" | %s", user.summary));
         }
 
-        if (!TextUtils.isEmpty(user.expert_label)){
+        if (!TextUtils.isEmpty(user.expert_label)) {
             iv_label.setText(String.format("%s |", user.expert_label));
-        }else {
+        } else {
             iv_label.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(user.expert_info)){
+        if (!TextUtils.isEmpty(user.expert_info)) {
             tv_auth.setText(user.expert_info);
-        }else {
+        } else {
             tv_auth.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.label)) {
             tv_label.setText(String.format(" %s", user.label));
-        }else {
+        } else {
             tv_label.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(user.expert_info)) {
             tv_auth.setText(user.expert_info);
-        }else {
+        } else {
             tv_auth.setVisibility(View.GONE);
         }
 
@@ -681,7 +685,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     .singleChoice()
                     .setEngine(new ImageLoaderEngine())
                     .forResult(REQUEST_CODE_PICK_IMAGE);
-        }else {
+        } else {
             ToastUtils.showError("未检测到SD卡");
 //            dialog.showErrorWithStatus("未检测到SD卡");
         }
@@ -710,12 +714,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 case REQUEST_CODE_PICK_IMAGE:
 //                    Uri uri = data.getData();
                     mSelected = PicturePickerUtils.obtainResult(data);
-                    if (mSelected==null) return;
-                    if (mSelected.size()==0) return;
+                    if (mSelected == null) return;
+                    if (mSelected.size() == 0) return;
 //                    if (uri != null) {
 //                        Bitmap bitmap = ImageUtils.decodeUriAsBitmap(uri);
 //                        mClipImageLayout.setImageBitmap(bitmap);
-                        toCropActivity(mSelected.get(0));
+                    toCropActivity(mSelected.get(0));
 //                    } else {
 //                        Util.makeToast("抱歉，从相册获取图片失败");
 //                    }

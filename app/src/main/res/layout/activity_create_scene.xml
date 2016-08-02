@@ -49,7 +49,7 @@
                     android:gravity="center"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
-                    android:text="搜索语境"
+                    android:text="@string/search_envir"
                     android:textColor="#717171"
                     android:textSize="11sp"
                     android:visibility="gone"/>
@@ -246,7 +246,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="11dp"
                     android:layout_marginTop="7dp"
-                    android:text="推荐标签"
+                    android:text="@string/recommend_labels"
                     android:textColor="#999999"
                     android:textSize="11sp"/>
 

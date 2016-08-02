@@ -378,4 +378,9 @@
     <string name="action_updateDataset">Update dataset</string>
 
     <string name="channel_name">UMENG_CHANNEL</string>
+    <string name="click_add_sight_title">点击添加情景标题</string>
+    <string name="add_sight_address">添加情景地点</string>
+    <string name="select_dipan">选择地盘</string>
+    <string name="search_envir">搜索语境</string>
+    <string name="recommend_labels">推荐标签</string>
 </resources>

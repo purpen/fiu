@@ -607,7 +607,7 @@ public class ViewPagerFragment extends Fragment implements View.OnClickListener,
                             //添加商品
                             addProductToImg();
                             changjingTitle.setText(netSceneDetails.getData().getTitle());
-                            SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
+//                            SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
                             suoshuqingjingTv.setText(netSceneDetails.getData().getScene_title());
                             locationTv.setText(netSceneDetails.getData().getAddress());
                             timeTv.setText(netSceneDetails.getData().getCreated_at());

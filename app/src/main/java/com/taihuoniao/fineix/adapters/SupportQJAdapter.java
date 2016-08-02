@@ -34,7 +34,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<LoveSceneBean.LoveSceneI
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final LoveSceneBean.LoveSceneItem item = list.get(position);
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_support_qj, null);
             holder = new ViewHolder(convertView);
@@ -45,7 +45,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<LoveSceneBean.LoveSceneI
 
         imageLoader.displayImage(item.getCover_url(), holder.iv_cover, options);
         holder.tv_title.setText(item.getTitle());
-        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame);
+        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame, holder.titleImg, 11, -1);
         holder.tv_desc.setText(item.getAddress());
         return convertView;
     }
@@ -59,6 +59,9 @@ public class SupportQJAdapter extends CommonBaseAdapter<LoveSceneBean.LoveSceneI
         TextView tv_desc;
         @Bind(R.id.item_frame)
         FrameLayout item_frame;
+        @Bind(R.id.title_img)
+        ImageView titleImg;
+
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

@@ -8,7 +8,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -101,6 +103,8 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
     TextView titleTv;
     @Bind(R.id.framelayout)
     FrameLayout frameLayout;
+    @Bind(R.id.title_img)
+    ImageView titleImg;
     @Bind(R.id.des_tv)
     TextView desTv;
     @Bind(R.id.label_relative)
@@ -218,7 +222,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         addLabelTv.setOnClickListener(this);
         desTv.setOnClickListener(this);
         recyclerView.setOnClickListener(this);
-        SceneTitleSetUtils.setTitle(titleTv, frameLayout, 0, 0, 1);
+        SceneTitleSetUtils.setTitle(titleTv, frameLayout, titleImg, 12, 1);
     }
 
     @Override
@@ -228,7 +232,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
             imgUrl = sceneDetails.getData().getCover_url();
             titleTv.setText(sceneDetails.getData().getTitle());
             titleEditText.setText(sceneDetails.getData().getTitle());
-            SceneTitleSetUtils.setTitle(titleTv, frameLayout, 0, 0, 1);
+            SceneTitleSetUtils.setTitle(titleTv, frameLayout, titleImg, 12, 1);
             desTv.setText(sceneDetails.getData().getDes());
             desEditText.setText(sceneDetails.getData().getDes());
             desTv.setVisibility(View.VISIBLE);
@@ -376,7 +380,25 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.alpha);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(titleEditText.getText().toString().length()>20){
+                    titleEditText.setText(titleEditText.getText().toString().substring(0,20));
+                    titleEditText.setSelection(20);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -401,7 +423,7 @@ public class CreateActivity extends BaseActivity implements View.OnClickListener
                 }
                 if (titleEditText.getText().toString().length() > 0) {
                     titleTv.setText(titleEditText.getText().toString());
-                    SceneTitleSetUtils.setTitle(titleTv, frameLayout, 0, 0, 1);
+                    SceneTitleSetUtils.setTitle(titleTv, frameLayout, titleImg, 12, 1);
                 }
                 if (desEditText.getText().toString().length() > 0) {
                     desTv.setText(desEditText.getText().toString());

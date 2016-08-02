@@ -68,7 +68,7 @@
                     android:layout_toLeftOf="@id/delete_address"
                     android:layout_toRightOf="@id/img"
                     android:gravity="center_vertical"
-                    android:text="添加情景地点"
+                    android:text="@string/add_sight_address"
                     android:textColor="@color/white"
                     android:textSize="11sp"/>
 
@@ -101,7 +101,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="11dp"
                     android:layout_toRightOf="@id/img1"
-                    android:text="选择地盘"
+                    android:text="@string/select_dipan"
                     android:textColor="@color/white"
                     android:textSize="11sp"/>
 

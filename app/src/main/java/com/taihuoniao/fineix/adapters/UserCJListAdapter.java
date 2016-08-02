@@ -51,7 +51,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final SceneListBean item = list.get(position);
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_scenelist, null);
             holder = new ViewHolder(convertView);
@@ -78,7 +78,7 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         holder.tv_blong.setText(item.getScene_title());
         holder.tv_location.setText(item.getAddress());
         holder.time.setText(item.getCreated_at());
-        SceneTitleSetUtils.setTitle(holder.tv_title, holder.frameLayout, 0, 0, 1);
+        SceneTitleSetUtils.setTitle(holder.tv_title, holder.frameLayout, holder.sceneImg, 11, -1);
         return convertView;
     }
 
@@ -91,7 +91,8 @@ public class UserCJListAdapter extends CommonBaseAdapter<SceneListBean> {
         RoundedImageView riv_auth;
         @Bind(R.id.item_scenelist_user_name)
         TextView tv_name;
-
+        @Bind(R.id.item_scenelist_title_img)
+        ImageView sceneImg;
         @Bind(R.id.item_scenelist_user_info)
         TextView tv_info;
         @Bind(R.id.item_scenelist_view_count)

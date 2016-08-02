@@ -380,8 +380,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         TextView locationTv = (TextView) view.findViewById(R.id.activity_share_location);
         ImageView erweima = (ImageView) view.findViewById(R.id.erweima);
         TextView line = (TextView) view.findViewById(R.id.activity_share_scene_line);
-        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
-        TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
+        final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
+        final ImageView titleImg = (ImageView) view.findViewById(R.id.activity_share_title_img);
+        final TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
         final TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
         final ImageView addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
         ImageView fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
@@ -410,8 +411,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 }
             }
         });
-        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, 42, 21, 1);
-
+        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, 1);
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
         view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
@@ -426,7 +426,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.e("<<<","imgPath="+MainApplication.getContext().getCacheDirPath());
+            Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
             Platform.ShareParams params;
             String imgPath = MainApplication.getContext().getCacheDirPath() + File.separator + "fiu" + ".png";
             if (!dialog.isShowing()) {

@@ -90,6 +90,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView backgroundImg;
     private LinearLayout titleLinear;
     private FrameLayout frameLayout;
+    private ImageView titleImg;
     private TextView changjingTitle;
     private TextView suoshuqingjingTv;
     private ImageView locationImg;
@@ -174,6 +175,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundImg = (ImageView) findViewById(R.id.activity_scenedetails_background);
         titleLinear = (LinearLayout) findViewById(R.id.activity_scenedetails_titlelinear);
         frameLayout = (FrameLayout) findViewById(R.id.activity_scenedetails_framelayout);
+        titleImg = (ImageView) findViewById(R.id.activity_scenedetails_title_img);
         changjingTitle = (TextView) findViewById(R.id.activity_scenedetails_changjing_title);
         suoshuqingjingTv = (TextView) findViewById(R.id.activity_scenedetails_suoshuqingjing);
         locationImg = (ImageView) findViewById(R.id.activity_scenedetails_locationimg);
@@ -385,7 +387,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setTitleWidth() {
-        SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, 42, 21, 1);
+        SceneTitleSetUtils.setTitle(changjingTitle, frameLayout, titleImg, 12, 1);
     }
 
 
@@ -480,7 +482,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                intent.putExtra(FocusActivity.USER_ID_EXTRA, netUserInfo.getUser_id());
+                long l = Long.valueOf(netUserInfo.getUser_id()+"");
+                Log.e("<<<","用户id="+netScene.getData().getUser_info().getUser_id()+",,,,"+netUserInfo.getUser_id());
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
                 startActivity(intent);
                 break;
             case R.id.pop_share_scene_detail_share_btn:

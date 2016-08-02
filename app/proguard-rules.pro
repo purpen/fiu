@@ -169,7 +169,7 @@ public static final int *;
     public boolean *(android.webkit.WebView, java.lang.String);
 }
 -keepclassmembers class * extends android.webkit.WebViewClient {
-    public void *(android.webkit.WebView, jav.lang.String);
+    public void *(android.webkit.WebView, java.lang.String);
 }
 #----------------------------------------------------------------------------
 
@@ -361,13 +361,7 @@ public static final int *;
 }
 
 
-#EventBus
--keepclassmembers class ** {
-    public void onEvent*(**);
-}
--keepclassmembers class ** {
-public void xxxxxx(**);
-}
+
 
 
 ################gson##################
@@ -482,13 +476,7 @@ public void xxxxxx(**);
 -dontwarn org.eclipse.jdt.annotation.**
 
 -keep class com.ultrapower.** {*;}
-#高徳地图
--dontwarn com.amap.api.**
--dontwarn com.a.a.**
--dontwarn com.autonavi.**
--keep class com.amap.api.**  {*;}
--keep class com.autonavi.**  {*;}
--keep class com.a.a.**  {*;}
+
 
 #SuperID
 #由*郭宇翔*贡献混淆代码
@@ -507,28 +495,5 @@ public void xxxxxx(**);
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
-
-#Rxjava RxAndroid
--dontwarn rx.*
--dontwarn sun.misc.**
-
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-   long producerIndex;
-   long consumerIndex;
-}
-
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
-
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
-
-
-#fastJson
--dontwarn com.alibaba.fastjson.**
--keep class com.alibaba.fastjson.** { *; }
-
 
 

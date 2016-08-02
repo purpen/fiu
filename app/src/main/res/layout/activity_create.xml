@@ -32,6 +32,7 @@
             >
 
             <ImageView
+                android:id="@+id/title_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="matrix"
@@ -44,7 +45,7 @@
                 android:includeFontPadding="false"
                 android:maxLines="2"
                 android:maxWidth="300dp"
-                android:text="点击添加情景标题"
+                android:text="@string/click_add_sight_title"
                 android:textColor="@color/white"
                 android:textSize="30sp"/>
         </FrameLayout>
@@ -86,7 +87,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="添加标签"
+                android:text="@string/add_label"
                 android:textColor="@color/yellow_bd8913"
                 android:textSize="13sp"/>
 
@@ -143,7 +144,7 @@
                     android:layout_marginLeft="11dp"
                     android:layout_marginRight="10dp"
                     android:singleLine="true"
-                    android:text="添加情景地点"
+                    android:text="@string/add_sight_address"
                     android:textColor="@color/white"
                     android:textSize="11sp"/>
 
@@ -158,7 +159,7 @@
                     android:layout_marginTop="7dp"
                     android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="添加情景地点"
+                    android:text="@string/add_sight_address"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:visibility="gone"/>
@@ -193,7 +194,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_toRightOf="@id/img1"
                 android:singleLine="true"
-                android:text="选择地盘"
+                android:text="@string/select_dipan"
                 android:textColor="@color/white"
                 android:textSize="11sp"/>
 

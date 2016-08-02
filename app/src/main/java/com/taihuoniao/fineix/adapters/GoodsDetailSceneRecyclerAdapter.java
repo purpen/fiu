@@ -1,6 +1,12 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Region;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +59,29 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
         holder.titleTv.post(new Runnable() {
             @Override
             public void run() {
+                double leng = holder.titleTv.getText().length();
+                int t = 10;
+                for (char c : holder.titleTv.getText().toString().toCharArray()) {
+                    if (c >= 32 && c <= 126) {
+                        leng -= 0.5;
+                        t++;
+                    }
+                }
+                if (leng > 10) {
+                    Bitmap bitmap = BitmapFactory.decodeResource(holder.titleTv.getResources(), R.mipmap.scene_title_background).copy(Bitmap.Config.ARGB_8888, true);
+                    Bitmap bitmap1 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap1);
+                    canvas.drawColor(Color.argb(0, 0, 0, 0));
+                    canvas.clipRect(0, 0, holder.titleTv.getMeasuredWidth(), holder.titleTv.getMeasuredHeight() / 2);
+                    canvas.clipRect(0, 0, holder.titleTv.getText().subSequence(t, holder.titleTv.getText().length()).length() * holder.titleTv.getTextSize(), holder.titleTv.getMeasuredHeight(), Region.Op.UNION);
+                    Paint paint = new Paint();
+                    canvas.drawBitmap(bitmap, 0, 0, paint);
+                    canvas.save();
+                    canvas.restore();
+                    holder.sceneImg.setImageBitmap(bitmap1);
+                } else {
+                    holder.sceneImg.setImageResource(R.mipmap.scene_title_background);
+                }
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) holder.frameLayout.getLayoutParams();
                 layoutParams1.height = holder.titleTv.getMeasuredHeight();
                 layoutParams1.width = holder.titleTv.getMeasuredWidth();
@@ -69,6 +98,7 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
     public static class VH extends RecyclerView.ViewHolder {
         ImageView imageView;
         FrameLayout frameLayout;
+        ImageView sceneImg;
         TextView titleTv;
         TextView addressTv;
 
@@ -76,6 +106,7 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.iv_cover);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.item_frame);
+            sceneImg = (ImageView) itemView.findViewById(R.id.title_img);
             titleTv = (TextView) itemView.findViewById(R.id.tv_title);
             addressTv = (TextView) itemView.findViewById(R.id.tv_desc);
         }
