@@ -290,6 +290,7 @@
     <string name="select_pay_method">请选择支付方式</string>
     <string name="alipay_pay">支付宝支付</string>
     <string name="wechat_pay">微信支付</string>
+    <string name="jd_pay">京东支付</string>
     <string name="report_reason">举报图片原因</string>
     <string name="sexual_violence">色情暴力</string>
     <string name="steal_picture">盗图</string>

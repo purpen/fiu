@@ -33,13 +33,15 @@ android {
         debug {
             // 显示Log
             buildConfigField "boolean", "LOG_DEBUG", "true"
-
             minifyEnabled true
+            //Zipalign优化
             zipAlignEnabled true
+
+            // 移除无用的resource文件
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.debug
         }
+
         release {
 // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
@@ -113,4 +115,13 @@ dependencies {
     compile project(':bubblecloud')
     compile project(':library')
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile files('libs/MobCommons-2016.0707.1708.jar')
+    compile files('libs/MobTools-2016.0707.1708.jar')
+    compile files('libs/ShareSDK-Core-2.7.4.jar')
+    compile files('libs/ShareSDK-QQ-2.7.4.jar')
+    compile files('libs/ShareSDK-QZone-2.7.4.jar')
+    compile files('libs/ShareSDK-SinaWeibo-2.7.4.jar')
+    compile files('libs/ShareSDK-Wechat-2.7.4.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.7.4.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.7.4.jar')
 }

@@ -152,6 +152,8 @@ public class PayDetailsActivity extends BaseActivity {
                         mTvPayway.setText("支付宝");
                     } else if (NetworkConstance.WX_PAY.equals(mPayway)) {
                         mTvPayway.setText("微信");
+                    } else if (NetworkConstance.JD_PAY.equals(mPayway)) {
+                        mTvPayway.setText("京东");
                     } else {
                         mTvPayway.setText("无");
                     }

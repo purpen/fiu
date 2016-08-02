@@ -10,11 +10,12 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.taihuoniao.fineix.beans.ALIPayParams;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.pay.bean.ALIPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 /**
  * @author lilin
@@ -107,6 +108,7 @@ public class AliPay{
 	}
 
 	private static void aliPay(final String payInfo){
+		LogUtil.e("payInfo", payInfo + "==");
 		Runnable payRunnable = new Runnable() {
 
 			@Override

@@ -56,6 +56,7 @@
 
 # Application classes that will be serialized/deserialized over Gson
 -keep class com.taihuoniao.fineix.beans.** { *; }
+-keep class com.taihuoniao.fineix.pay.bean.** { *; }
 
 ##---------------End: proguard configuration for Gson  ----------
 ##START友盟
@@ -87,6 +88,7 @@ public static final int *;
 -optimizationpasses 5
 -dontskipnonpubliclibraryclassmembers
 -printmapping proguardMapping.txt
+-printseeds seeds.txt
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -keepattributes *Annotation*,InnerClasses
 -keepattributes Signature

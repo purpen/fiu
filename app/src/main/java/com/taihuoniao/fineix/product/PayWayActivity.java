@@ -24,6 +24,7 @@ import com.alipay.sdk.app.PayTask;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.pay.alipay.AliPay;
+import com.taihuoniao.fineix.pay.jdpay.JdPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
@@ -53,8 +54,10 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
 
     private LinearLayout mLinearAlipay;
     private LinearLayout mLinearWechat;
+    private LinearLayout mLinearJd;
     private ImageView mImageAlipay;
     private ImageView mImageWechat;
+    private ImageView mImageJd;
     private String mTotalMoney, mRid;
     private String mPayway = NetworkConstance.ALI_PAY;
     private TextView mPayMoney;
@@ -305,8 +308,11 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         mLinearAlipay.setOnClickListener(this);
         mLinearWechat = (LinearLayout) findViewById(R.id.linear_wechat);
         mLinearWechat.setOnClickListener(this);
+        mLinearJd = (LinearLayout) findViewById(R.id.linear_jd);
+        mLinearJd.setOnClickListener(this);
         mImageAlipay = (ImageView) findViewById(R.id.image_alipay);
         mImageWechat = (ImageView) findViewById(R.id.image_wechat);
+        mImageJd = (ImageView) findViewById(R.id.image_jd);
         mPayMoney = (TextView) findViewById(R.id.tv_paymoney_payway);
         df = new DecimalFormat("######0.00");
         mPayMoney.setText("¥" + df.format(Double.valueOf(mTotalMoney)));
@@ -326,12 +332,20 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
             case R.id.linear_alipay:
                 mImageAlipay.setImageResource(R.mipmap.checked);
                 mImageWechat.setImageResource(R.mipmap.check);
+                mImageJd.setImageResource(R.mipmap.check);
                 mPayway = NetworkConstance.ALI_PAY;
                 break;
             case R.id.linear_wechat:
                 mImageWechat.setImageResource(R.mipmap.checked);
                 mImageAlipay.setImageResource(R.mipmap.check);
+                mImageJd.setImageResource(R.mipmap.check);
                 mPayway = NetworkConstance.WX_PAY;
+                break;
+            case R.id.linear_jd:
+                mImageJd.setImageResource(R.mipmap.checked);
+                mImageAlipay.setImageResource(R.mipmap.check);
+                mImageWechat.setImageResource(R.mipmap.check);
+                mPayway = NetworkConstance.JD_PAY;
                 break;
             case R.id.bt_paynow_payway:
 //                Toast.makeText(PayWayActivity.this, "支付", Toast.LENGTH_SHORT).show();
@@ -372,6 +386,8 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
                             delayThreeSeconds();
                         }
                     });
+                } else if (TextUtils.equals(NetworkConstance.JD_PAY, mPayway)) {
+                    JdPay.pay(orderId, PayWayActivity.this);
                 }
                 break;
         }

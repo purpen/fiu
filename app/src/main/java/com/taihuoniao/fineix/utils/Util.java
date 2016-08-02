@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.mob.tools.network.BufferedByteArrayOutputStream;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.NetworkConstance;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,28 +82,30 @@ public class Util {
 		return metaValue;// xxx
 
 	}
+
 	public static void makeToast(String content) {
 		Toast result = new Toast(MainApplication.getContext());
-		result.setGravity(Gravity.CENTER,0,0);
+		result.setGravity(Gravity.CENTER, 0, 0);
 		result.setDuration(Toast.LENGTH_SHORT);
 		View v = inflateView(R.layout.transient_notification, null);
-		TextView tv = (TextView)v.findViewById(R.id.message);
+		TextView tv = (TextView) v.findViewById(R.id.message);
 		tv.setText(content);
 		result.setView(v);
 		result.show();
 	}
 
-	public static void makeToast(Context context,String content) {
+	public static void makeToast(Context context, String content) {
 		Toast result = new Toast(context);
-		result.setGravity(Gravity.CENTER,0,0);
+		result.setGravity(Gravity.CENTER, 0, 0);
 		result.setDuration(Toast.LENGTH_SHORT);
 		View v = inflateView(R.layout.transient_notification, null);
-		TextView tv = (TextView)v.findViewById(R.id.message);
+		TextView tv = (TextView) v.findViewById(R.id.message);
 		tv.setText(content);
 		result.setView(v);
 		result.show();
 	}
-	public static void makeToast(Context context,int resId) {
+
+	public static void makeToast(Context context, int resId) {
 		makeToast(context, context.getString(resId));
 	}
 
@@ -121,15 +124,15 @@ public class Util {
 	}
 
 	public static int getScreenWidth() {
-			WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-			DisplayMetrics displayMetrics = new DisplayMetrics();
-			wm.getDefaultDisplay().getMetrics(displayMetrics);
+		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.widthPixels;
 	}
 
 
 	public static int getScreenHeight() {
-		WindowManager wm = (WindowManager)MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		wm.getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.heightPixels;
@@ -144,12 +147,12 @@ public class Util {
 	public static View inflateView(Activity activity, int resourceId, ViewGroup root) {
 		LayoutInflater inflater = (LayoutInflater) activity.getSystemService
 				(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(resourceId,root);
+		return inflater.inflate(resourceId, root);
 	}
 
-	public static int getScaleHeight(Activity activity,int w,int h){
+	public static int getScaleHeight(Activity activity, int w, int h) {
 
-		return getScreenWidth()*h/w;
+		return getScreenWidth() * h / w;
 	}
 
 	public static void traverseFolder(String path) {
@@ -157,19 +160,19 @@ public class Util {
 		if (file.exists()) {
 			File[] files = file.listFiles();
 			if (files.length == 0) {
-				LogUtil.e("traverseFolder","文件夹是空的");
+				LogUtil.e("traverseFolder", "文件夹是空的");
 			} else {
 				for (File file2 : files) {
 					if (file2.isDirectory()) {
-						LogUtil.e("文件夹:",file2.getAbsolutePath());
+						LogUtil.e("文件夹:", file2.getAbsolutePath());
 						traverseFolder(file2.getAbsolutePath());
 					} else {
-						LogUtil.e("文件：",file2.getAbsolutePath());
+						LogUtil.e("文件：", file2.getAbsolutePath());
 					}
 				}
 			}
 		} else {
-			LogUtil.e("文件：","文件不存在");
+			LogUtil.e("文件：", "文件不存在");
 		}
 	}
 
@@ -178,33 +181,33 @@ public class Util {
 		if (file.exists()) {
 			File[] files = file.listFiles();
 			if (files.length == 0) {
-				LogUtil.e("traverseFolder","文件夹是空的");
+				LogUtil.e("traverseFolder", "文件夹是空的");
 			} else {
 				for (File file2 : files) {
 					if (file2.isDirectory()) {
-						LogUtil.e("文件夹:",file2.getAbsolutePath());
+						LogUtil.e("文件夹:", file2.getAbsolutePath());
 						traverseFolder(file2.getAbsolutePath());
 					} else {
-						LogUtil.e("删除文件：",file2.getAbsolutePath());
+						LogUtil.e("删除文件：", file2.getAbsolutePath());
 						file2.delete();
 					}
 				}
 			}
 			file.delete();
-			LogUtil.e("删除完毕","fsafdsaf");
+			LogUtil.e("删除完毕", "fsafdsaf");
 		} else {
-			LogUtil.e("文件：","文件不存在");
+			LogUtil.e("文件：", "文件不存在");
 		}
 	}
 
 
-	public static String replaceChinese2UTF8(String url){
-		Pattern pattern=Pattern.compile("[\u3400-\u9FFF]+");
+	public static String replaceChinese2UTF8(String url) {
+		Pattern pattern = Pattern.compile("[\u3400-\u9FFF]+");
 		Matcher matcher = pattern.matcher(url);
-		while (matcher.find()){
+		while (matcher.find()) {
 			try {
-				String str=matcher.group();
-				url=url.replace(str, URLEncoder.encode(str,Constants.CHARSET));
+				String str = matcher.group();
+				url = url.replace(str, URLEncoder.encode(str, Constants.CHARSET));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -214,7 +217,7 @@ public class Util {
 
 	public static File saveBitmapToFile(Bitmap bitmap) {
 		File file = new File(Environment.getExternalStorageDirectory(),
-				"tmp_avatar"  + ".png");
+				"tmp_avatar" + ".png");
 		if (file.exists()) {
 			file.delete();
 		}
@@ -225,23 +228,23 @@ public class Util {
 			fops.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			bitmap.recycle();
 		}
 		return file;
 	}
 
 	public static String saveBitmap2Base64Str(Bitmap bitmap) {
-		if (bitmap==null) return null;
-		String imgStr=null;
+		if (bitmap == null) return null;
+		String imgStr = null;
 		try {
 			ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
 
-			bitmap.compress(Bitmap.CompressFormat.PNG,100, bao);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, bao);
 
 			byte[] ba = bao.toByteArray();
 
-			imgStr =Base64.encodeToString(ba,Base64.DEFAULT);
+			imgStr = Base64.encodeToString(ba, Base64.DEFAULT);
 			bao.flush();
 			bao.close();
 		} catch (Exception e) {
@@ -250,12 +253,12 @@ public class Util {
 		return imgStr;
 	}
 
-	public static String formatDouble(String price) throws NumberFormatException{
+	public static String formatDouble(String price) throws NumberFormatException {
 		DecimalFormat decimalFormat = new DecimalFormat("#.0");
 		return decimalFormat.format(Double.parseDouble(price));
 	}
 
-	public static String formatFloat(float price) throws NumberFormatException{
+	public static String formatFloat(float price) throws NumberFormatException {
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		return decimalFormat.format(price);
 	}
@@ -263,7 +266,7 @@ public class Util {
 	/**
 	 * @param key
 	 * @return
-     */
+	 */
 	public static String getAppMetaData(String key) {
 		Context context = MainApplication.getContext();
 		String defaultValue = "10"; //默认官方渠道下载
@@ -285,5 +288,9 @@ public class Util {
 
 		if (TextUtils.isEmpty(resultData)) return defaultValue;
 		return resultData;
+	}
+
+	public static String getEncodeStr(String string) throws UnsupportedEncodingException {
+		return URLEncoder.encode(string, NetworkConstance.CHARSET);
 	}
 }

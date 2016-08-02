@@ -7,10 +7,12 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.pay.bean.WXPayParams;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -48,6 +50,7 @@ public class WXPay {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e("responseInfo", responseInfo.result);
                 HttpResponse<WXPayParams> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<WXPayParams>>() {
                 });
 

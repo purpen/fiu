@@ -106,6 +106,38 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linear_jd"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@id/linear_wechat"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:paddingLeft="15dp">
+
+        <ImageView
+            android:id="@+id/image_jd"
+            android:layout_width="19dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/check" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/jd_pay" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="@string/jd_pay"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/bt_paynow_payway"
         android:layout_width="match_parent"
