@@ -92,6 +92,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private SceneDetailsBean netScene;
     //分享成功后的popwindow
     private PopupWindow popupWindow;
+    private LinearLayout linearLayout;
     private TextView textView, expTv;
 
     public TestShare() {
@@ -156,6 +157,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(this, R.layout.pop_share_success, null);
         Button button = (Button) popup_view.findViewById(R.id.pop_share_success_btn);
+        linearLayout = (LinearLayout) popup_view.findViewById(R.id.linear);
         textView = (TextView) popup_view.findViewById(R.id.tv1);
         expTv = (TextView) popup_view.findViewById(R.id.exp_tv);
         popupWindow = new PopupWindow(popup_view, DensityUtils.dp2px(this, 300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -253,8 +255,9 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 imgWidth = loadedImage.getWidth();
-                imgHeight = loadedImage.getHeight();
-//                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
+//                imgHeight = loadedImage.getHeight();
+                imgHeight = imgWidth * 16 / 9;
+                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
             }
 
             @Override
@@ -282,17 +285,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.activity_share_container:
-//                dialog.show();
-//                if (netScene == null) {
-//                    requestNet();
-//                    return;
-//                }
-//                Intent intent = new Intent(TestShare.this, ShareCJSelectActivity.class);
-//                intent.putExtra("scene", netScene);
-//                startActivityForResult(intent, 1);
-//                dialog.dismiss();
-//                break;
             case R.id.pop_share_success_btn:
                 popupWindow.dismiss();
                 break;
@@ -401,17 +393,12 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         locationTv.setText(netScene.getData().getAddress());
         sceneTitle.setText(netScene.getData().getTitle());
         desTv.setText(netScene.getData().getDes());
-        desTv.post(new Runnable() {
-            @Override
-            public void run() {
-                if (desTv.getLineCount() > 2) {
-                    addImg.setVisibility(View.VISIBLE);
-                } else {
-                    addImg.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, 1);
+        if(TestShareUtils.isShowL){
+            addImg.setVisibility(View.VISIBLE);
+        }else{
+            addImg.setVisibility(View.INVISIBLE);
+        }
+        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, (double) container.getWidth() / MainApplication.getContext().getScreenWidth());
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
         view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
@@ -519,11 +506,17 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                             }.getType();
                             bonusBean = gson.fromJson(responseInfo.result, type);
                         } catch (JsonSyntaxException e) {
-
+                            Log.e("<<<送积分", "数据解析异常:" + e.toString());
                         }
-                        textView.setText("+ " + bonusBean.getData().getExp());
-                        expTv.setText(bonusBean.getData().getExp() + "");
-                        showPopup();
+                        if (bonusBean.isSuccess() && bonusBean.getData().getExp() > 0) {
+                            textView.setText("+ " + bonusBean.getData().getExp());
+                            expTv.setText(bonusBean.getData().getExp() + "");
+                            showPopup();
+                        } else {
+                            textView.setVisibility(View.GONE);
+                            linearLayout.setVisibility(View.GONE);
+                            showPopup();
+                        }
                     }
 
                     @Override

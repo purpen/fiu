@@ -79,11 +79,11 @@
                     android:textSize="7sp"/>
 
                 <LinearLayout
-                    android:layout_marginLeft="2dp"
                     android:id="@+id/activity_share_location_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/activity_share_user_name"
+                    android:layout_marginLeft="2dp"
                     android:layout_toRightOf="@id/activity_share_user_info"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -155,7 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="11dp"
-              >
+                >
 
                 <TextView
                     android:id="@+id/activity_share_scene_des"
@@ -165,14 +165,15 @@
                     android:maxLines="2"
                     android:textColor="@color/white"
                     android:textSize="7sp"/>
+
                 <ImageView
                     android:id="@+id/activity_share_scene_add_img"
                     android:layout_width="7dp"
                     android:layout_height="7dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginBottom="1dp"
                     android:layout_alignBottom="@id/activity_share_scene_des"
                     android:layout_alignParentRight="true"
+                    android:layout_marginBottom="0.5dp"
+                    android:layout_marginRight="3dp"
                     android:src="@mipmap/share_des_add"
                     android:visibility="invisible"/>
 
@@ -194,14 +195,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/activity_share_scene_des_relative"
                 android:layout_marginEnd="11dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginRight="11dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="7dp"
-                android:layout_toRightOf="@id/logo_white"
                 android:layout_toEndOf="@id/logo_white"
+                android:layout_toRightOf="@id/logo_white"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:layout_marginLeft="4dp"
-                android:layout_marginStart="4dp"
                 android:text="@string/fiu_descrip"
                 android:textColor="@color/white"
                 android:textSize="7sp"/>

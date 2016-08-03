@@ -172,7 +172,7 @@
                     android:layout_width="7dp"
                     android:layout_height="7dp"
                     android:layout_marginRight="3dp"
-                    android:layout_marginBottom="1dp"
+                    android:layout_marginBottom="0.5dp"
                     android:layout_alignBottom="@id/activity_share_scene_des"
                     android:layout_alignParentRight="true"
                     android:src="@mipmap/share_des_add"

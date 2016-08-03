@@ -17,7 +17,7 @@ import com.taihuoniao.fineix.beans.CommentsBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -30,34 +30,37 @@ import butterknife.Bind;
 
 /**
  * @author lilin
- * created at 2016/5/4 19:17
+ *         created at 2016/5/4 19:17
  */
-public class UserCommentsActivity extends BaseActivity{
+public class UserCommentsActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
-    private int curPage=1;
+    private int curPage = 1;
     private int unread_count;
     private List<CommentsBean.CommentItem> list;
-    private static final String pageSize="9999";
-    private static final String COMMENT_TYPE="12";
+    private static final String pageSize = "9999";
+    private static final String COMMENT_TYPE = "12";
     private WaittingDialog dialog;
     private UserCommentsAdapter adapter;
-    public UserCommentsActivity(){
+
+    public UserCommentsActivity() {
         super(R.layout.activity_user_comments);
     }
+
     @Override
     protected void getIntentData() {
         Intent intent = getIntent();
-        if (intent.hasExtra(getClass().getSimpleName())){
-            unread_count = intent.getIntExtra(getClass().getSimpleName(),0);
+        if (intent.hasExtra(getClass().getSimpleName())) {
+            unread_count = intent.getIntExtra(getClass().getSimpleName(), 0);
         }
     }
+
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"评论");
-        dialog=new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, "评论");
+        dialog = new WaittingDialog(this);
     }
 
     @Override
@@ -65,8 +68,16 @@ public class UserCommentsActivity extends BaseActivity{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(activity, SceneDetailActivity.class);
-                intent.putExtra("id",list.get(i).target_id);
+//                Intent intent = new Intent(activity, SceneDetailActivity.class);
+//                intent.putExtra("id",list.get(i).target_id);
+//                startActivity(intent);
+                Intent intent = new Intent(activity, CommentListActivity.class);
+                intent.putExtra("target_id", list.get(i).target_id);
+                intent.putExtra("target_user_id", list.get(i).getUser().get_id());
+                intent.putExtra("type", 12 + "");
+                intent.putExtra(UserCommentsActivity.class.getSimpleName(), list.get(i).getUser().getNickname());
+                intent.putExtra("reply_id", list.get(i).get_id());
+                intent.putExtra("reply_user_id", list.get(i).getUser().get_id());
                 startActivity(intent);
             }
         });
@@ -74,10 +85,10 @@ public class UserCommentsActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage),pageSize,null, LoginInfo.getUserId()+"", COMMENT_TYPE, new RequestCallBack<String>() {
+        ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&& dialog!=null) dialog.show();
+                if (!activity.isFinishing() && dialog != null) dialog.show();
             }
 
             @Override
@@ -85,22 +96,23 @@ public class UserCommentsActivity extends BaseActivity{
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
-                if (responseInfo==null) return;
+                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e(TAG,responseInfo.result);
-                CommentsBean commentsBean = JsonUtil.fromJson(responseInfo.result,CommentsBean.class);
-                if (commentsBean.isSuccess()){
-                    if (commentsBean.getData()==null) return;
-                    list=commentsBean.getData().getRows();
+                LogUtil.e(TAG, responseInfo.result);
+                CommentsBean commentsBean = JsonUtil.fromJson(responseInfo.result, CommentsBean.class);
+                if (commentsBean.isSuccess()) {
+                    if (commentsBean.getData() == null) return;
+                    list = commentsBean.getData().getRows();
                     refreshUI();
-                }else {
+                } else {
                     ToastUtils.showError(commentsBean.getMessage());
 //                    dialog.showErrorWithStatus(commentsBean.getMessage());
                 }
             }
+
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
@@ -112,20 +124,20 @@ public class UserCommentsActivity extends BaseActivity{
 
     @Override
     protected void refreshUI() {
-        if (list==null) return;
-        if (list.size()==0) {
+        if (list == null) return;
+        if (list.size() == 0) {
 //            Util.makeToast("暂无评论");
             return;
         }
 
-        for (int i=0;i<unread_count;i++){
-            list.get(i).is_unread=true;
+        for (int i = 0; i < unread_count; i++) {
+            list.get(i).is_unread = true;
         }
 
-        if (adapter==null){
-            adapter=new UserCommentsAdapter(list,activity);
+        if (adapter == null) {
+            adapter = new UserCommentsAdapter(list, activity);
             lv.setAdapter(adapter);
-        }else {
+        } else {
             adapter.notifyDataSetChanged();
         }
     }

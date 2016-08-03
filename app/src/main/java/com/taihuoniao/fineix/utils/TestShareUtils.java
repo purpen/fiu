@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
  * Created by taihuoniao on 2016/5/24.
  */
 public class TestShareUtils {
+    public static boolean isShowL;
     static Context context;
     private static ImageView img;
     static RoundedImageView userHeadImg;
@@ -101,8 +102,10 @@ public class TestShareUtils {
             public void run() {
                 if (desTv.getLineCount() > 2) {
                     addImg.setVisibility(View.VISIBLE);
+                    isShowL = true;
                 } else {
                     addImg.setVisibility(View.INVISIBLE);
+                    isShowL = false;
                 }
             }
         });

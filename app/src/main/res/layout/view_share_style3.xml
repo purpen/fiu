@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/activity_share_frame"
-        android:layout_marginBottom="-15dp"
+        android:layout_marginBottom="-14.5dp"
         android:background="@mipmap/default_background_750_1334"
         android:scaleType="centerCrop"/>
 
@@ -163,8 +163,8 @@
                 android:id="@+id/activity_share_scene_add_img"
                 android:layout_width="7dp"
                 android:layout_height="7dp"
-                android:layout_marginRight="3dp"
-                android:layout_marginBottom="1dp"
+                android:layout_marginRight="5.5dp"
+                android:layout_marginBottom="0.5dp"
                 android:layout_alignBottom="@id/activity_share_scene_des"
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/share_des_add"
