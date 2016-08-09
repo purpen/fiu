@@ -54,16 +54,12 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
     //场景列表当前页码
     private int currentPage = 1;
     private double distance = 5000;//请求距离
-    //当前位置经纬度
-    private double[] location = null;
     //网络请求对话框
     private WaittingDialog dialog;
 
 
     @Override
     protected void requestNet() {
-//        instance = IndexFragment.this;
-//        DataPaser.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, handler);
         ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

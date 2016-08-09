@@ -31,379 +31,421 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".user.UserGuideActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen">
+            android:theme="@style/NoTitleFullscreen"
+            >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.MONKEY" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".product.MyGoodsDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".qingjingOrSceneDetails.TestShare"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".product.ApplyForRefundActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.AllOrderActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.SelectAddressActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.ShopOrderListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.ReturnGoodsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.OrderDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.PublishEvaluateActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".user.AddNewAddressActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.ConfirmOrderActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".qingjingOrSceneDetails.SubsCJListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.GoodsCommentsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.PayWayActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.ShopCarActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.TransferTimeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.GoodsListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".scene.SelectAllQingjingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".user.CompleteUserInfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".user.OrderInterestQJActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".user.NoticeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".user.CollectionsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".user.ImageCropActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".user.CertificateStatusActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".scene.SearchActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".product.AllFiuerActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".qingjingOrSceneDetails.ViewPagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.CreateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".scene.CategoryActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"
+            />
         <activity
             android:name=".scene.FilterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".zxing.activity.CaptureActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".qingjingOrSceneDetails.ReportActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".product.BrandDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.HasLoveActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.HasSubsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.MyBarCodeActivity"
             android:keepScreenOn="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.FindFriendsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
+
         <activity
             android:name=".user.UserCenterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
+
         <activity
             android:name=".user.EditUserInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.UserEditNameActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
+
         <activity
             android:name=".user.OrderQJActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.SystemNoticeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
+
         <activity
             android:name=".user.PrivateMessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+
         <activity
             android:name=".user.PrivateMessageListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.UsableRedPacketActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.OptRegisterLoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".user.ToLoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.ToRegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.FindPasswordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.UpdatePasswordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.BindPhoneActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".user.FocusActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".user.FansActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".user.UserCommentsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".user.SystemSettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.AboutUsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.MessageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.SubjectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.FeedbackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.UserEditSignatureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.PayDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".user.RankTagActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+
         <activity
             android:name=".user.OfficialCertificateActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".album.ImageSelectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.UnUsableRedPacketActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".product.GoodsDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".scene.SelectPhotoOrCameraActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.CropPictureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.EditPictureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.ShareCJSelectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
+
         <activity
             android:name=".qingjingOrSceneDetails.SceneDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.QingjingDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".qingjingOrSceneDetails.AllQingjingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".qingjingOrSceneDetails.CommentListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".scene.AddLabelActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".map.HotCitiesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".map.MapAddressDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".product.AllBrandsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".scene.AddProductActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".product.MineBrandActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".scene.SelectStoreActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.SearchURLActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"
+            />
+
+
         <activity
             android:name=".map.MapSearchAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name=".map.SelectOrSearchQJActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".map.DisplayOverlayerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".qingjingOrSceneDetails.ShareSearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen" />
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".scene.SelectSearchQingjingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".map.MapNearByCJActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".map.MapNearByQJActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:permission="android.permission.BAIDU_LOCATION_SERVICE"
-            android:process=":remote" />
+            android:process=":remote">
+        </service>
 
-        <!-- 此处为测试value，线上版本务必更换 -->
-        <!-- <meta-data -->
-        <!-- android:name="com.baidu.lbsapi.API_KEY" -->
-        <!-- android:value="muQDLN6lCST6qMDvTAydAilM" /> -->
+        <!--此处为测试value，线上版本务必更换-->
+        <!--<meta-data-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="muQDLN6lCST6qMDvTAydAilM" />-->
 
-
-        <!-- 百度地图线上API_KEY -->
+        <!--百度地图线上API_KEY-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4" />
+            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -412,19 +454,19 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
-                <data android:scheme="tencent1105329592" />
+                <data android:scheme="tencent1105329592"/>
 
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
 
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -433,12 +475,12 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"/>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"/>
 
         <!-- 微信支付 -->
         <activity
@@ -446,7 +488,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/transparent" />
+            android:theme="@style/transparent"/>
 
         <!-- 微信分享回调 -->
         <activity
@@ -454,11 +496,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5791f4bae0f55a986e000bd7" />
+            android:value="5791f4bae0f55a986e000bd7"></meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="10" />

@@ -482,8 +482,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 Intent intent = new Intent(SceneDetailActivity.this, UserCenterActivity.class);
-                long l = Long.valueOf(netUserInfo.getUser_id()+"");
-                Log.e("<<<","用户id="+netScene.getData().getUser_info().getUser_id()+",,,,"+netUserInfo.getUser_id());
+                long l = Long.valueOf(netUserInfo.getUser_id() + "");
+                Log.e("<<<", "用户id=" + netScene.getData().getUser_info().getUser_id() + ",,,," + netUserInfo.getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
                 startActivity(intent);
                 break;
@@ -625,6 +625,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent3);
                 break;
             case R.id.activity_scenedetails_moreuser:
+//                Intent intent6 = new Intent(this, LoveSceneActivity.class);
+//                startActivity(intent6);
                 break;
             case R.id.popup_scene_detail_more_bianji_linear:
                 if (!LoginInfo.isUserLogin()) {

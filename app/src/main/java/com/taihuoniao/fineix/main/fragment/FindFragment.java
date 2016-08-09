@@ -311,6 +311,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.e("<<<","情景列表解析异常");
                 }
                 dialog.dismiss();
                 pullToRefreshView.onRefreshComplete();
@@ -353,7 +354,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     }.getType();
                     qingJingListBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据异常：" + e.toString());
+                    Log.e("<<<", "地盘列表，数据异常：" + e.toString());
                 }
                 QingJingListBean netQingjingListBean = qingJingListBean;
                 if (netQingjingListBean.isSuccess()) {
@@ -394,7 +395,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     }.getType();
                     fiuUserListBean = gson.fromJson(responseInfo.result, type1);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
+                    Log.e("<<<", "fiu用户，数据解析异常" + e.toString());
                 }
                 FiuUserListBean netUser = fiuUserListBean;
                 netUsers = netUser;
@@ -449,7 +450,7 @@ public class FindFragment extends BaseFragment<Banner> implements AdapterView.On
                     }
                     refreshUI(bannerData.rows);
                 } catch (JsonSyntaxException e) {
-                    Util.makeToast(activity, "对不起,数据异常");
+                    Log.e("<<<","轮播图，数据解析异常");
                 }
 
 

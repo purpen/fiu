@@ -44,6 +44,7 @@
     <!-- AddLabelActivity -->
     <string name="add_label">添加标签</string>
     <string name="confirm">确定</string>
+    <string name="love_person">赞的人</string>
     <!-- AddProductActivity -->
     <string name="add_product">添加好货</string>
     <!-- CommentListActivity -->

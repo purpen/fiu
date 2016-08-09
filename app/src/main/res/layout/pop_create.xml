@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
+            android:textIsSelectable="true"
             android:layout_toLeftOf="@id/select_envir_tv"
             android:background="@null"
             android:hint="@string/input_more_twenty"
@@ -51,6 +52,7 @@
         android:layout_height="90dp">
 
         <EditText
+            android:textIsSelectable="true"
             android:id="@+id/des_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.UserCommentsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -367,16 +368,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         super.onBackPressed();
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        //        cancelNet();
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//            handler = null;
-//        }
-//        super.onDestroy();
-//    }
-
 
     @Override
     public void onClick(View v) {
@@ -470,4 +461,24 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private int po = -1;//要删除的评论
+    private boolean isFocus;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!isFocus && hasFocus && getIntent().hasExtra(UserCommentsActivity.class.getSimpleName())) {
+            reply_id = getIntent().getStringExtra("reply_id");
+            reply_user_id = getIntent().getStringExtra("reply_user_id");
+            if (target_user_id.equals(reply_user_id)) {
+                return;
+            }
+            isFocus = true;
+            String name = getIntent().getStringExtra(UserCommentsActivity.class.getSimpleName());
+            editText.setHint("回复  " + name + ":");
+            is_reply = 1 + "";
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            //2.调用showSoftInput方法显示软键盘，其中view为聚焦的view组件
+            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        }
+    }
 }

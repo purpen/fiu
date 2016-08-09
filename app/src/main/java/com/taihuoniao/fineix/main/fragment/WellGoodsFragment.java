@@ -426,6 +426,17 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
                 if (animFlag == 0) {
                     downAnimator.start();
                 }
+                if (firstVisible >= 1 && animFlag == 2) {
+                    if (goneFrame.getTranslationY() >= 0) {
+                        return;
+                    }
+                    if (secondDownAnimator == null) {
+                        initSecondDownAnimator();
+                    }
+                    if (secondFlag == 0) {
+                        secondDownAnimator.start();
+                    }
+                }
             } else {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.moveToReset();
@@ -530,7 +541,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
             getProductList(2 + "", null, null, null, productPage + "", 8 + "", null, null, null, null);
         }
         firstVisible = firstVisibleItem;
-        if(firstVisibleItem<=0){
+        if (firstVisibleItem <= 0) {
             if (goneFrame.getTranslationY() > -goneFrame.getMeasuredHeight()) {
                 if (secondUpAnimator == null) {
                     initSecondUpAnimator();
