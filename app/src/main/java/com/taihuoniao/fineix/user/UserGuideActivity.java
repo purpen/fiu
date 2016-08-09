@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
@@ -17,10 +18,10 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.ViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author lilin
@@ -42,12 +44,17 @@ public class UserGuideActivity extends BaseActivity {
     ImageView iv_welcome;
     @Bind(R.id.activity_video_view)
     VideoView activityVideoView;
+    @Bind(R.id.rl_video)
+    RelativeLayout rlVideo;
+    @Bind(R.id.ibn_volume)
+    ImageButton ibnVolume;
     private Intent intent;
     private boolean isGuide = false;
     private List<Integer> list;
+    private boolean flag = true;
     public static String fromPage;
     private int currentPosition;
-
+    private MediaPlayer mediaPlayer;
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -101,7 +108,7 @@ public class UserGuideActivity extends BaseActivity {
 
     private void initVideoRes() {
         scrollableView.setVisibility(View.GONE);
-        activityVideoView.setVisibility(View.VISIBLE);
+        rlVideo.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -117,22 +124,30 @@ public class UserGuideActivity extends BaseActivity {
         activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                mp.release();
                 initGuide();
             }
         });
         activityVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
+                mp.release();
                 initGuide();
                 return true;
             }
         });
-
+        activityVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mediaPlayer = mp;
+                setVolume(80);
+            }
+        });
     }
 
     private void showInvite() {
         scrollableView.setVisibility(View.VISIBLE);
-        activityVideoView.setVisibility(View.GONE);
+        rlVideo.setVisibility(View.GONE);
         list = new ArrayList<>();
         list.add(R.mipmap.guide3);
         scrollableView.setAdapter(new ViewPagerAdapter<>(activity, list));
@@ -154,8 +169,9 @@ public class UserGuideActivity extends BaseActivity {
                 LogUtil.e(TAG, "网络异常,请确保网络畅通");
             }
         });
+        rlVideo.setVisibility(View.GONE);
+        activityVideoView = null;
         scrollableView.setVisibility(View.VISIBLE);
-        activityVideoView.setVisibility(View.GONE);
         if (TextUtils.isEmpty(fromPage)) {
             isGuide = true;
         }
@@ -206,5 +222,39 @@ public class UserGuideActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt("currentPosition", currentPosition);
         super.onSaveInstanceState(outState);
+    }
+
+    @OnClick({R.id.ibn_volume, R.id.btn_pass})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ibn_volume:
+                if (mediaPlayer == null) return;
+                if (flag) {
+                    ibnVolume.setImageResource(R.mipmap.volume_mute);
+                    flag = false;
+                    setVolume(0);
+                } else {//
+                    ibnVolume.setImageResource(R.mipmap.volume);
+                    flag = true;
+                    setVolume(80);
+                }
+                break;
+            case R.id.btn_pass:
+                if (activityVideoView.isPlaying()) {
+                    rlVideo.setVisibility(View.GONE);
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    activityVideoView = null;
+                    initGuide();
+                }
+                break;
+        }
+    }
+
+    private void setVolume(int amount) {
+        final int max = 100;
+        final double numerator = max - amount > 0 ? Math.log(max - amount) : 0;
+        final float volume = (float) (1 - (numerator / Math.log(max)));
+        this.mediaPlayer.setVolume(volume, volume);
     }
 }

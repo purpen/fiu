@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
@@ -36,261 +37,293 @@ import java.util.regex.Pattern;
 
 public class Util {
 
-	public static String ToSBC(String input) {
-		char c[] = input.toCharArray();
-		for (int i = 0; i < c.length; i++) {
-			if (c[i] == ' ') {
-				c[i] = '\u3000';
-			} else if (c[i] < '\177') {
-				c[i] = (char) (c[i] + 65248);
-			}
-		}
-		return new String(c);
-	}
+    public static String ToSBC(String input) {
+        char c[] = input.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] == ' ') {
+                c[i] = '\u3000';
+            } else if (c[i] < '\177') {
+                c[i] = (char) (c[i] + 65248);
+            }
+        }
+        return new String(c);
+    }
 
-	public static String getImei(Context context) {
-		TelephonyManager phoneMgr = (TelephonyManager) context
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		return phoneMgr.getDeviceId();
-	}
+    public static String getImei(Context context) {
+        TelephonyManager phoneMgr = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        return phoneMgr.getDeviceId();
+    }
 
-	public static String getChannelID(Context context) {
+    public static String getChannelID(Context context) {
 
-		Bundle metaData = null;
-		String metaValue = null;
+        Bundle metaData = null;
+        String metaValue = null;
 
-		if (context == null) {
-			return null;
-		}
-		try {
+        if (context == null) {
+            return null;
+        }
+        try {
 
-			ApplicationInfo ai = context.getPackageManager()
-					.getApplicationInfo(context.getPackageName(),
-							PackageManager.GET_META_DATA);
+            ApplicationInfo ai = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(),
+                            PackageManager.GET_META_DATA);
 
-			if (null != ai) {
-				metaData = ai.metaData;
-			}
-			if (null != metaData) {
-				metaValue = metaData.getString("UMENG_CHANNEL");
-			}
+            if (null != ai) {
+                metaData = ai.metaData;
+            }
+            if (null != metaData) {
+                metaValue = metaData.getString("UMENG_CHANNEL");
+            }
 
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
-		return metaValue;// xxx
+        return metaValue;// xxx
 
-	}
+    }
 
-	public static void makeToast(String content) {
-		Toast result = new Toast(MainApplication.getContext());
-		result.setGravity(Gravity.CENTER, 0, 0);
-		result.setDuration(Toast.LENGTH_SHORT);
-		View v = inflateView(R.layout.transient_notification, null);
-		TextView tv = (TextView) v.findViewById(R.id.message);
-		tv.setText(content);
-		result.setView(v);
-		result.show();
-	}
+    public static void makeToast(String content) {
+        Toast result = new Toast(MainApplication.getContext());
+        result.setGravity(Gravity.CENTER, 0, 0);
+        result.setDuration(Toast.LENGTH_SHORT);
+        View v = inflateView(R.layout.transient_notification, null);
+        TextView tv = (TextView) v.findViewById(R.id.message);
+        tv.setText(content);
+        result.setView(v);
+        result.show();
+    }
 
-	public static void makeToast(Context context, String content) {
-		Toast result = new Toast(context);
-		result.setGravity(Gravity.CENTER, 0, 0);
-		result.setDuration(Toast.LENGTH_SHORT);
-		View v = inflateView(R.layout.transient_notification, null);
-		TextView tv = (TextView) v.findViewById(R.id.message);
-		tv.setText(content);
-		result.setView(v);
-		result.show();
-	}
+    public static void makeToast(Context context, String content) {
+        Toast result = new Toast(context);
+        result.setGravity(Gravity.CENTER, 0, 0);
+        result.setDuration(Toast.LENGTH_SHORT);
+        View v = inflateView(R.layout.transient_notification, null);
+        TextView tv = (TextView) v.findViewById(R.id.message);
+        tv.setText(content);
+        result.setView(v);
+        result.show();
+    }
 
-	public static void makeToast(Context context, int resId) {
-		makeToast(context, context.getString(resId));
-	}
+    public static void makeToast(Context context, int resId) {
+        makeToast(context, context.getString(resId));
+    }
 
-	public static float getScreenHeightDPI() {
-		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(displayMetrics);
-		return displayMetrics.ydpi;
-	}
+    public static float getScreenHeightDPI() {
+        WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.ydpi;
+    }
 
-	public static float getScreenWidthDPI() {
-		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(displayMetrics);
-		return displayMetrics.xdpi;
-	}
+    public static float getScreenWidthDPI() {
+        WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.xdpi;
+    }
 
-	public static int getScreenWidth() {
-		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(displayMetrics);
-		return displayMetrics.widthPixels;
-	}
-
-
-	public static int getScreenHeight() {
-		WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(displayMetrics);
-		return displayMetrics.heightPixels;
-	}
-
-	public static View inflateView(int resourceId, ViewGroup root) {
-		LayoutInflater inflater = (LayoutInflater) MainApplication.getContext().getSystemService
-				(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(resourceId, root);
-	}
-
-	public static View inflateView(Activity activity, int resourceId, ViewGroup root) {
-		LayoutInflater inflater = (LayoutInflater) activity.getSystemService
-				(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(resourceId, root);
-	}
-
-	public static int getScaleHeight(Activity activity, int w, int h) {
-
-		return getScreenWidth() * h / w;
-	}
-
-	public static void traverseFolder(String path) {
-		File file = new File(path);
-		if (file.exists()) {
-			File[] files = file.listFiles();
-			if (files.length == 0) {
-				LogUtil.e("traverseFolder", "文件夹是空的");
-			} else {
-				for (File file2 : files) {
-					if (file2.isDirectory()) {
-						LogUtil.e("文件夹:", file2.getAbsolutePath());
-						traverseFolder(file2.getAbsolutePath());
-					} else {
-						LogUtil.e("文件：", file2.getAbsolutePath());
-					}
-				}
-			}
-		} else {
-			LogUtil.e("文件：", "文件不存在");
-		}
-	}
-
-	public static void deleteFile(String path) {
-		File file = new File(path);
-		if (file.exists()) {
-			File[] files = file.listFiles();
-			if (files.length == 0) {
-				LogUtil.e("traverseFolder", "文件夹是空的");
-			} else {
-				for (File file2 : files) {
-					if (file2.isDirectory()) {
-						LogUtil.e("文件夹:", file2.getAbsolutePath());
-						traverseFolder(file2.getAbsolutePath());
-					} else {
-						LogUtil.e("删除文件：", file2.getAbsolutePath());
-						file2.delete();
-					}
-				}
-			}
-			file.delete();
-			LogUtil.e("删除完毕", "fsafdsaf");
-		} else {
-			LogUtil.e("文件：", "文件不存在");
-		}
-	}
+    public static int getScreenWidth() {
+        WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
 
 
-	public static String replaceChinese2UTF8(String url) {
-		Pattern pattern = Pattern.compile("[\u3400-\u9FFF]+");
-		Matcher matcher = pattern.matcher(url);
-		while (matcher.find()) {
-			try {
-				String str = matcher.group();
-				url = url.replace(str, URLEncoder.encode(str, Constants.CHARSET));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		return url;
-	}
+    public static int getScreenHeight() {
+        WindowManager wm = (WindowManager) MainApplication.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
+    }
 
-	public static File saveBitmapToFile(Bitmap bitmap) {
-		File file = new File(Environment.getExternalStorageDirectory(),
-				"tmp_avatar" + ".png");
-		if (file.exists()) {
-			file.delete();
-		}
-		try {
-			FileOutputStream fops = new FileOutputStream(file);
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fops);
-			fops.flush();
-			fops.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			bitmap.recycle();
-		}
-		return file;
-	}
+    public static View inflateView(int resourceId, ViewGroup root) {
+        LayoutInflater inflater = (LayoutInflater) MainApplication.getContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(resourceId, root);
+    }
 
-	public static String saveBitmap2Base64Str(Bitmap bitmap) {
-		if (bitmap == null) return null;
-		String imgStr = null;
-		try {
-			ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
+    public static View inflateView(Activity activity, int resourceId, ViewGroup root) {
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(resourceId, root);
+    }
 
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, bao);
+    public static int getScaleHeight(Activity activity, int w, int h) {
 
-			byte[] ba = bao.toByteArray();
+        return getScreenWidth() * h / w;
+    }
 
-			imgStr = Base64.encodeToString(ba, Base64.DEFAULT);
-			bao.flush();
-			bao.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return imgStr;
-	}
+    public static void traverseFolder(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+                LogUtil.e("traverseFolder", "文件夹是空的");
+            } else {
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+                        LogUtil.e("文件夹:", file2.getAbsolutePath());
+                        traverseFolder(file2.getAbsolutePath());
+                    } else {
+                        LogUtil.e("文件：", file2.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+            LogUtil.e("文件：", "文件不存在");
+        }
+    }
 
-	public static String formatDouble(String price) throws NumberFormatException {
-		DecimalFormat decimalFormat = new DecimalFormat("#.0");
-		return decimalFormat.format(Double.parseDouble(price));
-	}
+    public static void deleteFile(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+                LogUtil.e("traverseFolder", "文件夹是空的");
+            } else {
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+                        LogUtil.e("文件夹:", file2.getAbsolutePath());
+                        traverseFolder(file2.getAbsolutePath());
+                    } else {
+                        LogUtil.e("删除文件：", file2.getAbsolutePath());
+                        file2.delete();
+                    }
+                }
+            }
+            file.delete();
+            LogUtil.e("删除完毕", "fsafdsaf");
+        } else {
+            LogUtil.e("文件：", "文件不存在");
+        }
+    }
 
-	public static String formatFloat(float price) throws NumberFormatException {
-		DecimalFormat decimalFormat = new DecimalFormat("#.00");
-		return decimalFormat.format(price);
-	}
 
-	/**
-	 * @param key
-	 * @return
-	 */
-	public static String getAppMetaData(String key) {
-		Context context = MainApplication.getContext();
-		String defaultValue = "10"; //默认官方渠道下载
-		if (TextUtils.isEmpty(key)) return defaultValue;
-		String resultData = null;
-		try {
-			PackageManager packageManager = context.getPackageManager();
-			if (packageManager != null) {
-				ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-				if (applicationInfo != null) {
-					if (applicationInfo.metaData != null) {
-						resultData = applicationInfo.metaData.getString(key);
-					}
-				}
-			}
-		} catch (PackageManager.NameNotFoundException e) {
-			e.printStackTrace();
-		}
+    public static String replaceChinese2UTF8(String url) {
+        Pattern pattern = Pattern.compile("[\u3400-\u9FFF]+");
+        Matcher matcher = pattern.matcher(url);
+        while (matcher.find()) {
+            try {
+                String str = matcher.group();
+                url = url.replace(str, URLEncoder.encode(str, Constants.CHARSET));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return url;
+    }
 
-		if (TextUtils.isEmpty(resultData)) return defaultValue;
-		return resultData;
-	}
+    public static File saveBitmapToFile(Bitmap bitmap) {
+        File file = new File(Environment.getExternalStorageDirectory(),
+                "tmp_avatar" + ".png");
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream fops = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fops);
+            fops.flush();
+            fops.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            bitmap.recycle();
+        }
+        return file;
+    }
 
-	public static String getEncodeStr(String string) throws UnsupportedEncodingException {
-		return URLEncoder.encode(string, NetworkConstance.CHARSET);
-	}
+    public static String saveBitmap2Base64Str(Bitmap bitmap) {
+        if (bitmap == null) return null;
+        String imgStr = null;
+        try {
+            ByteArrayOutputStream bao = new BufferedByteArrayOutputStream();
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bao);
+
+            byte[] ba = bao.toByteArray();
+
+            imgStr = Base64.encodeToString(ba, Base64.DEFAULT);
+            bao.flush();
+            bao.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imgStr;
+    }
+
+    public static String formatDouble(String price) throws NumberFormatException {
+        DecimalFormat decimalFormat = new DecimalFormat("#.0");
+        return decimalFormat.format(Double.parseDouble(price));
+    }
+
+    public static String formatFloat(float price) throws NumberFormatException {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        return decimalFormat.format(price);
+    }
+
+    /**
+     * @param key
+     * @return
+     */
+    public static String getAppMetaData(String key) {
+        Context context = MainApplication.getContext();
+        String defaultValue = "10"; //默认官方渠道下载
+        if (TextUtils.isEmpty(key)) return defaultValue;
+        String resultData = null;
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            if (packageManager != null) {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+                if (applicationInfo != null) {
+                    if (applicationInfo.metaData != null) {
+                        resultData = applicationInfo.metaData.getString(key);
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (TextUtils.isEmpty(resultData)) return defaultValue;
+        return resultData;
+    }
+
+    public static String getEncodeStr(String string) throws UnsupportedEncodingException {
+        return URLEncoder.encode(string, NetworkConstance.CHARSET);
+    }
+
+    //打开扬声器
+    public static void openVolume() {
+        try {
+            AudioManager audioManager = (AudioManager) MainApplication.getContext().getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setSpeakerphoneOn(true);
+            if (!audioManager.isSpeakerphoneOn()) {
+                audioManager.setSpeakerphoneOn(true);
+                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+                        audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL),
+                        AudioManager.STREAM_VOICE_CALL);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //关闭扬声器
+    public static void closeVolume() {
+        try {
+            AudioManager audioManager = (AudioManager) MainApplication.getContext().getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                if (audioManager.isSpeakerphoneOn()) {
+                    audioManager.setSpeakerphoneOn(false);
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0,
+                            AudioManager.FLAG_PLAY_SOUND);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
