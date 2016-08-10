@@ -224,6 +224,7 @@ public class UserGuideActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
     }
 
+
     @OnClick({R.id.ibn_volume, R.id.btn_pass})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -243,7 +244,6 @@ public class UserGuideActivity extends BaseActivity {
                 if (activityVideoView.isPlaying()) {
                     rlVideo.setVisibility(View.GONE);
                     mediaPlayer.stop();
-                    mediaPlayer.release();
                     activityVideoView = null;
                     initGuide();
                 }
@@ -256,5 +256,11 @@ public class UserGuideActivity extends BaseActivity {
         final double numerator = max - amount > 0 ? Math.log(max - amount) : 0;
         final float volume = (float) (1 - (numerator / Math.log(max)));
         this.mediaPlayer.setVolume(volume, volume);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mediaPlayer != null) mediaPlayer.release();
+        super.onDestroy();
     }
 }
