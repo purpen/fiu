@@ -11,7 +11,6 @@ public class User implements Serializable {
     public long _id;
     public String account;
     public String nickname;
-    public String true_nickname;
     public int state;
     public int first_login;
     public int sex;
@@ -20,7 +19,6 @@ public class User implements Serializable {
     public String medium_avatar_url;
     public String avatar;
     public Identify identify;
-    public String realname;
     public String phone;
     public String nation;
     public String born_place;
@@ -55,6 +53,8 @@ public class User implements Serializable {
     public String head_pic_url;
     public int is_love;
     public String label;
+    public String age_group;
+    public String assets;
     public ArrayList<String> areas;
     public class Counter implements Serializable{
         public int notice_count;

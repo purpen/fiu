@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp150"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入手机号"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp14"
+            android:layout_marginBottom="@dimen/dp32" />
+
+        <com.taihuoniao.fineix.view.MaskedEditText
+            android:id="@+id/masked_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:gravity="center"
+            android:inputType="number"
+            app:mask="*** - **** - ****"
+            app:deleteChar="*"
+            android:textSize="@dimen/sp14"
+            android:textColor="@android:color/white"
+            android:textScaleX="1.2"
+            android:letterSpacing="0.5"
+            app:notMaskedSymbol="*"
+            app:replacementChar="*"
+            android:background="@null" />
+
+        <Button
+            android:id="@+id/bt_send_code"
+            style="@style/RegisterAndLogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp32"
+            android:background="@drawable/shape_login_register"
+            android:text="发送验证码"
+            android:textColor="@color/color_af8323" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp32">
+
+        <TextView
+            android:id="@+id/tv_quick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_btn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp16"
+            android:drawableLeft="@mipmap/circle_down"
+            android:drawablePadding="@dimen/dp5"
+            android:text="通过以下方式快速登录"
+            android:textColor="@color/color_666"
+            android:textSize="@dimen/sp12" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_quick"
+            android:layout_marginTop="@dimen/dp16"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_wechat"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:background="@null"
+                android:src="@mipmap/wechat_login" />
+
+            <ImageButton
+                android:id="@+id/btn_sina"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginLeft="@dimen/dp48"
+                android:background="@null"
+                android:src="@mipmap/sina_login" />
+
+            <ImageButton
+                android:id="@+id/btn_qq"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginLeft="@dimen/dp48"
+                android:background="@null"
+                android:src="@mipmap/qq_login" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

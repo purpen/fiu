@@ -454,6 +454,21 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+
+    /**
+     * 获得情景主题
+     *
+     * @param callBack
+     */
+    public static void categoryList(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.category_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", "1");
+        params.addQueryStringParameter("size", "10");
+        params.addQueryStringParameter("domain", "13");//情景主题
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //公共
     //搜索列表
     public static void search(String q, String t, String cid, String page, String evt, String sort, RequestCallBack<String> callBack) {
@@ -811,17 +826,40 @@ public class ClientDiscoverAPI {
 
     /**
      * 更新用户信息
-     *
      * @param nickname
-     * @param summary
+     * @param sex
      * @param callBack
      */
-    public static void updateNickNameSummary(String nickname, String summary, String sex, String label, RequestCallBack<String> callBack) {
+    public static void updateNickNameSex(String nickname, String sex, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("nickname", nickname);
-        params.addQueryStringParameter("summary", summary);
         params.addQueryStringParameter("sex", sex);
-        params.addQueryStringParameter("label", label);
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param age_group
+     * @param assets
+     * @param callBack
+     */
+    public static void updateAgeAssets(String age_group, String assets, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("age_group", age_group);
+        params.addQueryStringParameter("assets", assets);
+        MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
+    }
+
+    /**
+     * 提交订阅的主题
+     *
+     * @param interest_scene_cate
+     * @param callBack
+     */
+    public static void subscribeTheme(String interest_scene_cate, RequestCallBack<String> callBack) {
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("interest_scene_cate", interest_scene_cate);
         MD5Utils.sign(params, NetworkConstance.UPDATE_USERINFO_URL, callBack, false);
     }
 
@@ -1395,6 +1433,31 @@ public class ClientDiscoverAPI {
     public static void activeStatus(RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //提交验证码
+    public static void submitCheckCode(String text, RequestCallBack<String> callBack) {
+//        String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
+//        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+//        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //提交密码
+    public static void submitPassword(String text, RequestCallBack<String> callBack) {
+//        String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
+//        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+//        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //完善资料--->关注感兴趣的人
+    public static void focusInterestUser(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/user/find_user";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", "1");
+        params.addQueryStringParameter("size", "18");
+        params.addQueryStringParameter("type", "1");
+        params.addQueryStringParameter("edit_stick","1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

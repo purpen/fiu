@@ -5,6 +5,15 @@
     <string name="fiu">Fiu 浮游</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="forget_password">忘记登录密码?</string>
+    <string name="network_err">网络异常,请确认网络畅通或请联系我们</string>
+    <string name="subscribe_theme">订阅你感兴趣的情景主题</string>
+    <string name="focus_user">关注你感兴趣的人</string>
+    <string name="known_more">关于你我们想了解更多</string>
+    <string name="theme_subtitle">每个人心中都有一个不曾到过的美景，每个人心中都有一个不曾拥有的美物</string>
+    <string name="focus_subtitle">栖息了全球数千万希望用创意和梦想去改变平凡世界的品质生活家</string>
     <string name="about_us" translatable="false">关于Fiu</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
@@ -38,7 +47,7 @@
     <!-- CreateSceneActivity -->
     <string name="create_scene">创建情景</string>
     <string name="create_qingjing">创建地盘</string>
-    <string name="bianji_scene">编辑情景</string>
+    <string name="bianji_scene">编辑情境</string>
     <string name="bianji_qingjing">编辑地盘</string>
     <string name="publish">发布</string>
     <!-- AddLabelActivity -->
@@ -54,7 +63,7 @@
     <!-- ReportActivity -->
     <string name="report">举报</string>
     <!-- 个人中心 -->
-    <string name="has_love">赞过的情景</string>
+    <string name="has_love">赞过的情境</string>
     <!-- 编辑地址 -->
     <string name="delete">删除</string>
     <!-- 编辑收货地址界面-->
@@ -136,7 +145,7 @@
     </string-array>
     <string name="first_in_qing_title">情境定位</string>
     <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
-    <string name="first_in_jing_title">情景布局</string>
+    <string name="first_in_jing_title">情境布局</string>
     <string name="first_in_jing_des">给自己设一个局，换一处风情、换一面质地、换各色朝朝暮暮</string>
     <string name="first_in_fiu_title">Fiu是什么</string>
     <string name="first_in_fiu_des">敢挑剔，敢为每一处细节用尽心力，在这里编辑影像，Fiu同寻常</string>
@@ -145,7 +154,7 @@
     <string name="first_in_wo_title">个人Profile（编辑我的主页）</string>
     <string name="first_in_wo_des">不为人知的，呼之欲出的都放在这里</string>
     <string name="order_interest_qj">触动双眸的、与我共鸣的、鲜明新奇的，关注地盘给印象一个回忆的中轴线</string>
-    <!--<string name="order_interest_qj">现在你可以订阅感兴趣的情景</string>-->
+    <!--<string name="order_interest_qj">现在你可以订阅感兴趣的情境</string>-->
     <string name="complete_info">猜来猜去的游戏已落伍，取一个昵称，撕开日常标签，给同路者关注你的机会</string>
     <string-array name="user_tags">
         <item>创业先锋</item>
@@ -180,7 +189,7 @@
     </string-array>
     <string name="user_center_qj_tip">每个地盘都有故事，来都来了，讲讲你的故事吧</string>
     <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
-    <string name="user_center_cj_tip">你还没有发表过新情景哦，快来Fiu一下嘛</string>
+    <string name="user_center_cj_tip">你还没有发表过新情境哦，快来Fiu一下嘛</string>
     <string name="user_center_cj_tip1">关于TA的经历，你想知道的可能都在这里</string>
     <string name="focus_tips">偷偷告诉你：关注越多，推送越精准哦</string>
     <string name="focus_tips1">你一定是想关注我，才点进来的对吧</string>
@@ -267,7 +276,7 @@
     <string name="brand">品牌</string>
     <string name="mine_brand">自营品牌</string>
     <string name="product_lightspot">好货描述/亮点</string>
-    <string name="belong_what_changjing">应用的情景</string>
+    <string name="belong_what_changjing">应用的情境</string>
     <string name="related_recommend">相关好货推荐</string>
     <string name="add_to_cart">加入购物车</string>
     <string name="buy_now">立即购买</string>
@@ -299,11 +308,11 @@
     <string name="thank_for_report">感谢你的举报，如果此照片违反了我们的规定，我们会将其移除。</string>
     <string name="no_data">暂无数据！</string>
     <string name="number_300">300+</string>
-    <string name="products_of_sight">此情景下的好货</string>
+    <string name="products_of_sight">此情境下的好货</string>
     <string name="near_products">相近的好货</string>
     <string name="search">搜索</string>
     <string name="scene">地盘</string>
-    <string name="sight">情景</string>
+    <string name="sight">情境</string>
     <string name="product">产品</string>
     <string name="photo_album">相册</string>
     <string name="take_picture">拍照</string>
@@ -326,16 +335,16 @@
     <string name="bigger_no_low_profile">[有Bigger不低调]</string>
     <string name="new_land">新Land</string>
     <string name="enclosure_is_earnings">[圈地盘有收益]</string>
-    <string name="high_sight">High情景</string>
+    <string name="high_sight">High情境</string>
     <string name="whoever_with_addiction">[谁用谁上瘾]</string>
     <string name="severe_brands">牛Brands</string>
     <string name="good_here">[尖货这里找]</string>
     <string name="fiu_things">Fiu好货</string>
     <string name="more_goods_more_brands">[东西不少，牌子不小]</string>
-    <string name="sights_of_scene">此地盘下的情景</string>
-    <string name="create_sight">创建新的情景</string>
+    <string name="sights_of_scene">此地盘下的情境</string>
+    <string name="create_sight">创建新的情境</string>
     <string name="create_sight_in_empty_scene">在这里上传图片、选一段文字，即刻开启你的圈地之路吧</string>
-    <string name="create_sight_empty_scene">+ 创建情景</string>
+    <string name="create_sight_empty_scene">+ 创建情境</string>
     <string name="near_scene">附近的地盘</string>
     <string name="recommend_scene">推荐地盘</string>
     <string name="default_address">默认地址</string>
@@ -348,7 +357,7 @@
     <string name="up_to_look_more_detail" translatable="false">--上拉查看好货详情--</string>
     <string name="coment">评价</string>
     <string name="take_your_comment">写下您对商品的感受，对他人帮助很大</string>
-    <string name="fiu_des">Fiu | 创新产品情景式购物平台</string>
+    <string name="fiu_des">Fiu | 创新产品情境式购物平台</string>
     <string name="fiu_to_buy">有Fiu才购</string>
     <string name="the_number">数量 *</string>
     <string name="the_money">价钱</string>
@@ -367,7 +376,7 @@
     <string name="continue_to">继续</string>
     <string name="no_product">暂无商品</string>
     <string name="fiu_descrip">  | 你在发现 谁在惊呼？</string>
-    <string name="no_this_sight">没有这个情景</string>
+    <string name="no_this_sight">没有这个情境</string>
     <string name="position">位置</string>
     <string name="ranking_list_users">用户排行</string>
     <string name="scene_category">选择地盘分类</string>
@@ -379,9 +388,11 @@
     <string name="action_updateDataset">Update dataset</string>
 
     <string name="channel_name">UMENG_CHANNEL</string>
-    <string name="click_add_sight_title">点击添加情景标题</string>
-    <string name="add_sight_address">添加情景地点</string>
+    <string name="click_add_sight_title">点击添加情境标题</string>
+    <string name="add_sight_address">添加情境地点</string>
     <string name="select_dipan">选择地盘</string>
     <string name="search_envir">搜索语境</string>
     <string name="recommend_labels">推荐标签</string>
+    <string name="user_protocol">注册即表明同意 [ Fiu浮游&#8482;用户条款 ]</string>
+
 </resources>

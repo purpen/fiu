@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tv_known_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="关于你我们想了解更多"
+        android:textColor="@color/color_666"
+        android:textSize="@dimen/sp12" />
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="@dimen/dp80"
+        android:layout_height="@dimen/dp80"
+        android:layout_below="@+id/tv_known_more"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp60">
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/riv"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp80"
+            android:src="@mipmap/default_head"
+            app:riv_border_color="@color/color_eee"
+            app:riv_border_width="@dimen/dp1"
+            app:riv_corner_radius="@dimen/dp100" />
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:layout_width="@dimen/dp16"
+            android:layout_height="@dimen/dp16"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/camera"
+            app:riv_corner_radius="@dimen/dp100" />
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_below="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp32"
+        android:layout_height="@dimen/dp40"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/shape_login_register"
+        android:gravity="center"
+        android:hint="请输入昵称"
+        android:maxLength="15"
+        android:singleLine="true"
+        android:textColor="@color/color_af8323"
+        android:textColorHint="@color/color_af8323"
+        android:textSize="@dimen/sp12" />
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_below="@+id/et_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/selector_woman"
+        android:layout_marginTop="@dimen/dp32"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+
+        <RadioButton
+            android:id="@+id/rb_man"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/selector_man"
+            android:drawablePadding="@dimen/dp5"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:checked="true"
+            android:textSize="@dimen/sp12"
+            android:textColor="@color/color_666"
+            android:text="男" />
+
+        <RadioButton
+            android:id="@+id/rb_woman"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp5"
+            android:drawableTop="@drawable/selector_woman"
+            android:button="@null"
+            android:textSize="@dimen/sp12"
+            android:gravity="center_horizontal"
+            android:textColor="@color/color_666"
+            android:text="女"
+            android:layout_marginLeft="@dimen/dp32" />
+
+        <RadioButton
+            android:id="@+id/rb_secret"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/selector_secret"
+            android:gravity="center_horizontal"
+            android:drawablePadding="@dimen/dp5"
+            android:button="@null"
+            android:textSize="@dimen/sp12"
+            android:layout_marginLeft="@dimen/dp32"
+            android:textColor="@color/color_666"
+            android:text="保密" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/dp70"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/more"
+        android:background="@null"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14"
+        android:drawablePadding="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

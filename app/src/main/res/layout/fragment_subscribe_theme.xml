@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/head_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp48" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_below="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subscribe_theme"
+        android:textSize="@dimen/sp14"
+        android:layout_marginTop="@dimen/dp16"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_below="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:gravity="center_horizontal"
+        android:text="@string/theme_subtitle"
+        android:textSize="@dimen/sp11"
+        android:layout_marginTop="@dimen/dp8"
+        android:textColor="@color/color_666"
+        android:layout_centerHorizontal="true" />
+
+    <GridView
+        android:id="@+id/gv_theme"
+        android:layout_below="@+id/tv_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:horizontalSpacing="@dimen/dp10"
+        android:verticalSpacing="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btn_subscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp30"
+        android:layout_below="@id/gv_theme"
+        android:text="订阅全部"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_666"
+        android:layout_marginTop="@dimen/dp16"
+        android:textSize="@dimen/sp12"
+        android:background="@drawable/shape_subscribe_theme" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/dp70"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/more"
+        android:background="@null"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14"
+        android:layout_marginBottom="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

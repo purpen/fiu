@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -76,7 +77,7 @@ public abstract class MyBaseFragment<T> extends Fragment {
 
     }
 
-    protected void refreshUIAfterNet(List<T> list){
+    protected void refreshUIAfterNet(ArrayList<T> list) {
 
     }
 

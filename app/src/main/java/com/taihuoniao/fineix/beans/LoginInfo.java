@@ -55,6 +55,24 @@ public class LoginInfo implements Serializable {
         return null;
     }
 
+    public static String getNickName() {
+        if (isUserLogin()) {
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
+            loginInfo = JsonUtil.fromJson(login_info, LoginInfo.class);
+            return loginInfo.nickname;
+        }
+        return null;
+    }
+
+    public static String getGender() {
+        if (isUserLogin()) {
+            String login_info = SPUtil.read(DataConstants.LOGIN_INFO);
+            loginInfo = JsonUtil.fromJson(login_info, LoginInfo.class);
+            return loginInfo.sex;
+        }
+        return null;
+    }
+
     public static LoginInfo getLoginInfo(){
         if (isUserLogin()) {
             String login_info = SPUtil.read(DataConstants.LOGIN_INFO);

@@ -1,21 +1,18 @@
 package com.taihuoniao.fineix.user;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.view.MotionEvent;
+import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
@@ -23,12 +20,12 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -49,32 +46,28 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
-public class ToLoginActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, PlatformActionListener {
-    private TextView mPhone;
-    private ImageView mClose;
-    private ImageView mBack;
-    private TextView mQq;
-    private TextView mWeChat;
-    private TextView mSinaWeiBo;
+public class ToLoginActivity extends BaseActivity implements Handler.Callback, PlatformActionListener {
+    @Bind(R.id.btn_wechat)
+    ImageButton btnWechat;
+    @Bind(R.id.btn_sina)
+    ImageView btnSina;
+    @Bind(R.id.btn_qq)
+    ImageView btnQq;
     private String openidForWeChat;//这个只代表微信的openid
     private String userId;//对微信来说，这个是unionid，对QQ和微博，这个都是openid
     private String avatarUrl;
     private String sex;
     private String nickName;
     private String token;
-    @Bind(R.id.ll_login)
-    LinearLayout ll_login;
-    @Bind(R.id.ll_third)
-    LinearLayout ll_third;
-    @Bind(R.id.ll_third_box)
-    LinearLayout ll_third_box;
     @Bind(R.id.et_phone)
     EditText et_phone;
     @Bind(R.id.et_password)
     EditText et_password;
-    @Bind(R.id.scrollView)
-    ScrollView scrollView;
-    private ObjectAnimator animator;
+    @Bind(R.id.ibtn_clear)
+    ImageButton ibtnClear;
+    @Bind(R.id.ibtn_show_hide)
+    ImageButton ibtnShowHide;
+    private boolean flag = false;
     private static final String LOGIN_TYPE_WX = "1"; //微信登录
     private static final String LOGIN_TYPE_SINA = "2"; //新浪微博D
     private static final String LOGIN_TYPE_QQ = "3"; //  QQ
@@ -82,6 +75,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     private Boolean mFinish = false;//结束当前activity时是以左右动画方式退出,改为false则以上下动画退出
     public static ToLoginActivity instance = null;
     private WaittingDialog mDialog;
+
     public ToLoginActivity() {
         super(R.layout.activity_to_login);
     }
@@ -92,15 +86,15 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
             super.handleMessage(msg);
             switch (msg.what) {
                 case DataConstants.PARSER_THIRD_LOGIN_CANCEL:
-                    if (mDialog!=null) {
+                    if (mDialog != null) {
                         mDialog.dismiss();
-                        ToastUtils.showInfo("取消授权");
+                        ToastUtils.showInfo("您取消了授权");
                     }
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN_ERROR:
-                    if (mDialog!=null) {
+                    if (mDialog != null) {
                         mDialog.dismiss();
-                        ToastUtils.showError("授权失败");
+                        ToastUtils.showError("对不起,授权失败");
                     }
                     break;
                 case DataConstants.PARSER_THIRD_LOGIN:
@@ -116,35 +110,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         instance = this;
         ActivityUtil.getInstance().addActivity(this);
         mDialog = new WaittingDialog(this);
-        mPhone = (TextView) findViewById(R.id.tv_phone_number_tologin);
-        mPhone.setOnClickListener(this);
-        mClose = (ImageView) findViewById(R.id.image_close_tologin);
-        mClose.setOnClickListener(this);
-        mBack = (ImageView) findViewById(R.id.image_back_tologin);
-        mBack.setOnClickListener(this);
-        mQq = (TextView) findViewById(R.id.tv_qq_tologin);
-        mQq.setOnClickListener(this);
-        mWeChat = (TextView) findViewById(R.id.tv_weixin_tologin);
-        mWeChat.setOnClickListener(this);
-        mSinaWeiBo = (TextView) findViewById(R.id.tv_weibo_tologin);
-        mSinaWeiBo.setOnClickListener(this);
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (mDialogAppear) {
-//            if (!mDialog.isShowing()) {
-//                mDialog.show();
-//            }
-//        }
-//    }
 
     @Override
     public void finish() {
@@ -155,134 +121,91 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    @OnClick({R.id.bt_login,R.id.tv_find_pass})
-    void performClick(View v){
-        switch (v.getId()){
+    @Override
+    protected void installListener() {
+        et_phone.addTextChangedListener(tw);
+    }
+
+    private TextWatcher tw = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence cs, int start, int before, int count) {
+            String keyWord = cs.toString().trim();
+            if (!TextUtils.isEmpty(keyWord)) {
+                ibtnClear.setVisibility(View.VISIBLE);
+            } else {
+                ibtnClear.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    @OnClick({R.id.ibtn_back, R.id.ibtn_show_hide, R.id.ibtn_clear, R.id.bt_login, R.id.btn_find_pass, R.id.btn_wechat, R.id.btn_sina, R.id.btn_qq})
+    void performClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibtn_show_hide:
+                if (flag) {
+                    flag = false;
+                    et_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    ibtnShowHide.setImageResource(R.mipmap.pass_hide);
+                } else {
+                    flag = true;
+                    et_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    ibtnShowHide.setImageResource(R.mipmap.pass_show);
+                }
+                int length = et_password.getText().length();
+                if (length > 0) et_password.setSelection(length);
+                break;
+            case R.id.ibtn_clear:
+                et_phone.getText().clear();
+                ibtnClear.setVisibility(View.GONE);
+                break;
+            case R.id.ibtn_back:
+                finish();
+                break;
             case R.id.bt_login:
                 submitData(v);
                 break;
-            case R.id.tv_find_pass:
+            case R.id.btn_find_pass:
                 Intent intentFindPassword = new Intent(activity,
                         FindPasswordActivity.class);
                 startActivity(intentFindPassword);
                 break;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_qq_tologin: //QQ登录
-                if (mDialog!=null) {
+            case R.id.btn_wechat:
+                if (mDialog != null) {
                     mDialog.show();
                 }
-                mQq.setEnabled(false);
-                loginType = LOGIN_TYPE_QQ;
-                //QQ 不用打包签名即可测试
-                Platform qq = ShareSDK.getPlatform(QQ.NAME);
-                authorize(qq);
-                break;
-            case R.id.tv_weixin_tologin: //微信登录
-                if (mDialog!=null) {
-                    mDialog.show();
-                }
-                mWeChat.setEnabled(false);
+                btnWechat.setEnabled(false);
                 loginType = LOGIN_TYPE_WX;
-                //微信登录
-                //测试时，需要打包签名；sample测试时，用项目里面的demokey.keystore
-                //打包签名apk,然后才能产生微信的登录
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                 authorize(wechat);
                 break;
-            case R.id.tv_weibo_tologin: //新浪微博登录
-                if (mDialog!=null) {
+            case R.id.btn_sina:
+                if (mDialog != null) {
                     mDialog.show();
                 }
-                mSinaWeiBo.setEnabled(false);
+                btnSina.setEnabled(false);
                 loginType = LOGIN_TYPE_SINA;
                 //新浪微博，测试时，需要打包签名
                 Platform sina = ShareSDK.getPlatform(SinaWeibo.NAME);
                 authorize(sina);
                 break;
-            case R.id.tv_phone_number_tologin:
-                int[] location = new int[2];
-                ll_third_box.getLocationOnScreen(location);
-                int y = location[1];
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                lp.topMargin = y;
-                ll_login.setLayoutParams(lp);
-                animator = ObjectAnimator.ofFloat(ll_third_box, "translationY", ll_third_box.getTranslationY(), -y - ll_third.getMeasuredHeight());
-                animator.setDuration(300);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        ll_login.setAlpha(animation.getCurrentPlayTime() / 300);
-                    }
-                });
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        ll_login.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                });
-                animator.start();
-
-                break;
-            case R.id.image_back_tologin:
-                if (ll_login.isShown()) {
-                    if (animator != null) {
-                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                ll_login.setAlpha(1 - animation.getCurrentPlayTime() / 300);
-                            }
-                        });
-                        animator.addListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                ll_login.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-                        });
-                        animator.reverse();
-                    }
-                }else {
-                    finish();
+            case R.id.btn_qq:
+                if (mDialog != null) {
+                    mDialog.show();
                 }
+                btnQq.setEnabled(false);
+                loginType = LOGIN_TYPE_QQ;
+                Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                authorize(qq);
                 break;
-            case R.id.image_close_tologin:
-                mFinish = true;
-                if (OptRegisterLoginActivity.instance!=null){
-                    OptRegisterLoginActivity.instance.finish();
-                }
-                finish();
-                break;
+
         }
     }
 
@@ -321,10 +244,10 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
             openidForWeChat = platDB.getUserId();
             token = platDB.getToken();
             userId = null;
-            if (TextUtils.equals(LOGIN_TYPE_QQ,loginType)) {
+            if (TextUtils.equals(LOGIN_TYPE_QQ, loginType)) {
                 //QQ的ID得这样获取，这是MOB公司的错，不是字段写错了
                 userId = platform.getDb().get("weibo");
-            } else if (TextUtils.equals(LOGIN_TYPE_WX,loginType)) {
+            } else if (TextUtils.equals(LOGIN_TYPE_WX, loginType)) {
                 //微信这个神坑，我已无力吐槽，干嘛要搞两个ID出来，泥马，后台说要传的是这个ID，字段没有错！用platDB.getUserId()不行！
                 userId = platform.getDb().get("unionid");
             } else {
@@ -336,31 +259,31 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void doThirdLogin() {
-        if (TextUtils.isEmpty(userId))  return;
+        if (TextUtils.isEmpty(userId)) return;
         if (TextUtils.isEmpty(token)) return;
-        if(TextUtils.isEmpty(loginType)) return;
+        if (TextUtils.isEmpty(loginType)) return;
 
         ClientDiscoverAPI.thirdLoginNet(userId, token, loginType, new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&& mDialog!=null) mDialog.show();
+                if (!activity.isFinishing() && mDialog != null) mDialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (!activity.isFinishing()&& mDialog!=null) mDialog.dismiss();
-                mQq.setEnabled(true);
-                mWeChat.setEnabled(true);
-                mSinaWeiBo.setEnabled(true);
+                if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
+                btnQq.setEnabled(true);
+                btnSina.setEnabled(true);
+                btnWechat.setEnabled(true);
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<ThirdLogin> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ThirdLogin>>() {
                 });
                 if (response.isSuccess()) {
-                    ThirdLogin thirdLogin=response.getData();
-                    if (thirdLogin== null) return;
+                    ThirdLogin thirdLogin = response.getData();
+                    if (thirdLogin == null) return;
                     if (thirdLogin.has_user == 0) { //跳转去绑定用户
-                        MainApplication.hasUser=false;
+                        MainApplication.hasUser = false;
                         Intent intent = new Intent(activity, BindPhoneActivity.class);
                         intent.putExtra("oid", userId);
                         intent.putExtra("oidForWeChat", openidForWeChat);
@@ -370,21 +293,21 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
                         intent.putExtra("type", loginType);
                         intent.putExtra("sex", sex);
                         startActivity(intent);
-                    }else {        //已有该用户，直接跳转主页或订阅情景
-                        MainApplication.hasUser=true;
+                    } else {        //已有该用户，直接跳转主页或订阅情景
+                        MainApplication.hasUser = true;
                         LoginInfo instance = LoginInfo.getInstance();
                         instance.setId(thirdLogin.user._id);
                         instance.setNickname(thirdLogin.user.nickname);
                         instance.setSex(thirdLogin.user.sex);
-                        instance.areas=thirdLogin.user.areas;
+                        instance.areas = thirdLogin.user.areas;
                         instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
-                        instance.identify=thirdLogin.user.identify;
+                        instance.identify = thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
-                        if (thirdLogin.user.identify.is_scene_subscribe==0){ //未订阅
+                        if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
                             updateUserIdentity();
 //                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
                             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-                        }else {
+                        } else {
                             LoginCompleteUtils.goFrom(activity);
                         }
 
@@ -406,14 +329,13 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onFailure(HttpException e, String s) {
-                mQq.setEnabled(true);
-                mWeChat.setEnabled(true);
-                mSinaWeiBo.setEnabled(true);
-                if (mDialog!=null){
+                btnQq.setEnabled(true);
+                btnSina.setEnabled(true);
+                btnWechat.setEnabled(true);
+                if (mDialog != null) {
                     mDialog.dismiss();
                 }
-                ToastUtils.showError("网络异常，请确认网络畅通");
-//                mDialog.showErrorWithStatus("网络异常,请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -423,30 +345,30 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
         ClientDiscoverAPI.updateUserIdentify(type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (responseInfo==null) return;
+                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e("updateUserIdentity",responseInfo.result);
+                LogUtil.e("updateUserIdentity", responseInfo.result);
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
-                if (response.isSuccess()){
-                    LogUtil.e("updateUserIdentity","成功改为非首次登录");
+                if (response.isSuccess()) {
+                    LogUtil.e("updateUserIdentity", "成功改为非首次登录");
                     return;
                 }
-                LogUtil.e("改为非首次登录失败",responseInfo.result+"==="+response.getMessage());
+                LogUtil.e("改为非首次登录失败", responseInfo.result + "===" + response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (TextUtils.isEmpty(s)) return;
-                LogUtil.e("网络异常","改为非首次登录失败");
+                LogUtil.e("网络异常", "改为非首次登录失败");
             }
         });
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        mQq.setEnabled(true);
-        mWeChat.setEnabled(true);
-        mSinaWeiBo.setEnabled(true);
+        btnQq.setEnabled(true);
+        btnSina.setEnabled(true);
+        btnWechat.setEnabled(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_ERROR);
         }
@@ -455,9 +377,9 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onCancel(Platform platform, int i) {
-        mQq.setEnabled(true);
-        mWeChat.setEnabled(true);
-        mSinaWeiBo.setEnabled(true);
+        btnQq.setEnabled(true);
+        btnSina.setEnabled(true);
+        btnWechat.setEnabled(true);
         if (i == Platform.ACTION_USER_INFOR) {
             mHandler.sendEmptyMessage(DataConstants.PARSER_THIRD_LOGIN_CANCEL);
         }
@@ -501,8 +423,8 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
 //                ToastUtils.showError(responseInfo.result);
                 LogUtil.e("LOGIN_INFO", responseInfo.result);
                 if (response.isSuccess()) {//登录界面登录成功
-                    MainApplication.hasUser=true;
-                    LoginInfo loginInfo=response.getData();
+                    MainApplication.hasUser = true;
+                    LoginInfo loginInfo = response.getData();
                     SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
@@ -530,7 +452,7 @@ public class ToLoginActivity extends BaseActivity implements View.OnClickListene
             public void onFailure(HttpException e, String s) {
                 v.setEnabled(true);
                 mDialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/head_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp60" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_below="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/focus_user"
+        android:textSize="@dimen/sp14"
+        android:layout_marginTop="@dimen/dp16"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_below="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:gravity="center_horizontal"
+        android:text="@string/focus_subtitle"
+        android:textSize="@dimen/sp10"
+        android:layout_marginTop="@dimen/dp8"
+        android:textColor="@color/color_666"
+        android:layout_centerHorizontal="true" />
+
+    <com.taihuoniao.fineix.view.CustomViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@+id/tv_subtitle"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp360"
+        android:layout_marginLeft="@dimen/dp24"
+        android:layout_marginRight="@dimen/dp24" />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_below="@+id/viewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp10">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/dp150"
+        android:layout_height="@dimen/dp40"
+        android:text="进入FIU世界"
+        android:textColor="@android:color/black"
+        android:background="@drawable/shap_redbutton_commit"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:textSize="@dimen/sp14"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp32"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
