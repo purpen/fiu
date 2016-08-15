@@ -94,7 +94,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private PopupWindow popupWindow;
     private LinearLayout linearLayout;
     private TextView textView, expTv;
-
+    private TestShareUtils testShareUtils;
     public TestShare() {
         super(0);
     }
@@ -150,6 +150,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(shareCJRecyclerAdapter);
         initPopupWindow();
+        testShareUtils = new TestShareUtils();
     }
 
     private void initPopupWindow() {
@@ -321,7 +322,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             container.removeView(view);
         }
         double b = (double) container.getWidth() / MainApplication.getContext().getScreenWidth();
-        view = TestShareUtils.selectStyle(this, position, netScene, b);
+        view = testShareUtils.selectStyle(this, position, netScene, b);
         container.addView(view);
         currentPosition = position;
     }
@@ -393,12 +394,12 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         locationTv.setText(netScene.getData().getAddress());
         sceneTitle.setText(netScene.getData().getTitle());
         desTv.setText(netScene.getData().getDes());
-        if(TestShareUtils.isShowL){
+        if(testShareUtils.isShowL){
             addImg.setVisibility(View.VISIBLE);
         }else{
             addImg.setVisibility(View.INVISIBLE);
         }
-        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, (double) container.getWidth() / MainApplication.getContext().getScreenWidth());
+        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, /*(double) container.getWidth() / MainApplication.getContext().getScreenWidth()*/1);
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
         view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));

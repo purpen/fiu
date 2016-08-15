@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.taihuoniao.fineix">
+<manifest
+    package="com.taihuoniao.fineix"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android:hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android:hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
 
     <application
         android:name=".main.MainApplication"
@@ -45,6 +46,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".scene.CreateQJActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".scene.PictureEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".product.MyGoodsDetailsActivity"
             android:screenOrientation="portrait"/>
@@ -137,15 +146,6 @@
             android:name=".product.AllFiuerActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".qingjingOrSceneDetails.ViewPagerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".scene.CreateActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity
             android:name=".scene.CategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
@@ -153,12 +153,7 @@
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"
             />
-        <activity
-            android:name=".scene.FilterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".zxing.activity.CaptureActivity"
             android:launchMode="singleTask"
@@ -337,14 +332,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
-            android:name=".scene.CropPictureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".scene.EditPictureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
             android:name=".qingjingOrSceneDetails.ShareCJSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
@@ -384,11 +371,14 @@
         <activity
             android:name=".scene.AddProductActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
+            />
         <activity
             android:name=".product.MineBrandActivity"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".scene.SearchBrandActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".scene.SelectStoreActivity"
             android:screenOrientation="portrait"
@@ -503,7 +493,7 @@
             android:value="5791f4bae0f55a986e000bd7"></meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="10" />
+            android:value="10"/>
 
         <activity
             android:name=".pay.jdpay.JDPayActivity"

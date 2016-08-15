@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.beans;
 
+import android.os.Parcel;
+
 import com.taihuoniao.fineix.base.NetBean;
 
 /**
@@ -26,5 +28,13 @@ public class AddProductBean extends NetBean {
         public void setId(String id) {
             this.id = id;
         }
+
+        public Data() {
+        }
+
+        protected Data(Parcel in) {
+            this.id = in.readString();
+        }
+
     }
 }

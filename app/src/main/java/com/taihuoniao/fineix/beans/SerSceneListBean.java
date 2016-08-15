@@ -7,13 +7,13 @@ import java.util.List;
  * Created by taihuoniao on 2016/7/8.
  */
 public class SerSceneListBean implements Serializable {
-    private List<SceneListBean> sceneList;
+    private List<SceneList.DataBean.RowsBean> sceneList;
 
-    public List<SceneListBean> getSceneList() {
+    public List<SceneList.DataBean.RowsBean> getSceneList() {
         return sceneList;
     }
 
-    public void setSceneList(List<SceneListBean> sceneList) {
+    public void setSceneList(List<SceneList.DataBean.RowsBean> sceneList) {
         this.sceneList = sceneList;
     }
 }

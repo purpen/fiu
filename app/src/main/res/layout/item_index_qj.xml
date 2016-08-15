@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:paddingBottom="15dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:background="@color/black">
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp">
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/head_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher"
+                app:riv_border_color="@color/white"
+                app:riv_border_width="1px"
+                app:riv_corner_radius="100dp"/>
+
+            <ImageView
+                android:id="@+id/v_img"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/v"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/attention_btn"
+            android:layout_width="60dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@mipmap/index_attention"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/attention_btn"
+            android:layout_toRightOf="@id/relative"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="嘿嘿"
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name_tv"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@mipmap/index_time"/>
+
+                <TextView
+                    android:id="@+id/publish_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:singleLine="true"
+                    android:text="30分钟前"
+                    android:textColor="#8e8e8e"
+                    android:textSize="10sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/index_location"/>
+
+                <TextView
+                    android:id="@+id/location_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:singleLine="true"
+                    android:text="北京市"
+                    android:textColor="#8e8e8e"
+                    android:textSize="10sp"/>
+
+                <ImageView
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:src="@mipmap/index_arrow_right"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/qj_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/qj_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:background="@color/black"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/qj_title_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/qj_title_tv"
+            android:layout_marginBottom="3dp"
+            android:background="@color/black"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:singleLine="true"
+            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp">
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/index_eye"/>
+
+        <TextView
+            android:id="@+id/view_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/img1"
+            android:text="63"
+            android:textColor="#666666"
+            android:textSize="10sp"/>
+
+        <ImageView
+            android:id="@+id/more_img"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/index_more"/>
+
+        <ImageView
+            android:id="@+id/share_img"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/more_img"
+            android:paddingLeft="9dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/index_share"/>
+
+        <ImageView
+            android:id="@+id/comment_img"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/share_img"
+            android:paddingLeft="11dp"
+            android:paddingRight="9dp"
+            android:src="@mipmap/index_comment"/>
+
+        <TextView
+            android:id="@+id/love_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@id/comment_img"
+            android:paddingLeft="5dp"
+            android:text="163"
+            android:textColor="#666666"
+            android:textSize="10sp"/>
+
+        <ImageView
+            android:id="@+id/love_img"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/love_count"
+            android:paddingLeft="5dp"
+            android:src="@mipmap/index_love"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="#f4f4f4"
+        android:paddingBottom="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingTop="14dp">
+
+        <TextView
+            android:id="@+id/qj_des_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:maxLines="3"
+            android:text="Being the savage's bowsman, that is, the person who pulled the bow-oar in his boat (the second one from forward),it was my cheerful dufy to attend upon"
+            android:textColor="#666666"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:id="@+id/more_des_img"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:layout_alignBottom="@id/qj_des_tv"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:src="@mipmap/index_more_des"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/label_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="#f4f4f4"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="#f4f4f4"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp">
+
+        <com.taihuoniao.fineix.view.ListViewForScrollView
+            android:id="@+id/comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/more_comment_linear"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/more_comment_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/more_comment_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查看8条评论"
+                android:textColor="#212121"
+                android:textSize="9sp"/>
+
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/index_more_des"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

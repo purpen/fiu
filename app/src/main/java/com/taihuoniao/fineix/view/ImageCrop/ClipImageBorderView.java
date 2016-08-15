@@ -51,20 +51,19 @@ public class ClipImageBorderView extends View {
         /*
       水平方向与View的边距
      */
-        int mHorizontalPadding;
+        int mHorizontalPadding=0;
         /*
       垂直方向与View的边距
      */
-        int mVerticalPadding;
-        if (getHeight() * 9 < getWidth() * 16) {
-            mVerticalPadding = 0;
-            mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
-        } else {
-            mHorizontalPadding = 0;
-            mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
-        }
+        int mVerticalPadding=0;
+//        if (getHeight() * 9 < getWidth() * 16) {
+//            mVerticalPadding = 0;
+//            mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
+//        } else {
+//            mHorizontalPadding = 0;
+//            mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
+//        }
         // 计算距离屏幕垂直边界 的边距
-//        mVerticalPadding = (getHeight() - mWidth * 4 / 3) / 2;
         mPaint.setColor(Color.parseColor("#aa000000"));
         mPaint.setStyle(Style.FILL);
         // 绘制左边1

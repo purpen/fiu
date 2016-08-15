@@ -37,6 +37,8 @@
     </style>
 
     <style name="alpha" parent="android:Animation">
+        <item name="android:enterFadeDuration">200</item>
+        <item name="android:exitFadeDuration">300</item>
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>

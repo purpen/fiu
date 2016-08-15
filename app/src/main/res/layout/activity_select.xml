@@ -6,10 +6,10 @@
     <LinearLayout
         android:id="@+id/activity_select_bottomlinear"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="45dp"
         android:baselineAligned="false"
         android:layout_alignParentBottom="true"
-        android:background="@color/backround_black"
+        android:background="#212121"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -18,13 +18,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/activity_select_photoreredline"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/yellow_bd8913"
-                />
+            <!--<TextView-->
+                <!--android:id="@+id/activity_select_photoreredline"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="4dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:background="@color/yellow_bd8913"-->
+                <!--/>-->
 
             <TextView
                 android:id="@+id/activity_select_phototv"
@@ -42,13 +42,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/activity_select_cameraredline"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/yellow_bd8913"
-                android:visibility="gone"/>
+            <!--<TextView-->
+                <!--android:id="@+id/activity_select_cameraredline"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="4dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:background="@color/yellow_bd8913"-->
+                <!--android:visibility="gone"/>-->
 
             <TextView
                 android:id="@+id/activity_select_cameratv"

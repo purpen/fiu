@@ -21,7 +21,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     private int lastClick = -1;//上次点击的item
     private ItemClick itemClick;
 
-    public EditRecyclerAdapter(Context context, GPUImageFilterTools.OnGpuImageFilterChosenListener listener, ItemClick itemClick) {
+    public EditRecyclerAdapter(Context context, GPUImageFilterTools.OnGpuImageFilterChosenListener listener,ItemClick itemClick) {
 //        this.imageUri = imageUri;
         this.context = context;
         this.filterList = GPUImageFilterTools.getList();
@@ -134,5 +134,7 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     public interface ItemClick {
         void click(int postion);
     }
-
+    public interface FilterClick{
+        void filterClick(int position);
+    }
 }

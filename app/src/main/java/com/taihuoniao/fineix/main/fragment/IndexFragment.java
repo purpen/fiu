@@ -1,163 +1,96 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
-import android.graphics.PointF;
-import android.view.MotionEvent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.SceneListViewAdapter;
+import com.taihuoniao.fineix.adapters.IndexQJListAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
-import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener, View.OnTouchListener {
-    //    public static IndexFragment instance;
-    private View fragment_view;
-    private RelativeLayout titlelayout;
-    private ImageView searchImg;
-    private ImageView subsImg;
-    private PullToRefreshListView pullToRefreshLayout;
+import butterknife.Bind;
+
+/**
+ * Created by taihuoniao on 2016/8/9.
+ */
+public class IndexFragment extends BaseFragment implements View.OnClickListener, AbsListView.OnScrollListener {
+    @Bind(R.id.title_layout)
+    RelativeLayout titleLayout;
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshListView pullRefreshView;
     private ListView listView;
-    private ProgressBar progressBar;
-    private List<SceneListBean> sceneList;
-    private SceneListViewAdapter sceneListViewAdapter;
-    //场景列表当前页码
-    private int currentPage = 1;
-    private double distance = 5000;//请求距离
-    //网络请求对话框
-    private WaittingDialog dialog;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
+    @Bind(R.id.emptyview)
+    TextView emptyview;
+    @Bind(R.id.search_img)
+    ImageView searchImg;
+    @Bind(R.id.subs_img)
+    ImageView subsImg;
+
+    private ScrollableView scrollableView;
+    private ImageView moreThemeImg;
+    private RecyclerView recyclerView;
+    private ImageView moreQjImg;
+    private WaittingDialog dialog;//网络请求对话框
+    private int currentPage = 1;//网络请求页码
+    private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
+    private IndexQJListAdapter indexQJListAdapter;//情景列表适配器
 
 
     @Override
-    protected void requestNet() {
-        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", distance + "", null, null, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneList sceneL = new SceneList();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseInfo.result);
-                    sceneL.setSuccess(jsonObject.optBoolean("success"));
-                    sceneL.setMessage(jsonObject.optString("message"));
-//                    sceneList.setStatus(jsonObject.optString("status"));
-                    if (sceneL.isSuccess()) {
-                        JSONObject data = jsonObject.getJSONObject("data");
-                        JSONArray rows = data.getJSONArray("rows");
-                        List<SceneListBean> list = new ArrayList<>();
-                        for (int i = 0; i < rows.length(); i++) {
-                            JSONObject job = rows.getJSONObject(i);
-                            SceneListBean sceneListBean = new SceneListBean();
-                            sceneListBean.set_id(job.optString("_id"));
-                            sceneListBean.setAddress(job.optString("address"));
-                            sceneListBean.setScene_title(job.optString("scene_title"));
-                            sceneListBean.setView_count(job.optString("view_count"));
-                            sceneListBean.setCreated_at(job.optString("created_at"));
-                            sceneListBean.setLove_count(job.optString("love_count"));
-                            sceneListBean.setCover_url(job.optString("cover_url"));
-                            sceneListBean.setTitle(job.optString("title"));
-                            sceneListBean.setDes(job.optString("des"));
-                            JSONObject us = job.getJSONObject("user_info");
-                            SceneListBean.User user = new SceneListBean.User();
-                            user.setAccount(us.optString("account"));
-//                            user.setLabel(us.optString("label"));
-                            user.is_expert = us.optInt("is_expert");
-                            user.expert_info = us.optString("expert_info");
-                            user.expert_label = us.optString("expert_label");
-                            user.setUser_id(us.optString("user_id"));
-                            user.setSummary(us.optString("summary"));
-                            user.setNickname(us.optString("nickname"));
-                            user.setLove_count(us.optString("love_count"));
-                            user.setFollow_count(us.optString("follow_count"));
-                            user.setFans_count(us.optString("fans_count"));
-//                            user.setCounter(us.optString("counter"));
-                            user.setAvatar_url(us.optString("avatar_url"));
-                            sceneListBean.setUser_info(user);
-                            JSONArray product = job.getJSONArray("product");
-                            List<SceneListBean.Products> productsList = new ArrayList<>();
-                            for (int j = 0; j < product.length(); j++) {
-                                JSONObject ob = product.getJSONObject(j);
-                                SceneListBean.Products products = new SceneListBean.Products();
-                                products.setId(ob.optString("id"));
-                                products.setTitle(ob.optString("title"));
-                                products.setPrice(ob.optString("price"));
-                                products.setX(ob.optDouble("x"));
-                                products.setY(ob.optDouble("y"));
-                                productsList.add(products);
-                            }
-                            sceneListBean.setProductsList(productsList);
-                            list.add(sceneListBean);
-                        }
-                        sceneL.setSceneListBeanList(list);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                pullToRefreshLayout.onRefreshComplete();
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                if (sceneL.isSuccess()) {
-                    pullToRefreshLayout.setLoadingTime();
-                    if (currentPage == 1) {
-                        sceneList.clear();
-                        pullToRefreshLayout.lastTotalItem = -1;
-                        pullToRefreshLayout.lastSavedFirstVisibleItem = -1;
-                    }
-                    sceneList.addAll(sceneL.getSceneListBeanList());
-                    if (currentPage == 1 && sceneList.size() > 0) {
-                        sceneList.get(0).setStartAnim(true);
-                    }
-                    sceneListViewAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                pullToRefreshLayout.onRefreshComplete();
-                ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
-            }
-        });
+    protected View initView() {
+        View fragmentView = View.inflate(getActivity(), R.layout.fragment_index, null);
+        dialog = new WaittingDialog(getActivity());
+        return fragmentView;
     }
-
 
     @Override
     protected void initList() {
+        listView = pullRefreshView.getRefreshableView();
+        View headerView = View.inflate(getActivity(), R.layout.header_index, null);
+        scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
+        moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
+        recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
+        moreQjImg = (ImageView) headerView.findViewById(R.id.more_qj_img);
+        listView.addHeaderView(headerView);
+        pullRefreshView.animLayout();
+        listView.setDividerHeight(0);
         searchImg.setOnClickListener(this);
         subsImg.setOnClickListener(this);
-//        pullToRefreshLayout.setPullToRefreshEnabled(false);
-        pullToRefreshLayout.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+        pullRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 currentPage = 1;
@@ -167,63 +100,45 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 requestNet();
             }
         });
-        pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-                progressBar.setVisibility(View.VISIBLE);
-                currentPage++;
-                requestNet();
-            }
-        });
+        listView.setOnScrollListener(this);
+        ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
+        lp.width = MainApplication.getContext().getScreenWidth();
+        lp.height = lp.width * 422 / 750;
+        scrollableView.setLayoutParams(lp);
+        moreThemeImg.setOnClickListener(this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        //设置适配器
+        moreQjImg.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        sceneListViewAdapter = new SceneListViewAdapter(getActivity(), sceneList, null, null, null);
-        listView.setAdapter(sceneListViewAdapter);
-        listView.setOnItemClickListener(this);
-        listView.setOnTouchListener(this);
-        dialog.show();
+        indexQJListAdapter = new IndexQJListAdapter(sceneList);
+        listView.setAdapter(indexQJListAdapter);
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
-
     @Override
-    protected View initView() {
-        fragment_view = View.inflate(getActivity(), R.layout.fragment_index, null);
-        titlelayout = (RelativeLayout) fragment_view.findViewById(R.id.fragment_index_title);
-        searchImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_search);
-        subsImg = (ImageView) fragment_view.findViewById(R.id.fragment_index_subs);
-        pullToRefreshLayout = (PullToRefreshListView) fragment_view.findViewById(R.id.fragment_index_pullrefreshview);
-        pullToRefreshLayout.animLayout();
-        listView = pullToRefreshLayout.getRefreshableView();
-        progressBar = (ProgressBar) fragment_view.findViewById(R.id.fragment_index_progress);
-        listView.setDividerHeight(0);
-        dialog = new WaittingDialog(getActivity());
-        return fragment_view;
-    }
-
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
-        intent.putExtra("id", sceneList.get(position).get_id());
-        startActivity(intent);
-//        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-//        intent.putExtra("position", position);
-////        private SerSceneListBean serSceneListBean;//封装场景数据的列表
-////        private int currentPage = 1;//场景列表的页码
-////        //来源..从哪个界面跳转过来的
-//        SerSceneListBean serSceneListBean = new SerSceneListBean();
-//        serSceneListBean.setSceneList(sceneList);
-//        intent.putExtra("list", serSceneListBean);
-//        intent.putExtra(IndexFragment.class.getSimpleName(), false);
-//        intent.putExtra("page", currentPage);
-//        startActivity(intent);
+    protected void requestNet() {
+        sceneNet();
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fragment_index_subs:
-//                startActivity(new Intent(getActivity(), ViewPagerActivity.class));
+            case R.id.more_qj_img:
+                ToastUtils.showError("更多情景");
+                break;
+            case R.id.more_theme_img:
+                ToastUtils.showError("更多主题");
+                break;
+            case R.id.search_img:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("t", 9 + "");
+                startActivity(intent);
+                break;
+            case R.id.subs_img:
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
@@ -231,120 +146,67 @@ public class IndexFragment extends BaseFragment implements AdapterView.OnItemCli
                 }
                 startActivity(new Intent(getActivity(), SubsCJListActivity.class));
                 break;
-            case R.id.fragment_index_search:
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("t", 9 + "");
-                startActivity(intent);
-                break;
         }
     }
 
+    //获取情景列表
+    private void sceneNet() {
+        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, 2 + "", 1 + "", null, null, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<情景列表", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
+                SceneList sceneL = new SceneList();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneList>() {
+                    }.getType();
+                    sceneL = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "情景列表解析异常"+e.toString());
+                }
+                pullRefreshView.onRefreshComplete();
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                if (sceneL.isSuccess()) {
+//                    pullToRefreshLayout.setLoadingTime();
+                    if (currentPage == 1) {
+                        sceneList.clear();
+                        pullRefreshView.lastTotalItem = -1;
+                        pullRefreshView.lastSavedFirstVisibleItem = -1;
+                    }
+                    sceneList.addAll(sceneL.getData().getRows());
+                    indexQJListAdapter.notifyDataSetChanged();
+                }
+            }
 
-    public int getScrollY() {
-        View c = listView.getChildAt(0);
-        if (c == null) {
-            return 0;
-        }
-        int firstVisiblePosition = listView.getFirstVisiblePosition();
-        int top = c.getTop();
-        return -top + firstVisiblePosition * c.getHeight();
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                pullRefreshView.onRefreshComplete();
+                ToastUtils.showError("网络错误");
+            }
+        });
     }
-
-//    private boolean isMove = false;//判断手指在屏幕上是否移动过
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (listView == null || listView.getChildAt(0) == null || sceneList.size() <= 1) {
-            return false;
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        this.scrollState = scrollState;
+    }
+
+    private int scrollState;
+    private int lastFirst = -1;
+    private int lastTotal = -1;
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (scrollState == SCROLL_STATE_IDLE && visibleItemCount > listView.getHeaderViewsCount() &&
+                (firstVisibleItem + visibleItemCount >= totalItemCount) && lastFirst != firstVisibleItem &&
+                lastTotal != totalItemCount) {
+            progressBar.setVisibility(View.VISIBLE);
+            currentPage++;
+            sceneNet();
         }
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startP = new PointF(event.getX(), event.getY());
-//                isMove = false;
-//                Log.e("<<<按下坐标", "x=" + startP.x + ",y=" + startP.y);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                nowP = new PointF(event.getX(), event.getY());
-//                Log.e("<<<移动的坐标", "x=" + nowP.x + ",y=" + nowP.y);
-//                isMove = true;
-                break;
-            case MotionEvent.ACTION_UP:
-                if (nowP == null || startP == null) {
-                    return false;
-                }
-//                int i = getScrollY() / (listView.getChildAt(0).getHeight());
-                double move = Math.sqrt((nowP.x - startP.x) * (nowP.x - startP.x) + (nowP.y - startP.y) * (nowP.y - startP.y));
-                if (move < DensityUtils.dp2px(getActivity(), 12)) {
-                    return false;
-                }
-                //firstvisibleitem的偏移量
-                int s = getScrollY() % (listView.getChildAt(0).getHeight());
-                if (nowP.y < startP.y && s > 0.2 * listView.getChildAt(0).getHeight()) {
-//                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
-                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
-                    cancelChenjin();
-                    anim(listView.getFirstVisiblePosition() + 1);
-                } else if (nowP.y < startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
-//                    listView.smoothScrollByOffset(listView.getFirstVisiblePosition());
-//                    if (is16To9()) {
-//                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
-//                    } else {
-                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
-//                    }
-                } else if (nowP.y > startP.y && s < 0.8 * listView.getChildAt(0).getHeight() && s > 0) {
-//                    if (is16To9()) {
-//                        listView.smoothScrollToPosition(listView.getFirstVisiblePosition());
-//                    } else {
-                    anim(listView.getFirstVisiblePosition());
-                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition(),
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
-//                    }
-                    chenjin();
-
-                } else if (nowP.y > startP.y && move > DensityUtils.dp2px(getActivity(), 12)) {
-//                    listView.smoothScrollToPosition(listView.getFirstVisiblePosition() + 1);
-                    listView.smoothScrollToPositionFromTop(listView.getFirstVisiblePosition() + 1,
-                            -MainApplication.getContext().getScreenWidth() * 16 / 9 + MainApplication.getContext().getScreenHeight(), 300);
-                }
-                nowP = null;
-                startP = null;
-                break;
-        }
-        return false;
     }
-
-    private void anim(int position) {
-        for (int i = 0; i < sceneList.size(); i++) {
-            if (i == position) {
-                sceneList.get(i).setStartAnim(true);
-            } else {
-                sceneList.get(i).setStartAnim(false);
-            }
-        }
-//        sceneList.get(listView.getFirstVisiblePosition()+1).setStartAnim(true);
-        sceneListViewAdapter.notifyDataSetChanged();
-    }
-
-    private void cancelChenjin() {
-        searchImg.setVisibility(View.GONE);
-        subsImg.setVisibility(View.GONE);
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("index", 1);
-        intent.setAction(DataConstants.BroadShopCart);
-        getActivity().sendBroadcast(intent);
-    }
-
-    private void chenjin() {
-        searchImg.setVisibility(View.VISIBLE);
-        subsImg.setVisibility(View.VISIBLE);
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("index", 2);
-        intent.setAction(DataConstants.BroadShopCart);
-        getActivity().sendBroadcast(intent);
-    }
-
-
-    private PointF startP, nowP;
 }

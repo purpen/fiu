@@ -17,7 +17,7 @@
         android:id="@+id/title_relative1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/black">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:layout_height="45dp"
             android:paddingLeft="13dp"
             android:paddingRight="13dp"
-            android:src="@mipmap/head_search"/>
+            android:src="@mipmap/head_search_white"/>
 
         <RelativeLayout
             android:id="@+id/fragment_wellgoods_cart_relative"

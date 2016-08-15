@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
@@ -119,6 +122,12 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         deleteImg = (ImageView) findViewById(R.id.activity_add_product_delete);
         cancelTv = (TextView) findViewById(R.id.activity_add_product_cancel);
         dialog = new WaittingDialog(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.black));
+            tintManager.setStatusBarTintEnabled(true);
+        }
     }
 
     @Override
@@ -161,8 +170,6 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                         intent.putExtra("q", editText.getText().toString().trim());
                         intent.putExtra("search", isSearch);
                         sendBroadcast(intent);
-//                        Log.e("<<<", "发送广播");
-//                        DataPaser.search(editText.getText().toString().trim(), searchPage + "", "10", null, handler);
                     }
                 }
                 return false;
@@ -186,47 +193,18 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.activity_add_product_delete:
             case R.id.activity_add_product_cancel:
-//                isSearch = false;
-//                Intent intent = new Intent(DataConstants.BroadSearchFragment);
-//                intent.putExtra("pos", viewPager.getCurrentItem());
-//                intent.putExtra("search", isSearch);
-//                sendBroadcast(intent);
-                editText.setText("");
-//                Log.e("<<<", "取消搜索");
+                if (editText.getText().toString().length() > 0) {
+                    editText.setText("");
+                }else{
+                    onBackPressed();
+                }
                 break;
         }
     }
 
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.CATEGORY_LIST:
-//                    dialog.dismiss();
-//                    CategoryBean netCategoryBean = (CategoryBean) msg.obj;
-//                    if (netCategoryBean.isSuccess()) {
-//                        addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), netCategoryBean);
-//                        viewPager.setAdapter(addProductViewPagerAdapter);
-//                        slidingTab.setViewPager(viewPager);
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    break;
-//            }
-//        }
-//    };
 
     public interface CancelSearch {
         void cancelSearch();
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        //        cancelNet();
-//        if (handler != null) {
-//            handler.removeCallbacksAndMessages(null);
-//        }
-//        super.onDestroy();
-//    }
 }

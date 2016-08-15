@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.AttributeSet;
@@ -18,11 +19,13 @@ public class TopAndBottomLinear extends LinearLayout {
     private LinearLayout bottomLinear;
     private PointF startP;
     private PointF nowP;
+    private ValueAnimator upAnimator;
 
     public TopAndBottomLinear(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         initView();
+
     }
 
     private void initView() {
@@ -45,18 +48,41 @@ public class TopAndBottomLinear extends LinearLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 nowP = new PointF(ev.getX(), ev.getY());
-                if (nowP.y < startP.y && nowP.y <= topLinear.getHeight() && this.getPaddingTop() != -MainApplication.getContext().getScreenWidth()) {
+                if (startP.y >= topLinear.getHeight() && nowP.y < startP.y && nowP.y <= topLinear.getHeight() && this.getPaddingTop() != -MainApplication.getContext().getScreenWidth()) {
                     this.setPadding(0, (int) (nowP.y - MainApplication.getContext().getScreenWidth()), 0, 0);
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                if (getPaddingTop() == -MainApplication.getContext().getScreenWidth()) {
+                    return super.dispatchTouchEvent(ev);
+                }
                 nowP = new PointF(ev.getX(), ev.getY());
-                if (nowP.y / MainApplication.getContext().getScreenWidth() <= 0.8 && this.getPaddingTop() != -MainApplication.getContext().getScreenWidth()) {
-                    this.setPadding(0, -MainApplication.getContext().getScreenWidth(), 0, 0);
+                if (nowP.y / MainApplication.getContext().getScreenWidth() <= 0.8 && this.getPaddingTop() < 0) {
+                    upAnimator = ValueAnimator.ofFloat(getPaddingTop(), -MainApplication.getContext().getScreenWidth());
+                    upAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float f = (float) animation.getAnimatedValue();
+                            TopAndBottomLinear.this.setPadding(0, (int) f, 0, 0);
+                        }
+                    });
+                    upAnimator.setDuration(300);
+                    upAnimator.start();
+//                    this.setPadding(0, -MainApplication.getContext().getScreenWidth(), 0, 0);
                     return true;
-                } else if (nowP.y / MainApplication.getContext().getScreenWidth() <= 1 && this.getPaddingTop() != -MainApplication.getContext().getScreenWidth()) {
-                    this.setPadding(0, 0, 0, 0);
+                } else if (nowP.y / MainApplication.getContext().getScreenWidth() <= 1 && this.getPaddingTop() < 0) {
+//                    this.setPadding(0, 0, 0, 0);
+                    upAnimator = ValueAnimator.ofFloat(getPaddingTop(), 0);
+                    upAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float f = (float) animation.getAnimatedValue();
+                            TopAndBottomLinear.this.setPadding(0, (int) f, 0, 0);
+                        }
+                    });
+                    upAnimator.setDuration(300);
+                    upAnimator.start();
                     return true;
                 }
                 break;
@@ -75,7 +101,18 @@ public class TopAndBottomLinear extends LinearLayout {
 
     //外界用来调用将toplinear展示出来的回调
     public void showTop() {
-        if (this.getPaddingTop() == -MainApplication.getContext().getScreenWidth())
-            this.setPadding(0, 0, 0, 0);
+        if (this.getPaddingTop() == -MainApplication.getContext().getScreenWidth()) {
+            upAnimator = ValueAnimator.ofFloat(getPaddingTop(), 0);
+            upAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float f = (float) animation.getAnimatedValue();
+                    TopAndBottomLinear.this.setPadding(0, (int) f, 0, 0);
+                }
+            });
+            upAnimator.setDuration(300);
+            upAnimator.start();
+        }
+//            this.setPadding(0, 0, 0, 0);
     }
 }

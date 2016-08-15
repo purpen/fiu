@@ -18,32 +18,32 @@ import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
  * Created by taihuoniao on 2016/5/24.
  */
 public class TestShareUtils {
-    public static boolean isShowL;
-    static Context context;
-    private static ImageView img;
-    static RoundedImageView userHeadImg;
-    static RoundedImageView vImg;
-    static RelativeLayout userRightRelative;
-    static TextView userName;
-    static TextView userInfo;
-    static LinearLayout locationLinear;
-    static ImageView locationImg;
-    static TextView locationTv;
-    static ImageView erweima;
-    static TextView line;
-    static FrameLayout frameLayout;
-    static ImageView titleImg;
-    static TextView sceneTitle;
-    static TextView desTv;
-    static ImageView addImg;
-    static ImageView fiuImg;
-    static TextView fiuTv;
-    static DisplayImageOptions options500_500, options750_1334;
-    static int layout;
-    static double bi = 1;
+    public  boolean isShowL;
+    Context context;
+    private  ImageView img;
+     RoundedImageView userHeadImg;
+     RoundedImageView vImg;
+     RelativeLayout userRightRelative;
+     TextView userName;
+     TextView userInfo;
+     LinearLayout locationLinear;
+     ImageView locationImg;
+     TextView locationTv;
+     ImageView erweima;
+     TextView line;
+     FrameLayout frameLayout;
+     ImageView titleImg;
+     TextView sceneTitle;
+     TextView desTv;
+     ImageView addImg;
+     ImageView fiuImg;
+     TextView fiuTv;
+     DisplayImageOptions options500_500, options750_1334;
+     int layout;
+     double bi = 1;
 
     //根据position动态改变控件的位置
-    public static View selectStyle(final Context context1, int position, final SceneDetailsBean sceneDetails, double b) {
+    public  View selectStyle(final Context context1, int position, final SceneDetailsBean sceneDetails, double b) {
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -113,7 +113,7 @@ public class TestShareUtils {
         return view;
     }
 
-    private static void selectStyle(int position) {
+    private  void selectStyle(int position) {
         switch (position) {
             case 1:
                 layout = R.layout.view_share_style2;
@@ -130,7 +130,7 @@ public class TestShareUtils {
         }
     }
 
-    private static void setSize(View view, int position) {
+    private  void setSize(View view, int position) {
 
         userName.setTextColor(context.getResources().getColor(R.color.black));
         userInfo.setTextColor(context.getResources().getColor(R.color.black969696));
@@ -141,7 +141,7 @@ public class TestShareUtils {
 
     }
 
-    private static void selectTitleSize(int position) {
+    private  void selectTitleSize(int position) {
                 SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg,12, bi);
     }
 

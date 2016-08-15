@@ -27,6 +27,10 @@ public class ClipImageLayout extends RelativeLayout {
 //                R.drawable.a));
     }
 
+    public ClipImageLayout(Context context) {
+        this(context, null);
+    }
+
     public ClipImageLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 

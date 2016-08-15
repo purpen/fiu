@@ -70,12 +70,12 @@ public class CJResultFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     protected View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_index, null);
-        RelativeLayout title = (RelativeLayout) view.findViewById(R.id.fragment_index_title);
+        RelativeLayout title = (RelativeLayout) view.findViewById(R.id.title_layout);
         title.setVisibility(View.GONE);
-        pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.fragment_index_pullrefreshview);
+        pullToRefreshLayout = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_view);
         listView = pullToRefreshLayout.getRefreshableView();
-        progressBar = (ProgressBar) view.findViewById(R.id.fragment_index_progress);
-        emptyView = (TextView) view.findViewById(R.id.fragment_index_emptyview);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        emptyView = (TextView) view.findViewById(R.id.emptyview);
         dialog = new WaittingDialog(getActivity());
         return view;
     }
