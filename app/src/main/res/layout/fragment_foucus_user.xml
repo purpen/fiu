@@ -7,9 +7,9 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/head_logo"
+        android:src="@mipmap/logo_nofy"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp60" />
+        android:layout_marginTop="@dimen/dp48" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="@string/focus_user"
         android:textSize="@dimen/sp14"
-        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp10"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true" />
 

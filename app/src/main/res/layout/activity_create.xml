@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/black_touming">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_touming"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/background_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/bottom_linear"
@@ -28,15 +28,14 @@
         <FrameLayout
             android:id="@+id/framelayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/title_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="matrix"
-                android:src="@mipmap/scene_title_background"/>
+                android:src="@mipmap/scene_title_background" />
 
             <TextView
                 android:id="@+id/title_tv"
@@ -47,7 +46,7 @@
                 android:maxWidth="300dp"
                 android:text="@string/click_add_sight_title"
                 android:textColor="@color/white"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
         </FrameLayout>
 
         <TextView
@@ -59,13 +58,13 @@
             android:paddingTop="10dp"
             android:textColor="@color/white"
             android:textSize="9sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="3dp"
-            android:background="@color/white"/>
+            android:background="@color/white" />
 
         <RelativeLayout
             android:id="@+id/label_relative"
@@ -78,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/add_tags"/>
+                android:src="@mipmap/add_tags" />
 
             <TextView
                 android:id="@+id/add_label_tv"
@@ -89,7 +88,7 @@
                 android:padding="8dp"
                 android:text="@string/add_label"
                 android:textColor="@color/yellow_bd8913"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -99,13 +98,13 @@
                 android:layout_toLeftOf="@id/add_label_tv"
                 android:layout_toRightOf="@id/img2"
                 android:paddingTop="12dp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
-                android:background="@color/white"/>
+                android:background="@color/white" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -116,7 +115,7 @@
                 android:id="@+id/img"
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
-                android:src="@mipmap/location_white_20_30"/>
+                android:src="@mipmap/location_white_20_30" />
 
             <ImageView
                 android:id="@+id/delete_address"
@@ -126,7 +125,7 @@
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
                 android:src="@mipmap/cancel_gray"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/add_location_linear"
@@ -146,7 +145,7 @@
                     android:singleLine="true"
                     android:text="@string/add_sight_address"
                     android:textColor="@color/white"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/city_tv"
@@ -162,14 +161,14 @@
                     android:text="@string/add_sight_address"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
-                android:background="@color/white"/>
+                android:background="@color/white" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -183,7 +182,7 @@
                 android:id="@+id/img1"
                 android:layout_width="11dp"
                 android:layout_height="match_parent"
-                android:src="@mipmap/dipan_suoshu"/>
+                android:src="@mipmap/dipan_suoshu" />
 
             <TextView
                 android:id="@+id/category_tv"
@@ -196,13 +195,13 @@
                 android:singleLine="true"
                 android:text="@string/select_dipan"
                 android:textColor="@color/white"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
-                android:background="@color/white"/>
+                android:background="@color/white" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -17,9 +17,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FocusFansItem;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -88,9 +88,10 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         //关注界面
         if (userId == LoginInfo.getUserId()) { //是自己
             if (item.focus_flag) {
-                holder.btn.setText("关注");
-                holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-                holder.btn.setBackgroundResource(R.drawable.border_radius5);
+//                holder.btn.setText("关注");
+//                holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+//                holder.btn.setBackgroundResource(R.drawable.border_radius5);
+                setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
                 holder.btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {//关注
@@ -98,9 +99,10 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                     }
                 });
             } else {
-                holder.btn.setText("已关注");
-                holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-                holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+//                holder.btn.setText("已关注");
+//                holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+//                holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+                setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
                 holder.btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {//取消关注
@@ -243,9 +245,10 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     private void dealOthersFoucsFansStyle(final FocusFansItem item, final ViewHolder holder) {
         LogUtil.e("dealOthersFoucsFansStyle", "is_love===" + item.follows.is_love);
         if (item.follows.is_love == NOT_LOVE) {
-            holder.btn.setText("关注");
-            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5);
+//            holder.btn.setText("关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -254,9 +257,10 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 }
             });
         } else if (item.follows.is_love == LOVE) {
-            holder.btn.setText("已关注");
-            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+//            holder.btn.setText("已关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {//取消关注
@@ -264,6 +268,14 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 }
             });
         }
+    }
+
+    private void setFocusBtnStyle(Button bt_focus, int dimensionPixelSize, int focus, int unfocus_pic, int color, int drawable) {
+        bt_focus.setPadding(dimensionPixelSize, 0, dimensionPixelSize, 0);
+        bt_focus.setText(focus);
+        bt_focus.setTextColor(activity.getResources().getColor(color));
+        bt_focus.setBackgroundResource(drawable);
+        bt_focus.setCompoundDrawablesWithIntrinsicBounds(unfocus_pic, 0, 0, 0);
     }
 
     private void dealOthersFocus(final FocusFansItem item, final View view) {
@@ -289,7 +301,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    ToastUtils.showError("网络异常，请确认网络畅通");
+                    ToastUtils.showError(R.string.network_err);
                 }
             });
         } else if (item.follows.is_love == LOVE) {

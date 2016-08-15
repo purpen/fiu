@@ -21,7 +21,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -37,6 +36,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
+
+//import com.squareup.leakcanary.LeakCanary;
 
 //import com.squareup.leakcanary.LeakCanary;
 
@@ -96,10 +97,10 @@ public class MainApplication extends Application {
         cropPicPath = getCacheDirPath() + "/crop";
         editPicPath = getCacheDirPath() + "/edit";
         filterPicPath = getCacheDirPath() + "/filter";
-        try {
-            LeakCanary.install(this);
-        } catch (Exception e) {
-        }
+//        try {
+//            LeakCanary.install(this);
+//        } catch (Exception e) {
+//        }
     }
 
     public int getScreenHeight() {

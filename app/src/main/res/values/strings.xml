@@ -14,7 +14,7 @@
     <string name="known_more">关于你我们想了解更多</string>
     <string name="theme_subtitle">每个人心中都有一个不曾到过的美景，每个人心中都有一个不曾拥有的美物</string>
     <string name="focus_subtitle">栖息了全球数千万希望用创意和梦想去改变平凡世界的品质生活家</string>
-    <string name="about_us" translatable="false">关于Fiu</string>
+    <string name="about_us" translatable="false">关于我们</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
     <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
@@ -37,7 +37,9 @@
     <string name="tianmao">天猫</string>
     <string name="yamaxun">亚马逊</string>
     <string name="select_qj">选择情境</string>
-    <string name="search_qj">搜索情境</string>
+    <string name="search_qj">搜索情景</string>
+    <string name="focus">关注</string>
+    <string name="focused">已关注</string>
     <!-- SelectURLActivity -->
     <string name="find">找到</string>
     <string name="close">关闭</string>
@@ -101,10 +103,8 @@
         <item>收藏</item>
         <item>赞过</item>
         <item>积分</item>
-        <item>红包</item>
+        <item>礼券</item>
         <item>收货地址</item>
-        <item>服务条款</item>
-        <item>系统设置</item>
     </string-array>
 
     <string-array name="partner_name">

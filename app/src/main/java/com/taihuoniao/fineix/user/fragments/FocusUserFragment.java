@@ -1,6 +1,8 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -21,9 +23,11 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.InterestUserData;
 import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCompleteData;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomViewPager;
 
@@ -48,6 +52,8 @@ public class FocusUserFragment extends MyBaseFragment {
     private UserCompleteData data;
     private ArrayList<User> users;
     private ArrayList<ImageView> imageViews = new ArrayList<>();
+    private int size;
+    private int userSize;
 
     public static FocusUserFragment newInstance(UserCompleteData data) {
         FocusUserFragment fragment = new FocusUserFragment();
@@ -141,12 +147,22 @@ public class FocusUserFragment extends MyBaseFragment {
 
     @Override
     protected void refreshUIAfterNet() {
+        if (users == null) return;
+        userSize = users.size();
+        if (userSize <= 6) {
+            for (User user : users) {
+                user.is_love = 1;
+            }
+        } else {
+            for (int i = 0; i < 6; i++) {
+                users.get(i).is_love = 1;
+            }
+        }
         adapter = new FocusInterestedUserViewPagerAdapter(users, activity);
         viewPager.setAdapter(adapter);
         showIndicators();
     }
 
-    private int size;
 
     public void showIndicators() {
         if (users == null) return;
@@ -155,7 +171,6 @@ public class FocusUserFragment extends MyBaseFragment {
         llp.setMargins(activity.getResources().getDimensionPixelSize(R.dimen.dp5), 0, 0, 0);
         ViewGroup.LayoutParams vlp = new ViewGroup.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         ImageView imageView;
-        int userSize = users.size();
         if (userSize <= 6) {
             size = 1;
         } else {
@@ -182,8 +197,41 @@ public class FocusUserFragment extends MyBaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_next:
-                //
+                new MyHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(activity, MainActivity.class));
+                        activity.finish();
+                    }
+                }, 200);
+                StringBuilder builder = new StringBuilder();
+                for (User user : users) {
+                    if (user.is_love == 1) builder.append(user._id + ",");
+                }
+                if (TextUtils.isEmpty(builder)) return;
+                LogUtil.e(TAG, builder.deleteCharAt(builder.length() - 1).toString());
+                ClientDiscoverAPI.focusUsers(builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
+                        HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                        if (response.isSuccess()) {
+                            LogUtil.e(TAG, "关注成功");
+                            return;
+                        }
+                        ToastUtils.showError(response.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        e.printStackTrace();
+                        ToastUtils.showError(R.string.network_err);
+                    }
+                });
                 break;
         }
+    }
+
+    private static class MyHandler extends Handler {
     }
 }

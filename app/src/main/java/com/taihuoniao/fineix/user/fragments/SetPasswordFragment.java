@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -46,7 +48,7 @@ public class SetPasswordFragment extends MyBaseFragment {
     ImageButton ibtnShowHide;
     @Bind(R.id.bt_complete_register)
     Button btCompleteRegister;
-
+    private RegisterInfo registerInfo = null;
     public static SendCheckCodeFragment newInstance() {
         return new SendCheckCodeFragment();
     }
@@ -62,26 +64,32 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-
+        if (activity instanceof ToRegisterActivity) {
+            ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
+            if (null != viewPager) {
+                registerInfo = (RegisterInfo) viewPager.getTag();
+            }
+        }
     }
 
     @OnClick(R.id.bt_complete_register)
     public void onClick() {
-        String text = etPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(text)) {
+        String password = etPassword.getText().toString().trim();
+        if (TextUtils.isEmpty(password)) {
             ToastUtils.showInfo("请输入密码");
             return;
         }
 
-        if (text.length() < 6) {
+        if (password.length() < 6) {
             ToastUtils.showInfo("密码长度为6位以上");
             return;
         }
-        submitPassword(text);
+        registerUser(password);
     }
 
-    private void submitPassword(String text) {//注册完成
-        ClientDiscoverAPI.submitPassword(text, new RequestCallBack<String>() {
+    private void registerUser(String password) {//注册完成
+        if (registerInfo == null) return;
+        ClientDiscoverAPI.registerUser(registerInfo.mobile, password, registerInfo.verify_code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;

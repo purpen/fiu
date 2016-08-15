@@ -7,8 +7,8 @@
         android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/head_logo"
-        android:layout_marginTop="@dimen/dp60"
+        android:src="@mipmap/logo_nofy"
+        android:layout_marginTop="@dimen/dp48"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/known_more"
-        android:textSize="@dimen/sp12"
+        android:textSize="@dimen/sp10"
         android:textColor="@color/color_666"
         android:layout_marginTop="@dimen/dp8"
         android:layout_centerHorizontal="true" />

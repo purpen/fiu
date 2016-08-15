@@ -16,9 +16,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FocusFansItem;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -86,9 +86,10 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         if (userId == LoginInfo.getUserId()) { //是自己
             switch (item.type) {
                 case TYPE1:  //仅当粉丝关注我
-                    holder.btn.setText("关注");
-                    holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-                    holder.btn.setBackgroundResource(R.drawable.border_radius5);
+//                    holder.btn.setText("关注");
+//                    holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+//                    holder.btn.setBackgroundResource(R.drawable.border_radius5);
+                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
                     holder.btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -98,9 +99,10 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     });
                     break;
                 case TYPE2: //互粉
-                    holder.btn.setText("已关注");
-                    holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-                    holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+//                    holder.btn.setText("已关注");
+//                    holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+//                    holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
                     holder.btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -115,6 +117,13 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         return convertView;
     }
 
+    private void setFocusBtnStyle(Button bt_focus, int dimensionPixelSize, int focus, int unfocus_pic, int color, int drawable) {
+        bt_focus.setPadding(dimensionPixelSize, 0, dimensionPixelSize, 0);
+        bt_focus.setText(focus);
+        bt_focus.setTextColor(activity.getResources().getColor(color));
+        bt_focus.setBackgroundResource(drawable);
+        bt_focus.setCompoundDrawablesWithIntrinsicBounds(unfocus_pic, 0, 0, 0);
+    }
     //关注粉丝操作
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) {
@@ -129,11 +138,9 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (response.isSuccess()) {
                         item.type = TYPE2;
                         notifyDataSetChanged();
-//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-//                    svProgressHUD.showErrorWithStatus(response.getMessage());
 
                 }
 
@@ -141,8 +148,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    ToastUtils.showError("网络异常，请确认网络畅通");
-//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError(R.string.network_err);
                 }
             });
         } else {
@@ -188,21 +194,17 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                             if (response.isSuccess()) {
                                 item.type = TYPE1;
                                 notifyDataSetChanged();
-//                                Util.makeToast(response.getMessage());
                                 ToastUtils.showSuccess("已取消关注");
-//                                svProgressHUD.showSuccessWithStatus("已取消关注");
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
-//                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             view.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            ToastUtils.showError("网络异常，请确认网络畅通");
-//                            svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                            ToastUtils.showError(R.string.network_err);
                         }
                     });
                 } else { //处理别人粉丝列表的关注和取消关注操作
@@ -222,9 +224,10 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     private void dealOthersFoucsFansStyle(final FocusFansItem item, final ViewHolder holder) {
         LogUtil.e("dealOthersFoucsFansStyle", "is_love===" + item.follows.is_love);
         if (item.follows.is_love == NOT_LOVE) {
-            holder.btn.setText("关注");
-            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5);
+//            holder.btn.setText("关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -233,9 +236,10 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 }
             });
         } else if (item.follows.is_love == LOVE) {
-            holder.btn.setText("已关注");
-            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+//            holder.btn.setText("已关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {//取消关注
@@ -259,11 +263,9 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                     if (response.isSuccess()) {
                         item.follows.is_love = LOVE;
                         notifyDataSetChanged();
-//                        Util.makeToast(response.getMessage());
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-//                    svProgressHUD.showErrorWithStatus(response.getMessage());
 
                 }
 
@@ -271,8 +273,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    ToastUtils.showError("网络异常，请确认网络畅通");
-//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError(R.string.network_err);
                 }
             });
         } else if (item.follows.is_love == LOVE) {//取消关注
@@ -297,7 +298,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
                     PopupWindowUtil.dismiss();
-                    ToastUtils.showError("网络异常，请确认网络畅通");
+                    ToastUtils.showError(R.string.network_err);
                 }
             });
         }

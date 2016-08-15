@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -140,6 +141,10 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.btn_next:
+                if (activity instanceof CompleteUserInfoActivity) {
+                    ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
+                    if (null != viewPager) viewPager.setCurrentItem(3);
+                }
                 StringBuilder builder = new StringBuilder();
                 for (ThemeQJ item : mList) {
                     if (item.stick == 1) {
@@ -155,7 +160,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()) {
-                            ToastUtils.showSuccess("订阅成功");
+                            LogUtil.e(TAG, "订阅成功");
                             return;
                         }
                         ToastUtils.showError(response.getMessage());
@@ -167,11 +172,6 @@ public class SubscribeThemeFragment extends MyBaseFragment {
                         ToastUtils.showError(R.string.network_err);
                     }
                 });
-
-                if (activity instanceof CompleteUserInfoActivity) {
-                    ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
-                    if (null != viewPager) viewPager.setCurrentItem(3);
-                }
                 break;
         }
     }

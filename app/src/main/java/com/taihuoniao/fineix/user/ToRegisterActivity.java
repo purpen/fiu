@@ -7,7 +7,10 @@ import android.widget.ImageButton;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FragmentViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.user.fragments.SendCheckCodeFragment;
+import com.taihuoniao.fineix.user.fragments.SetPasswordFragment;
+import com.taihuoniao.fineix.user.fragments.SubmitCheckCodeFragment;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.CustomViewPager;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -99,7 +102,9 @@ public class ToRegisterActivity extends BaseActivity {
         ActivityUtil.getInstance().addActivity(this);
         instance = this;
         viewPager.setPagingEnabled(false);
-        Fragment[] fragments = {SendCheckCodeFragment.newInstance()};
+        RegisterInfo registerInfo = new RegisterInfo();
+        viewPager.setTag(registerInfo);
+        Fragment[] fragments = {SendCheckCodeFragment.newInstance(), SubmitCheckCodeFragment.newInstance(), SetPasswordFragment.newInstance()};
         viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments));
 //        readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
         //注册短信内容监听

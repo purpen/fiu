@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f7f7f7"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_add_label_titlelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e9e9e9"/>
+        android:background="#e9e9e9" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,15 +24,15 @@
         android:background="@color/white">
 
         <ImageView
-            android:contentDescription="@string/delete_all_select_labels"
             android:id="@+id/activity_add_label_cancel"
             android:layout_width="44dp"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/delete_all_select_labels"
             android:paddingLeft="14dp"
             android:paddingRight="14dp"
-            android:src="@mipmap/cancel_gray"/>
+            android:src="@mipmap/cancel_gray" />
 
         <HorizontalScrollView
             android:id="@+id/activity_add_label_horizontalscroll"
@@ -39,8 +40,7 @@
             android:layout_height="44dp"
             android:layout_toLeftOf="@id/activity_add_label_cancel"
             android:layout_toStartOf="@id/activity_add_label_cancel"
-            android:scrollbars="none"
-            >
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/activity_add_label_horizontallinear"
@@ -48,10 +48,10 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingRight="1dp"
                 android:paddingEnd="1dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="1dp"
+                android:paddingStart="16dp">
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -60,7 +60,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e2e2e2"/>
+        android:background="#e2e2e2" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginTop="5dp"
-                android:background="#e2e2e2"/>
+                android:background="#e2e2e2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/used_labels"
                         android:textColor="@color/yellow_bd8913"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/activity_add_label_usedlabelline"
@@ -108,7 +108,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignRight="@id/activity_add_label_usedlabel"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/yellow_bd8913"/>
+                        android:background="@color/yellow_bd8913" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -124,7 +124,7 @@
                         android:layout_centerInParent="true"
                         android:text="@string/hot_labels"
                         android:textColor="@color/black333333"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/activity_add_label_hotlabelline"
@@ -134,26 +134,26 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignRight="@id/activity_add_label_hotlabel"
                         android:background="@color/yellow_bd8913"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#ebebeb"/>
+                android:background="#ebebeb" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_add_label_labelviewpager"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:background="@color/white"
-                android:paddingTop="15dp"/>
+                android:paddingTop="15dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#e0e0e0"/>
+                android:background="#e0e0e0" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -169,21 +169,21 @@
                     android:paddingRight="16dp"
                     android:text="@string/all_labels"
                     android:textColor="@color/black333333"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/activity_add_label_alllabeltv"
-                    android:background="#cccccc"/>
+                    android:background="#cccccc" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/activity_add_label_alllabeltv"
-                    android:background="#cccccc"/>
+                    android:background="#cccccc" />
             </RelativeLayout>
 
             <TextView
@@ -195,12 +195,12 @@
                 android:text="@string/please_select_one"
                 android:textColor="#999999"
                 android:textSize="11sp"
-                tools:ignore="SmallSp"/>
+                tools:ignore="SmallSp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#e6e6e6"/>
+                android:background="#e6e6e6" />
 
             <com.taihuoniao.fineix.view.CustomSlidingTab
                 android:id="@+id/activity_add_label_slidingtab"
@@ -211,19 +211,19 @@
                 app:paddingStart="25dp"
                 app:pstsIndicatorHeight="2dp"
                 app:pstsTabPaddingLeftRight="30dp"
-                app:pstsUnderlineHeight="0dp"/>
+                app:pstsUnderlineHeight="0dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#ebebeb"/>
+                android:background="#ebebeb" />
 
 
             <com.taihuoniao.fineix.view.WrapContentViewPager
                 android:id="@+id/activity_add_label_alllabelviewpager"
                 android:layout_width="match_parent"
                 android:layout_height="700dp"
-                android:background="@color/white"/>
+                android:background="@color/white" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

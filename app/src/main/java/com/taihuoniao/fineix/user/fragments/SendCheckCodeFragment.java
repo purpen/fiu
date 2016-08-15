@@ -20,6 +20,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
@@ -234,7 +235,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
     }
 
-    private void getCheckCode(String phone) {
+    private void getCheckCode(final String phone) {
         ClientDiscoverAPI.getVerifyCodeNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -244,7 +245,10 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 if (response.isSuccess()) {
                     if (activity instanceof ToRegisterActivity) {
                         ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
-                        if (null != viewPager) viewPager.setCurrentItem(1);
+                        if (null != viewPager) {
+                            viewPager.setCurrentItem(1);
+                            ((RegisterInfo) viewPager.getTag()).mobile = phone;
+                        }
                     }
                     return;
                 }

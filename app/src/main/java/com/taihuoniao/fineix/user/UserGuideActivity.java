@@ -55,6 +55,7 @@ public class UserGuideActivity extends BaseActivity {
     public static String fromPage;
     private int currentPosition;
     private MediaPlayer mediaPlayer;
+
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -124,14 +125,13 @@ public class UserGuideActivity extends BaseActivity {
         activityVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mp.release();
+
                 initGuide();
             }
         });
         activityVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                mp.release();
                 initGuide();
                 return true;
             }
@@ -245,6 +245,7 @@ public class UserGuideActivity extends BaseActivity {
                     rlVideo.setVisibility(View.GONE);
                     mediaPlayer.stop();
                     activityVideoView = null;
+                    mediaPlayer = null;
                     initGuide();
                 }
                 break;
@@ -256,11 +257,5 @@ public class UserGuideActivity extends BaseActivity {
         final double numerator = max - amount > 0 ? Math.log(max - amount) : 0;
         final float volume = (float) (1 - (numerator / Math.log(max)));
         this.mediaPlayer.setVolume(volume, volume);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mediaPlayer != null) mediaPlayer.release();
-        super.onDestroy();
     }
 }

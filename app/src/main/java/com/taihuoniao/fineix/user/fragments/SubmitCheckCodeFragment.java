@@ -14,6 +14,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
@@ -34,7 +35,7 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
     MaskedEditText maskedEditText;
     @Bind(R.id.bt_send_code)
     Button btSendCode;
-
+    private RegisterInfo registerInfo = null;
     public static SendCheckCodeFragment newInstance() {
         return new SendCheckCodeFragment();
     }
@@ -60,13 +61,24 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
         submitCheckCode(text);
     }
 
-    private void submitCheckCode(String text) {
-        ClientDiscoverAPI.submitCheckCode(text, new RequestCallBack<String>() {
+    private void submitCheckCode(final String text) {
+        if (activity instanceof ToRegisterActivity) {
+            ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
+            if (null != viewPager) {
+                registerInfo = (RegisterInfo) viewPager.getTag();
+            }
+        }
+
+        if (registerInfo == null) return;
+        String phone = registerInfo.mobile;
+        if (TextUtils.isEmpty(phone)) return;
+        ClientDiscoverAPI.submitCheckCode(phone, text, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
+                    registerInfo.verify_code = text;
                     if (activity instanceof ToRegisterActivity) {
                         ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
                         if (null != viewPager) viewPager.setCurrentItem(2);

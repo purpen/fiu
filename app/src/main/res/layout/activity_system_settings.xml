@@ -3,88 +3,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_f7f7f7"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
+
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_update_psd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
-        android:layout_marginTop="@dimen/dp5"
         android:id="@+id/item_push_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginTop="@dimen/dp5" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_666"
+        android:paddingBottom="@dimen/dp10"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
         android:paddingTop="@dimen/dp10"
-        android:paddingBottom="@dimen/dp10"
-        android:textSize="@dimen/sp12"
         android:text="@string/push_tip"
-        />
+        android:textColor="@color/color_666"
+        android:textSize="@dimen/sp12" />
 
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_clear_cache"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_to_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_welcome_page"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_about_us"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_feedback"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_share"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/item_exit"
-        android:layout_marginTop="@dimen/dp10"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:text="退出当前账户"
-        android:gravity="center"
+        android:layout_marginTop="@dimen/dp10"
         android:background="@android:color/white"
-        android:textSize="@dimen/sp12"
-        android:textColor="@color/color_af8323" />
+        android:gravity="center"
+        android:text="退出当前账户"
+        android:textColor="@color/color_af8323"
+        android:textSize="@dimen/sp12" />
 
     <Button
+        android:id="@+id/btn_logout"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="@dimen/dp250"
         android:layout_height="@dimen/dp45"
-        android:id="@+id/btn_logout"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_margin="@dimen/dp16"
         android:background="@drawable/logout_btn_style"
         android:text="退出当前账户"
-        android:textSize="@dimen/sp12"
         android:textColor="@color/color_333"
+        android:textSize="@dimen/sp12"
         android:visibility="gone" />
 </LinearLayout>

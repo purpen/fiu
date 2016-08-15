@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true"
     android:focusable="true"
     >
 

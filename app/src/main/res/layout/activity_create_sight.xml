@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/background_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:id="@+id/container"
@@ -25,29 +25,28 @@
             <com.taihuoniao.fineix.view.GlobalTitleLayout
                 android:id="@+id/title_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_below="@id/title_layout"
-                android:background="#cc757575"/>
+                android:background="#cc757575" />
 
             <RelativeLayout
                 android:id="@+id/address_linear"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_below="@id/line"
-                android:visibility="visible"
-                >
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/img"
                     android:layout_width="10dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
-                    android:src="@mipmap/location_white_20_30"/>
+                    android:src="@mipmap/location_white_20_30" />
 
                 <ImageView
                     android:id="@+id/delete_address"
@@ -57,7 +56,7 @@
                     android:paddingLeft="14dp"
                     android:paddingRight="14dp"
                     android:src="@mipmap/cancel_gray"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/location_tv"
@@ -70,14 +69,14 @@
                     android:gravity="center_vertical"
                     android:text="@string/add_sight_address"
                     android:textColor="@color/white"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="15dp"
-                    android:background="#cc757575"/>
+                    android:background="#cc757575" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -92,7 +91,7 @@
                     android:layout_width="11dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
-                    android:src="@mipmap/category_create_sight"/>
+                    android:src="@mipmap/category_create_sight" />
 
                 <TextView
                     android:id="@+id/category_tv"
@@ -103,14 +102,14 @@
                     android:layout_toRightOf="@id/img1"
                     android:text="@string/select_dipan"
                     android:textColor="@color/white"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="15dp"
-                    android:background="#cc757575"/>
+                    android:background="#cc757575" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -126,7 +125,7 @@
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="15dp"
-                    android:background="#cc757575"/>
+                    android:background="#cc757575" />
 
                 <TextView
                     android:id="@+id/title_tv"
@@ -140,7 +139,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="13sp"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
             </RelativeLayout>
 
             <LinearLayout
@@ -153,15 +152,14 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    >
+                    android:layout_height="45dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_alignParentBottom="true"
                         android:layout_marginLeft="15dp"
-                        android:background="#cc757575"/>
+                        android:background="#cc757575" />
 
                     <TextView
                         android:id="@+id/select_envir_tv"
@@ -173,7 +171,7 @@
                         android:paddingRight="16dp"
                         android:text="选择语境"
                         android:textColor="@color/yellow_bd8913"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/title_edit_text"
@@ -188,7 +186,7 @@
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:textSize="12sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -206,14 +204,14 @@
                         android:hint="添加描述"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:layout_alignParentBottom="true"
                         android:layout_marginLeft="15dp"
-                        android:background="#cc757575"/>
+                        android:background="#cc757575" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -226,7 +224,7 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="13dp"
-                        android:src="@mipmap/add_tags"/>
+                        android:src="@mipmap/add_tags" />
 
                     <TextView
                         android:id="@+id/add_label_tv"
@@ -240,7 +238,7 @@
                         android:paddingTop="11dp"
                         android:text="添加标签"
                         android:textColor="@color/yellow_bd8913"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
 
                     <com.taihuoniao.fineix.view.FlowLayout
                         android:id="@+id/flowlayout"
@@ -252,7 +250,7 @@
                         android:layout_toLeftOf="@id/add_label_tv"
                         android:layout_toRightOf="@id/img2"
                         app:horizontalSpacing="10dp"
-                        app:verticalSpacing="10dp"/>
+                        app:verticalSpacing="10dp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view"
@@ -263,7 +261,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_toLeftOf="@id/add_label_tv"
                         android:layout_toRightOf="@id/img2"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

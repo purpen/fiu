@@ -1,9 +1,10 @@
-<RelativeLayout android:id="@+id/activity_main_container"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:context="com.taihuoniao.fineix.main.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context="com.taihuoniao.fineix.main.MainActivity">
 
     <!--<com.taihuoniao.fineix.view.CustomHeadView-->
     <!--android:id="@+id/custom_head"-->
@@ -14,8 +15,7 @@
     <FrameLayout
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/activity_main_bottomlinear"
@@ -34,7 +34,7 @@
                 android:id="@+id/activity_main_homepagebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:src="@mipmap/home_gray"/>
+                android:src="@mipmap/home_gray" />
 
             <TextView
                 android:id="@+id/tv_nav0"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/qing"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +55,7 @@
                 android:id="@+id/activity_main_findbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/find_gray"/>
+                android:src="@mipmap/find_gray" />
 
             <TextView
                 android:id="@+id/tv_nav1"
@@ -64,7 +64,7 @@
                 android:layout_marginTop="7dp"
                 android:gravity="center_horizontal"
                 android:text="@string/jing"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,7 +74,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/create_sight"/>
+                android:src="@mipmap/create_sight" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/fiu"
                 android:textColor="#999999"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -94,7 +94,7 @@
                 android:id="@+id/activity_main_shopbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/shop_gray"/>
+                android:src="@mipmap/shop_gray" />
 
             <TextView
                 android:id="@+id/tv_nav3"
@@ -103,7 +103,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/pin"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -118,7 +118,7 @@
                     android:id="@+id/activity_main_minebtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/mine_gray"/>
+                    android:src="@mipmap/mine_gray" />
 
                 <TextView
                     android:id="@+id/tv_msg_indicator"
@@ -127,8 +127,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp20"
                     android:background="@drawable/msg_indicator"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
@@ -138,7 +137,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/mine"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -156,7 +155,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="6dp"
             android:layout_marginTop="3dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/activity_main_first_left_img"
@@ -164,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="4dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/activity_main_first_img"
@@ -172,8 +171,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:scaleType="fitXY"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </RelativeLayout>
 
 </RelativeLayout>

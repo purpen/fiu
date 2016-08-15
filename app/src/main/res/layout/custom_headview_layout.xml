@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:background="@drawable/selector_fff_eee"
+        android:background="@null"
         android:padding="@dimen/dp16"
         android:visibility="gone" />
 
@@ -89,7 +89,7 @@
             android:id="@+id/head_view_shop"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/selector_fff_eee"
+            android:background="@null"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/selector_fff_eee"
+        android:background="@null"
         android:padding="@dimen/dp16"
         android:src="@mipmap/icon_more"
         android:visibility="gone" />
@@ -130,24 +130,23 @@
         android:layout_alignTop="@+id/rl_head_shop"
         android:layout_toLeftOf="@+id/rl_head_shop"
         android:layout_toStartOf="@+id/rl_head_shop"
-        android:background="@drawable/selector_fff_eee"
+        android:background="@null"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
         android:src="@mipmap/ic_launcher"
         android:visibility="gone" />
 
-
+    <!-- android:background="@drawable/selector_fff_eee"-->
     <TextView
         android:id="@+id/tv_head_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/selector_fff_eee"
         android:drawablePadding="@dimen/dp5"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:textColor="@color/color_333"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/sp14"
         android:visibility="gone" />
 

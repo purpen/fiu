@@ -1436,18 +1436,22 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    //提交验证码
-    public static void submitCheckCode(String text, RequestCallBack<String> callBack) {
-//        String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
-//        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-//        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    //验证验证码
+    public static void submitCheckCode(String phone, String code, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/check_verify_code";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    //提交密码
-    public static void submitPassword(String text, RequestCallBack<String> callBack) {
-//        String url = NetworkConstance.BASE_URL + "/gateway/record_fiu_user_active";
-//        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-//        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    //注册用户
+    public static void registerUser(String mobile, String password, String verify_code, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/auth/register";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("mobile", mobile);
+        params.addBodyParameter("password", password);
+        params.addBodyParameter("verify_code", verify_code);
+        params.addBodyParameter("from_to", "2"); //1.ios;2.android;3.win;
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
     //完善资料--->关注感兴趣的人
@@ -1458,6 +1462,14 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", "18");
         params.addQueryStringParameter("type", "1");
         params.addQueryStringParameter("edit_stick","1");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //开始关注感兴趣的人
+    public static void focusUsers(String follow_ids, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/follow/batch_follow";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("follow_ids", follow_ids);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

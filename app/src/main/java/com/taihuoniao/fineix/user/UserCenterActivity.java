@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonSyntaxException;
@@ -31,6 +32,7 @@ import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
 import com.taihuoniao.fineix.album.PicturePickerUtils;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.SceneListBean;
@@ -39,7 +41,6 @@ import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -74,10 +75,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Bind(R.id.ll_tips)
     LinearLayout ll_tips;
     private RoundedImageView riv;
-    private RoundedImageView riv_auth;
+    private ImageView riv_auth;
     private TextView tv_real;
     private TextView tv_qj;
-    private TextView tv_cj;
     private TextView tv_focus;
     private TextView tv_fans;
     private Button bt_focus;
@@ -91,10 +91,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
     ImageButton iv_right;
-    private LinearLayout ll_focus;
+    private RelativeLayout rl_focus;
     private LinearLayout ll_fans;
-    private LinearLayout ll_qj;
-    private LinearLayout ll_cj;
+    private RelativeLayout rl_qj;
     private User user;
     private List<Uri> mSelected;
     private int which = MineFragment.REQUEST_CJ;
@@ -158,17 +157,15 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         iv_label = ButterKnife.findById(headView, R.id.iv_label);
         tv_auth = ButterKnife.findById(headView, R.id.tv_auth);
         ll_btn_box = ButterKnife.findById(headView, R.id.ll_btn_box);
-        tv_cj = ButterKnife.findById(headView, R.id.tv_cj);
         tv_qj = ButterKnife.findById(headView, R.id.tv_qj);
         tv_focus = ButterKnife.findById(headView, R.id.tv_focus);
         tv_fans = ButterKnife.findById(headView, R.id.tv_fans);
         bt_focus = ButterKnife.findById(headView, R.id.bt_focus);
         bt_msg = ButterKnife.findById(headView, R.id.bt_msg);
         ll_box = ButterKnife.findById(headView, R.id.ll_box);
-        ll_focus = ButterKnife.findById(headView, R.id.ll_focus);
+        rl_focus = ButterKnife.findById(headView, R.id.rl_focus);
         ll_fans = ButterKnife.findById(headView, R.id.ll_fans);
-        ll_cj = ButterKnife.findById(headView, R.id.ll_cj);
-        ll_qj = ButterKnife.findById(headView, R.id.ll_qj);
+        rl_qj = ButterKnife.findById(headView, R.id.rl_qj);
         riv_auth = ButterKnife.findById(headView, R.id.riv_auth);
 
         dialog = new WaittingDialog(this);
@@ -401,9 +398,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
         LogUtil.e(TAG, "refreshUI===" + user._id);
         if (user.is_love == FansAdapter.NOT_LOVE) {
-            bt_focus.setText("关注");
+            setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic);
         } else {
-            bt_focus.setText("已关注");
+            setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic);
         }
         if (!TextUtils.isEmpty(user.nickname)) {
             tv_title.setText(user.nickname);
@@ -462,6 +459,14 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         tv_fans.setText(String.valueOf(user.fans_count));
     }
 
+    private void setFocusBtnStyle(int dimensionPixelSize, int focus, int unfocus_pic) {
+        bt_focus.setPadding(dimensionPixelSize, 0, dimensionPixelSize, 0);
+        bt_focus.setText(focus);
+        bt_focus.setTextColor(activity.getResources().getColor(android.R.color.white));
+        bt_focus.setBackgroundResource(R.drawable.border_radius5_pressed);
+        bt_focus.setCompoundDrawablesWithIntrinsicBounds(unfocus_pic, 0, 0, 0);
+    }
+
     private View initPopView(int layout, String title) {
         View view = Util.inflateView(activity, layout, null);
         ((TextView) view.findViewById(R.id.tv_title)).setText(title);
@@ -480,11 +485,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         iv_detail.setOnClickListener(this);
         iv_right.setOnClickListener(this);
         bt_focus.setOnClickListener(this);
-        ll_focus.setOnClickListener(this);
+        rl_focus.setOnClickListener(this);
         ll_fans.setOnClickListener(this);
         bt_msg.setOnClickListener(this);
-        ll_cj.setOnClickListener(this);
-        ll_qj.setOnClickListener(this);
+        rl_qj.setOnClickListener(this);
         riv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -577,7 +581,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.iv_detail:
                 finish();
                 break;
-            case R.id.ll_focus:
+            case R.id.rl_focus:
                 intent = new Intent(activity, FocusActivity.class);
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, userId);
                 startActivity(intent);
@@ -605,7 +609,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.LOVE;
-                                bt_focus.setText("已关注");
+//                                bt_focus.setText("已关注");
+                                setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic);
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
@@ -629,7 +634,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
-                                bt_focus.setText("关注");
+//                                bt_focus.setText("关注");
+                                setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic);
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
@@ -639,7 +645,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            ToastUtils.showError("网络异常，请确认网络畅通");
+                            ToastUtils.showError(R.string.network_err);
                         }
                     });
                 }
@@ -647,11 +653,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.ibtn:
                 Util.makeToast("认证");
                 break;
-            case R.id.ll_cj:
-                if (which == MineFragment.REQUEST_CJ) return;
-                showCj();
-                break;
-            case R.id.ll_qj:
+//            case R.id.ll_cj:
+//                if (which == MineFragment.REQUEST_CJ) return;
+//                showCj();
+//                break;
+            case R.id.rl_qj:
                 if (which == MineFragment.REQUEST_CJ) return;
                 showCj();
                 break;

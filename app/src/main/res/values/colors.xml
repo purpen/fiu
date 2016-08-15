@@ -35,4 +35,5 @@
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     <color name="default_background_label">#ff303030</color>
     <color name="black40">#40000000</color>
+    <color name="black90">#90000000</color>
 </resources>

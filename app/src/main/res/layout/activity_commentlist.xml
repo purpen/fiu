@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_commentlist_titlelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/activity_commentlist_titlelayout"
-        android:background="#eaeaea"/>
+        android:background="#eaeaea" />
 
     <RelativeLayout
         android:id="@+id/bottom_relative"
@@ -36,8 +37,7 @@
             android:background="@drawable/corner_yellow"
             android:text="@string/send"
             android:textColor="@color/white"
-            android:textSize="11sp"
-            />
+            android:textSize="11sp" />
 
         <EditText
             android:id="@+id/activity_commentlist_edit"
@@ -49,7 +49,7 @@
             android:hint="@string/take_comment"
             android:paddingLeft="13dp"
             android:singleLine="true"
-            android:textSize="11sp"/>
+            android:textSize="11sp" />
     </RelativeLayout>
 
     <TextView
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@id/bottom_relative"
-        android:background="#e6e6e6"/>
+        android:background="#e6e6e6" />
 
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/activity_commentlist_pulltorefreshview"
@@ -67,7 +67,7 @@
         android:layout_below="@id/top_line"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:scrollbars="none"/>
+        android:scrollbars="none" />
 
     <TextView
         android:id="@+id/activity_commentlist_nothing"
@@ -77,12 +77,12 @@
         android:layout_below="@id/top_line"
         android:gravity="center"
         android:text="@string/you_are_first_comment"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/activity_commentlist_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

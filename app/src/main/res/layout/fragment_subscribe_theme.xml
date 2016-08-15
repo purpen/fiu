@@ -7,7 +7,7 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/head_logo"
+        android:src="@mipmap/logo_nofy"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp48" />
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="@string/subscribe_theme"
         android:textSize="@dimen/sp14"
-        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp10"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true" />
 

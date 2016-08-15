@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/dp10"
     android:paddingRight="@dimen/dp10"
     android:paddingBottom="@dimen/dp10"
+    android:fitsSystemWindows="true"
     >
     <LinearLayout
         android:id="@+id/linear_bg_redbag"

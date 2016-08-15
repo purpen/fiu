@@ -70,7 +70,9 @@
         android:layout_height="@dimen/dp30"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:background="@drawable/shape_subscribe_theme"
-        android:text="+ 关注"
+        android:text="关注"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp12" />

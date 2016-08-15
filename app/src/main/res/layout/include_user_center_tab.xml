@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp60"
+    android:orientation="horizontal"
+    android:background="@android:color/black">
+
+    <RelativeLayout
+        android:id="@+id/rl_qj"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_qj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp13" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_qj"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp5"
+                android:drawableLeft="@mipmap/focus_qj"
+                android:drawablePadding="@dimen/dp5"
+                android:text="@string/sight"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp1"
+            android:layout_height="@dimen/dp30"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/white" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_focus"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_focus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp13" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_focus"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/dp5"
+                android:drawableLeft="@mipmap/focus_user"
+                android:drawablePadding="@dimen/dp5"
+                android:text="关注"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp1"
+            android:layout_height="@dimen/dp30"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/white" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_fans"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_fans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp13" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp5"
+            android:drawableLeft="@mipmap/fans_user"
+            android:drawablePadding="@dimen/dp5"
+            android:text="粉丝"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp12" />
+    </LinearLayout>
+</LinearLayout>

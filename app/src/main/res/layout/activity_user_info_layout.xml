@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/color_f7f7f7"
+    android:fitsSystemWindows="true"
     >
     <com.taihuoniao.fineix.view.CustomHeadView
         android:id="@+id/head_view"

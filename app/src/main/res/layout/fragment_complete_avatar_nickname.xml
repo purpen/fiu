@@ -3,15 +3,44 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
     <TextView
-        android:id="@+id/tv_known_more"
+        android:id="@+id/tv_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="欢迎来到"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/dp40"
+        android:textSize="@dimen/sp16" />
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_below="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp10"
+        android:src="@mipmap/logo_fy" />
+
+    <ImageView
+        android:id="@+id/iv_slogan"
+        android:layout_below="@+id/iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp8"
+        android:src="@mipmap/slogan" />
+
+    <TextView
+        android:id="@+id/tv_known_more"
+        android:layout_below="@+id/iv_slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp8"
         android:text="关于你我们想了解更多"
         android:textColor="@color/color_666"
-        android:textSize="@dimen/sp12" />
+        android:textSize="@dimen/sp10" />
 
     <RelativeLayout
         android:id="@+id/rl"
@@ -20,7 +49,7 @@
         android:layout_below="@+id/tv_known_more"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp60">
+        android:layout_marginTop="@dimen/dp45">
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/riv"

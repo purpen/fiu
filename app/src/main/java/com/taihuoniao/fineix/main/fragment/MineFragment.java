@@ -21,6 +21,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.User;
@@ -29,7 +30,6 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
@@ -70,8 +70,6 @@ public class MineFragment extends MyBaseFragment {
     CustomGridView gv;
     @Bind(R.id.iv_detail)
     ImageView iv_detail;
-    @Bind(R.id.iv_calendar)
-    ImageView iv_calendar;
     @Bind(R.id.item_about_us)
     CustomItemLayout item_about_us;
     @Bind(R.id.item_feedback)
@@ -90,8 +88,6 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_nick;
     @Bind(R.id.tv_qj)
     TextView tv_qj;
-    @Bind(R.id.tv_cj)
-    TextView tv_cj;
     @Bind(R.id.tv_focus)
     TextView tv_focus;
     @Bind(R.id.tv_fans)
@@ -107,7 +103,7 @@ public class MineFragment extends MyBaseFragment {
     @Bind(R.id.tv_label)
     TextView tv_label;
     @Bind(R.id.riv_auth)
-    RoundedImageView riv_auth;
+    ImageView riv_auth;
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
     public static final int REQUEST_FOCUS = 2;
@@ -115,9 +111,9 @@ public class MineFragment extends MyBaseFragment {
     private User user;
     private ArrayList<ImgTxtItem> gvList;
     private boolean isInitLoad = true;
-    private ArrayList<ImgTxtItem> horizentalList; // R.mipmap.gv_collection
+    private ArrayList<ImgTxtItem> horizentalList;
     private PersonalCenterGVAdapter adapter;
-    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gift_coupon, R.mipmap.consignee_address, R.mipmap.gv_service, R.mipmap.gv_accout};
+    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address};
     public String[] imgTxt = null;
     //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
 //    public String[] partnerName = null;
@@ -370,25 +366,22 @@ public class MineFragment extends MyBaseFragment {
 //        });
 //    }
 
-    @OnClick({R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.ll_qj, R.id.ll_cj, R.id.ll_focus, R.id.ll_fans})
+    @OnClick({R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
             case R.id.ll_box:
                 startActivity(new Intent(activity, UserCenterActivity.class));
                 break;
-            case R.id.ll_qj:
+            case R.id.rl_qj:
                 intent = new Intent(activity, UserCenterActivity.class);
                 intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
                 startActivity(intent);
-                //
                 break;
-//            case R.id.ll_cj:
-//                intent = new Intent(activity, UserCenterActivity.class);
-//                intent.putExtra(MineFragment.class.getSimpleName(), REQUEST_CJ);
-//                startActivity(intent);
-//                break;
-            case R.id.ll_focus:
+            case R.id.ibtn_setting:
+                startActivity(new Intent(activity, SystemSettingsActivity.class));
+                break;
+            case R.id.rl_focus:
                 intent = new Intent(activity, FocusActivity.class);
                 startActivity(intent);
                 break;
@@ -460,9 +453,6 @@ public class MineFragment extends MyBaseFragment {
                         intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
                         intent.putExtra(AboutUsActivity.class.getName(), "服务条款");
                         startActivity(intent);
-                        break;
-                    case 9:
-                        startActivity(new Intent(activity, SystemSettingsActivity.class));
                         break;
                 }
             }

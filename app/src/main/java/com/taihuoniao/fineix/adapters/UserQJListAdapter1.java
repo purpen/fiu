@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -61,13 +59,13 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
             holder.tv_title_right.setText(right_qj.getTitle());
-            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame, holder.rightTitleImg, 11, -1);
+//            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame, holder.rightTitleImg, 11, -1);
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
         holder.tv_title_left.setText(left_qj.getTitle());
-        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame, holder.leftTitleImg, 11, -1);
+//        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame, holder.leftTitleImg, 11, -1);
 
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +99,6 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         @Bind(R.id.tv_desc_left)
         TextView tv_desc_left;
 
-        @Bind(R.id.item_left_frame)
-        FrameLayout item_left_frame;
-
-        @Bind(R.id.item_right_frame)
-        FrameLayout item_right_frame;
-
         @Bind(R.id.rl_right)
         RelativeLayout rl_right;
         @Bind(R.id.iv_cover_right)
@@ -115,10 +107,6 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         TextView tv_title_right;
         @Bind(R.id.tv_desc_right)
         TextView tv_desc_right;
-        @Bind(R.id.left_title_img)
-        ImageView leftTitleImg;
-        @Bind(R.id.right_title_img)
-        ImageView rightTitleImg;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

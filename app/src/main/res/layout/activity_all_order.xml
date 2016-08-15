@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f7f7f7"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_all_order_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#e9e9e9"/>
+        android:background="#e9e9e9" />
 
     <RelativeLayout
         android:id="@+id/activity_all_order_myorderrelative"
@@ -28,7 +29,7 @@
             android:gravity="center_vertical"
             android:text="@string/my_order"
             android:textColor="@color/black333333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,13 +39,13 @@
             android:gravity="center_vertical"
             android:text="@string/look_all"
             android:textColor="#666666"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e2e2e2"/>
+        android:background="#e2e2e2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,7 +63,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/obligation"
                 android:textColor="@color/black333333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/activity_all_order_daifukuanred"
@@ -81,11 +82,11 @@
                 android:layout_centerInParent="true"
                 android:text="@string/wait_for_delivery"
                 android:textColor="@color/black333333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/activity_all_order_daifahuored"
-                style="@style/AccountCommingPayRedCircle"/>
+                style="@style/AccountCommingPayRedCircle" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -98,11 +99,11 @@
                 android:layout_centerInParent="true"
                 android:text="@string/waiting_for_goods"
                 android:textColor="@color/black333333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/activity_all_order_daishouhuored"
-                style="@style/AccountCommingPayRedCircle"/>
+                style="@style/AccountCommingPayRedCircle" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -115,11 +116,11 @@
                 android:layout_centerInParent="true"
                 android:text="@string/waiting_for_comments"
                 android:textColor="@color/black333333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/activity_all_order_daipingjiared"
-                style="@style/AccountCommingPayRedCircle"/>
+                style="@style/AccountCommingPayRedCircle" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -132,7 +133,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/changing_or_refunding"
                 android:textColor="@color/black333333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView style="@style/AccountCommingPayRedCircle" />
         </RelativeLayout>
@@ -141,7 +142,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e2e2e2"/>
+        android:background="#e2e2e2" />
 
     <RelativeLayout
         android:id="@+id/activity_all_order_jdrelative"
@@ -155,7 +156,7 @@
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/jd"/>
+            android:src="@mipmap/jd" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -165,7 +166,7 @@
             android:gravity="center_vertical"
             android:text="@string/jingdong_orders"
             android:textColor="@color/black333333"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -173,13 +174,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
-            android:src="@mipmap/arrow_right_gray"/>
+            android:src="@mipmap/arrow_right_gray" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e6e6e6"/>
+        android:background="#e6e6e6" />
 
     <RelativeLayout
         android:id="@+id/activity_all_order_tbrelative"
@@ -192,7 +193,7 @@
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/taobao"/>
+            android:src="@mipmap/taobao" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -202,7 +203,7 @@
             android:gravity="center_vertical"
             android:text="@string/taobao_orders"
             android:textColor="@color/black333333"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -210,13 +211,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
-            android:src="@mipmap/arrow_right_gray"/>
+            android:src="@mipmap/arrow_right_gray" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e6e6e6"/>
+        android:background="#e6e6e6" />
 
     <RelativeLayout
         android:id="@+id/activity_all_order_tmrelative"
@@ -229,7 +230,7 @@
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/tmall"/>
+            android:src="@mipmap/tmall" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -239,7 +240,7 @@
             android:gravity="center_vertical"
             android:text="@string/tianmao_orders"
             android:textColor="@color/black333333"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -247,13 +248,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
-            android:src="@mipmap/arrow_right_gray"/>
+            android:src="@mipmap/arrow_right_gray" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e6e6e6"/>
+        android:background="#e6e6e6" />
 
     <RelativeLayout
         android:id="@+id/activity_all_order_ymxrelative"
@@ -267,7 +268,7 @@
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/amzon"/>
+            android:src="@mipmap/amzon" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -277,7 +278,7 @@
             android:gravity="center_vertical"
             android:text="@string/yamaxun_orders"
             android:textColor="@color/black333333"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -285,12 +286,12 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
-            android:src="@mipmap/arrow_right_gray"/>
+            android:src="@mipmap/arrow_right_gray" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#e6e6e6"/>
+        android:background="#e6e6e6" />
 
 </LinearLayout>

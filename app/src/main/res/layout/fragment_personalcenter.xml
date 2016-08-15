@@ -1,20 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/dp50"
-            >
+            android:paddingBottom="@dimen/dp50">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -25,31 +23,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/user_center_bg"
-                    />
+                    android:src="@mipmap/user_center_bg" />
 
                 <LinearLayout
                     android:id="@+id/ll_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/jianbian_scenelist"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/dp45"
-                        >
+                        android:paddingBottom="@dimen/dp45">
 
                         <RelativeLayout
                             android:layout_width="@dimen/dp60"
                             android:layout_height="@dimen/dp60"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="@dimen/dp5"
-                            >
+                            android:layout_marginBottom="@dimen/dp5">
 
                             <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
                                 android:id="@+id/riv"
@@ -58,18 +52,16 @@
                                 android:src="@mipmap/default_head"
                                 app:riv_border_color="@color/color_eee"
                                 app:riv_border_width="@dimen/dp1"
-                                app:riv_corner_radius="@dimen/dp100"/>
+                                app:riv_corner_radius="@dimen/dp100" />
 
-                            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                            <ImageView
                                 android:id="@+id/riv_auth"
                                 android:layout_width="@dimen/dp15"
                                 android:layout_height="@dimen/dp15"
                                 android:layout_alignParentBottom="true"
                                 android:layout_alignParentRight="true"
                                 android:src="@mipmap/v"
-                                android:visibility="gone"
-                                app:riv_corner_radius="@dimen/dp100"
-                                />
+                                android:visibility="gone" />
                         </RelativeLayout>
 
                         <TextView
@@ -80,8 +72,7 @@
                             android:layout_marginBottom="@dimen/dp5"
                             android:layout_marginTop="@dimen/dp5"
                             android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp12"
-                            />
+                            android:textSize="@dimen/sp12" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -95,8 +86,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"
-                                />
+                                android:textSize="@dimen/sp12" />
 
                             <TextView
                                 android:id="@+id/tv_auth"
@@ -105,8 +95,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/dp5"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"
-                                />
+                                android:textSize="@dimen/sp12" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -121,14 +110,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"/>
+                                android:textSize="@dimen/sp12" />
 
                             <TextView
                                 android:id="@+id/tv_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"/>
+                                android:textSize="@dimen/sp12" />
 
                             <TextView
                                 android:id="@+id/tv_real"
@@ -137,129 +126,13 @@
                                 android:ellipsize="end"
                                 android:maxLength="18"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp12"
-                                />
+                                android:textSize="@dimen/sp12" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/ll_cj"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/color_222"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/tv_cj"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sight"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/dp4"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_qj"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/color_222"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_qj"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sight"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/dp4"
-                    android:layout_height="match_parent"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_focus"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/color_222"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_focus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="关注"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="@dimen/dp4"
-                    android:layout_height="match_parent"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_fans"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/color_222"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_fans"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="粉丝"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12"/>
-                </LinearLayout>
-            </LinearLayout>
+            <include layout="@layout/include_user_center_tab" />
 
             <com.taihuoniao.fineix.view.CustomGridView
                 android:id="@+id/gv"
@@ -268,38 +141,36 @@
                 android:layout_marginBottom="@dimen/dp5"
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
-                android:numColumns="5"
+                android:numColumns="4"
                 android:paddingBottom="@dimen/dp5"
                 android:paddingTop="@dimen/dp5"
-                android:verticalSpacing="@dimen/dp10"/>
+                android:verticalSpacing="@dimen/dp10" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp05"
-                android:background="@color/color_ddd"/>
+                android:background="@color/color_ddd" />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_about_us"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_feedback"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <com.taihuoniao.fineix.view.CustomItemLayout
                 android:id="@+id/item_partner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp40"
-                />
+                android:layout_height="@dimen/dp40" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -322,36 +193,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/jianbian_head"
-        >
+        android:background="@drawable/jianbian_head">
 
         <ImageButton
             android:id="@+id/iv_detail"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp45"
             android:layout_height="@dimen/dp45"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:background="@null"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
-            android:src="@mipmap/personal_detail"/>
+            android:src="@mipmap/group" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp45"
             android:layout_centerInParent="true"
-            android:src="@mipmap/logo_no_word"/>
+            android:src="@mipmap/logo_no_word" />
 
-        <ImageView
-            android:id="@+id/iv_calendar"
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/ibtn_setting"
+            android:layout_width="@dimen/dp45"
             android:layout_height="@dimen/dp45"
             android:layout_alignParentRight="true"
-            android:paddingBottom="@dimen/dp10"
+            android:background="@null"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
-            android:paddingTop="@dimen/dp10"
-            android:src="@mipmap/calendar"
-            android:visibility="gone"/>
+            android:src="@mipmap/setting" />
     </RelativeLayout>
 </RelativeLayout>

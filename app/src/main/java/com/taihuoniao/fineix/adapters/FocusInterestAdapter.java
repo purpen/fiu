@@ -45,15 +45,33 @@ public class FocusInterestAdapter extends CommonBaseAdapter<User> {
         }
         holder.tv_nickname.setText(item.nickname);
         holder.tv_info.setText(item.expert_label);
+        if (item.is_love == 1) {
+            holder.btn_focus.setPadding(activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
+            holder.btn_focus.setText(R.string.focused);
+            holder.btn_focus.setTextColor(activity.getResources().getColor(android.R.color.white));
+            holder.btn_focus.setBackgroundResource(R.drawable.border_radius5_pressed);
+            holder.btn_focus.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+        } else {
+            holder.btn_focus.setPadding(activity.getResources().getDimensionPixelSize(R.dimen.dp16), 0, activity.getResources().getDimensionPixelSize(R.dimen.dp16), 0);
+            holder.btn_focus.setText(R.string.focus);
+            holder.btn_focus.setTextColor(activity.getResources().getColor(android.R.color.black));
+            holder.btn_focus.setBackgroundResource(R.drawable.shape_subscribe_theme);
+            holder.btn_focus.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.unfocus_pic, 0, 0, 0);
+        }
         setClickListener(holder.btn_focus, item);
         return convertView;
     }
 
-    private void setClickListener(Button btn_focus, User item) {
+    private void setClickListener(Button btn_focus, final User item) {
         btn_focus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 做关注和取消关注
+                if (item.is_love == 1) {
+                    item.is_love = 0;
+                } else {
+                    item.is_love = 1;
+                }
+                notifyDataSetChanged();
             }
         });
     }

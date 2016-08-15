@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/activity_share_select_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/default_background_750_1334"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_share_select_titlelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/linear1"
@@ -28,8 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:background="#3ff7f7f7"
-            >
+            android:background="#3ff7f7f7">
 
             <ImageView
                 android:id="@+id/activity_share_select_scene_title_cancelimg"
@@ -43,8 +43,8 @@
                 android:paddingRight="15dp"
                 android:paddingStart="24dp"
                 android:paddingTop="14dp"
-                android:visibility="gone"
-                android:src="@mipmap/cancel_gray"/>
+                android:src="@mipmap/cancel_gray"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/activity_share_select_title"
@@ -58,15 +58,14 @@
                 android:paddingBottom="14dp"
                 android:paddingTop="14dp"
                 android:textColor="#cccccc"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:background="#3ff7f7f7"
-            >
+            android:background="#3ff7f7f7">
 
             <ImageView
                 android:id="@+id/activity_share_select_scene_des_cancelimg"
@@ -80,8 +79,8 @@
                 android:paddingRight="15dp"
                 android:paddingStart="24dp"
                 android:paddingTop="14dp"
-                android:visibility="gone"
-                android:src="@mipmap/cancel_gray"/>
+                android:src="@mipmap/cancel_gray"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/activity_share_select_des"
@@ -91,13 +90,13 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:layout_toLeftOf="@id/activity_share_select_scene_des_cancelimg"
-                android:gravity="center_vertical"
-                android:paddingBottom="14dp"
-                android:maxLines="3"
                 android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="3"
+                android:paddingBottom="14dp"
                 android:paddingTop="14dp"
                 android:textColor="#cccccc"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -108,15 +107,15 @@
             android:layout_marginLeft="11dp"
             android:layout_marginRight="11dp"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:background="@drawable/share_search_background">
+            android:background="@drawable/share_search_background"
+            android:gravity="center">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="13dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
-                android:src="@mipmap/search_title"/>
+                android:src="@mipmap/search_title" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -131,7 +130,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/white"/>
+            android:background="@color/white" />
     </LinearLayout>
 
     <ListView
@@ -140,13 +139,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/linear1"
         android:background="#aa222222"
-        android:paddingLeft="17dp"
-        />
+        android:paddingLeft="17dp" />
 
     <ProgressBar
         android:id="@+id/activity_share_select_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>
