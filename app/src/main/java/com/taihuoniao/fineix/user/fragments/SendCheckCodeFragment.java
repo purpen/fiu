@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -20,7 +21,6 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
@@ -85,15 +85,18 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    if (btSendCode == null) return;
                     btSendCode.setEnabled(false);
                     btSendCode.setTextColor(getResources().getColor(R.color.color_af8323));
 //                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode_gray);
                     break;
                 case 2:
+                    if (btSendCode == null) return;
                     btSendCode.setText(msg.arg1 + "s");
                     btSendCode.setTextColor(getResources().getColor(R.color.color_af8323));
                     break;
                 case 3:
+                    if (btSendCode == null) return;
                     btSendCode.setEnabled(true);
                     btSendCode.setTextColor(getResources().getColor(R.color.color_af8323));
 //                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode);
@@ -132,6 +135,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
 
     @Override
     protected void initViews() {
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         mDialog = new WaittingDialog(activity);
     }
 
@@ -244,10 +248,11 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
                     if (activity instanceof ToRegisterActivity) {
-                        ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
+                        ToRegisterActivity registerActivity = (ToRegisterActivity) SendCheckCodeFragment.this.activity;
+                        ViewPager viewPager = registerActivity.getViewPager();
                         if (null != viewPager) {
                             viewPager.setCurrentItem(1);
-                            ((RegisterInfo) viewPager.getTag()).mobile = phone;
+                            registerActivity.getRegisterInfo().mobile = phone;
                         }
                     }
                     return;
@@ -447,6 +452,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mHandler != null) mHandler.removeCallbacksAndMessages(null);
         ButterKnife.unbind(this);
     }
 

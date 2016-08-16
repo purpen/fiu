@@ -125,8 +125,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/dp15"
                     android:layout_marginTop="@dimen/dp5"
-                    android:orientation="horizontal"
-                    android:visibility="invisible">
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/bt_focus"
@@ -148,10 +147,9 @@
                         android:layout_marginLeft="@dimen/dp20"
                         android:background="@null"
                         android:text="私信"
-                        android:paddingLeft="@dimen/dp24"
-                        android:paddingRight="@dimen/dp24"
-                        android:drawableLeft="@mipmap/circle_down"
-                        android:drawablePadding="@dimen/dp5"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:drawableLeft="@mipmap/icon_msg"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp12" />
                 </LinearLayout>

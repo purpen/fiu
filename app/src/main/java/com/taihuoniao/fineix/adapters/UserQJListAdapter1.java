@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
  */
 public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
     private ImageLoader imageLoader;
-
     public UserQJListAdapter1(List<SceneListBean> list, Activity activity) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
@@ -51,6 +50,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         final SceneListBean left_qj;
         SceneListBean right_qj = null;
         left_qj = list.get(2 * position);
+
 
         if (position == list.size() / 2) {
             holder.rl_right.setVisibility(View.INVISIBLE);

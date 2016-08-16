@@ -61,7 +61,7 @@ public class CompleteUserInfoActivity extends BaseActivity {
     @Override
     protected void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        viewPager.setPagingEnabled(false);
+        viewPager.setPagingEnabled(false);
         data = new UserCompleteData();
         Fragment[] fragments = {CompleteAvatarNickNameFragment.newInstance(data), DecadeSelectFragment.newInstance(data), SubscribeThemeFragment.newInstance(data), FocusUserFragment.newInstance(data)};
         viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments));

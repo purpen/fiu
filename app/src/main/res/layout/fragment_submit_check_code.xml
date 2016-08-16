@@ -26,13 +26,14 @@
             android:layout_height="@dimen/dp40"
             android:gravity="center"
             android:inputType="number"
-            app:mask="*****"
+            app:mask="******"
             android:textSize="@dimen/sp14"
             android:textColor="@android:color/white"
             android:textScaleX="1.2"
             android:letterSpacing="0.5"
             app:notMaskedSymbol="*"
             app:replacementChar="-"
+            app:deleteChar="-"
             android:background="@null" />
 
         <Button

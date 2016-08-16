@@ -43,16 +43,15 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 btGetVerifyCode.setEnabled(false);
-                btGetVerifyCode.setTextColor(Color.BLACK);
+                btGetVerifyCode.setTextColor(Color.WHITE);
 //                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode_gray);
             } else if (msg.what == 2) {
                 btGetVerifyCode.setText(msg.arg1 + "s");
 
             } else if (msg.what == 3) {
                 btGetVerifyCode.setEnabled(true);
-                btGetVerifyCode.setTextColor(Color.RED);
-//                btnSendVertifyCode.setBackgroundResource(R.drawable.user_getcode);
-                btGetVerifyCode.setText("获取手机验证码");
+                btGetVerifyCode.setTextColor(Color.WHITE);
+                btGetVerifyCode.setText("发送验证码");
             }
             if (msg.what == DataConstants.PARSER_FIND_PASSWORD) {
                 if (msg.obj instanceof FindPasswordInfo) {

@@ -34,6 +34,7 @@ public class ToRegisterActivity extends BaseActivity {
     ImageButton ibtnBack;
     @Bind(R.id.viewPager)
     CustomViewPager viewPager;
+    private RegisterInfo registerInfo;
     //    private TextView mPhone;
 //    private ImageView mClose;
 //    private ImageView mBack;
@@ -102,13 +103,16 @@ public class ToRegisterActivity extends BaseActivity {
         ActivityUtil.getInstance().addActivity(this);
         instance = this;
         viewPager.setPagingEnabled(false);
-        RegisterInfo registerInfo = new RegisterInfo();
-        viewPager.setTag(registerInfo);
+        registerInfo = new RegisterInfo();
         Fragment[] fragments = {SendCheckCodeFragment.newInstance(), SubmitCheckCodeFragment.newInstance(), SetPasswordFragment.newInstance()};
         viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments));
 //        readSmsContent = new ReadSmsContent(new Handler(), this, et_code);
         //注册短信内容监听
 //        this.getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, readSmsContent);
+    }
+
+    public RegisterInfo getRegisterInfo() {
+        return null == registerInfo ? null : registerInfo;
     }
 
     public CustomViewPager getViewPager() {

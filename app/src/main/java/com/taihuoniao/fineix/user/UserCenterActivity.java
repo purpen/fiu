@@ -171,10 +171,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         dialog = new WaittingDialog(this);
 
         lv_cj.addHeaderView(headView);
-//        lv_qj.addHeaderView(headView);
-
         lv_cj.setAdapter(adapterCJ);
-//        lv_qj.setAdapter(adapterQJ);
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.INVISIBLE);
         } else {
@@ -222,7 +219,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
 
@@ -232,16 +229,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 lv_cj.setVisibility(View.VISIBLE);
                 loadCJData();
                 break;
-            case MineFragment.REQUEST_QJ:
-                lv_cj.setVisibility(View.GONE);
-                lv_qj.setVisibility(View.VISIBLE);
-                loadQJData();
-                break;
+//            case MineFragment.REQUEST_QJ:
+//                lv_cj.setVisibility(View.GONE);
+//                lv_qj.setVisibility(View.VISIBLE);
+//                loadQJData();
+//                break;
         }
     }
 
     /**
-     * 加载场景数据
+     * 加载情境数据
      */
     private void loadCJData() {
         ClientDiscoverAPI.getSceneList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
@@ -278,22 +275,21 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
 
 
     /**
-     * 刷新场景数据
+     * 刷新情境数据
      *
      * @param list
      */
     private void refreshCJUI(List<SceneListBean> list) {
         if (list == null) return;
         if (list.size() == 0) {
-            if (isFirstLoad) {
-                isFirstLoad = false;
+            if (mSceneList.size() == 0) {
                 ll_tips.setVisibility(View.VISIBLE);
                 if (LoginInfo.getUserId() == userId) {
                     tv_tips.setText(R.string.user_center_cj_tip);

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -127,6 +128,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
 
     @Override
     protected void initView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         instance = this;
         mDialog = new WaittingDialog(activity);
         overridePendingTransition(R.anim.up_register, 0);

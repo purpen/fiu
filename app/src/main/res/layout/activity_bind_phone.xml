@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/reg_login_blur"
+    android:background="@mipmap/login_register_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -29,21 +29,25 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:gravity="bottom"
-        android:paddingLeft="15dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp80"
         android:text="@string/bind_had_phone"
+        android:textSize="@dimen/sp14"
+        android:gravity="center_horizontal"
         android:textColor="@android:color/white" />
 
     <EditText
         android:id="@+id/et_phone_bindPhone"
         style="@style/RegisterAndLogin"
-        android:background="@drawable/shap_home_gridview"
-        android:ems="8"
+        android:background="@drawable/shape_login_register"
         android:hint="@string/phone_number"
+        android:textColorHint="@android:color/white"
+        android:textColor="@android:color/white"
         android:inputType="phone"
         android:maxLength="11"
-        android:paddingLeft="5dp"
+        android:paddingLeft="@dimen/dp8"
         android:singleLine="true">
 
         <requestFocus />
@@ -52,32 +56,34 @@
     <EditText
         android:id="@+id/et_password_bindPhone"
         style="@style/RegisterAndLogin"
-        android:background="@drawable/shap_home_gridview"
+        android:background="@drawable/shape_login_register"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:paddingLeft="5dip"
+        android:textColorHint="@android:color/white"
+        android:textColor="@android:color/white"
+        android:paddingLeft="@dimen/dp8"
         android:singleLine="true" />
 
     <Button
         android:id="@+id/bt_bindPhone"
         style="@style/RegisterAndLogin"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shap_redbutton_commit"
+        android:background="@drawable/shape_login_register"
         android:onClick="onLogin"
         android:text="@string/bind"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/color_af8323" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:paddingTop="10dp">
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp16">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:gravity="right"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
             android:text="@string/skip_bind"
             android:textColor="@color/color_666"
             android:textSize="13sp" />
@@ -86,10 +92,11 @@
             android:id="@+id/tv_click_login_bindPhone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.9"
+            android:layout_weight="1"
             android:paddingLeft="5dp"
             android:text="立即登录"
-            android:textColor="@color/color_333"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_af8323"
             android:textSize="13sp"
             android:textStyle="bold" />
     </LinearLayout>

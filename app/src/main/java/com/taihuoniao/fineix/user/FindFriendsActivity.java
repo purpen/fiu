@@ -16,8 +16,8 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindFriendAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -70,7 +70,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "发现好友");
         dialog=new WaittingDialog(this);
-        custom_head.setHeadCenterTxtShow(true,"发现好友");
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
         View view = Util.inflateView(R.layout.headview_findfriend, null);

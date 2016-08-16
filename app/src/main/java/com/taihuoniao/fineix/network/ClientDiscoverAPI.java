@@ -1440,6 +1440,8 @@ public class ClientDiscoverAPI {
     public static void submitCheckCode(String phone, String code, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/check_verify_code";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addBodyParameter("phone", phone);
+        params.addBodyParameter("code", code);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -36,8 +37,9 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
     @Bind(R.id.bt_send_code)
     Button btSendCode;
     private RegisterInfo registerInfo = null;
-    public static SendCheckCodeFragment newInstance() {
-        return new SendCheckCodeFragment();
+
+    public static SubmitCheckCodeFragment newInstance() {
+        return new SubmitCheckCodeFragment();
     }
 
     @Override
@@ -51,7 +53,7 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     @OnClick(R.id.bt_send_code)
@@ -63,10 +65,8 @@ public class SubmitCheckCodeFragment extends MyBaseFragment {
 
     private void submitCheckCode(final String text) {
         if (activity instanceof ToRegisterActivity) {
-            ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
-            if (null != viewPager) {
-                registerInfo = (RegisterInfo) viewPager.getTag();
-            }
+            ToRegisterActivity registerActivity = (ToRegisterActivity) this.activity;
+            registerInfo = registerActivity.getRegisterInfo();
         }
 
         if (registerInfo == null) return;

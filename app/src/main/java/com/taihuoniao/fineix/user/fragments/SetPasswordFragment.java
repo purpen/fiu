@@ -3,11 +3,11 @@ package com.taihuoniao.fineix.user.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,8 +49,9 @@ public class SetPasswordFragment extends MyBaseFragment {
     @Bind(R.id.bt_complete_register)
     Button btCompleteRegister;
     private RegisterInfo registerInfo = null;
-    public static SendCheckCodeFragment newInstance() {
-        return new SendCheckCodeFragment();
+
+    public static SetPasswordFragment newInstance() {
+        return new SetPasswordFragment();
     }
 
     @Override
@@ -64,11 +65,10 @@ public class SetPasswordFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         if (activity instanceof ToRegisterActivity) {
-            ViewPager viewPager = ((ToRegisterActivity) activity).getViewPager();
-            if (null != viewPager) {
-                registerInfo = (RegisterInfo) viewPager.getTag();
-            }
+            ToRegisterActivity registerActivity = (ToRegisterActivity) this.activity;
+            registerInfo = registerActivity.getRegisterInfo();
         }
     }
 
