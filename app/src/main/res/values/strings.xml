@@ -36,8 +36,7 @@
     <string name="input_product_title">输入商品名称</string>
     <string name="confirm_add">确认添加</string>
     <!-- CreateSceneActivity -->
-    <string name="create_scene">创建情景</string>
-    <string name="create_qingjing">创建地盘</string>
+    <string name="create_qingjing">创建情景</string>
     <string name="bianji_scene">编辑情景</string>
     <string name="bianji_qingjing">编辑地盘</string>
     <string name="publish">发布</string>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f8f8f8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.taihuoniao.fineix.view.GlobalTitleLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"/>
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="375dp">
+
+            <ImageView
+                android:id="@+id/background_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/qj_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:background="@color/black"
+                android:maxWidth="188dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:text="添加标题"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/qj_title_tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/qj_title_tv"
+                android:layout_marginBottom="3dp"
+                android:background="@color/black"
+                android:maxWidth="188dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="添加标题"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/des_tv"
+            android:layout_width="match_parent"
+            android:layout_height="89dp"
+            android:background="@color/white"
+            android:gravity="top"
+            android:paddingBottom="16dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="16dp"
+            android:text="说说现在的想法"
+            android:textColor="#333333"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e6e6e6"/>
+
+        <RelativeLayout
+            android:id="@+id/location_relative"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/location_create"/>
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="6dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"
+                android:src="@mipmap/arrow_right_gray"/>
+
+            <ImageView
+                android:id="@+id/delete_address"
+                android:layout_width="26dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/arrow"
+                android:padding="5dp"
+                android:src="@mipmap/cancel_gray"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/delete_address"
+                android:layout_toRightOf="@id/img"
+                android:ellipsize="end"
+                android:paddingLeft="6dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:text="添加地点"
+                android:textColor="#333333"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e6e6e6"/>
+    </LinearLayout>
+
+
+</ScrollView>

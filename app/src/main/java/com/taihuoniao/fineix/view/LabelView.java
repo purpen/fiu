@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.utils.DensityUtils;
 
 
 /**
@@ -21,7 +20,7 @@ import com.taihuoniao.fineix.utils.DensityUtils;
  */
 public class LabelView extends LinearLayout {
     //贴纸
-    private MyImageViewTouch mImageView;
+//    private MyImageViewTouch mImageView;
     //容器
     private RelativeLayout gpuRelative;
 
@@ -30,7 +29,7 @@ public class LabelView extends LinearLayout {
     private float parentHeight = 0;
     private boolean isLeft = true;
     public TextView nameTv;
-    private RelativeLayout pointRelative;
+    public RelativeLayout pointRelative;
 
     public TagItem getTagInfo() {
         return tagInfo;
@@ -45,6 +44,10 @@ public class LabelView extends LinearLayout {
         super(context, attr);
         init(context);
     }
+    //判断是左侧还是在右侧
+    public boolean isLeft() {
+        return isLeft;
+    }
 
     //切换左右
     public void setLeftOrRight() {
@@ -55,10 +58,10 @@ public class LabelView extends LinearLayout {
                 @Override
                 public void run() {
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointRelative.getLayoutParams();
-                    layoutParams.leftMargin = nameTv.getMeasuredWidth() - DensityUtils.dp2px(getContext(), 60);
+                    layoutParams.leftMargin = (int) (nameTv.getMeasuredWidth() - pointWidth - labelMargin);
                     pointRelative.setLayoutParams(layoutParams);
-                    tagInfo.setX(than(left + getMeasuredWidth() - DensityUtils.dp2px(getContext(), 44), mImageView.getHeight()));
-                    tagInfo.setY(than(top + getMeasuredHeight() - DensityUtils.dp2px(getContext(), 16), mImageView.getHeight()));
+                    tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentWidth));
+                    tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
                     Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
                 }
             });
@@ -69,20 +72,25 @@ public class LabelView extends LinearLayout {
                 @Override
                 public void run() {
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointRelative.getLayoutParams();
-                    layoutParams.leftMargin = DensityUtils.dp2px(getContext(), 28);
+                    layoutParams.leftMargin = (int) labelMargin;
                     pointRelative.setLayoutParams(layoutParams);
-                    tagInfo.setX(than(left + DensityUtils.dp2px(getContext(), 44), mImageView.getWidth()));
-                    tagInfo.setY(than(top + getMeasuredHeight() - DensityUtils.dp2px(getContext(), 16), mImageView.getHeight()));
+                    tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
+                    tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
                     Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
                 }
             });
         }
     }
 
+    private float pointWidth;
+    private float labelMargin;
+
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
         nameTv = (TextView) findViewById(R.id.name);
         pointRelative = (RelativeLayout) findViewById(R.id.point_relative);
+        pointWidth = getResources().getDimension(R.dimen.label_point_width);
+        labelMargin = getResources().getDimension(R.dimen.label_point_margin);
     }
 
     public void init(TagItem tagItem) {
@@ -102,7 +110,7 @@ public class LabelView extends LinearLayout {
         if (deleteListener != null) {
 //            deleteImg.setOnClickListener(deleteListener);
         }
-        mImageView = overlay;
+//        mImageView = overlay;
         gpuRelative = parent;
         this.parentWidth = overlay.getWidth();
         this.parentHeight = overlay.getHeight();
@@ -115,13 +123,13 @@ public class LabelView extends LinearLayout {
         this.left = leftLoc;
         this.top = topLoc;
         RelativeLayout.LayoutParams labelParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (left + getWidth() > mImageView.getWidth()) {
+        if (left + getWidth() > parentWidth) {
             //右边缘
-            left = mImageView.getWidth() - getWidth();
+            left = (int) (parentWidth - getWidth());
         }
-        if (top + getHeight() > mImageView.getHeight()) {
+        if (top + getHeight() > parentHeight) {
             //下边缘
-            top = mImageView.getHeight() - getHeight();
+            top = (int) (parentHeight - getHeight());
         }
         if (top < 0) {
             top = 0;
@@ -130,14 +138,14 @@ public class LabelView extends LinearLayout {
             //左边缘
             left = 0;
         }
-        labelParams.setMargins(left + (gpuRelative.getWidth() - mImageView.getWidth()) / 2, top, 0, 0);
+        labelParams.setMargins((int) (left + (gpuRelative.getWidth() - parentWidth) / 2), top, 0, 0);
         setLayoutParams(labelParams);
         if (isLeft) {
-            tagInfo.setX(than(left + DensityUtils.dp2px(getContext(), 44), mImageView.getWidth()));
+            tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
         } else {
-            tagInfo.setX(than(left + getMeasuredWidth() - DensityUtils.dp2px(getContext(), 44), mImageView.getHeight()));
+            tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentHeight));
         }
-        tagInfo.setY(than(top + getMeasuredHeight() - DensityUtils.dp2px(getContext(), 16), mImageView.getHeight()));
+        tagInfo.setY(than(top + getMeasuredHeight() - pointWidth/2, parentHeight));
         Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
     }
 
@@ -150,13 +158,12 @@ public class LabelView extends LinearLayout {
     private int imageHeight = 0;
 
 
-
     public void wave() {
         pointRelative.clearAnimation();
-        final ScaleAnimation scaleAnimation = new ScaleAnimation(1f,0.2f,1f,0.2f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        final ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 0.2f, 1f, 0.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimation.setDuration(2000);
         scaleAnimation.setFillAfter(true);
-        final ScaleAnimation scaleAnimation1 = new ScaleAnimation(0.2f,1f,0.2f,1f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        final ScaleAnimation scaleAnimation1 = new ScaleAnimation(0.2f, 1f, 0.2f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimation1.setDuration(2000);
         scaleAnimation1.setFillAfter(true);
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
