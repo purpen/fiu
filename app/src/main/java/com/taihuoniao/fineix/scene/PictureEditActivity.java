@@ -58,7 +58,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
 /**
  * Created by taihuoniao on 2016/8/12.
  */
-public class PictureEditActivity extends BaseActivity implements View.OnClickListener {
+public class PictureEditActivity extends BaseActivity implements View.OnClickListener, GPUImageFilterTools.OnGpuImageFilterChosenListener {
     @Bind(R.id.img)
     GPUImageView img;
     @Bind(R.id.title_layout)
@@ -87,6 +87,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     //当前获取焦点的labelview
     private LabelView labelView;
     private GPUImageFilter currentFilter;//当前滤镜
+    private int currentPosition;//滤镜位置
 
     public PictureEditActivity() {
         super(0);
@@ -163,45 +164,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         filter.setOnClickListener(this);
         filterRecycler.setHasFixedSize(true);
         filterRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(this, new GPUImageFilterTools.OnGpuImageFilterChosenListener() {
-            @Override
-            public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
-                currentFilter = filter;
-                img.setFilter(filter);
-                GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
-                switch (position) {
-                    //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
-                    case 4:
-                        filterAdjuster.adjust(97);//摩卡
-                        break;
-                    case 11:
-                        filterAdjuster.adjust(45);//暮光
-                        break;
-                    case 6:
-                        filterAdjuster.adjust(0);//候鸟
-                        break;
-                    case 7:
-                        filterAdjuster.adjust(40);//夏日
-                        break;
-                    case 1:
-                        filterAdjuster.adjust(100);//都市
-                        break;
-                    case 5:
-                        filterAdjuster.adjust(25);//佳人
-                        break;
-                    case 10:
-                        filterAdjuster.adjust(55);//流年
-                        break;
-                    case 3:
-                        filterAdjuster.adjust(53);//日光
-                        break;
-                    case 8:
-                        filterAdjuster.adjust(60);//午茶
-                        break;
-                }
-                img.requestRender();
-            }
-        }, new EditRecyclerAdapter.ItemClick() {
+        EditRecyclerAdapter recyclerAdapter = new EditRecyclerAdapter(this, this, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
                 //当点击同一滤镜时，做滤镜调节时使用
@@ -215,6 +178,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 filterRecycler.setVisibility(View.VISIBLE);
             }
         });
+        currentFilter = new GPUImageFilter();
+        currentPosition = 0;
     }
 
     @Override
@@ -258,6 +223,31 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         objectAnimator1.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                objectAnimator1.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        try {
+                            blur(myShot(), 25f);
+                        } catch (Exception e) {
+                            productPopView.setBackgroundResource(R.color.black_blur);
+                        }
                     }
 
                     @Override
@@ -347,16 +337,18 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
         img.setImage(newBitmap);
-        img.setFilter(currentFilter);
+        onGpuImageFilterChosenListener(currentFilter, currentPosition);
         Bitmap bitmap = null;
         try {
             bitmap = img.capture();
         } catch (InterruptedException e) {
+            img.setImage(MainApplication.cropBitmap);
             dialog.dismiss();
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
         if (bitmap == null) {
+            img.setImage(MainApplication.cropBitmap);
             dialog.dismiss();
             ToastUtils.showError("图片信息错误，请重试");
             return;
@@ -368,8 +360,12 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             tagInfoList.add(label.getTagInfo());
         }
         MainApplication.tagInfoList = tagInfoList;
+        Log.e("<<<上传之前",tagInfoList.toString());
+        img.setImage(MainApplication.cropBitmap);
         dialog.dismiss();
-        startActivity(new Intent(this, CreateQJActivity.class));
+        Intent intent = new Intent(this, CreateQJActivity.class);
+        intent.putExtra(PictureEditActivity.class.getSimpleName(), false);
+        startActivity(intent);
     }
 
     private View productPopView;
@@ -507,27 +503,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
-//                case DataConstants.RESULTCODE_EDIT_SEARCHSTORE:
-//                    TagItem tagItem = (TagItem) data.getSerializableExtra("tagItem");
-//                    if (requestCode == DataConstants.REQUESTCODE_EDIT_SEARCHSTORE) {
-//                        addLabel(tagItem);
-//                        SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//                        //判断是不是第一次进入Fiu界面
-//                        boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_URL, true);
-//                        if (isFirstIn) {
-//                            FirstInAppUtils.showPop(this, FirstInAppUtils.ADDURL, activity_view);
-//                            SharedPreferences.Editor editor = firstInSp.edit();
-//                            editor.putBoolean(DataConstants.FIRST_IN_URL, false);
-//                            editor.apply();
-//                        }
-//                    } else {
-//                        ImageLoader.getInstance().displayImage(tagItem.getImagePath(), productImg);
-//                        name.setText(tagItem.getName());
-//                        nameTv.setText(tagItem.getName());
-//                        price.setText(tagItem.getPrice());
-//                        priceTv.setText(tagItem.getPrice());
-//                    }
-//                    break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
                     final GoodsDetailBean productListBean = (GoodsDetailBean) data.getSerializableExtra("product");
                     String url = productListBean.getData().getPng_asset().get(0).getUrl();
@@ -568,4 +543,42 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onGpuImageFilterChosenListener(GPUImageFilter filter, int position) {
+        currentFilter = filter;
+        currentPosition = position;
+        img.setFilter(filter);
+        GPUImageFilterTools.FilterAdjuster filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
+        switch (position) {
+            //        原图、都市、摩登、日光、摩卡、佳人、 候鸟、夏日、午茶、戏剧、流年、暮光
+            case 4:
+                filterAdjuster.adjust(97);//摩卡
+                break;
+            case 11:
+                filterAdjuster.adjust(45);//暮光
+                break;
+            case 6:
+                filterAdjuster.adjust(0);//候鸟
+                break;
+            case 7:
+                filterAdjuster.adjust(40);//夏日
+                break;
+            case 1:
+                filterAdjuster.adjust(100);//都市
+                break;
+            case 5:
+                filterAdjuster.adjust(25);//佳人
+                break;
+            case 10:
+                filterAdjuster.adjust(55);//流年
+                break;
+            case 3:
+                filterAdjuster.adjust(53);//日光
+                break;
+            case 8:
+                filterAdjuster.adjust(60);//午茶
+                break;
+        }
+        img.requestRender();
+    }
 }
