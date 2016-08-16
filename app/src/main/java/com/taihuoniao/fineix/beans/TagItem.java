@@ -33,9 +33,6 @@ public class TagItem implements Serializable {
     private double x = 0.5;
     private double y = 0.5;
 
-//    private int recordCount;
-//    private boolean left = false;
-
 
     public String getPrice() {
         return price;
@@ -45,21 +42,6 @@ public class TagItem implements Serializable {
         this.price = price;
     }
 
-    public boolean isLeft() {
-        return false;
-    }
-
-//    public void setLeft(boolean left) {
-//        this.left = left;
-//    }
-
-//    public int getRecordCount() {
-//        return recordCount;
-//    }
-
-//    public void setRecordCount(int recordCount) {
-//        this.recordCount = recordCount;
-//    }
 
     public TagItem() {
 
@@ -69,14 +51,6 @@ public class TagItem implements Serializable {
         this.name = name;
         this.price = price;
     }
-
-//    public long getId() {
-//        return id;
-//    }
-
-//    public void setId(long id) {
-//        this.id = id;
-//    }
 
     public int getType() {
         return type;

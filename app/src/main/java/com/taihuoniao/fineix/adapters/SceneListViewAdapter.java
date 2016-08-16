@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.adapters;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
-import com.taihuoniao.fineix.beans.SceneListBean;
+import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.beans.TagItem;
@@ -34,13 +33,13 @@ import java.util.List;
 public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private SceneListAdapterScrollListener sceneListAdapterScrollListener;//外界用来调用的滑动监听
     private Context context;
-    private List<SceneListBean> list;
+    private List<SceneList.DataBean.RowsBean> list;
     private List<LoveSceneBean.LoveSceneItem> loveList;
     private List<SearchBean.SearchItem> searchList;
     private List<SubsCjListBean.SubsCJItem> subsList;
     private DisplayImageOptions options500_500, options750_1334;
 
-    public SceneListViewAdapter(Context context, List<SceneListBean> list, List<LoveSceneBean.LoveSceneItem> loveList,
+    public SceneListViewAdapter(Context context, List<SceneList.DataBean.RowsBean> list, List<LoveSceneBean.LoveSceneItem> loveList,
                                 List<SearchBean.SearchItem> searchList, List<SubsCjListBean.SubsCJItem> subsList) {
         this.context = context;
         this.list = list;
@@ -146,16 +145,16 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             holder = (ViewHolder) convertView.getTag();
         }
         if (holder.backgroundImg.getTag() != null && holder.backgroundImg.getTag().toString().equals(list.get(position).getCover_url())) {
-            if (list != null && list.get(position).isStartAnim()) {
-                holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-                ObjectAnimator.ofFloat(holder.bottomLinear, "translationY", 0).setDuration(600).start();
-                list.get(position).setStartAnim(false);
-//                }
-//            });
-            }
+//            if (list != null && list.get(position).isStartAnim()) {
+//                holder.bottomLinear.setTranslationY(holder.bottomLinear.getMeasuredHeight());
+////            new Handler().post(new Runnable() {
+////                @Override
+////                public void run() {
+//                ObjectAnimator.ofFloat(holder.bottomLinear, "translationY", 0).setDuration(600).start();
+//                list.get(position).setStartAnim(false);
+////                }
+////            });
+//            }
             return convertView;
         }
         holder.backgroundImg.setImageResource(R.mipmap.default_background_750_1334);
@@ -164,18 +163,18 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             if (!isScrolling) {
                 ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
                 holder.backgroundImg.setTag(list.get(position).getCover_url());
-                if (list.get(position).getProductsList() != null && list.get(position).getProductsList().size() > 0) {
-                    addProductToImg(list.get(position).getProductsList(), holder.pointContainer);
+                if (list.get(position).getProduct() != null && list.get(position).getProduct().size() > 0) {
+                    addProductToImg(list.get(position).getProduct(), holder.pointContainer);
                 }
             }
             //数据为空
             ImageLoader.getInstance().displayImage(list.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
             holder.userName.setText(list.get(position).getUser_info().getNickname());
-            if (list.get(position).getUser_info().is_expert == 1) {
-                holder.userInfo.setText(list.get(position).getUser_info().expert_label + " | " + list.get(position).getUser_info().expert_info);
+            if (list.get(position).getUser_info().getIs_expert() == 1) {
+                holder.userInfo.setText(list.get(position).getUser_info().getExpert_label() + " | " + list.get(position).getUser_info().getExpert_info());
                 holder.vImg.setVisibility(View.VISIBLE);
             } else {
-                holder.userInfo.setText(list.get(position).getUser_info().getSummary());
+                holder.userInfo.setText(list.get(position).getUser_info().getSummary().toString());
                 holder.vImg.setVisibility(View.GONE);
             }
             holder.viewCount.setText(list.get(position).getView_count());
@@ -254,17 +253,17 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
     }
 
 
-    private void addProductToImg(List<SceneListBean.Products> productList, RelativeLayout container) {
-        for (final SceneListBean.Products product : productList) {
+    private void addProductToImg(List<SceneList.DataBean.RowsBean.ProductBean> productList, RelativeLayout container) {
+        for (final SceneList.DataBean.RowsBean.ProductBean product : productList) {
 //            Log.e("<<<", productList.toString());
             final LabelView labelView = new LabelView(context);
             TagItem tagItem = new TagItem();
-            tagItem.setId(product.getId());
+            tagItem.setId(product.getId()+"");
             tagItem.setName(product.getTitle());
             tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            labelView.pointOrAll(false, false);
+//            labelView.pointOrAll(false, false);
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
             labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
             labelView.setLayoutParams(labelLp);

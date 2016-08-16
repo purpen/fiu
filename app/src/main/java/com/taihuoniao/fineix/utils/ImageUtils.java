@@ -1,8 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,13 +13,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.scene.CropPictureActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,21 +99,21 @@ public class ImageUtils {
         return null;
     }
 
-    //判断图片是否需要裁剪
-    public static void processPhotoItem(Activity activity, PhotoItem photo) {
-        location = picLocation(photo.getImageUri());
-        Uri uri = photo.getImageUri().startsWith("file:") ? Uri.parse(photo
-                .getImageUri()) : Uri.parse("file://" + photo.getImageUri());
-//        if (isFourToThree(photo.getImageUri())) {
-//            Intent intent = new Intent(activity, EditPictureActivity.class);
-//            intent.setData(uri);
-//            activity.startActivity(intent);
-//        } else {
-        Intent intent = new Intent(activity, CropPictureActivity.class);
-        intent.setData(uri);
-        activity.startActivity(intent);
-//        }
-    }
+//    //判断图片是否需要裁剪
+//    public static void processPhotoItem(Activity activity, PhotoItem photo) {
+//        location = picLocation(photo.getImageUri());
+//        Uri uri = photo.getImageUri().startsWith("file:") ? Uri.parse(photo
+//                .getImageUri()) : Uri.parse("file://" + photo.getImageUri());
+////        if (isFourToThree(photo.getImageUri())) {
+////            Intent intent = new Intent(activity, EditPictureActivity.class);
+////            intent.setData(uri);
+////            activity.startActivity(intent);
+////        } else {
+//        Intent intent = new Intent(activity, CropPictureActivity.class);
+//        intent.setData(uri);
+//        activity.startActivity(intent);
+////        }
+//    }
 
     //判断图片是不是16:9
     public static boolean isFourToThree(String imagePath) {
@@ -140,7 +135,7 @@ public class ImageUtils {
     public static Bitmap decodeBitmapWithSize(String pathName, int width, int height,
                                               boolean useBigger) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;//只加载宽高
+        options.inJustDecodeBounds = true;//只加载参数
         options.inInputShareable = true;//用于图片清空之后恢复
         options.inPurgeable = true;//当内存不足时可以清楚
         BitmapFactory.decodeFile(pathName, options);

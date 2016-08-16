@@ -17,7 +17,7 @@
     <RelativeLayout
         android:id="@+id/fragment_find_titlelayout"
         android:layout_width="match_parent"
-        android:background="@color/white"
+        android:background="@color/black"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -33,7 +33,7 @@
             android:layout_height="45dp"
             android:paddingLeft="13dp"
             android:paddingRight="13dp"
-            android:src="@mipmap/head_search"/>
+            android:src="@mipmap/head_search_white"/>
 
         <ImageView
             android:id="@+id/fragment_find_location"

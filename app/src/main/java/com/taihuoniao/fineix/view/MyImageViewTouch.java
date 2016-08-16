@@ -43,6 +43,9 @@ public class MyImageViewTouch extends ImageViewTouch {
 
         //标签的点击事件处理
         void onClick(LabelView label);
+
+//        //移动标签后手指抬起事件
+//        void onUp(LabelView labelView);
     }
 
     //删除的时候会出错

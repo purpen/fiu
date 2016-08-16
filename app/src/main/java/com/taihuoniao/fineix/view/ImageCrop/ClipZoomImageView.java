@@ -70,11 +70,11 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
     /**
      * 水平方向与View的边距
      */
-    private int mHorizontalPadding;
+    private int mHorizontalPadding = 0;
     /**
      * 垂直方向与View的边距
      */
-    private int mVerticalPadding;
+    private int mVerticalPadding = 0;
 
     public ClipZoomImageView(Context context) {
         this(context, null);
@@ -326,13 +326,13 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
             oldHeight = d.getIntrinsicHeight();
             // 垂直方向的边距
 //            mVerticalPadding = (getHeight() - getWidth() * 4 / 3) / 2;
-            if (getHeight() * 9 < getWidth() * 16) {
-                mVerticalPadding = 0;
-                mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
-            } else {
-                mHorizontalPadding = 0;
-                mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
-            }
+//            if (getHeight() * 9 < getWidth() * 16) {
+//                mVerticalPadding = 0;
+//                mHorizontalPadding = (getWidth() - getHeight() * 9 / 16) / 2;
+//            } else {
+//                mHorizontalPadding = 0;
+//                mVerticalPadding = (getHeight() - getWidth() * 16 / 9) / 2;
+//            }
             int width = getWidth();
             int height = getHeight();
             // 拿到图片的宽和高

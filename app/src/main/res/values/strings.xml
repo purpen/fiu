@@ -32,7 +32,7 @@
     <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->
     <string name="add_url">添加链接</string>
-    <string name="search_products">搜索好货</string>
+    <string name="search_products">搜索产品</string>
     <string name="jingdong">京东</string>
     <string name="taobao">淘宝</string>
     <string name="tianmao">天猫</string>

@@ -2,19 +2,23 @@ package com.taihuoniao.fineix.scene.fragments;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AlbumGridAdapter;
 import com.taihuoniao.fineix.adapters.AlbumListAdapter;
@@ -22,11 +26,13 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.AlbumBean;
 import com.taihuoniao.fineix.beans.PhotoItem;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.scene.PictureEditActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.ImageCrop.ClipImageLayout;
 import com.taihuoniao.fineix.view.TopAndBottomLinear;
 
 import java.util.ArrayList;
@@ -44,8 +50,8 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     private LinearLayout listLinear;
     private ListView albumListView;
     private AlbumListAdapter albumListAdapter;
-    private ImageView photoImg;
-    //    private GridViewForScrollView gridView;
+    //    private ImageView photoImg;
+    private ClipImageLayout clipImageLayout;
     private GridView gridView;
     private AlbumGridAdapter albumGridAdapter;
     private Map<String, AlbumBean> albumList;
@@ -62,6 +68,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     protected void initList() {
+        titleLayout.setBackgroundResource(R.color.title_black);
         titleLayout.setBackImgVisible(false);
         titleLayout.setCancelImgVisible(true);
         titleLayout.setArrowImgVisible(true);
@@ -95,7 +102,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         listLinear = (LinearLayout) view.findViewById(R.id.fragment_photo_listlinear);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) listLinear.getLayoutParams();
         lp.topMargin = MainApplication.getContext().getScreenHeight();
-        lp.height = MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(getActivity(), 106);
+        lp.height = MainApplication.getContext().getScreenHeight() - DensityUtils.dp2px(getActivity(), 90);
         albumListView = (ListView) view.findViewById(R.id.fragment_photo_albmlist);
         options500_500 = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
@@ -107,10 +114,9 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void addViewToLinear() {
-        photoImg = new ImageView(getActivity());
-        photoImg.setLayoutParams(new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth()));
-        photoImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        linear.addToToplinear(photoImg);
+        clipImageLayout = new ClipImageLayout(getActivity());
+        clipImageLayout.setLayoutParams(new LinearLayout.LayoutParams(MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth()));
+        linear.addToToplinear(clipImageLayout);
         gridView = new GridView(getActivity());
         gridView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         gridView.setCacheColorHint(0);
@@ -132,14 +138,14 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             case R.id.title_linear:
                 if (isUp) {
                     isUp = false;
-                    ObjectAnimator.ofFloat(listLinear, "translationY", DensityUtils.dp2px(getActivity(), 50) - MainApplication.getContext().getScreenHeight()).setDuration(500).start();
+                    ObjectAnimator.ofFloat(listLinear, "translationY", DensityUtils.dp2px(getActivity(), 45) - MainApplication.getContext().getScreenHeight()).setDuration(500).start();
                     titleLayout.setArrowImgResource(R.mipmap.arrow_up_white);
                     titleLayout.setContinueTvVisible(false);
                     titleLayout.setBackImgVisible(true);
                     titleLayout.setCancelImgVisible(false);
                 } else {
                     isUp = true;
-                    ObjectAnimator.ofFloat(listLinear, "translationY", listLinear.getMeasuredHeight() - DensityUtils.dp2px(getActivity(), 50)).setDuration(500).start();
+                    ObjectAnimator.ofFloat(listLinear, "translationY", 0).setDuration(500).start();
                     titleLayout.setArrowImgResource(R.mipmap.arrow_down_white);
                     titleLayout.setContinueTvVisible(true);
                     titleLayout.setBackImgVisible(false);
@@ -149,11 +155,13 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             case R.id.title_continue:
                 if (photoItem == null) {
                     ToastUtils.showError("请选择一张照片");
-//                    new SVProgressHUD(getActivity()).showErrorWithStatus("请选择一张照片");
-//                    Toast.makeText(getActivity(),"请选择一张图片",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ImageUtils.processPhotoItem(getActivity(), photoItem);
+                //剪切完的图片
+                MainApplication.cropBitmap = clipImageLayout.clip();
+                ImageUtils.location = ImageUtils.picLocation(photoItem.getImageUri());
+                Intent intent = new Intent(activity, PictureEditActivity.class);
+                activity.startActivity(intent);
                 break;
         }
     }
@@ -228,15 +236,40 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-    private void selectImg(int position) {
+    private void selectImg(final int position) {
         if (albumGridAdapter != null) {
             albumGridAdapter.selectImg(position);
             photoItem = (PhotoItem) albumGridAdapter.getItem(position);
             Uri uri = photoItem.getImageUri().startsWith("file:") ? Uri.parse(photoItem
                     .getImageUri()) : Uri.parse("file://" + photoItem.getImageUri());
-            ImageLoader.getInstance().displayImage(uri.toString(), photoImg, options500_500);
-//            photoImg.setImageBitmap(ImageUtils.decodeBitmapWithSize(uri.getPath(), MainApplication.getContext().getScreenWidth(), MainApplication.getContext().getScreenWidth(), true));
-            gridView.smoothScrollToPositionFromTop(position, 0);
+            ImageLoader.getInstance().loadImage(uri.toString(), options500_500, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    clipImageLayout.setImage(loadedImage);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+//            ImageLoader.getInstance().displayImage(uri.toString(), photoImg, options500_500);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    gridView.smoothScrollToPositionFromTop(position, 0);
+                }
+            });
         }
     }
 

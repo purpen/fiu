@@ -306,7 +306,6 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 ToastUtils.showError("网络错误");
-//                new SVProgressHUD(getActivity()).showErrorWithStatus("网络错误");
             }
         });
 

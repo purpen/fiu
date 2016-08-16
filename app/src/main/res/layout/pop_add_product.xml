@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:background="@color/black_blur"
+                android:layout_height="match_parent">
+
+    <com.taihuoniao.fineix.blurview.BlurView
+        android:id="@+id/blur_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:blurOverlayColor="#50000000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="38dp"
+        android:layout_marginRight="37dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#969696"/>
+
+        <RelativeLayout
+            android:id="@+id/add_product_relative"
+            android:layout_width="match_parent"
+            android:layout_height="39dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="选择产品添加到当前图片中"
+                android:textColor="@color/white"
+                android:textSize="13sp"/>
+
+            <ImageView
+                android:layout_width="7dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:rotation="90"
+                android:src="@mipmap/arrow_up_white"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#969696"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="或自行输入产品信息"
+            android:textColor="#969696"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/brand_tv"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/shape_corner_white_nothing"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="品牌"
+            android:textColor="@color/white"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/shape_corner_white_nothing"
+            android:gravity="center_vertical"
+            android:paddingLeft="17dp"
+            android:text="产品名称"
+            android:textColor="@color/white"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="#24272a">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+    </LinearLayout>
+</RelativeLayout>

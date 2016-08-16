@@ -60,6 +60,7 @@ public class MainApplication extends Application {
     public static String cropPicPath = null;
     public static String editPicPath = null;//编辑好的图片存储路径
     public static String filterPicPath = null;//加完滤镜的图片
+
     public static String uuid = null;
     public static boolean hasUser;
     //编辑好的图片标签的list
@@ -76,7 +77,8 @@ public class MainApplication extends Application {
     public static final String THN_MOBILE = "mobile";
     // SharedPreference 中保存的密码
     public static final String THN_PASSWORD = "password";
-
+    public static Bitmap cropBitmap = null;//前切好的图片
+    public static Bitmap editBitmap = null;//编辑好的图片
     public static MainApplication getContext() {
         return instance;
     }

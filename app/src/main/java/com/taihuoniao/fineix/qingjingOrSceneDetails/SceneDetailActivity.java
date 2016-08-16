@@ -52,7 +52,7 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
-import com.taihuoniao.fineix.scene.CreateActivity;
+import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -421,7 +421,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            labelView.pointOrAll(false, true);
+//            labelView.pointOrAll(false, true);
             labelLp.leftMargin = (int) (product.getX() * MainApplication.getContext().getScreenWidth());
             labelLp.topMargin = (int) (product.getY() * MainApplication.getContext().getScreenWidth() * 16 / 9);
             labelView.setLayoutParams(labelLp);
@@ -431,9 +431,9 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (labelView.nameLeft.getVisibility() == View.INVISIBLE) {
-                        return;
-                    }
+//                    if (labelView.nameLeft.getVisibility() == View.INVISIBLE) {
+//                        return;
+//                    }
                     Intent intent = new Intent(SceneDetailActivity.this, GoodsDetailActivity.class);
                     String id = labelView.getTagInfo().getId();//商品id
                     intent.putExtra("id", id);
@@ -562,7 +562,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     View view = container.getChildAt(i);
                     if (view instanceof LabelView) {
                         LabelView labelView = (LabelView) view;
-                        labelView.pointOrAll(false, isShowAll);
+//                        labelView.pointOrAll(false, isShowAll);
                     }
                 }
 
@@ -640,7 +640,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                     sceneDetails(id);
                     return;
                 }
-                Intent intent5 = new Intent(SceneDetailActivity.this, CreateActivity.class);
+                Intent intent5 = new Intent(SceneDetailActivity.this, CreateQJActivity.class);
                 MainApplication.tag = 1;
                 intent5.putExtra(SceneDetailActivity.class.getSimpleName(), netScene);
                 startActivity(intent5);
@@ -752,17 +752,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 if (view instanceof LabelView) {
                     LabelView labelView = (LabelView) view;
                     VisibleAnimListener visibleAnimListener = new VisibleAnimListener();
-                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 1).setDuration(500);
-                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 1).setDuration(500);
-                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 1).setDuration(500);
-                    visibleAnim1.addListener(visibleAnimListener);
-                    visibleAnim2.addListener(visibleAnimListener);
-                    visibleAnim3.addListener(visibleAnimListener);
-                    if (animFlag == 0) {
-                        visibleAnim1.start();
-                        visibleAnim2.start();
-                        visibleAnim3.start();
-                    }
+//                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 1).setDuration(500);
+//                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 1).setDuration(500);
+//                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 1).setDuration(500);
+//                    visibleAnim1.addListener(visibleAnimListener);
+//                    visibleAnim2.addListener(visibleAnimListener);
+//                    visibleAnim3.addListener(visibleAnimListener);
+//                    if (animFlag == 0) {
+//                        visibleAnim1.start();
+//                        visibleAnim2.start();
+//                        visibleAnim3.start();
+//                    }
                 }
             }
             imgRelative.setTranslationY(t);
@@ -790,17 +790,17 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 if (view instanceof LabelView) {
                     LabelView labelView = (LabelView) view;
                     GoneAnimListener visibleAnimListener = new GoneAnimListener();
-                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 0).setDuration(500);
-                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 0).setDuration(500);
-                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 0).setDuration(500);
-                    visibleAnim1.addListener(visibleAnimListener);
-                    visibleAnim2.addListener(visibleAnimListener);
-                    visibleAnim3.addListener(visibleAnimListener);
-                    if (animFlag == 2) {
-                        visibleAnim1.start();
-                        visibleAnim2.start();
-                        visibleAnim3.start();
-                    }
+//                    ObjectAnimator visibleAnim1 = ObjectAnimator.ofFloat(labelView.nameLeft, "alpha", 0).setDuration(500);
+//                    ObjectAnimator visibleAnim2 = ObjectAnimator.ofFloat(labelView.priceRight, "alpha", 0).setDuration(500);
+//                    ObjectAnimator visibleAnim3 = ObjectAnimator.ofFloat(labelView.relativeRight, "alpha", 0).setDuration(500);
+//                    visibleAnim1.addListener(visibleAnimListener);
+//                    visibleAnim2.addListener(visibleAnimListener);
+//                    visibleAnim3.addListener(visibleAnimListener);
+//                    if (animFlag == 2) {
+//                        visibleAnim1.start();
+//                        visibleAnim2.start();
+//                        visibleAnim3.start();
+//                    }
                 }
             }
         }

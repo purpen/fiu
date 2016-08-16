@@ -7,40 +7,9 @@
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/fragment_camera_titlelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <!--<RelativeLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:background="#212121">-->
+        android:layout_height="45dp"/>
 
-    <!--<ImageView-->
-    <!--android:id="@+id/fragment_camera_cancel"-->
-    <!--android:layout_width="50dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:padding="16dp"-->
-    <!--android:src="@drawable/cancel_red"/>-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/fragment_camera_flash"-->
-    <!--android:layout_width="50dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:contentDescription="@null"-->
-    <!--android:padding="12dp"-->
-    <!--android:src="@drawable/flash_off"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_toLeftOf="@id/fragment_camera_flash"-->
-    <!--android:layout_toRightOf="@id/fragment_camera_cancel"-->
-    <!--android:gravity="center"-->
-    <!--android:text="拍照"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textSize="16sp"/>-->
-    <!--</RelativeLayout>-->
-
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -56,10 +25,20 @@
             <RelativeLayout
                 android:id="@+id/fragment_camera_bottomrelative"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="150dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/backround_black"
-                />
+                >
+
+                <ImageView
+                    android:id="@+id/fragment_camera_takepic"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/take_picture"
+                    />
+            </RelativeLayout>
+
 
             <View
                 android:id="@+id/fragment_camera_focus"
@@ -69,15 +48,23 @@
                 android:background="@drawable/camera_focus"
                 android:visibility="invisible"/>
 
-            <Button
-                android:id="@+id/fragment_camera_takepic"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="16dp"
-                android:background="@mipmap/take_picture" />
+            <ImageView
+                android:id="@+id/flash"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_above="@id/fragment_camera_bottomrelative"
+                android:layout_alignParentRight="true"
+                android:padding="14dp"
+                android:src="@mipmap/flash_off"/>
+
+            <ImageView
+                android:id="@+id/self_take"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_above="@id/fragment_camera_bottomrelative"
+                android:padding="14dp"
+                android:src="@mipmap/self_take"/>
         </RelativeLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>

@@ -40,13 +40,13 @@ public class LoveSceneBean extends NetBean {
         private String created_at;
         private String scene_title;
         private User user_info;
-        private List<SceneListBean.Products> product;
+        private List<SceneList.DataBean.RowsBean.ProductBean> product;
 
-        public List<SceneListBean.Products> getProduct() {
+        public List<SceneList.DataBean.RowsBean.ProductBean> getProduct() {
             return product;
         }
 
-        public void setProduct(List<SceneListBean.Products> product) {
+        public void setProduct(List<SceneList.DataBean.RowsBean.ProductBean> product) {
             this.product = product;
         }
 

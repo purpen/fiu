@@ -7,10 +7,10 @@
     <LinearLayout
         android:id="@+id/activity_select_bottomlinear"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/backround_black"
+        android:layout_height="45dp"
         android:baselineAligned="false"
+        android:layout_alignParentBottom="true"
+        android:background="#212121"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -19,12 +19,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/activity_select_photoreredline"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/yellow_bd8913" />
+            <!--<TextView-->
+                <!--android:id="@+id/activity_select_photoreredline"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="4dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:background="@color/yellow_bd8913"-->
+                <!--/>-->
 
             <TextView
                 android:id="@+id/activity_select_phototv"
@@ -33,7 +34,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/photo_album"
                 android:textColor="@color/yellow_bd8913"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -42,13 +43,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/activity_select_cameraredline"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/yellow_bd8913"
-                android:visibility="gone" />
+            <!--<TextView-->
+                <!--android:id="@+id/activity_select_cameraredline"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="4dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:background="@color/yellow_bd8913"-->
+                <!--android:visibility="gone"/>-->
 
             <TextView
                 android:id="@+id/activity_select_cameratv"
@@ -57,7 +58,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/take_picture"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
         </RelativeLayout>
     </LinearLayout>
 

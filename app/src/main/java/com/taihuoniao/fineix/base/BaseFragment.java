@@ -95,10 +95,6 @@ public abstract class BaseFragment<T> extends Fragment {
         super.onStop();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 
     @Override
     public void onDestroy() {
@@ -124,7 +120,11 @@ public abstract class BaseFragment<T> extends Fragment {
     protected void refreshUI(ArrayList<T> list) {
 
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
     public void handMessage(Message msg) {
     }
 }

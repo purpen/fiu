@@ -23,7 +23,6 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private View activityView;
     private RelativeLayout photoRelative, cameraRelative;
     private TextView photoTv, cameraTv;
-    private TextView photoRedline, cameraRedline;
     private FragmentManager fm;
     private PhotoFragment photoFragment;
     private CameraFragment cameraFragment;
@@ -55,8 +54,6 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
         cameraRelative = (RelativeLayout) findViewById(R.id.activity_select_camerarelative);
         photoTv = (TextView) findViewById(R.id.activity_select_phototv);
         cameraTv = (TextView) findViewById(R.id.activity_select_cameratv);
-        photoRedline = (TextView) findViewById(R.id.activity_select_photoreredline);
-        cameraRedline = (TextView) findViewById(R.id.activity_select_cameraredline);
         fm = getSupportFragmentManager();
         photoFragment = new PhotoFragment();
         FragmentTransaction ft = fm.beginTransaction();
@@ -75,8 +72,6 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private void goneColor() {
         photoTv.setTextColor(getResources().getColor(R.color.white));
         cameraTv.setTextColor(getResources().getColor(R.color.white));
-        photoRedline.setVisibility(View.GONE);
-        cameraRedline.setVisibility(View.GONE);
     }
 
     private void goneFragment() {
@@ -110,11 +105,9 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
         switch (v.getId()) {
             case R.id.activity_select_photorelative:
                 photoTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                photoRedline.setVisibility(View.VISIBLE);
                 break;
             case R.id.activity_select_camerarelative:
                 cameraTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
-                cameraRedline.setVisibility(View.VISIBLE);
                 break;
         }
     }
