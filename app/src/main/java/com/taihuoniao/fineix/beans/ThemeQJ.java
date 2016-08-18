@@ -12,7 +12,8 @@ public class ThemeQJ implements Parcelable {
     public String title;
     public String back_url;
     public int stick;
-
+    public String sub_count;
+    public boolean isSubscribed;
     public ThemeQJ() {
     }
 
@@ -27,6 +28,7 @@ public class ThemeQJ implements Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.back_url);
         dest.writeInt(this.stick);
+        dest.writeString(this.sub_count);
     }
 
     protected ThemeQJ(Parcel in) {
@@ -34,6 +36,7 @@ public class ThemeQJ implements Parcelable {
         this.title = in.readString();
         this.back_url = in.readString();
         this.stick = in.readInt();
+        this.sub_count = in.readString();
     }
 
     public static final Creator<ThemeQJ> CREATOR = new Creator<ThemeQJ>() {

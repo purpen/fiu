@@ -9,6 +9,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
+import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MD5Utils;
 
@@ -280,6 +281,22 @@ public class ClientDiscoverAPI {
         getSceneList(page, size, null, null, null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
     }
 
+
+    /**
+     * 获取订阅情境的列表
+     * @param page
+     * @param category_ids
+     * @param callBack
+     */
+    public static void getQJList(String page, String category_ids, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.scene_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
+        params.addQueryStringParameter("category_ids", category_ids);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     /**
      * 根据用户ID查找CJ
      *
@@ -481,6 +498,16 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("size", 8 + "");
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    public static void searchUser(String q, String page, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.search;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("q", q);
+        params.addQueryStringParameter("t", "14"); //14.用户
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1472,6 +1499,25 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/follow/batch_follow";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("follow_ids", follow_ids);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * 取消订阅情景主题
+     *
+     * @param id
+     */
+    public static void cancelSubscribe(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/my/remove_interest_scene_id";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    public static void subscribe(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/my/add_interest_scene_id";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

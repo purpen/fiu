@@ -149,7 +149,8 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="10dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/jd"
@@ -186,7 +187,8 @@
         android:id="@+id/activity_all_order_tbrelative"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/tb"
@@ -223,7 +225,8 @@
         android:id="@+id/activity_all_order_tmrelative"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/tm"

@@ -6,7 +6,9 @@
     <string name="pin">好货</string>
     <string name="mine">个人</string>
     <string name="login">登录</string>
+    <string name="subscribe">订阅</string>
     <string name="register">注册</string>
+    <string name="qj_theme">情境主题</string>
     <string name="forget_password">忘记登录密码?</string>
     <string name="forget_password_tips">如果您忘记了密码,可以通过手机号找回</string>
     <string name="network_err">网络异常,请确认网络畅通或请联系我们</string>
@@ -112,6 +114,11 @@
         <item>天猫</item>
         <item>京东</item>
         <item>亚马逊</item>
+    </string-array>
+
+    <string-array name="favorite_tabs">
+        <item>情境</item>
+        <item>产品</item>
     </string-array>
     <string name="please_input">请输入</string>
     <string name="loading">加载中…</string>
@@ -242,8 +249,8 @@
     <string name="bind_had_phone">绑定已太火鸟账户</string>
     <string name="phone_number">手机号</string>
     <string name="password">密码</string>
-    <string name="bind">绑定</string>
-    <string name="skip_bind">首次加入太火鸟?</string>
+    <string name="bind">立即绑定</string>
+    <string name="skip_bind">跳过绑定</string>
     <string name="send">发送</string>
     <string name="take_comment">评论一下</string>
     <string name="you_are_first_comment">你可是第一个看到它的人，快来评论一下吧</string>

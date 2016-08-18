@@ -5,7 +5,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.exception.HttpException;
@@ -14,12 +16,14 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderedQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.QingJingListBean;
+import com.taihuoniao.fineix.beans.DataSubscribedQJ;
+import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -27,32 +31,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author lilin
- * created at 2016/5/5 18:12
+ *         created at 2016/5/5 18:12
  */
-public class OrderQJActivity  extends BaseActivity{
+public class OrderQJActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.pull_gv)
     PullToRefreshGridView pull_gv;
-    private int curPage=1;
-    private boolean isLoadMore=false;
-    public static final String PAGE_SIZE="10";
-    public static final String PAGE_TYPE="scene";
-    public static final String PAGE_EVENT="subscription";
-    private List<QingJingListBean.QingJingItem> mList=new ArrayList<>();
+    @Bind(R.id.tv_subscribe)
+    TextView tvSubscribe;
+    private int curPage = 1;
+    private boolean isLoadMore = false;
+    public static final String PAGE_SIZE = "10";
+    private List<ItemSubscribedQJ> mList = new ArrayList<>();
     private WaittingDialog dialog;
     private OrderedQJAdapter adapter;
-    public OrderQJActivity(){
+    private ArrayList<String> subscribedIds;
+    private static final int REQUEST_THEME_NUM = 100;
+
+    public OrderQJActivity() {
         super(R.layout.activity_order_qj);
     }
 
     @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(TAG)) {
+            subscribedIds = intent.getStringArrayListExtra(TAG);
+        }
+    }
+
+    @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"订阅的地盘");
-        dialog=new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, R.string.subscribe);
+        dialog = new WaittingDialog(this);
         pull_gv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 
@@ -62,7 +78,9 @@ public class OrderQJActivity  extends BaseActivity{
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-                resetData();
+                curPage = 1;
+                isLoadMore = true;
+                mList.clear();
                 requestNet();
             }
 
@@ -74,7 +92,7 @@ public class OrderQJActivity  extends BaseActivity{
         pull_gv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-                isLoadMore=true;
+                isLoadMore = true;
                 requestNet();
             }
         });
@@ -82,75 +100,103 @@ public class OrderQJActivity  extends BaseActivity{
         pull_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent=new Intent(activity, QingjingDetailActivity.class);
-                intent.putExtra("id",mList.get(i).get_id());
+                Intent intent = new Intent(activity, QingjingDetailActivity.class);
+                intent.putExtra("id", mList.get(i)._id);
                 startActivity(intent);
             }
         });
     }
 
-    private void resetData(){
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         curPage=1;
         isLoadMore=false;
         mList.clear();
+        requestNet();
     }
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.commonList(String.valueOf(curPage),PAGE_SIZE,null, String.valueOf(LoginInfo.getUserId()),PAGE_TYPE,PAGE_EVENT,new RequestCallBack<String>(){
+        if (subscribedIds == null) return;
+        tvSubscribe.setText(String.format("已订阅%s个情境主题", subscribedIds.size()));
+        if (subscribedIds.size() == 0) return;
+        StringBuilder builder = new StringBuilder();
+        for (String id : subscribedIds) {
+            builder.append(id + ",");
+        }
+        if (TextUtils.isEmpty(builder)) return;
+        ClientDiscoverAPI.getQJList(String.valueOf(curPage), builder.deleteCharAt(builder.length() - 1).toString(), new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (curPage==1) dialog.show();
+                if (!isLoadMore && dialog != null) {
+                    dialog.show();
+                }
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
-                if (responseInfo==null) return;
+                if (dialog != null) dialog.dismiss();
+                pull_gv.onRefreshComplete();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                QingJingListBean listBean = JsonUtil.fromJson(responseInfo.result, QingJingListBean.class);
-                if (listBean.isSuccess()){
-                    List list = listBean.getData().getRows();
+                HttpResponse<DataSubscribedQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataSubscribedQJ>>() {
+                });
+                if (response.isSuccess()) {
+                    List list = response.getData().rows;
                     refreshUI(list);
                     return;
                 }
-                Util.makeToast(listBean.getMessage());
+                ToastUtils.showError(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
-                if(TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
+                if (dialog != null) dialog.dismiss();
+                e.printStackTrace();
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
 
     @Override
     protected void refreshUI(List list) {
-        if (list==null) return;
-        if (list.size()==0){
-//            if (isLoadMore){
-//                Util.makeToast("没有更多数据哦！");
-//            }else {
-//                Util.makeToast("暂无数据！");
-//            }
+        if (list == null) return;
+        if (list.size() == 0) {
             return;
         }
-
         curPage++;
-
-        if (adapter==null){
-            mList.addAll(list);
-            adapter=new OrderedQJAdapter(mList,activity);
+        mList.addAll(list);
+        if (adapter == null) {
+            adapter = new OrderedQJAdapter(mList, activity);
             pull_gv.setAdapter(adapter);
-        }else {
-            mList.addAll(list);
+        } else {
             adapter.notifyDataSetChanged();
         }
 
-        if (pull_gv !=null)
-            pull_gv.onRefreshComplete();
     }
 
+
+    @OnClick(R.id.tv_subscribe)
+    public void onClick() {
+        Intent intent = new Intent(activity, SubscribeThemeActivity.class);
+        intent.putStringArrayListExtra(SubscribeThemeActivity.class.getSimpleName(), subscribedIds);
+        startActivityForResult(intent, REQUEST_THEME_NUM);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        switch (requestCode) {
+            case REQUEST_THEME_NUM:
+                if (data == null) return;
+                if (subscribedIds == null) return;
+                if (data.hasExtra(TAG)) {
+                    subscribedIds.clear();
+                    subscribedIds.addAll(data.getStringArrayListExtra(TAG));
+                }
+                LogUtil.e(TAG, subscribedIds.size() + "");
+                break;
+        }
+    }
 }

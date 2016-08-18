@@ -48,6 +48,7 @@ import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
@@ -220,7 +221,7 @@ public class MineFragment extends MyBaseFragment {
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                Util.makeToast("对不起,网络请求失败");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -297,7 +298,7 @@ public class MineFragment extends MyBaseFragment {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
 //        if (!TextUtils.isEmpty(user.head_pic_url)) {
-            ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
+        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
 //        }
 
         if (user.identify.is_expert == 1) {
@@ -414,20 +415,25 @@ public class MineFragment extends MyBaseFragment {
     @Override
     protected void installListener() {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Intent intent;
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
-                    case 0:
+                    case 0:  //订单
                         startActivity(new Intent(activity, AllOrderActivity.class));
                         break;
                     case 1:
                         startActivity(new Intent(activity, MessageActivity.class));
                         break;
-                    case 2:
-                        startActivity(new Intent(activity, OrderQJActivity.class));
+                    case 2:  //订阅
+                        intent = new Intent(activity, OrderQJActivity.class);
+                        if (user.interest_scene_cate != null) {
+                            intent.putStringArrayListExtra(OrderQJActivity.class.getSimpleName(), user.interest_scene_cate);
+                        }
+                        startActivity(intent);
                         break;
-                    case 4:
-                        Intent intent = new Intent(activity, HasLoveActivity.class);
+                    case 4: //赞过
+                        intent = new Intent(activity, HasLoveActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
                         break;
@@ -441,7 +447,7 @@ public class MineFragment extends MyBaseFragment {
                         intent.putExtra(AboutUsActivity.class.getName(), "积分");
                         startActivity(intent);
                         break;
-                    case 6:
+                    case 6: //礼券
                         startActivity(new Intent(getActivity(), UsableRedPacketActivity.class));
                         break;
                     case 7:
@@ -461,7 +467,8 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     public void onDestroy() {
-        listener = null;
+        if (listener != null)
+            listener = null;
         super.onDestroy();
     }
 }

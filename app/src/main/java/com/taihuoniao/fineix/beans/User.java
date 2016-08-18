@@ -17,6 +17,7 @@ public class User implements Serializable {
     public long created_on;
     public String birthday;
     public String medium_avatar_url;
+    public String avatar_url;
     public String avatar;
     public Identify identify;
     public String phone;
@@ -55,6 +56,7 @@ public class User implements Serializable {
     public String label;
     public String age_group;
     public String assets;
+    public ArrayList<String> interest_scene_cate;
     public ArrayList<String> areas;
     public class Counter implements Serializable{
         public int notice_count;

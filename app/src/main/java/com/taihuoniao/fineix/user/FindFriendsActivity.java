@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.fragments.SearchUserFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -25,6 +26,7 @@ import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSubItemLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
@@ -48,11 +50,13 @@ import cn.sharesdk.wechat.friends.Wechat;
 public class FindFriendsActivity extends BaseActivity<FindFriendData.User> implements PlatformActionListener, View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
+
     CustomSubItemLayout item_wx;
     CustomSubItemLayout item_sina;
     CustomSubItemLayout item_contacts;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pull_lv;
+
     private int curPage = 1;
     private static final String PAGE_SIZE = "10";
     private static final String SORT = "1";  //随机排序
@@ -62,14 +66,15 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     private ListView lv;
 
     private WaittingDialog dialog;
-    public FindFriendsActivity(){
+
+    public FindFriendsActivity() {
         super(R.layout.activity_find_freinds);
     }
 
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "发现好友");
-        dialog=new WaittingDialog(this);
+        dialog = new WaittingDialog(this);
         custom_head.setHeadShopShow(true);
         custom_head.getShopImg().setImageResource(R.mipmap.scan);
         View view = Util.inflateView(R.layout.headview_findfriend, null);
@@ -95,7 +100,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 
     @Override
     protected void installListener() {
-        pull_lv.setOnLastItemVisibleListener(new com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase.OnLastItemVisibleListener() {
+        pull_lv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
 //                isLoadMore = true;
@@ -128,7 +133,6 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-                if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
                 HttpResponse<FindFriendData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<FindFriendData>>() {
@@ -145,7 +149,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -154,12 +158,12 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     protected void refreshUI(List<FindFriendData.User> list) {
         if (list == null) return;
         if (list.size() == 0) {
-            boolean isLoadMore = false;
-            if (isLoadMore) {
-                Util.makeToast("没有更多数据哦！");
-            } else {
-                Util.makeToast("暂无数据！");
-            }
+//            boolean isLoadMore = false;
+//            if (isLoadMore) {
+//                Util.makeToast("没有更多数据哦！");
+//            } else {
+//                Util.makeToast("暂无数据！");
+//            }
             return;
         }
 
@@ -192,14 +196,12 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
             switch (msg.what) {
                 case 3:
                     ToastUtils.showError("对不起，分享出错");
-//                    dialog.showErrorWithStatus("对不起，分享出错");
                     break;
                 case 2:
-//                    dialog.showErrorWithStatus("您取消了分享");
+                    ToastUtils.showInfo("您取消了分享");
                     break;
                 case 1:
                     ToastUtils.showSuccess("分享成功");
-//                    dialog.showSuccessWithStatus("分享成功");
                     break;
             }
         }
@@ -235,16 +237,25 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
                 sendIntent.setType("vnd.android-dir/mms-sms");
                 startActivity(sendIntent);
                 break;
+
         }
     }
 
-    @OnClick({R.id.head_view_shop})
+    @OnClick({R.id.head_view_shop, R.id.rl_search_user})
     void performClick(View v) {
         switch (v.getId()) {
             case R.id.head_view_shop:
                 startActivity(new Intent(activity, CaptureActivity.class));
                 break;
+            case R.id.rl_search_user:
+                showDialog();
+                break;
         }
+    }
+
+    private void showDialog() {
+        SearchUserFragment newFragment = SearchUserFragment.newInstance();
+        newFragment.show(getSupportFragmentManager(), SearchUserFragment.class.getSimpleName());
     }
 
     @Override
@@ -261,4 +272,5 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
     public void onError(Platform platform, int i, Throwable throwable) {
         handler.sendEmptyMessage(3);
     }
+
 }

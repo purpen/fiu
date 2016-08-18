@@ -271,7 +271,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         });
         Intent intent = new Intent(activity, ImageCropActivity.class);
         intent.putExtra(ImageCropActivity.class.getSimpleName(), uri);
-        intent.putExtra(ImageCropActivity.class.getName(), TAG);
+        intent.putExtra(ImageCropActivity.class.getName(), CompleteUserInfoActivity.class.getSimpleName());
         startActivity(intent);
     }
 

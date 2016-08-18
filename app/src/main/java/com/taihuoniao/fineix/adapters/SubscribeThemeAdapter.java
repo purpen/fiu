@@ -38,7 +38,8 @@ public class SubscribeThemeAdapter extends CommonBaseAdapter<ThemeQJ> {
         }
         ImageLoader.getInstance().displayImage(item.back_url, holder.iv, options);
         holder.tv.setText(item.title);
-        if (item.stick == 1) {
+        holder.tv_count.setText(String.format("已有%s人订阅", item.sub_count));
+        if (item.isSubscribed) {
             holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.subscribed, 0, 0, 0);
             holder.view_bg.setVisibility(View.VISIBLE);
         } else {
@@ -55,7 +56,8 @@ public class SubscribeThemeAdapter extends CommonBaseAdapter<ThemeQJ> {
         TextView tv;
         @Bind(R.id.view_bg)
         View view_bg;
-
+        @Bind(R.id.tv_count)
+        TextView tv_count;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

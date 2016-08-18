@@ -18,7 +18,8 @@
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingLeft="15dp">
+        android:paddingLeft="15dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -143,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/yellow_bd8913"
+        android:background="@color/color_333"
         android:text="@string/pay_now"
         android:textColor="@color/white"
         android:textSize="14sp"/>

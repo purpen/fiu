@@ -18,12 +18,12 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.UnUsableRedPacketAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CheckRedBagUsable;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.RedBagUntimeout;
 import com.taihuoniao.fineix.beans.RedPacketData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -176,7 +176,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"过期红包");
+        custom_head.setHeadCenterTxtShow(true, "过期礼券");
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");

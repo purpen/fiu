@@ -21,5 +21,5 @@ public class Constants {
     public static final String XZC = "C";
     public static final String TH = "D";
     public static final String DH = "E";
-
+    public static final String PAGE_SIZE = "10";
 }

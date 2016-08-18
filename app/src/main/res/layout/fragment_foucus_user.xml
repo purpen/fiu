@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="@string/focus_user"
         android:textSize="@dimen/sp14"
-        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp8"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true" />
 

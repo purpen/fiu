@@ -30,7 +30,7 @@
                 android:layout_marginTop="0dp"
                 android:inputType="phone"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/color_666"
                 android:maxLength="20"
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true" />
@@ -61,7 +61,7 @@
                 android:layout_marginTop="0dp"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
+                android:textColorHint="@color/color_666"
                 android:paddingLeft="@dimen/dp8"
                 android:maxLength="50"
                 android:singleLine="true" />

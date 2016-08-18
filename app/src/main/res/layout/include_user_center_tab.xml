@@ -37,15 +37,15 @@
                 android:drawablePadding="@dimen/dp5"
                 android:text="@string/sight"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp13" />
         </LinearLayout>
 
         <View
-            android:layout_width="@dimen/dp1"
+            android:layout_width="@dimen/dp05"
             android:layout_height="@dimen/dp30"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@android:color/white" />
+            android:background="@color/color_999" />
     </RelativeLayout>
 
 
@@ -84,15 +84,15 @@
                 android:drawablePadding="@dimen/dp5"
                 android:text="关注"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp13" />
         </LinearLayout>
 
         <View
-            android:layout_width="@dimen/dp1"
+            android:layout_width="@dimen/dp05"
             android:layout_height="@dimen/dp30"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@android:color/white" />
+            android:background="@color/color_999" />
     </RelativeLayout>
 
     <LinearLayout
@@ -119,6 +119,6 @@
             android:drawablePadding="@dimen/dp5"
             android:text="粉丝"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp12" />
+            android:textSize="@dimen/sp13" />
     </LinearLayout>
 </LinearLayout>

@@ -419,6 +419,10 @@
             android:name=".map.MapNearByQJActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".user.SubscribeThemeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.baidu.location.f"

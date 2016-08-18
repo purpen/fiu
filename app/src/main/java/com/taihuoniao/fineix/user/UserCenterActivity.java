@@ -394,7 +394,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         }
         LogUtil.e(TAG, "refreshUI===" + user._id);
         if (user.is_love == FansAdapter.NOT_LOVE) {
-            setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic);
+            setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white);
         } else {
             setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic);
         }
@@ -569,7 +569,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.ll_box:
                 if (LoginInfo.getUserId() != userId) return;
                 flag = UserCenterActivity.class.getSimpleName();
-                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换背景封面"));
+                PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "更换个人主页封面"));
                 break;
             case R.id.iv_right:
                 startActivity(new Intent(activity, EditUserInfoActivity.class));
@@ -615,7 +615,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void onFailure(HttpException e, String s) {
                             bt_focus.setEnabled(true);
-                            ToastUtils.showError("网络异常，请确认网络畅通");
+                            ToastUtils.showError(R.string.network_err);
                         }
                     });
                 } else {
@@ -631,7 +631,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             if (response.isSuccess()) {
                                 user.is_love = FansAdapter.NOT_LOVE;
 //                                bt_focus.setText("关注");
-                                setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic);
+                                setFocusBtnStyle(activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white);
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());

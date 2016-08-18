@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,7 @@ public class SetPasswordFragment extends MyBaseFragment {
     ImageButton ibtnShowHide;
     @Bind(R.id.bt_complete_register)
     Button btCompleteRegister;
+    private boolean flag = false;
     private RegisterInfo registerInfo = null;
 
     public static SetPasswordFragment newInstance() {
@@ -72,19 +75,37 @@ public class SetPasswordFragment extends MyBaseFragment {
         }
     }
 
-    @OnClick(R.id.bt_complete_register)
-    public void onClick() {
-        String password = etPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(password)) {
-            ToastUtils.showInfo("请输入密码");
-            return;
+    @OnClick({R.id.bt_complete_register, R.id.ibtn_show_hide})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_complete_register:
+                String password = etPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtils.showInfo("请输入密码");
+                    return;
+                }
+
+                if (password.length() < 6) {
+                    ToastUtils.showInfo("密码长度为6位以上");
+                    return;
+                }
+                registerUser(password);
+                break;
+            case R.id.ibtn_show_hide:
+                if (flag) {
+                    flag = false;
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    ibtnShowHide.setImageResource(R.mipmap.pass_hide);
+                } else {
+                    flag = true;
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    ibtnShowHide.setImageResource(R.mipmap.pass_show);
+                }
+                int length = etPassword.getText().length();
+                if (length > 0) etPassword.setSelection(length);
+                break;
         }
 
-        if (password.length() < 6) {
-            ToastUtils.showInfo("密码长度为6位以上");
-            return;
-        }
-        registerUser(password);
     }
 
     private void registerUser(String password) {//注册完成
@@ -152,15 +173,5 @@ public class SetPasswordFragment extends MyBaseFragment {
                 LogUtil.e("网络异常", "改为非首次登录失败");
             }
         });
-    }
-
-    @OnClick({R.id.ibtn_show_hide, R.id.bt_complete_register})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ibtn_show_hide:
-                break;
-            case R.id.bt_complete_register:
-                break;
-        }
     }
 }

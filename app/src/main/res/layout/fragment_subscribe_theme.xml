@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="@string/subscribe_theme"
         android:textSize="@dimen/sp14"
-        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp8"
         android:textColor="@android:color/white"
         android:layout_centerHorizontal="true" />
 
@@ -27,11 +27,11 @@
         android:layout_below="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp24"
+        android:layout_marginRight="@dimen/dp24"
         android:gravity="center_horizontal"
         android:text="@string/theme_subtitle"
-        android:textSize="@dimen/sp11"
+        android:textSize="@dimen/sp10"
         android:layout_marginTop="@dimen/dp8"
         android:textColor="@color/color_666"
         android:layout_centerHorizontal="true" />
@@ -45,8 +45,8 @@
         android:horizontalSpacing="@dimen/dp10"
         android:verticalSpacing="@dimen/dp10"
         android:layout_marginTop="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
         android:layout_centerHorizontal="true" />
 
     <Button

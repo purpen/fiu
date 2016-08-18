@@ -8,8 +8,8 @@ public class NetworkConstance {
     public static final String ALI_PAY = "alipay";
     public static final String WX_PAY = "weichat";
     public static final String JD_PAY = "jdpay";
-        public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
-//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    //        public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     //热门城市 暂用ESTORE的URL
     public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";
@@ -127,6 +127,7 @@ public class NetworkConstance {
     public static final String MINE_INFO = BASE_URL + "/user/user_info";
     //送积分
     public static final String GET_BONUS = BASE_URL + "/user/send_exp";
+
     //获得个人中心
     public static final String USER_CENTER = BASE_URL + "/auth/user";
 

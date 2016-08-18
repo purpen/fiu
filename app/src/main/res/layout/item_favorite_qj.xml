@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp160">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:layout_alignParentBottom="true"
+            android:text="@string/app_name"
+            android:textSize="@dimen/sp12"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:background="@color/black90"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="@dimen/dp8" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
+        android:background="@color/color_222">
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/riv"
+            android:layout_width="@dimen/dp35"
+            android:layout_height="@dimen/dp35"
+            app:riv_corner_radius="@dimen/dp100"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/default_head" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_toRightOf="@+id/riv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="@dimen/sp12"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="@dimen/dp5"
+            android:singleLine="true"
+            android:layout_marginRight="@dimen/dp5"
+            android:ellipsize="end" />
+
+        <ImageButton
+            android:id="@+id/ibtn"
+            android:layout_width="@dimen/dp35"
+            android:layout_height="@dimen/dp35"
+            android:background="@null"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/zan_normal" />
+    </RelativeLayout>
+</LinearLayout>

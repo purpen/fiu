@@ -28,7 +28,7 @@
 
         <Button
             android:id="@+id/bt_clip"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp70"
             android:layout_height="@dimen/dp35"
             android:layout_alignParentRight="true"
             android:background="@null"
