@@ -547,6 +547,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
         final LabelView label = new LabelView(this);
         label.init(tagItem);
+        label.setDeleteVisible(true);
         EffectUtil.addLabelEditable(new View.OnClickListener() {
 
             @Override

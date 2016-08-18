@@ -55,4 +55,5 @@
     <!--- LabelView -->
     <dimen name="label_point_width">32dp</dimen>
     <dimen name="label_point_margin">25dp</dimen>
+    <dimen name="delete_width">24dp</dimen>
 </resources>

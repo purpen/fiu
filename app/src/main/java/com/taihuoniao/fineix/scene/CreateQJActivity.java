@@ -1,10 +1,12 @@
 package com.taihuoniao.fineix.scene;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -481,6 +483,28 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 labelView.wave();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateQJActivity.this);
+        builder.setMessage("返回上一步？");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                CreateQJActivity.this.finish();
+            }
+        });
+        builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
+            }
+        });
+        builder.create().show();
+
     }
 
     @Override
