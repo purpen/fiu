@@ -490,17 +490,14 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         // 获取windows中最顶层的view
         View view = getWindow().getDecorView();
         view.buildDrawingCache();
-
         // 获取状态栏高度
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);
         // 获取屏幕宽和高
         int widths = MainApplication.getContext().getScreenWidth();
         int heights = MainApplication.getContext().getScreenHeight();
-
         // 允许当前窗口保存缓存信息
         view.setDrawingCacheEnabled(true);
-
         // 去掉状态栏
         Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache(), 0,
                 0, widths, heights);

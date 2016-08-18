@@ -159,8 +159,12 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }
                     //如果选择品牌，则返回品牌，如果没有品牌。则不返回
                     if (brandName.getText().toString().length() > 0) {
-                        String brand = brandName.getText().toString();
+                        if(searchEditText.getText().toString().length()>0){
+                            addProduct(searchEditText.getText().toString());
+                            return false;
+                        }
                         Intent intent = new Intent();
+                        String brand = brandName.getText().toString();
                         intent.putExtra("brand", brand);
                         intent.putExtra("brandId", cuurentBrandId);
                         setResult(1, intent);
