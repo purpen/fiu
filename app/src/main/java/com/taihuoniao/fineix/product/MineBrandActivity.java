@@ -62,7 +62,7 @@ public class MineBrandActivity extends BaseActivity implements AdapterView.OnIte
             dialog.show();
         }
         //品牌列表
-        ClientDiscoverAPI.brandList(1, Integer.MAX_VALUE, null, 1 + "", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(1, Integer.MAX_VALUE, null, 1 + "", null,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<品牌列表", responseInfo.result);

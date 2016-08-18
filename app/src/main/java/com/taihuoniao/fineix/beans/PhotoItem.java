@@ -7,13 +7,26 @@ import android.support.annotation.NonNull;
  */
 public class PhotoItem implements Comparable<PhotoItem> {
     private String imageUri;
+//    private long id;
     private long date;
     private boolean isChecked;
 
-    public PhotoItem(String imageUri, long date) {
+    public PhotoItem() {
+    }
+
+    public PhotoItem(long id, String imageUri, long date) {
+//        this.id = id;
         this.imageUri = imageUri;
         this.date = date;
     }
+
+//    public long getId() {
+//        return id;
+//    }
+
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     public boolean isChecked() {
         return isChecked;

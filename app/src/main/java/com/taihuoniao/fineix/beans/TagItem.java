@@ -20,6 +20,15 @@ public class TagItem implements Serializable {
     private String name;
     private String price;
     private String imagePath;
+    private boolean right;
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -87,6 +96,6 @@ public class TagItem implements Serializable {
     @Override
     public String toString() {
 //        return "{id:" + id + ",price:" + price + ",title:" + name + ",x:" + x + ",y:" + y + "}";
-        return "{\"id\":\"" + id + "\",\"price\":\"" + price + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + "}";
+        return "{\"id\":\"" + id + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + ",\"loc\":" + (isRight() ? 2 : 1) + "}";
     }
 }

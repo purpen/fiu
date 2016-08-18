@@ -54,6 +54,7 @@ public class LabelView extends LinearLayout {
         if (isLeft) {
             nameTv.setBackgroundResource(R.drawable.label_right);
             isLeft = false;
+            tagInfo.setRight(true);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
@@ -68,6 +69,7 @@ public class LabelView extends LinearLayout {
         } else {
             nameTv.setBackgroundResource(R.drawable.label_left);
             isLeft = true;
+            tagInfo.setRight(false);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {

@@ -62,13 +62,6 @@ public class HotLabelFragment extends Fragment implements AdapterView.OnItemClic
             intent.putExtra("label", label.getHotLabelList().get(position));
         } else {
             if (pos == 0) {
-                for (int i = 0; i < label.getUsedLabelList().size(); i++) {
-                    if (i == position) {
-                        label.getUsedLabelList().get(position).setIsSelect(true);
-                    } else {
-                        label.getUsedLabelList().get(i).setIsSelect(false);
-                    }
-                }
                 usedAndHotLabelAdapter.notifyDataSetChanged();
                 intent.putExtra("flag", -2);
                 intent.putExtra("label", label.getUsedLabelList().get(position));

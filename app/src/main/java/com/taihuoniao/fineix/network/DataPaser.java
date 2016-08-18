@@ -64,8 +64,6 @@ import com.taihuoniao.fineix.beans.TBProductBean;
 import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.beans.TryDetailsUserBean;
-import com.taihuoniao.fineix.beans.UsedLabel;
-import com.taihuoniao.fineix.beans.UsedLabelBean;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.beans.UserListBean;
 
@@ -114,7 +112,7 @@ public class DataPaser {
     //列表
     public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                       String stick, String fine, final Handler handler) {
-        ClientDiscoverAPI.getProductList(null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<商品列表", responseInfo.result);
@@ -553,36 +551,6 @@ public class DataPaser {
         });
     }
 
-    //场景
-    //新增场景
-    public static void createScene(String id, String tmp, String title, String des, String scene_id, String tags, String products,
-                                   String address,String city, String lat, String lng, final Handler handler) {
-        ClientDiscoverAPI.createScene(id, tmp, title, des, scene_id, tags, products, address,city,
-                lat, lng, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-//                        Log.e("<<<创建场景", responseInfo.result);
-                        Message msg = handler.obtainMessage();
-                        msg.what = DataConstants.CREATE_SCENE;
-                        msg.obj = new AddProductBean();
-                        try {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<AddProductBean>() {
-                            }.getType();
-                            msg.obj = gson.fromJson(responseInfo.result, type);
-                        } catch (JsonSyntaxException e) {
-                            Log.e("<<<创建场景", "数据解析异常");
-                        }
-                        handler.sendMessage(msg);
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-//                        Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                        handler.sendEmptyMessage(DataConstants.NET_FAIL);
-                    }
-                });
-    }
 
     //场景
     //场景详情
@@ -733,60 +701,6 @@ public class DataPaser {
     }
 
 
-    //标签
-    //最近使用的标签
-    public static void usedLabelList(final Handler handler) {
-        ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<用过的标签", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.USED_LABEL_LIST;
-                UsedLabel usedLabel = new UsedLabel();
-                try {
-                    JSONObject job = new JSONObject(responseInfo.result);
-                    usedLabel.setSuccess(job.optBoolean("success"));
-                    usedLabel.setMessage(job.optString("message"));
-//                    usedLabel.setStatus(job.optString("status"));
-                    if (usedLabel.isSuccess()) {
-                        JSONObject data = job.getJSONObject("data");
-                        usedLabel.setHas_tag(data.optInt("has_tag"));
-                        if (usedLabel.getHas_tag() != 0) {
-                            List<UsedLabelBean> list = new ArrayList<>();
-                            JSONArray tags = data.getJSONArray("tags");
-                            for (int i = 0; i < tags.length(); i++) {
-                                JSONObject ob = tags.getJSONObject(i);
-                                UsedLabelBean usedLabelBean = new UsedLabelBean();
-                                usedLabelBean.set_id(ob.optString("_id"));
-                                usedLabelBean.setUser_id(ob.optString("user_id"));
-                                usedLabelBean.setUsed_count(ob.optString("used_count"));
-                                usedLabelBean.setUpdated_on(ob.optString("updated_on"));
-                                usedLabelBean.setType(ob.optString("type"));
-                                usedLabelBean.setTitle_en(ob.optString("title_en"));
-                                usedLabelBean.setTitle_cn(ob.optString("title_cn"));
-                                usedLabelBean.setStick(ob.optString("stick"));
-                                usedLabelBean.setStatus(ob.optString("status"));
-                                list.add(usedLabelBean);
-                            }
-                            usedLabel.setUsedLabelList(list);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                msg.obj = usedLabel;
-                //需要登录
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-    }
 
     //标签
     //标签列表
@@ -1096,7 +1010,7 @@ public class DataPaser {
     //公共
     //品牌列表
     public static void brandList(int page, int size, String mark, String self_run, String stick, final Handler handler) {
-        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<品牌列表", responseInfo.result);

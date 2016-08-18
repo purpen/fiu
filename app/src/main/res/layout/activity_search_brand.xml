@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#f8f8f8"
+                android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -48,19 +50,31 @@
                 android:src="@mipmap/cancel_gray"
                 android:visibility="gone"/>
 
+
+            <TextView
+                android:id="@+id/brand_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/i"
+                android:gravity="center"
+                android:textColor="#666666"
+                android:textSize="12sp"/>
+
             <EditText
                 android:id="@+id/search_edit_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@id/activity_add_product_delete"
-                android:layout_toRightOf="@+id/i"
+                android:layout_toRightOf="@+id/brand_name"
                 android:background="@null"
                 android:hint="搜索品牌"
-                android:imeOptions="actionSearch"
+                android:imeOptions="actionDone"
                 android:singleLine="true"
                 android:textSize="12sp"
                 />
+
         </RelativeLayout>
     </RelativeLayout>
 
@@ -69,5 +83,90 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/relative"
-        android:background="#f8f8f8"/>
+        />
+
+    <RelativeLayout
+        android:id="@+id/add_brand_relative"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/relative"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@mipmap/add"/>
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/img"
+            android:gravity="center"
+            android:text="点击添加品牌:"
+            android:textColor="#666666"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/add_brand_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tv"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="13sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:background="#cccccc"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_height="1dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/add_product_relative"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/relative"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@mipmap/add"/>
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/img1"
+            android:gravity="center"
+            android:text="点击添加产品:"
+            android:textColor="#666666"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/add_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tv1"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="13sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:background="#cccccc"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_height="1dp"/>
+    </RelativeLayout>
 </RelativeLayout>

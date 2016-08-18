@@ -17,12 +17,17 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +62,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
 /**
  * Created by taihuoniao on 2016/8/12.
+ * 图片编辑：添加商品。合成图片，添加滤镜。添加链接
  */
 public class PictureEditActivity extends BaseActivity implements View.OnClickListener, GPUImageFilterTools.OnGpuImageFilterChosenListener {
     @Bind(R.id.img)
@@ -80,7 +86,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow productPop;
     private BlurView blurView;
     private RelativeLayout addProductRelative;
-    private TextView brandTv, productName;
+    private EditText brandTv, productName;
+    private ImageView deleteBrand, deleteProduct;
     private TextView cancel, confirm;
     private WaittingDialog dialog;
     private List<LabelView> labels = new ArrayList<>();//添加的产品信息
@@ -297,16 +304,45 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 productPop.dismiss();
                 break;
             case R.id.confirm:
-                ToastUtils.showError("确认");
+                if (TextUtils.isEmpty(brandTv.getText()) && TextUtils.isEmpty(productName.getText())) {
+                    productPop.dismiss();
+                } else {
+                    productPop.dismiss();
+                    TagItem tagItem = new TagItem();
+                    tagItem.setId(productId);
+                    tagItem.setName(brandTv.getText().toString() + productName.getText().toString());
+                    addLabel(tagItem);
+                    brandTv.setText("");
+                    productName.setText("");
+                }
+                break;
+            case R.id.delete_brand:
+                brandTv.setText("");
+                break;
+            case R.id.delete_product:
+                productName.setText("");
                 break;
             case R.id.brand_tv:
-                productPop.dismiss();
                 Intent intent1 = new Intent(this, SearchBrandActivity.class);
+                intent1.putExtra(PictureEditActivity.class.getSimpleName(), false);
+                if (brandTv.getText().toString().length() > 0) {
+                    intent1.putExtra("brand", brandTv.getText().toString());
+                }
                 startActivityForResult(intent1, 1);
                 break;
-            case R.id.product_name:
-                productPop.dismiss();
-                ToastUtils.showError("搜索产品名称");
+            case R.id.product_tv:
+                Intent intent2 = new Intent(this, SearchBrandActivity.class);
+                if (brandTv.getText().toString().length() > 0) {
+                    intent2.putExtra("brand", brandTv.getText().toString());
+                    if (brandId != null) {
+                        intent2.putExtra("brandId", brandId);
+                    }
+                }
+                if (productName.getText().toString().length() > 0) {
+                    intent2.putExtra("product", productName.getText().toString());
+                    Log.e("<<<", "传递产品名称=" + productName.getText().toString());
+                }
+                startActivityForResult(intent2, 1);
                 break;
             case R.id.add_product_relative:
                 productPop.dismiss();
@@ -360,7 +396,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             tagInfoList.add(label.getTagInfo());
         }
         MainApplication.tagInfoList = tagInfoList;
-        Log.e("<<<上传之前",tagInfoList.toString());
+        Log.e("<<<上传之前", tagInfoList.toString());
         img.setImage(MainApplication.cropBitmap);
         dialog.dismiss();
         Intent intent = new Intent(this, CreateQJActivity.class);
@@ -374,8 +410,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         productPopView = View.inflate(this, R.layout.pop_add_product, null);
         blurView = (BlurView) productPopView.findViewById(R.id.blur_view);
         addProductRelative = (RelativeLayout) productPopView.findViewById(R.id.add_product_relative);
-        brandTv = (TextView) productPopView.findViewById(R.id.brand_tv);
-        productName = (TextView) productPopView.findViewById(R.id.product_name);
+        brandTv = (EditText) productPopView.findViewById(R.id.brand_tv);
+        productName = (EditText) productPopView.findViewById(R.id.product_tv);
+        deleteBrand = (ImageView) productPopView.findViewById(R.id.delete_brand);
+        deleteProduct = (ImageView) productPopView.findViewById(R.id.delete_product);
         cancel = (TextView) productPopView.findViewById(R.id.cancel);
         confirm = (TextView) productPopView.findViewById(R.id.confirm);
         productPop = new PopupWindow(productPopView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
@@ -398,9 +436,51 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
+        brandTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    deleteBrand.setVisibility(View.VISIBLE);
+                } else {
+                    deleteBrand.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        productName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    deleteProduct.setVisibility(View.VISIBLE);
+                } else {
+                    deleteProduct.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         addProductRelative.setOnClickListener(this);
         brandTv.setOnClickListener(this);
         productName.setOnClickListener(this);
+        deleteBrand.setOnClickListener(this);
+        deleteProduct.setOnClickListener(this);
         cancel.setOnClickListener(this);
         confirm.setOnClickListener(this);
     }
@@ -499,10 +579,25 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    private String brandId;
+    private String productId;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case 1:
+                    String brand = data.getStringExtra("brand");
+                    brandId = data.getStringExtra("brandId");
+                    String product = data.getStringExtra("product");
+                    productId = data.getStringExtra("productId");
+                    if (brand != null) {
+                        brandTv.setText(brand);
+                    }
+                    if (product != null) {
+                        productName.setText(product);
+                    }
+                    break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
                     final GoodsDetailBean productListBean = (GoodsDetailBean) data.getSerializableExtra("product");
                     String url = productListBean.getData().getPng_asset().get(0).getUrl();
