@@ -55,7 +55,6 @@ public class SearchEnvirAdapter extends RecyclerView.Adapter<SearchEnvirAdapter.
 
     static class VH extends RecyclerView.ViewHolder {
         TextView tv;
-
         public VH(View itemView) {
             super(itemView);
             tv = (TextView) itemView.findViewById(R.id.tv);

@@ -125,7 +125,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             search(q, "10", currentPage + "", null, null);
         } else {
             if (position == 0) {
-                ClientDiscoverAPI.getProductList(null,null, null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                ClientDiscoverAPI.getProductList(null,null,null, null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -139,7 +139,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
                 });
             } else {
-                ClientDiscoverAPI.getProductList(null,categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                ClientDiscoverAPI.getProductList(null,null,categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();

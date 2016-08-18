@@ -398,6 +398,7 @@
     <string name="click_add_sight_title">点击添加情境标题</string>
     <string name="add_sight_address">添加情境地点</string>
     <string name="select_dipan">选择地盘</string>
+    <string name="add_envir">添加语境</string>
     <string name="search_envir">搜索语境</string>
     <string name="recommend_labels">推荐标签</string>
     <string name="user_protocol">注册即表明同意 [ Fiu浮游&#8482;用户条款 ]</string>

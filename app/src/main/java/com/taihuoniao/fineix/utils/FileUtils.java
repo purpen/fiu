@@ -40,7 +40,7 @@ public class FileUtils {
                             .endsWith(".jpeg"));
                 }
             })) {
-                photos.add(new PhotoItem(file.getAbsolutePath(), file.lastModified()));
+                photos.add(new PhotoItem(0,file.getAbsolutePath(), file.lastModified()));
             }
         }
         Collections.sort(photos);

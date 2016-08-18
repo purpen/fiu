@@ -200,7 +200,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
             }
 //            Log.e("<<<图片路径", data);
 //            if (data.endsWith(".png") || data.endsWith(".jpg") || data.endsWith(".jpeg")) {
-            galleries.get(sub).getPhotos().add(new PhotoItem(data, (long) (cursor.getInt(2)) * 1000));
+            galleries.get(sub).getPhotos().add(new PhotoItem(cursor.getLong(0),data, (long) (cursor.getInt(2)) * 1000));
 //            }
         }
         //系统相机照片

@@ -2,23 +2,23 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by taihuoniao on 2016/8/18.
  */
-public class UsedLabelBean extends NetBean {
+public class ActiveTagsBean extends NetBean implements Serializable{
 
     /**
      * is_error : false
-     * data : {"has_tag":1,"tags":[190,197,194,189,196,191,39,35,41,42,36,37,568,573,572,567,96,44,33,45,76,78,60,40],"current_user_id":924789}
+     * data : {"items":[["一次有意义的旅行","3"],["说说你们最爱的美食","2"]],"current_user_id":36}
      */
 
     private boolean is_error;
     /**
-     * has_tag : 1
-     * tags : [190,197,194,189,196,191,39,35,41,42,36,37,568,573,572,567,96,44,33,45,76,78,60,40]
-     * current_user_id : 924789
+     * items : [["一次有意义的旅行","3"],["说说你们最爱的美食","2"]]
+     * current_user_id : 36
      */
 
     private DataBean data;
@@ -39,18 +39,9 @@ public class UsedLabelBean extends NetBean {
         this.data = data;
     }
 
-    public static class DataBean {
-        private int has_tag;
+    public static class DataBean implements Serializable{
         private int current_user_id;
-        private List<String> tags;
-
-        public int getHas_tag() {
-            return has_tag;
-        }
-
-        public void setHas_tag(int has_tag) {
-            this.has_tag = has_tag;
-        }
+        private List<List<String>> items;
 
         public int getCurrent_user_id() {
             return current_user_id;
@@ -60,12 +51,12 @@ public class UsedLabelBean extends NetBean {
             this.current_user_id = current_user_id;
         }
 
-        public List<String> getTags() {
-            return tags;
+        public List<List<String>> getItems() {
+            return items;
         }
 
-        public void setTags(List<String> tags) {
-            this.tags = tags;
+        public void setItems(List<List<String>> items) {
+            this.items = items;
         }
     }
 }

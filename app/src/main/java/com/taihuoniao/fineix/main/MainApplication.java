@@ -72,13 +72,15 @@ public class MainApplication extends Application {
     //在哪个情景下创建场景
     public static QingjingDetailBean whichQingjing = null;
     //上传图片的时候的最大限制
-    public static final int MAXPIC = 1024 * 1024;
+    public static final long MAXPIC = 1024 * 1024;
     // SharedPreference 中保存的手机号
     public static final String THN_MOBILE = "mobile";
     // SharedPreference 中保存的密码
     public static final String THN_PASSWORD = "password";
     public static Bitmap cropBitmap = null;//前切好的图片
     public static Bitmap editBitmap = null;//编辑好的图片
+    public static Bitmap blurBitmap = null;//模糊的图片
+
     public static MainApplication getContext() {
         return instance;
     }

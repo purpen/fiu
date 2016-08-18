@@ -1,14 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -22,8 +14,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -31,9 +25,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.SearchEnvirAdapter;
@@ -41,6 +32,7 @@ import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -55,25 +47,33 @@ import butterknife.Bind;
 /**
  * Created by taihuoniao on 2016/6/2.
  */
-public class ShareSearchActivity extends BaseActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, EditRecyclerAdapter.ItemClick {
-    //上个界面传递过来的数据
-//    private SceneDetailsBean scene;
-    private String imgUrl;
-    @Bind(R.id.activity_share_select_img)
-    ImageView backImg;
-    @Bind(R.id.activity_share_select_titlelayout)
+public class ShareSearchActivity extends BaseActivity implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, EditRecyclerAdapter.ItemClick, View.OnClickListener {
+
+    @Bind(R.id.blur_view)
+    BlurView blurView;
+    @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
-    @Bind(R.id.activity_share_search_edittext)
+    @Bind(R.id.search1)
+    ImageView search1;
+    @Bind(R.id.search_delete)
+    ImageView searchDelete;
+    @Bind(R.id.edit_text)
     EditText editText;
-    @Bind(R.id.activity_share_search_delete)
-    ImageView deleteImg;
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
-    @Bind(R.id.activity_share_select_listview)
+    @Bind(R.id.line)
+    TextView line;
+    @Bind(R.id.linear1)
+    LinearLayout linear1;
+    @Bind(R.id.list_view)
     ListView listView;
-    @Bind(R.id.activity_share_select_progress)
+    @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    WaittingDialog dialog;
+    @Bind(R.id.cancel)
+    TextView cancel;
+    @Bind(R.id.confirm)
+    TextView confirm;
+    private WaittingDialog dialog;
     //语境分类
     private List<CategoryListBean.CategoryListItem> envirList;
     private SearchEnvirAdapter searchEnvirAdapter;
@@ -85,41 +85,12 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
     @Override
     protected void initView() {
         dialog = new WaittingDialog(this);
-        imgUrl = getIntent().getStringExtra("url");
-        ImageLoader.getInstance().loadImage(imgUrl, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    try {
-                        blur(loadedImage, backImg, 20);
-                    } catch (Exception e) {
-                        backImg.setImageBitmap(loadedImage);
-                    }
-                } else {
-                    backImg.setImageBitmap(loadedImage);
-                }
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
-        titleLayout.setTitleVisible(false);
+        titleLayout.setBackImgVisible(false);
+        titleLayout.setTitle(R.string.add_envir,getResources().getColor(R.color.white));
         titleLayout.setContinueTvVisible(false);
-        editText.setFocusable(true);
-        editText.setFocusableInTouchMode(true);
-        editText.requestFocus();
+//        editText.setFocusable(true);
+//        editText.setFocusableInTouchMode(true);
+//        editText.requestFocus();
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,9 +100,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    deleteImg.setVisibility(View.VISIBLE);
+                    searchDelete.setVisibility(View.VISIBLE);
                 } else {
-                    deleteImg.setVisibility(View.GONE);
+                    searchDelete.setVisibility(View.GONE);
                 }
             }
 
@@ -174,31 +145,13 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         listView.setAdapter(shareCJSelectListAdapter);
         listView.setOnScrollListener(this);
         listView.setOnItemClickListener(this);
-        deleteImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setText("");
-            }
-        });
+        searchDelete.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        confirm.setOnClickListener(this);
         categoryList();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void blur(Bitmap bkg, View view, float radius) throws Exception {
-        Bitmap overlay = Bitmap.createBitmap(bkg.getWidth(), bkg.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.drawBitmap(bkg, -view.getLeft(), -view.getTop(), null);
-        RenderScript rs = RenderScript.create(this);
-        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
-        ScriptIntrinsicBlur blur;
-        blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
-        blur.setInput(overlayAlloc);
-        blur.setRadius(radius);
-        blur.forEach(overlayAlloc);
-        overlayAlloc.copyTo(overlay);
-        view.setBackground(new BitmapDrawable(getResources(), overlay));
-        rs.destroy();
-    }
+
 
     private List<SearchBean.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
@@ -225,7 +178,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
             } else {
                 envirList();
             }
-//            search();
         }
     }
 
@@ -239,6 +191,18 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         intent.putExtra("scene", searchItem);
         setResult(222, intent);
         finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0,R.anim.slide_out_to_bottom);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0,R.anim.slide_out_to_bottom);
     }
 
     private String cid;
@@ -270,8 +234,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         ClientDiscoverAPI.search(searchStr, 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<搜索标题", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 SearchBean netSearch = new SearchBean();
@@ -293,7 +255,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                     shareCJSelectListAdapter.notifyDataSetChanged();
                 } else {
                     ToastUtils.showError(netSearch.getMessage());
-//                    new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus(netSearch.getMessage());
                 }
             }
 
@@ -302,7 +263,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError("网络错误");
-//                new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus("网络错误");
             }
         });
     }
@@ -315,7 +275,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
         ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<分类列表", responseInfo.result);
                 dialog.dismiss();
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
@@ -345,11 +304,9 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
     //语境列表
     private void envirList() {
-        ClientDiscoverAPI.envirList(page + "", 8 + "", 1+"", cid, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<语境列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 SearchBean netSearch = new SearchBean();
@@ -371,7 +328,6 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                     shareCJSelectListAdapter.notifyDataSetChanged();
                 } else {
                     ToastUtils.showError(netSearch.getMessage());
-//                    new SVProgressHUD(ShareSearchActivity.this).showErrorWithStatus(netSearch.getMessage());
                 }
             }
 
@@ -381,5 +337,20 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.search_delete:
+                editText.setText("");
+                break;
+            case R.id.cancel:
+                finish();
+                break;
+            case R.id.confirm:
+                ToastUtils.showError("确定");
+                break;
+        }
     }
 }

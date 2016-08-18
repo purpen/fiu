@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class LabelView extends LinearLayout {
     private boolean isLeft = true;
     public TextView nameTv;
     public RelativeLayout pointRelative;
+    private ImageView deleteImg;
 
     public TagItem getTagInfo() {
         return tagInfo;
@@ -44,6 +46,7 @@ public class LabelView extends LinearLayout {
         super(context, attr);
         init(context);
     }
+
     //判断是左侧还是在右侧
     public boolean isLeft() {
         return isLeft;
@@ -54,6 +57,7 @@ public class LabelView extends LinearLayout {
         if (isLeft) {
             nameTv.setBackgroundResource(R.drawable.label_right);
             isLeft = false;
+            tagInfo.setRight(true);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
@@ -68,13 +72,18 @@ public class LabelView extends LinearLayout {
         } else {
             nameTv.setBackgroundResource(R.drawable.label_left);
             isLeft = true;
+            tagInfo.setRight(false);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
                     RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointRelative.getLayoutParams();
                     layoutParams.leftMargin = (int) labelMargin;
                     pointRelative.setLayoutParams(layoutParams);
-                    tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
+                    if (deleteImg.getVisibility() == GONE) {
+                        tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
+                    } else {
+                        tagInfo.setX(than(left + deleteWidth + labelMargin + pointWidth / 2, parentWidth));
+                    }
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
                     Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
                 }
@@ -84,13 +93,16 @@ public class LabelView extends LinearLayout {
 
     private float pointWidth;
     private float labelMargin;
+    private float deleteWidth;
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
         nameTv = (TextView) findViewById(R.id.name);
         pointRelative = (RelativeLayout) findViewById(R.id.point_relative);
+        deleteImg = (ImageView) findViewById(R.id.delete);
         pointWidth = getResources().getDimension(R.dimen.label_point_width);
         labelMargin = getResources().getDimension(R.dimen.label_point_margin);
+        deleteWidth = getResources().getDimension(R.dimen.delete_width);
     }
 
     public void init(TagItem tagItem) {
@@ -98,6 +110,13 @@ public class LabelView extends LinearLayout {
         nameTv.setText(tagItem.getName());
     }
 
+    public void setDeleteVisible(boolean visible) {
+        if (visible) {
+            deleteImg.setVisibility(VISIBLE);
+        } else {
+            deleteImg.setVisibility(GONE);
+        }
+    }
 
     /**
      * 将标签放置于对应RelativeLayout的对应位置，考虑引入postion作为参数？？
@@ -108,7 +127,7 @@ public class LabelView extends LinearLayout {
      */
     public void addTo(OnClickListener deleteListener, final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
         if (deleteListener != null) {
-//            deleteImg.setOnClickListener(deleteListener);
+            deleteImg.setOnClickListener(deleteListener);
         }
 //        mImageView = overlay;
         gpuRelative = parent;
@@ -141,11 +160,15 @@ public class LabelView extends LinearLayout {
         labelParams.setMargins((int) (left + (gpuRelative.getWidth() - parentWidth) / 2), top, 0, 0);
         setLayoutParams(labelParams);
         if (isLeft) {
-            tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
+            if (deleteImg.getVisibility() == GONE) {
+                tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
+            } else {
+                tagInfo.setX(than(left + deleteWidth+labelMargin + pointWidth / 2, parentWidth));
+            }
         } else {
             tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentHeight));
         }
-        tagInfo.setY(than(top + getMeasuredHeight() - pointWidth/2, parentHeight));
+        tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
         Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
     }
 

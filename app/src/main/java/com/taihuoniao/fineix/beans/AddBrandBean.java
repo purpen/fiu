@@ -2,22 +2,19 @@ package com.taihuoniao.fineix.beans;
 
 import com.taihuoniao.fineix.base.NetBean;
 
-import java.util.List;
-
 /**
  * Created by taihuoniao on 2016/8/18.
  */
-public class UsedLabelBean extends NetBean {
+public class AddBrandBean extends NetBean {
 
     /**
      * is_error : false
-     * data : {"has_tag":1,"tags":[190,197,194,189,196,191,39,35,41,42,36,37,568,573,572,567,96,44,33,45,76,78,60,40],"current_user_id":924789}
+     * data : {"id":"57b55b853ffca26a0c8b4a27","current_user_id":924789}
      */
 
     private boolean is_error;
     /**
-     * has_tag : 1
-     * tags : [190,197,194,189,196,191,39,35,41,42,36,37,568,573,572,567,96,44,33,45,76,78,60,40]
+     * id : 57b55b853ffca26a0c8b4a27
      * current_user_id : 924789
      */
 
@@ -40,16 +37,15 @@ public class UsedLabelBean extends NetBean {
     }
 
     public static class DataBean {
-        private int has_tag;
+        private String id;
         private int current_user_id;
-        private List<String> tags;
 
-        public int getHas_tag() {
-            return has_tag;
+        public String getId() {
+            return id;
         }
 
-        public void setHas_tag(int has_tag) {
-            this.has_tag = has_tag;
+        public void setId(String id) {
+            this.id = id;
         }
 
         public int getCurrent_user_id() {
@@ -58,14 +54,6 @@ public class UsedLabelBean extends NetBean {
 
         public void setCurrent_user_id(int current_user_id) {
             this.current_user_id = current_user_id;
-        }
-
-        public List<String> getTags() {
-            return tags;
-        }
-
-        public void setTags(List<String> tags) {
-            this.tags = tags;
         }
     }
 }

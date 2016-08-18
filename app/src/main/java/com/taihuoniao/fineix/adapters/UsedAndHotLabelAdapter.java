@@ -61,14 +61,6 @@ public class UsedAndHotLabelAdapter extends BaseAdapter {
         TextView textView = (TextView) convertView.findViewById(R.id.view_labellist_item_tv);
         if (getItem(position) instanceof UsedLabelBean) {
             UsedLabelBean usedLabelBean = (UsedLabelBean) getItem(position);
-            if (usedLabelBean.isSelect()) {
-                textView.setBackgroundResource(R.drawable.yellow_corner_white);
-                textView.setTextColor(parent.getResources().getColor(R.color.yellow_bd8913));
-            } else {
-                textView.setBackgroundResource(R.drawable.background_corner_black);
-                textView.setTextColor(parent.getResources().getColor(R.color.black333333));
-            }
-            textView.setText(usedLabelBean.getTitle_cn());
         } else {
             HotLabel.HotLabelBean hotLabelBean = (HotLabel.HotLabelBean) getItem(position);
             if (hotLabelBean.isSelect()) {

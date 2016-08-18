@@ -19,7 +19,12 @@
         <item name="android:windowBackground">@color/color_transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
+    <style name="transparent.FullScreen" parent="transparent">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <!-- MainActivity中最下面RadioGroup的五个Button的样式 -->
     <style name="MainButtonStyle">
         <item name="android:layout_height">match_parent</item>

@@ -620,7 +620,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
     //列表
     private void getProductList(String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                                 String stick, String fine) {
-        ClientDiscoverAPI.getProductList(sort, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,sort, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<商品列表", responseInfo.result);
@@ -734,7 +734,7 @@ public class WellGoodsFragment extends BaseFragment<Banner> implements EditRecyc
 
     //品牌列表
     private void brandList(int page, int size) {
-        ClientDiscoverAPI.brandList(page, size, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(page, size, null, null, null,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 BrandListBean brandListBean = new BrandListBean();

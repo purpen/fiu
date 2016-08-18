@@ -1,9 +1,11 @@
 package com.taihuoniao.fineix.base;
 
+import java.io.Serializable;
+
 /**
  * Created by taihuoniao on 2016/3/23.
  */
-public class NetBean {
+public class NetBean implements Serializable{
     protected boolean success;
     protected String message;
     protected String current_user_id;

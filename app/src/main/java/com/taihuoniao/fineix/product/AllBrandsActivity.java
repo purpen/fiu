@@ -93,7 +93,7 @@ public class AllBrandsActivity extends BaseActivity implements AdapterView.OnIte
 
     private void brandList(int page, final int size, String mark, String self_run, String stick) {
         //品牌列表
-        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<品牌列表", responseInfo.result);

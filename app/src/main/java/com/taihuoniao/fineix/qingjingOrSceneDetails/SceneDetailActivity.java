@@ -1172,7 +1172,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         }
         ids.deleteCharAt(0);
 //        Log.e("<<<场景下商品id", ids.toString());
-        ClientDiscoverAPI.getProductList(null, null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,null, null, null, null, 1 + "", 4 + "", ids.toString(), null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ProductBean netProductBean = new ProductBean();
@@ -1208,7 +1208,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
                              String stick, String fine) {
-        ClientDiscoverAPI.getProductList(null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null,null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ProductBean productBean = new ProductBean();
