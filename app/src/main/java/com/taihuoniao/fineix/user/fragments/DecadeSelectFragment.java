@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import butterknife.Bind;
@@ -142,7 +143,8 @@ public class DecadeSelectFragment extends MyBaseFragment {
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse<User> response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()) {
-                            ToastUtils.showSuccess("更新成功");
+//                            ToastUtils.showSuccess("更新成功");
+                            LogUtil.e(TAG, "更新成功");
                             return;
                         }
                         ToastUtils.showError(response.getMessage());

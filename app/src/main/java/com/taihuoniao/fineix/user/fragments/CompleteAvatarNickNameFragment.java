@@ -38,6 +38,7 @@ import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -166,7 +167,8 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                             loginInfo.setNickname(nickName);
                             loginInfo.setMedium_avatar_url(user.avatar);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                            ToastUtils.showSuccess("更新成功");
+//                            ToastUtils.showSuccess("更新成功");
+                            LogUtil.e(TAG, "更新成功");
                             return;
                         }
                         ToastUtils.showError(response.getMessage());
