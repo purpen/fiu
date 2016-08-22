@@ -19,12 +19,14 @@
     <color name="white">#ffffff</color>
     <!--<color name="color_ff3366">#ff3366</color>-->
     <color name="color_af8323">#af8323</color>
+    <color name="color_a67203">#65a67203</color>
     <color name="backround_black">#ff010101</color>
     <color name="nothing">#00ffffff</color>
     <color name="black_blur">#99000000</color>
     <!-- camerafragment -->
     <color name="blue">#2196F3</color>
     <color name="color_f7f7f7">#f7f7f7</color>
+    <color name="color_8e8e8e">#8e8e8e</color>
     <color name="color_222">#222</color>
     <color name="color_333">#333</color>
     <color name="color_666">#666</color>
@@ -36,5 +38,6 @@
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     <color name="default_background_label">#ff303030</color>
     <color name="black40">#40000000</color>
+    <color name="black20">#20000000</color>
     <color name="black90">#90000000</color>
 </resources>

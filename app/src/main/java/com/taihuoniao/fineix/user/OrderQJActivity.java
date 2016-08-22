@@ -46,7 +46,6 @@ public class OrderQJActivity extends BaseActivity {
     TextView tvSubscribe;
     private int curPage = 1;
     private boolean isLoadMore = false;
-    public static final String PAGE_SIZE = "10";
     private List<ItemSubscribedQJ> mList = new ArrayList<>();
     private WaittingDialog dialog;
     private OrderedQJAdapter adapter;

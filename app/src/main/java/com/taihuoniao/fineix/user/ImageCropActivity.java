@@ -27,7 +27,6 @@ import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.ImageCrop.ClipSquareImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -50,17 +49,15 @@ public class ImageCropActivity extends BaseActivity {
     Button bt_clip;
     private String page;
     private WaittingDialog dialog;
-    private SVProgressHUD svProgressHUD;
     public ImageCropActivity() {
         super(R.layout.activity_image_crop);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
                 .showImageOnFail(R.mipmap.default_background_750_1334)
-                .delayBeforeLoading(0)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
@@ -85,9 +82,7 @@ public class ImageCropActivity extends BaseActivity {
     protected void initView() {
         if (uri == null) return;
         dialog=new WaittingDialog(this);
-        svProgressHUD=new SVProgressHUD(this);
         String path = FileUtils.getRealFilePath(getApplicationContext(), uri);
-//        LogUtil.e("path",path);
         ImageLoader.getInstance().displayImage("file:///"+path,csiv,options);
     }
 

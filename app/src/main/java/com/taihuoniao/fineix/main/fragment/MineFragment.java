@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.AllOrderActivity;
+import com.taihuoniao.fineix.user.ChooseSubjectActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
@@ -239,15 +240,6 @@ public class MineFragment extends MyBaseFragment {
         }
     }
 
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected void initViews() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -276,7 +268,7 @@ public class MineFragment extends MyBaseFragment {
         if (user == null) return;
         if (user.counter != null) {
             if (adapter != null && gvList != null) {
-                for (int i = 0; i < gvList.size(); i++) { //TODO 注意顺序和GridView位置
+                for (int i = 0; i < gvList.size(); i++) {
                     switch (i) {
                         case 0:
                             gvList.get(i).count = user.counter.order_total_count;
@@ -409,6 +401,7 @@ public class MineFragment extends MyBaseFragment {
 //                startActivity(new Intent(activity, MapSearchAddressActivity.class));
 //                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
 //                startActivity(new Intent(activity, BindPhoneActivity.class));
+                startActivity(new Intent(activity, ChooseSubjectActivity.class));
         }
     }
 
@@ -433,9 +426,7 @@ public class MineFragment extends MyBaseFragment {
                         startActivity(intent);
                         break;
                     case 4: //赞过
-                        intent = new Intent(activity, HasLoveActivity.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
+                        startActivity(new Intent(activity, HasLoveActivity.class));
                         break;
                     case 3: //收藏
                         startActivity(new Intent(activity, CollectionsActivity.class));

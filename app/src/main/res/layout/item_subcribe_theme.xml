@@ -14,7 +14,7 @@
         android:id="@+id/view_bg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp62"
-        android:background="#50af8323"
+        android:background="@color/color_a67203"
         android:visibility="gone" />
 
     <RelativeLayout

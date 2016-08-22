@@ -17,8 +17,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -66,14 +66,17 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             holder.tv_desc.setVisibility(View.INVISIBLE);
         }
         if (item.is_love==FansAdapter.NOT_LOVE){
-            holder.btn.setText("关注");
-            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
+//            holder.btn.setText("关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5);
         }else {
-            holder.btn.setText("已关注");
-            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
+            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
+//            holder.btn.setText("已关注");
+//            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
+//            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
         }
+
         setOnClickListener(holder.btn,item);
         LinearLayoutManager manager = new LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false);
         holder.recycler_view.setLayoutManager(manager);
@@ -83,7 +86,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             adapter.setmOnItemClickLitener(new FindFriendRecycleViewAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-
 //                    Util.makeToast("positon=="+position);
                     Intent intent = new Intent(activity, SceneDetailActivity.class);
                     LogUtil.e(TAG,item.scene_sight.get(position)._id+"");
@@ -109,6 +111,14 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         return convertView;
     }
 
+    private void setFocusBtnStyle(Button bt_focus, int dimensionPixelSize, int focus, int unfocus_pic, int color, int drawable) {
+        bt_focus.setPadding(dimensionPixelSize, 0, dimensionPixelSize, 0);
+        bt_focus.setText(focus);
+        bt_focus.setTextColor(activity.getResources().getColor(color));
+        bt_focus.setBackgroundResource(drawable);
+        bt_focus.setCompoundDrawablesWithIntrinsicBounds(unfocus_pic, 0, 0, 0);
+    }
+
     private void setOnClickListener(final Button button,final FindFriendData.User item){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,21 +135,19 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
                                 item.is_love=FansAdapter.LOVE;
-                                button.setText("已关注");
-                                button.setTextColor(activity.getResources().getColor(android.R.color.white));
-                                button.setBackgroundResource(R.drawable.border_radius5_pressed);
-//                                Util.makeToast(response.getMessage());
+                                setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
+//                                button.setText("已关注");
+//                                button.setTextColor(activity.getResources().getColor(android.R.color.white));
+//                                button.setBackgroundResource(R.drawable.border_radius5_pressed);
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
-//                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
-                            ToastUtils.showError("网络异常，请确认网络畅通");
-//                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
+                            ToastUtils.showError(R.string.network_err);
                         }
                     });
                 }else {
@@ -154,22 +162,21 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()){
                                 item.is_love=FansAdapter.NOT_LOVE;
-                                button.setText("关注");
-                                button.setTextColor(activity.getResources().getColor(R.color.color_333));
-                                button.setBackgroundResource(R.drawable.border_radius5);
-                                ToastUtils.showSuccess("已取消关注");
+                                setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
+//                                button.setText("关注");
+//                                button.setTextColor(activity.getResources().getColor(R.color.color_333));
+//                                button.setBackgroundResource(R.drawable.border_radius5);
+//                                ToastUtils.showSuccess("已取消关注");
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
-//                            svProgressHUD.showErrorWithStatus(response.getMessage());
                         }
 
                         @Override
                         public void onFailure(HttpException e, String s) {
                             button.setEnabled(true);
                             PopupWindowUtil.dismiss();
-                            ToastUtils.showError("网络异常，请确认网络畅通");
-//                            svProgressHUD.showErrorWithStatus("网络异常,请确认网络畅通");
+                            ToastUtils.showError(R.string.network_err);
                         }
                     });
                 }

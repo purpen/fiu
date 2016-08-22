@@ -7,22 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.FavoriteQJGVAdapter;
-import com.taihuoniao.fineix.beans.DataQJCollect;
+import com.taihuoniao.fineix.adapters.ArticleAdapter;
+import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.ItemQJCollect;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -36,25 +34,26 @@ import butterknife.ButterKnife;
  * @author lilin
  *         created at 2016/8/10 17:24
  */
-public class FavoriteQJFragment extends MyBaseFragment {
-    public static final String PAGE_TYPE = "12"; //10. 情境产品；11.地盘；12.情境；13.情境专题；
-    public static final String PAGE_EVENT = "1";
+public class ArticleFragment extends MyBaseFragment {
+    public static final String PAGE_TYPE = "1"; //0.全部；1.文章；2.活动；3.促销；4.新品；5.--
+    public static final String FINE = "1"; //0.全部；-1.否；1.是
+    public static final String SORT = "2";
     public int curPage = 1;
-    @Bind(R.id.pull_gv)
-    PullToRefreshGridView pullGv;
-    private ArrayList<ItemQJCollect> mList;
-    private FavoriteQJGVAdapter adapter;
+    @Bind(R.id.pull_lv)
+    PullToRefreshListView pullLv;
+    private ArrayList<DataChooseSubject.ItemChoosenSubject> mList;
+    private ArticleAdapter adapter;
     private WaittingDialog dialog;
     private boolean isLoadMore = false;
 
-    public static FavoriteQJFragment newInstance() {
-        return new FavoriteQJFragment();
+    public static ArticleFragment newInstance() {
+        return new ArticleFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.setFragmentLayout(R.layout.fragment_favorite_qj);
+        super.setFragmentLayout(R.layout.fragment_article);
         super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, view);
         return view;
@@ -62,16 +61,16 @@ public class FavoriteQJFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        pullGv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        pullLv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         mList = new ArrayList<>();
         dialog = new WaittingDialog(activity);
     }
 
     @Override
     protected void installListener() {
-        pullGv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+        pullLv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 isLoadMore = true;
                 curPage = 1;
                 mList.clear();
@@ -79,12 +78,12 @@ public class FavoriteQJFragment extends MyBaseFragment {
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 
             }
         });
 
-        pullGv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        pullLv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 isLoadMore = true;
@@ -92,7 +91,7 @@ public class FavoriteQJFragment extends MyBaseFragment {
             }
         });
 
-        pullGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mList != null) {
@@ -108,7 +107,7 @@ public class FavoriteQJFragment extends MyBaseFragment {
 
     @Override
     protected void loadData() {
-        ClientDiscoverAPI.getCollectOrdered(String.valueOf(curPage), Constants.PAGE_SIZE, PAGE_TYPE, PAGE_EVENT, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getChoosenSubject(String.valueOf(curPage), PAGE_TYPE, FINE, SORT, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (!isLoadMore && dialog != null) {
@@ -121,12 +120,12 @@ public class FavoriteQJFragment extends MyBaseFragment {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
 
-                HttpResponse<DataQJCollect> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataQJCollect>>() {
+                HttpResponse<DataChooseSubject> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataChooseSubject>>() {
                 });
 
                 if (response.isSuccess()) {
-                    pullGv.onRefreshComplete();
-                    ArrayList<ItemQJCollect> list = response.getData().rows;
+                    pullLv.onRefreshComplete();
+                    ArrayList<DataChooseSubject.ItemChoosenSubject> list = response.getData().rows;
                     refreshUIAfterNet(list);
                     return;
                 }
@@ -148,8 +147,8 @@ public class FavoriteQJFragment extends MyBaseFragment {
         curPage++;
         mList.addAll(list);
         if (adapter == null) {
-            adapter = new FavoriteQJGVAdapter(mList, activity);
-            pullGv.setAdapter(adapter);
+            adapter = new ArticleAdapter(mList, activity);
+            pullLv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
