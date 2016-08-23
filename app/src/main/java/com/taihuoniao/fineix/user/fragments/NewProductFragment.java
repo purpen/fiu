@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -94,13 +96,12 @@ public class NewProductFragment extends MyBaseFragment {
         pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mList != null) {
-//                    ItemQJCollect itemQJCollect = mList.get(position);
-//                    Intent intent=new Intent(activity,);
-//                    intent.putExtra("_id",itemQJCollect.sight._id);
-//                    startActivity(intent);
+                if (mList != null && mList.size() > 0) {
+                    DataChooseSubject.ItemChoosenSubject item = mList.get(position - 1);
+                    Intent intent = new Intent(activity, NewProductDetailActivity.class);
+                    intent.putExtra(NewProductDetailActivity.class.getSimpleName(), item._id);
+                    startActivity(intent);
                 }
-                ToastUtils.showInfo("跳转情境详情");
             }
         });
     }

@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <WebView
+        android:id="@+id/webView_about"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_operate"
+        android:layout_below="@+id/custom_head" />
+
+    <LinearLayout
+        android:id="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ibtn_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:drawableTop="@mipmap/shoucang_not"
+                android:paddingTop="@dimen/dp5"
+                android:paddingBottom="@dimen/dp5"
+                android:gravity="center"
+                android:text="收藏"
+                android:textSize="@dimen/sp12" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/ibtn_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color_222"
+            android:text="去购买"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp14" />
+    </LinearLayout>
+</RelativeLayout>

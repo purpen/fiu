@@ -189,6 +189,11 @@
             />
 
         <activity
+            android:name=".user.ArticalDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".user.UserCenterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -199,6 +204,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             />
+        <activity
+            android:name=".user.NewProductDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".user.UserEditNameActivity"
             android:screenOrientation="portrait"

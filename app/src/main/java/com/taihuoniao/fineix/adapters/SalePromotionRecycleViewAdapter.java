@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.ItemProductCollect;
+import com.taihuoniao.fineix.beans.DataChooseSubject;
 
 import java.util.ArrayList;
 
@@ -37,10 +37,10 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
     }
 
     private Activity activity;
-    private ArrayList<ItemProductCollect> list;
+    private ArrayList<DataChooseSubject.ItemChoosenSubject.ProductBean> list;
     private DisplayImageOptions options;
 
-    public SalePromotionRecycleViewAdapter(Activity activity, ArrayList<ItemProductCollect> list) {
+    public SalePromotionRecycleViewAdapter(Activity activity, ArrayList<DataChooseSubject.ItemChoosenSubject.ProductBean> list) {
         this.activity = activity;
         this.list = list;
         options = new DisplayImageOptions.Builder()
@@ -62,7 +62,7 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        ItemProductCollect item = list.get(position);
+        DataChooseSubject.ItemChoosenSubject.ProductBean item = list.get(position);
         if (mOnItemClickLitener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,9 +79,9 @@ public class SalePromotionRecycleViewAdapter extends RecyclerView.Adapter<SalePr
                 }
             });
         }
-        ImageLoader.getInstance().displayImage(item.scene_product.cover_url, holder.imageView, options);
-        holder.tvName.setText(item.scene_product.title);
-        holder.tvPrice.setText("￥" + item.scene_product.sale_price);
+        ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
+        holder.tvName.setText(item.title);
+        holder.tvPrice.setText("￥" + item.sale_price);
     }
 
     @Override

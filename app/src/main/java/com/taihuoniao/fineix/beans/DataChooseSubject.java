@@ -39,8 +39,51 @@ public class DataChooseSubject implements Parcelable {
         public String cover_url;
         public String begin_time_at;
         public String end_time_at;
-        public ArrayList<ItemProductCollect> products;
+        public ArrayList<ProductBean> products;
 
+        public static class ProductBean implements Parcelable {
+            public String _id;
+            public String title;
+            public String banner_url;
+            public String summary;
+            public String market_price;
+            public String sale_price;
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this._id);
+                dest.writeString(this.title);
+                dest.writeString(this.banner_url);
+                dest.writeString(this.summary);
+            }
+
+            public ProductBean() {
+            }
+
+            protected ProductBean(Parcel in) {
+                this._id = in.readString();
+                this.title = in.readString();
+                this.banner_url = in.readString();
+                this.summary = in.readString();
+            }
+
+            public static final Creator<ProductBean> CREATOR = new Creator<ProductBean>() {
+                @Override
+                public ProductBean createFromParcel(Parcel source) {
+                    return new ProductBean(source);
+                }
+
+                @Override
+                public ProductBean[] newArray(int size) {
+                    return new ProductBean[size];
+                }
+            };
+        }
         public ItemChoosenSubject() {
         }
 
@@ -105,7 +148,7 @@ public class DataChooseSubject implements Parcelable {
             this.cover_url = in.readString();
             this.begin_time_at = in.readString();
             this.end_time_at = in.readString();
-            this.products = in.createTypedArrayList(ItemProductCollect.CREATOR);
+            this.products = in.createTypedArrayList(ProductBean.CREATOR);
         }
 
         public static final Creator<ItemChoosenSubject> CREATOR = new Creator<ItemChoosenSubject>() {

@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <WebView
+        android:id="@+id/webView_about"
+        android:layout_below="@+id/custom_head"
+        android:layout_above="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_operate"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left">
+
+            <TextView
+                android:id="@+id/ibtn_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp25"
+                android:drawablePadding="@dimen/dp5"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp16"
+                android:drawableLeft="@mipmap/readed_black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/sp12"
+                android:gravity="top"
+                android:text="0" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|right">
+
+            <TextView
+                android:id="@+id/ibtn_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp25"
+                android:drawablePadding="@dimen/dp5"
+                android:layout_weight="1"
+                android:drawableLeft="@mipmap/comment_black"
+                android:gravity="top"
+                android:textSize="@dimen/sp12"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="0" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|right">
+
+            <TextView
+                android:id="@+id/ibtn_share"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp25"
+                android:drawablePadding="@dimen/dp5"
+                android:layout_marginRight="@dimen/dp16"
+                android:layout_weight="1"
+                android:drawableLeft="@mipmap/share_black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/sp12"
+                android:gravity="top"
+                android:text="0" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

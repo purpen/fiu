@@ -1411,6 +1411,7 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+
     //收藏产品和取消收藏
     public static void favorite(String id, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.favorite_product;
@@ -1592,7 +1593,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);
         params.addQueryStringParameter("fine", fine);
-        params.addQueryStringParameter("pageType", pageType);
+        params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort",sort);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }

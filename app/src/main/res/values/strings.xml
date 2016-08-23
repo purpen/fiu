@@ -124,7 +124,7 @@
     <string-array name="subject_tab">
         <item>文章</item>
         <item>活动</item>
-        <item>精品</item>
+        <item>新品</item>
         <item>促销</item>
     </string-array>
     <string name="please_input">请输入</string>
