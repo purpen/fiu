@@ -27,7 +27,6 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;

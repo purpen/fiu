@@ -208,55 +208,6 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         });
     }
 
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.DELETE_ADDRESS:
-//                    NetBean netBean = (NetBean) msg.obj;
-//                    if(netBean.isSuccess()){
-//                        ToastUtils.showSuccess("删除成功");
-////                        dialog.showSuccessWithStatus("删除成功");
-////                        Toast.makeText(SelectAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-//                        list.clear();
-//                        currentPage = 1;
-//                        dialog.show();
-//                        DataPaser.getAddressList(currentPage + "", mHandler);
-//                    }
-//                   else{
-//                        ToastUtils.showError(netBean.getMessage());
-//                    }
-//                    break;
-//                case DataConstants.GET_ADDRESS_LIST:
-//                    dialog.dismiss();
-//                    AddressListBean netAddressList = (AddressListBean) msg.obj;
-//                    if(netAddressList.isSuccess()){
-//                        list.addAll(netAddressList.getData().getRows());
-//                        if(list.size()<=0){
-//                            emptyView.setVisibility(View.VISIBLE);
-//                        }else{
-//                            emptyView.setVisibility(View.GONE);
-//                        }
-//                        listViewAdapter.notifyDataSetChanged();
-//                    }else{
-//                        ToastUtils.showError(netAddressList.getMessage());
-//                    }
-//
-//                    break;
-//                case DataConstants.NETWORK_FAILURE:
-//                    dialog.dismiss();
-//                    ToastUtils.showError("网络错误");
-////                    dialog.showErrorWithStatus("网络错误");
-////                    Toast.makeText(SelectAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
-
-//    private void cancelNet() {
-//        NetworkManager.getInstance().cancel("getAddressList");
-//    }
-
     //获得收货地址列表
     private void getAddressList( String page) {
         ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {

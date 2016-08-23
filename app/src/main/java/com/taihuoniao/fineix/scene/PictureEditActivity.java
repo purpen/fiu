@@ -79,6 +79,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     RelativeLayout container;
     @Bind(R.id.bottom_relative)
     RelativeLayout bottomRelative;
+    @Bind(R.id.hint)
+    TextView hintTv;
     @Bind(R.id.filter_recycler)
     RecyclerView filterRecycler;
     private View activity_view;
@@ -124,6 +126,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         titleLayout.setContinueListener(this);
+        titleLayout.setTitle(R.string.biaoji_chanpin,getResources().getColor(R.color.white));
         imageViewTouch.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
             @Override
             public void onSingleTapConfirmed() {
@@ -304,7 +307,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 productPop.dismiss();
                 break;
             case R.id.confirm:
-                if (TextUtils.isEmpty(brandTv.getText()) && TextUtils.isEmpty(productName.getText())) {
+                if (TextUtils.isEmpty(productName.getText())) {
                     productPop.dismiss();
                 } else {
                     productPop.dismiss();
@@ -364,11 +367,12 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
+        int w =MainApplication.getContext().getScreenWidth();
         //加滤镜
-        final Bitmap newBitmap = Bitmap.createBitmap(img.getWidth(), img.getHeight(),
+        final Bitmap newBitmap = Bitmap.createBitmap(w, w,
                 Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(newBitmap);
-        RectF dst = new RectF(0, 0, img.getWidth(), img.getHeight());
+        RectF dst = new RectF(0, 0, w, w);
         cv.drawBitmap(MainApplication.cropBitmap, null, dst, null);
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
@@ -552,6 +556,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 labelView = label;
                 EffectUtil.removeLabelEditable(imageViewTouch, container, labelView);
                 labels.remove(labelView);
+                setHint();
             }
         }, imageViewTouch, container, label, left, top);
         labels.add(label);
@@ -559,6 +564,24 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             for (LabelView labelView : labels) {
                 labelView.wave();
             }
+        }
+        setHint();
+    }
+
+    private void setHint(){
+        switch (labels.size()){
+            case 0:
+                hintTv.setText("点击图片标记相关信息");
+                break;
+            case 1:
+                hintTv.setText("您还可以继续标记2个产品(￣▽￣)");
+                break;
+            case 2:
+                hintTv.setText("您还可以继续标记1个产品(￣▽￣)");
+                break;
+            case 3:
+                hintTv.setText("最多标记三个产品哦(⌒▽⌒)");
+                break;
         }
     }
 
@@ -619,7 +642,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                             //是自动添加标签还是后添加
                             TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price());
                             tag.setId(productListBean.getData().get_id());
-                            tag.setImagePath(productListBean.getData().getPng_asset().get(0).getUrl());
+//                            tag.setImagePath(productListBean.getData().getPng_asset().get(0).getUrl());
+                            tag.setLoc(2);
                             tag.setType(1);
                             addLabel(tag);
                             EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, loadedImage);

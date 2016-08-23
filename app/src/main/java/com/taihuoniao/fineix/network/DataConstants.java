@@ -11,6 +11,12 @@ public class DataConstants {
     public static final int ElseActivity = 102;//其他不需要刷新界面的activity
     public static final int QingjingDetailActivity = 103;
     public static final int MyGoodsDetailsActivity = 104;
+    public static final int IndexFragment = 105;//首页
+    public static final int FindFragment = 106;//发现页
+    public static final int SearchActivity = 107;//搜索页
+    public static final String BroadSearch = "com.taihuoniao.fiu.search";
+    public static final String BroadIndex = "com.taihuoniao.fiu.index";
+    public static final String BroadFind = "con.taihuoniao.fiu.find";
     public static final String BroadViewPager = "com.taihuoniao.fiu.viewpager";
     //场景详情界面跳转到注册界面广播Action
     public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";

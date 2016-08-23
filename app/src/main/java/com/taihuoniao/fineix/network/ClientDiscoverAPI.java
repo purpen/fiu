@@ -266,18 +266,18 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    //场景
-    //场景点赞
-    public static void loveScene(String id, RequestCallBack<String> callBack) {
+    //情境
+    //情境点赞
+    public static void loveQJ(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.love_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    //场景
-    //取消场景点赞
-    public static void cancelLoveScene(String id, RequestCallBack<String> callBack) {
+    //情境
+    //取消情境点赞
+    public static void cancelLoveQJ(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.cancel_love_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
@@ -316,6 +316,7 @@ public class ClientDiscoverAPI {
 
     /**
      * 获取订阅情境的列表
+     *
      * @param page
      * @param category_ids
      * @param callBack
@@ -1578,6 +1579,43 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/my/add_interest_scene_id";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //记录情景浏览次数
+    public static void viewCount(String qjId) {
+        String url = NetworkConstance.BASE_URL + "/scene_sight/record_view";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", qjId);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
+    //首页精选主题
+    public static void subjectList(String page, String size, String stick, String fine, String type, String sort, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_subject/getlist";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", size);
+        params.addQueryStringParameter("stick", stick);
+        params.addQueryStringParameter("fine", fine);
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("sort", sort);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //最新好货推荐
+    public static void firstProducts(RequestCallBack<String>callBack){
+        String url = NetworkConstance.BASE_URL + "/product/index_new";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

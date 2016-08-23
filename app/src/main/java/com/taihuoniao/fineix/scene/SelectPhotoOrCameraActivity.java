@@ -26,7 +26,6 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private FragmentManager fm;
     private PhotoFragment photoFragment;
     private CameraFragment cameraFragment;
-    public static SelectPhotoOrCameraActivity instance = null;
 
 
     @Override
@@ -49,7 +48,6 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     protected void initView() {
         activityView = View.inflate(SelectPhotoOrCameraActivity.this, R.layout.activity_select, null);
         setContentView(activityView);
-        instance = SelectPhotoOrCameraActivity.this;
         photoRelative = (RelativeLayout) findViewById(R.id.activity_select_photorelative);
         cameraRelative = (RelativeLayout) findViewById(R.id.activity_select_camerarelative);
         photoTv = (TextView) findViewById(R.id.activity_select_phototv);
@@ -127,9 +125,4 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        instance = null;
-        super.onDestroy();
-    }
 }

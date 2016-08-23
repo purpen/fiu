@@ -246,4 +246,7 @@
         <item name="android:textColor">?android:textColorSecondary</item>
         <item name="textAllCaps">true</item>
     </style>
+   <style name="searchTab" parent="TextAppearance.Design.Tab">
+       <item name="android:textSize">14sp</item>
+   </style>
 </resources>

@@ -72,7 +72,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
     //    private ListView listView;
     private WaittingDialog dialog;
     private int currentPage = 1;
-    private List<SearchBean.SearchItem> list = new ArrayList<>();
+    private List<SearchBean.Data.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
 
     public ShareCJSelectActivity() {
@@ -239,7 +239,7 @@ public class ShareCJSelectActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
+        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) listView.getAdapter().getItem(position);
 //        titleTv.setText(searchItem.getTitle());
 //        desTv.setText(searchItem.getDes());
         isSelect = true;

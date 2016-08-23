@@ -140,7 +140,8 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".scene.SearchActivity"
+            android:name=".qingjingOrSceneDetails.SearchActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".product.AllFiuerActivity"
@@ -403,7 +404,7 @@
         <activity
             android:name=".map.MapSearchAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/NoTitleFullscreen"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name=".map.SelectOrSearchQJActivity"

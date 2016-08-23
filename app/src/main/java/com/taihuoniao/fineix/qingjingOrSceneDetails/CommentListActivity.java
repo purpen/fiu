@@ -390,7 +390,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 if (!LoginInfo.isUserLogin()) {
-//                    Toast.makeText(CommentListActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.ElseActivity;
                     startActivity(new Intent(CommentListActivity.this, OptRegisterLoginActivity.class));
                     return;
@@ -401,12 +400,9 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                         if (reply_id == null || reply_user_id == null) {
                             dialog.dismiss();
                             ToastUtils.showError("请选择回复评论");
-//                            dialog.showErrorWithStatus("请选择回复评论");
-//                            Toast.makeText(CommentListActivity.this, "请选择回复评论", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id);
-//                        DataPaser.sendComment(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id, handler);
                         break;
                     default:
                         sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, null, null);

@@ -54,7 +54,6 @@ import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByQJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
@@ -683,7 +682,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(QingjingDetailActivity.this, R.layout.popup_scene_details_more, null);
         TextView pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
-        TextView shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
+//        TextView shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
         LinearLayout bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
         TextView jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
@@ -693,7 +692,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         pinglunTv.setVisibility(View.GONE);
         jubaoTv.setText("删除");
-        shareTv.setVisibility(View.GONE);
+//        shareTv.setVisibility(View.GONE);
         bianjiLinear.setVisibility(View.VISIBLE);
         jubaoTv.setOnClickListener(this);
         bianjiLinear.setOnClickListener(this);

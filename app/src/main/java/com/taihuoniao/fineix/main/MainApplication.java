@@ -44,16 +44,16 @@ import java.util.UUID;
 /**
  * Created by taihuoniao on 2016/3/14.
  * ¥
- * 上线之前检查Log.e("<<<") 和 WriteJSONToSD
+ * 上线之前检查WriteJSONToSD
  * 在客户端scene是场景，qingjing是情景，而在服务器端sight是场景，scene是情景
  * 检查在DataConstants.NETWORK_FAILURE情况下dialog是否隐藏
- * 检查所有的Log和Toast，删除没用的提示,并改成DialogUtils
+ * 检查所有的Toast，删除没用的提示
  */
 public class MainApplication extends Application {
     private static MainApplication instance;
     //    public LocationService locationService;
     public Vibrator mVibrator;
-    public static int which_activity;//0是默认从主页面跳
+    public static int which_activity;//判断是从哪个界面跳转到登录界面,0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
     //剪切好的图片存储路径
@@ -65,8 +65,6 @@ public class MainApplication extends Application {
     public static boolean hasUser;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
-    //用户选择的标签列表
-    public static List<String> selectList;
     //创建场景或情景的标识
     public static int tag;//1,场景 2,情景
     //在哪个情景下创建场景

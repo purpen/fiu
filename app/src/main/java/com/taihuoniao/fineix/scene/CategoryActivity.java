@@ -122,7 +122,7 @@ public class CategoryActivity extends BaseActivity implements AdapterView.OnItem
                 }
                 break;
             case DataConstants.RESULTCODE_CREATESCENE_SEARCHQJ:
-                SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
+                SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) data.getSerializableExtra("searchqj");
                 if (searchItem != null) {
                     Intent intent = new Intent();
                     intent.putExtra("searchqj", searchItem);

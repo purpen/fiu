@@ -38,7 +38,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
-import com.taihuoniao.fineix.scene.SearchActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -134,8 +134,6 @@ public class GoodsDetailActivity extends BaseActivity<String> implements View.On
 //        Log.e("<<<", "商品id=" + id);
         if (id == null) {
             ToastUtils.showError("好货不存在");
-//            dialog.showErrorWithStatus("产品不存在");
-//            Toast.makeText(GoodsDetailActivity.this, "产品不存在", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

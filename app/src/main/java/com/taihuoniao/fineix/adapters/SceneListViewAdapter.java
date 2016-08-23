@@ -35,12 +35,12 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
     private Context context;
     private List<SceneList.DataBean.RowsBean> list;
     private List<LoveSceneBean.LoveSceneItem> loveList;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private List<SubsCjListBean.SubsCJItem> subsList;
     private DisplayImageOptions options500_500, options750_1334;
 
     public SceneListViewAdapter(Context context, List<SceneList.DataBean.RowsBean> list, List<LoveSceneBean.LoveSceneItem> loveList,
-                                List<SearchBean.SearchItem> searchList, List<SubsCjListBean.SubsCJItem> subsList) {
+                                List<SearchBean.Data.SearchItem> searchList, List<SubsCjListBean.SubsCJItem> subsList) {
         this.context = context;
         this.list = list;
         this.loveList = loveList;
@@ -180,7 +180,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             holder.viewCount.setText(list.get(position).getView_count());
             holder.loveCount.setText(list.get(position).getLove_count());
             holder.sceneTitle.setText(list.get(position).getTitle());
-            holder.suoshuQingjing.setText(list.get(position).getScene_title());
+//            holder.suoshuQingjing.setText(list.get(position).getScene_title());
             holder.location.setText(list.get(position).getAddress());
             holder.time.setText(list.get(position).getCreated_at());
         } else if (loveList != null) {
@@ -260,7 +260,7 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             TagItem tagItem = new TagItem();
             tagItem.setId(product.getId()+"");
             tagItem.setName(product.getTitle());
-            tagItem.setPrice("¥" + product.getPrice());
+//            tagItem.setPrice("¥" + product.getPrice());
             labelView.init(tagItem);
             final RelativeLayout.LayoutParams labelLp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 //            labelView.pointOrAll(false, false);

@@ -1,228 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                tools:context="com.taihuoniao.fineix.main.fragment.FindFragment"
-    >
-
+                android:layout_height="match_parent">
 
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
-        android:id="@+id/fragment_find_scenelistview"
+        android:id="@+id/pull_to_refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/relative"
         />
 
     <RelativeLayout
-        android:id="@+id/fragment_find_titlelayout"
+        android:id="@+id/gone_relative"
         android:layout_width="match_parent"
-        android:background="@color/black"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp"
+        android:layout_below="@id/relative"
+        android:translationY="-60dp">
+
+        <com.taihuoniao.fineix.blurview.BlurView
+            android:id="@+id/blur_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#50ffffff"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/black">
 
         <ImageView
-            android:id="@+id/fragment_find_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/logo_no_word" />
+            android:id="@+id/title_left"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/find_title_left"/>
 
         <ImageView
-            android:id="@+id/fragment_find_search"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:paddingLeft="13dp"
-            android:paddingRight="13dp"
-            android:src="@mipmap/head_search_white"/>
-
-        <ImageView
-            android:id="@+id/fragment_find_location"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:id="@+id/title_right"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="17dp"
-            android:paddingRight="13dp"
-            android:src="@mipmap/location_39"
-            android:visibility="gone"/>
+            android:paddingLeft="19dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/find_title_right"/>
+
+        <LinearLayout
+            android:id="@+id/search_linear"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/title_right"
+            android:layout_toRightOf="@id/title_left"
+            android:background="@drawable/background_corner_gray"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="13dp"
+                android:src="@mipmap/search_height_26px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:text="搜索情境或用户"
+                android:textColor="#878787"
+                android:textSize="12sp"/>
+        </LinearLayout>
     </RelativeLayout>
 
     <ProgressBar
-        android:id="@+id/fragment_find_progress"
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
-
-    <!--<com.taihuoniao.fineix.view.MyScrollView-->
-    <!--android:id="@+id/fragment_find_scrollview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:scrollbars="none">-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
-    <!--<com.taihuoniao.fineix.view.ScrollableView-->
-    <!--android:id="@+id/scrollableView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="180dp"-->
-    <!--/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="44dp"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingLeft="13dp">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:src="@mipmap/friends"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="最Fiu伙伴"-->
-    <!--android:textColor="#666666"-->
-    <!--android:textSize="13sp"/>-->
-    <!--&lt;!&ndash; 999999 &ndash;&gt;-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="[越喜欢头像越大]"-->
-    <!--android:textColor="#999999"-->
-    <!--android:textSize="11sp"/>-->
-    <!--</LinearLayout>-->
-
-    <!--<AbsoluteLayout-->
-    <!--android:id="@+id/fragment_find_absolute"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="156dp"-->
-    <!--android:background="#f0f0f0"></AbsoluteLayout>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1px"-->
-    <!--android:background="#e4e4e4"/>-->
-
-    <!--<android.support.v7.widget.RecyclerView-->
-    <!--android:id="@+id/fragment_find_labelrecycler"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="80dp"-->
-    <!--android:paddingBottom="15dp"-->
-    <!--android:paddingTop="5dp"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1px"-->
-    <!--android:background="#e4e4e4"/>-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="44dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!-->-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/fragment_find_allqingjing"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:gravity="center"-->
-    <!--android:paddingLeft="17dp"-->
-    <!--android:paddingRight="17dp"-->
-    <!--android:text="查看全部"-->
-    <!--android:textSize="10sp"/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="44dp"-->
-    <!--android:layout_toLeftOf="@id/fragment_find_allqingjing"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingLeft="13dp">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:src="@mipmap/jing_scene"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="最Fiu情景"-->
-    <!--android:textColor="#666666"-->
-    <!--android:textSize="13sp"/>-->
-    <!--&lt;!&ndash; 999999 &ndash;&gt;-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="[我的地盘我收益]"-->
-    <!--android:textColor="#999999"-->
-    <!--android:textSize="11sp"/>-->
-    <!--</LinearLayout>-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<android.support.v7.widget.RecyclerView-->
-    <!--android:id="@+id/fragment_find_qingjing_recycler"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="267dp"/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="44dp"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingLeft="13dp">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:src="@mipmap/jing_scene"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="最Fiu场景"-->
-    <!--android:textColor="#666666"-->
-    <!--android:textSize="13sp"/>-->
-    <!--&lt;!&ndash; 999999 &ndash;&gt;-->
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:gravity="center_vertical"-->
-    <!--android:text="[发现不一样]"-->
-    <!--android:textColor="#999999"-->
-    <!--android:textSize="11sp"/>-->
-    <!--</LinearLayout>-->
-
-    <!--&lt;!&ndash;<com.taihuoniao.fineix.view.PullToRefreshListViewForScrollView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/fragment_find_pullrefresh"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;/>&ndash;&gt;-->
-    <!--&lt;!&ndash;<com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/fragment_find_pullrefreshview"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;/>&ndash;&gt;-->
-
-    <!--<com.taihuoniao.fineix.view.ListViewForScrollView-->
-    <!--android:id="@+id/fragment_find_scenelistview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"/>-->
-    <!--</LinearLayout>-->
-    <!--</com.taihuoniao.fineix.view.MyScrollView>-->
 
 </RelativeLayout>

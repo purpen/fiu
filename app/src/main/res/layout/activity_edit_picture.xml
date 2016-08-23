@@ -27,7 +27,7 @@
         android:layout_height="55dp"
         android:baselineAligned="false"
         android:layout_alignParentBottom="true"
-        android:background="@color/black_touming"
+        android:background="@color/black_touming_60"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -121,7 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_above="@id/activity_edit_bottom_linear"
-        android:background="@color/black_touming"
+        android:background="@color/black_touming_60"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">

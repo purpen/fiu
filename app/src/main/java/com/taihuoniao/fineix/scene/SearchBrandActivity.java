@@ -1,13 +1,11 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
-import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -22,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchBrandAdapter;
 import com.taihuoniao.fineix.adapters.SearchProductAdapter;
@@ -33,6 +30,7 @@ import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -96,12 +94,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         listView = pullRefreshView.getRefreshableView();
         listView.setDividerHeight(0);
         listView.setDivider(null);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.black));
-            tintManager.setStatusBarTintEnabled(true);
-        }
+        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -128,10 +121,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                         searchProduct(s.toString(), null);
                         return;
                     }
-                    if (brandName.getText().length() > 0 && productList.size() <= 0) {
-                        addProductRelative.setVisibility(View.VISIBLE);
-                        addProductName.setText(s.toString());
-                    } else if (brandName.getText().length() > 0) {
+                    if (brandName.getText().length() > 0) {
                         searchProduct(s.toString(), cuurentBrandId);
                     } else {
                         currentInBrand = s.toString();
@@ -157,10 +147,18 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     if (SearchBrandActivity.this.getCurrentFocus() != null) {
                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(SearchBrandActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
+                    if (onlyProduct) {
+                        if (searchEditText.getText().toString().length() > 0) {
+                            addProduct(searchEditText.getText().toString(), null);
+                            return false;
+                        }
+                        finish();
+                        return false;
+                    }
                     //如果选择品牌，则返回品牌，如果没有品牌。则不返回
                     if (brandName.getText().toString().length() > 0) {
-                        if(searchEditText.getText().toString().length()>0){
-                            addProduct(searchEditText.getText().toString());
+                        if (searchEditText.getText().toString().length() > 0) {
+                            addProduct(searchEditText.getText().toString(), cuurentBrandId);
                             return false;
                         }
                         Intent intent = new Intent();
@@ -201,7 +199,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 onlyProduct = true;
                 addBrandRelative.setVisibility(View.GONE);
                 searchEditText.setHint("请输入产品名称");
-                Log.e("<<<","接收产品名称="+productIntent);
+                Log.e("<<<", "接收产品名称=" + productIntent);
                 searchEditText.setText(productIntent);
             }
         }
@@ -214,7 +212,11 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_product_relative:
-                addProduct(brandName.getText().toString());
+                if (onlyProduct) {
+                    addProduct(addProductName.getText().toString(), null);
+                    return;
+                }
+                addProduct(addProductName.getText().toString(), cuurentBrandId);
                 break;
             case R.id.add_brand_relative:
                 addBrand(currentInBrand);
@@ -232,14 +234,15 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addProduct(String title) {
+    private void addProduct(String title, String brand_id) {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addProduct(title, cuurentBrandId, new RequestCallBack<String>() {
+        ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
+                Log.e("<<<添加产品",responseInfo.result);
                 AddProductBean addProductBean = new AddProductBean();
                 try {
                     Gson gson = new Gson();
@@ -254,7 +257,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     Intent intent = new Intent();
                     intent.putExtra("brand", brand);
                     intent.putExtra("brandId", cuurentBrandId);
-                    intent.putExtra("product", addProductName.getText());
+                    intent.putExtra("product", searchEditText.getText().toString());
                     intent.putExtra("productId", addProductBean.getData().getId());
                     setResult(1, intent);
                     finish();
@@ -297,6 +300,8 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     addBrandRelative.setVisibility(View.GONE);
                     searchProduct(null, cuurentBrandId);
                     isProduct = true;
+                    brandList.clear();
+                    searchBrandAdapter.notifyDataSetChanged();
                 } else {
                     ToastUtils.showError(addBrandBean.getMessage());
                 }

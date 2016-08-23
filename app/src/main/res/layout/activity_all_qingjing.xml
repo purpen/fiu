@@ -96,7 +96,7 @@
         android:id="@+id/activity_all_qingjing_first"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_first"
+        android:background="@color/black_touming_80"
         android:visibility="gone">
 
         <ImageView

@@ -54,7 +54,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     private AddProductGridAdapter addProductGridAdapter;
     private String q = "";//搜索关键字
     private boolean search = false;//判断是不是搜索
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private WaittingDialog dialog;
 
 

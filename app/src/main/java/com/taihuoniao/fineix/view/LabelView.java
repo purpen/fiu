@@ -57,7 +57,7 @@ public class LabelView extends LinearLayout {
         if (isLeft) {
             nameTv.setBackgroundResource(R.drawable.label_right);
             isLeft = false;
-            tagInfo.setRight(true);
+            tagInfo.setLoc(1);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
@@ -67,12 +67,13 @@ public class LabelView extends LinearLayout {
                     tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentWidth));
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
                     Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
+                    Log.e("<<<","label.getMesureWidth="+nameTv.getMeasuredWidth());
                 }
             });
         } else {
             nameTv.setBackgroundResource(R.drawable.label_left);
             isLeft = true;
-            tagInfo.setRight(false);
+            tagInfo.setLoc(2);
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
@@ -91,8 +92,8 @@ public class LabelView extends LinearLayout {
         }
     }
 
-    private float pointWidth;
-    private float labelMargin;
+    public float pointWidth;
+    public float labelMargin;
     private float deleteWidth;
 
     private void init(Context context) {
@@ -182,7 +183,6 @@ public class LabelView extends LinearLayout {
 
 
     public void wave() {
-        pointRelative.clearAnimation();
         final ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 0.2f, 1f, 0.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimation.setDuration(2000);
         scaleAnimation.setFillAfter(true);
@@ -223,6 +223,7 @@ public class LabelView extends LinearLayout {
 
             }
         });
+        pointRelative.clearAnimation();
         pointRelative.startAnimation(scaleAnimation);
     }
 

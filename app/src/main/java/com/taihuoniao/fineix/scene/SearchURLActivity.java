@@ -350,7 +350,7 @@ public class SearchURLActivity extends BaseActivity implements View.OnClickListe
                     tagItem.setType(type);
 //                        Log.e("<<<add", "返回的id=" + netAdd.getData().getId());
                     tagItem.setId(netAdd.getData().getId());
-                    tagItem.setImagePath(imagePath);
+//                    tagItem.setImagePath(imagePath);
                     Intent intent = new Intent();
                     intent.putExtra("tagItem", tagItem);
                     setResult(DataConstants.RESULTCODE_SEARCHSTORE_SEARCHURL, intent);

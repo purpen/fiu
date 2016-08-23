@@ -1,25 +1,68 @@
 package com.taihuoniao.fineix.adapters;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
+import com.taihuoniao.fineix.beans.SceneLoveBean;
+import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.TestShare;
+import com.taihuoniao.fineix.scene.CreateQJActivity;
+import com.taihuoniao.fineix.user.FocusActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
+import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,10 +72,125 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/10.
  */
 public class IndexQJListAdapter extends BaseAdapter {
+    private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
+    private WaittingDialog dialog;
+    //popupwindow下的控件
+    private View popup_view;
+    private PopupWindow popupWindow;
+    private TextView pinglunTv;
+    private LinearLayout bianjiLinear;
+    private TextView jubaoTv;
+    private TextView cancelTv;
 
-    public IndexQJListAdapter(List<SceneList.DataBean.RowsBean> sceneList) {
+    public IndexQJListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList) {
+        this.activity = activity;
         this.sceneList = sceneList;
+        dialog = new WaittingDialog(activity);
+        initPopupWindow();
+    }
+
+    private void initPopupWindow() {
+        WindowManager windowManager = activity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        popup_view = View.inflate(activity, R.layout.popup_scene_details_more, null);
+        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
+        bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
+        jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+                params.alpha = 1f;
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                activity.getWindow().setAttributes(params);
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(activity,
+                R.color.nothing));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    private void showPopup(final int position) {
+        pinglunTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                Intent intent3 = new Intent(activity, CommentListActivity.class);
+                intent3.putExtra("target_id", sceneList.get(position).get_id());
+                intent3.putExtra("type", 12 + "");
+                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+                activity.startActivity(intent3);
+            }
+        });
+        bianjiLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                if (!LoginInfo.isUserLogin()) {
+                    if (activity instanceof MainActivity) {
+                        MainApplication.which_activity = DataConstants.IndexFragment;
+                        ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
+                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    }
+                    return;
+                }
+                Intent intent5 = new Intent(activity, CreateQJActivity.class);
+                intent5.putExtra(IndexFragment.class.getSimpleName(), sceneList.get(position));
+                activity.startActivity(intent5);
+            }
+        });
+        jubaoTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                if (!LoginInfo.isUserLogin()) {
+                    if (activity instanceof MainActivity) {
+                        MainApplication.which_activity = DataConstants.IndexFragment;
+                        ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
+                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    }
+                    return;
+                }
+                if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
+                    deleteScene(sceneList.get(position).get_id());
+                    //过滤自己
+                    return;
+                }
+                Intent intent1 = new Intent(activity, ReportActivity.class);
+                intent1.putExtra("target_id", sceneList.get(position).get_id());
+                intent1.putExtra("type", 4 + "");
+                activity.startActivity(intent1);
+            }
+        });
+        cancelTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        params.alpha = 0.4f;
+        activity.getWindow().setAttributes(params);
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(popup_view, Gravity.BOTTOM, 0, 0);
     }
 
     @Override
@@ -51,17 +209,26 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.item_index_qj, null);
             holder = new ViewHolder(convertView);
+            ViewGroup.LayoutParams layoutParams = holder.container.getLayoutParams();
+            layoutParams.width = MainApplication.getContext().getScreenWidth();
+            layoutParams.height = layoutParams.width;
+            holder.container.setLayoutParams(layoutParams);
             convertView.setTag(holder);
-            holder.labelRecycler.setHasFixedSize(true);
-            holder.labelRecycler.setLayoutManager(new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false));
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        //停止商品动画
+        for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
+            LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
+            view.stopAnim();
+        }
+        //移除所有标签
+        holder.labelContainer.removeAllViews();
         ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
         if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
@@ -71,29 +238,60 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
         holder.locationTv.setText(sceneList.get(position).getAddress());
-        //判断是否已经关注的标识没有
+        if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+            //自己的话隐藏关注按钮
+            holder.attentionBtn.setVisibility(View.GONE);
+        } else {
+            holder.attentionBtn.setVisibility(View.VISIBLE);
+            if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
+                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.attentionBtn.setText("已关注");
+                holder.attentionBtn.setVisibility(View.GONE);
+            } else {
+                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.attentionBtn.setText("+ 关注");
+            }
+        }
         ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
         holder.viewCount.setText(sceneList.get(position).getView_count());
         holder.loveCount.setText(sceneList.get(position).getLove_count());
-        //判断是否已经点赞标识没有
-        holder.qjDesTv.setText(sceneList.get(position).getDes());
-        holder.labelRecycler.setAdapter(new IndexLabelRecyclerAdapter(sceneList.get(position).getTags()));
-        holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
-        holder.moreCommentTv.setText("查看" + sceneList.get(position).getComment_count() + "条评论");
-        if (Integer.parseInt(sceneList.get(position).getComment_count()) > 0) {
-            holder.moreCommentLinear.setVisibility(View.VISIBLE);
+        if (sceneList.get(position).getIs_love() == 1) {
+            holder.loveImg.setImageResource(R.mipmap.index_has_love);
         } else {
-            holder.moreCommentLinear.setVisibility(View.GONE);
+            holder.loveImg.setImageResource(R.mipmap.index_love);
         }
+        int sta = 0;
+        SpannableString spannableStringBuilder = new SpannableString(sceneList.get(position).getDes());
+        while (sceneList.get(position).getDes().substring(sta).contains("#")) {
+            TextClick textClick;
+            sta = sceneList.get(position).getDes().indexOf("#", sta);
+            if (sceneList.get(position).getDes().substring(sta).contains(" ")) {
+                int en = sceneList.get(position).getDes().indexOf(" ", sta);
+                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, en));
+                spannableStringBuilder.setSpan(textClick, sta, en + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sta = en;
+            } else {
+                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, sceneList.get(position).getDes().length()));
+                spannableStringBuilder.setSpan(textClick, sta, sceneList.get(position).getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                break;
+            }
+        }
+        holder.qjDesTv.setText(spannableStringBuilder);
+        holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.qjDesTv.setMaxLines(3);
+//        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
+        holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
+        if (sceneList.get(position).getComment_count() > 0) {
+            holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
+            holder.moreComment.setVisibility(View.VISIBLE);
+        } else {
+            holder.moreComment.setVisibility(View.GONE);
+        }
+        //设置情景标题
         holder.qjTitleTv.setText(sceneList.get(position).getTitle());
         holder.qjTitleTv.post(new Runnable() {
             @Override
             public void run() {
-                if (holder.qjDesTv.getLineCount() >= 3) {
-                    holder.moreDesImg.setVisibility(View.VISIBLE);
-                } else {
-                    holder.moreDesImg.setVisibility(View.GONE);
-                }
                 if (holder.qjTitleTv.getLineCount() >= 2) {
                     Layout layout = holder.qjTitleTv.getLayout();
                     StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv.getText().toString());
@@ -107,7 +305,359 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             }
         });
+        //添加商品标签
+        for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
+            final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            final LabelView labelView = new LabelView(parent.getContext());
+            labelView.nameTv.setText(productBean.getTitle());
+            labelView.setLayoutParams(layoutParams);
+            if (productBean.getLoc() == 2) {
+                labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                layoutParams1.leftMargin = (int) labelView.labelMargin;
+                labelView.pointRelative.setLayoutParams(layoutParams1);
+            }
+            labelView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (productBean.getLoc() == 2) {
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        labelView.setLayoutParams(lp);
+                    } else {
+                        labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                        layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                        labelView.pointRelative.setLayoutParams(layoutParams1);
+                        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                        lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
+                        lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                        labelView.setLayoutParams(lp);
+                    }
+                }
+            });
+            holder.labelContainer.addView(labelView);
+//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
+            labelView.wave();
+            labelView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(parent.getContext(), GoodsDetailActivity.class);
+                    intent.putExtra("id", productBean.getId());
+                    parent.getContext().startActivity(intent);
+                }
+            });
+        }
+        //跳转个人中心
+        holder.headImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(parent.getContext(), UserCenterActivity.class);
+                long l = Long.valueOf(sceneList.get(position).getUser_info().getUser_id());
+                intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
+                parent.getContext().startActivity(intent);
+            }
+        });
+        //关注或取消关注
+        holder.attentionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LoginInfo.isUserLogin()) {
+                    //已经登录
+                    if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+                        //过滤自己
+                        return;
+                    }
+                    if (sceneList.get(position).getUser_info().getIs_follow() == 0) {
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
+                        fllow(position, sceneList.get(position).getUser_id(), holder);
+                    } else {
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
+                        cancelFollow(position, sceneList.get(position).getUser_id(), holder);
+                    }
+                    return;
+                }
+                if (activity instanceof MainActivity) {
+                    MainApplication.which_activity = DataConstants.IndexFragment;
+                    ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
+            }
+        });
+
+        //点赞或取消点赞
+        holder.loveRelative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LoginInfo.isUserLogin()) {
+                    //已经登录
+                    if (sceneList.get(position).getIs_love() == 1) {
+//                        holder.loveImg.setImageResource(R.mipmap.has_love);
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
+                        cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
+                    } else {
+//                        holder.loveImg.setImageResource(R.mipmap.index_love);
+                        if (!dialog.isShowing()) {
+                            dialog.show();
+                        }
+                        loveQJ(position, sceneList.get(position).get_id(), holder);
+                    }
+                    return;
+                }
+                if (activity instanceof MainActivity) {
+                    MainApplication.which_activity = DataConstants.IndexFragment;
+                    ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
+            }
+        });
+        //跳转到评论界面
+        holder.commentImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(activity, CommentListActivity.class);
+                intent3.putExtra("target_id", sceneList.get(position).get_id());
+                intent3.putExtra("type", 12 + "");
+                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+                activity.startActivity(intent3);
+            }
+        });
+        holder.commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> pare, View vie, int positi, long d) {
+                Intent intent3 = new Intent(activity, CommentListActivity.class);
+                intent3.putExtra("target_id", sceneList.get(position).get_id());
+                intent3.putExtra("type", 12 + "");
+                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+                activity.startActivity(intent3);
+            }
+        });
+        holder.moreComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(activity, CommentListActivity.class);
+                intent3.putExtra("target_id", sceneList.get(position).get_id());
+                intent3.putExtra("type", 12 + "");
+                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+                activity.startActivity(intent3);
+            }
+        });
+        //跳转到分享页面
+        holder.shareImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent4 = new Intent(activity, TestShare.class);
+                intent4.putExtra("id", sceneList.get(position).get_id());
+                activity.startActivity(intent4);
+            }
+        });
+        //更多
+        holder.moreImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+                    //自己不能举报自己。改为删除
+                    bianjiLinear.setVisibility(View.VISIBLE);
+                    jubaoTv.setText("删除");
+                } else {
+                    bianjiLinear.setVisibility(View.GONE);
+                    jubaoTv.setText("举报");
+                }
+                showPopup(position);
+            }
+        });
+        //情景描述添加监听
+        holder.qjDesTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    if (holder.qjDesTv.getMaxLines() == 3) {
+                        holder.qjDesTv.setMaxLines(Integer.MAX_VALUE);
+                    } else {
+                        holder.qjDesTv.setMaxLines(3);
+                    }
+                }
+            }
+        });
         return convertView;
+    }
+
+    //删除情景
+    private void deleteScene(String i) {
+        ClientDiscoverAPI.deleteScene(i, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<删除场景", "数据解析异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //取消点赞
+    private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
+        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常");
+                }
+                if (sceneLoveBean.isSuccess()) {
+                    holder.loveImg.setImageResource(R.mipmap.index_love);
+                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
+                    sceneList.get(position).setIs_love(0);
+                    sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
+                } else {
+                    ToastUtils.showError(sceneLoveBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //点赞情景
+    private void loveQJ(final int position, String id, final ViewHolder holder) {
+        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<SceneLoveBean>() {
+                    }.getType();
+                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常");
+                }
+                if (sceneLoveBean.isSuccess()) {
+                    holder.loveImg.setImageResource(R.mipmap.index_has_love);
+                    holder.loveCount.setText(sceneLoveBean.getData().getLove_count() + "");
+                    sceneList.get(position).setIs_love(1);
+                    sceneList.get(position).setLove_count(sceneLoveBean.getData().getLove_count() + "");
+                } else {
+                    ToastUtils.showError(sceneLoveBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //关注用户
+    private void fllow(final int position, String otherUserId, final ViewHolder holder) {
+        ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<关注用户", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常");
+                }
+                if (netBean.isSuccess()) {
+                    holder.attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
+                    holder.attentionBtn.setText("已关注");
+                    sceneList.get(position).getUser_info().setIs_follow(1);
+                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                        if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
+                            rowsBean.getUser_info().setIs_follow(1);
+                        }
+                    }
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //取消关注
+    private void cancelFollow(final int position, final String otherUserId, final ViewHolder holder) {
+        ClientDiscoverAPI.cancelFocusOperate(otherUserId, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<", "解析异常");
+                }
+                if (netBean.isSuccess()) {
+                    holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                    holder.attentionBtn.setText("+ 关注");
+                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
+                        if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
+                            rowsBean.getUser_info().setIs_follow(0);
+                        }
+                    }
+                    return;
+                }
+                ToastUtils.showError(netBean.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 
     static class ViewHolder {
@@ -123,12 +673,16 @@ public class IndexQJListAdapter extends BaseAdapter {
         TextView publishTime;
         @Bind(R.id.location_tv)
         TextView locationTv;
+        @Bind(R.id.container)
+        RelativeLayout container;
         @Bind(R.id.qj_img)
         ImageView qjImg;
         @Bind(R.id.qj_title_tv)
         TextView qjTitleTv;
         @Bind(R.id.qj_title_tv2)
         TextView qjTitleTv2;
+        @Bind(R.id.label_container)
+        RelativeLayout labelContainer;
         @Bind(R.id.view_count)
         TextView viewCount;
         @Bind(R.id.more_img)
@@ -137,60 +691,46 @@ public class IndexQJListAdapter extends BaseAdapter {
         ImageView shareImg;
         @Bind(R.id.comment_img)
         ImageView commentImg;
+        @Bind(R.id.love_container)
+        RelativeLayout loveRelative;
         @Bind(R.id.love_count)
         TextView loveCount;
         @Bind(R.id.love_img)
         ImageView loveImg;
         @Bind(R.id.qj_des_tv)
         TextView qjDesTv;
-        @Bind(R.id.more_des_img)
-        ImageView moreDesImg;
-        @Bind(R.id.label_recycler)
-        RecyclerView labelRecycler;
         @Bind(R.id.comment_list)
         ListViewForScrollView commentList;
-        @Bind(R.id.more_comment_tv)
-        TextView moreCommentTv;
-        @Bind(R.id.more_comment_linear)
-        LinearLayout moreCommentLinear;
+        @Bind(R.id.more_comment)
+        TextView moreComment;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    static class IndexLabelRecyclerAdapter extends RecyclerView.Adapter<IndexLabelRecyclerAdapter.VH> {
-        private List<String> tags;
+    //设置部分文字可以点击
+    static class TextClick extends ClickableSpan {
+        private Activity activity;
+        private String q;
 
-        public IndexLabelRecyclerAdapter(List<String> tags) {
-            this.tags = tags;
+        public TextClick(Activity activity, String q) {
+            this.activity = activity;
+            this.q = q;
         }
 
         @Override
-        public IndexLabelRecyclerAdapter.VH onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = View.inflate(parent.getContext(), R.layout.item_index_label, null);
-            VH holder = new VH(view);
-            return holder;
+        public void updateDrawState(TextPaint ds) {
+            ds.setColor(activity.getResources().getColor(R.color.yellow_bd8913));
+            ds.setUnderlineText(false);
         }
 
         @Override
-        public void onBindViewHolder(IndexLabelRecyclerAdapter.VH holder, int position) {
-            holder.textView.setText(tags.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return tags == null ? 0 : tags.size();
-        }
-
-        public static class VH extends RecyclerView.ViewHolder {
-            @Bind(R.id.tv)
-            TextView textView;
-
-            public VH(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
+        public void onClick(View widget) {
+            Intent intent = new Intent(activity, SearchActivity.class);
+            intent.putExtra("q", q);
+            intent.putExtra("t", "9");
+            activity.startActivity(intent);
         }
     }
 
@@ -203,10 +743,10 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            if(commentList==null){
+            if (commentList == null) {
                 return 0;
             }
-            if(commentList.size()<=2){
+            if (commentList.size() <= 2) {
                 return commentList.size();
             }
             return 2;

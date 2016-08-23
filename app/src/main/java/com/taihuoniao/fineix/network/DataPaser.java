@@ -52,7 +52,6 @@ import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.QingjingSubsBean;
 import com.taihuoniao.fineix.beans.RelationProductsBean;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
-import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.ShopCart;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
@@ -612,66 +611,6 @@ public class DataPaser {
             }
         });
     }
-
-    //场景
-    //场景点赞
-    public static void loveScene(String id, final Handler handler) {
-        ClientDiscoverAPI.loveScene(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<", responseInfo.result);
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.LOVE_SCENE;
-                msg.obj = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-    }
-
-    //场景
-    //取消场景点赞
-    public static void cancelLoveScene(String id, final Handler handler) {
-        ClientDiscoverAPI.cancelLoveScene(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<", responseInfo.result);
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.CANCEL_LOVE_SCENE;
-                msg.obj = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    msg.obj = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-
-    }
-
 
     //个人中心
     //用户列表
