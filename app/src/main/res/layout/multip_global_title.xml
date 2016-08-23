@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="@android:color/black"
     >
 
     <ImageView
-
         android:id="@+id/global_title_back"
         android:layout_width="65dp"
         android:layout_height="match_parent"
@@ -15,7 +14,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="20dp"
         android:paddingTop="13dp"
-        android:src="@mipmap/back_3x"/>
+        android:src="@mipmap/back_white" />
 
     <TextView
         android:id="@+id/global_title_text"
@@ -24,7 +23,7 @@
         android:layout_centerInParent="true"
         android:text="@string/title"
         android:textColor="@color/white"
-        android:textSize="17sp"/>
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/global_title_button"
@@ -36,7 +35,7 @@
         android:paddingRight="10dp"
         android:textColor="@color/white"
         android:textSize="17sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <!--“购物车”的图标按钮-->
@@ -49,7 +48,7 @@
         android:clickable="true"
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
-        android:src="@mipmap/cart"/>
+        android:src="@mipmap/cart" />
 
     <!--“购物车上标记所购数量的小黑圆圈”的图标按钮-->
     <TextView
@@ -64,7 +63,7 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="9sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
     <!--“搜索”的图标按钮-->
     <ImageView
         android:id="@+id/global_title_image_search"
@@ -74,7 +73,7 @@
         android:layout_toLeftOf="@id/global_title_image_shopcart"
         android:clickable="true"
         android:padding="13dp"
-        android:src="@mipmap/search_title"/>
+        android:src="@mipmap/search_title" />
 
     <!--“分享”的图标按钮-->
     <ImageView
@@ -87,7 +86,7 @@
         android:clickable="true"
         android:padding="2dp"
         android:src="@mipmap/share_3x"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <!--“设置”的图标按钮-->
     <ImageView
@@ -100,6 +99,6 @@
         android:clickable="true"
         android:padding="5dp"
         android:src="@mipmap/set"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -1,26 +1,27 @@
 package com.taihuoniao.fineix.user;
 
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
+import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
 import com.taihuoniao.fineix.utils.ActivityUtil;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopOrderListActivity extends FragmentActivity implements TabLayout.OnTabSelectedListener {
-//    private WaittingDialog mDialog;
+import butterknife.Bind;
 
+public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
     private ViewPager mPager;
     private TabLayout.Tab mAllTab, mPayTab, mDeliverTab, mCriticalTab, mReceiverTab;
-    private MyGlobalTitleLayout title;
+    @Bind(R.id.custom_head)
+    CustomHeadView custom_head;
+
     private String mFlag;
 
 //    private Handler mHandler = new Handler() {
@@ -31,24 +32,13 @@ public class ShopOrderListActivity extends FragmentActivity implements TabLayout
 //        }
 //    };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        StatusBarChange.initWindow(this);
-        setContentView(R.layout.activity_shop_order_list);
-        ActivityUtil.getInstance().addActivity(this);
-        initView();
+    public ShopOrderListActivity() {
+        super(R.layout.activity_shop_order_list);
     }
 
-    private void initView() {
-        title = (MyGlobalTitleLayout) findViewById(R.id.order_title);
-        title.setBackgroundResource(R.color.white);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackImg(R.mipmap.back_black);
-        title.setBackButtonVisibility(true);
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
-
+    protected void initView() {
+        ActivityUtil.getInstance().addActivity(this);
+        custom_head.setHeadCenterTxtShow(true, "待付款");
         TabLayout tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         //手动添加tab
@@ -105,19 +95,19 @@ public class ShopOrderListActivity extends FragmentActivity implements TabLayout
 
         switch (position) {
             case 0:
-                title.setTitle("全部");
+                custom_head.setHeadCenterTxtShow(true, "全部");
                 break;
             case 1:
-                title.setTitle("待付款");
+                custom_head.setHeadCenterTxtShow(true, "待付款");
                 break;
             case 2:
-                title.setTitle("待发货");
+                custom_head.setHeadCenterTxtShow(true, "待发货");
                 break;
             case 3:
-                title.setTitle("待收货");
+                custom_head.setHeadCenterTxtShow(true, "待收货");
                 break;
             case 4:
-                title.setTitle("待评价");
+                custom_head.setHeadCenterTxtShow(true, "待评价");
                 break;
         }
 

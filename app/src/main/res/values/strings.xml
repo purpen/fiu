@@ -120,6 +120,13 @@
         <item>情境</item>
         <item>产品</item>
     </string-array>
+
+    <string-array name="subject_tab">
+        <item>文章</item>
+        <item>活动</item>
+        <item>新品</item>
+        <item>促销</item>
+    </string-array>
     <string name="please_input">请输入</string>
     <string name="loading">加载中…</string>
     <string name="btn_done">OK</string>
@@ -219,7 +226,7 @@
     <string name="hot_labels">热门标签</string>
     <string name="all_labels">全部标签</string>
     <string name="please_select_one">请在情绪、环境、时间、人物中各选一个</string>
-    <string name="commit">提交</string>
+    <string name="commit">提交申请</string>
     <string name="consignee_name">收货人姓名</string>
     <string name="phone">手机</string>
     <string name="postcode">邮政编码</string>
@@ -250,7 +257,8 @@
     <string name="phone_number">手机号</string>
     <string name="password">密码</string>
     <string name="bind">立即绑定</string>
-    <string name="skip_bind">跳过绑定</string>
+    <string name="skip_bind">绑定已有太火鸟账户</string>
+    <string name="login_now">立即登录</string>
     <string name="send">发送</string>
     <string name="take_comment">评论一下</string>
     <string name="you_are_first_comment">你可是第一个看到它的人，快来评论一下吧</string>

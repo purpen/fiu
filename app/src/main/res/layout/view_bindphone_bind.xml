@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp100"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
+            android:text="@string/skip_bind"
+            android:textColor="@color/color_666"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:text="立即登录"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_af8323"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_phone_bindPhone"
+        style="@style/RegisterAndLogin"
+        android:background="@drawable/shape_login_register"
+        android:hint="@string/phone_number"
+        android:textColorHint="@color/color_666"
+        android:textColor="@android:color/white"
+        android:inputType="phone"
+        android:maxLength="11"
+        android:paddingLeft="@dimen/dp8"
+        android:singleLine="true">
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_password_bindPhone"
+        style="@style/RegisterAndLogin"
+        android:background="@drawable/shape_login_register"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/color_666"
+        android:textColor="@android:color/white"
+        android:paddingLeft="@dimen/dp8"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/bt_bindPhone"
+        style="@style/RegisterAndLogin"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_login_register"
+        android:onClick="onLogin"
+        android:text="@string/bind"
+        android:textColor="@color/color_af8323" />
+</LinearLayout>

@@ -19,8 +19,8 @@
         android:background="@drawable/selector_fff_eee"
         android:textColor="@color/color_333"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
         android:drawableRight="@mipmap/more" />
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@+id/pull_gv"

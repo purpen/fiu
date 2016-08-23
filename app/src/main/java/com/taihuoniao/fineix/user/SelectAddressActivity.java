@@ -10,7 +10,6 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -39,12 +38,12 @@ import java.util.List;
 public class SelectAddressActivity extends Activity implements View.OnClickListener {
     //控件
     private MyGlobalTitleLayout titleLayout;
-    private TextView addNewAddressTv;
+    private LinearLayout addNewAddressTv;
     private LinearLayout emptyView;
     private PullToRefreshListView pullToRefresh;
     private ListView listView;
     private ProgressBar progressBar;
-    private List<AddressListBean.AddressListItem> list = new ArrayList<AddressListBean.AddressListItem>();
+    private List<AddressListBean.AddressListItem> list = new ArrayList<>();
     private SelectAddressListViewAdapter listViewAdapter;
     //网络请求
     private int currentPage = 1;
@@ -72,9 +71,8 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 
     private void setData() {
         titleLayout.setTitle("选择收货地址");
-        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setTitleColor(getResources().getColor(android.R.color.white));
+        titleLayout.setBackImg(R.mipmap.back_white);
         titleLayout.setRightShopCartButton(false);
         titleLayout.setRightSearchButton(false);
         titleLayout.setBackButtonListener(new View.OnClickListener() {
@@ -123,7 +121,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
 
     private void initView() {
         titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_select_address_title);
-        addNewAddressTv = (TextView) findViewById(R.id.activity_select_address_addnewaddresstv);
+        addNewAddressTv = (LinearLayout) findViewById(R.id.activity_select_address_addnewaddresstv);
         emptyView = (LinearLayout) findViewById(R.id.activity_select_address_emptylinear);
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
         listView = pullToRefresh.getRefreshableView();

@@ -24,6 +24,7 @@ public class SubjectData implements Parcelable {
     public int love_count;
     public int favorite_count;
     public int view_count;
+    public int share_count;
     public int comment_count;
     public String cover_url;
     public int is_love;
@@ -31,6 +32,46 @@ public class SubjectData implements Parcelable {
     public String share_view_url;
     public String share_desc;
     public List<String> tags;
+    public Product product;
+
+    public SubjectData() {
+    }
+
+    public static class Product implements Parcelable {
+        public String _id;
+        public int is_favorite;
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeInt(this.is_favorite);
+        }
+
+        public Product() {
+        }
+
+        protected Product(Parcel in) {
+            this._id = in.readString();
+            this.is_favorite = in.readInt();
+        }
+
+        public static final Creator<Product> CREATOR = new Creator<Product>() {
+            @Override
+            public Product createFromParcel(Parcel source) {
+                return new Product(source);
+            }
+
+            @Override
+            public Product[] newArray(int size) {
+                return new Product[size];
+            }
+        };
+    }
 
     @Override
     public int describeContents() {
@@ -53,6 +94,7 @@ public class SubjectData implements Parcelable {
         dest.writeInt(this.love_count);
         dest.writeInt(this.favorite_count);
         dest.writeInt(this.view_count);
+        dest.writeInt(this.share_count);
         dest.writeInt(this.comment_count);
         dest.writeString(this.cover_url);
         dest.writeInt(this.is_love);
@@ -60,9 +102,7 @@ public class SubjectData implements Parcelable {
         dest.writeString(this.share_view_url);
         dest.writeString(this.share_desc);
         dest.writeStringList(this.tags);
-    }
-
-    public SubjectData() {
+        dest.writeParcelable(this.product, flags);
     }
 
     protected SubjectData(Parcel in) {
@@ -80,6 +120,7 @@ public class SubjectData implements Parcelable {
         this.love_count = in.readInt();
         this.favorite_count = in.readInt();
         this.view_count = in.readInt();
+        this.share_count = in.readInt();
         this.comment_count = in.readInt();
         this.cover_url = in.readString();
         this.is_love = in.readInt();
@@ -87,9 +128,10 @@ public class SubjectData implements Parcelable {
         this.share_view_url = in.readString();
         this.share_desc = in.readString();
         this.tags = in.createStringArrayList();
+        this.product = in.readParcelable(Product.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<SubjectData> CREATOR = new Parcelable.Creator<SubjectData>() {
+    public static final Creator<SubjectData> CREATOR = new Creator<SubjectData>() {
         @Override
         public SubjectData createFromParcel(Parcel source) {
             return new SubjectData(source);

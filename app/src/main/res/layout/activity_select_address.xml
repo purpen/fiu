@@ -10,16 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/activity_select_address_addnewaddresstv"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="@string/add_new_address"
-        android:textColor="#333333"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp05"
+            android:background="@color/color_ddd" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/add_new_address"
+            android:textColor="@color/color_af8323"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/activity_select_address_emptylinear"

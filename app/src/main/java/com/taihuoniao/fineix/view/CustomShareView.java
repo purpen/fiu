@@ -34,7 +34,15 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  */
 public class CustomShareView extends RelativeLayout implements PlatformActionListener {
     private ShareContent content;
+    private OnShareSuccessListener listener;
 
+    public interface OnShareSuccessListener {
+        void onSuccess();
+    }
+
+    public void setOnShareSuccessListener(OnShareSuccessListener listener) {
+        this.listener = listener;
+    }
     public CustomShareView(Context context, ShareContent content) {
         this(context, null, content);
     }
@@ -191,6 +199,7 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        if (listener != null) listener.onSuccess();
         handler.sendEmptyMessage(1);
     }
 

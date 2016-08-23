@@ -1,19 +1,28 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.LoveSceneBean;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
+import com.taihuoniao.fineix.beans.DataSupportQJ;
+import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,44 +32,114 @@ import butterknife.ButterKnife;
  * @author lilin
  *         created at 2016/5/5 19:13
  */
-public class SupportQJAdapter extends CommonBaseAdapter<LoveSceneBean.LoveSceneItem> {
-    private ImageLoader imageLoader;
+public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSupportQJ> {
+    private static final String TYPE_QJ = "12";
 
-    public SupportQJAdapter(List<LoveSceneBean.LoveSceneItem> list, Activity activity) {
+    public SupportQJAdapter(ArrayList<DataSupportQJ.ItemSupportQJ> list, Activity activity) {
         super(list, activity);
-        this.imageLoader = ImageLoader.getInstance();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final LoveSceneBean.LoveSceneItem item = list.get(position);
+        final DataSupportQJ.ItemSupportQJ item = list.get(position);
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = Util.inflateView(R.layout.item_support_qj, null);
+            convertView = Util.inflateView(R.layout.item_favorite_qj, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        imageLoader.displayImage(item.getCover_url(), holder.iv_cover, options);
-        holder.tv_title.setText(item.getTitle());
-        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame, holder.titleImg, 11, -1);
-        holder.tv_desc.setText(item.getAddress());
+        ImageLoader.getInstance().displayImage(item.sight.cover_url, holder.imageView, options);
+        ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
+        holder.tvName.setText(item.sight.user_info.nickname);
+        holder.tv_title.setText(item.sight.scene_title);
+        if (item.is_love == 1) {
+            holder.ibtn.setImageResource(R.mipmap.zaned);
+        } else {
+            holder.ibtn.setImageResource(R.mipmap.zan_normal);
+        }
+        setClickListener(holder.ibtn, item);
         return convertView;
     }
 
+    private void setClickListener(final ImageButton ibtn, final DataSupportQJ.ItemSupportQJ item) {
+        ibtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item == null) return;
+                if (item.is_love == 0) {
+                    ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
+                        @Override
+                        public void onStart() {
+                            ibtn.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            ibtn.setEnabled(true);
+                            if (TextUtils.isEmpty(responseInfo.result)) return;
+                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                item.is_love = 1;
+                                ibtn.setImageResource(R.mipmap.zaned);
+                                return;
+                            }
+                            ToastUtils.showError(response.getMessage());
+                        }
+
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            ibtn.setEnabled(true);
+                            e.printStackTrace();
+                            ToastUtils.showError(R.string.network_err);
+                            LogUtil.e(TAG, s);
+                        }
+                    });
+                } else {
+                    ClientDiscoverAPI.cancelLoveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
+                        @Override
+                        public void onStart() {
+                            ibtn.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            ibtn.setEnabled(true);
+                            if (TextUtils.isEmpty(responseInfo.result)) return;
+                            HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                            if (response.isSuccess()) {
+                                item.is_love = 0;
+                                ibtn.setImageResource(R.mipmap.zan_normal);
+                                return;
+                            }
+                            ToastUtils.showError(response.getMessage());
+                        }
+
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            ibtn.setEnabled(true);
+                            e.printStackTrace();
+                            ToastUtils.showError(R.string.network_err);
+                            LogUtil.e(TAG, s);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     static class ViewHolder {
-        @Bind(R.id.iv_cover)
-        ImageView iv_cover;
+        @Bind(R.id.imageView)
+        ImageView imageView;
+        @Bind(R.id.riv)
+        RoundedImageView riv;
+        @Bind(R.id.tv_name)
+        TextView tvName;
         @Bind(R.id.tv_title)
         TextView tv_title;
-        @Bind(R.id.tv_desc)
-        TextView tv_desc;
-        @Bind(R.id.item_frame)
-        FrameLayout item_frame;
-        @Bind(R.id.title_img)
-        ImageView titleImg;
+        @Bind(R.id.ibtn)
+        ImageButton ibtn;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

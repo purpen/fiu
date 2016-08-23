@@ -25,7 +25,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
@@ -138,7 +137,7 @@ public class FavoriteQJFragment extends MyBaseFragment {
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
                 e.printStackTrace();
-                Util.makeToast(s);
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }

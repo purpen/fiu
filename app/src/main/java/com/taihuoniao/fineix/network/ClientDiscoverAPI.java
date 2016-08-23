@@ -146,6 +146,26 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+
+    /**
+     * 赞过的情境
+     *
+     * @param page
+     * @param type
+     * @param event
+     * @param callBack
+     */
+    public static void getSupportQJ(String page, String type, String event, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/favorite/get_new_list";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
+        params.addQueryStringParameter("user_id", LoginInfo.getUserId() + "");
+        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("event", event);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
     //情景
     //情景订阅
     public static void subsQingjing(String id, RequestCallBack<String> callBack) {
@@ -1391,6 +1411,7 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
+
     //收藏产品和取消收藏
     public static void favorite(String id, String type, RequestCallBack<String> callBack) {
         String url = NetworkConstance.favorite_product;
@@ -1557,6 +1578,23 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/my/add_interest_scene_id";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * @param page
+     * @param pageType
+     * @param sort
+     * @param callBack
+     */
+    public static void getChoosenSubject(String page, String pageType, String fine, String sort, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_subject/getlist";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
+        params.addQueryStringParameter("fine", fine);
+        params.addQueryStringParameter("type", pageType);
+        params.addQueryStringParameter("sort",sort);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp210"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp210"
+        android:background="@color/black20" />
+
+    <LinearLayout
+        android:layout_width="@dimen/dp150"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:background="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/riv"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:gravity="center_horizontal"
+            android:lineSpacingMultiplier="1.1"
+            android:text="不知道这3种清洁技巧哪敢安心铺地铺"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp16"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp10" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:background="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp12"
+            android:drawableLeft="@mipmap/readed"
+            android:text="0"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="@dimen/dp5"
+            android:layout_marginTop="@dimen/dp5" />
+    </LinearLayout>
+</RelativeLayout>

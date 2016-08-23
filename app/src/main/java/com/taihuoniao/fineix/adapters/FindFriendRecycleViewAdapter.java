@@ -3,10 +3,10 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +14,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 
 import java.util.ArrayList;
 
@@ -85,8 +84,10 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         }
 
         imageLoader.displayImage(item.cover_url, holder.iv_cover, options);
-        holder.tv_title.setText(list.get(position).title);
-        SceneTitleSetUtils.setTitle(holder.tv_title, holder.item_frame, holder.titleImg, 9, -1);
+        if (!TextUtils.isEmpty(item.title)) {
+            holder.tv_title.setText(item.title);
+            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+        }
         holder.tv_desc.setText(item.address);
     }
 
@@ -95,18 +96,13 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_cover)
         ImageView iv_cover;
         @Bind(R.id.tv_title)
         TextView tv_title;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
-        @Bind(R.id.item_frame)
-        FrameLayout item_frame;
-        @Bind(R.id.title_img)
-        ImageView titleImg;
-
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

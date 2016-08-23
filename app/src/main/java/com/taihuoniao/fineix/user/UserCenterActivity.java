@@ -350,7 +350,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onFailure(HttpException e, String s) {
                 if (dialog != null) dialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }

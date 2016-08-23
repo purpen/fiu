@@ -14,7 +14,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.UserInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.GlobalTitleLayout;
+import com.taihuoniao.fineix.view.CustomHeadView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +26,8 @@ import butterknife.OnClick;
  * Created by taihuoniao on 2016/5/10.
  */
 public class AllOrderActivity extends BaseActivity implements View.OnClickListener {
-    @Bind(R.id.activity_all_order_title)
-    GlobalTitleLayout titleLayout;
+    @Bind(R.id.custom_head)
+    CustomHeadView custom_head;
     @Bind(R.id.activity_all_order_myorderrelative)
     RelativeLayout myOrderRelative;
     @Bind(R.id.activity_all_order_daifukuanrelative)
@@ -63,10 +63,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initView() {
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setContinueTvVisible(false);
-        titleLayout.setBackImg(R.mipmap.back_black);
-        titleLayout.setTitle(R.string.all_order, getResources().getColor(R.color.black333333));
+        custom_head.setHeadCenterTxtShow(true, "全部订单");
 //        myOrderRelative.setOnClickListener(this);
 //        daifukuanTv.setOnClickListener(this);
 //        daifahuoTv.setOnClickListener(this);
@@ -215,7 +212,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                ToastUtils.showError("网络错误");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }

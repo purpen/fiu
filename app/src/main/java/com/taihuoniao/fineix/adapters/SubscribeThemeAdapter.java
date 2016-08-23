@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ThemeQJ;
+import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -39,12 +40,23 @@ public class SubscribeThemeAdapter extends CommonBaseAdapter<ThemeQJ> {
         ImageLoader.getInstance().displayImage(item.back_url, holder.iv, options);
         holder.tv.setText(item.title);
         holder.tv_count.setText(String.format("已有%s人订阅", item.sub_count));
-        if (item.isSubscribed) {
-            holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.subscribed, 0, 0, 0);
-            holder.view_bg.setVisibility(View.VISIBLE);
+        if (activity instanceof CompleteUserInfoActivity) {
+            holder.tv_count.setVisibility(View.GONE);
+            if (item.stick == 1) {
+                holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.subscribed, 0, 0, 0);
+                holder.view_bg.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.circle_add, 0, 0, 0);
+                holder.view_bg.setVisibility(View.GONE);
+            }
         } else {
-            holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.circle_add, 0, 0, 0);
-            holder.view_bg.setVisibility(View.GONE);
+            if (item.isSubscribed) {
+                holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.subscribed, 0, 0, 0);
+                holder.view_bg.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.circle_add, 0, 0, 0);
+                holder.view_bg.setVisibility(View.GONE);
+            }
         }
         return convertView;
     }

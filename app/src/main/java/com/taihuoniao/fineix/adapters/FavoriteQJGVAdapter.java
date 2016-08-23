@@ -53,12 +53,13 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
         ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
         holder.tvName.setText(item.sight.user_info.nickname);
         holder.tv_title.setText(item.sight.scene_title);
-        if (item.is_follow == 1) {
-            holder.ibtn.setImageResource(R.mipmap.zaned);
-        } else {
-            holder.ibtn.setImageResource(R.mipmap.zan_normal);
-        }
-        setClickListener(holder.ibtn, item);
+        holder.ibtn.setVisibility(View.GONE);
+//        if (item.is_follow == 1) {
+//            holder.ibtn.setImageResource(R.mipmap.zaned);
+//        } else {
+//            holder.ibtn.setImageResource(R.mipmap.zan_normal);
+//        }
+//        setClickListener(holder.ibtn, item);
         return convertView;
     }
 
