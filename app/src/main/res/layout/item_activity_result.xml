@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_prize"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:gravity="center_vertical"
+        android:background="@color/color_f8f8f8"
+        android:text="@string/app_name"
+        android:textColor="@color/color_666"
+        android:paddingLeft="@dimen/dp16" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:background="@color/black">
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp">
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/head_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher"
+                app:riv_border_color="@color/white"
+                app:riv_border_width="1px"
+                app:riv_corner_radius="100dp" />
+
+            <ImageView
+                android:id="@+id/v_img"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/v"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/attention_btn"
+            android:layout_width="@dimen/dp70"
+            android:layout_height="@dimen/dp30"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/attention_btn"
+            android:layout_toRightOf="@id/relative"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="嘿嘿"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name_tv"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/publish_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:singleLine="true"
+                    android:text="30分钟前"
+                    android:drawableLeft="@mipmap/index_time"
+                    android:drawablePadding="@dimen/dp5"
+                    android:textColor="#8e8e8e"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/location_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:drawableLeft="@mipmap/index_location"
+                    android:drawableRight="@mipmap/index_arrow_right"
+                    android:singleLine="true"
+                    android:text="北京市"
+                    android:drawablePadding="@dimen/dp5"
+                    android:textColor="#8e8e8e"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/qj_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_background_750_1334" />
+
+        <TextView
+            android:id="@+id/qj_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:background="@color/black_touming_80"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/qj_title_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/qj_title_tv"
+            android:layout_marginBottom="3dp"
+            android:background="@color/black_touming_80"
+            android:maxWidth="188dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="12dp"
+            android:singleLine="true"
+            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/label_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+</LinearLayout>

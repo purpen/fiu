@@ -24,6 +24,9 @@ public class LoginCompleteUtils {
             case DataConstants.SceneDetailActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                 break;
+            case DataConstants.ActivityDetail:
+                activity.sendBroadcast(new Intent(DataConstants.BroadSceneActivityDetail));
+                break;
             case DataConstants.ElseActivity:
                 //其他不需要做任何活动的界面的activity，只需要正常返回就行
                 break;

@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,13 +59,19 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.rl_right.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
-            holder.tv_title_right.setText(right_qj.getTitle());
+            if (!TextUtils.isEmpty(left_qj.getTitle())) {
+                holder.tv_title_right.setText(right_qj.getTitle());
+                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+            }
 //            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame, holder.rightTitleImg, 11, -1);
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
-        holder.tv_title_left.setText(left_qj.getTitle());
+        if (!TextUtils.isEmpty(left_qj.getTitle())) {
+            holder.tv_title_left.setText(left_qj.getTitle());
+            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+        }
 //        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame, holder.leftTitleImg, 11, -1);
 
         holder.tv_desc_left.setText(left_qj.getAddress());

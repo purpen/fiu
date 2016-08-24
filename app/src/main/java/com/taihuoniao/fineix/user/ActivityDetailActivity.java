@@ -1,8 +1,11 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -24,6 +27,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
 import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
 import com.taihuoniao.fineix.user.fragments.RuleFragment;
@@ -64,6 +68,14 @@ public class ActivityDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            id = savedInstanceState.getString(TAG);
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void getIntentData() {
         Intent intent = getIntent();
         if (intent.hasExtra(TAG)) {
@@ -84,7 +96,7 @@ public class ActivityDetailActivity extends BaseActivity {
         bundle.putString("summary", data.summary);
         String[] array = getResources().getStringArray(R.array.activity_detail_tab);
         Fragment[] fragments = {RuleFragment.newInstance(bundle), ParticipateQJFragment.newInstance(id), ActivityResultFragment.newInstance(data.sights)};
-        if (data.evt == 2) {//2是结束
+        if (data.evt != 2) {//2活动未结束展示两项
             array = Arrays.copyOf(array, 2);
             fragments = Arrays.copyOf(fragments, 2);
         }
@@ -202,4 +214,27 @@ public class ActivityDetailActivity extends BaseActivity {
         tvDesc.setText(data.short_title);
         initTabLayout();
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(TAG, id);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putString(TAG, id);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TextUtils.equals(DataConstants.BroadSceneActivityDetail, intent.getAction())) {
+                if (TextUtils.isEmpty(id)) return;
+                requestNet();
+            }
+        }
+    };
 }

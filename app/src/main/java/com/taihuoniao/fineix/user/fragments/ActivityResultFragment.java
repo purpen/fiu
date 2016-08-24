@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.ActivityAdapter;
+import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 
@@ -26,15 +26,15 @@ public class ActivityResultFragment extends MyBaseFragment {
     @Bind(R.id.pull_lv)
     PullToRefreshListView pullLv;
     private ArrayList<SubjectData.SightBean> mList;
-    private ActivityAdapter adapter;
+    private ActivityResultAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
             mList = bundle.getParcelableArrayList("list");
         }
+        super.onCreate(savedInstanceState);
     }
 
     public static ActivityResultFragment newInstance(ArrayList<SubjectData.SightBean> list) {
@@ -56,7 +56,6 @@ public class ActivityResultFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        mList = new ArrayList<>();
         pullLv.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
@@ -65,10 +64,12 @@ public class ActivityResultFragment extends MyBaseFragment {
 
     }
 
+
     @Override
-    protected void refreshUIAfterNet() {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (mList == null || mList.size() == 0) return;
-        adapter = new ActivityAdapter(mList, activity);
+        adapter = new ActivityResultAdapter(mList, activity);
         pullLv.setAdapter(adapter);
     }
 }

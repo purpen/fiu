@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingLeft="@dimen/dp8"
-    android:paddingRight="@dimen/dp8"
-    android:paddingTop="@dimen/dp8">
+    android:paddingLeft="@dimen/dp16"
+    android:paddingRight="@dimen/dp16"
+    android:paddingTop="@dimen/dp16">
 
     <RelativeLayout
         android:id="@+id/rl_left"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp160"
-        android:paddingRight="@dimen/dp4"
+        android:paddingRight="@dimen/dp8"
         android:layout_weight="1">
         <ImageView
             android:id="@+id/iv_cover_left"
@@ -25,14 +25,12 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@string/app_name"
             android:lineSpacingMultiplier="1.2"
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
-            android:background="@color/black90"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp12"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp10"
             android:layout_alignParentBottom="true" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +59,7 @@
         android:id="@+id/rl_right"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp160"
-        android:paddingLeft="@dimen/dp4"
+        android:paddingLeft="@dimen/dp8"
         android:layout_weight="1">
 
         <ImageView
@@ -76,12 +74,10 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@string/app_name"
             android:lineSpacingMultiplier="1.2"
-            android:background="@color/black90"
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp10"
             android:textColor="@android:color/white"
             android:layout_alignParentBottom="true"
             android:textSize="@dimen/sp12" />

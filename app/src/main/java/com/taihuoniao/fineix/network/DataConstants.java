@@ -14,12 +14,16 @@ public class DataConstants {
     public static final int IndexFragment = 105;//首页
     public static final int FindFragment = 106;//发现页
     public static final int SearchActivity = 107;//搜索页
+    public static final int ActivityDetail = 108;//活动详情
     public static final String BroadSearch = "com.taihuoniao.fiu.search";
     public static final String BroadIndex = "com.taihuoniao.fiu.index";
     public static final String BroadFind = "con.taihuoniao.fiu.find";
     public static final String BroadViewPager = "com.taihuoniao.fiu.viewpager";
     //场景详情界面跳转到注册界面广播Action
     public static final String BroadSceneDetail = "com.taihuoniao.fiu.scenedetail";
+    //跳转活动详情
+    public static final String BroadSceneActivityDetail = "com.taihuoniao.fiu.activitydetail";
+
     //情景详情界面跳转到注册界面广播action
     public static final String BroadQingjingDetail = "com.taihuonioa.fiu.qingjingdetail";
     public static final int NET_FAIL = 404;//网络请求失败

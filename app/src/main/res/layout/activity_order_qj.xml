@@ -19,8 +19,8 @@
         android:background="@drawable/selector_fff_eee"
         android:textColor="@color/color_333"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp8"
-        android:paddingRight="@dimen/dp8"
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16"
         android:drawableRight="@mipmap/more" />
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@+id/pull_gv"
@@ -29,11 +29,11 @@
         ptr:ptrAnimationStyle="flip"
         android:background="@color/color_f7f7f7"
         android:numColumns="2"
-        android:paddingLeft="@dimen/dp4"
-        android:paddingRight="@dimen/dp4"
-        android:paddingTop="@dimen/dp8"
-        android:paddingBottom="@dimen/dp8"
-        android:verticalSpacing="@dimen/dp8"
-        android:horizontalSpacing="@dimen/dp8"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:paddingTop="@dimen/dp16"
+        android:paddingBottom="@dimen/dp16"
+        android:verticalSpacing="@dimen/dp16"
+        android:horizontalSpacing="@dimen/dp16"
         />
 </LinearLayout>

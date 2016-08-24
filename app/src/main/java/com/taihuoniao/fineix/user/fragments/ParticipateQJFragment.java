@@ -17,8 +17,8 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.SupportQJAdapter;
-import com.taihuoniao.fineix.beans.DataSupportQJ;
+import com.taihuoniao.fineix.adapters.ParticipateQJAdapter;
+import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
@@ -42,9 +42,9 @@ public class ParticipateQJFragment extends MyBaseFragment {
     @Bind(R.id.pull_gv)
     PullToRefreshGridView pullGv;
     private WaittingDialog dialog;
-    private ArrayList<DataSupportQJ.ItemSupportQJ> mList = new ArrayList<>();
+    private ArrayList<DataParticipateQJ.ItemParticipateQJ> mList = new ArrayList<>();
     private int curPage = 1;
-    private SupportQJAdapter adapter;
+    private ParticipateQJAdapter adapter;
     private boolean isLoadMore = false;
     private String id;
 
@@ -135,7 +135,7 @@ public class ParticipateQJFragment extends MyBaseFragment {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<DataSupportQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataSupportQJ>>() {
+                HttpResponse<DataParticipateQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataParticipateQJ>>() {
                 });
 
                 if (response.isSuccess()) {
@@ -162,7 +162,7 @@ public class ParticipateQJFragment extends MyBaseFragment {
         curPage++;
         mList.addAll(list);
         if (adapter == null) {
-            adapter = new SupportQJAdapter(mList, activity);
+            adapter = new ParticipateQJAdapter(mList, activity);
             pullGv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

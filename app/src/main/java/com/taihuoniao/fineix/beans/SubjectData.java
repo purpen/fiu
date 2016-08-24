@@ -41,6 +41,7 @@ public class SubjectData implements Parcelable {
     public Product product;
     public ArrayList<SightBean> sights;
     public ArrayList<ProductBean> products;
+
     public SubjectData() {
     }
 
@@ -50,15 +51,62 @@ public class SubjectData implements Parcelable {
         public String cover_url;
         public String created_at;
         public UserBean user;
+        public String prize;
+        public ArrayList<ProductBean> product;
 
+        public static class ProductBean implements Parcelable {
+            public String id;
+            public String title;
+            public double x;
+            public double y;
+            public int loc;
+
+            public ProductBean() {
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.id);
+                dest.writeString(this.title);
+                dest.writeDouble(this.x);
+                dest.writeDouble(this.y);
+                dest.writeInt(this.loc);
+            }
+
+            protected ProductBean(Parcel in) {
+                this.id = in.readString();
+                this.title = in.readString();
+                this.x = in.readDouble();
+                this.y = in.readDouble();
+                this.loc = in.readInt();
+            }
+
+            public static final Creator<ProductBean> CREATOR = new Creator<ProductBean>() {
+                @Override
+                public ProductBean createFromParcel(Parcel source) {
+                    return new ProductBean(source);
+                }
+
+                @Override
+                public ProductBean[] newArray(int size) {
+                    return new ProductBean[size];
+                }
+            };
+        }
         public static class UserBean implements Parcelable {
-            public String _id;
+            public long _id;
             public String nickname;
             public int is_expert;
             public String avatar_url;
             public int is_follow;
             public String address;
             public String city;
+            public String prize;
             public LocationBean location;
 
             public static class LocationBean implements Parcelable {
@@ -101,6 +149,9 @@ public class SubjectData implements Parcelable {
                 };
             }
 
+            public UserBean() {
+            }
+
             @Override
             public int describeContents() {
                 return 0;
@@ -108,7 +159,7 @@ public class SubjectData implements Parcelable {
 
             @Override
             public void writeToParcel(Parcel dest, int flags) {
-                dest.writeString(this._id);
+                dest.writeLong(this._id);
                 dest.writeString(this.nickname);
                 dest.writeInt(this.is_expert);
                 dest.writeString(this.avatar_url);
@@ -118,11 +169,8 @@ public class SubjectData implements Parcelable {
                 dest.writeParcelable(this.location, flags);
             }
 
-            public UserBean() {
-            }
-
             protected UserBean(Parcel in) {
-                this._id = in.readString();
+                this._id = in.readLong();
                 this.nickname = in.readString();
                 this.is_expert = in.readInt();
                 this.avatar_url = in.readString();
