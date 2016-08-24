@@ -45,7 +45,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="@mipmap/index_attention"/>
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="+ 关注"
+            android:background="@drawable/shape_corner_969696_nothing"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -118,6 +121,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="300dp">
 
@@ -134,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:background="@color/black"
+            android:background="@color/black_touming_80"
             android:maxWidth="188dp"
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
@@ -148,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/qj_title_tv"
             android:layout_marginBottom="3dp"
-            android:background="@color/black"
+            android:background="@color/black_touming_80"
             android:maxWidth="188dp"
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
@@ -157,6 +161,11 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/label_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -209,25 +218,32 @@
             android:paddingRight="9dp"
             android:src="@mipmap/index_comment"/>
 
-        <TextView
-            android:id="@+id/love_count"
+        <RelativeLayout
+            android:id="@+id/love_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="11dp"
-            android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@id/comment_img"
-            android:paddingLeft="5dp"
-            android:text="163"
-            android:textColor="#666666"
-            android:textSize="10sp"/>
-
-        <ImageView
-            android:id="@+id/love_img"
-            android:layout_width="24dp"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/love_count"
-            android:paddingLeft="5dp"
-            android:src="@mipmap/index_love"/>
+            android:layout_toLeftOf="@id/comment_img">
+
+            <ImageView
+                android:id="@+id/love_img"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:src="@mipmap/index_love"/>
+
+            <TextView
+                android:id="@+id/love_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="11dp"
+                android:layout_toRightOf="@id/love_img"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:text="163"
+                android:textColor="#666666"
+                android:textSize="10sp"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -236,7 +252,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="#f4f4f4"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="11dp"
         android:paddingRight="11dp"
         android:paddingTop="14dp">
@@ -245,78 +261,38 @@
             android:id="@+id/qj_des_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:lineSpacingExtra="5dp"
             android:maxLines="3"
-            android:text="Being the savage's bowsman, that is, the person who pulled the bow-oar in his boat (the second one from forward),it was my cheerful dufy to attend upon"
+            android:singleLine="false"
+            android:text="Being the savage's bowsman, thaasdffasdfasdfasdfasdfasdfasdfasdfasdft is, the person who pulled the bow-oar in his boat (the second one from forward),it was my cheerful dufy to attend upon"
             android:textColor="#666666"
             android:textSize="12sp"/>
-
-        <ImageView
-            android:id="@+id/more_des_img"
-            android:layout_width="11dp"
-            android:layout_height="11dp"
-            android:layout_alignBottom="@id/qj_des_tv"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
-            android:src="@mipmap/index_more_des"
-            android:visibility="visible"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/label_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="19dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="#f4f4f4"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"/>
-
-
-    <RelativeLayout
+    <com.taihuoniao.fineix.view.ListViewForScrollView
+        android:id="@+id/comment_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="#f4f4f4"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:paddingLeft="11dp"
-        android:paddingRight="11dp">
+        android:paddingRight="11dp"
+        />
 
-        <com.taihuoniao.fineix.view.ListViewForScrollView
-            android:id="@+id/comment_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="7dp"
-            android:layout_toLeftOf="@+id/more_comment_linear"
-            android:divider="@null"
-            android:dividerHeight="5dp"
-            />
-
-        <LinearLayout
-            android:id="@+id/more_comment_linear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/more_comment_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="查看8条评论"
-                android:textColor="#212121"
-                android:textSize="9sp"/>
-
-            <ImageView
-                android:layout_width="11dp"
-                android:layout_height="11dp"
-                android:layout_marginLeft="5dp"
-                android:src="@mipmap/index_more_des"/>
-        </LinearLayout>
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/more_comment"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:paddingLeft="11dp"
+        android:textSize="10sp"
+        android:textColor="#999999"
+        android:layout_height="wrap_content"
+        android:background="#f4f4f4"
+        android:paddingBottom="15dp"
+        android:text="查看所有8条评论"/>
 </LinearLayout>

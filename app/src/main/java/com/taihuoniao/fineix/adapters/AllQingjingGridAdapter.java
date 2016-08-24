@@ -24,12 +24,12 @@ import java.util.List;
  */
 public class AllQingjingGridAdapter extends BaseAdapter {
     private List<QingJingListBean.QingJingItem> list;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private Context context;
     private int horizontalSpace = 0;//gridview的水平间距
     private DisplayImageOptions options;
 
-    public AllQingjingGridAdapter(List<QingJingListBean.QingJingItem> list, List<SearchBean.SearchItem> searchList, Context context, int horizontalSpace) {
+    public AllQingjingGridAdapter(List<QingJingListBean.QingJingItem> list, List<SearchBean.Data.SearchItem> searchList, Context context, int horizontalSpace) {
         this.list = list;
         this.searchList = searchList;
         this.context = context;

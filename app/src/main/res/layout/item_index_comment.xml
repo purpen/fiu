@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:paddingBottom="3dp"
                 android:background="#f4f4f4"
                 >
 
@@ -16,14 +17,15 @@
     <TextView
         android:id="@+id/content_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:gravity="center_vertical"
         android:layout_toRightOf="@id/head_img"
         android:ellipsize="end"
-        android:lineSpacingExtra="5dp"
+        android:lineSpacingExtra="3dp"
         android:maxLines="2"
-        android:text="Index Fragment"
+        android:text="Index Fragment
+        sadfasdfas;dflkasdjjff;laskjdf;a;slkdjf;laskdjf;laskdjf;laskdjf;laskdjff"
         android:textSize="12sp"/>
 </RelativeLayout>

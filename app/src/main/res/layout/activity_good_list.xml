@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/activity_good_list_first_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="91dp" />
-
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+    >
 
     <RelativeLayout
-        android:id="@+id/title_relative"
+        android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/white">
+        android:background="@color/black">
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,20 +18,20 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/goods_category"
-            android:textColor="@color/black333333"
-            android:textSize="16sp" />
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
 
 
         <ImageView
-            android:id="@+id/activity_good_list_search"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@mipmap/back_black" />
+            android:src="@mipmap/back_white"/>
 
         <RelativeLayout
-            android:id="@+id/activity_good_list_cart_relative"
+            android:id="@+id/cart_relative"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true">
@@ -48,10 +41,10 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="17dp"
                 android:paddingRight="17dp"
-                android:src="@mipmap/cart" />
+                android:src="@mipmap/cart"/>
 
             <TextView
-                android:id="@+id/activity_good_list_cart_number"
+                android:id="@+id/cart_number"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_alignParentRight="true"
@@ -61,32 +54,29 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="10sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/line2"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/relative"
+        android:background="#313131"/>
+
+    <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/title_relative"
-        android:background="#eaeaea" />
+        android:layout_below="@id/relative"
+        android:background="#727272"/>
 
-    <com.taihuoniao.fineix.view.CustomSlidingTab
-        android:id="@+id/activity_good_list_first_sliding"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_below="@id/line2"
-        app:pstsIndicatorHeight="2dp"
-        app:pstsIsDivierShow="false"
-        app:pstsTabPaddingLeftRight="10dp"
-        app:pstsUnderlineHeight="0dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/activity_good_list_first_sliding"
-        android:background="#e2e2e2" />
-
+        android:layout_height="match_parent"
+        android:layout_below="@id/recycler_view"/>
 
 </RelativeLayout>

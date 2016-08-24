@@ -45,7 +45,6 @@ import com.taihuoniao.fineix.beans.CommonBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SceneDetailsBean;
-import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
@@ -53,7 +52,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.scene.CreateQJActivity;
-import com.taihuoniao.fineix.scene.SearchActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -131,7 +129,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow sharePop, popupWindow;
     //popupwindow下的控件
     private TextView pinglunTv;
-    private TextView shareTv;
     private LinearLayout bianjiLinear;
     private TextView jubaoTv;
     private TextView cancelTv;
@@ -341,7 +338,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
         pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
-        shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
         bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
@@ -350,7 +346,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         pinglunTv.setOnClickListener(this);
-        shareTv.setOnClickListener(this);
         bianjiLinear.setOnClickListener(this);
         jubaoTv.setOnClickListener(this);
         cancelTv.setOnClickListener(this);
@@ -488,7 +483,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.pop_share_scene_detail_share_btn:
-            case R.id.popup_scene_detail_more_share:
             case R.id.activity_scenedetails_share:
                 if (sharePop != null) {
                     sharePop.dismiss();
@@ -955,96 +949,96 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void loveScene(String i) {
-        ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                SceneLoveBean netSceneLoveBean = sceneLoveBean;
-//                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                if (netSceneLoveBean.isSuccess()) {
-                    commonList(1 + "", 14 + "", id, null, "sight", "love");
-                    isLove = 1;
-                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
-//                        love.setImageResource(R.mipmap.love_yes);
-                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
-                    loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
-                    moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
-                    if (netSceneLoveBean.getData().getLove_count() > 14) {
-                        moreUser.setVisibility(View.VISIBLE);
-                    } else {
-                        moreUser.setVisibility(View.GONE);
-                    }
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netSceneLoveBean.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
+//        ClientDiscoverAPI.loveScene(i, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<SceneLoveBean>() {
+//                    }.getType();
+//                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+////                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                }
+//                SceneLoveBean netSceneLoveBean = sceneLoveBean;
+////                    Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+//                if (netSceneLoveBean.isSuccess()) {
+//                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+//                    isLove = 1;
+//                    loveCount.setBackgroundResource(R.mipmap.loved_scene);
+////                        love.setImageResource(R.mipmap.love_yes);
+//                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean.getData().getLove_count()));
+//                    loveCountTv.setText(String.format("%d", netSceneLoveBean.getData().getLove_count()));
+//                    moreUser.setText(String.format("%d+", netSceneLoveBean.getData().getLove_count()));
+//                    if (netSceneLoveBean.getData().getLove_count() > 14) {
+//                        moreUser.setVisibility(View.VISIBLE);
+//                    } else {
+//                        moreUser.setVisibility(View.GONE);
+//                    }
+//                } else {
+//                    dialog.dismiss();
+//                    ToastUtils.showError(netSceneLoveBean.getMessage());
+////                        dialog.showErrorWithStatus(netSceneLoveBean.getMessage());
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                dialog.dismiss();
+//                ToastUtils.showError("网络错误");
+//            }
+//        });
     }
 
     private void cancelLoveScene(String i) {
-        ClientDiscoverAPI.cancelLoveScene(i, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SceneLoveBean sceneLoveBean = new SceneLoveBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SceneLoveBean>() {
-                    }.getType();
-                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-//                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                //                case DataConstants.CANCEL_LOVE_SCENE:
-                SceneLoveBean netSceneLoveBean1 = sceneLoveBean;
-                if (netSceneLoveBean1.isSuccess()) {
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
-                    commonList(1 + "", 14 + "", id, null, "sight", "love");
-                    isLove = 0;
-                    loveCount.setBackgroundResource(R.mipmap.love_scene);
-//                        love.setImageResource(R.mipmap.like_height_43px);
-                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
-                    loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
-                    moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
-                    if (netSceneLoveBean1.getData().getLove_count() > 14) {
-                        moreUser.setVisibility(View.VISIBLE);
-                    } else {
-                        moreUser.setVisibility(View.GONE);
-                    }
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(netSceneLoveBean1.getMessage());
-//                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
-//                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-//                    break;
-//                case DataConstants.LOVE_SCENE:
+//        ClientDiscoverAPI.cancelLoveScene(i, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                SceneLoveBean sceneLoveBean = new SceneLoveBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<SceneLoveBean>() {
+//                    }.getType();
+//                    sceneLoveBean = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+////                    Toast.makeText(MainApplication.getContext(), "解析异常" + e.toString(), Toast.LENGTH_SHORT).show();
+//                }
+//                //                case DataConstants.CANCEL_LOVE_SCENE:
+//                SceneLoveBean netSceneLoveBean1 = sceneLoveBean;
+//                if (netSceneLoveBean1.isSuccess()) {
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getData().getLove_count() + "", Toast.LENGTH_SHORT).show();
+//                    commonList(1 + "", 14 + "", id, null, "sight", "love");
+//                    isLove = 0;
+//                    loveCount.setBackgroundResource(R.mipmap.love_scene);
+////                        love.setImageResource(R.mipmap.like_height_43px);
+//                    loveCount.setText(String.format("%d人赞过", netSceneLoveBean1.getData().getLove_count()));
+//                    loveCountTv.setText(String.format("%d", netSceneLoveBean1.getData().getLove_count()));
+//                    moreUser.setText(String.format("%d+", netSceneLoveBean1.getData().getLove_count()));
+//                    if (netSceneLoveBean1.getData().getLove_count() > 14) {
+//                        moreUser.setVisibility(View.VISIBLE);
+//                    } else {
+//                        moreUser.setVisibility(View.GONE);
+//                    }
+//                } else {
+//                    dialog.dismiss();
+//                    ToastUtils.showError(netSceneLoveBean1.getMessage());
+////                        dialog.showErrorWithStatus(netSceneLoveBean1.getMessage());
+////                        Toast.makeText(SceneDetailActivity.this, netSceneLoveBean1.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+////                    break;
+////                case DataConstants.LOVE_SCENE:
+////
+////                    break;
+//            }
 //
-//                    break;
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError("网络错误");
-            }
-        });
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                dialog.dismiss();
+//                ToastUtils.showError("网络错误");
+//            }
+//        });
     }
 
     private void deleteScene(String i) {

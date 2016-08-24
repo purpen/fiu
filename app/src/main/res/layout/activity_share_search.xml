@@ -40,12 +40,13 @@
                 android:visibility="gone"/>
 
             <EditText
+                android:textColor="@color/white"
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/delete_title"
                 android:background="@null"
-                android:hint="添加标题"
+                android:hint="添加20字以内的标题"
                 android:paddingLeft="17dp"
                 android:paddingRight="15dp"
                 android:singleLine="true"
@@ -55,7 +56,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="60dp"
             android:layout_marginTop="3dp"
             android:background="#3ff7f7f7">
 
@@ -78,6 +79,7 @@
                 android:hint="说说现在的想法"
                 android:paddingLeft="17dp"
                 android:paddingRight="15dp"
+                android:textColor="@color/white"
                 android:textColorHint="#cccccc"
                 android:textSize="12sp"/>
         </RelativeLayout>
@@ -118,6 +120,7 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/search_text"
+                android:textColor="@color/white"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textColorHint="#cccccc"
@@ -143,7 +146,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/linear1"
-        android:layout_marginBottom="44dp"
         android:background="#cc222222"
         android:divider="@null"
         android:dividerHeight="0dp"
@@ -155,6 +157,7 @@
         android:id="@+id/gone_linear"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="#f8f8f8">
 
@@ -192,35 +195,6 @@
             android:layout_alignParentBottom="true"
             android:background="#cccccc"/>
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/bottom_linear"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_alignParentBottom="true"
-        android:background="#010101"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/confirm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="确定"
-            android:textColor="@color/white"
-            android:textSize="15sp"/>
-    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"

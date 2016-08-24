@@ -26,11 +26,11 @@ import java.util.List;
 public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private Activity activity;
     private List<ProductBean.ProductListItem> list;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private boolean isScrolling;//用来判断listview是否正在滑动的标识
     private SceneListViewAdapter.SceneListAdapterScrollListener sceneListAdapterScrollListener;//外界用来调用的滑动监听
 
-    public GoodListAdapter(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
+    public GoodListAdapter(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList) {
         this.activity = activity;
         this.list = list;
         this.searchList = searchList;
@@ -216,9 +216,9 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
         private Activity activity;
         private int position;
         private List<ProductBean.ProductListItem> list;
-        private List<SearchBean.SearchItem> searchList;
+        private List<SearchBean.Data.SearchItem> searchList;
 
-        public ClickListener(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList, int position) {
+        public ClickListener(Activity activity, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList, int position) {
             this.activity = activity;
             this.list = list;
             this.searchList = searchList;

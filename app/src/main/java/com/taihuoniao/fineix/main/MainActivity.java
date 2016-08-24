@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -39,6 +37,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
+import com.taihuoniao.fineix.utils.WindowUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +101,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<TabItem> tabList;
     private ArrayList<Fragment> fragments;
     private Fragment showFragment;
-    private String which = IndexFragment.class.getSimpleName();
+    public String which = IndexFragment.class.getSimpleName();
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -120,6 +119,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 bottomLinear.setTranslationY(0);
                 animFlag = 0;
             }
+        }else if(intent.hasExtra(FindFragment.class.getSimpleName())){
+            which = FindFragment.class.getSimpleName();
         }
         which2Switch();
 
@@ -133,6 +134,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(MineFragment.class);
         } else if (TextUtils.equals(WellGoodsFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(WellGoodsFragment.class);
+        }else if(TextUtils.equals(FindFragment.class.getSimpleName(),which)){
+            switchFragmentandImg(FindFragment.class);
         }
     }
 
@@ -170,12 +173,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.black));
-            tintManager.setStatusBarTintEnabled(true);
-        }
+        WindowUtils.chenjin(this);
     }
 
     private void recoverAllState(Bundle savedInstanceState) {
@@ -262,7 +260,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
                 if (first) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstImg.setImageResource(R.mipmap.first_in_fiu);
                     firstRelative.setTag(2);
                     firstImg.setVisibility(View.VISIBLE);
@@ -371,7 +369,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tabItem.tv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
             } else {
                 tabItem.imageView.setImageResource(tabItem.unselId);
-                tabItem.tv.setTextColor(getResources().getColor(R.color.color_999));
+                tabItem.tv.setTextColor(getResources().getColor(R.color.white));
             }
         }
     }
@@ -438,7 +436,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_QING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstImg.setImageResource(R.mipmap.first_in_index);
                     firstImg.setVisibility(View.VISIBLE);
                     firstRelative.setTag(1);
@@ -447,7 +445,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 1) {
                                 firstImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_first);
+                                firstRelative.setBackgroundResource(R.color.black_touming_80);
                                 firstRightImg.setImageResource(R.mipmap.index);
                                 firstRightImg.setVisibility(View.VISIBLE);
                                 firstRelative.setTag(6);
@@ -467,7 +465,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_JING, true);
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstImg.setImageResource(R.mipmap.first_in_find);
                     firstRelative.setTag(7);
                     firstImg.setVisibility(View.VISIBLE);
@@ -487,7 +485,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof WellGoodsFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_wellgood);
                     firstImg.setVisibility(View.VISIBLE);
@@ -500,7 +498,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                                if (isMove()) {
 //                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
 //                                }
-                                firstRelative.setBackgroundResource(R.color.black_first);
+                                firstRelative.setBackgroundResource(R.color.black_touming_80);
                                 firstLeftImg.setImageResource(R.mipmap.wellgoods2);
                                 firstLeftImg.setVisibility(View.VISIBLE);
                                 firstRelative.setTag(9);
@@ -526,7 +524,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof MineFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_first);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstRelative.setVisibility(View.VISIBLE);
                     firstImg.setImageResource(R.mipmap.first_in_mine);
                     firstImg.setVisibility(View.VISIBLE);
@@ -536,7 +534,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 11) {
                                 firstImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_first);
+                                firstRelative.setBackgroundResource(R.color.black_touming_80);
                                 firstLeftImg.setImageResource(R.mipmap.mine2);
                                 firstLeftImg.setVisibility(View.VISIBLE);
                                 firstRelative.setTag(12);

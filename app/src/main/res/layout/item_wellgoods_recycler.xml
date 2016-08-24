@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:paddingBottom="11dp"
+                android:paddingLeft="7.5dp"
+                android:paddingRight="7.5dp"
+                android:paddingTop="9dp">
+
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+        android:id="@+id/round_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/modeng"
+        app:riv_corner_radius="100dp"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="分类"
+        android:textColor="@color/white"
+        android:textSize="8sp"/>
+</RelativeLayout>

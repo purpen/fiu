@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_margin="1dp"
-        android:background="@color/black_touming"
+        android:background="@color/black_touming_60"
         android:gravity="center"
         android:textColor="@color/white"/>
 </RelativeLayout>

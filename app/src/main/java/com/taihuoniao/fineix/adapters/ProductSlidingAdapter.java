@@ -20,11 +20,11 @@ import com.taihuoniao.fineix.utils.Util;
 public class ProductSlidingAdapter extends BaseAdapter {
     private Activity activity;
     private ProductBean.ProductListItem productListItem;
-    private SearchBean.SearchItem searchItem;
+    private SearchBean.Data.SearchItem searchItem;
     private DisplayImageOptions options;
     private boolean isScrolling;
 
-    public ProductSlidingAdapter(Activity activity, ProductBean.ProductListItem productListItem, SearchBean.SearchItem searchItem, boolean isScrolling) {
+    public ProductSlidingAdapter(Activity activity, ProductBean.ProductListItem productListItem, SearchBean.Data.SearchItem searchItem, boolean isScrolling) {
         this.activity = activity;
         this.productListItem = productListItem;
         this.searchItem = searchItem;

@@ -88,6 +88,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                 break;
             case "1":
                 hold.isDefaultTv.setVisibility(View.VISIBLE);
+                list.get(position).setIsSelect(true);
                 break;
         }
         hold.addressTv.setText(list.get(position).getProvince_name() + "  " + list.get(position).getCity_name());

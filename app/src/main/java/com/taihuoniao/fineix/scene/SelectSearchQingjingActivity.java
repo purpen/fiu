@@ -64,7 +64,7 @@ public class SelectSearchQingjingActivity extends BaseActivity implements View.O
     private int page = 1;
     private double distance = 5000;//搜索范围
     private List<QingJingListBean.QingJingItem> qingjingList;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private AllQingjingGridAdapter allQingjingGridAdapter;
     //搜索情景
     private String q;

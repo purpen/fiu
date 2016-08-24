@@ -9,8 +9,16 @@ import java.util.List;
  * Created by taihuoniao on 2016/4/18.
  */
 public class SceneList extends NetBean implements Serializable {
-
+    private boolean is_error;
     private DataBean data;
+
+    public boolean isIs_error() {
+        return is_error;
+    }
+
+    public void setIs_error(boolean is_error) {
+        this.is_error = is_error;
+    }
 
     public DataBean getData() {
         return data;
@@ -20,16 +28,69 @@ public class SceneList extends NetBean implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
-        private int current_user_id;
-
+    public static class DataBean implements Serializable{
+        private int total_rows;
+        private int total_page;
+        private int current_page;
+        private String pager;
+        private int next_page;
+        private int prev_page;
+        private String current_user_id;
         private List<RowsBean> rows;
 
-        public int getCurrent_user_id() {
+        public int getTotal_rows() {
+            return total_rows;
+        }
+
+        public void setTotal_rows(int total_rows) {
+            this.total_rows = total_rows;
+        }
+
+        public int getTotal_page() {
+            return total_page;
+        }
+
+        public void setTotal_page(int total_page) {
+            this.total_page = total_page;
+        }
+
+        public int getCurrent_page() {
+            return current_page;
+        }
+
+        public void setCurrent_page(int current_page) {
+            this.current_page = current_page;
+        }
+
+        public String getPager() {
+            return pager;
+        }
+
+        public void setPager(String pager) {
+            this.pager = pager;
+        }
+
+        public int getNext_page() {
+            return next_page;
+        }
+
+        public void setNext_page(int next_page) {
+            this.next_page = next_page;
+        }
+
+        public int getPrev_page() {
+            return prev_page;
+        }
+
+        public void setPrev_page(int prev_page) {
+            this.prev_page = prev_page;
+        }
+
+        public String getCurrent_user_id() {
             return current_user_id;
         }
 
-        public void setCurrent_user_id(int current_user_id) {
+        public void setCurrent_user_id(String current_user_id) {
             this.current_user_id = current_user_id;
         }
 
@@ -41,63 +102,37 @@ public class SceneList extends NetBean implements Serializable {
             this.rows = rows;
         }
 
-        public static class RowsBean implements Serializable {
+        public static class RowsBean implements Serializable{
             private String _id;
             private String title;
             private String user_id;
             private String des;
             private String scene_id;
+            private String category_id;
+            private List<String> tags;
 
             private LocationBean location;
+            private String city;
             private String address;
             private String used_count;
             private String view_count;
             private String love_count;
-            private String comment_count;
+            private int comment_count;
+            private String stick;
             private String fine;
             private String is_check;
             private String status;
+            private String deleted;
             private String created_on;
             private String updated_on;
-            private String deleted;
             private String tags_s;
             private String cover_url;
             private String created_at;
-            private String scene_title;
-            /**
-             * user_id : 924807
-             * nickname : 183****0981
-             * avatar_url : http://frstatic.qiniudn.com/images/deavatar/007-m.jpg
-             * summary : null
-             * counter : {"message_count":0,"notice_count":2,"alert_count":9,"fans_count":12,"comment_count":0,"people_count":0,"fiu_notice_count":6,"fiu_alert_count":4,"fiu_comment_count":21,"order_wait_payment":2,"order_ready_goods":0}
-             * follow_count : 0
-             * fans_count : 7
-             * love_count : 0
-             * is_expert : 0
-             * label :
-             * expert_label :
-             * expert_info :
-             */
 
             private UserInfoBean user_info;
-            private List<String> tags;
-            /**
-             * id : 0
-             * title :
-             * price : 0
-             * x : 0
-             * y : 0
-             */
-
+            private int is_love;
+            private List<?> category_ids;
             private List<ProductBean> product;
-            /**
-             * _id : 57a016e63ffca2da538b4911
-             * content : 有人给面子。在于
-             * user_id : 719877
-             * user_nickname : Fynn
-             * user_avatar_url : http://frbird.qiniudn.com/avatar/160420/5716ff563ffca2e3108bcf89-avn.jpg
-             */
-
             private List<CommentsBean> comments;
 
             public String get_id() {
@@ -140,12 +175,36 @@ public class SceneList extends NetBean implements Serializable {
                 this.scene_id = scene_id;
             }
 
+            public String getCategory_id() {
+                return category_id;
+            }
+
+            public void setCategory_id(String category_id) {
+                this.category_id = category_id;
+            }
+
+            public List<String> getTags() {
+                return tags;
+            }
+
+            public void setTags(List<String> tags) {
+                this.tags = tags;
+            }
+
             public LocationBean getLocation() {
                 return location;
             }
 
             public void setLocation(LocationBean location) {
                 this.location = location;
+            }
+
+            public String getCity() {
+                return city;
+            }
+
+            public void setCity(String city) {
+                this.city = city;
             }
 
             public String getAddress() {
@@ -180,12 +239,20 @@ public class SceneList extends NetBean implements Serializable {
                 this.love_count = love_count;
             }
 
-            public String getComment_count() {
+            public int getComment_count() {
                 return comment_count;
             }
 
-            public void setComment_count(String comment_count) {
+            public void setComment_count(int comment_count) {
                 this.comment_count = comment_count;
+            }
+
+            public String getStick() {
+                return stick;
+            }
+
+            public void setStick(String stick) {
+                this.stick = stick;
             }
 
             public String getFine() {
@@ -212,6 +279,14 @@ public class SceneList extends NetBean implements Serializable {
                 this.status = status;
             }
 
+            public String getDeleted() {
+                return deleted;
+            }
+
+            public void setDeleted(String deleted) {
+                this.deleted = deleted;
+            }
+
             public String getCreated_on() {
                 return created_on;
             }
@@ -226,14 +301,6 @@ public class SceneList extends NetBean implements Serializable {
 
             public void setUpdated_on(String updated_on) {
                 this.updated_on = updated_on;
-            }
-
-            public String getDeleted() {
-                return deleted;
-            }
-
-            public void setDeleted(String deleted) {
-                this.deleted = deleted;
             }
 
             public String getTags_s() {
@@ -260,14 +327,6 @@ public class SceneList extends NetBean implements Serializable {
                 this.created_at = created_at;
             }
 
-            public String getScene_title() {
-                return scene_title;
-            }
-
-            public void setScene_title(String scene_title) {
-                this.scene_title = scene_title;
-            }
-
             public UserInfoBean getUser_info() {
                 return user_info;
             }
@@ -276,12 +335,20 @@ public class SceneList extends NetBean implements Serializable {
                 this.user_info = user_info;
             }
 
-            public List<String> getTags() {
-                return tags;
+            public int getIs_love() {
+                return is_love;
             }
 
-            public void setTags(List<String> tags) {
-                this.tags = tags;
+            public void setIs_love(int is_love) {
+                this.is_love = is_love;
+            }
+
+            public List<?> getCategory_ids() {
+                return category_ids;
+            }
+
+            public void setCategory_ids(List<?> category_ids) {
+                this.category_ids = category_ids;
             }
 
             public List<ProductBean> getProduct() {
@@ -299,8 +366,56 @@ public class SceneList extends NetBean implements Serializable {
             public void setComments(List<CommentsBean> comments) {
                 this.comments = comments;
             }
+            public static class CommentsBean implements Serializable{
 
-            public static class LocationBean implements Serializable {
+
+                private String _id;
+                private String content;
+                private String user_id;
+                private String user_nickname;
+                private String user_avatar_url;
+
+                public String get_id() {
+                    return _id;
+                }
+
+                public void set_id(String _id) {
+                    this._id = _id;
+                }
+
+                public String getContent() {
+                    return content;
+                }
+
+                public void setContent(String content) {
+                    this.content = content;
+                }
+
+                public String getUser_id() {
+                    return user_id;
+                }
+
+                public void setUser_id(String user_id) {
+                    this.user_id = user_id;
+                }
+
+                public String getUser_nickname() {
+                    return user_nickname;
+                }
+
+                public void setUser_nickname(String user_nickname) {
+                    this.user_nickname = user_nickname;
+                }
+
+                public String getUser_avatar_url() {
+                    return user_avatar_url;
+                }
+
+                public void setUser_avatar_url(String user_avatar_url) {
+                    this.user_avatar_url = user_avatar_url;
+                }
+            }
+            public static class LocationBean implements Serializable{
                 private String type;
                 private List<Double> coordinates;
 
@@ -321,33 +436,29 @@ public class SceneList extends NetBean implements Serializable {
                 }
             }
 
-            public static class UserInfoBean implements Serializable {
+            public static class UserInfoBean implements Serializable{
                 private String user_id;
                 private String nickname;
                 private String avatar_url;
-                private Object summary;
-                /**
-                 * message_count : 0
-                 * notice_count : 2
-                 * alert_count : 9
-                 * fans_count : 12
-                 * comment_count : 0
-                 * people_count : 0
-                 * fiu_notice_count : 6
-                 * fiu_alert_count : 4
-                 * fiu_comment_count : 21
-                 * order_wait_payment : 2
-                 * order_ready_goods : 0
-                 */
+                private String summary;
 
                 private CounterBean counter;
                 private String follow_count;
                 private String fans_count;
                 private String love_count;
                 private int is_expert;
+                private int is_follow;
                 private String label;
                 private String expert_label;
                 private String expert_info;
+
+                public int getIs_follow() {
+                    return is_follow;
+                }
+
+                public void setIs_follow(int is_follow) {
+                    this.is_follow = is_follow;
+                }
 
                 public String getUser_id() {
                     return user_id;
@@ -373,11 +484,11 @@ public class SceneList extends NetBean implements Serializable {
                     this.avatar_url = avatar_url;
                 }
 
-                public Object getSummary() {
+                public String getSummary() {
                     return summary;
                 }
 
-                public void setSummary(Object summary) {
+                public void setSummary(String summary) {
                     this.summary = summary;
                 }
 
@@ -445,18 +556,20 @@ public class SceneList extends NetBean implements Serializable {
                     this.expert_info = expert_info;
                 }
 
-                public static class CounterBean implements Serializable {
+                public static class CounterBean implements Serializable{
                     private String message_count;
                     private String notice_count;
                     private String alert_count;
                     private String fans_count;
                     private String comment_count;
                     private String people_count;
-                    private String fiu_notice_count;
-                    private String fiu_alert_count;
-                    private String fiu_comment_count;
                     private String order_wait_payment;
                     private String order_ready_goods;
+                    private String order_sended_goods;
+                    private String order_evaluate;
+                    private String fiu_comment_count;
+                    private String fiu_alert_count;
+                    private String fiu_notice_count;
 
                     public String getMessage_count() {
                         return message_count;
@@ -506,30 +619,6 @@ public class SceneList extends NetBean implements Serializable {
                         this.people_count = people_count;
                     }
 
-                    public String getFiu_notice_count() {
-                        return fiu_notice_count;
-                    }
-
-                    public void setFiu_notice_count(String fiu_notice_count) {
-                        this.fiu_notice_count = fiu_notice_count;
-                    }
-
-                    public String getFiu_alert_count() {
-                        return fiu_alert_count;
-                    }
-
-                    public void setFiu_alert_count(String fiu_alert_count) {
-                        this.fiu_alert_count = fiu_alert_count;
-                    }
-
-                    public String getFiu_comment_count() {
-                        return fiu_comment_count;
-                    }
-
-                    public void setFiu_comment_count(String fiu_comment_count) {
-                        this.fiu_comment_count = fiu_comment_count;
-                    }
-
                     public String getOrder_wait_payment() {
                         return order_wait_payment;
                     }
@@ -545,15 +634,55 @@ public class SceneList extends NetBean implements Serializable {
                     public void setOrder_ready_goods(String order_ready_goods) {
                         this.order_ready_goods = order_ready_goods;
                     }
+
+                    public String getOrder_sended_goods() {
+                        return order_sended_goods;
+                    }
+
+                    public void setOrder_sended_goods(String order_sended_goods) {
+                        this.order_sended_goods = order_sended_goods;
+                    }
+
+                    public String getOrder_evaluate() {
+                        return order_evaluate;
+                    }
+
+                    public void setOrder_evaluate(String order_evaluate) {
+                        this.order_evaluate = order_evaluate;
+                    }
+
+                    public String getFiu_comment_count() {
+                        return fiu_comment_count;
+                    }
+
+                    public void setFiu_comment_count(String fiu_comment_count) {
+                        this.fiu_comment_count = fiu_comment_count;
+                    }
+
+                    public String getFiu_alert_count() {
+                        return fiu_alert_count;
+                    }
+
+                    public void setFiu_alert_count(String fiu_alert_count) {
+                        this.fiu_alert_count = fiu_alert_count;
+                    }
+
+                    public String getFiu_notice_count() {
+                        return fiu_notice_count;
+                    }
+
+                    public void setFiu_notice_count(String fiu_notice_count) {
+                        this.fiu_notice_count = fiu_notice_count;
+                    }
                 }
             }
 
-            public static class ProductBean implements Serializable {
+            public static class ProductBean implements Serializable{
                 private String id;
                 private String title;
-                private double price;
                 private double x;
                 private double y;
+                private int loc;
 
                 public String getId() {
                     return id;
@@ -571,14 +700,6 @@ public class SceneList extends NetBean implements Serializable {
                     this.title = title;
                 }
 
-                public double getPrice() {
-                    return price;
-                }
-
-                public void setPrice(double price) {
-                    this.price = price;
-                }
-
                 public double getX() {
                     return x;
                 }
@@ -594,53 +715,13 @@ public class SceneList extends NetBean implements Serializable {
                 public void setY(double y) {
                     this.y = y;
                 }
-            }
 
-            public static class CommentsBean implements Serializable {
-                private String _id;
-                private String content;
-                private String user_id;
-                private String user_nickname;
-                private String user_avatar_url;
-
-                public String get_id() {
-                    return _id;
+                public int getLoc() {
+                    return loc;
                 }
 
-                public void set_id(String _id) {
-                    this._id = _id;
-                }
-
-                public String getContent() {
-                    return content;
-                }
-
-                public void setContent(String content) {
-                    this.content = content;
-                }
-
-                public String getUser_id() {
-                    return user_id;
-                }
-
-                public void setUser_id(String user_id) {
-                    this.user_id = user_id;
-                }
-
-                public String getUser_nickname() {
-                    return user_nickname;
-                }
-
-                public void setUser_nickname(String user_nickname) {
-                    this.user_nickname = user_nickname;
-                }
-
-                public String getUser_avatar_url() {
-                    return user_avatar_url;
-                }
-
-                public void setUser_avatar_url(String user_avatar_url) {
-                    this.user_avatar_url = user_avatar_url;
+                public void setLoc(int loc) {
+                    this.loc = loc;
                 }
             }
         }

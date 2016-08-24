@@ -19,23 +19,14 @@ public class TagItem implements Serializable {
     private int type;//商品属于哪个商城,1 是官网
     private String name;
     private String price;
-    private String imagePath;
-    private boolean right;
+    private int loc = 2;
 
-    public boolean isRight() {
-        return right;
+    public int getLoc() {
+        return loc;
     }
 
-    public void setRight(boolean right) {
-        this.right = right;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setLoc(int loc) {
+        this.loc = loc;
     }
 
     //考虑适配的问题，纪录的是百分比坐标
@@ -96,6 +87,6 @@ public class TagItem implements Serializable {
     @Override
     public String toString() {
 //        return "{id:" + id + ",price:" + price + ",title:" + name + ",x:" + x + ",y:" + y + "}";
-        return "{\"id\":\"" + id + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + ",\"loc\":" + (isRight() ? 2 : 1) + "}";
+        return "{\"id\":\"" + id + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + ",\"loc\":" + loc + "}";
     }
 }

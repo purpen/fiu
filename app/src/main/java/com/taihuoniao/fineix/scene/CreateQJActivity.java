@@ -57,11 +57,13 @@ import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
+import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -98,13 +100,15 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     ImageView deleteAddressImg;
     @Bind(R.id.location_tv)
     EditText locationTv;
+    @Bind(R.id.city_tv)
+    TextView cityTv;
     private WaittingDialog dialog;
     private float pointWidth;//LabelView动画点的宽高
     private float labelMargin;//LabelView动画点左间距
     private View activityView;
-    private double longitude, latitude;
     //选择语境popupwindow
     private PopupWindow selectEnvirPop;
+    private StringBuilder tags;//用来存储标签
 
     public CreateQJActivity() {
         super(0);
@@ -120,7 +124,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     protected void initView() {
         titleLayout.setBackgroundResource(R.color.title_black);
         titleLayout.setTitle(R.string.create_qingjing, getResources().getColor(R.color.white));
-        titleLayout.setContinueListener(this);
+        titleLayout.setRightTv(R.string.publish, getResources().getColor(R.color.yellow_bd8913), this);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) container.getLayoutParams();
         layoutParams.width = MainApplication.getContext().getScreenWidth();
         layoutParams.height = layoutParams.width;
@@ -128,6 +132,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         pointWidth = getResources().getDimension(R.dimen.label_point_width);
         labelMargin = getResources().getDimension(R.dimen.label_point_margin);
         dialog = new WaittingDialog(this);
+        tags = new StringBuilder();
         initSelectEnvirPop();
     }
 
@@ -159,14 +164,15 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         locationRelative.setOnClickListener(this);
         deleteAddressImg.setOnClickListener(this);
         if (getIntent().hasExtra(PictureEditActivity.class.getSimpleName())) {
-            backgroundImg.setImageBitmap(MainApplication.editBitmap);//设置背景图片
-            for (final TagItem tagItem : MainApplication.tagInfoList) {//添加标签
-                Log.e("<<<传递过来", MainApplication.tagInfoList.toString());
+            //设置背景图片
+            backgroundImg.setImageBitmap(MainApplication.editBitmap);
+            //添加标签
+            for (final TagItem tagItem : MainApplication.tagInfoList) {
                 final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 final LabelView labelView = new LabelView(this);
                 labelView.init(tagItem);
                 labelView.setLayoutParams(layoutParams);
-                if (!tagItem.isRight()) {
+                if (tagItem.getLoc() == 2) {
                     labelView.nameTv.setBackgroundResource(R.drawable.label_left);
                     RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
                     layoutParams1.leftMargin = (int) labelMargin;
@@ -175,7 +181,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 labelView.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!tagItem.isRight()) {
+                        if (tagItem.getLoc() == 2) {
                             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                             lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelMargin - pointWidth / 2);
                             lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
@@ -204,6 +210,126 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 labelView.wave();
             }
         }
+//        else if (getIntent().hasExtra(IndexFragment.class.getSimpleName())) {
+//            titleLayout.setBackImgVisible(false);
+//            titleLayout.setCancelImg(R.mipmap.cancel_white);
+//            titleLayout.setTitle(R.string.bianji_qingjing, getResources().getColor(R.color.white));
+//            titleLayout.setBackImgVisible(true);
+//            sceneBean = (SceneList.DataBean.RowsBean) getIntent().getSerializableExtra(IndexFragment.class.getSimpleName());
+//            id = sceneBean.get_id();
+//            //设置背景图片
+//            ImageLoader.getInstance().displayImage(sceneBean.getCover_url(), backgroundImg, new ImageLoadingListener() {
+//                @Override
+//                public void onLoadingStarted(String imageUri, View view) {
+//
+//                }
+//
+//                @Override
+//                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+//
+//                }
+//
+//                @Override
+//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                    MainApplication.editBitmap = loadedImage;
+//                }
+//
+//                @Override
+//                public void onLoadingCancelled(String imageUri, View view) {
+//
+//                }
+//            });
+//            //添加标签
+//            for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneBean.getProduct()) {
+//                final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//                final LabelView labelView = new LabelView(this);
+//                final TagItem tagItem = new TagItem();
+//                tagItem.setId(productBean.getId());
+//                tagItem.setName(productBean.getTitle());
+//                tagItem.setX(productBean.getX());
+//                tagItem.setY(productBean.getY());
+//                tagItem.setLoc(productBean.getLoc());
+//                labelView.init(tagItem);
+//                labelView.setLayoutParams(layoutParams);
+//                if (tagItem.getLoc() == 2) {
+//                    labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+//                    RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+//                    layoutParams1.leftMargin = (int) labelMargin;
+//                    labelView.pointRelative.setLayoutParams(layoutParams1);
+//                }
+//                labelView.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (tagItem.getLoc() == 2) {
+//                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+//                            lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelMargin - pointWidth / 2);
+//                            lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
+//                            labelView.setLayoutParams(lp);
+//                        } else {
+//                            labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+//                            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+//                            layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - pointWidth - labelMargin);
+//                            labelView.pointRelative.setLayoutParams(layoutParams1);
+//                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+//                            lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelMargin + pointWidth / 2);
+//                            lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
+//                            labelView.setLayoutParams(lp);
+//                        }
+//                    }
+//                });
+//                container.addView(labelView);
+//                labelView.wave();
+//            }
+//            //设置标题及描述
+//            tags = new StringBuilder();
+//            qjTitleTv.setText(sceneBean.getTitle());
+//            holder.title.setText(sceneBean.getTitle());
+//            qjTitleTv.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (qjTitleTv.getLineCount() >= 2) {
+//                        Layout layout = qjTitleTv.getLayout();
+//                        StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
+//                        String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
+//                        String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
+//                        qjTitleTv2.setText(str0);
+//                        qjTitleTv.setText(str1);
+//                        qjTitleTv2.setVisibility(View.VISIBLE);
+//                    } else {
+//                        qjTitleTv2.setVisibility(View.GONE);
+//                    }
+//                }
+//            });
+//            holder.des.setText(sceneBean.getDes());
+//            int sta = 0;
+//            SpannableString spannableStringBuilder = new SpannableString(sceneBean.getDes());
+//            while (sceneBean.getDes().substring(sta).contains("#")) {
+//                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
+//                sta = sceneBean.getDes().indexOf("#", sta);
+//                if (sceneBean.getDes().substring(sta).contains(" ")) {
+//                    int en = sceneBean.getDes().indexOf(" ", sta);
+//                    tags.append(",").append(sceneBean.getDes().substring(sta + 1, en));
+//                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    sta = en;
+//                } else {
+//                    tags.append(",").append(sceneBean.getDes().substring(sta + 1));
+//                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, sceneBean.getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    break;
+//                }
+//            }
+//            if (tags.length() > 0) {
+//                tags.deleteCharAt(0);
+//            }
+//            desTv.setText(spannableStringBuilder);
+//            //设置地理位置
+//            city = sceneBean.getCity();
+//            cityTv.setText(city);
+//            cityTv.setVisibility(View.VISIBLE);
+//            lng = sceneBean.getLocation().getCoordinates().get(0) + "";
+//            lat = sceneBean.getLocation().getCoordinates().get(1) + "";
+//            locationTv.setText(sceneBean.getAddress());
+//        }
+
     }
 
     private ActiveTagsBean activeTagsBean;//当前活动javabean
@@ -260,46 +386,11 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             case R.id.search_delete:
                 holder.editText.setText("");
                 break;
-            case R.id.cancel:
-                selectEnvirPop.dismiss();
-                break;
-            case R.id.confirm:
-                qjTitleTv.setText(holder.title.getText().toString());
-                qjTitleTv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (qjTitleTv.getLineCount() >= 2) {
-                            Layout layout = qjTitleTv.getLayout();
-                            StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
-                            String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                            String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                            qjTitleTv2.setText(str0);
-                            qjTitleTv.setText(str1);
-                            qjTitleTv2.setVisibility(View.VISIBLE);
-                        } else {
-                            qjTitleTv2.setVisibility(View.GONE);
-                        }
-                    }
-                });
-                int sta = 0;
-                SpannableString spannableStringBuilder = new SpannableString(holder.des.getText().toString());
-                while (holder.des.getText().toString().substring(sta).contains("#")) {
-                    ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
-                    sta = holder.des.getText().toString().indexOf("#", sta);
-                    if (holder.des.getText().toString().substring(sta).contains(" ")) {
-                        int en = holder.des.getText().toString().indexOf(" ", sta);
-                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        sta = en;
-                    } else {
-                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, holder.des.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    }
-                }
-                desTv.setText(spannableStringBuilder);
-                selectEnvirPop.dismiss();
-                break;
+
             case R.id.delete_address:
                 locationTv.setText("");
+                cityTv.setText("");
+                cityTv.setVisibility(View.GONE);
                 city = null;
                 lat = null;
                 lng = null;
@@ -402,7 +493,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             }
                         }
                         Log.e("<<<", "初始化活动标签");
-                        createQJ(null, title, des, null, null, products.toString(), address, city, tmp, lat, lng, sids);
+                        createQJ(null, title, des, null, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, sids);
                     }
                 });
                 thread.start();
@@ -412,7 +503,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     private long lastClick = 0L;//上次点击的时间。避免多次点击重复上传
 
-    private void createQJ(String id, String title, String des, String scene_id, String tags,
+    private void createQJ(String id, String title, String des, final String scene_id, String tags,
                           String products, String address, String city, String tmp, String lat, String lng,
                           String subject_ids) {
         Log.e("<<<", "开始上传");
@@ -437,8 +528,12 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     MainApplication.cropBitmap = null;
                                     MainApplication.editBitmap = null;
                                     MainApplication.blurBitmap = null;
+                                    EffectUtil.clear();
                                     ToastUtils.showSuccess("创建成功");
-                                    startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
+                                    sendBroadcast(new Intent(DataConstants.BroadFind));
+                                    Intent intent = new Intent(CreateQJActivity.this, MainActivity.class);
+                                    intent.putExtra(FindFragment.class.getSimpleName(), false);
+                                    startActivity(intent);
                                 } else {
                                     ToastUtils.showError(createQJBean.getMessage());
                                 }
@@ -487,24 +582,28 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateQJActivity.this);
-        builder.setMessage("返回上一步？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                CreateQJActivity.this.finish();
-            }
-        });
-        builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
-            }
-        });
-        builder.create().show();
-
+        if (getIntent().hasExtra(PictureEditActivity.class.getSimpleName())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateQJActivity.this);
+            builder.setMessage("返回上一步？");
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    CreateQJActivity.this.finish();
+                }
+            });
+            builder.setNegativeButton("取消创建", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    EffectUtil.clear();
+                    startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
+                }
+            });
+            builder.create().show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -529,8 +628,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     if (poiInfo != null) {
 //                        locationTv.setText(poiInfo.name);
 //                        deleteAddress.setVisibility(View.VISIBLE);
-//                        cityTv.setText(city);
-//                        cityTv.setVisibility(View.VISIBLE);
+                        cityTv.setText(city);
+                        cityTv.setVisibility(View.VISIBLE);
                         lng = poiInfo.location.longitude + "";
                         lat = poiInfo.location.latitude + "";
                         locationTv.setText(poiInfo.name);
@@ -543,7 +642,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private String lat, lng;
     private String city;
 
-    private List<SearchBean.SearchItem> list = new ArrayList<>();
+    private List<SearchBean.Data.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
     private int page = 1;//搜索页码
     private String searchStr;
@@ -582,8 +681,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.bottomLinear.setVisibility(View.GONE);
-//                            holder.goneLinear.setVisibility(View.VISIBLE);
+                            holder.goneLinear.setVisibility(View.VISIBLE);
                         }
                     });
 
@@ -592,8 +690,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.bottomLinear.setVisibility(View.VISIBLE);
-//                            holder.goneLinear.setVisibility(View.GONE);
+                            holder.goneLinear.setVisibility(View.GONE);
                         }
                     });
 
@@ -603,9 +700,58 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         setupBlurView();
         holder.goneLabel.setOnClickListener(this);
         holder.goneDemoLabel.setOnClickListener(this);
-        holder.titleLayout.setBackImgVisible(false);
+        holder.titleLayout.setBackImg(R.mipmap.cancel_white);
+        holder.titleLayout.setBackListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectEnvirPop.dismiss();
+            }
+        });
         holder.titleLayout.setTitle(R.string.add_envir, getResources().getColor(R.color.white));
-        holder.titleLayout.setContinueTvVisible(false);
+        holder.titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tags = new StringBuilder();
+                qjTitleTv.setText(holder.title.getText().toString());
+                qjTitleTv.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (qjTitleTv.getLineCount() >= 2) {
+                            Layout layout = qjTitleTv.getLayout();
+                            StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
+                            String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
+                            String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
+                            qjTitleTv2.setText(str0);
+                            qjTitleTv.setText(str1);
+                            qjTitleTv2.setVisibility(View.VISIBLE);
+                        } else {
+                            qjTitleTv2.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                int sta = 0;
+                SpannableString spannableStringBuilder = new SpannableString(holder.des.getText().toString());
+                while (holder.des.getText().toString().substring(sta).contains("#")) {
+                    ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
+                    sta = holder.des.getText().toString().indexOf("#", sta);
+                    if (holder.des.getText().toString().substring(sta).contains(" ")) {
+                        int en = holder.des.getText().toString().indexOf(" ", sta);
+                        tags.append(",").append(holder.des.getText().toString().substring(sta + 1, en));
+                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        sta = en;
+                    } else {
+                        tags.append(",").append(holder.des.getText().toString().substring(sta + 1));
+                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, holder.des.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        break;
+                    }
+                }
+                if (tags.length() > 0) {
+                    tags.deleteCharAt(0);
+                }
+                desTv.setText(spannableStringBuilder);
+                selectEnvirPop.dismiss();
+            }
+        });
         holder.deleteTitle.setOnClickListener(this);
         holder.deleteDes.setOnClickListener(this);
         holder.title.addTextChangedListener(new TextWatcher() {
@@ -617,6 +763,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
+                    if (s.length() > 20) {
+                        holder.title.setText(s.subSequence(0, 20));
+                    }
                     holder.deleteTitle.setVisibility(View.VISIBLE);
                 } else {
                     holder.deleteTitle.setVisibility(View.GONE);
@@ -721,8 +870,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         holder.listView.setOnScrollListener(this);
         holder.listView.setOnItemClickListener(this);
         holder.searchDelete.setOnClickListener(this);
-        holder.cancel.setOnClickListener(this);
-        holder.confirm.setOnClickListener(this);
         selectEnvirPop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         selectEnvirPop.setAnimationStyle(R.style.popupwindow_style);
         selectEnvirPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -776,7 +923,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) holder.listView.getAdapter().getItem(position);
+        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) holder.listView.getAdapter().getItem(position);
         //设置语境
         holder.title.setText(searchItem.getTitle());
         holder.des.setText(searchItem.getDes());
@@ -796,10 +943,10 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             }
         }
         searchEnvirAdapter.notifyDataSetChanged();
+        list.clear();
+        shareCJSelectListAdapter.notifyDataSetChanged();
         cid = envirList.get(postion).get_id();
         page = 1;
-        lastTotalItem = -1;
-        lastSavedFirstVisibleItem = -1;
         if (holder.editText.getText().toString().length() > 0) {
             search();
         } else {
@@ -808,7 +955,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void search() {
-        ClientDiscoverAPI.search(searchStr, 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(holder.editText.getText().toString(), 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -948,12 +1095,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         TextView goneDemoLabel;
         @Bind(R.id.gone_linear)
         RelativeLayout goneLinear;
-        @Bind(R.id.cancel)
-        TextView cancel;
-        @Bind(R.id.confirm)
-        TextView confirm;
-        @Bind(R.id.bottom_linear)
-        LinearLayout bottomLinear;
         @Bind(R.id.list_view)
         ListView listView;
         @Bind(R.id.progress_bar)

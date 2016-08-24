@@ -153,7 +153,7 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
 
 
-    private List<SearchBean.SearchItem> list = new ArrayList<>();
+    private List<SearchBean.Data.SearchItem> list = new ArrayList<>();
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
     private int page = 1;//搜索页码
     private String searchStr;
@@ -186,7 +186,7 @@ public class ShareSearchActivity extends BaseActivity implements AbsListView.OnS
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.SearchItem searchItem = (SearchBean.SearchItem) listView.getAdapter().getItem(position);
+        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) listView.getAdapter().getItem(position);
         Intent intent = new Intent();
         intent.putExtra("scene", searchItem);
         setResult(222, intent);

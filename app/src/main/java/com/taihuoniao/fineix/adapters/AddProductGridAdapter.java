@@ -24,10 +24,10 @@ import java.util.List;
 public class AddProductGridAdapter extends BaseAdapter {
     private Context context;
     private List<ProductBean.ProductListItem> list;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private DisplayImageOptions options_750_422;
 
-    public AddProductGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.SearchItem> searchList) {
+    public AddProductGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.searchList = searchList;

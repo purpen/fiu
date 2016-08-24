@@ -69,7 +69,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
     private int page = 1;
     private double distance = 5000;//搜索范围
     private List<QingJingListBean.QingJingItem> qingjingList;
-    private List<SearchBean.SearchItem> searchList;
+    private List<SearchBean.Data.SearchItem> searchList;
     private AllQingjingGridAdapter allQingjingGridAdapter;
     //搜索情景
     private String q;
@@ -250,7 +250,7 @@ public class SelectAllQingjingActivity extends BaseActivity implements View.OnCl
                     }
                     break;
                 case DataConstants.RESULTCODE_SELECTQJ_SALLQJ:
-                    SearchBean.SearchItem searchItem = (SearchBean.SearchItem) data.getSerializableExtra("searchqj");
+                    SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) data.getSerializableExtra("searchqj");
                     if (searchItem != null) {
                         Intent intent = new Intent();
 //                        Log.e("<<<>>>", searchItem.getTitle());

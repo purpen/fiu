@@ -10,8 +10,8 @@
         android:layout_width="@dimen/delete_width"
         android:layout_height="wrap_content"
         android:padding="2dp"
-        android:visibility="gone"
-        android:src="@drawable/delete"/>
+        android:src="@drawable/delete"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -58,8 +58,9 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:background="@drawable/label_left"
+            android:ellipsize="end"
+            android:gravity="center"
             android:maxWidth="174dp"
-            android:padding="5dp"
             android:singleLine="true"
             android:text="意大利seletti egg  亮神智能感应灯"
             android:textColor="@color/white"

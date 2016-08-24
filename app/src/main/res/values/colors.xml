@@ -11,8 +11,8 @@
     <color name="black333333">#ff333333</color>
     <color name="black969696">#969696</color>
     <color name="yellow_bd8913">#bd8913</color>
-    <color name="black_touming">#99000000</color>
-    <color name="black_first">#cc000000</color>
+    <color name="black_touming_60">#99000000</color>
+    <color name="black_touming_80">#cc000000</color>
     <!-- selectactivity -->
     <color name="black">#000000</color>
     <color name="red">#ffff3366</color>
