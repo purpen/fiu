@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -88,19 +87,6 @@ public class SalePromotionFragment extends MyBaseFragment {
             public void onLastItemVisible() {
                 isLoadMore = true;
                 loadData();
-            }
-        });
-
-        pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mList != null) {
-//                    ItemQJCollect itemQJCollect = mList.get(position);
-//                    Intent intent=new Intent(activity,);
-//                    intent.putExtra("_id",itemQJCollect.sight._id);
-//                    startActivity(intent);
-                }
-                ToastUtils.showInfo("跳转情境详情");
             }
         });
     }

@@ -95,7 +95,7 @@ public class ArticleFragment extends MyBaseFragment {
         pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mList != null) {
+                if (mList != null && mList.size() > 0) {
                     DataChooseSubject.ItemChoosenSubject item = mList.get(position - 1);
                     Intent intent = new Intent(activity, ArticalDetailActivity.class);
                     intent.putExtra(ArticalDetailActivity.class.getSimpleName(), item._id);

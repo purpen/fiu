@@ -45,6 +45,7 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
             holder.ivFinish.setVisibility(View.GONE);
         }
         holder.tvTitle.setText(item.title);
+        holder.tvDesc.setText(item.short_title);
         holder.tvCount.setText(String.format("已有%s人参与", item.view_count));
         return convertView;
     }
@@ -61,8 +62,8 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
         TextView tvTitle;
         @Bind(R.id.tv_count)
         TextView tvCount;
-//        @Bind(R.id.tv_desc)
-//        TextView tvDesc;
+        @Bind(R.id.tv_desc)
+        TextView tvDesc;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

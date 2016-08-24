@@ -1,17 +1,20 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
-import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         }
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         holder.tvTitle.setText(item.title);
+        holder.tvDesc.setText(item.short_title);
         holder.tvCount.setText(item.view_count);
         LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
         holder.recyclerView.setLayoutManager(manager);
@@ -49,20 +53,31 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         adapter.setmOnItemClickLitener(new SalePromotionRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ToastUtils.showInfo("促销详情");
+                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                intent.putExtra("id", item._id);
+                activity.startActivity(intent);
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-
             }
         });
         holder.recyclerView.setAdapter(adapter);
+        holder.rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, SalePromotionDetailActivity.class);
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), item._id);
+                activity.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
 
     static class ViewHolder {
+        @Bind(R.id.rl)
+        RelativeLayout rl;
         @Bind(R.id.imageView)
         ImageView imageView;
         @Bind(R.id.tv_title)

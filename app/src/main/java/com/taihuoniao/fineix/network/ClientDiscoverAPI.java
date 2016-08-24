@@ -1591,7 +1591,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/scene_subject/getlist";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
-        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
+        params.addQueryStringParameter("size", "1");//Constants.PAGE_SIZE
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort",sort);

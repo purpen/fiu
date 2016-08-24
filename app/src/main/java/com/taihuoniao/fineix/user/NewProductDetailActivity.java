@@ -19,7 +19,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -99,13 +99,15 @@ public class NewProductDetailActivity extends BaseActivity {
     };
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_favorite})
-    void onClick(View v) {
+    void onClick(final View v) {
         switch (v.getId()) {
             case R.id.ibtn_favorite: //收藏
+                v.setEnabled(false);
                 if (data.product.is_favorite == 0) {
                     ClientDiscoverAPI.favorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
+                            v.setEnabled(true);
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
@@ -118,6 +120,7 @@ public class NewProductDetailActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(HttpException e, String s) {
+                            v.setEnabled(true);
                             ToastUtils.showError(R.string.network_err);
                         }
                     });
@@ -125,6 +128,7 @@ public class NewProductDetailActivity extends BaseActivity {
                     ClientDiscoverAPI.cancelFavorite(data.product._id, "1", new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
+                            v.setEnabled(true);
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
@@ -137,6 +141,7 @@ public class NewProductDetailActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(HttpException e, String s) {
+                            v.setEnabled(true);
                             ToastUtils.showError(R.string.network_err);
                         }
                     });
@@ -144,7 +149,7 @@ public class NewProductDetailActivity extends BaseActivity {
                 break;
             case R.id.ibtn_share: //去购买
                 if (data == null) return;
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
                 intent.putExtra("id", data.product._id);
                 startActivity(intent);
                 break;

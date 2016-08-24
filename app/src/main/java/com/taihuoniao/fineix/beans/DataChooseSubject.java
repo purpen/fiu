@@ -16,6 +16,7 @@ public class DataChooseSubject implements Parcelable {
     public static class ItemChoosenSubject implements Parcelable {
         public String _id;
         public String title;
+        public String short_title;
         public String category_id;
         public String publish;
         public String type;

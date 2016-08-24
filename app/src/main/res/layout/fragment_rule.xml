@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_rule"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/color_666"
+    android:layout_marginLeft="@dimen/dp16"
+    android:layout_marginRight="@dimen/dp16"
+    android:textSize="@dimen/sp12"
+    android:lineSpacingMultiplier="1.5" />
