@@ -330,6 +330,21 @@ public class ClientDiscoverAPI {
     }
 
     /**
+     * 参与的情境
+     *
+     * @param subject_id
+     * @param callBack
+     */
+    public static void participateActivity(String page, String subject_id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.scene_list;
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", page);
+        params.addQueryStringParameter("size", Constants.PAGE_SIZE);
+        params.addQueryStringParameter("subject_id", subject_id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
      * 根据用户ID查找CJ
      *
      * @param page

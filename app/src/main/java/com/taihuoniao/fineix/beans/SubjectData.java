@@ -39,8 +39,148 @@ public class SubjectData implements Parcelable {
     public String end_time_at;
     public List<String> tags;
     public Product product;
+    public ArrayList<SightBean> sights;
     public ArrayList<ProductBean> products;
     public SubjectData() {
+    }
+
+    public static class SightBean implements Parcelable {
+        public String _id;
+        public String title;
+        public String cover_url;
+        public String created_at;
+        public UserBean user;
+
+        public static class UserBean implements Parcelable {
+            public String _id;
+            public String nickname;
+            public int is_expert;
+            public String avatar_url;
+            public int is_follow;
+            public String address;
+            public String city;
+            public LocationBean location;
+
+            public static class LocationBean implements Parcelable {
+                public String type;
+                public String prize;
+                public List<Double> coordinates;
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    dest.writeString(this.type);
+                    dest.writeString(this.prize);
+                    dest.writeList(this.coordinates);
+                }
+
+                public LocationBean() {
+                }
+
+                protected LocationBean(Parcel in) {
+                    this.type = in.readString();
+                    this.prize = in.readString();
+                    this.coordinates = new ArrayList<Double>();
+                    in.readList(this.coordinates, Double.class.getClassLoader());
+                }
+
+                public static final Creator<LocationBean> CREATOR = new Creator<LocationBean>() {
+                    @Override
+                    public LocationBean createFromParcel(Parcel source) {
+                        return new LocationBean(source);
+                    }
+
+                    @Override
+                    public LocationBean[] newArray(int size) {
+                        return new LocationBean[size];
+                    }
+                };
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this._id);
+                dest.writeString(this.nickname);
+                dest.writeInt(this.is_expert);
+                dest.writeString(this.avatar_url);
+                dest.writeInt(this.is_follow);
+                dest.writeString(this.address);
+                dest.writeString(this.city);
+                dest.writeParcelable(this.location, flags);
+            }
+
+            public UserBean() {
+            }
+
+            protected UserBean(Parcel in) {
+                this._id = in.readString();
+                this.nickname = in.readString();
+                this.is_expert = in.readInt();
+                this.avatar_url = in.readString();
+                this.is_follow = in.readInt();
+                this.address = in.readString();
+                this.city = in.readString();
+                this.location = in.readParcelable(LocationBean.class.getClassLoader());
+            }
+
+            public static final Creator<UserBean> CREATOR = new Creator<UserBean>() {
+                @Override
+                public UserBean createFromParcel(Parcel source) {
+                    return new UserBean(source);
+                }
+
+                @Override
+                public UserBean[] newArray(int size) {
+                    return new UserBean[size];
+                }
+            };
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.title);
+            dest.writeString(this.cover_url);
+            dest.writeString(this.created_at);
+            dest.writeParcelable(this.user, flags);
+        }
+
+        public SightBean() {
+        }
+
+        protected SightBean(Parcel in) {
+            this._id = in.readString();
+            this.title = in.readString();
+            this.cover_url = in.readString();
+            this.created_at = in.readString();
+            this.user = in.readParcelable(UserBean.class.getClassLoader());
+        }
+
+        public static final Creator<SightBean> CREATOR = new Creator<SightBean>() {
+            @Override
+            public SightBean createFromParcel(Parcel source) {
+                return new SightBean(source);
+            }
+
+            @Override
+            public SightBean[] newArray(int size) {
+                return new SightBean[size];
+            }
+        };
     }
 
     public static class ProductBean implements Parcelable {
@@ -162,6 +302,7 @@ public class SubjectData implements Parcelable {
         dest.writeString(this.end_time_at);
         dest.writeStringList(this.tags);
         dest.writeParcelable(this.product, flags);
+        dest.writeTypedList(this.sights);
         dest.writeTypedList(this.products);
     }
 
@@ -194,6 +335,7 @@ public class SubjectData implements Parcelable {
         this.end_time_at = in.readString();
         this.tags = in.createStringArrayList();
         this.product = in.readParcelable(Product.class.getClassLoader());
+        this.sights = in.createTypedArrayList(SightBean.CREATOR);
         this.products = in.createTypedArrayList(ProductBean.CREATOR);
     }
 

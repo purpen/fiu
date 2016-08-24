@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_rule"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/color_666"
-    android:layout_marginLeft="@dimen/dp16"
-    android:layout_marginRight="@dimen/dp16"
-    android:textSize="@dimen/sp12"
-    android:lineSpacingMultiplier="1.5" />
+    android:background="@color/color_f8f8f8"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tv_rule"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/color_666"
+        android:padding="@dimen/dp16"
+        android:textSize="@dimen/sp12"
+        android:layout_above="@+id/btn"
+        android:lineSpacingMultiplier="1.5" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_af8323"
+        android:text="参加活动"
+        android:textSize="@dimen/sp14"
+        android:textColor="@android:color/white" />
+</RelativeLayout>

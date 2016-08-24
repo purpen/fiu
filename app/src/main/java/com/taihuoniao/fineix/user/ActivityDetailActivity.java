@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -23,8 +24,8 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.user.fragments.ActivityFragment;
-import com.taihuoniao.fineix.user.fragments.NewProductFragment;
+import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
+import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
 import com.taihuoniao.fineix.user.fragments.RuleFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -78,8 +79,11 @@ public class ActivityDetailActivity extends BaseActivity {
 
     private void initTabLayout() {
         if (data == null) return;
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        bundle.putString("summary", data.summary);
         String[] array = getResources().getStringArray(R.array.activity_detail_tab);
-        Fragment[] fragments = {RuleFragment.newInstance(data.summary), ActivityFragment.newInstance(), NewProductFragment.newInstance()};
+        Fragment[] fragments = {RuleFragment.newInstance(bundle), ParticipateQJFragment.newInstance(id), ActivityResultFragment.newInstance(data.sights)};
         if (data.evt == 2) {//2是结束
             array = Arrays.copyOf(array, 2);
             fragments = Arrays.copyOf(fragments, 2);

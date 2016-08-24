@@ -2,9 +2,11 @@ package com.taihuoniao.fineix.user.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
@@ -12,30 +14,31 @@ import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author lilin
  *         created at 2016/8/10 17:24
  */
 public class RuleFragment extends MyBaseFragment {
-    private static final String TAG = "RuleFragment";
     @Bind(R.id.tv_rule)
     TextView tvRule;
+    @Bind(R.id.btn)
+    Button btn;
     private String string;
-
+    private String id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            string = bundle.getString(TAG);
+            string = bundle.getString("summary");
+            id = bundle.getString("id");
         }
     }
 
-    public static RuleFragment newInstance(String string) {
+    public static RuleFragment newInstance(Bundle bundle) {
         RuleFragment fragment = new RuleFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(TAG, string);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -52,5 +55,39 @@ public class RuleFragment extends MyBaseFragment {
     @Override
     protected void initViews() {
         tvRule.setText(string);
+    }
+
+    @OnClick(R.id.btn)
+    void onClick() {
+        if (TextUtils.isEmpty(id)) return;
+        //TODO 跳转参加活动界面
+
+//        ClientDiscoverAPI.participateActivity(id, new RequestCallBack<String>() {
+//            @Override
+//            public void onStart() {
+//                btn.setEnabled(false);
+//            }
+//
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                btn.setEnabled(true);
+//                if (TextUtils.isEmpty(responseInfo.result)) return;
+//                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+//                if (response.isSuccess()){
+//                    btn.setBackgroundColor(getResources().getColor(R.color.color_222));
+//                    btn.setText("已参加");
+//                    btn.setTextColor(getResources().getColor(android.R.color.white));
+//                    btn.setEnabled(false);
+//                    return;
+//                }
+//                ToastUtils.showError(response.getMessage());
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                btn.setEnabled(true);
+//                ToastUtils.showError(R.string.network_err);
+//            }
+//        });
     }
 }
