@@ -28,7 +28,7 @@ public class SceneList extends NetBean implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean implements Serializable {
         private int total_rows;
         private int total_page;
         private int current_page;
@@ -102,7 +102,7 @@ public class SceneList extends NetBean implements Serializable {
             this.rows = rows;
         }
 
-        public static class RowsBean implements Serializable{
+        public static class RowsBean implements Serializable {
             private String _id;
             private String title;
             private String user_id;
@@ -131,9 +131,18 @@ public class SceneList extends NetBean implements Serializable {
 
             private UserInfoBean user_info;
             private int is_love;
-            private List<?> category_ids;
+            private int is_favorite;
+            private List<String> category_ids;
             private List<ProductBean> product;
             private List<CommentsBean> comments;
+
+            public int getIs_favorite() {
+                return is_favorite;
+            }
+
+            public void setIs_favorite(int is_favorite) {
+                this.is_favorite = is_favorite;
+            }
 
             public String get_id() {
                 return _id;
@@ -343,11 +352,11 @@ public class SceneList extends NetBean implements Serializable {
                 this.is_love = is_love;
             }
 
-            public List<?> getCategory_ids() {
+            public List<String> getCategory_ids() {
                 return category_ids;
             }
 
-            public void setCategory_ids(List<?> category_ids) {
+            public void setCategory_ids(List<String> category_ids) {
                 this.category_ids = category_ids;
             }
 
@@ -366,7 +375,8 @@ public class SceneList extends NetBean implements Serializable {
             public void setComments(List<CommentsBean> comments) {
                 this.comments = comments;
             }
-            public static class CommentsBean implements Serializable{
+
+            public static class CommentsBean implements Serializable {
 
 
                 private String _id;
@@ -415,7 +425,8 @@ public class SceneList extends NetBean implements Serializable {
                     this.user_avatar_url = user_avatar_url;
                 }
             }
-            public static class LocationBean implements Serializable{
+
+            public static class LocationBean implements Serializable {
                 private String type;
                 private List<Double> coordinates;
 
@@ -436,7 +447,7 @@ public class SceneList extends NetBean implements Serializable {
                 }
             }
 
-            public static class UserInfoBean implements Serializable{
+            public static class UserInfoBean implements Serializable {
                 private String user_id;
                 private String nickname;
                 private String avatar_url;
@@ -556,7 +567,7 @@ public class SceneList extends NetBean implements Serializable {
                     this.expert_info = expert_info;
                 }
 
-                public static class CounterBean implements Serializable{
+                public static class CounterBean implements Serializable {
                     private String message_count;
                     private String notice_count;
                     private String alert_count;
@@ -677,12 +688,21 @@ public class SceneList extends NetBean implements Serializable {
                 }
             }
 
-            public static class ProductBean implements Serializable{
+            public static class ProductBean implements Serializable {
                 private String id;
                 private String title;
                 private double x;
                 private double y;
-                private int loc;
+                private int loc;//1 点在右边 2点在左边
+                private int type;//1 自建 2产品
+
+                public int getType() {
+                    return type;
+                }
+
+                public void setType(int type) {
+                    this.type = type;
+                }
 
                 public String getId() {
                     return id;

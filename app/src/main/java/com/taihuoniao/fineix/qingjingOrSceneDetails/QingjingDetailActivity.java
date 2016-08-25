@@ -59,7 +59,6 @@ import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -249,7 +248,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void getSceneList(String page, String size, String scene_id, String sort, String fine, final String dis, String lng, String lat) {
-        ClientDiscoverAPI.getSceneList(page, size, scene_id, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(page, size, scene_id,null, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 SceneList sceneList1 = new SceneList();
@@ -428,7 +427,7 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 public void onClick(View v) {
                     Intent intent = new Intent(QingjingDetailActivity.this, SearchActivity.class);
                     intent.putExtra("q", tagsTitleList.get(finalI));
-                    intent.putExtra("t", "8");
+                    intent.putExtra("t", 8);
                     startActivity(intent);
                 }
             });
@@ -533,7 +532,6 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
                 if (!LoginInfo.isUserLogin()) {
 //                    Toast.makeText(QingjingDetailActivity.this, "请先登录", Toast.LENGTH_SHORT).show();
                     MainApplication.which_activity = DataConstants.QingjingDetailActivity;
-                    LoginCompleteUtils.id = id;
                     startActivity(new Intent(QingjingDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
@@ -681,21 +679,21 @@ public class QingjingDetailActivity extends BaseActivity implements View.OnClick
         WindowManager windowManager = QingjingDetailActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(QingjingDetailActivity.this, R.layout.popup_scene_details_more, null);
-        TextView pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
+//        TextView pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
 //        TextView shareTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_share);
-        LinearLayout bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
+//        LinearLayout bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
         TextView jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         TextView cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        pinglunTv.setVisibility(View.GONE);
+//        pinglunTv.setVisibility(View.GONE);
         jubaoTv.setText("删除");
 //        shareTv.setVisibility(View.GONE);
-        bianjiLinear.setVisibility(View.VISIBLE);
+//        bianjiLinear.setVisibility(View.VISIBLE);
         jubaoTv.setOnClickListener(this);
-        bianjiLinear.setOnClickListener(this);
+//        bianjiLinear.setOnClickListener(this);
         jubaoTv.setVisibility(View.VISIBLE);
         cancelTv.setOnClickListener(this);
 

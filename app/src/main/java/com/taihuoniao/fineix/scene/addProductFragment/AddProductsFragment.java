@@ -21,14 +21,15 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.AddProductGridAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
-import com.taihuoniao.fineix.beans.GoodsDetailBean;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
@@ -78,7 +79,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void search(String q, String t, String page, String evt, String sort) {
-        ClientDiscoverAPI.search(q, t, null,page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, 3+"", null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -125,7 +126,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             search(q, "10", currentPage + "", null, null);
         } else {
             if (position == 0) {
-                ClientDiscoverAPI.getProductList(null,null,null, null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -139,7 +140,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     }
                 });
             } else {
-                ClientDiscoverAPI.getProductList(null,null,categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+                ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -157,6 +158,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void getProductList(String result) {
+        Log.e("<<<全部好货", result);
+        WriteJsonToSD.writeToSD("json", result);
         ProductBean productBean = new ProductBean();
         try {
             Gson gson = new Gson();
@@ -168,15 +171,14 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         }
         pullToRefreshView.onRefreshComplete();
         progressBar.setVisibility(View.GONE);
-        ProductBean netProductBean = productBean;
-        if (netProductBean.isSuccess()) {
+        if (productBean.isSuccess()) {
             searchList.clear();
             if (currentPage == 1) {
                 productList.clear();
                 pullToRefreshView.lastTotalItem = -1;
                 pullToRefreshView.lastSavedFirstVisibleItem = -1;
             }
-            productList.addAll(netProductBean.getData().getRows());
+            productList.addAll(productBean.getData().getRows());
             if (productList.size() <= 0) {
                 nothingTv.setVisibility(View.VISIBLE);
             } else {
@@ -248,7 +250,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 if (!dialog.isShowing()) {
                     dialog.show();
                 }
-                search(q,"10",currentPage+"",null,null);
+                search(q, "10", currentPage + "", null, null);
             } else if (search && !intent.getBooleanExtra("search", true)) {
                 search = false;
                 currentPage = 1;
@@ -286,19 +288,23 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-//                Log.e("<<<商品详情", responseInfo.result);
-                GoodsDetailBean netGood = new GoodsDetailBean();
+                Log.e("<<<商品详情", responseInfo.result);
+                BuyGoodDetailsBean netGood = new BuyGoodDetailsBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<GoodsDetailBean>() {
+                    Type type = new TypeToken<BuyGoodDetailsBean>() {
                     }.getType();
                     netGood = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                if (netGood.isSuccess()) {
                     Intent intent = new Intent();
                     intent.putExtra("product", netGood);
                     getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
                     getActivity().finish();
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }else{
+                    ToastUtils.showError(netGood.getMessage());
                 }
             }
 

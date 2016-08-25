@@ -31,7 +31,7 @@ import com.taihuoniao.fineix.beans.OrderDetailsProducts;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.ApplyForRefundActivity;
-import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -954,7 +954,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                         mItemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(OrderDetailsActivity.this, MyGoodsDetailsActivity.class);
+                                Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
                                 intent.putExtra("id", mDetailsList.get(x).getProducts().get(y).getProduct_id());
                                 OrderDetailsActivity.this.startActivity(intent);
                             }

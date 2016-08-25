@@ -40,7 +40,7 @@ import android.widget.TextView;
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -275,7 +275,7 @@ public final class CaptureActivity extends BaseActivity implements
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
-                    intent=new Intent(CaptureActivity.this, GoodsDetailActivity.class);
+                    intent=new Intent(CaptureActivity.this, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 }

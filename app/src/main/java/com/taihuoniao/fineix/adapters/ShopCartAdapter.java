@@ -19,7 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
@@ -147,7 +147,7 @@ public class ShopCartAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         if (shopCarActivity.getChange() == STATE_COMPLETE) {
-                            Intent intent = new Intent(shopCarActivity, MyGoodsDetailsActivity.class);
+                            Intent intent = new Intent(shopCarActivity, BuyGoodsDetailsActivity.class);
                             intent.putExtra("id", list.get(position).get("keyProductId") + "");
                             shopCarActivity.startActivity(intent);
                         }

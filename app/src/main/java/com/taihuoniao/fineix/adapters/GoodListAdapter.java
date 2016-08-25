@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.view.SlidingFocusImageView;
 
@@ -227,7 +227,7 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(activity, GoodsDetailActivity.class);
+            Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
             if (list != null) {
                 intent.putExtra("id", list.get(position).get_id());
             } else if (searchList != null) {
@@ -239,7 +239,7 @@ public class GoodListAdapter extends BaseAdapter implements AbsListView.OnScroll
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            Intent intent = new Intent(activity, GoodsDetailActivity.class);
+            Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
             if (list != null) {
                 if (list.get(this.position).getSights() != null && list.get(this.position).getSights().size() > 0 && list.get(this.position).getSights().get(0) != null) {
                     if (position % (1 + list.get(this.position).getBanner_asset().size()) == list.get(this.position).getBanner_asset().size()) {

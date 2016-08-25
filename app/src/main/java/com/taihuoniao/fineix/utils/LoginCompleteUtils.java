@@ -8,16 +8,18 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
 
 /**
  * Created by taihuoniao on 2016/5/25.
  */
 public class LoginCompleteUtils {
-    public static String id;//用来记录登录之前界面的id
 
     public static void goFrom(Activity activity) {
         switch (MainApplication.which_activity) {
+            case DataConstants.BuyGoodDetailsActivity:
+                activity.sendBroadcast(new Intent(DataConstants.BroadBuyGoodDetails));
+                break;
             case DataConstants.QingjingDetailActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
                 break;
@@ -44,8 +46,13 @@ public class LoginCompleteUtils {
                 break;
             case DataConstants.SearchActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadSearch));
-                Intent intent3 = new Intent(activity, SearchActivity.class);
-                activity.startActivity(intent3);
+                break;
+            case DataConstants.FindActivity:
+                Intent intent4 = new Intent(activity, FindActivity.class);
+                activity.startActivity(intent4);
+                break;
+            case DataConstants.QJDetailActivity:
+                activity.sendBroadcast(new Intent(DataConstants.BroadQJDetail));
                 break;
             default:
                 Intent intent = new Intent(activity, MainActivity.class);

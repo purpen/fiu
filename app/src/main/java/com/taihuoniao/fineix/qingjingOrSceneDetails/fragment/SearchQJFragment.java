@@ -1,12 +1,9 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,44 +49,6 @@ public class SearchQJFragment extends SearchFragment {
     private List<SearchBean.Data.SearchItem> searchList;
     private SearchQJAdapter searchQJAdapter;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.e("<<<", "onAttach");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        q = getArguments().getString("q", null);
-        isContent = getArguments().getBoolean("isContent");
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            q = savedInstanceState.getString("q");
-            isContent = savedInstanceState.getBoolean("isContent");
-        }
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString("q", q);
-        outState.putBoolean("isContent", isContent);
-        super.onSaveInstanceState(outState);
-        Log.e("<<<", "onSaveInstanceState" + outState.toString());
-    }
-
     public static SearchQJFragment newInstance(String q, boolean isContent) {
         Bundle args = new Bundle();
         args.putString("q", q);
@@ -97,6 +56,13 @@ public class SearchQJFragment extends SearchFragment {
         SearchQJFragment fragment = new SearchQJFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        q = getArguments().getString("q", null);
+        isContent = getArguments().getBoolean("isContent");
     }
 
 
@@ -147,7 +113,7 @@ public class SearchQJFragment extends SearchFragment {
     }
 
     public void refreshData(String q) {
-        if (TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
+        if (dialog == null || TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
             return;
         }
         this.q = q;
@@ -159,6 +125,7 @@ public class SearchQJFragment extends SearchFragment {
         ClientDiscoverAPI.search(q, "9", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<搜索情景", responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -173,6 +140,7 @@ public class SearchQJFragment extends SearchFragment {
                 pullRefreshView.onRefreshComplete();
                 SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
+                    searchQJAdapter.setPage(netSearch.getData().getCurrent_page());
                     pullRefreshView.setLoadingTime();
                     if (page == 1) {
                         searchList.clear();
@@ -198,4 +166,9 @@ public class SearchQJFragment extends SearchFragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }

@@ -25,6 +25,8 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     private ImageView arrowImg;//默认隐藏
     private TextView continueTv;
     private ImageView flashImg;//默认隐藏
+    private RelativeLayout cartRelative;//右侧购物车  默认隐藏
+    private TextView cartNum;//购物车数量  默认隐藏
 
     public GlobalTitleLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,7 +42,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
 
     private void initView() {
         view = View.inflate(context, R.layout.title, GlobalTitleLayout.this);
-        view.setBackgroundResource(R.color.title_black);
+        view.setBackgroundResource(R.color.black);
         backImg = (ImageView) view.findViewById(R.id.title_back);
         shareImg = (ImageView) view.findViewById(R.id.title_share);
         cancelImg = (ImageView) view.findViewById(R.id.title_cancel);
@@ -49,6 +51,23 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         arrowImg = (ImageView) view.findViewById(R.id.title_arrow);
         continueTv = (TextView) view.findViewById(R.id.title_continue);
         flashImg = (ImageView) view.findViewById(R.id.title_flash);
+        cartRelative = (RelativeLayout) view.findViewById(R.id.title_cart);
+        cartNum = (TextView) view.findViewById(R.id.cart_number);
+    }
+
+    public void setCartListener(OnClickListener onClickListener) {
+        cartRelative.setVisibility(VISIBLE);
+        continueTv.setVisibility(GONE);
+        cartRelative.setOnClickListener(onClickListener);
+    }
+
+    public void setCartNum(int num) {
+        if (num > 0) {
+            cartNum.setText(num + "");
+            cartNum.setVisibility(VISIBLE);
+        } else {
+            cartNum.setVisibility(GONE);
+        }
     }
 
     //设置背景颜色

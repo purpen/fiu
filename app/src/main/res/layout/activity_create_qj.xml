@@ -52,7 +52,6 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="12dp"
                 android:singleLine="true"
-                android:text="添加标题"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:visibility="gone"/>

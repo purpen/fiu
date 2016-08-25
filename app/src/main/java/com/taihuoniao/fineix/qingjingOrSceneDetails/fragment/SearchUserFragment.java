@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -15,14 +15,13 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.SearchQJAdapter;
+import com.taihuoniao.fineix.adapters.SearchUsersAdapter;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,19 +34,20 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/23.
  */
 public class SearchUserFragment extends SearchFragment {
+
     private String q;
     private boolean isContent;
     @Bind(R.id.pull_refresh_view)
-    PullToRefreshGridView pullRefreshView;
+    PullToRefreshListView pullRefreshView;
     @Bind(R.id.empty_view)
     TextView emptyView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    private GridView gridView;
+    private ListView listView;
     private WaittingDialog dialog;
     private int page = 1;
     private List<SearchBean.Data.SearchItem> searchList;
-    private SearchQJAdapter searchQJAdapter;
+    private SearchUsersAdapter searchUsersAdapter;
 
     public static SearchUserFragment newInstance(String q, boolean isContent) {
         Bundle args = new Bundle();
@@ -58,7 +58,6 @@ public class SearchUserFragment extends SearchFragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,17 +65,25 @@ public class SearchUserFragment extends SearchFragment {
         isContent = getArguments().getBoolean("isContent");
     }
 
+
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_search_qj, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_search_user, null);
         ButterKnife.bind(this, view);
-        gridView = pullRefreshView.getRefreshableView();
+        listView = pullRefreshView.getRefreshableView();
         dialog = new WaittingDialog(getActivity());
         return view;
     }
 
     @Override
     protected void initList() {
+        pullRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                requestNet();
+            }
+        });
         pullRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -85,17 +92,17 @@ public class SearchUserFragment extends SearchFragment {
                 search();
             }
         });
-        gridView.setNumColumns(2);
-        gridView.setHorizontalSpacing(DensityUtils.dp2px(getActivity(), 15));
-        gridView.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
+        listView.setDividerHeight(0);
+        listView.setSelector(R.color.nothing);
         searchList = new ArrayList<>();
-        searchQJAdapter = new SearchQJAdapter(getActivity(), searchList);
-        gridView.setAdapter(searchQJAdapter);
+        searchUsersAdapter = new SearchUsersAdapter(getActivity(),searchList);
+        listView.setAdapter(searchUsersAdapter);
     }
 
     @Override
     protected void requestNet() {
         if (TextUtils.isEmpty(q)) {
+            pullRefreshView.onRefreshComplete();
             return;
         }
         if (!dialog.isShowing()) {
@@ -105,7 +112,7 @@ public class SearchUserFragment extends SearchFragment {
     }
 
     public void refreshData(String q) {
-        if(TextUtils.isEmpty(q)||TextUtils.equals(this.q,q)){
+        if (dialog==null||TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
             return;
         }
         this.q = q;
@@ -114,9 +121,10 @@ public class SearchUserFragment extends SearchFragment {
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "9", null, page+"", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, "14", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<搜索用户",responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -128,6 +136,7 @@ public class SearchUserFragment extends SearchFragment {
                 }
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
+                pullRefreshView.onRefreshComplete();
                 SearchBean netSearch = searchBean;
                 if (netSearch.isSuccess()) {
                     pullRefreshView.setLoadingTime();
@@ -142,7 +151,9 @@ public class SearchUserFragment extends SearchFragment {
                     } else {
                         emptyView.setVisibility(View.GONE);
                     }
-                    searchQJAdapter.notifyDataSetChanged();
+                    searchUsersAdapter.notifyDataSetChanged();
+                }else{
+                    ToastUtils.showError(netSearch.getMessage());
                 }
             }
 
@@ -150,7 +161,7 @@ public class SearchUserFragment extends SearchFragment {
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
+                ToastUtils.showError(R.string.net_fail);
             }
         });
     }
@@ -160,4 +171,5 @@ public class SearchUserFragment extends SearchFragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
 }

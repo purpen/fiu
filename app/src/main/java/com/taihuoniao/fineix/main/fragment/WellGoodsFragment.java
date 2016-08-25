@@ -33,7 +33,7 @@ import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -75,7 +75,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     private List<CategoryListBean.CategoryListItem> categoryList;//产品分类数据
     private WellGoodsProductCategoryAdapter wellGoodsProductCategoryAdapter;//产品分类大图适配器
     private WellGoodsRecyclerAdapter wellGoodsRecyclerAdapter;//产品分类小图适配器
-    private List<FirstProductBean.DataBean.RowsBean> firstProductList;//最新好货推荐数据
+    private List<FirstProductBean.DataBean.ItemsBean> firstProductList;//最新好货推荐数据
     private FirstProductAdapter firstProductAdapter;//最新好货推荐适配器
     private int currentPage = 1;//产品列表页码
     private List<SubjectListBean.DataBean.RowsBean> subjectList;//好货页面专题及产品列表
@@ -115,7 +115,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         firstProductAdapter = new FirstProductAdapter(firstProductList, new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
-                Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+                Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);
                 intent.putExtra("id", firstProductList.get(postion).get_id());
                 getActivity().startActivity(intent);
             }
@@ -210,11 +210,11 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     firstProductBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常");
+                    Log.e("<<<", "解析异常="+e.toString());
                 }
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();
-                    firstProductList.addAll(firstProductBean.getData().getRows());
+                    firstProductList.addAll(firstProductBean.getData().getItems());
                     firstProductAdapter.notifyDataSetChanged();
                 }
             }
@@ -228,7 +228,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //获取产品分类列表
     private void productCategoryList() {
-        ClientDiscoverAPI.categoryList("1", "10", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<分类列表", responseInfo.result);

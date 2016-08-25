@@ -33,16 +33,16 @@ public class ProductAndSceneListBean extends NetBean {
     }
 
     public static class ProductAndSceneItem {
-        private Product product;
+//        private Product product;
         private Sight sight;
 
-        public Product getProduct() {
-            return product;
-        }
-
-        public void setProduct(Product product) {
-            this.product = product;
-        }
+//        public Product getProduct() {
+//            return product;
+//        }
+//
+//        public void setProduct(Product product) {
+//            this.product = product;
+//        }
 
         public Sight getSight() {
             return sight;
@@ -52,11 +52,30 @@ public class ProductAndSceneListBean extends NetBean {
             this.sight = sight;
         }
     }
-    public static class Sight{
+
+    public static class Sight {
         private String title;
         private String _id;
         private String cover_url;
         private String address;
+        private int is_love;
+        private QJDetailBean.DataBean.UserInfoBean user_info;
+
+        public int getIs_love() {
+            return is_love;
+        }
+
+        public void setIs_love(int is_love) {
+            this.is_love = is_love;
+        }
+
+        public QJDetailBean.DataBean.UserInfoBean getUser_info() {
+            return user_info;
+        }
+
+        public void setUser_info(QJDetailBean.DataBean.UserInfoBean user_info) {
+            this.user_info = user_info;
+        }
 
         public String getAddress() {
             return address;
@@ -91,7 +110,8 @@ public class ProductAndSceneListBean extends NetBean {
         }
 
     }
-    public static class Product{
+
+    public static class Product {
         private String _id;
         private String title;
         private String oid;

@@ -725,6 +725,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             qjTitleTv.setText(str1);
                             qjTitleTv2.setVisibility(View.VISIBLE);
                         } else {
+                            qjTitleTv2.setText("");
                             qjTitleTv2.setVisibility(View.GONE);
                         }
                     }
@@ -893,6 +894,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void showSelectEnvirPop() {
+        holder.title.setText(qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());
+        holder.des.setText(desTv.getText().toString());
         categoryList();
         lastSavedFirstVisibleItem = -1;
         lastTotalItem = -1;

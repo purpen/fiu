@@ -42,7 +42,7 @@ public class WellGoodsRecyclerAdapter extends RecyclerView.Adapter<WellGoodsRecy
                 itemClick.click(position);
             }
         });
-        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
+        ImageLoader.getInstance().displayImage(list.get(position).getBack_url(), holder.roundImg);
         holder.name.setText(list.get(position).getTitle());
     }
 

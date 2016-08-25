@@ -86,6 +86,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //rid传递过去的临时订单编号
     //返回数据 money  code
     private CustomDialogForPay mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,14 +161,14 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         redBagRelative.setOnClickListener(this);
         payBtn.setOnClickListener(this);
         if (nowBuyBean != null) {
-            productsAdapter = new ConfirmOrderProductsAdapter(nowBuyBean.getItemList(), ConfirmOrderActivity.this, null);
+            productsAdapter = new ConfirmOrderProductsAdapter(nowBuyBean.getData().getOrder_info().getDict().getItems(), ConfirmOrderActivity.this, null);
         } else if (cartBean != null) {
             productsAdapter = new ConfirmOrderProductsAdapter(null, ConfirmOrderActivity.this, cartBean.getCartOrderContentItems());
         }
         productsListView.setAdapter(productsAdapter);
         if (nowBuyBean != null) {
-            payPriceTv.setText("¥ " + df.format(Double.valueOf(nowBuyBean.getPay_money())));
-            if (nowBuyBean.getBonus_number() > 0) {
+            payPriceTv.setText("¥ " + df.format(nowBuyBean.getData().getPay_money()));
+            if (nowBuyBean.getData().getBonus().size() > 0) {
                 redBagTv.setText("选择红包");
             }
         } else if (cartBean != null) {
@@ -233,7 +234,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
 
                 //跳转到红包界面
                 Intent intent2 = new Intent(ConfirmOrderActivity.this, UsableRedPacketActivity.class);
-                intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getRid());
+                intent2.putExtra("rid", nowBuyBean == null ? cartBean.getRid() : nowBuyBean.getData().getOrder_info().getRid());
 
                 startActivityForResult(intent2, DataConstants.REQUESTCODE_REDBAG);
                 break;
@@ -250,7 +251,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     return;
                 }
                 if (nowBuyBean != null)
-                    confirmOrder(nowBuyBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), nowBuyBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(nowBuyBean.getData().getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), nowBuyBean.getData().getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
                 else if (cartBean != null)
                     confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 break;
@@ -355,7 +356,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     redBagTv.setText("使用了" + money + "元红包");
                     redBagCancelTv.setText("您使用了一张" + money + "元红包，下单后将不可恢复");
                     if (nowBuyBean != null) {
-                        double nowPrice = Double.valueOf(nowBuyBean.getPay_money()) - Double.valueOf(money);
+                        double nowPrice = nowBuyBean.getData().getPay_money() - Double.valueOf(money);
                         if (nowPrice <= 0) {
                             payPriceTv.setText("¥ 0.00");
                         } else {

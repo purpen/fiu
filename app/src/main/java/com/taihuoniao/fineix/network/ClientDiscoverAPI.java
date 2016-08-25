@@ -86,11 +86,11 @@ public class ClientDiscoverAPI {
 
     //产品
     //添加产品
-    public static void addProduct(String title, String brand_id, RequestCallBack<String> callBack) {
+    public static void addProduct(String title, RequestCallBack<String> callBack) {
         String url = NetworkConstance.add_product;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
-        params.addQueryStringParameter("brand_id", brand_id);
+        params.addQueryStringParameter("type", 1 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -103,15 +103,6 @@ public class ClientDiscoverAPI {
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
-    //产品
-    //自营商品详情
-    public static void goodsDetailsNet(String id, RequestCallBack<String> callBack) {
-        String url = NetworkConstance.urlString_goods_details;
-        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("id", id);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
-        NetworkManager.getInstance().add("goodsDetails", httpHandler);
-    }
 
 
     //产品
@@ -295,12 +286,13 @@ public class ClientDiscoverAPI {
 
     //场景
     //列表数据
-    public static void getSceneList(String page, String size, String scene_id, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String scene_id,String category_ids, String sort, String fine, String dis, String lng, String lat, RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("scene_id", scene_id);
+        params.addQueryStringParameter("category_ids",category_ids);
         params.addQueryStringParameter("sort", sort);
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("dis", 10000 + "");
@@ -310,7 +302,7 @@ public class ClientDiscoverAPI {
     }
 
     public static void getSceneList(LatLng ll, String page, String size, String dis, RequestCallBack<String> callBack) {
-        getSceneList(page, size, null, null, null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
+        getSceneList(page, size, null, null, null,null, dis, String.valueOf(ll.longitude), String.valueOf(ll.latitude), callBack);
     }
 
 
@@ -1563,9 +1555,10 @@ public class ClientDiscoverAPI {
 
     //添加品牌
     public static void addBrand(String title, RequestCallBack<String> callBack) {
-        String url = NetworkConstance.BASE_URL + "/scene_brands/submit";
+        String url = NetworkConstance.BASE_URL + "/user_temp/add";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
+        params.addQueryStringParameter("type", 2 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1627,8 +1620,9 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sort", sort);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //最新好货推荐
-    public static void firstProducts(RequestCallBack<String>callBack){
+    public static void firstProducts(RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/product/index_new";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
@@ -1647,7 +1641,34 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("size", "1");//Constants.PAGE_SIZE
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("type", pageType);
-        params.addQueryStringParameter("sort",sort);
+        params.addQueryStringParameter("sort", sort);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //收藏情景
+    public static void shoucang(String id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/favorite/ajax_favorite";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //取消收藏
+    public static void cancelShoucang(String id, String type, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/favorite/ajax_cancel_favorite";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("type", type);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+    //首页用户列表
+    public static void getUserList(int size,RequestCallBack<String>callBack){
+        String url = NetworkConstance.BASE_URL + "/user/find_user";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("page", "1");
+        params.addQueryStringParameter("size", size+"");
+        params.addQueryStringParameter("edit_stick", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 }

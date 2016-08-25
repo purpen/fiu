@@ -53,11 +53,14 @@ public class WellGoodsProductCategoryAdapter extends BaseAdapter {
             layoutParams.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(parent.getContext(), 75)) / 5;
             layoutParams.height = layoutParams.width;
             holder.roundImg.setLayoutParams(layoutParams);
+            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) holder.name.getLayoutParams();
+            layoutParams1.topMargin = layoutParams.width / 2;
+            holder.name.setLayoutParams(layoutParams1);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
+        ImageLoader.getInstance().displayImage(list.get(position).getBack_url(), holder.roundImg);
         holder.name.setText(list.get(position).getTitle());
         return convertView;
     }

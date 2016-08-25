@@ -160,7 +160,7 @@ public class AllQingjingActivity extends BaseActivity implements AdapterView.OnI
         switch (v.getId()) {
             case R.id.search_linear:
                 Intent intent1 = new Intent(this, SearchActivity.class);
-                intent1.putExtra("t", "8");
+                intent1.putExtra("t", 8);
                 startActivity(intent1);
                 break;
             case R.id.activity_all_qingjing_search:
