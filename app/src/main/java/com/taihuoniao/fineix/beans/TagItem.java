@@ -16,7 +16,7 @@ public class TagItem implements Serializable {
 
     //    private long id;
     private String id;//商品id
-    private int type;//商品属于哪个商城,1 是官网
+    private int type = 1;//商品属于哪个商城,1 是官网 2 是用户自己添加
     private String name;
     private String price;
     private int loc = 2;
@@ -87,6 +87,6 @@ public class TagItem implements Serializable {
     @Override
     public String toString() {
 //        return "{id:" + id + ",price:" + price + ",title:" + name + ",x:" + x + ",y:" + y + "}";
-        return "{\"id\":\"" + id + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + ",\"loc\":" + loc + "}";
+        return "{\"id\":\"" + id + "\",\"title\":\"" + name + "\",\"x\":" + x + ",\"y\":" + y + ",\"loc\":" + loc +",\"type\":"+type+ "}";
     }
 }

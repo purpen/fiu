@@ -2,7 +2,7 @@ package com.taihuoniao.fineix.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by taihuoniao on 2016/8/23.
  */
-public class SearchViewPagerAdapter extends FragmentStatePagerAdapter {
+public class SearchViewPagerAdapter extends FragmentPagerAdapter {
     private List<SearchFragment> fragmentList;
     private List<String> titleList;
 
@@ -30,6 +30,7 @@ public class SearchViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return fragmentList.size();
     }
+
 
     @Override
     public CharSequence getPageTitle(int position) {

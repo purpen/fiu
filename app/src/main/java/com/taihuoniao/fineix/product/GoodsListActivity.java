@@ -83,7 +83,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<分类列表",responseInfo.result);

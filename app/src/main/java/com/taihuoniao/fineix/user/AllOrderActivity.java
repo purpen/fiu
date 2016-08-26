@@ -2,10 +2,14 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -16,8 +20,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -142,68 +145,38 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
         ClientDiscoverAPI.userInfoNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<个人信息", responseInfo.result);
-                UserInfo userInfo = null;
+                UserInfo userInfo = new UserInfo();
                 try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject userObj = obj.getJSONObject("data");
-                    userInfo = UserInfo.getInstance();
-                    userInfo.setSuccess(obj.optBoolean("success"));
-                    userInfo.setAccount(userObj.optString("account"));
-                    userInfo.setNickname(userObj.optString("nickname"));
-                    userInfo.setTrue_nickname(userObj.optString("true_nickname"));
-                    userInfo.setSex(userObj.optString("sex"));
-                    userInfo.setBirthday(userObj.optString("birthday"));
-                    userInfo.setMedium_avatar_url(userObj.optString("medium_avatar_url"));
-                    userInfo.setRealname(userObj.optString("realname"));
-                    userInfo.setPhone(userObj.optString("phone"));
-                    userInfo.setAddress(userObj.optString("address"));
-                    userInfo.setZip(userObj.optString("zip"));
-                    userInfo.setIm_qq(userObj.optString("im_qq"));
-                    userInfo.setWeixin(userObj.optString("weixin"));
-                    userInfo.setCompany(userObj.optString("company"));
-                    userInfo.setProvince_id(userObj.optString("province_id"));
-                    userInfo.setDistrict_id(userObj.optString("district_id"));
-                    userInfo.setRank_id(userObj.optString("rank_id"));
-                    userInfo.setRank_title(userObj.optString("rank_title"));
-                    userInfo.setBird_coin(userObj.optString("bird_coin"));
-                    userInfo.set_id(userObj.optString("_id"));
-                    JSONObject counterObj = userObj.getJSONObject("counter");
-                    userInfo.setOrder_wait_payment(counterObj.optString("order_wait_payment"));
-                    userInfo.setOrder_ready_goods(counterObj.optString("order_ready_goods"));
-                    userInfo.setOrder_evaluate(counterObj.optString("order_evaluate"));
-                    userInfo.setOrder_total_count(counterObj.optString("order_total_count"));
-                    userInfo.setOrder_sended_goods(counterObj.optString("order_sended_goods"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (userInfo == null) {
-                    return;
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<UserInfo>(){}.getType();
+                    userInfo = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<用户信息","解析异常="+e.toString());
                 }
                 if (userInfo.isSuccess()) {
 //                        Log.e("<<<", "待付款" + userInfo.getOrder_wait_payment() + ",待发货" + userInfo.getOrder_ready_goods()
 //                                + ",待收货" + userInfo.getOrder_sended_goods() + ",待评价" + userInfo.getOrder_evaluate());
-                    if (!"0".equals(userInfo.getOrder_wait_payment())) {
+                    if (!"0".equals(userInfo.getData().getCounter().getOrder_wait_payment())) {
                         daifukuanRed.setVisibility(View.VISIBLE);
-                        daifukuanRed.setText(String.format("%s", userInfo.getOrder_wait_payment()));
+                        daifukuanRed.setText(String.format("%s", userInfo.getData().getCounter().getOrder_wait_payment()));
                     } else {
                         daifukuanRed.setVisibility(View.INVISIBLE);
                     }
-                    if (!"0".equals(userInfo.getOrder_ready_goods())) {
+                    if (!"0".equals(userInfo.getData().getCounter().getOrder_ready_goods())) {
                         daifahuoRed.setVisibility(View.VISIBLE);
-                        daifahuoRed.setText(userInfo.getOrder_ready_goods());
+                        daifahuoRed.setText(userInfo.getData().getCounter().getOrder_ready_goods());
                     } else {
                         daifahuoRed.setVisibility(View.INVISIBLE);
                     }
-                    if (!"0".equals(userInfo.getOrder_sended_goods())) {
+                    if (!"0".equals(userInfo.getData().getCounter().getOrder_sended_goods())) {
                         daishouhuoRed.setVisibility(View.VISIBLE);
-                        daishouhuoRed.setText(userInfo.getOrder_sended_goods());
+                        daishouhuoRed.setText(userInfo.getData().getCounter().getOrder_sended_goods());
                     } else {
                         daishouhuoRed.setVisibility(View.INVISIBLE);
                     }
-                    if (!"0".equals(userInfo.getOrder_evaluate())) {
+                    if (!"0".equals(userInfo.getData().getCounter().getOrder_evaluate())) {
                         daipingjiaRed.setVisibility(View.VISIBLE);
-                        daipingjiaRed.setText(userInfo.getOrder_evaluate());
+                        daipingjiaRed.setText(userInfo.getData().getCounter().getOrder_evaluate());
                     } else {
                         daipingjiaRed.setVisibility(View.INVISIBLE);
                     }
@@ -212,7 +185,7 @@ public class AllOrderActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                ToastUtils.showError(R.string.network_err);
+                ToastUtils.showError(R.string.net_fail);
             }
         });
     }

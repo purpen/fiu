@@ -17,7 +17,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoveSceneBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SearchBean;
-import com.taihuoniao.fineix.beans.SubsCjListBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
@@ -36,16 +35,16 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
     private List<SceneList.DataBean.RowsBean> list;
     private List<LoveSceneBean.LoveSceneItem> loveList;
     private List<SearchBean.Data.SearchItem> searchList;
-    private List<SubsCjListBean.SubsCJItem> subsList;
+//    private List<SubsCjListBean.SubsCJItem> subsList;
     private DisplayImageOptions options500_500, options750_1334;
 
     public SceneListViewAdapter(Context context, List<SceneList.DataBean.RowsBean> list, List<LoveSceneBean.LoveSceneItem> loveList,
-                                List<SearchBean.Data.SearchItem> searchList, List<SubsCjListBean.SubsCJItem> subsList) {
+                                List<SearchBean.Data.SearchItem> searchList, List subsList) {
         this.context = context;
         this.list = list;
         this.loveList = loveList;
         this.searchList = searchList;
-        this.subsList = subsList;
+//        this.subsList = subsList;
         options500_500 = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_background_750_1334)
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
@@ -88,9 +87,10 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             return loveList.size();
         } else if (searchList != null) {
             return searchList.size();
-        } else if (subsList != null) {
-            return subsList.size();
         }
+//        else if (subsList != null) {
+//            return subsList.size();
+//        }
         return 0;
     }
 
@@ -102,9 +102,10 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             return loveList.get(position);
         } else if (searchList != null) {
             return searchList.get(position);
-        } else if (subsList != null) {
-            return subsList.get(position);
         }
+//        else if (subsList != null) {
+//            return subsList.get(position);
+//        }
         return null;
     }
 
@@ -224,30 +225,31 @@ public class SceneListViewAdapter extends BaseAdapter implements AbsListView.OnS
             holder.suoshuQingjing.setText(searchList.get(position).getScene_title());
             holder.location.setText(searchList.get(position).getAddress());
             holder.time.setText(searchList.get(position).getCreated_at());
-        } else if (subsList != null) {
-            if (subsList.get(position).getProduct() != null && subsList.get(position).getProduct().size() > 0) {
-                addProductToImg(subsList.get(position).getProduct(), holder.pointContainer);
-            }
-
-            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
-//            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
-            ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
-            holder.userName.setText(subsList.get(position).getUser_info().getNickname());
-            if (subsList.get(position).getUser_info().getIs_expert() == 1) {
-                holder.userInfo.setText(subsList.get(position).getUser_info().getExpert_label() + " | " + subsList.get(position).getUser_info().getExpert_info());
-                holder.vImg.setVisibility(View.VISIBLE);
-            } else {
-                holder.userInfo.setText(subsList.get(position).getUser_info().getSummary());
-                holder.vImg.setVisibility(View.GONE);
-            }
-//            isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getLabel(), subsList.get(position).getUser_info().getSummary());
-            holder.viewCount.setText(subsList.get(position).getView_count());
-            holder.loveCount.setText(subsList.get(position).getLove_count());
-            holder.sceneTitle.setText(subsList.get(position).getTitle());
-            holder.suoshuQingjing.setText(subsList.get(position).getScene_title());
-            holder.location.setText(subsList.get(position).getAddress());
-            holder.time.setText(subsList.get(position).getCreated_at());
         }
+//        else if (subsList != null) {
+//            if (subsList.get(position).getProduct() != null && subsList.get(position).getProduct().size() > 0) {
+//                addProductToImg(subsList.get(position).getProduct(), holder.pointContainer);
+//            }
+//
+//            ImageLoader.getInstance().displayImage(subsList.get(position).getCover_url(), holder.backgroundImg, options750_1334);
+////            Log.e("<<<", "用户头像url=" + loveList.get(position).getUser_info().getAvatar_ur());
+//            ImageLoader.getInstance().displayImage(subsList.get(position).getUser_info().getAvatar_url(), holder.userHeadImg, options500_500);
+//            holder.userName.setText(subsList.get(position).getUser_info().getNickname());
+//            if (subsList.get(position).getUser_info().getIs_expert() == 1) {
+//                holder.userInfo.setText(subsList.get(position).getUser_info().getExpert_label() + " | " + subsList.get(position).getUser_info().getExpert_info());
+//                holder.vImg.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.userInfo.setText(subsList.get(position).getUser_info().getSummary());
+//                holder.vImg.setVisibility(View.GONE);
+//            }
+////            isSpertAndSummary(holder.userInfo, subsList.get(position).getUser_info().getLabel(), subsList.get(position).getUser_info().getSummary());
+//            holder.viewCount.setText(subsList.get(position).getView_count());
+//            holder.loveCount.setText(subsList.get(position).getLove_count());
+//            holder.sceneTitle.setText(subsList.get(position).getTitle());
+//            holder.suoshuQingjing.setText(subsList.get(position).getScene_title());
+//            holder.location.setText(subsList.get(position).getAddress());
+//            holder.time.setText(subsList.get(position).getCreated_at());
+//        }
         SceneTitleSetUtils.setTitle(holder.sceneTitle, holder.frameLayout, holder.sceneImg, 12, 1);
         return convertView;
     }

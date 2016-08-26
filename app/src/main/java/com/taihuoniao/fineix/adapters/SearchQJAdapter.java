@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -46,11 +47,20 @@ public class SearchQJAdapter extends BaseAdapter {
     private Activity activity;
     private List<SearchBean.Data.SearchItem> list;
     private WaittingDialog dialog;
+    private int page;
 
     public SearchQJAdapter(Activity activity, List<SearchBean.Data.SearchItem> list) {
         this.activity = activity;
         this.list = list;
         dialog = new WaittingDialog(activity);
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     @Override
@@ -111,7 +121,9 @@ public class SearchQJAdapter extends BaseAdapter {
         holder.qjBackgroundImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showError("点击情景" + position);
+                Intent intent = new Intent(activity, QJDetailActivity.class);
+                intent.putExtra("id", list.get(position).get_id());
+                activity.startActivity(intent);
             }
         });
         holder.qjHeadImg.setOnClickListener(new View.OnClickListener() {

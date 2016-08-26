@@ -9,7 +9,7 @@ public class NetworkConstance {
     public static final String WX_PAY = "weichat";
     public static final String JD_PAY = "jdpay";
 //        public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
-public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     //热门城市 暂用ESTORE的URL
     public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";
@@ -23,11 +23,11 @@ public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测
     //删除用户添加的产品
     public static final String delete_product = BASE_URL + "/scene_product/deleted";
     //列表
-    public static final String urlString_productsList = BASE_URL + "/scene_product/getlist";
+    public static final String urlString_productsList = BASE_URL + "/product/getlist";
     //添加产品
-    public static final String add_product = BASE_URL + "/scene_product/add";
+    public static final String add_product = BASE_URL + "/user_temp/add";
     //产品详情
-    public static final String good_details = BASE_URL + "/scene_product/view";
+    public static final String good_details = BASE_URL + "/product/view";
     // 自营商品详情
     public static final String urlString_goods_details = BASE_URL + "/product/view";
     //获取京东商品信息

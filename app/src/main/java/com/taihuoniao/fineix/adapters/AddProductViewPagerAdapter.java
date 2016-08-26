@@ -26,9 +26,6 @@ public class AddProductViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-//        if (position == 0) {
-//            return "全部";
-//        }
         return categoryBean.getData().getRows().get(position).getTitle();
     }
 

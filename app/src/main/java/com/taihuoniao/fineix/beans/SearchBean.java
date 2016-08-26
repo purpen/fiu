@@ -22,7 +22,16 @@ public class SearchBean extends NetBean {
     }
 
     public static class Data {
+        private int current_page;
         private List<SearchItem> rows;
+
+        public int getCurrent_page() {
+            return current_page;
+        }
+
+        public void setCurrent_page(int current_page) {
+            this.current_page = current_page;
+        }
 
         public List<SearchItem> getRows() {
             return rows;
@@ -33,11 +42,9 @@ public class SearchBean extends NetBean {
         }
 
         public static class SearchItem implements Serializable {
+            //情景
             public int pos;
             public boolean isSelect;
-            private String _id;
-            private String cover_url;
-            private String title;
             private String address;
             private User user_info;
             private String view_count;
@@ -45,14 +52,213 @@ public class SearchBean extends NetBean {
             private String scene_title;
             private String created_at;
             private List<String> banners;
-            private double sale_price;
-            private double market_price;
             private String attrbute;
-            private String content;
-            private String oid;
             private String des;
-            private List<String> tags;
             private int is_love;
+            //用户
+            private String nickname;
+            private String summary;
+            private String avatar_url;
+            private int is_export;
+            private int is_follow;
+            //产品
+            private double market_price;
+            private double sale_price;
+            private String tips_label;
+            //品牌
+            //主题
+            private String pid;
+            private String oid;
+            private String tid;
+            private String cid;
+            private String kind;
+            private String title;
+            private String cover_id;
+            private String content;
+            private String user_id;
+            private List<String> tags;
+            private String created_on;
+            private String updated_on;
+            private String high_title;
+            private String high_content;
+            private String _id;
+            private String cover_url;
+            private String kind_name;
+            private String asset_type;
+            private String short_title;
+            private int type;
+
+            public int getType() {
+                return type;
+            }
+
+            public void setType(int type) {
+                this.type = type;
+            }
+
+            public String getShort_title() {
+                return short_title;
+            }
+
+            public void setShort_title(String short_title) {
+                this.short_title = short_title;
+            }
+
+            public String getTips_label() {
+                return tips_label;
+            }
+
+            public void setTips_label(String tips_label) {
+                this.tips_label = tips_label;
+            }
+
+            public int getIs_export() {
+                return is_export;
+            }
+
+            public void setIs_export(int is_export) {
+                this.is_export = is_export;
+            }
+
+            public int getIs_follow() {
+                return is_follow;
+            }
+
+            public void setIs_follow(int is_follow) {
+                this.is_follow = is_follow;
+            }
+
+            public String getAsset_type() {
+                return asset_type;
+            }
+
+            public void setAsset_type(String asset_type) {
+                this.asset_type = asset_type;
+            }
+
+            public String getAvatar_url() {
+                return avatar_url;
+            }
+
+            public void setAvatar_url(String avatar_url) {
+                this.avatar_url = avatar_url;
+            }
+
+            public String getCid() {
+                return cid;
+            }
+
+            public void setCid(String cid) {
+                this.cid = cid;
+            }
+
+            public String getCover_id() {
+                return cover_id;
+            }
+
+            public void setCover_id(String cover_id) {
+                this.cover_id = cover_id;
+            }
+
+            public String getCreated_on() {
+                return created_on;
+            }
+
+            public void setCreated_on(String created_on) {
+                this.created_on = created_on;
+            }
+
+            public String getHigh_content() {
+                return high_content;
+            }
+
+            public void setHigh_content(String high_content) {
+                this.high_content = high_content;
+            }
+
+            public String getHigh_title() {
+                return high_title;
+            }
+
+            public void setHigh_title(String high_title) {
+                this.high_title = high_title;
+            }
+
+            public void setSelect(boolean select) {
+                isSelect = select;
+            }
+
+            public String getKind() {
+                return kind;
+            }
+
+            public void setKind(String kind) {
+                this.kind = kind;
+            }
+
+            public String getKind_name() {
+                return kind_name;
+            }
+
+            public void setKind_name(String kind_name) {
+                this.kind_name = kind_name;
+            }
+
+            public String getNickname() {
+                return nickname;
+            }
+
+            public void setNickname(String nickname) {
+                this.nickname = nickname;
+            }
+
+            public String getPid() {
+                return pid;
+            }
+
+            public void setPid(String pid) {
+                this.pid = pid;
+            }
+
+            public int getPos() {
+                return pos;
+            }
+
+            public void setPos(int pos) {
+                this.pos = pos;
+            }
+
+            public String getSummary() {
+                return summary;
+            }
+
+            public void setSummary(String summary) {
+                this.summary = summary;
+            }
+
+            public String getTid() {
+                return tid;
+            }
+
+            public void setTid(String tid) {
+                this.tid = tid;
+            }
+
+            public String getUpdated_on() {
+                return updated_on;
+            }
+
+            public void setUpdated_on(String updated_on) {
+                this.updated_on = updated_on;
+            }
+
+            public String getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(String user_id) {
+                this.user_id = user_id;
+            }
 
             public int getIs_love() {
                 return is_love;

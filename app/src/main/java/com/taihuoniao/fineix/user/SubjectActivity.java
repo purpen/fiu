@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.user;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -25,6 +24,7 @@ import com.taihuoniao.fineix.beans.SupportData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
@@ -122,6 +122,8 @@ public class SubjectActivity extends BaseActivity {
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
                     intent = new Intent(activity, BrandDetailActivity.class);
+                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
+                    intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面

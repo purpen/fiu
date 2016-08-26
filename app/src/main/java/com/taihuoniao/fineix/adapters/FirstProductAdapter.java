@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
  */
 public class FirstProductAdapter extends RecyclerView.Adapter<FirstProductAdapter.VH> {
 
-    private List<FirstProductBean.DataBean.RowsBean> list;
+    private List<FirstProductBean.DataBean.ItemsBean> list;
     private EditRecyclerAdapter.ItemClick itemClick;
 
-    public FirstProductAdapter(List<FirstProductBean.DataBean.RowsBean> list, EditRecyclerAdapter.ItemClick itemClick) {
+    public FirstProductAdapter(List<FirstProductBean.DataBean.ItemsBean> list, EditRecyclerAdapter.ItemClick itemClick) {
         this.list = list;
         this.itemClick = itemClick;
     }

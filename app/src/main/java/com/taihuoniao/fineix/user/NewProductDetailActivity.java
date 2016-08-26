@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
@@ -250,7 +251,7 @@ public class NewProductDetailActivity extends BaseActivity {
                 break;
             case R.id.ibtn_share: //去购买
                 if (data == null) return;
-                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                 intent.putExtra("id", data.product._id);
                 startActivity(intent);
                 break;

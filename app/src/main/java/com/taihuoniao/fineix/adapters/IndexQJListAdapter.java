@@ -14,7 +14,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,24 +36,22 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
-import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.TestShare;
-import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
-import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -74,31 +70,29 @@ import butterknife.ButterKnife;
 public class IndexQJListAdapter extends BaseAdapter {
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
+    private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表
     private WaittingDialog dialog;
     //popupwindow下的控件
     private View popup_view;
     private PopupWindow popupWindow;
-    private TextView pinglunTv;
-    private LinearLayout bianjiLinear;
+    private TextView shoucangTv;
     private TextView jubaoTv;
     private TextView cancelTv;
 
-    public IndexQJListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList) {
+    public IndexQJListAdapter(Activity activity, List<SceneList.DataBean.RowsBean> sceneList, List<IndexUserListBean.DataBean.UsersBean> userList) {
         this.activity = activity;
         this.sceneList = sceneList;
+        this.userList = userList;
         dialog = new WaittingDialog(activity);
         initPopupWindow();
     }
 
     private void initPopupWindow() {
-        WindowManager windowManager = activity.getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
         popup_view = View.inflate(activity, R.layout.popup_scene_details_more, null);
-        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
-        bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
+        shoucangTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_shoucang);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
-        popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -126,32 +120,37 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     private void showPopup(final int position) {
-        pinglunTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", sceneList.get(position).get_id());
-                intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivity(intent3);
-            }
-        });
-        bianjiLinear.setOnClickListener(new View.OnClickListener() {
+        if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
+            //自己不能举报自己。改为删除
+            jubaoTv.setText("删除");
+        } else {
+            jubaoTv.setText("举报");
+        }
+        if (sceneList.get(position).getIs_favorite() == 1) {
+            shoucangTv.setText("取消收藏");
+        } else {
+            shoucangTv.setText("收藏");
+        }
+        shoucangTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
                 if (!LoginInfo.isUserLogin()) {
-                    if (activity instanceof MainActivity) {
-                        MainApplication.which_activity = DataConstants.IndexFragment;
-                        ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
-                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                    }
+                    MainApplication.which_activity = DataConstants.IndexFragment;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
-                Intent intent5 = new Intent(activity, CreateQJActivity.class);
-                intent5.putExtra(IndexFragment.class.getSimpleName(), sceneList.get(position));
-                activity.startActivity(intent5);
+                if (sceneList.get(position).getIs_favorite() == 1) {
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
+                    cancelShoucang(position);
+                } else {
+                    if (!dialog.isShowing()) {
+                        dialog.show();
+                    }
+                    shoucang(position);
+                }
             }
         });
         jubaoTv.setOnClickListener(new View.OnClickListener() {
@@ -159,11 +158,8 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 popupWindow.dismiss();
                 if (!LoginInfo.isUserLogin()) {
-                    if (activity instanceof MainActivity) {
-                        MainApplication.which_activity = DataConstants.IndexFragment;
-                        ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
-                        activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                    }
+                    MainApplication.which_activity = DataConstants.IndexFragment;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
                     return;
                 }
                 if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
@@ -246,7 +242,6 @@ public class IndexQJListAdapter extends BaseAdapter {
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
-                holder.attentionBtn.setVisibility(View.GONE);
             } else {
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("+ 关注");
@@ -343,7 +338,15 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(parent.getContext(), GoodsDetailActivity.class);
+                    Intent intent = new Intent();
+                    switch (productBean.getType()) {
+                        case 2:
+                            intent.setClass(activity, GoodsDetailActivity.class);
+                            break;
+                        default:
+                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
+                            break;
+                    }
                     intent.putExtra("id", productBean.getId());
                     parent.getContext().startActivity(intent);
                 }
@@ -382,11 +385,8 @@ public class IndexQJListAdapter extends BaseAdapter {
                     }
                     return;
                 }
-                if (activity instanceof MainActivity) {
-                    MainApplication.which_activity = DataConstants.IndexFragment;
-                    ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
-                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                }
+                MainApplication.which_activity = DataConstants.IndexFragment;
+                activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
             }
         });
 
@@ -411,11 +411,8 @@ public class IndexQJListAdapter extends BaseAdapter {
                     }
                     return;
                 }
-                if (activity instanceof MainActivity) {
-                    MainApplication.which_activity = DataConstants.IndexFragment;
-                    ((MainActivity) activity).which = IndexFragment.class.getSimpleName();
-                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
-                }
+                MainApplication.which_activity = DataConstants.IndexFragment;
+                activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
             }
         });
         //跳转到评论界面
@@ -462,14 +459,6 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.moreImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
-                    //自己不能举报自己。改为删除
-                    bianjiLinear.setVisibility(View.VISIBLE);
-                    jubaoTv.setText("删除");
-                } else {
-                    bianjiLinear.setVisibility(View.GONE);
-                    jubaoTv.setText("举报");
-                }
                 showPopup(position);
             }
         });
@@ -487,6 +476,68 @@ public class IndexQJListAdapter extends BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    //取消收藏情景
+    private void cancelShoucang(final int position) {
+        ClientDiscoverAPI.cancelShoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<取消收藏情景", "数据解析异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    sceneList.get(position).setIs_favorite(0);
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //收藏情景
+    private void shoucang(final int position) {
+        ClientDiscoverAPI.shoucang(sceneList.get(position).get_id(), "12", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>() {
+                    }.getType();
+                    netBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<收藏情景", "数据解析异常");
+                }
+                dialog.dismiss();
+                if (netBean.isSuccess()) {
+                    ToastUtils.showSuccess(netBean.getMessage());
+                    sceneList.get(position).setIs_favorite(1);
+                } else {
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 
     //删除情景
@@ -729,7 +780,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         public void onClick(View widget) {
             Intent intent = new Intent(activity, SearchActivity.class);
             intent.putExtra("q", q);
-            intent.putExtra("t", "9");
+            intent.putExtra("t", 9);
             activity.startActivity(intent);
         }
     }

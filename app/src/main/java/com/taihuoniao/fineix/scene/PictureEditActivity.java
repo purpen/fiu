@@ -38,7 +38,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.GoodsDetailBean;
+import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -126,7 +126,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initList() {
         titleLayout.setContinueListener(this);
-        titleLayout.setTitle(R.string.biaoji_chanpin,getResources().getColor(R.color.white));
+        titleLayout.setTitle(R.string.biaoji_chanpin, getResources().getColor(R.color.white));
         imageViewTouch.setSingleTapListener(new ImageViewTouch.OnImageViewTouchSingleTapListener() {
             @Override
             public void onSingleTapConfirmed() {
@@ -313,6 +313,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     productPop.dismiss();
                     TagItem tagItem = new TagItem();
                     tagItem.setId(productId);
+                    tagItem.setType(type);
                     tagItem.setName(brandTv.getText().toString() + productName.getText().toString());
                     addLabel(tagItem);
                     brandTv.setText("");
@@ -367,7 +368,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
-        int w =MainApplication.getContext().getScreenWidth();
+        int w = MainApplication.getContext().getScreenWidth();
         //加滤镜
         final Bitmap newBitmap = Bitmap.createBitmap(w, w,
                 Bitmap.Config.ARGB_8888);
@@ -568,8 +569,8 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         setHint();
     }
 
-    private void setHint(){
-        switch (labels.size()){
+    private void setHint() {
+        switch (labels.size()) {
             case 0:
                 hintTv.setText("点击图片标记相关信息");
                 break;
@@ -602,6 +603,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
 
     private String brandId;
     private String productId;
+    private int type = 1;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -612,6 +614,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     brandId = data.getStringExtra("brandId");
                     String product = data.getStringExtra("product");
                     productId = data.getStringExtra("productId");
+                    type = data.getIntExtra("type", 1);
                     if (brand != null) {
                         brandTv.setText(brand);
                     }
@@ -620,41 +623,46 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     }
                     break;
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
-                    final GoodsDetailBean productListBean = (GoodsDetailBean) data.getSerializableExtra("product");
-                    String url = productListBean.getData().getPng_asset().get(0).getUrl();
-                    ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-                            if (!dialog.isShowing()) {
-                                dialog.show();
+                    final BuyGoodDetailsBean productListBean = (BuyGoodDetailsBean) data.getSerializableExtra("product");
+                    //是自动添加标签还是后添加
+                    TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price()+"");
+                    tag.setId(productListBean.getData().get_id());
+                    tag.setLoc(2);
+                    tag.setType(1);
+                    addLabel(tag);
+                    try {
+                        String url = productListBean.getData().getPng_asset().get(0).getUrl();
+                        ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+                                if (!dialog.isShowing()) {
+                                    dialog.show();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                            dialog.dismiss();
-                            ToastUtils.showError("图片加载失败");
-                        }
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                dialog.dismiss();
+                                ToastUtils.showError("图片加载失败");
+                            }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            dialog.dismiss();
-                            //是自动添加标签还是后添加
-                            TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price());
-                            tag.setId(productListBean.getData().get_id());
-//                            tag.setImagePath(productListBean.getData().getPng_asset().get(0).getUrl());
-                            tag.setLoc(2);
-                            tag.setType(1);
-                            addLabel(tag);
-                            EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, loadedImage);
-                        }
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                dialog.dismiss();
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-                            dialog.dismiss();
-                            ToastUtils.showError("图片加载失败");
-                        }
-                    });
+                                EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, loadedImage);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+                                dialog.dismiss();
+                                ToastUtils.showError("图片加载失败");
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e("<<<", "没有褪底图");
+                    }
+
                     break;
             }
         }

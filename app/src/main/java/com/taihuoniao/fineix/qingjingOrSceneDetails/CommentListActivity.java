@@ -38,6 +38,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCommentsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -81,7 +82,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         activityView = View.inflate(CommentListActivity.this, R.layout.activity_commentlist, null);
         setContentView(activityView);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_commentlist_titlelayout);
@@ -93,6 +93,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
         sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
         dialog = new WaittingDialog(this);
+        WindowUtils.chenjin(this);
         initPopupWindow();
     }
 
@@ -102,9 +103,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");
         if (target_id == null || type == null || target_user_id == null) {
-//            Log.e("<<<评论界面", "target_id=" + target_id + ",type=" + type + ",user_id=" + target_user_id);
             ToastUtils.showError("数据错误");
-//            dialog.showErrorWithStatus("数据错误");
             if (dialog != null) {
                 if (dialog.isShowing()) {
                     dialog.dismiss();
@@ -112,9 +111,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             }
             finish();
         }
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setBackImg(R.mipmap.back_black);
-        titleLayout.setTitle(R.string.comment, getResources().getColor(R.color.title_black));
+        titleLayout.setTitle(R.string.comment);
         titleLayout.setContinueTvVisible(false);
         commentList = new ArrayList<>();
         commentsListAdapter = new CommentsListAdapter(CommentListActivity.this, commentList);
@@ -126,7 +123,6 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                 requestNet();
             }
         });
-//        pullToRefreshLayout.setEmptyView(nothingTv);
         pullToRefreshLayout.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {

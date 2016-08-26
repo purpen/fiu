@@ -14,7 +14,12 @@ public class DataConstants {
     public static final int IndexFragment = 105;//首页
     public static final int FindFragment = 106;//发现页
     public static final int SearchActivity = 107;//搜索页
-    public static final int ActivityDetail = 108;//活动详情
+    public static final int FindActivity = 108;//发现大图
+    public static final int QJDetailActivity = 109;//情景详情
+    public static final int BuyGoodDetailsActivity = 110;//可以购买的商品详情
+    public static final int ActivityDetail = 111;//活动详情
+    public static final String BroadBuyGoodDetails = "com.taihuoniao.fiu.buygooddetail";
+    public static final String BroadQJDetail = "con.taihuoniao.fiu.qjdetail";
     public static final String BroadSearch = "com.taihuoniao.fiu.search";
     public static final String BroadIndex = "com.taihuoniao.fiu.index";
     public static final String BroadFind = "con.taihuoniao.fiu.find";

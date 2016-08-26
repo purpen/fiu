@@ -51,12 +51,10 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.GoodsDetailActivity;
-import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
-import com.taihuoniao.fineix.utils.LoginCompleteUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -128,8 +126,8 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
     private ListViewForScrollView nearProductListView;
     private PopupWindow sharePop, popupWindow;
     //popupwindow下的控件
-    private TextView pinglunTv;
-    private LinearLayout bianjiLinear;
+//    private TextView pinglunTv;
+//    private LinearLayout bianjiLinear;
     private TextView jubaoTv;
     private TextView cancelTv;
     //网络请求对话框
@@ -337,16 +335,16 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
         WindowManager windowManager = SceneDetailActivity.this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(SceneDetailActivity.this, R.layout.popup_scene_details_more, null);
-        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
-        bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
+//        pinglunTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_pinglun);
+//        bianjiLinear = (LinearLayout) popup_view.findViewById(R.id.popup_scene_detail_more_bianji_linear);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
         popupWindow = new PopupWindow(popup_view, display.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        pinglunTv.setOnClickListener(this);
-        bianjiLinear.setOnClickListener(this);
+//        pinglunTv.setOnClickListener(this);
+//        bianjiLinear.setOnClickListener(this);
         jubaoTv.setOnClickListener(this);
         cancelTv.setOnClickListener(this);
 
@@ -453,7 +451,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 public void onClick(View v) {
                     Intent intent = new Intent(SceneDetailActivity.this, SearchActivity.class);
                     intent.putExtra("q", tagsTitleList.get(finalI));
-                    intent.putExtra("t", "9");
+                    intent.putExtra("t", 9);
                     startActivity(intent);
                 }
             });
@@ -494,7 +492,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.popup_scene_detail_more_jubao:
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
-                    LoginCompleteUtils.id = id;
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
@@ -583,7 +580,6 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.activity_scenedetails_lovecount:
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.SceneDetailActivity;
-                    LoginCompleteUtils.id = id;
                     startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
                     return;
                 }
@@ -598,7 +594,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
 //            case R.id.activity_scenedetails_commentlinear:
-            case R.id.popup_scene_detail_more_pinglun:
+//            case R.id.popup_scene_detail_more_pinglun:
             case R.id.activity_scenedetails_commentimg:
             case R.id.activity_scenedetails_commentcount:
             case R.id.activity_scenedetails_allcomment:
@@ -622,23 +618,23 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                Intent intent6 = new Intent(this, LoveSceneActivity.class);
 //                startActivity(intent6);
                 break;
-            case R.id.popup_scene_detail_more_bianji_linear:
-                if (!LoginInfo.isUserLogin()) {
-                    MainApplication.which_activity = DataConstants.SceneDetailActivity;
-                    LoginCompleteUtils.id = id;
-                    startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
-                    return;
-                }
-                if (netScene == null) {
-                    dialog.show();
-                    sceneDetails(id);
-                    return;
-                }
-                Intent intent5 = new Intent(SceneDetailActivity.this, CreateQJActivity.class);
-                MainApplication.tag = 1;
-                intent5.putExtra(SceneDetailActivity.class.getSimpleName(), netScene);
-                startActivity(intent5);
-                break;
+//            case R.id.popup_scene_detail_more_bianji_linear:
+//                if (!LoginInfo.isUserLogin()) {
+//                    MainApplication.which_activity = DataConstants.SceneDetailActivity;
+//                    LoginCompleteUtils.id = id;
+//                    startActivity(new Intent(SceneDetailActivity.this, OptRegisterLoginActivity.class));
+//                    return;
+//                }
+//                if (netScene == null) {
+//                    dialog.show();
+//                    sceneDetails(id);
+//                    return;
+//                }
+//                Intent intent5 = new Intent(SceneDetailActivity.this, CreateQJActivity.class);
+//                MainApplication.tag = 1;
+//                intent5.putExtra(SceneDetailActivity.class.getSimpleName(), netScene);
+//                startActivity(intent5);
+//                break;
             case R.id.activity_scenedetails_more:
                 if (netScene == null) {
                     if (!dialog.isShowing()) {
@@ -650,7 +646,7 @@ public class SceneDetailActivity extends BaseActivity implements View.OnClickLis
 //                Log.e("<<<", "当前id=" + netScene.getCurrent_user_id() + "," + netScene.getData().getUser_info().getUser_id() + "," + netScene.getData().getUser_id());
 //                if(netScene.getUser_info().getUser_id().equals(netScene.getCurrent_user_id()))
                 if (netScene.getCurrent_user_id() != null && netScene.getCurrent_user_id().equals(netScene.getData().getUser_info().getUser_id() + "")) {
-                    bianjiLinear.setVisibility(View.VISIBLE);
+//                    bianjiLinear.setVisibility(View.VISIBLE);
                     jubaoTv.setText("删除");
                 }
                 showPopup();

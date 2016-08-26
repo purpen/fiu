@@ -177,16 +177,16 @@ public class FindQJAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         if (LoginInfo.isUserLogin()) {
                             //已经登录
-                            if (sceneList.get(qjPosition + 1).getIs_love() == 1) {
+                            if (sceneList.get(qjPosition).getIs_love() == 1) {
                                 if (!dialog.isShowing()) {
                                     dialog.show();
                                 }
-                                cancelLoveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, false);
+                                cancelLoveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             } else {
                                 if (!dialog.isShowing()) {
                                     dialog.show();
                                 }
-                                loveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, false);
+                                loveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             }
                             return;
                         }

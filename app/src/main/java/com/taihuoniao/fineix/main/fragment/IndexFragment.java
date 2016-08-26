@@ -13,8 +13,6 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -31,6 +29,7 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.BannerData;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.IndexUserListBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SubjectListBean;
@@ -38,7 +37,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsCJListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsQJActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -57,15 +56,11 @@ import butterknife.Bind;
  * Created by taihuoniao on 2016/8/9.
  */
 public class IndexFragment extends BaseFragment<Banner> implements View.OnClickListener, PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
-    @Bind(R.id.title_layout)
-    RelativeLayout titleLayout;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshListView pullRefreshView;
     private ListView listView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    @Bind(R.id.emptyview)
-    TextView emptyview;
     @Bind(R.id.search_img)
     ImageView searchImg;
     @Bind(R.id.subs_img)
@@ -74,11 +69,11 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     private ScrollableView scrollableView;
     private ImageView moreThemeImg;
     private RecyclerView recyclerView;
-    private ImageView moreQjImg;
     private WaittingDialog dialog;//网络请求对话框
     private int currentPage = 1;//网络请求页码
     private ViewPagerAdapter viewPagerAdapter;//banner图适配器
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
+    private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表的用户列表数据
     private IndexQJListAdapter indexQJListAdapter;//情景列表适配器
     private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private IndexSubjectAdapter indexSubjectAdapter;//主题列表适配器
@@ -99,7 +94,6 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
         moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
         recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
-        moreQjImg = (ImageView) headerView.findViewById(R.id.more_qj_img);
         listView.addHeaderView(headerView);
         pullRefreshView.animLayout();
         listView.setDividerHeight(0);
@@ -117,10 +111,9 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         subjectList = new ArrayList<>();
         indexSubjectAdapter = new IndexSubjectAdapter(this, subjectList);
         recyclerView.setAdapter(indexSubjectAdapter);
-        //设置适配器
-        moreQjImg.setOnClickListener(this);
         sceneList = new ArrayList<>();
-        indexQJListAdapter = new IndexQJListAdapter(getActivity(), sceneList);
+        userList = new ArrayList<>();
+        indexQJListAdapter = new IndexQJListAdapter(getActivity(), sceneList, userList);
         listView.setAdapter(indexQJListAdapter);
         if (!dialog.isShowing()) {
             dialog.show();
@@ -130,6 +123,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     @Override
     public void onRefresh() {
         currentPage = 1;
+        sneceComplete = 0;
         if (!dialog.isShowing()) {
             dialog.show();
         }
@@ -141,30 +135,29 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         sceneNet();
         subjectList();
         getBanners();
+        getUserList();
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.more_qj_img:
-                ToastUtils.showError("更多情景");
-                break;
             case R.id.more_theme_img:
                 ToastUtils.showError("更多主题");
+
                 break;
             case R.id.search_img:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("t", 9 + "");
+                intent.putExtra("t", 9);
                 startActivity(intent);
                 break;
             case R.id.subs_img:
                 if (!LoginInfo.isUserLogin()) {
-                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    MainApplication.which_activity = DataConstants.IndexFragment;
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }
-                startActivity(new Intent(getActivity(), SubsCJListActivity.class));
+                startActivity(new Intent(getActivity(), SubsQJActivity.class));
                 break;
         }
     }
@@ -235,6 +228,48 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         });
     }
 
+    private int sneceComplete;//判断情景是否加载完毕 0，情景用户都没加载 1,情景加载完毕等待用户加载 2，用户加载完毕等待情景加载
+
+    //获取中间插入的用户列表
+    private void getUserList() {
+        ClientDiscoverAPI.getUserList(20, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<首页用户列表", responseInfo.result);
+                IndexUserListBean indexUserListBean = new IndexUserListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<IndexUserListBean>() {
+                    }.getType();
+                    indexUserListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<首页用户列表", "解析异常=" + e.toString());
+                }
+                if (indexUserListBean.isSuccess()) {
+                    userList.clear();
+                    userList.addAll(indexUserListBean.getData().getUsers());
+                    if (sneceComplete == 1) {
+                        indexQJListAdapter.notifyDataSetChanged();
+                        sneceComplete = 2;
+                    }
+                    return;
+                }
+                if (sneceComplete == 1) {
+                    indexQJListAdapter.notifyDataSetChanged();
+                    sneceComplete = 0;
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                if (sneceComplete == 1) {
+                    indexQJListAdapter.notifyDataSetChanged();
+                    sneceComplete = 0;
+                }
+            }
+        });
+    }
+
     //获取精选主题
     private void subjectList() {
         ClientDiscoverAPI.subjectList("1", "4", null, "1", null, null, new RequestCallBack<String>() {
@@ -266,7 +301,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取情景列表
     private void sceneNet() {
-        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -291,16 +326,11 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                         pullRefreshView.lastSavedFirstVisibleItem = -1;
                     }
                     sceneList.addAll(sceneL.getData().getRows());
+                    if (userList.size() <= 0 && sneceComplete == 0) {
+                        sneceComplete = 1;
+                        return;
+                    }
                     indexQJListAdapter.notifyDataSetChanged();
-//                    //纪录浏览次数
-//                    StringBuilder ids = new StringBuilder();
-//                    for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
-//                        ids.append(",").append(rowsBean.get_id());
-//                    }
-//                    if (ids.length() > 0) {
-//                        ids.deleteCharAt(0);
-//                        ClientDiscoverAPI.viewCount(ids.toString());
-//                    }
                 }
             }
 

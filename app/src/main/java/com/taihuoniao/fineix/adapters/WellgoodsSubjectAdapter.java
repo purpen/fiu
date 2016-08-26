@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
 import java.util.List;
@@ -92,7 +92,7 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         holder.recyclerView.setAdapter(new RecyclerAdapter(activity, list.get(position).getProducts(), new EditRecyclerAdapter.ItemClick() {
             @Override
             public void click(int postion) {
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                 intent.putExtra("id", list.get(position).getProducts().get(postion).get_id());
                 activity.startActivity(intent);
             }

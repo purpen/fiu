@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
+import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
@@ -56,10 +57,6 @@ public class MainApplication extends Application {
     public static int which_activity;//判断是从哪个界面跳转到登录界面,0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
-    //剪切好的图片存储路径
-    public static String cropPicPath = null;
-    public static String editPicPath = null;//编辑好的图片存储路径
-    public static String filterPicPath = null;//加完滤镜的图片
 
     public static String uuid = null;
     public static boolean hasUser;
@@ -78,6 +75,7 @@ public class MainApplication extends Application {
     public static Bitmap cropBitmap = null;//前切好的图片
     public static Bitmap editBitmap = null;//编辑好的图片
     public static Bitmap blurBitmap = null;//模糊的图片
+    public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
 
     public static MainApplication getContext() {
         return instance;
@@ -96,9 +94,6 @@ public class MainApplication extends Application {
         JsonUtil.init();
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
-        cropPicPath = getCacheDirPath() + "/crop";
-        editPicPath = getCacheDirPath() + "/edit";
-        filterPicPath = getCacheDirPath() + "/filter";
 //        try {
 //            LeakCanary.install(this);
 //        } catch (Exception e) {

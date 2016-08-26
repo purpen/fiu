@@ -36,7 +36,9 @@ import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
@@ -213,6 +215,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                         findQJAdapter.notifyDataSetChanged();
                         sneceComplete = 2;
                     }
+                    return;
                 }
                 if (sneceComplete == 1) {
                     findQJAdapter.notifyDataSetChanged();
@@ -232,7 +235,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表
     private void sceneNet() {
-        ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -278,15 +281,15 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_left:
-                ToastUtils.showError("发现好友");
+                startActivity(new Intent(getActivity(), FindFriendsActivity.class));
                 break;
             case R.id.title_right:
-                ToastUtils.showError("用户排行");
+                startActivity(new Intent(getActivity(), AllFiuerActivity.class));
                 break;
             case R.id.search_linear:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra(FindFragment.class.getSimpleName(),false);
-                intent.putExtra("t", 9 + "");
+                intent.putExtra(FindFragment.class.getSimpleName(), false);
+                intent.putExtra("t", 9);
                 startActivity(intent);
                 break;
         }
@@ -296,7 +299,9 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
-    private ObjectAnimator downAnimator,upAnimator;
+
+    private ObjectAnimator downAnimator, upAnimator;
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount > listView.getHeaderViewsCount()
@@ -310,12 +315,12 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
             }
         }
         if (firstVisibleItem >= 1 && goneRelative.getTranslationY() == -goneRelative.getMeasuredHeight()) {
-            if(downAnimator==null){
+            if (downAnimator == null) {
                 downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
             }
             downAnimator.start();
         } else if (firstVisibleItem < 1 && goneRelative.getTranslationY() == 0) {
-            if(upAnimator==null){
+            if (upAnimator == null) {
                 upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
             }
             upAnimator.start();

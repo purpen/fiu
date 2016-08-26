@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -50,20 +51,14 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
     protected void initView() {
         listView = pullRefreshView.getRefreshableView();
         dialog = new WaittingDialog(this);
-        titlelayout.setBackgroundResource(R.color.white);
-        titlelayout.setBackImg(R.mipmap.back_black);
-        titlelayout.setTitle(R.string.ranking_list_users, getResources().getColor(R.color.black333333));
+        titlelayout.setTitle("排行榜");
+        titlelayout.setContinueTvVisible(false);
         searchLinear.setVisibility(View.GONE);
         searchLinear.setOnClickListener(this);
         pullRefreshView.setPullToRefreshEnabled(false);
-//        pullRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//
-//            }
-//        });
         listView.setOnItemClickListener(this);
         listView.setDividerHeight(0);
+        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -74,24 +69,22 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<用户排行", responseInfo.result);
+                Log.e("<<<用户排行", responseInfo.result);
 //                WriteJsonToSD.writeToSD("json", responseInfo.result);
-                FiuUserListBean fiuUserListBean = new FiuUserListBean();
                 try {
                     Gson gson = new Gson();
                     Type type1 = new TypeToken<FiuUserListBean>() {
                     }.getType();
-                    fiuUserListBean = gson.fromJson(responseInfo.result, type1);
+                    netUsers = gson.fromJson(responseInfo.result, type1);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 dialog.dismiss();
-                netUsers = fiuUserListBean;
-                if (fiuUserListBean.isSuccess()) {
-                    AllFiuerAdapter allFiuerAdapter = new AllFiuerAdapter(AllFiuerActivity.this, fiuUserListBean);
+                if (netUsers.isSuccess()) {
+                    AllFiuerAdapter allFiuerAdapter = new AllFiuerAdapter(AllFiuerActivity.this, netUsers);
                     listView.setAdapter(allFiuerAdapter);
                 } else {
-                    ToastUtils.showError(fiuUserListBean.getMessage());
+                    ToastUtils.showError(netUsers.getMessage());
                 }
             }
 
@@ -111,7 +104,9 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
+
     private FiuUserListBean netUsers;
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, UserCenterActivity.class);

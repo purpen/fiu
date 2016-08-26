@@ -16,11 +16,11 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SystemNoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -105,7 +105,7 @@ public class SystemNoticeActivity extends BaseActivity {
                             startActivity(intent);
                             break;
                         case 3: //产品
-                            intent=new Intent(activity, GoodsDetailActivity.class);
+                            intent=new Intent(activity, BuyGoodsDetailsActivity.class);
                             intent.putExtra("id",item.url);
                             startActivity(intent);
                             break;

@@ -18,12 +18,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.Banner;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
@@ -150,7 +150,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 9:     //产品
-                            intent = new Intent(activity, GoodsDetailActivity.class);
+                            intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                             break;

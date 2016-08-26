@@ -66,8 +66,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         if (!dialog.isShowing()) {
             dialog.show();
         }
-//        DataPaser.categoryList(1 + "", 10 + "", 1 + "", handler);
-        ClientDiscoverAPI.categoryList(1 + "", 10 + "", 1 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.categoryList(1 + "", 1+ "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                dialog.dismiss();

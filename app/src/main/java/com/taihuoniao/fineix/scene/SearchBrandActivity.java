@@ -238,11 +238,11 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
+        ClientDiscoverAPI.addProduct(title, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-                Log.e("<<<添加产品",responseInfo.result);
+                Log.e("<<<添加产品", responseInfo.result);
                 AddProductBean addProductBean = new AddProductBean();
                 try {
                     Gson gson = new Gson();
@@ -259,6 +259,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     intent.putExtra("brandId", cuurentBrandId);
                     intent.putExtra("product", searchEditText.getText().toString());
                     intent.putExtra("productId", addProductBean.getData().getId());
+                    intent.putExtra("type", 2);
                     setResult(1, intent);
                     finish();
                 } else {
@@ -417,6 +418,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             intent.putExtra("brandId", cuurentBrandId);
             intent.putExtra("product", productList.get(position).getTitle());
             intent.putExtra("productId", productList.get(position).get_id());
+            intent.putExtra("type", 1);
             setResult(1, intent);
             finish();
         }
