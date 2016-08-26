@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="首次加入太火鸟"
+        android:text=""
         android:layout_gravity="center_horizontal"
         android:textColor="@android:color/white"
         android:textSize="@dimen/sp13"
@@ -19,6 +19,7 @@
         style="@style/RegisterAndLogin"
         android:layout_centerHorizontal="true"
         android:background="@drawable/shape_login_register"
+        android:textAllCaps="false"
         android:text="@string/login_now"
         android:textColor="@color/color_af8323" />
 
@@ -26,25 +27,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_gravity="right">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:text="@string/skip_bind"
             android:textColor="@color/color_666"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_bind"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:paddingLeft="5dp"
             android:text="立即绑定"
-            android:gravity="center_vertical"
             android:textColor="@color/color_af8323"
             android:textSize="13sp"
             android:textStyle="bold" />

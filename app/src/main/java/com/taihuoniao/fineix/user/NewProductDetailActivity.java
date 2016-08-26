@@ -20,16 +20,19 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
-import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -108,7 +111,7 @@ public class NewProductDetailActivity extends BaseActivity {
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
                     jump2ThemeDetail(infoId);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
-                    intent = new Intent(activity, MyGoodsDetailsActivity.class);
+                    intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
@@ -118,6 +121,11 @@ public class NewProductDetailActivity extends BaseActivity {
                 } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
                     if (url.contains("infoTag")) {
                         String infoTag = args[2].split("=")[1];
+                        try {
+                            infoTag = URLDecoder.decode(infoTag, Constants.CHARSET);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                         if (!TextUtils.isEmpty(infoTag)) {
                             intent = new Intent(activity, SearchActivity.class);
                             intent.putExtra("q", infoTag);

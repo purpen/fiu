@@ -76,7 +76,7 @@ public class ParticipateQJFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        pullGv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        pullGv.setMode(PullToRefreshBase.Mode.DISABLED);
         mList = new ArrayList<>();
         dialog = new WaittingDialog(activity);
     }

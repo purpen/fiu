@@ -43,6 +43,17 @@
                 android:layout_height="@dimen/dp1"
                 android:background="@color/color_af8323" />
             <TextView
+                android:id="@+id/tv_short_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="@dimen/dp5" />
+
+            <TextView
                 android:id="@+id/tv_during"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +62,7 @@
                 android:drawablePadding="@dimen/dp5"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp12" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -60,7 +71,7 @@
         android:layout_marginTop="@dimen/dp15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_222"
+        android:textColor="@color/color_666"
         android:textSize="@dimen/sp12"
         android:layout_marginRight="@dimen/dp16"
         android:layout_marginLeft="@dimen/dp16"

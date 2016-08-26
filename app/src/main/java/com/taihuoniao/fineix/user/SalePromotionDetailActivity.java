@@ -56,6 +56,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
     private ImageView iv_banner;
     private TextView tv_title;
     private TextView tv_during;
+    private TextView tv_short_title;
     private WaittingDialog dialog;
     private String id;
     private SubjectData data;
@@ -79,6 +80,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
         View view = Util.inflateView(R.layout.head_sale_promotion_detail, null);
         iv_banner = ButterKnife.findById(view, R.id.iv_banner);
         tv_title = ButterKnife.findById(view, R.id.tv_title);
+        tv_short_title = ButterKnife.findById(view, R.id.tv_short_title);
         tv_during = ButterKnife.findById(view, R.id.tv_during);
         tvDesc = ButterKnife.findById(view, R.id.tv_desc);
         view_line = ButterKnife.findById(view, R.id.view_line);
@@ -101,6 +103,8 @@ public class SalePromotionDetailActivity extends BaseActivity {
                 }
             }
         });
+
+
     }
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_comment})
@@ -185,6 +189,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
         ibtnShare.setText(String.valueOf(data.share_count));
         ibtnFavorite.setText(String.valueOf(data.view_count));
         tv_title.setText(data.title);
+        tv_short_title.setText(data.short_title);
         tvDesc.setText(data.summary);
         tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         ImageLoader.getInstance().displayImage(data.banner_url, iv_banner);

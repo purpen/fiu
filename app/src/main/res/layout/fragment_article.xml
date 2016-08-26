@@ -9,5 +9,5 @@
         android:background="@color/color_f7f7f7"
         android:dividerHeight="@dimen/dp8"
         android:divider="@color/color_transparent"
-        ptr:ptrDrawable="@drawable/indicator_arrow" />
+        ptr:ptrAnimationStyle="flip" />
 </RelativeLayout>

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectData;
-import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                 intent.putExtra("id", item._id);
                 activity.startActivity(intent);
             }

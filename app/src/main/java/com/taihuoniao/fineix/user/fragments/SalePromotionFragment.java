@@ -1,11 +1,13 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -20,6 +22,7 @@ import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -87,6 +90,16 @@ public class SalePromotionFragment extends MyBaseFragment {
             public void onLastItemVisible() {
                 isLoadMore = true;
                 loadData();
+            }
+        });
+
+        pullLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mList == null || mList.size() == 0) return;
+                Intent intent = new Intent(activity, SalePromotionDetailActivity.class);
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), mList.get(position - 1)._id);
+                activity.startActivity(intent);
             }
         });
     }

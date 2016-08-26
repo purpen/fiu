@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -58,6 +59,11 @@ public class ActivityDetailActivity extends BaseActivity {
     TabLayout tabLayout;
     @Bind(R.id.viewPager)
     ViewPager viewPager;
+    @Bind(R.id.view_line)
+    View viewLine;
+    @Bind(R.id.tv_during)
+    TextView tvDuring;
+
     private CollectViewPagerAdapter adapter;
     private WaittingDialog dialog;
     private String id;
@@ -207,8 +213,27 @@ public class ActivityDetailActivity extends BaseActivity {
     protected void refreshUI() {
         if (data == null) return;
         ImageLoader.getInstance().displayImage(data.banner_url, imageView);
-        tvTitle.setText(data.title);
+        if (!TextUtils.isEmpty(data.title)) {
+            tvTitle.setText(data.title);
+            tvTitle.setBackgroundColor(getResources().getColor(android.R.color.black));
+            tvTitle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int width = tvTitle.getMeasuredWidth();
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp2));
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    viewLine.setLayoutParams(params);
+                    viewLine.setBackgroundColor(activity.getResources().getColor(R.color.color_af8323));
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                        tvTitle.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        tvTitle.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+                }
+            });
+        }
         tvDesc.setText(data.short_title);
+        tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         initTabLayout();
     }
 

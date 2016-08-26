@@ -1,17 +1,19 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.os.Build;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
-import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final DataChooseSubject.ItemChoosenSubject item = list.get(position);
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_sale_promotion, null);
             holder = new ViewHolder(convertView);
@@ -40,9 +42,27 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
-        holder.tvTitle.setText(item.title);
+        if (!TextUtils.isEmpty(item.title)) {
+            holder.tvTitle.setText(item.title);
+            holder.tvTitle.setBackgroundColor(activity.getResources().getColor(android.R.color.black));
+        }
         holder.tvDesc.setText(item.short_title);
         holder.tvCount.setText(String.format("%s人浏览", item.view_count));
+        holder.tvTitle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = holder.tvTitle.getMeasuredWidth();
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp2));
+                params.gravity = Gravity.CENTER_HORIZONTAL;
+                holder.viewLine.setLayoutParams(params);
+                holder.viewLine.setBackgroundColor(activity.getResources().getColor(R.color.color_af8323));
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.tvTitle.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    holder.tvTitle.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
 //        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 //        holder.recyclerView.setLayoutManager(manager);
 //        holder.recyclerView.setHasFixedSize(true);
@@ -60,21 +80,19 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
 //            }
 //        });
 //        holder.recyclerView.setAdapter(adapter);
-        holder.rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, SalePromotionDetailActivity.class);
-                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), item._id);
-                activity.startActivity(intent);
-            }
-        });
+//        holder.rl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(activity, SalePromotionDetailActivity.class);
+//                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), item._id);
+//                activity.startActivity(intent);
+//            }
+//        });
         return convertView;
     }
 
 
     static class ViewHolder {
-        @Bind(R.id.rl)
-        RelativeLayout rl;
         @Bind(R.id.imageView)
         ImageView imageView;
         @Bind(R.id.tv_title)
@@ -83,6 +101,8 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         TextView tvDesc;
         @Bind(R.id.tv_count)
         TextView tvCount;
+        @Bind(R.id.view_line)
+        View viewLine;
 //        @Bind(R.id.recycler_view)
 //        RecyclerView recyclerView;
 

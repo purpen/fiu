@@ -34,35 +34,43 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/riv"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:singleLine="true"
                 android:gravity="center_horizontal"
-                android:lineSpacingMultiplier="1.1"
                 android:paddingBottom="@dimen/dp5"
                 android:paddingTop="@dimen/dp5"
                 android:paddingLeft="@dimen/dp15"
                 android:paddingRight="@dimen/dp15"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp16"
-                android:background="@android:color/black" />
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/sp16" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp1"
-                android:background="@color/color_af8323" />
+                android:id="@+id/view_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp2" />
 
             <TextView
                 android:id="@+id/tv_desc"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sp14"
                 android:gravity="center_horizontal"
-                android:maxLines="2"
+                android:singleLine="true"
                 android:ellipsize="end"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="@dimen/dp5" />
+
+            <TextView
+                android:id="@+id/tv_during"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:drawableLeft="@mipmap/during"
+                android:drawablePadding="@dimen/dp5"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12" />
         </LinearLayout>
     </RelativeLayout>
 

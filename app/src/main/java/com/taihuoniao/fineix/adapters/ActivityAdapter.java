@@ -54,7 +54,7 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
             @Override
             public void onGlobalLayout() {
                 int width = holder.tvTitle.getMeasuredWidth();
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp1));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp2));
                 params.gravity = Gravity.CENTER_HORIZONTAL;
                 holder.viewLine.setLayoutParams(params);
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
