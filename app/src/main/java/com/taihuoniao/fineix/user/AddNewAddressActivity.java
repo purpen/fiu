@@ -227,7 +227,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void setData() {
         addressBean = (AddressListBean.AddressListItem) getIntent().getSerializableExtra("addressBean");
-        titleLayout.setTitle(R.string.edit_address, getResources().getColor(R.color.black333333));
+        titleLayout.setTitle(R.string.edit_address, getResources().getColor(android.R.color.white));
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
@@ -242,8 +242,8 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void initView() {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_addnewaddress_title);
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout.setBackgroundResource(android.R.color.black);
+        titleLayout.setBackImg(R.mipmap.back_white);
         commitBtn = (Button) findViewById(R.id.activity_addnewaddress_commitbtn);
         nameEdt = (EditText) findViewById(R.id.activity_addnewaddress_name);
         phoneEdt = (EditText) findViewById(R.id.activity_addnewaddress_phone);

@@ -38,7 +38,7 @@ public class ArticleAdapter extends CommonBaseAdapter<DataChooseSubject.ItemChoo
         }
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         holder.tvTitle.setText(item.title);
-        holder.tvCount.setText(item.view_count);
+        holder.tvCount.setText(String.format("%s人浏览", item.view_count));
         return convertView;
     }
 

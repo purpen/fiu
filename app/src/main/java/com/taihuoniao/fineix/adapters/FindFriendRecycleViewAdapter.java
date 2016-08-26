@@ -86,7 +86,7 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         imageLoader.displayImage(item.cover_url, holder.iv_cover, options);
         if (!TextUtils.isEmpty(item.title)) {
             holder.tv_title.setText(item.title);
-            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
         }
         holder.tv_desc.setText(item.address);
     }

@@ -27,6 +27,7 @@ public class RuleFragment extends MyBaseFragment {
     Button btn;
     private String string;
     private String id;
+    private int evt;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class RuleFragment extends MyBaseFragment {
         if (bundle != null) {
             string = bundle.getString("summary");
             id = bundle.getString("id");
+            evt = bundle.getInt("evt");
         }
     }
 
@@ -54,6 +56,9 @@ public class RuleFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
+        if (evt == 2) {
+            btn.setVisibility(View.GONE);
+        }
         tvRule.setText(string);
     }
 

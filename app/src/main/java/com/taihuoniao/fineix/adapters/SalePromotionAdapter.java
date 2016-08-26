@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataChooseSubject;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.Util;
 
@@ -45,24 +42,24 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         holder.tvTitle.setText(item.title);
         holder.tvDesc.setText(item.short_title);
-        holder.tvCount.setText(item.view_count);
-        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-        holder.recyclerView.setLayoutManager(manager);
-        holder.recyclerView.setHasFixedSize(true);
-        SalePromotionRecycleViewAdapter adapter = new SalePromotionRecycleViewAdapter(activity, item.products);
-        adapter.setmOnItemClickLitener(new SalePromotionRecycleViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
-                intent.putExtra("id", item._id);
-                activity.startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-            }
-        });
-        holder.recyclerView.setAdapter(adapter);
+        holder.tvCount.setText(String.format("%s人浏览", item.view_count));
+//        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+//        holder.recyclerView.setLayoutManager(manager);
+//        holder.recyclerView.setHasFixedSize(true);
+//        SalePromotionRecycleViewAdapter adapter = new SalePromotionRecycleViewAdapter(activity, item.products);
+//        adapter.setmOnItemClickLitener(new SalePromotionRecycleViewAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
+//                intent.putExtra("id", item._id);
+//                activity.startActivity(intent);
+//            }
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//            }
+//        });
+//        holder.recyclerView.setAdapter(adapter);
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +83,8 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         TextView tvDesc;
         @Bind(R.id.tv_count)
         TextView tvCount;
-        @Bind(R.id.recycler_view)
-        RecyclerView recyclerView;
+//        @Bind(R.id.recycler_view)
+//        RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

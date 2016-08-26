@@ -1,9 +1,13 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +50,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
     TextView ibtnComment;
     @Bind(R.id.ibtn_share)
     TextView ibtnShare;
+    TextView tvDesc;
     @Bind(R.id.lv)
     ListView lv;
     private ImageView iv_banner;
@@ -54,7 +59,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
     private WaittingDialog dialog;
     private String id;
     private SubjectData data;
-
+    private View view_line;
     public SalePromotionDetailActivity() {
         super(R.layout.activity_sale_promotion_detail);
     }
@@ -75,9 +80,28 @@ public class SalePromotionDetailActivity extends BaseActivity {
         iv_banner = ButterKnife.findById(view, R.id.iv_banner);
         tv_title = ButterKnife.findById(view, R.id.tv_title);
         tv_during = ButterKnife.findById(view, R.id.tv_during);
+        tvDesc = ButterKnife.findById(view, R.id.tv_desc);
+        view_line = ButterKnife.findById(view, R.id.view_line);
         lv.addHeaderView(view);
     }
 
+    @Override
+    protected void installListener() {
+        tv_title.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = tv_title.getMeasuredWidth();
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp1));
+                params.gravity = Gravity.CENTER_HORIZONTAL;
+                view_line.setLayoutParams(params);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                    tv_title.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    tv_title.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+    }
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_comment})
     void onClick(View v) {
@@ -156,11 +180,13 @@ public class SalePromotionDetailActivity extends BaseActivity {
 
     @Override
     protected void refreshUI() {
+        if (data == null) return;
         ibtnComment.setText(String.valueOf(data.comment_count));
         ibtnShare.setText(String.valueOf(data.share_count));
         ibtnFavorite.setText(String.valueOf(data.view_count));
         tv_title.setText(data.title);
-        tv_during.setText(String.format("促销时间：%s-%s", data.begin_time_at, data.end_time_at));
+        tvDesc.setText(data.summary);
+        tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         ImageLoader.getInstance().displayImage(data.banner_url, iv_banner);
         if (data.products == null) return;
         SalePromotionDetailAdapter adapter = new SalePromotionDetailAdapter(data.products, activity);

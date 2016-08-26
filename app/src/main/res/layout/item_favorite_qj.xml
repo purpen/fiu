@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/dp150"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160">
+        android:layout_height="@dimen/dp150">
 
         <ImageView
             android:id="@+id/imageView"
@@ -29,22 +29,21 @@
             android:maxLines="2"
             android:singleLine="true"
             android:ellipsize="end"
-            android:background="@color/black90"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="@dimen/dp8" />
+            android:layout_marginBottom="@dimen/dp10" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp50"
+        android:layout_height="@dimen/dp32"
         android:paddingLeft="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
         android:background="@color/color_222">
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/riv"
-            android:layout_width="@dimen/dp35"
-            android:layout_height="@dimen/dp35"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
             app:riv_corner_radius="@dimen/dp100"
             android:layout_centerVertical="true"
             android:src="@mipmap/default_head" />
@@ -66,7 +65,7 @@
         <ImageButton
             android:id="@+id/ibtn"
             android:layout_width="@dimen/dp15"
-            android:layout_height="@dimen/dp35"
+            android:layout_height="match_parent"
             android:background="@null"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"

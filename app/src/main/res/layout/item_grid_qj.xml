@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/rl_left"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160"
+        android:layout_height="match_parent"
         android:paddingRight="@dimen/dp8"
         android:layout_weight="1">
         <ImageView
@@ -58,7 +58,7 @@
     <RelativeLayout
         android:id="@+id/rl_right"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160"
+        android:layout_height="match_parent"
         android:paddingLeft="@dimen/dp8"
         android:layout_weight="1">
 

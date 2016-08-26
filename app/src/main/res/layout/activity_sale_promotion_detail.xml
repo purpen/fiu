@@ -53,8 +53,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textSize="@dimen/sp12"
-                    android:gravity="top"
-                    android:text="0" />
+                    android:gravity="top" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -73,8 +72,7 @@
                     android:gravity="top"
                     android:textSize="@dimen/sp12"
                     android:singleLine="true"
-                    android:ellipsize="end"
-                    android:text="0" />
+                    android:ellipsize="end" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -94,8 +92,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textSize="@dimen/sp12"
-                    android:gravity="top"
-                    android:text="0" />
+                    android:gravity="top" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

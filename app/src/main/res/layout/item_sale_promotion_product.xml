@@ -29,7 +29,7 @@
             android:maxLines="2"
             android:singleLine="true"
             android:ellipsize="end"
-            android:background="@color/black90"
+            android:background="@color/black_touming_80"
             android:textColor="@android:color/white"
             android:layout_marginBottom="@dimen/dp8" />
     </RelativeLayout>

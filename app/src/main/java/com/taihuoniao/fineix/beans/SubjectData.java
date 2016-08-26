@@ -17,6 +17,7 @@ public class SubjectData implements Parcelable {
     public String tags_s;
     public int kind;
     public int evt;
+    public int type;
     public String cover_id;
     public int category_id;
     public String summary;

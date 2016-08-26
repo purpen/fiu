@@ -29,16 +29,18 @@
             android:maxLines="2"
             android:singleLine="true"
             android:ellipsize="end"
-            android:background="@color/black90"
+            android:background="@color/black_touming_80"
             android:textColor="@android:color/white"
             android:layout_marginBottom="@dimen/dp8" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp50"
+        android:layout_height="@dimen/dp40"
         android:paddingLeft="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
+        android:paddingTop="@dimen/dp2"
+        android:paddingBottom="@dimen/dp2"
         android:background="@color/color_222"
         android:gravity="center_vertical">
 
@@ -62,7 +64,6 @@
             android:textSize="@dimen/sp12"
             android:layout_centerHorizontal="true"
             android:textColor="@color/color_af8323"
-            android:layout_marginTop="@dimen/dp5"
             android:singleLine="true"
             android:ellipsize="end" />
     </RelativeLayout>

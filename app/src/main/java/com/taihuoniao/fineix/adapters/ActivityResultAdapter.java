@@ -21,7 +21,7 @@ import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -116,7 +116,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(parent.getContext(), GoodsDetailActivity.class);
+                    Intent intent = new Intent(parent.getContext(), MyGoodsDetailsActivity.class);
                     intent.putExtra("id", productBean.id);
                     parent.getContext().startActivity(intent);
                 }

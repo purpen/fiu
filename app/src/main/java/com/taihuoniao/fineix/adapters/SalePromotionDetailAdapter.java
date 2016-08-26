@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectData;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(item.banner_url, holder.imageView, options);
-        holder.tvTitle.setText(item.title);
+        holder.tvTitle.setText(String.format("%s. %s", position + 1, item.title));
         holder.tvDesc.setText(item.summary);
         holder.tvSalePrice.setText(String.format("￥%s", item.sale_price));
         holder.tvMarketPrice.setText(String.format("￥%s", item.market_price));
@@ -49,7 +49,7 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                Intent intent = new Intent(activity, MyGoodsDetailsActivity.class);
                 intent.putExtra("id", item._id);
                 activity.startActivity(intent);
             }

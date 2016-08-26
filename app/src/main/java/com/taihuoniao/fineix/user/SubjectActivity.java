@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -16,6 +17,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.beans.SubjectData;
@@ -23,11 +25,11 @@ import com.taihuoniao.fineix.beans.SupportData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
+import com.taihuoniao.fineix.product.BrandDetailActivity;
+import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -40,10 +42,13 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class SubjectActivity extends BaseActivity {
-    private static final String INFO_TYPE_QJ = "10";
-    private static final String INFO_TYPE_CJ = "11";
+    private static final String INFO_TYPE_URL = "1";
+    private static final String INFO_TYPE_QJ = "11";
     private static final String INFO_TYPE_CP = "12";
     private static final String INFO_TYPE_USER = "13";
+    private static final String INFO_TYPE_JXZT = "14";  //精选主题
+    private static final String INFO_TYPE_PP = "15";  //品牌
+    private static final String INFO_TYPE_SEARCH = "20";
     public static final int REQUEST_COMMENT = 100;
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
@@ -105,17 +110,33 @@ public class SubjectActivity extends BaseActivity {
                     intent = new Intent(activity, UserCenterActivity.class);
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
                     startActivity(intent);
-                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
+                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
                     intent = new Intent(activity, QingjingDetailActivity.class);
                     intent.putExtra("id", infoId);
                     startActivity(intent);
-                } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转场景详情
-                    intent = new Intent(activity, SceneDetailActivity.class);
+                } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
+                    jump2ThemeDetail(infoId);
+                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
+                    intent = new Intent(activity, MyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
                     startActivity(intent);
-                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
-                    intent = new Intent(activity, GoodsDetailActivity.class);
+                } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
+                    intent = new Intent(activity, BrandDetailActivity.class);
                     intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
+                    if (url.contains("infoTag")) {
+                        String infoTag = args[2].split("=")[1];
+                        if (!TextUtils.isEmpty(infoTag)) {
+                            intent = new Intent(activity, SearchActivity.class);
+                            intent.putExtra("q", infoTag);
+                            intent.putExtra("t", Integer.parseInt(infoId));
+                            startActivity(intent);
+                        }
+                    }
+                } else if (TextUtils.equals(INFO_TYPE_URL, infoType)) { //用浏览器打开
+                    Uri uri = Uri.parse(url);
+                    intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                 }
                 return true;
@@ -143,6 +164,51 @@ public class SubjectActivity extends BaseActivity {
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     };
+
+    private void jump2ThemeDetail(final String id) {
+        if (TextUtils.isEmpty(id)) return;
+        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                });
+
+                if (response.isSuccess()) {
+                    SubjectData data = response.getData();
+                    Intent intent;
+                    switch (data.type) {
+                        case 1: //文章详情
+                            intent = new Intent(activity, ArticalDetailActivity.class);
+                            intent.putExtra(ArticalDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 2: //活动详情
+                            intent = new Intent(activity, ActivityDetailActivity.class);
+                            intent.putExtra(ActivityDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 3: //新品
+                            intent = new Intent(activity, NewProductDetailActivity.class);
+                            intent.putExtra(NewProductDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 4: //促销
+                            intent = new Intent(activity, SalePromotionDetailActivity.class);
+                            intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                    }
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+    }
 
     @OnClick({R.id.ibtn_favorite, R.id.ibtn_share, R.id.ibtn_comment})
     void onClick(View v) {

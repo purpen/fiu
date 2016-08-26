@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.user;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -19,8 +20,12 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.MyGoodsDetailsActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -33,7 +38,13 @@ import butterknife.OnClick;
  *         created at 2016/8/23 10:28
  */
 public class NewProductDetailActivity extends BaseActivity {
-    public static final int REQUEST_COMMENT = 100;
+    private static final String INFO_TYPE_URL = "1";
+    private static final String INFO_TYPE_QJ = "11";
+    private static final String INFO_TYPE_CP = "12";
+    private static final String INFO_TYPE_USER = "13";
+    private static final String INFO_TYPE_JXZT = "14";  //精选主题
+    private static final String INFO_TYPE_PP = "15";  //品牌
+    private static final String INFO_TYPE_SEARCH = "20";
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.webView_about)
@@ -62,7 +73,7 @@ public class NewProductDetailActivity extends BaseActivity {
     @SuppressLint("JavascriptInterface")
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "新品详情");
+//        custom_head.setHeadCenterTxtShow(true, "新品详情");
         dialog = new WaittingDialog(this);
         WebSettings webSettings = webViewAbout.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -74,6 +85,52 @@ public class NewProductDetailActivity extends BaseActivity {
     private WebViewClient webViewClient = new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.contains("infoType") && url.contains("infoId")) {
+                Intent intent;
+                url = url.substring(url.indexOf("?") + 1, url.length());
+                String[] args = url.split("&");
+                String infoType = args[0].split("=")[1];
+                String infoId = args[1].split("=")[1];
+                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
+                if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
+                    LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
+                    return true;
+                }
+                if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
+                    intent = new Intent(activity, UserCenterActivity.class);
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
+                    intent = new Intent(activity, QingjingDetailActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
+                    jump2ThemeDetail(infoId);
+                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
+                    intent = new Intent(activity, MyGoodsDetailsActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
+                    intent = new Intent(activity, BrandDetailActivity.class);
+                    intent.putExtra("id", infoId);
+                    startActivity(intent);
+                } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
+                    if (url.contains("infoTag")) {
+                        String infoTag = args[2].split("=")[1];
+                        if (!TextUtils.isEmpty(infoTag)) {
+                            intent = new Intent(activity, SearchActivity.class);
+                            intent.putExtra("q", infoTag);
+                            intent.putExtra("t", Integer.parseInt(infoId));
+                            startActivity(intent);
+                        }
+                    }
+                } else if (TextUtils.equals(INFO_TYPE_URL, infoType)) { //用浏览器打开
+                    Uri uri = Uri.parse(infoId);
+                    intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+                return true;
+            }
             return super.shouldOverrideUrlLoading(view, url);
         }
 
@@ -97,6 +154,50 @@ public class NewProductDetailActivity extends BaseActivity {
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     };
+
+    private void jump2ThemeDetail(final String id) {
+        if (TextUtils.isEmpty(id)) return;
+        ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                });
+                if (response.isSuccess()) {
+                    SubjectData data = response.getData();
+                    Intent intent;
+                    switch (data.type) {
+                        case 1: //文章详情
+                            intent = new Intent(activity, ArticalDetailActivity.class);
+                            intent.putExtra(ArticalDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 2: //活动详情
+                            intent = new Intent(activity, ActivityDetailActivity.class);
+                            intent.putExtra(ActivityDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 3: //促销
+                            intent = new Intent(activity, SalePromotionDetailActivity.class);
+                            intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                        case 4: //新品
+                            intent = new Intent(activity, NewProductDetailActivity.class);
+                            intent.putExtra(NewProductDetailActivity.class.getSimpleName(), id);
+                            activity.startActivity(intent);
+                            break;
+                    }
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+    }
 
     @OnClick({R.id.ibtn_share, R.id.ibtn_favorite})
     void onClick(final View v) {
@@ -182,11 +283,13 @@ public class NewProductDetailActivity extends BaseActivity {
 
     @Override
     protected void refreshUI() {
+        custom_head.setHeadCenterTxtShow(true, data.title);
         webViewAbout.loadUrl(data.content_view_url);
         setFavoriteStyle();
     }
 
     private void setFavoriteStyle() {
+        if (data.product == null) return;
         if (data.product.is_favorite == 1) {
             ibtnFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.shoucang_yes, 0, 0);
         } else {

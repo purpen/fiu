@@ -94,6 +94,7 @@ public class ActivityDetailActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         bundle.putString("summary", data.summary);
+        bundle.putInt("evt", data.evt);
         String[] array = getResources().getStringArray(R.array.activity_detail_tab);
         Fragment[] fragments = {RuleFragment.newInstance(bundle), ParticipateQJFragment.newInstance(id), ActivityResultFragment.newInstance(data.sights)};
         if (data.evt != 2) {//2活动未结束展示两项
@@ -149,13 +150,9 @@ public class ActivityDetailActivity extends BaseActivity {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    tabLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
             }
         });
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

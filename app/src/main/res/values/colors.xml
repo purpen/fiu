@@ -37,8 +37,7 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>
     <color name="default_background_label">#ff303030</color>
-    <color name="black40">#40000000</color>
-    <color name="black20">#20000000</color>
-    <color name="black90">#90000000</color>
+    <color name="black40">#66000000</color>
+    <color name="black20">#33000000</color>
     <color name="color_f8f8f8">#f8f8f8</color>
 </resources>

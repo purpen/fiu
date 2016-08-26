@@ -1,10 +1,14 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,7 +33,7 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final DataChooseSubject.ItemChoosenSubject item = list.get(position);
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_activity, null);
             holder = new ViewHolder(convertView);
@@ -45,8 +49,23 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
             holder.ivFinish.setVisibility(View.GONE);
         }
         holder.tvTitle.setText(item.title);
+
+        holder.tvTitle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = holder.tvTitle.getMeasuredWidth();
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp1));
+                params.gravity = Gravity.CENTER_HORIZONTAL;
+                holder.viewLine.setLayoutParams(params);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.tvTitle.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    holder.tvTitle.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
         holder.tvDesc.setText(item.short_title);
-        holder.tvCount.setText(String.format("已有%s人参与", item.view_count));
+        holder.tvCount.setText(String.format("已有%s人参与", item.attend_count));
         return convertView;
     }
 
@@ -64,6 +83,8 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
         TextView tvCount;
         @Bind(R.id.tv_desc)
         TextView tvDesc;
+        @Bind(R.id.view_line)
+        View viewLine;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

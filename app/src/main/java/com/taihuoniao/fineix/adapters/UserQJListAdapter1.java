@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ import butterknife.ButterKnife;
  */
 public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
     private ImageLoader imageLoader;
+    private int i = Util.getScreenWidth() - 3 * activity.getResources().getDimensionPixelSize(R.dimen.dp16);
+    private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i / 2, 1);
     public UserQJListAdapter1(List<SceneListBean> list, Activity activity) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
@@ -56,24 +59,23 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         if (position == list.size() / 2) {
             holder.rl_right.setVisibility(View.INVISIBLE);
         } else {
+            holder.rl_right.setLayoutParams(params);
             holder.rl_right.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
             if (!TextUtils.isEmpty(left_qj.getTitle())) {
                 holder.tv_title_right.setText(right_qj.getTitle());
-                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
             }
-//            SceneTitleSetUtils.setTitle(holder.tv_title_right, holder.item_right_frame, holder.rightTitleImg, 11, -1);
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
         if (!TextUtils.isEmpty(left_qj.getTitle())) {
             holder.tv_title_left.setText(left_qj.getTitle());
-            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black90));
+            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
         }
-//        SceneTitleSetUtils.setTitle(holder.tv_title_left, holder.item_left_frame, holder.leftTitleImg, 11, -1);
-
+        holder.rl_left.setLayoutParams(params);
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {
             @Override

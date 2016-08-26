@@ -16,6 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:layout_above="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp05"
+        android:background="@color/color_ddd" />
     <LinearLayout
         android:id="@+id/ll_operate"
         android:layout_alignParentBottom="true"
@@ -40,10 +45,8 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="@dimen/sp12"
-                android:gravity="top"
-                android:text="0" />
+                android:gravity="top" />
         </RelativeLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,8 +63,7 @@
                 android:gravity="top"
                 android:textSize="@dimen/sp12"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:text="0" />
+                android:ellipsize="end" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -81,8 +83,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="@dimen/sp12"
-                android:gravity="top"
-                android:text="0" />
+                android:gravity="top" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

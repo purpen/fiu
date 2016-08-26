@@ -16,6 +16,11 @@
         android:layout_above="@+id/ll_operate"
         android:layout_below="@+id/custom_head" />
 
+    <View
+        android:layout_above="@+id/ll_operate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp05"
+        android:background="@color/color_ddd" />
     <LinearLayout
         android:id="@+id/ll_operate"
         android:layout_width="match_parent"
