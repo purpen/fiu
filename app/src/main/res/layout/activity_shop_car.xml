@@ -134,7 +134,7 @@
             android:layout_below="@+id/tv_center"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:background="@drawable/shap_redbutton_commit"
+            android:background="@drawable/corner_black"
             android:text="@string/go_for_stroll"
             android:textColor="@color/white"
             android:textSize="14sp"/>

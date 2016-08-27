@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -23,10 +25,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +45,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
@@ -71,6 +76,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表
+    //    private List<IndexUserListBean.DataBean.UsersBean> firstUserList;
+//    private List<IndexUserListBean.DataBean.UsersBean> secondUserList;
     private WaittingDialog dialog;
     //popupwindow下的控件
     private View popup_view;
@@ -85,6 +92,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         this.userList = userList;
         dialog = new WaittingDialog(activity);
         initPopupWindow();
+//        firstUserList = userList.subList(0, userList.size() / 2);
+//        secondUserList = userList.subList(userList.size() / 2 - 1, userList.size());
     }
 
     private void initPopupWindow() {
@@ -210,6 +219,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.item_index_qj, null);
             holder = new ViewHolder(convertView);
+            holder.userRecycler.setHasFixedSize(true);
+            holder.userRecycler.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
             ViewGroup.LayoutParams layoutParams = holder.container.getLayoutParams();
             layoutParams.width = MainApplication.getContext().getScreenWidth();
             layoutParams.height = layoutParams.width;
@@ -217,6 +228,16 @@ public class IndexQJListAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+        }
+        if (position == 6) {
+            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
+            holder.userRecycler.setVisibility(View.VISIBLE);
+        } else if (position == 17) {
+            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
+            holder.userRecycler.setVisibility(View.VISIBLE);
+        } else {
+            holder.userRecycler.setAdapter(null);
+            holder.userRecycler.setVisibility(View.GONE);
         }
         //停止商品动画
         for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
@@ -308,9 +329,9 @@ public class IndexQJListAdapter extends BaseAdapter {
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
                 labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
-                labelView.pointRelative.setLayoutParams(layoutParams1);
+                labelView.pointContainer.setLayoutParams(layoutParams1);
             }
             labelView.post(new Runnable() {
                 @Override
@@ -322,9 +343,9 @@ public class IndexQJListAdapter extends BaseAdapter {
                         labelView.setLayoutParams(lp);
                     } else {
                         labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                         layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
-                        labelView.pointRelative.setLayoutParams(layoutParams1);
+                        labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
@@ -360,6 +381,19 @@ public class IndexQJListAdapter extends BaseAdapter {
                 long l = Long.valueOf(sceneList.get(position).getUser_info().getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
                 parent.getContext().startActivity(intent);
+            }
+        });
+        //跳转情景地图
+        holder.mapLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                跳转到地图界面，查看附近的情境
+                String address = sceneList.get(position).getAddress();
+                LatLng ll = new LatLng(sceneList.get(position).getLocation().getCoordinates().get(1), sceneList.get(position).getLocation().getCoordinates().get(0));
+                Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
+                intent2.putExtra("address", address);
+                intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
+                activity.startActivity(intent2);
             }
         });
         //关注或取消关注
@@ -712,6 +746,8 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        @Bind(R.id.user_recycler)
+        RecyclerView userRecycler;
         @Bind(R.id.head_img)
         RoundedImageView headImg;
         @Bind(R.id.v_img)
@@ -720,6 +756,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         Button attentionBtn;
         @Bind(R.id.user_name_tv)
         TextView userNameTv;
+        @Bind(R.id.map_linear)
+        LinearLayout mapLinear;
         @Bind(R.id.publish_time)
         TextView publishTime;
         @Bind(R.id.location_tv)
@@ -757,6 +795,206 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+    }
+
+    //用户列表适配器
+    static class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
+        private Activity activity;
+        private List<IndexUserListBean.DataBean.UsersBean> userList;
+        private WaittingDialog dialog;
+
+        public UserAdapter(Activity activity, List<IndexUserListBean.DataBean.UsersBean> userList) {
+            this.activity = activity;
+            this.userList = userList;
+            dialog = new WaittingDialog(activity);
+        }
+
+        @Override
+        public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = View.inflate(parent.getContext(), R.layout.item_index_user, null);
+            VH holder = new VH(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final VH holder, final int position) {
+            ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
+            holder.name.setText(userList.get(position).getNickname());
+            if (userList.get(position).getIdentify().getIs_expert() == 1) {
+                holder.summary.setText(userList.get(position).getExpert_label() + " " + userList.get(position).getExpert_info());
+            } else {
+                holder.summary.setText(userList.get(position).getSummary());
+            }
+            if (userList.get(position).getIs_follow() == 1) {
+                holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
+                holder.followBtn.setTextColor(activity.getResources().getColor(R.color.white));
+                holder.followBtn.setText("已关注");
+            } else {
+                holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.followBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
+                holder.followBtn.setText("+关注");
+            }
+            holder.headImg.setTag(userList.get(position).get_id());
+            holder.headImg.setOnClickListener(this);
+            holder.delete.setTag(userList.get(position).get_id());
+            holder.delete.setOnClickListener(this);
+            holder.followBtn.setTag(userList.get(position).get_id());
+            holder.followBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (LoginInfo.isUserLogin()) {
+                        int k = -1;
+                        String t = (String) v.getTag();
+                        for (int j = 0; j < userList.size(); j++) {
+                            if (userList.get(j).get_id().equals(t)) {
+                                k = j;
+                                break;
+                            }
+                        }
+                        if (k == -1) {
+                            return;
+                        }
+                        //已经登录
+                        if (LoginInfo.getUserId() == Long.parseLong(userList.get(k).get_id())) {
+                            //过滤自己
+                            return;
+                        }
+                        if (userList.get(k).getIs_follow() == 1) {
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
+                            cancelFollow(k, userList.get(k).get_id(), holder);
+                        } else {
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
+                            fllow(k, userList.get(k).get_id(), holder);
+                        }
+                        return;
+                    }
+                    MainApplication.which_activity = DataConstants.IndexFragment;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
+            });
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.head_img:
+                    Intent intent = new Intent(activity, UserCenterActivity.class);
+                    long l = Long.valueOf((String) v.getTag());
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
+                    activity.startActivity(intent);
+                    break;
+                case R.id.delete:
+                    int i = -1;
+                    String tag = (String) v.getTag();
+                    for (int j = 0; j < userList.size(); j++) {
+                        if (userList.get(j).get_id().equals(tag)) {
+                            i = j;
+                            break;
+                        }
+                    }
+                    if (i == -1) {
+                        return;
+                    }
+                    userList.remove(i);
+                    notifyItemRemoved(i);
+                    break;
+            }
+        }
+
+        //关注用户
+        private void fllow(final int position, String otherUserId, final VH holder) {
+            ClientDiscoverAPI.focusOperate(otherUserId, new RequestCallBack<String>() {
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    dialog.dismiss();
+                    Log.e("<<<关注用户", responseInfo.result);
+                    NetBean netBean = new NetBean();
+                    try {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<NetBean>() {
+                        }.getType();
+                        netBean = gson.fromJson(responseInfo.result, type);
+                    } catch (JsonSyntaxException e) {
+                        Log.e("<<<", "解析异常");
+                    }
+                    if (netBean.isSuccess()) {
+                        holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
+                        holder.followBtn.setTextColor(activity.getResources().getColor(R.color.white));
+                        holder.followBtn.setText("已关注");
+                        userList.get(position).setIs_follow(1);
+                    } else {
+                        ToastUtils.showError(netBean.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(HttpException error, String msg) {
+                    dialog.dismiss();
+                    ToastUtils.showError(R.string.net_fail);
+                }
+            });
+        }
+
+        //取消关注
+        private void cancelFollow(final int position, final String otherUserId, final VH holder) {
+            ClientDiscoverAPI.cancelFocusOperate(otherUserId, new RequestCallBack<String>() {
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    dialog.dismiss();
+                    NetBean netBean = new NetBean();
+                    try {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<NetBean>() {
+                        }.getType();
+                        netBean = gson.fromJson(responseInfo.result, type);
+                    } catch (JsonSyntaxException e) {
+                        Log.e("<<<", "解析异常");
+                    }
+                    if (netBean.isSuccess()) {
+                        holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                        holder.followBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
+                        holder.followBtn.setText("+关注");
+                        userList.get(position).setIs_follow(0);
+                        return;
+                    }
+                    ToastUtils.showError(netBean.getMessage());
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    dialog.dismiss();
+                    ToastUtils.showError(R.string.net_fail);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return userList == null ? 0 : userList.size();
+        }
+
+
+        static class VH extends RecyclerView.ViewHolder {
+            @Bind(R.id.head_img)
+            RoundedImageView headImg;
+            @Bind(R.id.name)
+            TextView name;
+            @Bind(R.id.summary)
+            TextView summary;
+            @Bind(R.id.follow_btn)
+            Button followBtn;
+            @Bind(R.id.delete)
+            ImageView delete;
+
+            public VH(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
         }
     }
 

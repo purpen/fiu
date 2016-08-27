@@ -83,15 +83,17 @@
         android:layout_height="1dp"
         android:background="#e6e6e6"/>
 
-    <com.taihuoniao.fineix.view.CustomSlidingTab
+    <android.support.design.widget.TabLayout
         android:id="@+id/activity_add_product_slidingtab"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@color/white"
-        app:pstsIndicatorHeight="2dp"
-        app:pstsIsDivierShow="false"
-        app:pstsTabPaddingLeftRight="10dp"
-        app:pstsUnderlineHeight="0dp"/>
+        app:tabSelectedTextColor="@color/yellow_bd8913"
+        app:tabIndicatorColor="@color/yellow_bd8913"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="scrollable"
+        app:tabTextColor="@color/color_333"/>
+
 
     <TextView
         android:layout_width="match_parent"

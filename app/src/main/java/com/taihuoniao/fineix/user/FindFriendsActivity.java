@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomSubItemLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -96,6 +97,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
 //        lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
         pull_lv.getRefreshableView().addHeaderView(view);
         pull_lv.setPullToRefreshEnabled(false);
+        WindowUtils.chenjin(this);
     }
 
     @Override

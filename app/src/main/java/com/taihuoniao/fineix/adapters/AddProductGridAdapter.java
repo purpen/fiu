@@ -1,22 +1,24 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
+import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/4/13.
@@ -25,20 +27,11 @@ public class AddProductGridAdapter extends BaseAdapter {
     private Context context;
     private List<ProductBean.ProductListItem> list;
     private List<SearchBean.Data.SearchItem> searchList;
-    private DisplayImageOptions options_750_422;
 
     public AddProductGridAdapter(Context context, List<ProductBean.ProductListItem> list, List<SearchBean.Data.SearchItem> searchList) {
         this.context = context;
         this.list = list;
         this.searchList = searchList;
-        options_750_422 = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .build();
     }
 
     @Override
@@ -68,68 +61,41 @@ public class AddProductGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder mHolder;
+        ViewHolder holder;
         if (convertView == null) {
-            mHolder = new ViewHolder();
-            convertView = View.inflate(context, R.layout.item_nicegoods_gridview, null);
-            mHolder.item_nicegoods_title = (TextView) convertView
-                    .findViewById(R.id.item_tv_title_nicegoods);
-            mHolder.item_nicegoods_zan = (TextView) convertView
-                    .findViewById(R.id.tv_zan_nicegoods);
-            mHolder.item_nicegoods_currentprice = (TextView) convertView
-                    .findViewById(R.id.tv_currentPrice_nicegoods);
-            mHolder.item_nicegoods_oldprice = (TextView) convertView
-                    .findViewById(R.id.tv_oldPrice_nicegoods);
-            mHolder.item_nicegoods_image = (ImageView) convertView
-                    .findViewById(R.id.item_imageview_nicegoods);
-
-            convertView.setTag(mHolder);
+            convertView = View.inflate(parent.getContext(), R.layout.item_search_products, null);
+            holder = new ViewHolder(convertView);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.productImg.getLayoutParams();
+            layoutParams.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(parent.getContext(), 45)) / 2;
+            layoutParams.height = layoutParams.width;
+            holder.productImg.setLayoutParams(layoutParams);
+            convertView.setTag(holder);
         } else {
-            mHolder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
         if (list.size() != 0) {
-            mHolder.item_nicegoods_title
-                    .setText(list.get(position).getTitle());
-            mHolder.item_nicegoods_zan
-                    .setText(list.get(position).getLove_count() + "");
-            mHolder.item_nicegoods_currentprice
-                    .setText("¥" + list.get(position).getSale_price());
-            mHolder.item_nicegoods_currentprice
-                    .setTextColor(context.getResources().getColor(R.color.yellow_bd8913));
-
-            SpannableString ss = new SpannableString("¥" + list.get(position).getMarket_price());
-            ss.setSpan(new StrikethroughSpan(), 0, ss.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mHolder.item_nicegoods_oldprice
-                    .setText(ss);
-            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), mHolder.item_nicegoods_image,options_750_422);
-        }else if(searchList.size()!=0){
-            mHolder.item_nicegoods_title
-                    .setText(searchList.get(position).getTitle());
-            mHolder.item_nicegoods_zan
-                    .setText(searchList.get(position).getLove_count() + "");
-            mHolder.item_nicegoods_currentprice
-                    .setText("¥" + searchList.get(position).getSale_price());
-            mHolder.item_nicegoods_currentprice
-                    .setTextColor(context.getResources().getColor(R.color.yellow_bd8913));
-
-            SpannableString ss = new SpannableString("¥" + searchList.get(position).getMarket_price());
-            ss.setSpan(new StrikethroughSpan(), 0, ss.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mHolder.item_nicegoods_oldprice
-                    .setText(ss);
-            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), mHolder.item_nicegoods_image,options_750_422);
+            ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.productImg);
+            holder.name.setText(list.get(position).getTitle());
+            holder.price.setText("¥" + list.get(position).getSale_price());
+        } else if (searchList.size() != 0) {
+            ImageLoader.getInstance().displayImage(searchList.get(position).getCover_url(), holder.productImg);
+            holder.name.setText(searchList.get(position).getTitle());
+            holder.price.setText("¥" + searchList.get(position).getSale_price());
         }
         return convertView;
     }
 
     static class ViewHolder {
-        private ImageView item_nicegoods_image;
-        private TextView item_nicegoods_title;
-        private TextView item_nicegoods_oldprice;
-        private TextView item_nicegoods_currentprice;
-        private TextView item_nicegoods_zan;
-    }
+        @Bind(R.id.product_img)
+        ImageView productImg;
+        @Bind(R.id.name)
+        TextView name;
+        @Bind(R.id.price)
+        TextView price;
 
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
 
 }

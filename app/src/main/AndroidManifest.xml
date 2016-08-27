@@ -75,11 +75,12 @@
             android:name=".product.ApplyForRefundActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".user.AllOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".user.SelectAddressActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".qingjingOrSceneDetails.QJCategoryActivity"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".user.ShopOrderListActivity"
             android:screenOrientation="portrait"/>
@@ -173,8 +174,7 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".product.BrandDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+           />
         <activity
             android:name=".user.HasLoveActivity"
             android:screenOrientation="portrait"
@@ -214,16 +214,16 @@
         <activity
             android:name=".user.NewProductDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".user.ActivityDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".user.SalePromotionDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".user.UserEditNameActivity"

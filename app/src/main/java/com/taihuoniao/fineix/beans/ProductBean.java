@@ -42,9 +42,18 @@ public class ProductBean extends NetBean implements Serializable {
         private String love_count;
         private String cover_url;
         private String attrbute;
+        private int stage;
         private List<String> category_tags;
         private List<String> banner_asset = new ArrayList<>();
         private List<Sight> sights;
+
+        public int getStage() {
+            return stage;
+        }
+
+        public void setStage(int stage) {
+            this.stage = stage;
+        }
 
         @Override
         public String toString() {

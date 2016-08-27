@@ -105,7 +105,7 @@
             android:id="@+id/item_address_deletetv"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/yellow_bd8913"
+            android:background="#e30a0a"
             android:gravity="center"
             android:padding="15dp"
             android:text="@string/delete"

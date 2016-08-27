@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:fitsSystemWindows="true">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_share_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="45dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_share_recycler"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="109dp"
         android:layout_alignParentBottom="true"
         android:background="@color/title_black"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <RelativeLayout
         android:id="@+id/activity_share_relative"
@@ -23,14 +24,14 @@
         android:layout_height="match_parent"
         android:layout_above="@id/activity_share_recycler"
         android:layout_below="@id/activity_share_title"
-        android:background="@color/title_black">
+        >
 
         <RelativeLayout
             android:id="@+id/activity_share_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:background="@color/white">
+            >
 
 
         </RelativeLayout>

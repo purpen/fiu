@@ -26,7 +26,6 @@ import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.LoginCompleteUtils;
@@ -108,7 +107,6 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ShareSDK.initSDK(this);//必须先在程序入口处初始化SDK
         instance = this;
-        ActivityUtil.getInstance().addActivity(this);
         mDialog = new WaittingDialog(this);
     }
 

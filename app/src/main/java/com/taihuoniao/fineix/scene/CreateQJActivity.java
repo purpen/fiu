@@ -174,9 +174,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 labelView.setLayoutParams(layoutParams);
                 if (tagItem.getLoc() == 2) {
                     labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-                    RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                    RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                     layoutParams1.leftMargin = (int) labelMargin;
-                    labelView.pointRelative.setLayoutParams(layoutParams1);
+                    labelView.pointContainer.setLayoutParams(layoutParams1);
                 }
                 labelView.post(new Runnable() {
                     @Override
@@ -191,9 +191,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             labelView.setLayoutParams(lp);
                         } else {
                             labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-                            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                             layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - pointWidth - labelMargin);
-                            labelView.pointRelative.setLayoutParams(layoutParams1);
+                            labelView.pointContainer.setLayoutParams(layoutParams1);
                             Log.e("<<<", "nameTv.width=" + labelView.nameTv.getMeasuredWidth() + ",pointWidth=" + pointWidth + ",labelMargin=" + labelMargin + ",point.leftMargin=" + layoutParams1.leftMargin);
 
                             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
@@ -340,6 +340,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<活动标签", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json",responseInfo.result);
+//                activeTagsBean = new ActiveTagsBean();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ActiveTagsBean>() {
@@ -349,7 +351,12 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     Log.e("<<<", "解析异常" + e.toString());
                 }
                 if (activeTagsBean.isSuccess()) {
-                    holder.goneDemoLabel.setText("#" + activeTagsBean.getData().getItems().get(0).get(0) + " ");
+                    try {
+                        holder.goneDemoLabel.setText("#" + activeTagsBean.getData().getItems().get(0).get(0) + " ");
+                    } catch (Exception e) {
+                        Log.e("<<<", "没有活动");
+                    }
+
                 } else {
                     holder.goneDemoLabel.setVisibility(View.GONE);
                 }

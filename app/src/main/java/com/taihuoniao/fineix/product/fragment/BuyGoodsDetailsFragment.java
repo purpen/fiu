@@ -197,7 +197,6 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         priceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_price);
         quantity = (TextView) popup_view.findViewById(R.id.dialog_cart_skusnumber);
         Button toBuyBtn = (Button) popup_view.findViewById(R.id.dialog_cart_buybtn);
-        ImageView cancelImg = (ImageView) popup_view.findViewById(R.id.dialog_cart_cancelimg);
         scrollLinear = (LinearLayout) popup_view.findViewById(R.id.dialog_cart_scrolllinear);
         TextView reduceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_reduce);
         numberTv = (TextView) popup_view.findViewById(R.id.dialog_cart_number);
@@ -207,7 +206,6 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        cancelImg.setOnClickListener(this);
         reduceTv.setOnClickListener(this);
         addTv.setOnClickListener(this);
         toCartBtn.setOnClickListener(this);
@@ -250,7 +248,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                         for (int k = 0; k < scrollLinear.getChildCount(); k++) {
                             TextView text = (TextView) scrollLinear.getChildAt(k).getTag();
                             if (k == j) {
-                                text.setBackgroundResource(R.drawable.corner_yellow);
+                                text.setBackgroundResource(R.drawable.corner_black);
                                 text.setTextColor(getResources().getColor(R.color.white));
                             } else {
                                 text.setBackgroundResource(R.drawable.backround_corner_gray);
@@ -346,7 +344,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
     //获取商品相关的情境列表
     private void getSceneList() {
-        ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, new RequestCallBack<String>() {
+        ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -453,6 +451,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                 activity.viewPager.setCurrentItem(1);
                 break;
             case R.id.brand_container:
+
                 if (buyGoodDetailsBean == null) {
                     getActivity().sendBroadcast(new Intent(DataConstants.BroadBuyGoodDetails));
                     return;
@@ -460,11 +459,9 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                 Intent intent = new Intent(getActivity(), BrandDetailActivity.class);
                 intent.putExtra("id", buyGoodDetailsBean.getData().getBrand().get_id());
                 getActivity().startActivity(intent);
+//                startActivity(new Intent(getActivity(), AAAAAAAAAAAAAAA.class));
                 break;
             //popupwindow下的控件
-            case R.id.dialog_cart_cancelimg:
-                popupWindow.dismiss();
-                break;
             case R.id.dialog_cart_reduce:
                 if (number <= 1) {
                     number = 1;

@@ -77,6 +77,6 @@
         android:layout_marginTop="5dp"
         android:background="@android:color/white"
         android:text="@string/check_order_detail"
-        android:textColor="@color/color_af8323"
+        android:textColor="#333333"
         android:textSize="17sp" />
 </LinearLayout>

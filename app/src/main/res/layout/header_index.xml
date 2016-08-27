@@ -53,7 +53,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_height="70dp"/>
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="45dp">
 
@@ -74,5 +75,5 @@
             android:text="精选情景"
             android:textColor="@color/black"
             android:textSize="14sp"/>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

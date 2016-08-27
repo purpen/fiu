@@ -68,6 +68,7 @@
     <string name="select_qingjing">选择地盘</string>
     <!-- ReportActivity -->
     <string name="report">举报</string>
+    <string name="return_goods">退款/售后</string>
     <!-- 个人中心 -->
     <string name="has_love">赞过的情境</string>
     <!-- 编辑地址 -->

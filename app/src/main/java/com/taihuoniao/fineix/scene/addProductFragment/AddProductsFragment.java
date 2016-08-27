@@ -27,9 +27,9 @@ import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.scene.AddProductActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
@@ -79,10 +79,12 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void search(String q, String t, String page, String evt, String sort) {
-        ClientDiscoverAPI.search(q, 3+"", null, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, 3 + "", null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
+                pullToRefreshView.onRefreshComplete();
+                progressBar.setVisibility(View.GONE);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -115,6 +117,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
+                pullToRefreshView.onRefreshComplete();
+                progressBar.setVisibility(View.GONE);
                 ToastUtils.showError("网络错误");
             }
         });
@@ -130,12 +134,16 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
+                        pullToRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
                         getProductList(responseInfo.result);
                     }
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
                         dialog.dismiss();
+                        pullToRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showError("网络错误");
                     }
                 });
@@ -144,12 +152,16 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
+                        pullToRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
                         getProductList(responseInfo.result);
                     }
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
                         dialog.dismiss();
+                        pullToRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showError("网络错误");
                     }
                 });
@@ -159,7 +171,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
 
     private void getProductList(String result) {
         Log.e("<<<全部好货", result);
-        WriteJsonToSD.writeToSD("json", result);
+//        WriteJsonToSD.writeToSD("json", result);
         ProductBean productBean = new ProductBean();
         try {
             Gson gson = new Gson();
@@ -169,8 +181,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
-        pullToRefreshView.onRefreshComplete();
-        progressBar.setVisibility(View.GONE);
+
         if (productBean.isSuccess()) {
             searchList.clear();
             if (currentPage == 1) {
@@ -196,11 +207,8 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         GridView grid = pullToRefreshView.getRefreshableView();
         grid.setVerticalScrollBarEnabled(false);
         grid.setNumColumns(2);
-        int dp10 = DensityUtils.dp2px(getActivity(), 10);
-        int dp12 = DensityUtils.dp2px(getActivity(), 12);
-        grid.setPadding(dp10, dp12, dp10, dp12);
-        grid.setHorizontalSpacing(dp10);
-        grid.setVerticalSpacing(dp10);
+        grid.setHorizontalSpacing(DensityUtils.dp2px(getActivity(), 15));
+        grid.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -215,6 +223,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             @Override
             public void onLastItemVisible() {
                 currentPage++;
+                progressBar.setVisibility(View.VISIBLE);
                 requestNet();
             }
         });
@@ -223,7 +232,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         addProductGridAdapter = new AddProductGridAdapter(getActivity(), productList, searchList);
         grid.setAdapter(addProductGridAdapter);
         grid.setOnItemClickListener(this);
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override
@@ -232,7 +243,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         pullToRefreshView = (PullToRefreshGridView) view.findViewById(R.id.view_addproduct_fragment_refresh);
         nothingTv = (TextView) view.findViewById(R.id.view_addproduct_fragment_nothingtv);
         progressBar = (ProgressBar) view.findViewById(R.id.view_addproduct_fragment_progress);
-        dialog = new WaittingDialog(getActivity());
+        dialog = ((AddProductActivity) getActivity()).dialog;
         return view;
     }
 
@@ -303,7 +314,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                     intent.putExtra("product", netGood);
                     getActivity().setResult(DataConstants.RESULTCODE_EDIT_ADDPRODUCT, intent);
                     getActivity().finish();
-                }else{
+                } else {
                     ToastUtils.showError(netGood.getMessage());
                 }
             }

@@ -1,26 +1,28 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
-import com.taihuoniao.fineix.utils.ActivityUtil;
-import com.taihuoniao.fineix.view.CustomHeadView;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 
-public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, View.OnClickListener {
     private ViewPager mPager;
     private TabLayout.Tab mAllTab, mPayTab, mDeliverTab, mCriticalTab, mReceiverTab;
     @Bind(R.id.custom_head)
-    CustomHeadView custom_head;
+    GlobalTitleLayout custom_head;
 
     private String mFlag;
 
@@ -37,8 +39,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     }
 
     protected void initView() {
-        ActivityUtil.getInstance().addActivity(this);
-        custom_head.setHeadCenterTxtShow(true, "待付款");
+        custom_head.setRightTv(R.string.return_goods, getResources().getColor(R.color.white), this);
         TabLayout tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         //手动添加tab
@@ -85,6 +86,8 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
                 mPager.setCurrentItem(4);
                 break;
         }
+        mPager.setOffscreenPageLimit(mFragments.size());
+        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -95,19 +98,19 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
         switch (position) {
             case 0:
-                custom_head.setHeadCenterTxtShow(true, "全部");
+                custom_head.setTitle("全部");
                 break;
             case 1:
-                custom_head.setHeadCenterTxtShow(true, "待付款");
+                custom_head.setTitle("待付款");
                 break;
             case 2:
-                custom_head.setHeadCenterTxtShow(true, "待发货");
+                custom_head.setTitle("待发货");
                 break;
             case 3:
-                custom_head.setHeadCenterTxtShow(true, "待收货");
+                custom_head.setTitle("待收货");
                 break;
             case 4:
-                custom_head.setHeadCenterTxtShow(true, "待评价");
+                custom_head.setTitle("待评价");
                 break;
         }
 
@@ -121,5 +124,10 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(this, ReturnGoodsActivity.class));
     }
 }

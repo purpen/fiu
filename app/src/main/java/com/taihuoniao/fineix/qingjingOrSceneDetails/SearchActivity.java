@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.main.fragment.FindFragment;
+import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchBrandFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
@@ -123,14 +125,19 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initList() {
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-        //添加tab 9
-        titleList.add("情景");
-        searchQJFragment = SearchQJFragment.newInstance(q, isContent);
-        fragmentList.add(searchQJFragment);
-        //添加tab 14
-        titleList.add("用户");
-        searchUserFragment = SearchUserFragment.newInstance(q, isContent);
-        fragmentList.add(searchUserFragment);
+        if (!getIntent().hasExtra(WellGoodsFragment.class.getSimpleName())) {
+            //添加tab 9
+            titleList.add("情景");
+            searchQJFragment = SearchQJFragment.newInstance(q, isContent);
+            fragmentList.add(searchQJFragment);
+            //添加tab 14
+            titleList.add("用户");
+            searchUserFragment = SearchUserFragment.newInstance(q, isContent);
+            fragmentList.add(searchUserFragment);
+            if (getIntent().hasExtra(FindFragment.class.getSimpleName())) {
+                return;
+            }
+        }
         //添加tab 3
         titleList.add("产品");
         searchProductFragment = SearchProductFragment.newInstance(q, isContent);
@@ -139,10 +146,17 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         titleList.add("品牌");
         searchBrandFragment = SearchBrandFragment.newInstance(q, isContent);
         fragmentList.add(searchBrandFragment);
+        if (getIntent().hasExtra(WellGoodsFragment.class.getSimpleName())) {
+            return;
+        }
         //添加tab 12
         titleList.add("主题");
         searchSubjectFragment = SearchSubjectFragment.newInstance(q, isContent);
         fragmentList.add(searchSubjectFragment);
+    }
+
+    @Override
+    protected void requestNet() {
         //设置适配器
         searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(searchViewPagerAdapter);
@@ -184,7 +198,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     private void refreshData() {
 //        fragmentList.get(viewPager.getCurrentItem()).refreshData(currentStr);
-        for(SearchFragment searchFragment:fragmentList){
+        for (SearchFragment searchFragment : fragmentList) {
             searchFragment.refreshData(currentStr);
         }
     }

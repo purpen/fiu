@@ -29,6 +29,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.PullRefreshLayout;
@@ -191,6 +192,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 //        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_shop_car);
 //        ActivityUtil.getInstance().addActivity(this);
+        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -229,10 +231,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
             }
         });
         title = (MyGlobalTitleLayout) findViewById(R.id.title_shopcart);
-        title.setBackgroundResource(R.color.white);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackImg(R.mipmap.back_black);
-        title.setRightColor(getResources().getColor(R.color.black333333));
+        title.setTitleColor(getResources().getColor(R.color.white));
+        title.setBackImg(R.mipmap.back_white);
+        title.setRightColor(getResources().getColor(R.color.white));
         if (mCarNum > 0) {
             title.setTitle("购物车（" + mCarNum + "）");
         } else {
@@ -280,7 +281,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             for (int i = 0; i < totalList.size(); i++) {
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
-                                    mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                                    mDeleteCalculate.setBackgroundResource(R.color.title_black);
                                 }
                             }
                             if (count == totalList.size()) {
@@ -337,7 +338,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
                                     mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                                    mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                                    mDeleteCalculate.setBackgroundResource(R.color.title_black);
                                 }
                             }
                             mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
@@ -368,7 +369,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     if (totalList.get(i).get("status").equals(true)) {
                         count = count + 1;
                         mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                        mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                        mDeleteCalculate.setBackgroundResource(R.color.title_black);
                     }
                 }
                 mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
@@ -397,11 +398,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                         //在这change为1是因为在上面切换了“编缉”、“完成”这一按钮后，change在括号内最后一行代码处被赋为了1，
                         // 所以，在这里1所代表的状态即是上面0所代表的状态，反之亦然
                         if (change == 1) {
-                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
                         } else if (change == 0) {
-                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
                         } else {
-                            mDeleteCalculate.setBackgroundResource(R.color.yellow_bd8913);
+                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
                         }
 
                         totalList.get(i).put("status", true);

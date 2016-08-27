@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.R;
  * Created by taihuoniao on 2016/4/14.
  */
 public class WindowUtils {
+    //状态栏变为黑色
     public static void chenjin(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -19,4 +20,16 @@ public class WindowUtils {
             tintManager.setStatusBarTintEnabled(true);
         }
     }
+
+    public static void showStatusBar(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+
+//            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+
+
 }

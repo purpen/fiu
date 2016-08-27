@@ -122,33 +122,33 @@ public class FirstInAppUtils {
 //                    }
 //                });
 //                break;
-            case CREATE:
-                img.setImageResource(R.mipmap.first_in_create);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
-                });
-                break;
-            case ADDURL:
-                img.setImageResource(R.mipmap.first_in_url);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
-                });
-                break;
-            case ALL:
-                img.setImageResource(R.mipmap.first_in_all);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
-                });
-                break;
+//            case CREATE:
+//                img.setImageResource(R.mipmap.first_in_create);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                    }
+//                });
+//                break;
+//            case ADDURL:
+//                img.setImageResource(R.mipmap.first_in_url);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                    }
+//                });
+//                break;
+//            case ALL:
+//                img.setImageResource(R.mipmap.first_in_all);
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                    }
+//                });
+//                break;
         }
 //        btn.setOnClickListener(new View.OnClickListener() {
 //            @Override

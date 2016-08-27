@@ -18,7 +18,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -95,7 +94,7 @@ public class CommentFragment extends SearchFragment {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<商品评论",responseInfo.result);
-                WriteJsonToSD.writeToSD("json",responseInfo.result);
+//                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(responseInfo.result);
                 progressBar.setVisibility(View.GONE);
                 if (page == 1) {

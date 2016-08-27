@@ -15,9 +15,9 @@ import com.taihuoniao.fineix.adapters.ShopOrderListAdapter;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -31,7 +31,7 @@ import java.util.List;
 
 //
 public class ReturnGoodsActivity extends Activity {
-    private MyGlobalTitleLayout title = null;
+    private GlobalTitleLayout title = null;
     private PullToRefreshListView pullToRefreshListView;
     private ProgressBar progressBar;
     private ShopOrderListAdapter mAdapter;
@@ -41,47 +41,20 @@ public class ReturnGoodsActivity extends Activity {
     private int curPage = 1;
     private int size = 10;
 
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_ORDER:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof List) {
-//                            if (curPage == 1) {
-//                                mList.clear();
-//                                pullToRefreshListView.lastTotalItem = -1;
-//                                pullToRefreshListView.lastSavedFirstVisibleItem = -1;
-//                            }
-//                            mList.addAll((Collection<? extends OrderEntity>) msg.obj);
-//                            progressBar.setVisibility(View.GONE);
-//                            pullToRefreshListView.onRefreshComplete();
-//                            pullToRefreshListView.setLoadingTime();
-//
-//                            mAdapter.notifyDataSetChanged();
-//                            mDialog.dismiss();
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        StatusBarChange.initWindow(this);
         setContentView(R.layout.activity_return_goods);
         iniView();
-
+        WindowUtils.chenjin(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (curPage == 1) {
-            if(!mDialog.isShowing()){
+            if (!mDialog.isShowing()) {
                 mDialog.show();
             }
         }
@@ -154,18 +127,12 @@ public class ReturnGoodsActivity extends Activity {
     }
 
     private void iniView() {
-        ActivityUtil.getInstance().addActivity(this);
-        title = (MyGlobalTitleLayout) findViewById(R.id.title_return);
+        title = (GlobalTitleLayout) findViewById(R.id.title_return);
         title.setTitle("退款/售后");
-        title.setBackgroundResource(R.color.white);
-        title.setBackImg(R.mipmap.back_black);
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackButtonVisibility(true);
+        title.setContinueTvVisible(false);
         mDialog = new WaittingDialog(this);
         if (curPage == 1) {
-            if(!mDialog.isShowing()){
+            if (!mDialog.isShowing()) {
                 mDialog.show();
             }
         }

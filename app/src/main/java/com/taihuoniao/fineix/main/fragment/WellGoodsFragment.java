@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -27,6 +28,7 @@ import com.taihuoniao.fineix.adapters.WellGoodsProductCategoryAdapter;
 import com.taihuoniao.fineix.adapters.WellGoodsRecyclerAdapter;
 import com.taihuoniao.fineix.adapters.WellgoodsSubjectAdapter;
 import com.taihuoniao.fineix.base.BaseFragment;
+import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.FirstProductBean;
 import com.taihuoniao.fineix.beans.SubjectListBean;
@@ -34,11 +36,15 @@ import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.product.ShopCarActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -55,7 +61,9 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     @Bind(R.id.title_left)
     ImageView titleLeft;
     @Bind(R.id.title_right)
-    ImageView titleRight;
+    RelativeLayout titleRight;
+    @Bind(R.id.cart_number)
+    TextView cartNumber;
     @Bind(R.id.search_linear)
     LinearLayout searchLinear;
     @Bind(R.id.blur_view)
@@ -158,12 +166,50 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         subjectList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        cartNumber();
+    }
+
+    //获取购物车数量
+    public void cartNumber() {
+        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                CartBean cartBean = new CartBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CartBean>() {
+                    }.getType();
+                    cartBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<>>>", "数据异常" + e.toString());
+                }
+                CartBean netCartBean = cartBean;
+                if (netCartBean.isSuccess()) {
+                    if (netCartBean.getData().getCount() > 0) {
+                        cartNumber.setVisibility(View.VISIBLE);
+                        cartNumber.setText(netCartBean.getData().getCount() + "");
+                        return;
+                    }
+                }
+                cartNumber.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                cartNumber.setVisibility(View.GONE);
+            }
+        });
+    }
+
     //好货专题列表
     private void subjectList() {
         ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<好货专题列表",responseInfo.result);
+                Log.e("<<<好货专题列表", responseInfo.result);
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 pullRefreshView.onRefreshComplete();
@@ -177,7 +223,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
-                    if(currentPage==1){
+                    if (currentPage == 1) {
                         pullRefreshView.lastTotalItem = -1;
                         pullRefreshView.lastSavedFirstVisibleItem = -1;
                         subjectList.clear();
@@ -210,7 +256,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     }.getType();
                     firstProductBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常="+e.toString());
+                    Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (firstProductBean.isSuccess()) {
                     firstProductList.clear();
@@ -263,13 +309,16 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_left:
-                ToastUtils.showError("扫描二维码");
+                startActivity(new Intent(getActivity(), CaptureActivity.class));
                 break;
             case R.id.title_right:
-                ToastUtils.showError("购物车");
+                startActivity(new Intent(getActivity(), ShopCarActivity.class));
                 break;
             case R.id.search_linear:
-                ToastUtils.showError("搜索产品");
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra(WellGoodsFragment.class.getSimpleName(), false);
+                intent.putExtra("t", 3);
+                startActivity(intent);
                 break;
         }
     }
@@ -314,7 +363,11 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void click(int postion) {
-        ToastUtils.showError("产品分类=" + postion);
+        Intent intent = new Intent(getActivity(), GoodsListActivity.class);
+        intent.putExtra("id",categoryList.get(postion).get_id());
+        intent.putExtra("name",categoryList.get(postion).getTitle());
+        startActivity(intent);
+//        ToastUtils.showError("产品分类=" + postion);
     }
 
     @Override

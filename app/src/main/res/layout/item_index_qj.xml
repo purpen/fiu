@@ -7,6 +7,16 @@
               android:orientation="vertical"
               android:paddingBottom="15dp">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/user_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="#444444"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="20dp"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="49dp"
@@ -45,10 +55,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:textColor="@color/white"
-            android:textSize="12sp"
+            android:background="@drawable/shape_corner_969696_nothing"
             android:text="+ 关注"
-            android:background="@drawable/shape_corner_969696_nothing"/>
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,6 +80,7 @@
                 android:textSize="13sp"/>
 
             <LinearLayout
+                android:id="@+id/map_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_name_tv"
@@ -106,11 +117,13 @@
                     android:layout_marginLeft="6dp"
                     android:singleLine="true"
                     android:text="北京市"
+                    android:ellipsize="end"
                     android:textColor="#8e8e8e"
                     android:textSize="10sp"/>
 
                 <ImageView
                     android:layout_width="5dp"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:src="@mipmap/index_arrow_right"/>
@@ -286,13 +299,13 @@
     <TextView
         android:id="@+id/more_comment"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:paddingLeft="11dp"
-        android:textSize="10sp"
-        android:textColor="#999999"
-        android:layout_height="wrap_content"
         android:background="#f4f4f4"
         android:paddingBottom="15dp"
-        android:text="查看所有8条评论"/>
+        android:paddingLeft="11dp"
+        android:text="查看所有8条评论"
+        android:textColor="#999999"
+        android:textSize="10sp"/>
 </LinearLayout>

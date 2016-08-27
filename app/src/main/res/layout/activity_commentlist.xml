@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+                android:background="#f8f8f8"
     android:orientation="vertical">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
@@ -22,22 +23,23 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#ededed"
+        android:background="@color/white"
         android:paddingBottom="10dp"
         android:paddingLeft="13dp"
         android:paddingRight="5dp"
         android:paddingTop="11dp">
 
-        <Button
+        <TextView
             android:id="@+id/activity_commentlist_send"
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:gravity="center"
             android:layout_marginLeft="11dp"
-            android:background="@drawable/corner_yellow"
+            android:background="@color/nothing"
             android:text="@string/send"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+            android:textColor="#cccccc"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/activity_commentlist_edit"

@@ -6,7 +6,7 @@
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <com.taihuoniao.fineix.view.CustomHeadView
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/custom_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

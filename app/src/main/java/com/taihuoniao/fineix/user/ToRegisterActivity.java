@@ -11,7 +11,6 @@ import com.taihuoniao.fineix.beans.RegisterInfo;
 import com.taihuoniao.fineix.user.fragments.SendCheckCodeFragment;
 import com.taihuoniao.fineix.user.fragments.SetPasswordFragment;
 import com.taihuoniao.fineix.user.fragments.SubmitCheckCodeFragment;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.view.CustomViewPager;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -100,7 +99,6 @@ public class ToRegisterActivity extends BaseActivity {
     protected void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ShareSDK.initSDK(this);//必须先在程序入口处初始化SDK
-        ActivityUtil.getInstance().addActivity(this);
         instance = this;
         viewPager.setPagingEnabled(false);
         registerInfo = new RegisterInfo();

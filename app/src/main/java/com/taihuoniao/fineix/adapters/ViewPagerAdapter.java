@@ -70,6 +70,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     @Override
     public int getCount() {
         // Infinite loop
+        if (size == 0) {
+            return 0;
+        }
         return isInfiniteLoop ? Integer.MAX_VALUE : size;
     }
 
@@ -234,7 +237,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
      * 判断是否需要输入邀请码
      */
     private void isNeedCode() {
-        if(!dialog.isShowing()){
+        if (!dialog.isShowing()) {
             dialog.show();
         }
         ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {

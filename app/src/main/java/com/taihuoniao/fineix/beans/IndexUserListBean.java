@@ -356,7 +356,7 @@ public class IndexUserListBean extends NetBean {
 
             public static class IdentifyBean {
                 private String is_scene_subscribe;
-                private String is_expert;
+                private int is_expert;
 
                 public String getIs_scene_subscribe() {
                     return is_scene_subscribe;
@@ -366,11 +366,11 @@ public class IndexUserListBean extends NetBean {
                     this.is_scene_subscribe = is_scene_subscribe;
                 }
 
-                public String getIs_expert() {
+                public int getIs_expert() {
                     return is_expert;
                 }
 
-                public void setIs_expert(String is_expert) {
+                public void setIs_expert(int is_expert) {
                     this.is_expert = is_expert;
                 }
             }

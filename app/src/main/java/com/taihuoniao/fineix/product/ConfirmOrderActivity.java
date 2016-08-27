@@ -31,9 +31,10 @@ import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import org.json.JSONException;
@@ -53,7 +54,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //购物车界面传递过来的数据
     private CartDoOrder cartBean;
     //界面下的控件
-    private MyGlobalTitleLayout titleLayout;
+    private GlobalTitleLayout titleLayout;
     private RelativeLayout addressRelative;
     private TextView noAddressTv;
     private TextView nameTv;
@@ -92,6 +93,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmorder);
         initView();
+        WindowUtils.chenjin(this);
         setData();
         if (!dialog.isShowing()) {
             dialog.show();
@@ -152,9 +154,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             return;
         }
         df = new DecimalFormat("######0.00");
-        titleLayout.setRightSearchButton(false);
-        titleLayout.setRightShopCartButton(false);
-        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
+        titleLayout.setContinueTvVisible(false);
         titleLayout.setTitle("确认订单");
         addressRelative.setOnClickListener(this);
         timeRelative.setOnClickListener(this);
@@ -191,9 +191,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private void initView() {
 //        StatusBarChange.initWindow(ConfirmOrderActivity.this);
         mDialog = new CustomDialogForPay(this);
-        titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
-        titleLayout.setBackgroundResource(R.color.white);
-        titleLayout.setBackImg(R.mipmap.back_black);
+        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_confirmorder_title);
         addressRelative = (RelativeLayout) findViewById(R.id.activity_confirmorder_addrelative);
         noAddressTv = (TextView) findViewById(R.id.activity_confirmorder_noaddresstv);
         nameTv = (TextView) findViewById(R.id.activity_confirmorder_name);

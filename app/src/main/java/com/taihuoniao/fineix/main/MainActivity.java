@@ -34,7 +34,6 @@ import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
-import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -256,28 +255,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-                SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-                boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
-                if (first) {
-                    firstRelative.setVisibility(View.VISIBLE);
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstImg.setImageResource(R.mipmap.first_in_fiu);
-                    firstRelative.setTag(2);
-                    firstImg.setVisibility(View.VISIBLE);
-                    firstRelative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((int) (v.getTag()) == 2) {
-                                firstRelative.setVisibility(View.GONE);
-                                firstImg.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
-                    editor.apply();
-                    return;
-                }
+//                SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
+//                boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
+//                if (first) {
+//                    firstRelative.setVisibility(View.VISIBLE);
+//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                    firstImg.setImageResource(R.mipmap.first_in_fiu);
+//                    firstRelative.setTag(2);
+//                    firstImg.setVisibility(View.VISIBLE);
+//                    firstRelative.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if ((int) (v.getTag()) == 2) {
+//                                firstRelative.setVisibility(View.GONE);
+//                                firstImg.setVisibility(View.GONE);
+//                            }
+//                        }
+//                    });
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
+//                    editor.apply();
+//                    return;
+//                }
                 if (LoginInfo.isUserLogin()) {
                     MainApplication.tag = 1;
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
@@ -405,26 +404,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
-//    private int getStatusBarHeight() {
-//        int result = 0;
-//        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-//        if (resourceId > 0) {
-//            result = getResources().getDimensionPixelSize(resourceId);
-//        }
-//        return result;
-//    }
-//
-//    private int getNavigationBarHeight() {
-//        int height = 0;
-//        Resources resources = getResources();
-//        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-//        if (resourceId > 0) {
-//            height = resources.getDimensionPixelSize(resourceId);
-//        }
-////        Log.e("<<<", "工具栏 height:" + height);
-//        return height;
-//    }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -437,16 +416,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
                     firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstImg.setImageResource(R.mipmap.first_in_index);
-                    firstImg.setVisibility(View.VISIBLE);
+                    firstLeftImg.setImageResource(R.mipmap.first_in_index);
+                    firstLeftImg.setVisibility(View.VISIBLE);
                     firstRelative.setTag(1);
                     firstRelative.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if ((int) (v.getTag()) == 1) {
-                                firstImg.setVisibility(View.GONE);
+                                firstLeftImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstRightImg.setImageResource(R.mipmap.index);
+                                firstRightImg.setImageResource(R.mipmap.first_in_index2);
                                 firstRightImg.setVisibility(View.VISIBLE);
                                 firstRelative.setTag(6);
                             } else if ((int) (v.getTag()) == 6) {
@@ -466,15 +445,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (isFirstIn) {
                     firstRelative.setVisibility(View.VISIBLE);
                     firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstImg.setImageResource(R.mipmap.first_in_find);
-                    firstRelative.setTag(7);
-                    firstImg.setVisibility(View.VISIBLE);
+                    firstLeftImg.setImageResource(R.mipmap.first_in_find);
+                    firstLeftImg.setVisibility(View.VISIBLE);
+                    firstRelative.setTag(1);
                     firstRelative.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if ((int) (v.getTag()) == 7) {
+                            if ((int) (v.getTag()) == 1) {
+                                firstLeftImg.setVisibility(View.GONE);
+                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+                                firstRightImg.setImageResource(R.mipmap.first_in_find2);
+                                firstRightImg.setVisibility(View.VISIBLE);
+                                firstRelative.setTag(6);
+                            } else if ((int) (v.getTag()) == 6) {
                                 firstRelative.setVisibility(View.GONE);
-                                firstImg.setVisibility(View.GONE);
+                                firstRightImg.setVisibility(View.GONE);
+                                firstRelative.setBackgroundResource(R.color.nothing);
+                                firstRelative.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -485,35 +472,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (showFragment instanceof WellGoodsFragment) {
                 boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_PIN, true);
                 if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
                     firstRelative.setVisibility(View.VISIBLE);
-                    firstImg.setImageResource(R.mipmap.first_in_wellgood);
-                    firstImg.setVisibility(View.VISIBLE);
-                    firstRelative.setTag(8);
+                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+                    firstLeftImg.setImageResource(R.mipmap.first_in_wellgood);
+                    firstLeftImg.setVisibility(View.VISIBLE);
+                    firstRelative.setTag(1);
                     firstRelative.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if ((int) (v.getTag()) == 8) {
-                                firstImg.setVisibility(View.GONE);
-//                                if (isMove()) {
-//                                    firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
-//                                }
-                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstLeftImg.setImageResource(R.mipmap.wellgoods2);
-                                firstLeftImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(9);
-                            } else if ((int) (v.getTag()) == 9) {
+                            if ((int) (v.getTag()) == 1) {
                                 firstLeftImg.setVisibility(View.GONE);
-                                firstRightImg.setPadding(0, 0, DensityUtils.dp2px(MainActivity.this, 6), 0);
-                                firstRightImg.setImageResource(R.mipmap.wellgoods3);
+                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+                                firstRightImg.setImageResource(R.mipmap.first_in_wellgood2);
                                 firstRightImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(10);
-                            } else if ((int) (v.getTag()) == 10) {
+                                firstRelative.setTag(6);
+                            } else if ((int) (v.getTag()) == 6) {
                                 firstRelative.setVisibility(View.GONE);
                                 firstRightImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.nothing);
                                 firstRelative.setPadding(0, 0, 0, 0);
-                                firstRightImg.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -521,36 +498,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     editor.putBoolean(DataConstants.FIRST_IN_PIN, false);
                     editor.apply();
                 }
-            } else if (showFragment instanceof MineFragment) {
-                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
-                if (isFirstIn) {
-                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-                    firstRelative.setVisibility(View.VISIBLE);
-                    firstImg.setImageResource(R.mipmap.first_in_mine);
-                    firstImg.setVisibility(View.VISIBLE);
-                    firstRelative.setTag(11);
-                    firstRelative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((int) (v.getTag()) == 11) {
-                                firstImg.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.black_touming_80);
-                                firstLeftImg.setImageResource(R.mipmap.mine2);
-                                firstLeftImg.setVisibility(View.VISIBLE);
-                                firstRelative.setTag(12);
-                            } else if ((int) (v.getTag()) == 12) {
-                                firstLeftImg.setVisibility(View.GONE);
-                                firstRelative.setVisibility(View.GONE);
-                                firstRelative.setBackgroundResource(R.color.nothing);
-                                firstRelative.setPadding(0, 0, 0, 0);
-                            }
-                        }
-                    });
-                    SharedPreferences.Editor editor = firstInSp.edit();
-                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
-                    editor.apply();
-                }
             }
+//            else if (showFragment instanceof MineFragment) {
+//                boolean isFirstIn = firstInSp.getBoolean(DataConstants.FIRST_IN_WO, true);
+//                if (isFirstIn) {
+//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                    firstRelative.setVisibility(View.VISIBLE);
+//                    firstImg.setImageResource(R.mipmap.first_in_mine);
+//                    firstImg.setVisibility(View.VISIBLE);
+//                    firstRelative.setTag(11);
+//                    firstRelative.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if ((int) (v.getTag()) == 11) {
+//                                firstImg.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.black_touming_80);
+//                                firstLeftImg.setImageResource(R.mipmap.mine2);
+//                                firstLeftImg.setVisibility(View.VISIBLE);
+//                                firstRelative.setTag(12);
+//                            } else if ((int) (v.getTag()) == 12) {
+//                                firstLeftImg.setVisibility(View.GONE);
+//                                firstRelative.setVisibility(View.GONE);
+//                                firstRelative.setBackgroundResource(R.color.nothing);
+//                                firstRelative.setPadding(0, 0, 0, 0);
+//                            }
+//                        }
+//                    });
+//                    SharedPreferences.Editor editor = firstInSp.edit();
+//                    editor.putBoolean(DataConstants.FIRST_IN_WO, false);
+//                    editor.apply();
+//                }
+//            }
         }
     }
 

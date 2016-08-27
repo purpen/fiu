@@ -9,7 +9,8 @@ import android.widget.LinearLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 /**
  * Created by taihuoniao on 2016/3/3.
@@ -18,7 +19,7 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
     //上个界面传递过来的数据
     private String transfer_time;//送货时间类型 a任意时间 b周一周五 c周六周日
     //界面下的控件
-    private MyGlobalTitleLayout titleLayout;
+    private GlobalTitleLayout titleLayout;
     private LinearLayout anyLinear;
     private LinearLayout workLinear;
     private LinearLayout restLinear;
@@ -31,6 +32,7 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transefer_time);
         initView();
+        WindowUtils.chenjin(this);
         setData();
         selectImg();
     }
@@ -38,11 +40,6 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
     private void setData() {
         transfer_time = getIntent().getStringExtra("transfer_time");
         titleLayout.setTitle("送货时间");
-        titleLayout.setTitleColor(getResources().getColor(R.color.black333333));
-        titleLayout.setBackImg(R.mipmap.back_black);
-        titleLayout.setRightShopCartButton(false);
-        titleLayout.setRightSearchButton(false);
-        titleLayout.setBackgroundResource(R.color.white);
         anyLinear.setOnClickListener(this);
         workLinear.setOnClickListener(this);
         restLinear.setOnClickListener(this);
@@ -50,7 +47,7 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
 
     private void initView() {
 //        StatusBarChange.initWindow(TransferTimeActivity.this);
-        titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_transfer_time_title);
+        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_transfer_time_title);
         anyLinear = (LinearLayout) findViewById(R.id.activity_transfer_time_anylinear);
         workLinear = (LinearLayout) findViewById(R.id.activity_transfer_time_worklinear);
         restLinear = (LinearLayout) findViewById(R.id.activity_transfer_time_restlinear);

@@ -20,7 +20,6 @@ import com.taihuoniao.fineix.adapters.SearchSubjectAdapter;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -134,7 +133,7 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索主题", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
