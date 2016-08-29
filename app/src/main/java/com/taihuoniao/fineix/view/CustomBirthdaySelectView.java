@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,15 @@ import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class CustomBirthdaySelectView extends LinearLayout {
-    private static final int DURING_YEAR = 150;
+    private static final int DURING_YEAR = 100;
     private static final int MONTHS_OF_YEAR = 12;
     private boolean isCurrentYear = true;
     private boolean isCurrentMonth = true;
@@ -88,6 +92,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
         }
 
     }
+
 
     private void initData() {
         setCalendarCurrentTime();
@@ -200,6 +205,44 @@ public class CustomBirthdaySelectView extends LinearLayout {
             calendar.setTimeInMillis(TimeUtil.getMillonsecond(getBithday(),"yyyy-MM-dd"));
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置当前选中日期
+     *
+     * @param date
+     */
+    public void setCurrentDate(String date, String pattern) throws ParseException {
+        if (TextUtils.isEmpty(date) || TextUtils.isEmpty(pattern)) return;
+        Calendar calendar = new GregorianCalendar();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date parse = simpleDateFormat.parse(date);
+        calendar.setTime(parse);
+        for (int i = 0; i < years.size(); i++) {
+            LogUtil.e("Calendar.YEAR", calendar.get(Calendar.YEAR) + "");
+            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.YEAR)), years.get(i))) {
+                LogUtil.e("i===", i + "");
+                wv_left.setCurrentItem(i);
+                break;
+            }
+        }
+
+        for (int j = 0; j < months.size(); j++) {
+            LogUtil.e("Calendar.MONTH", calendar.get(Calendar.MONTH) + "");
+            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.MONTH)), months.get(j))) {
+                LogUtil.e("j===", j + "");
+                wv_center.setCurrentItem(j);
+                break;
+            }
+        }
+        for (int k = 0; k < days.size(); k++) {
+            LogUtil.e("DAY_OF_MONTH", calendar.get(Calendar.DAY_OF_MONTH) + "");
+            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)), days.get(k))) {
+                LogUtil.e("k===", k + "");
+                wv_right.setCurrentItem(k);
+                break;
+            }
         }
     }
 

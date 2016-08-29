@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,28 @@ public class CustomAddressSelectView extends LinearLayout {
 //            wv_right.setCurrentItem(0);
 //        }
 
+    }
+
+    /**
+     * @param province
+     * @param city
+     */
+    public void setCurrentAddress(String province, String city) {
+        if (provinces == null || cities == null) return;
+        if (TextUtils.isEmpty(province) || TextUtils.isEmpty(city)) return;
+        for (int i = 0; i < provinces.size(); i++) {
+            if (TextUtils.equals(province, provinces.get(i))) {
+                wv_left.setCurrentItem(i);
+                break;
+            }
+        }
+
+        for (int i = 0; i < cities.size(); i++) {
+            if (TextUtils.equals(city, cities.get(i))) {
+                wv_center.setCurrentItem(i);
+                break;
+            }
+        }
     }
 
     private void initProvinces() {

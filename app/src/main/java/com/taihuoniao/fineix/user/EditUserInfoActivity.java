@@ -40,6 +40,7 @@ import com.taihuoniao.fineix.view.wheelview.StringWheelAdapter;
 import com.taihuoniao.fineix.view.wheelview.WheelView;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,7 +132,6 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
             case R.id.custom_area:
                 PopupWindowUtil.show(activity, initAddressPopView(R.layout.popup_address_layout, R.string.select_address,ProvinceUtil.getProvinces()));
-                //TODO 选择区域
                 break;
             case R.id.custom_user_birthday:
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_birth_layout, R.string.select_birth));
@@ -162,6 +162,12 @@ public class EditUserInfoActivity extends BaseActivity {
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
         WheelView wv_province = (WheelView) view.findViewById(R.id.custom_wv);
         wv_province.setAdapter(new StringWheelAdapter(list));
+        for (int i = 0; i < list.size(); i++) {
+            if (TextUtils.equals(custom_user_sex.getTvarrowLeftTxt(), list.get(i))) {
+                wv_province.setCurrentItem(i);
+                break;
+            }
+        }
         wv_province.setVisibleItems(5);
         tv_title.setText(resId);
         setClickListener(tv_cancel_select, resId,wv_province, list);
@@ -175,8 +181,13 @@ public class EditUserInfoActivity extends BaseActivity {
         View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
         CustomAddressSelectView addressView = (CustomAddressSelectView)view.findViewById(R.id.custom_address_select);
-//        wv_province.setAdapter(new StringWheelAdapter(list));
-//        wv_province.setVisibleItems(5);
+        String area = custom_area.getTvarrowLeftTxt();
+        if (!TextUtils.isEmpty(area)) {
+            LogUtil.e("equals", TextUtils.equals(getResources().getString(R.string.select_city), area) + "");
+            if (!TextUtils.equals(getResources().getString(R.string.select_city), area)) {
+                addressView.setCurrentAddress(area.split("\\s")[0], area.split("\\s")[1]);
+            }
+        }
         tv_title.setText(resId);
         setClickListener(tv_cancel_select,addressView);
         setClickListener(tv_confirm_select,addressView);
@@ -241,7 +252,6 @@ public class EditUserInfoActivity extends BaseActivity {
                     LogUtil.e(TAG, e.getLocalizedMessage());
                     if (!activity.isFinishing()&&dialog!=null)
                         ToastUtils.showError("对不起，数据异常");
-//                        dialog.showErrorWithStatus("对不起,数据异常");
                 }
                 refreshUI();
             }
@@ -251,7 +261,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 if (!activity.isFinishing()&&dialog!=null) dialog.dismiss();
                 if (TextUtils.isEmpty(s)) return;
                 LogUtil.e(TAG, s);
-                ToastUtils.showError("对不起，网路请求失败");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -262,6 +272,11 @@ public class EditUserInfoActivity extends BaseActivity {
         View tv_confirm_select = view.findViewById(R.id.tv_confirm_select);
         TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
         CustomBirthdaySelectView custom_birth_select = (CustomBirthdaySelectView) view.findViewById(R.id.custom_birth_select);
+        try {
+            custom_birth_select.setCurrentDate(custom_user_birthday.getTvarrowLeftTxt(), "yyyy-MM-dd");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tv_title.setText(resId);
         setClickListener(tv_confirm_select, custom_birth_select);
         setClickListener(tv_cancel_select, custom_birth_select);

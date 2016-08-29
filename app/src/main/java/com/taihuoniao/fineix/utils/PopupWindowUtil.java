@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.utils;
 import android.app.Activity;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ public class PopupWindowUtil {
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         popupWindow.setOnDismissListener(dismissListener);
         setWindowAlpha(0.5f);
