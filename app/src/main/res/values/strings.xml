@@ -24,7 +24,7 @@
     <string name="net_fail">网络错误</string>
     <string name="input_invite_code">请输入您的邀请码</string>
     <!-- PhotoFragment -->
-    <string name="film_album">胶卷相册</string>
+    <string name="film_album">Camera</string>
     <!-- CropPictureActivity -->
     <string name="crop_picture">剪切图片</string>
     <!-- EditPictureActivity -->

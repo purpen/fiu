@@ -19,7 +19,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -87,7 +87,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                 @Override
                 public void onItemClick(View view, int position) {
 //                    Util.makeToast("positon=="+position);
-                    Intent intent = new Intent(activity, SceneDetailActivity.class);
+                    Intent intent = new Intent(activity, QJDetailActivity.class);
                     LogUtil.e(TAG,item.scene_sight.get(position)._id+"");
                     intent.putExtra("id", item.scene_sight.get(position)._id);//场景ID
                     activity.startActivity(intent);

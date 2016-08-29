@@ -13,11 +13,10 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.NoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -63,10 +62,10 @@ public class NoticeActivity extends BaseActivity{
                 NoticeData.NoticeItem item=list.get(i);
                 Intent intent;
                 if (item.kind==12){ //情景
-                    intent = new Intent(activity, QingjingDetailActivity.class);
+                    intent = new Intent(activity, QJDetailActivity.class);
                     intent.putExtra("id",String.valueOf(item.related_id));
                 }else {
-                    intent = new Intent(activity, SceneDetailActivity.class);
+                    intent = new Intent(activity, QJDetailActivity.class);
                     intent.putExtra("id",String.valueOf(item.related_id));
                 }
                 startActivity(intent);

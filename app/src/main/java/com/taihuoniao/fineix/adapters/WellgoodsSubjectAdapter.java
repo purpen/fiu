@@ -16,7 +16,10 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 
 import java.util.List;
 
@@ -84,19 +87,43 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
                 break;
         }
         holder.subjectImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtils.showError("专题详情" + position);
-            }
-        });
+                                                 @Override
+                                                 public void onClick(View v) {
+                                                     Intent intent = new Intent();
+                                                     switch (list.get(position).getType()) {
+                                                         case 1:
+                                                             intent.setClass(activity, ArticalDetailActivity.class);
+                                                             intent.putExtra(ArticalDetailActivity.class.getSimpleName(), list.get(position).get_id());
+                                                             break;
+                                                         case 2:
+                                                             intent.setClass(activity, ActivityDetailActivity.class);
+                                                             intent.putExtra(ActivityDetailActivity.class.getSimpleName(), list.get(position).get_id());
+                                                             break;
+                                                         case 3:
+                                                             intent.setClass(activity, SalePromotionDetailActivity.class);
+                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
+                                                             break;
+                                                         default:
+                                                             intent.setClass(activity, NewProductDetailActivity.class);
+                                                             intent.putExtra(NewProductDetailActivity.class.getSimpleName(), list.get(position).get_id());
+                                                             break;
+                                                     }
+                                                     activity.startActivity(intent);
+                                                 }
+
+                                             }
+
+        );
         holder.recyclerView.setAdapter(new RecyclerAdapter(activity, list.get(position).getProducts(), new EditRecyclerAdapter.ItemClick() {
-            @Override
-            public void click(int postion) {
-                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                intent.putExtra("id", list.get(position).getProducts().get(postion).get_id());
-                activity.startActivity(intent);
-            }
-        }));
+                    @Override
+                    public void click(int postion) {
+                        Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                        intent.putExtra("id", list.get(position).getProducts().get(postion).get_id());
+                        activity.startActivity(intent);
+                    }
+                }
+
+        ));
 //        holder.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
 //            @Override
 //            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {

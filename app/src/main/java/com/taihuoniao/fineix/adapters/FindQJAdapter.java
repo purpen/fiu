@@ -30,8 +30,12 @@ import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -310,7 +314,26 @@ public class FindQJAdapter extends BaseAdapter {
                 holder.subjectContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtils.showError("点击主题" + subjectPosition);
+                        Intent intent = new Intent();
+                        switch (subjectList.get(subjectPosition).getType()) {
+                            case 1:
+                                intent.setClass(activity, ArticalDetailActivity.class);
+                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            case 2:
+                                intent.setClass(activity, ActivityDetailActivity.class);
+                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            case 3:
+                                intent.setClass(activity, SalePromotionDetailActivity.class);
+                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            default:
+                                intent.setClass(activity, NewProductDetailActivity.class);
+                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                        }
+                        activity.startActivity(intent);
                     }
                 });
                 switch (subjectList.get(subjectPosition).getType()) {

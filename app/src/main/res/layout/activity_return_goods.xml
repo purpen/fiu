@@ -4,11 +4,6 @@
     android:fitsSystemWindows="true"
     android:background="#f4f4f4"
     android:orientation="vertical">
-
-    <com.taihuoniao.fineix.view.GlobalTitleLayout
-        android:id="@+id/title_return"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
         android:id="@+id/pullToRefreshListView_return"
         android:layout_width="match_parent"

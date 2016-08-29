@@ -54,9 +54,6 @@ public class PhotoItem implements Comparable<PhotoItem> {
 
     @Override
     public int compareTo(@NonNull PhotoItem another) {
-        if (another == null) {
-            return 1;
-        }
         return (int) ((another.getDate() - date) / 1000);
     }
 }

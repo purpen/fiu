@@ -41,7 +41,7 @@ import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
@@ -500,7 +500,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 if (mSceneList == null) return;
                 if (mSceneList.size() == 0) return;
                 SceneListBean item = (SceneListBean) lv_cj.getAdapter().getItem(i);
-                Intent intent = new Intent(activity, SceneDetailActivity.class);
+                Intent intent = new Intent(activity, QJDetailActivity.class);
                 intent.putExtra("id", item.get_id());
                 startActivity(intent);
             }

@@ -159,6 +159,17 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
 
     //获取商品详情
     private void goodDetails() {
+        ClientDiscoverAPI.getTempGoods(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                    Log.e("<<<临时产品库",responseInfo.result);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
         ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

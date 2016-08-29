@@ -79,7 +79,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void initList() {
         titleLayout.setTitle("拍照");
-        titleLayout.setBackListener(this);
+        titleLayout.setBackImgVisible(false);
+        titleLayout.setCancelImgVisible(true);
         titleLayout.setContinueTvVisible(false);
 //        titleLayout.setFlashImgListtener(this);
         bottomRelative.setOnClickListener(this);
@@ -639,7 +640,7 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         Matrix m = new Matrix();
         if (camera_facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
             m.setRotate(90, options.outWidth, options.outHeight);
-            Log.e("<<<","后置旋转");
+            Log.e("<<<", "后置旋转");
         } else {
             Log.e("<<<", "自拍旋转");
 
@@ -664,9 +665,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 rotatedImage = Bitmap.createBitmap(croppedImage, 0, 0, w, h, m, true);
             } else {
                 if (options.outHeight < options.outWidth) {
-                    rotatedImage = Bitmap.createBitmap(croppedImage,options.outWidth - options.outHeight, 0,  w, h, m, true);
+                    rotatedImage = Bitmap.createBitmap(croppedImage, options.outWidth - options.outHeight, 0, w, h, m, true);
                 } else {
-                    rotatedImage = Bitmap.createBitmap(croppedImage,options.outHeight-options.outWidth, 0, w, h, m, true);
+                    rotatedImage = Bitmap.createBitmap(croppedImage, options.outHeight - options.outWidth, 0, w, h, m, true);
                 }
             }
         } catch (OutOfMemoryError e) {
@@ -703,17 +704,17 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
 
                     cameraInst.startPreview();
                 } catch (Throwable e) {
-                    Log.e("<<<", "初始化失败");
-                    e.printStackTrace();
+                    ToastUtils.showError("相机打开失败，请重试");
+                    getActivity().finish();
                 }
             }
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            Log.e("<<<", "surface=height=" + surfaceView.getHeight() + ",width=" + surfaceView.getWidth());
-            Log.e("<<<", "预览尺寸=height=" + previewSize.height + ",width=" + previewSize.width);
-            Log.e("<<<", "图片尺寸=height=" + adapterSize.height + ",width=" + adapterSize.width);
+//            Log.e("<<<", "surface=height=" + surfaceView.getHeight() + ",width=" + surfaceView.getWidth());
+//            Log.e("<<<", "预览尺寸=height=" + previewSize.height + ",width=" + previewSize.width);
+//            Log.e("<<<", "图片尺寸=height=" + adapterSize.height + ",width=" + adapterSize.width);
 //            Log.e("<<<", "surfaceChanged" + ",width=" + width + ",height=" + height + ",surfaceView.width=" + surfaceView.getWidth()
 //                    + ",surfaceView.height=" + surfaceView.getHeight());
             autoFocus();

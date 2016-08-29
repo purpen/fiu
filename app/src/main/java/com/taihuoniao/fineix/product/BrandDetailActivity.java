@@ -1,5 +1,9 @@
 package com.taihuoniao.fineix.product;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -23,6 +27,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.fragment.BrandProductFragment;
 import com.taihuoniao.fineix.product.fragment.BrandQJFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
@@ -89,6 +94,8 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         backgroundContainer.setFocusable(true);
         backgroundContainer.setFocusableInTouchMode(true);
         backgroundContainer.requestFocus();
+        IntentFilter intentFilter = new IntentFilter(DataConstants.BroadBrandDetails);
+        registerReceiver(brandReceiver,intentFilter);
     }
 
     @Override
@@ -203,5 +210,17 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(brandReceiver);
+        super.onDestroy();
+    }
+
+    private BroadcastReceiver brandReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            requestNet();
+        }
+    };
 
 }

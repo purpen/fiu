@@ -1675,4 +1675,11 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("sort", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+    //临时产品库
+    public static void getTempGoods(String id,RequestCallBack<String>callBack){
+        String url = NetworkConstance.BASE_URL + "/user_temp/view";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 }

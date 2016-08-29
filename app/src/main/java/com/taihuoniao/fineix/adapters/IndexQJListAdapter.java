@@ -362,10 +362,10 @@ public class IndexQJListAdapter extends BaseAdapter {
                     Intent intent = new Intent();
                     switch (productBean.getType()) {
                         case 2:
-                            intent.setClass(activity, GoodsDetailActivity.class);
+                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
+                            intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
                     intent.putExtra("id", productBean.getId());

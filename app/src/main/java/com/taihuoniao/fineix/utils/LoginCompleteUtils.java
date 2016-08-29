@@ -29,12 +29,6 @@ public class LoginCompleteUtils {
             case DataConstants.BuyGoodDetailsActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadBuyGoodDetails));
                 break;
-            case DataConstants.QingjingDetailActivity:
-                activity.sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                break;
-            case DataConstants.SceneDetailActivity:
-                activity.sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
-                break;
             case DataConstants.ActivityDetail:
                 activity.sendBroadcast(new Intent(DataConstants.BroadSceneActivityDetail));
                 break;

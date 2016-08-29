@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.adapters.BrandQJAdapter;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
@@ -20,6 +24,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +45,7 @@ public class BrandQJFragment extends SearchFragment {
     private WaittingDialog dialog;
     private int page = 1;
     private List<ProductAndSceneListBean.ProductAndSceneItem> qjList;
+    private BrandQJAdapter brandQJAdapter;
 
     public static BrandQJFragment newInstance(String id) {
 
@@ -81,6 +87,8 @@ public class BrandQJFragment extends SearchFragment {
         gridView.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
         qjList = new ArrayList<>();
         //设置适配器
+        brandQJAdapter = new BrandQJAdapter(getActivity(), qjList);
+        gridView.setAdapter(brandQJAdapter);
     }
 
     @Override
@@ -98,7 +106,23 @@ public class BrandQJFragment extends SearchFragment {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                Log.e("<<<品牌下的情景",responseInfo.result);
+                Log.e("<<<品牌下的情景", responseInfo.result);
+                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductAndSceneListBean>() {
+                    }.getType();
+                    productAndSceneListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<品牌下的情景", "解析异常=" + e.toString());
+                }
+                if (productAndSceneListBean.isSuccess()) {
+                    if (page == 1) {
+                        qjList.clear();
+                    }
+                    qjList.addAll(productAndSceneListBean.getData().getRows());
+                    brandQJAdapter.notifyDataSetChanged();
+                }
 //                WriteJsonToSD.writeToSD("json",responseInfo.result);
             }
 

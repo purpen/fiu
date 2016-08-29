@@ -85,9 +85,6 @@
             android:name=".user.ShopOrderListActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".user.ReturnGoodsActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".user.OrderDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -357,23 +354,7 @@
             android:name=".scene.SelectPhotoOrCameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".qingjingOrSceneDetails.ShareCJSelectActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
 
-        <activity
-            android:name=".qingjingOrSceneDetails.SceneDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".qingjingOrSceneDetails.QingjingDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".qingjingOrSceneDetails.AllQingjingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
         <activity
             android:name=".qingjingOrSceneDetails.CommentListActivity"
             android:screenOrientation="portrait"
@@ -392,14 +373,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".product.AllBrandsActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".scene.AddProductActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity
-            android:name=".product.MineBrandActivity"
             android:screenOrientation="portrait"
             />
         <activity
@@ -430,10 +404,7 @@
             android:name=".map.DisplayOverlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-        <activity
-            android:name=".qingjingOrSceneDetails.ShareSearchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/transparent.FullScreen"/>
+
         <activity
             android:name=".scene.SelectSearchQingjingActivity"
             android:screenOrientation="portrait"/>

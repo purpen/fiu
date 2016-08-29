@@ -65,7 +65,7 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/label_right"
+            android:background="@drawable/label_left"
             android:ellipsize="end"
             android:gravity="center"
             android:maxWidth="174dp"

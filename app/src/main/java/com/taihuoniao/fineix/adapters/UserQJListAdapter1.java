@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SceneListBean;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.Util;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         holder.rl_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, SceneDetailActivity.class);
+                Intent intent = new Intent(activity, QJDetailActivity.class);
                 intent.putExtra("id", left_qj.get_id());
                 activity.startActivity(intent);
             }
@@ -89,7 +89,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         holder.rl_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, SceneDetailActivity.class);
+                Intent intent = new Intent(activity, QJDetailActivity.class);
                 intent.putExtra("id", finalRight_qj.get_id());
                 activity.startActivity(intent);
             }

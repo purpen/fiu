@@ -24,8 +24,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -148,7 +147,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 8:     //场景详情
-                            intent = new Intent(activity, SceneDetailActivity.class);
+                            intent = new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                             break;
@@ -158,7 +157,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 10:    //情景
-                            intent = new Intent(activity, QingjingDetailActivity.class);
+                            intent = new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                         case 11:    //专题

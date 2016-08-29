@@ -1,15 +1,14 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
+import com.taihuoniao.fineix.user.returnGoods.ReturnGoodsFragment;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
@@ -18,7 +17,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, View.OnClickListener {
+public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
     private ViewPager mPager;
     private TabLayout.Tab mAllTab, mPayTab, mDeliverTab, mCriticalTab, mReceiverTab;
     @Bind(R.id.custom_head)
@@ -39,7 +38,8 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     }
 
     protected void initView() {
-        custom_head.setRightTv(R.string.return_goods, getResources().getColor(R.color.white), this);
+        custom_head.setContinueTvVisible(false);
+        custom_head.setTitle("全部");
         TabLayout tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         //手动添加tab
@@ -60,9 +60,12 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         for (int i = 0; i < tabBar.getTabCount(); i++) {
             mFragments.add(ShopOrderFragment.getInstance(i));
         }
+        ReturnGoodsFragment shopOrderFragment = new ReturnGoodsFragment();
+        mFragments.add(shopOrderFragment);
         OrderViewpagerAdapter mAdapter = new OrderViewpagerAdapter(getSupportFragmentManager(), mFragments);
         mPager.setAdapter(mAdapter);
-        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabBar));
+        tabBar.setupWithViewPager(mPager);
+//        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabBar));
         //tabBar设置点击联动
         tabBar.setOnTabSelectedListener(ShopOrderListActivity.this);
         mFlag = getIntent().getStringExtra("optFragmentFlag");
@@ -112,6 +115,9 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
             case 4:
                 custom_head.setTitle("待评价");
                 break;
+            case 5:
+                custom_head.setTitle("退款/售后");
+                break;
         }
 
     }
@@ -126,8 +132,4 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
     }
 
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(this, ReturnGoodsActivity.class));
-    }
 }
