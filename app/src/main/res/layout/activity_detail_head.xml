@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp210"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp210"
+            android:background="@color/black20" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/dp5"
+                android:paddingLeft="@dimen/dp15"
+                android:paddingRight="@dimen/dp15"
+                android:paddingTop="@dimen/dp5"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp16" />
+
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp2" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp14" />
+
+            <TextView
+                android:id="@+id/tv_during"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp10"
+                android:drawableLeft="@mipmap/during"
+                android:drawablePadding="@dimen/dp5"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45">
+
+        <RelativeLayout
+            android:id="@+id/rl_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_rule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/sp14"
+                android:textColor="@color/color_666"
+                android:text="活动规则" />
+
+            <View
+                android:id="@+id/line_rule"
+                android:layout_width="@dimen/dp55"
+                android:layout_height="@dimen/dp3"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_af8323"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_participate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_participate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:text="参与的情境"
+                android:textSize="@dimen/sp14"
+                android:textColor="@color/color_666" />
+
+            <View
+                android:id="@+id/line_participate"
+                android:layout_width="@dimen/dp70"
+                android:layout_height="@dimen/dp3"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_af8323"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:text="活动结果"
+                android:textSize="@dimen/sp14"
+                android:textColor="@color/color_666" />
+
+            <View
+                android:id="@+id/line_result"
+                android:layout_width="@dimen/dp55"
+                android:layout_height="@dimen/dp3"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_af8323"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

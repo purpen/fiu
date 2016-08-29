@@ -51,10 +51,12 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(item.sight.cover_url, holder.imageView, options);
-        ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
-        holder.tvName.setText(item.sight.user_info.nickname);
+        if (item.sight.user_info != null) {
+            ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
+            holder.tvName.setText(item.sight.user_info.nickname);
+        }
         holder.tv_title.setText(item.sight.scene_title);
-        if (item.is_love == 1) {
+        if (item.sight.is_love == 1) {
             holder.ibtn.setImageResource(R.mipmap.zaned);
         } else {
             holder.ibtn.setImageResource(R.mipmap.zan_normal);
@@ -68,7 +70,7 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
             @Override
             public void onClick(View v) {
                 if (item == null) return;
-                if (item.is_love == 0) {
+                if (item.sight.is_love == 0) {
                     ClientDiscoverAPI.loveNet(String.valueOf(item._id), TYPE_QJ, new RequestCallBack<String>() {
                         @Override
                         public void onStart() {
@@ -81,8 +83,9 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
-                                item.is_love = 1;
-                                ibtn.setImageResource(R.mipmap.zaned);
+                                item.sight.is_love = 1;
+//                                ibtn.setImageResource(R.mipmap.zaned);
+                                SupportQJAdapter.this.notifyDataSetChanged();
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
@@ -109,8 +112,9 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                             if (response.isSuccess()) {
-                                item.is_love = 0;
-                                ibtn.setImageResource(R.mipmap.zan_normal);
+                                item.sight.is_love = 0;
+//                                ibtn.setImageResource(R.mipmap.zan_normal);
+                                SupportQJAdapter.this.notifyDataSetChanged();
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());

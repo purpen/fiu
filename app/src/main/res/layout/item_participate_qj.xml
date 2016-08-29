@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingRight="@dimen/dp16"
+    android:paddingTop="@dimen/dp16"
+    android:background="@color/color_f8f8f8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/dp8">
+
+            <ImageView
+                android:id="@+id/iv_cover_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_title_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12"
+                android:layout_marginBottom="@dimen/dp10"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_zan_left"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp32"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:background="@color/color_222">
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/riv"
+                android:layout_width="@dimen/dp20"
+                android:layout_height="@dimen/dp20"
+                app:riv_corner_radius="@dimen/dp100"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/default_head" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_toRightOf="@+id/riv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="@dimen/sp12"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/dp5"
+                android:singleLine="true"
+                android:layout_marginRight="@dimen/dp5"
+                android:ellipsize="end" />
+
+            <ImageButton
+                android:id="@+id/ibtn"
+                android:layout_width="@dimen/dp15"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/zan_normal" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp8">
+
+        <RelativeLayout
+            android:id="@+id/rl_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_cover_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_title_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp10"
+                android:textColor="@android:color/white"
+                android:layout_alignParentBottom="true"
+                android:textSize="@dimen/sp12" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_zan_right"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp32"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:background="@color/color_222">
+
+            <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+                android:id="@+id/riv_right"
+                android:layout_width="@dimen/dp20"
+                android:layout_height="@dimen/dp20"
+                app:riv_corner_radius="@dimen/dp100"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/default_head" />
+
+            <TextView
+                android:id="@+id/tv_name_right"
+                android:layout_toRightOf="@+id/riv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="@dimen/sp12"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/dp5"
+                android:singleLine="true"
+                android:layout_marginRight="@dimen/dp5"
+                android:ellipsize="end" />
+
+            <ImageButton
+                android:id="@+id/ibtn_right"
+                android:layout_width="@dimen/dp15"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/zan_normal" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

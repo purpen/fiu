@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -23,8 +24,11 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.CollectViewPagerAdapter;
+import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
+import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
+import com.taihuoniao.fineix.adapters.RuleContentAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
@@ -33,41 +37,58 @@ import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
 import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
 import com.taihuoniao.fineix.user.fragments.RuleFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * @author lilin  活动详情
  *         created at 2016/8/23 10:28
  */
-public class ActivityDetailActivity extends BaseActivity {
+public class ActivityDetailActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    @Bind(R.id.imageView)
+    @Bind(R.id.pull_gv)
+    ListView pullGv;
+    @Bind(R.id.pull_lv)
+    ListView pullLv;
+    @Bind(R.id.pull_rule)
+    ListView pullRule;
+    //    @Bind(R.id.imageView)
     ImageView imageView;
-    @Bind(R.id.tv_title)
+    //    @Bind(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.tv_desc)
+    //    @Bind(R.id.tv_desc)
     TextView tvDesc;
-    @Bind(R.id.tabLayout)
-    TabLayout tabLayout;
-    @Bind(R.id.viewPager)
-    ViewPager viewPager;
-    @Bind(R.id.view_line)
+    //    @Bind(R.id.tabLayout)
+//    TabLayout tabLayout;
+//    @Bind(R.id.viewPager)
+//    ViewPager viewPager;
+//    @Bind(R.id.view_line)
     View viewLine;
-    @Bind(R.id.tv_during)
+    //    @Bind(R.id.tv_during)
     TextView tvDuring;
-
-    private CollectViewPagerAdapter adapter;
+    RelativeLayout rlRule;
+    RelativeLayout rlParticipate;
+    RelativeLayout rlResult;
+    private ParticipateQJListAdapter adapter;
     private WaittingDialog dialog;
     private String id;
     private SubjectData data;
+    private View lineRule;
+    private View lineParticipate;
+    private View lineResult;
+    private int curPage = 1;
+    private boolean isLoadMore = false;
+    private ArrayList<DataParticipateQJ.ItemParticipateQJ> mList = new ArrayList<>();
 
     public ActivityDetailActivity() {
         super(R.layout.activity_activity_detail);
@@ -93,6 +114,27 @@ public class ActivityDetailActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "活动详情");
         dialog = new WaittingDialog(this);
+        View view = Util.inflateView(R.layout.activity_detail_head, null);
+        imageView = ButterKnife.findById(view, R.id.imageView);
+        tvTitle = ButterKnife.findById(view, R.id.tv_title);
+        tvDesc = ButterKnife.findById(view, R.id.tv_desc);
+        viewLine = ButterKnife.findById(view, R.id.view_line);
+        tvDuring = ButterKnife.findById(view, R.id.tv_during);
+        rlRule = ButterKnife.findById(view, R.id.rl_rule);
+        rlParticipate = ButterKnife.findById(view, R.id.rl_participate);
+        rlResult = ButterKnife.findById(view, R.id.rl_result);
+        lineRule = ButterKnife.findById(view, R.id.line_rule);
+        lineParticipate = ButterKnife.findById(view, R.id.line_participate);
+        lineResult = ButterKnife.findById(view, R.id.line_result);
+
+        pullRule.addHeaderView(view);
+        pullRule.setVisibility(View.VISIBLE);
+        pullGv.addHeaderView(view);
+        pullLv.addHeaderView(view);
+        pullLv.setAdapter(null);
+        pullGv.setAdapter(null);
+        pullRule.setAdapter(null);
+        loadData();
     }
 
     private void initTabLayout() {
@@ -107,74 +149,81 @@ public class ActivityDetailActivity extends BaseActivity {
             array = Arrays.copyOf(array, 2);
             fragments = Arrays.copyOf(fragments, 2);
         }
-        for (int i = 0; i < array.length; i++) {
-            if (i == 0) {
-                tabLayout.addTab(tabLayout.newTab().setText(array[0]), true);
-            } else {
-                tabLayout.addTab(tabLayout.newTab().setText(array[i]), false);
-            }
-        }
+//        for (int i = 0; i < array.length; i++) {
+//            if (i == 0) {
+//                tabLayout.addTab(tabLayout.newTab().setText(array[0]), true);
+//            } else {
+//                tabLayout.addTab(tabLayout.newTab().setText(array[i]), false);
+//            }
+//        }
 
-        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.setupWithViewPager(viewPager);
+//        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
+//        viewPager.setAdapter(adapter);
+//        viewPager.setOffscreenPageLimit(2);
+//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+//        tabLayout.setupWithViewPager(viewPager);
     }
 
-
-    private void setIndicatorWidth() throws NoSuchFieldException, IllegalAccessException {
-        int margin = activity.getResources().getDimensionPixelSize(R.dimen.dp25);
-        Class<?> tablayout = tabLayout.getClass();
-        Field tabStrip = tablayout.getDeclaredField("mTabStrip");
-        tabStrip.setAccessible(true);
-        LinearLayout ll_tab = (LinearLayout) tabStrip.get(tabLayout);
-        for (int i = 0; i < ll_tab.getChildCount(); i++) {
-            View child = ll_tab.getChildAt(i);
-            child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                params.setMarginStart(margin);
-                params.setMarginEnd(margin);
-            } else {
-                params.setMargins(margin, 0, margin, 0);
-            }
-            child.setLayoutParams(params);
-            child.invalidate();
-        }
-    }
 
     @Override
     protected void installListener() {
-        tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        rlRule.setOnClickListener(this);
+        rlParticipate.setOnClickListener(this);
+        rlResult.setOnClickListener(this);
+
+        pullGv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onGlobalLayout() {
-                try {
-                    setIndicatorWidth();
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
+                    if (mList.size() % 2 == 0) {
+                        if (view.getLastVisiblePosition() == mList.size() / 2) {
+                            LogUtil.e("curPage==偶数", curPage + "");
+                            loadData();
+                        }
+                    } else {
+                        if (view.getLastVisiblePosition() == mList.size() / 2 + 1) {
+                            LogUtil.e("curPage==奇数", curPage + "");
+                            loadData();
+                        }
+                    }
                 }
             }
-        });
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.rl_rule:
+                resetUI();
+                pullRule.setVisibility(View.VISIBLE);
+                lineRule.setVisibility(View.VISIBLE);
+                break;
+            case R.id.rl_participate:
+                resetUI();
+                pullGv.setVisibility(View.VISIBLE);
+                lineParticipate.setVisibility(View.VISIBLE);
+                break;
+            case R.id.rl_result:
+                resetUI();
+                pullLv.setVisibility(View.VISIBLE);
+                lineResult.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void resetUI() {
+        pullRule.setVisibility(View.GONE);
+        pullGv.setVisibility(View.GONE);
+        pullLv.setVisibility(View.GONE);
+        lineRule.setVisibility(View.INVISIBLE);
+        lineParticipate.setVisibility(View.INVISIBLE);
+        lineResult.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -209,6 +258,43 @@ public class ActivityDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 加载参与情境数据
+     */
+    protected void loadData() {
+        if (TextUtils.isEmpty(id)) return;
+        LogUtil.e(TAG, id);
+        ClientDiscoverAPI.participateActivity(String.valueOf(curPage), id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<DataParticipateQJ> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<DataParticipateQJ>>() {
+                });
+
+                if (response.isSuccess()) {
+                    ArrayList list = response.getData().rows;
+                    if (list == null || list.size() == 0) return;
+                    curPage++;
+                    mList.addAll(list);
+                    if (adapter == null) {
+                        adapter = new ParticipateQJListAdapter(mList, activity);
+                        pullGv.setAdapter(adapter);
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+                    return;
+                }
+                ToastUtils.showError(response.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                ToastUtils.showError(R.string.network_err);
+            }
+        });
+    }
+
     @Override
     protected void refreshUI() {
         if (data == null) return;
@@ -233,8 +319,15 @@ public class ActivityDetailActivity extends BaseActivity {
             });
         }
         tvDesc.setText(data.short_title);
-        tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
-        initTabLayout();
+        if (data.evt == 2) {
+            tvDuring.setText("已结束");
+        } else {
+            tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
+        }
+        ActivityResultAdapter resultAdapter = new ActivityResultAdapter(data.sights, activity);
+        pullRule.setAdapter(new RuleContentAdapter(data, activity));
+        pullLv.setAdapter(resultAdapter);
+//        initTabLayout();
     }
 
     @Override

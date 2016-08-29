@@ -19,7 +19,6 @@ public class DataSupportQJ implements Parcelable {
         public String target_id;
         public UserBean user;
         public SightBean sight;
-        public int is_love;
 
         public static class UserBean implements Parcelable {
             public String _id;
@@ -66,7 +65,7 @@ public class DataSupportQJ implements Parcelable {
             public String created_at;
             public UserInfoBean user_info;
             public String scene_title;
-
+            public int is_love;
             public static class UserInfoBean implements Parcelable {
                 public String user_id;
                 public String nickname;
@@ -121,6 +120,9 @@ public class DataSupportQJ implements Parcelable {
                 };
             }
 
+            public SightBean() {
+            }
+
             @Override
             public int describeContents() {
                 return 0;
@@ -133,9 +135,7 @@ public class DataSupportQJ implements Parcelable {
                 dest.writeString(this.created_at);
                 dest.writeParcelable(this.user_info, flags);
                 dest.writeString(this.scene_title);
-            }
-
-            public SightBean() {
+                dest.writeInt(this.is_love);
             }
 
             protected SightBean(Parcel in) {
@@ -144,6 +144,7 @@ public class DataSupportQJ implements Parcelable {
                 this.created_at = in.readString();
                 this.user_info = in.readParcelable(UserInfoBean.class.getClassLoader());
                 this.scene_title = in.readString();
+                this.is_love = in.readInt();
             }
 
             public static final Creator<SightBean> CREATOR = new Creator<SightBean>() {
