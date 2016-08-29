@@ -1,16 +1,18 @@
 package com.taihuoniao.fineix.product;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,18 +24,17 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
+import com.taihuoniao.fineix.adapters.BrandProductAdapter;
+import com.taihuoniao.fineix.adapters.BrandQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BrandDetailBean;
+import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
+import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.product.fragment.BrandProductFragment;
-import com.taihuoniao.fineix.product.fragment.BrandQJFragment;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
-import com.taihuoniao.fineix.view.BrandScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -42,119 +43,171 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
- * Created by taihuoniao on 2016/5/5.
+ * Created by taihuoniao on 2016/8/29.
  */
-public class BrandDetailActivity extends BaseActivity implements View.OnClickListener {
-    //上个界面传递过来的名牌详情id
+public class BrandDetailActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener {
+    //上个界面传递过来的品牌id
     private String id;
     @Bind(R.id.title_name)
     TextView titleName;
     @Bind(R.id.back)
     ImageView back;
-    @Bind(R.id.scroll_view)
-    BrandScrollView scrollView;
-    @Bind(R.id.background_container)
-    RelativeLayout backgroundContainer;
-    @Bind(R.id.background_img)
-    ImageView backgroundImg;
-    @Bind(R.id.title_img)
-    RoundedImageView titleImg;
-    @Bind(R.id.des)
-    TextView des;
-    @Bind(R.id.tab_layout)
-    public TabLayout tabLayout;
-    @Bind(R.id.view_pager)
-    ViewPager viewPager;
-    public WaittingDialog dialog;
-    private BrandProductFragment brandProductFragment;
-    private BrandQJFragment brandQJFragment;
-    private List<SearchFragment> fragmentList;
-    private List<String> titleList;
-
-    public BrandDetailActivity() {
-        super(R.layout.activity_brand_detail);
-    }
+    @Bind(R.id.list_view)
+    ListView listView;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
+    private ViewHolder holder;//headerView中的控件
+    private int productPage = 1;
+    private int qjPage = 1;
+    private WaittingDialog dialog;
+    private boolean isQJ;//当前显示的是情景还是产品
+    private int qjLastTotalItem = -1;
+    private int qjLastSavedFirstVisibleItem = -1;
+    private int productLastTotal = -1;
+    private int productLastFirst = -1;
+    private List<ProductBean.ProductListItem> productList;//商品列表
+    private BrandProductAdapter brandProductAdapter;//品牌下的产品列表
+    private List<ProductAndSceneListBean.ProductAndSceneItem> qjList;//情景列表
+    private BrandQJAdapter brandQJAdapter;//品牌下的情景列表
 
     @Override
     protected void getIntentData() {
         id = getIntent().getStringExtra("id");
         if (id == null) {
-            ToastUtils.showError("暂无此品牌详细信息");
+            ToastUtils.showError("品牌不存在或已删除");
             finish();
         }
+    }
+
+    public BrandDetailActivity() {
+        super(R.layout.activity_brand_details);
     }
 
     @Override
     protected void initView() {
         back.setOnClickListener(this);
+        View header = View.inflate(this, R.layout.header_brand_detail, null);
+        holder = new ViewHolder(header);
+        listView.addHeaderView(header);
         dialog = new WaittingDialog(this);
         WindowUtils.showStatusBar(this);
-        backgroundContainer.setFocusable(true);
-        backgroundContainer.setFocusableInTouchMode(true);
-        backgroundContainer.requestFocus();
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadBrandDetails);
-        registerReceiver(brandReceiver,intentFilter);
+        registerReceiver(brandReceiver, intentFilter);
     }
 
     @Override
     protected void initList() {
-        ViewGroup.LayoutParams lp = backgroundContainer.getLayoutParams();
+        ViewGroup.LayoutParams lp = holder.backgroundContainer.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
-        backgroundContainer.setLayoutParams(lp);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) viewPager.getLayoutParams();
-        layoutParams.height = MainApplication.getContext().getScreenHeight();
-        viewPager.setLayoutParams(layoutParams);
-//        scrollView.setOnScrollListener(new BrandScrollView.OnScrollListener() {
-//            @Override
-//            public void scroll(ScrollView scrollView, int l, int t, int oldl, int oldt) {
-//                //判断拦截点击手势
-//                Log.e("<<<滑动", "t=" + t + ",oldt=" + oldt);
-//                if (t > 300 && t > oldt) {
-//                    BrandDetailActivity.this.scrollView.setStop(true);
-//                } else {
-//                    BrandDetailActivity.this.scrollView.setStop(false);
-//                }
-//            }
-//        });
-        //fragment
-        fragmentList = new ArrayList<>();
-        titleList = new ArrayList<>();
-        brandProductFragment = BrandProductFragment.newInstance(id);
-        brandQJFragment = BrandQJFragment.newInstance(id);
+        holder.backgroundContainer.setLayoutParams(lp);
+        holder.productTv.setOnClickListener(this);
+        holder.qjTv.setOnClickListener(this);
+        holder.lineContainer.setPadding(0, 0, MainApplication.getContext().getScreenWidth() / 2, 0);
+        productList = new ArrayList<>();
+        brandProductAdapter = new BrandProductAdapter(this, productList);
+        listView.setAdapter(brandProductAdapter);
+        qjList = new ArrayList<>();
+        brandQJAdapter = new BrandQJAdapter(this, qjList);
+        listView.setOnScrollListener(this);
     }
-
-//    public void setTabLayoutVisible(boolean visible) {
-//        if (visible) {
-//            tabLayout.setVisibility(View.VISIBLE);
-//        } else {
-//            tabLayout.setVisibility(View.GONE);
-//        }
-//
-//    }
-//
-//    public void onlyOne(boolean isOne) {
-//        if (isOne) {
-//            fragmentList.clear();
-//            titleList.clear();
-//            des.setVisibility(View.GONE);
-//            fragmentList.add(brandQJFragment);
-//        } else {
-//            des.setVisibility(View.VISIBLE);
-//            fragmentList.add(brandProductFragment);
-//            titleList.add("产品列表");
-//            fragmentList.add(brandQJFragment);
-//            titleList.add("情境");
-//        }
-//    }
 
     @Override
     protected void requestNet() {
         if (!dialog.isShowing()) {
             dialog.show();
         }
+        brandDetails();
+        getProductList();
+        getQJList();
+    }
+
+    //获取品牌下的情景
+    private void getQJList() {
+        ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                Log.e("<<<品牌下的情景", responseInfo.result);
+                ProductAndSceneListBean productAndSceneListBean = new ProductAndSceneListBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductAndSceneListBean>() {
+                    }.getType();
+                    productAndSceneListBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<品牌下的情景", "解析异常=" + e.toString());
+                }
+                if (productAndSceneListBean.isSuccess()) {
+                    if (productPage == 1) {
+                        qjList.clear();
+                        qjLastSavedFirstVisibleItem = -1;
+                        qjLastTotalItem = -1;
+                    }
+                    qjList.addAll(productAndSceneListBean.getData().getRows());
+                    brandQJAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showError(productAndSceneListBean.getMessage());
+                }
+//                WriteJsonToSD.writeToSD("json",responseInfo.result);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //品牌下产品列表
+    private void getProductList() {
+        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ProductBean productBean = new ProductBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ProductBean>() {
+                    }.getType();
+                    productBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+                if (productBean.isSuccess()) {
+                    if (productPage == 1) {
+                        productList.clear();
+                        productLastFirst = -1;
+                        productLastTotal = -1;
+                    }
+                    productList.addAll(productBean.getData().getRows());
+//                    if (!isQJ) {
+                    brandProductAdapter.notifyDataSetChanged();
+//                    }
+//                    addProductGridAdapter.notifyDataSetChanged();
+                    return;
+                }
+                ToastUtils.showError(productBean.getMessage());
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+    }
+
+    //品牌详情
+    private void brandDetails() {
         ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -168,26 +221,10 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     Log.e("<<<", "数据解析异常" + e.toString());
                 }
                 if (brandDetailBean.isSuccess()) {
-                    try {
-                        fragmentList.clear();
-                        titleList.clear();
-                        titleName.setText(brandDetailBean.getData().getTitle());
-                        ImageLoader.getInstance().displayImage(brandDetailBean.getData().getCover_url(), titleImg);
-                        des.setText(brandDetailBean.getData().getDes());
-                        ImageLoader.getInstance().displayImage(brandDetailBean.getData().getBanner_url(), backgroundImg);
-//                        onlyOne(false);
-//                        setTabLayoutVisible(true);
-                    } catch (Exception e) {
-//                        onlyOne(true);
-//                        setTabLayoutVisible(false);
-                    }
-                    fragmentList.add(brandProductFragment);
-                    titleList.add("产品列表");
-                    fragmentList.add(brandQJFragment);
-                    titleList.add("情境");
-                    viewPager.setAdapter(new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList));
-                    tabLayout.setupWithViewPager(viewPager);
-                    viewPager.setOffscreenPageLimit(fragmentList.size());
+                    titleName.setText(brandDetailBean.getData().getTitle());
+                    ImageLoader.getInstance().displayImage(brandDetailBean.getData().getCover_url(), holder.titleImg);
+                    holder.des.setText(brandDetailBean.getData().getDes());
+                    ImageLoader.getInstance().displayImage(brandDetailBean.getData().getBanner_url(), holder.backgroundImg);
                 } else {
                     ToastUtils.showError(brandDetailBean.getMessage());
                 }
@@ -200,10 +237,101 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.qj_tv:
+                if (isQJ) {
+                    return;
+                }
+//                page = 1;
+//                qjPage = 1;
+                isQJ = true;
+                brandQJAdapter = new BrandQJAdapter(BrandDetailActivity.this, qjList);
+                listView.setAdapter(brandQJAdapter);
+                ValueAnimator valueAnimator1 = ValueAnimator.ofFloat(0, MainApplication.getContext().getScreenWidth() / 2);
+                valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float f = (float) animation.getAnimatedValue();
+                        holder.lineContainer.setPadding((int) f, 0,
+                                (int) (MainApplication.getContext().getScreenWidth() / 2 - f), 0);
+                    }
+                });
+                valueAnimator1.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        holder.qjTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
+                        holder.productTv.setTextColor(getResources().getColor(R.color.color_666));
+
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+//                        getQJList();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                valueAnimator1.start();
+                break;
+            case R.id.product_tv:
+                if (!isQJ) {
+                    return;
+                }
+//                productPage = 1;
+                isQJ = false;
+                brandProductAdapter = new BrandProductAdapter(BrandDetailActivity.this, productList);
+                listView.setAdapter(brandProductAdapter);
+                ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, MainApplication.getContext().getScreenWidth() / 2);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float f = (float) animation.getAnimatedValue();
+                        holder.lineContainer.setPadding(MainApplication.getContext().getScreenWidth() / 2 - (int) f, 0, (int) f, 0);
+                    }
+                });
+                valueAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        holder.qjTv.setTextColor(getResources().getColor(R.color.color_666));
+                        holder.productTv.setTextColor(getResources().getColor(R.color.yellow_bd8913));
+
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+//                        getProductList();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                valueAnimator.start();
+                break;
             case R.id.back:
                 onBackPressed();
                 break;
@@ -223,4 +351,54 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
         }
     };
 
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+        if (visibleItemCount > listView.getHeaderViewsCount()
+                && (firstVisibleItem + visibleItemCount >= totalItemCount)) {
+            if (isQJ) {
+                if (firstVisibleItem != qjLastSavedFirstVisibleItem && qjLastTotalItem != totalItemCount) {
+                    qjLastSavedFirstVisibleItem = firstVisibleItem;
+                    qjLastTotalItem = totalItemCount;
+                    progressBar.setVisibility(View.VISIBLE);
+                    qjPage++;
+                    getQJList();
+                }
+            } else {
+                if (firstVisibleItem != productLastFirst && productLastTotal != totalItemCount) {
+                    productLastFirst = firstVisibleItem;
+                    productLastTotal = totalItemCount;
+                    progressBar.setVisibility(View.VISIBLE);
+                    productPage++;
+                    getProductList();
+                }
+            }
+        }
+    }
+
+    static class ViewHolder {
+        @Bind(R.id.background_img)
+        ImageView backgroundImg;
+        @Bind(R.id.background_container)
+        RelativeLayout backgroundContainer;
+        @Bind(R.id.des)
+        TextView des;
+        @Bind(R.id.title_img)
+        RoundedImageView titleImg;
+        @Bind(R.id.product_tv)
+        TextView productTv;
+        @Bind(R.id.qj_tv)
+        TextView qjTv;
+        @Bind(R.id.line_container)
+        RelativeLayout lineContainer;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
 }

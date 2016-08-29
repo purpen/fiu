@@ -19,13 +19,12 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.GoodDetailSceneListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
-import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.ProductAndSceneListBean;
+import com.taihuoniao.fineix.beans.TempGoodsBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -56,7 +55,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     ProgressBar progressBar;
     private ViewHolder holder;//headerview中的控件
     private WaittingDialog dialog;
-    private BuyGoodDetailsBean buyGoodDetailsBean;//网络请求返回值
+    //    private BuyGoodDetailsBean buyGoodDetailsBean;//网络请求返回值
     private int page = 1;//相关情景列表页码
     private List<ProductAndSceneListBean.ProductAndSceneItem> sceneList;
     private GoodDetailSceneListAdapter goodDetailsSceneListAdapter;
@@ -118,7 +117,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
 
     //获取商品相关的情境列表
     private void getSceneList() {
-        ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id,null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -162,46 +161,24 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.getTempGoods(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                    Log.e("<<<临时产品库",responseInfo.result);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-        });
-        ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品详情", responseInfo.result);
+                Log.e("<<<临时产品库", responseInfo.result);
+                TempGoodsBean tempGoodsBean = new TempGoodsBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<BuyGoodDetailsBean>() {
+                    Type type = new TypeToken<TempGoodsBean>() {
                     }.getType();
-                    buyGoodDetailsBean = gson.fromJson(responseInfo.result, type);
+                    tempGoodsBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<商品详情", "解析异常=" + e.toString());
+                    Log.e("<<<临时产品库", "解析异常=" + e.toString());
                 }
-                if (buyGoodDetailsBean.isSuccess()) {
-                    holder.title.setText(buyGoodDetailsBean.getData().getTitle());
-                    try {
-                        holder.brandName.setText(buyGoodDetailsBean.getData().getBrand().getTitle());
-                        holder.brandContainer.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(GoodsDetailActivity.this, BrandDetailActivity.class);
-                                intent.putExtra("id", buyGoodDetailsBean.getData().getBrand().get_id());
-                                startActivity(intent);
-                            }
-                        });
-                        ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
-                    } catch (Exception e) {
-
-                    }
+                if (tempGoodsBean.isSuccess()) {
+                    holder.title.setText(tempGoodsBean.getData().getTitle());
+                    holder.brandName.setText(tempGoodsBean.getData().getBrand_name());
+//                    ImageLoader.getInstance().displayImage(tempGoodsBean.getData().getBrand().getCover_url(), holder.brandImg);
                     return;
                 }
                 dialog.dismiss();
-                ToastUtils.showError(buyGoodDetailsBean.getMessage());
+                ToastUtils.showError(tempGoodsBean.getMessage());
                 finish();
             }
 
@@ -211,6 +188,47 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+//        ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<商品详情", responseInfo.result);
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<BuyGoodDetailsBean>() {
+//                    }.getType();
+//                    buyGoodDetailsBean = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<商品详情", "解析异常=" + e.toString());
+//                }
+//                if (buyGoodDetailsBean.isSuccess()) {
+//                    holder.title.setText(buyGoodDetailsBean.getData().getTitle());
+//                    try {
+//                        holder.brandName.setText(buyGoodDetailsBean.getData().getBrand().getTitle());
+//                        holder.brandContainer.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(GoodsDetailActivity.this, BrandDetailActivity.class);
+//                                intent.putExtra("id", buyGoodDetailsBean.getData().getBrand().get_id());
+//                                startActivity(intent);
+//                            }
+//                        });
+//                        ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
+//                    } catch (Exception e) {
+//
+//                    }
+//                    return;
+//                }
+//                dialog.dismiss();
+//                ToastUtils.showError(buyGoodDetailsBean.getMessage());
+//                finish();
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                dialog.dismiss();
+//                ToastUtils.showError(R.string.net_fail);
+//            }
+//        });
     }
 
     //获取购物车数量

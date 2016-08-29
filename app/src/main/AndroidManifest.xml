@@ -171,7 +171,8 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".product.BrandDetailActivity"
-           />
+            />
+        <activity android:name=".product.BrandDetailsActivity"/>
         <activity
             android:name=".user.HasLoveActivity"
             android:screenOrientation="portrait"

@@ -341,9 +341,11 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     Intent intent = new Intent();
                     switch (productBean.getType()){
                         case 2:
+                            Log.e("<<<","可购买");
                             intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
+                            Log.e("<<<","不可购买");
                             intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }

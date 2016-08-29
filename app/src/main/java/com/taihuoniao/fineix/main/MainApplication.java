@@ -21,10 +21,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.QingjingDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -62,16 +62,8 @@ public class MainApplication extends Application {
     public static boolean hasUser;
     //编辑好的图片标签的list
     public static List<TagItem> tagInfoList;
-    //创建场景或情景的标识
-    public static int tag;//1,场景 2,情景
-    //在哪个情景下创建场景
-    public static QingjingDetailBean whichQingjing = null;
     //上传图片的时候的最大限制
     public static final long MAXPIC = 1024 * 1024;
-    // SharedPreference 中保存的手机号
-    public static final String THN_MOBILE = "mobile";
-    // SharedPreference 中保存的密码
-    public static final String THN_PASSWORD = "password";
     public static Bitmap cropBitmap = null;//前切好的图片
     public static Bitmap editBitmap = null;//编辑好的图片
     public static Bitmap blurBitmap = null;//模糊的图片
@@ -94,10 +86,10 @@ public class MainApplication extends Application {
         JsonUtil.init();
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
-//        try {
-//            LeakCanary.install(this);
-//        } catch (Exception e) {
-//        }
+        try {
+            LeakCanary.install(this);
+        } catch (Exception e) {
+        }
     }
 
     public int getScreenHeight() {
