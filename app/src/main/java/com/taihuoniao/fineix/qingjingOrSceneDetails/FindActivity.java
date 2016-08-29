@@ -15,8 +15,8 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FindQJSceneListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.SceneList;
-import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -37,7 +37,6 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
     private int pos;//显示的位置
     private int page;//当前页码
     private List<SceneList.DataBean.RowsBean> sceneList;
-    private List<SearchBean.Data.SearchItem> searchList;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.pull_refresh_view)
@@ -46,6 +45,7 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
     ProgressBar progressBar;
     private ListView listView;
     private FindQJSceneListAdapter findQJSceneListAdapter;
+
     public FindActivity() {
         super(R.layout.activity_find);
     }
@@ -67,10 +67,12 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         page = getIntent().getIntExtra("page", 1);
         if (getIntent().hasExtra(SubsQJActivity.class.getSimpleName())) {
             pos = getIntent().getIntExtra(SubsQJActivity.class.getSimpleName(), 0);
-            sceneList = MainApplication.sceneList;
-            findQJSceneListAdapter = new FindQJSceneListAdapter(this, sceneList);
-            listView.setAdapter(findQJSceneListAdapter);
+        } else if (getIntent().hasExtra(FindFragment.class.getSimpleName())) {
+            pos = getIntent().getIntExtra(FindFragment.class.getSimpleName(), 0);
         }
+        sceneList = MainApplication.sceneList;
+        findQJSceneListAdapter = new FindQJSceneListAdapter(this, sceneList);
+        listView.setAdapter(findQJSceneListAdapter);
         MainApplication.sceneList = null;
         listView.setSelection(pos);
     }
@@ -87,6 +89,10 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         if (getIntent().hasExtra(SubsQJActivity.class.getSimpleName())) {
             String ids = getIntent().getStringExtra("ids");
             getSceneList(page, 8 + "", null, ids, null, null, null, null, null);
+        } else if (getIntent().hasExtra(FindFragment.class.getSimpleName())) {
+            getSceneList(page, 10 + "", null, null, 0 + "", null, null, null, null);
+        } else {
+            progressBar.setVisibility(View.GONE);
         }
     }
 

@@ -206,7 +206,7 @@ public class PhotoFragment extends BaseFragment implements View.OnClickListener,
         //系统相机照片
         ArrayList<PhotoItem> sysPhotos = FileUtils.findPicsInDir(MainApplication.systemPhotoPath);
         if (!sysPhotos.isEmpty()) {
-            galleries.put(MainApplication.systemPhotoPath, new AlbumBean("胶卷相册", MainApplication.systemPhotoPath, sysPhotos));
+            galleries.put(MainApplication.systemPhotoPath, new AlbumBean("Camera", MainApplication.systemPhotoPath, sysPhotos));
         } else {
             galleries.remove(MainApplication.systemPhotoPath);
             albumPaths.remove(MainApplication.systemPhotoPath);

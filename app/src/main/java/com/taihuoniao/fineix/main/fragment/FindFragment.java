@@ -37,10 +37,10 @@ import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -166,6 +166,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<分类列表",responseInfo.result);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
@@ -209,6 +210,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
+
                     subjectList.clear();
                     subjectList.addAll(subjectListBean.getData().getRows());
                     if (sneceComplete == 1) {
@@ -239,7 +241,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 SceneList sceneL = new SceneList();
                 try {
                     Gson gson = new Gson();
@@ -253,6 +255,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 if (sceneL.isSuccess()) {
+                    findQJAdapter.setPage(sceneL.getData().getCurrent_page());
                     if (currentPage == 1) {
                         sceneList.clear();
                         pullRefreshView.lastTotalItem = -1;
@@ -334,7 +337,11 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     @Override
     public void click(int postion) {
-        ToastUtils.showError("情景分类=" + postion);
+        Intent intent = new Intent(getActivity(), QJCategoryActivity.class);
+        intent.putExtra("id",categoryList.get(postion).get_id());
+        intent.putExtra("name",categoryList.get(postion).getTitle());
+        startActivity(intent);
+//        ToastUtils.showError("情景分类=" + categoryList.get(postion).get_id());
     }
 
     private BroadcastReceiver findReceiver = new BroadcastReceiver() {

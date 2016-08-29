@@ -23,7 +23,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -111,7 +111,7 @@ public class ParticipateQJFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mList != null && mList.size() > 0) {
                     ItemSubscribedQJ item = (ItemSubscribedQJ) pullGv.getRefreshableView().getAdapter().getItem(position);
-                    Intent intent = new Intent(activity, SceneDetailActivity.class);
+                    Intent intent = new Intent(activity, QJDetailActivity.class);
                     intent.putExtra("id", item._id);
                     startActivity(intent);
                 }

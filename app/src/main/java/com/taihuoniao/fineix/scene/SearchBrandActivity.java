@@ -149,7 +149,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }
                     if (onlyProduct) {
                         if (searchEditText.getText().toString().length() > 0) {
-                            addProduct(searchEditText.getText().toString(), null);
+                            addProduct(searchEditText.getText().toString(), null,null);
                             return false;
                         }
                         finish();
@@ -158,7 +158,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     //如果选择品牌，则返回品牌，如果没有品牌。则不返回
                     if (brandName.getText().toString().length() > 0) {
                         if (searchEditText.getText().toString().length() > 0) {
-                            addProduct(searchEditText.getText().toString(), cuurentBrandId);
+                            addProduct(searchEditText.getText().toString(), cuurentBrandId,currentBrandName);
                             return false;
                         }
                         Intent intent = new Intent();
@@ -213,10 +213,10 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.add_product_relative:
                 if (onlyProduct) {
-                    addProduct(addProductName.getText().toString(), null);
+                    addProduct(addProductName.getText().toString(), null,null);
                     return;
                 }
-                addProduct(addProductName.getText().toString(), cuurentBrandId);
+                addProduct(addProductName.getText().toString(), cuurentBrandId,currentBrandName);
                 break;
             case R.id.add_brand_relative:
                 addBrand(currentInBrand);
@@ -234,11 +234,11 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addProduct(String title, String brand_id) {
+    private void addProduct(String title, String brand_id,String brand_name) {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addProduct(title, new RequestCallBack<String>() {
+        ClientDiscoverAPI.addProduct(title,brand_id,brand_name, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

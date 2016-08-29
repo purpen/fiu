@@ -6,7 +6,7 @@
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/activity_transfer_time_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

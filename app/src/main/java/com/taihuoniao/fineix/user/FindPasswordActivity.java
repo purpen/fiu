@@ -21,7 +21,6 @@ import com.taihuoniao.fineix.beans.FindPasswordInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.EmailUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 
@@ -83,7 +82,6 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
     protected void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        ActivityUtil.getInstance().addActivity(this);
         ImageView mBack = (ImageView) findViewById(R.id.image_back_find_password);
         mBack.setOnClickListener(this);
         ImageView mClose = (ImageView) findViewById(R.id.image_close_find_password);

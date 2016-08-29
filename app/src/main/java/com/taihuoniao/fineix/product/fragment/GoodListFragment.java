@@ -1,15 +1,12 @@
 package com.taihuoniao.fineix.product.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -18,275 +15,162 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
-import com.taihuoniao.fineix.adapters.GoodListAdapter;
-import com.taihuoniao.fineix.adapters.GoodListFragmentRecyclerAdapter;
-import com.taihuoniao.fineix.beans.CategoryLabelListBean;
-import com.taihuoniao.fineix.beans.CategoryListBean;
+import com.taihuoniao.fineix.adapters.GoodListFragmentAdapter;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
+import com.taihuoniao.fineix.product.GoodsListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
-import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshGridView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by taihuoniao on 2016/5/4.
  */
-public class GoodListFragment extends Fragment implements EditRecyclerAdapter.ItemClick {
-    private CategoryListBean categoryBean;
-    private int position;
-    private String tag_id;//第二级商品分类的tag_id
-    //界面下的控件
-    private RecyclerView recyclerView;//二级分类
-    private ProgressBar progressBar;
-    private PullToRefreshListView pullToRefreshView;
-    private ListView listView;
-    //二级分类列表
-    private List<CategoryLabelListBean.CategoryTagItem> recyclerList;
-    private GoodListFragmentRecyclerAdapter goodListFragmentRecyclerAdapter;
-    private int pos = -1;//被点击的二级分类
-    //商品列表
-    private int page = 1;//列表页码
-    private List<ProductBean.ProductListItem> productList;
-    private GoodListAdapter goodListAdapter;
-    //网络请求工具类
-//    private SVProgressHUD dialog;
+public class GoodListFragment extends SearchFragment implements AdapterView.OnItemClickListener {
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshGridView pullRefreshView;
+    private GridView gridView;
+    @Bind(R.id.empty_view)
+    TextView empthView;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
+    private String id;//父分类id
+    private String tag_id;//子分类id
     private WaittingDialog dialog;
+    private int page = 1;//产品列表页码
+    private List<ProductBean.ProductListItem> list;
+    private GoodListFragmentAdapter goodListFragmentAdapter;
 
-    public static GoodListFragment newInstance(int position, CategoryListBean categoryBean) {
-
+    public static GoodListFragment newInstance(String id, String tag_id) {
         Bundle args = new Bundle();
-        args.putInt("position", position);
-        args.putSerializable("categoryBean", categoryBean);
+        args.putString("tag_id", tag_id);
+        args.putString("id", id);
         GoodListFragment fragment = new GoodListFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        id = getArguments().getString("id");
+        tag_id = getArguments().getString("tag_id");
+        dialog = ((GoodsListActivity) getActivity()).dialog;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = initView();
-        initList();
-        requestNet();
-        return view;
-    }
-
-
     protected View initView() {
-        categoryBean = (CategoryListBean) getArguments().getSerializable("categoryBean");
-        position = getArguments().getInt("position", 0);
-//        Log.e("<<<产品分类", position + "");
-        if (position >= 0)
-            tag_id = categoryBean == null ? "0" : categoryBean.getData().getRows().get(position).getTag_id();
-        View view = View.inflate(getActivity(), R.layout.fragment_good_list, null);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_good_list_recycler);
-        progressBar = (ProgressBar) view.findViewById(R.id.fragment_good_list_progress);
-        pullToRefreshView = (PullToRefreshListView) view.findViewById(R.id.fragment_good_list_pullrefreshview);
-        listView = pullToRefreshView.getRefreshableView();
-        listView.setDivider(null);
-        listView.setDividerHeight(0);
-//        dialog = new SVProgressHUD(getActivity());
-        dialog = new WaittingDialog(getActivity());
-        return view;
-    }
-
-
-    protected void initList() {
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerList = new ArrayList<>();
-        goodListFragmentRecyclerAdapter = new GoodListFragmentRecyclerAdapter(getActivity(), recyclerList, this);
-        recyclerView.setAdapter(goodListFragmentRecyclerAdapter);
-        pullToRefreshView.setPullToRefreshEnabled(false);
-        pullToRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        View view = View.inflate(getActivity(), R.layout.fragment_search_qj, null);
+        ButterKnife.bind(this, view);
+        gridView = pullRefreshView.getRefreshableView();
+        pullRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                requestNet();
+            }
+        });
+        pullRefreshView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 page++;
                 progressBar.setVisibility(View.VISIBLE);
-                if (position == 0) {
-                    getProducts(null, null, null, page + "", 8 + "", null, null, null, null);
-                    return;
-                }
-                if (tag_id.equals("0")) {
-                    getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
-                } else {
-                    if (pos == -1) {
-                        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
-                    } else {
-                        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, recyclerList.get(pos).get_id(), page + "", 8 + "", null, null, null, null);
-                    }
-                }
+                productList();
             }
         });
-        productList = new ArrayList<>();
-        goodListAdapter = new GoodListAdapter(getActivity(), productList, null);
-        listView.setAdapter(goodListAdapter);
+        return view;
     }
-
-    private void getProducts(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
-                             String stick, String fine) {
-        ClientDiscoverAPI.getProductList(null,null,category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-//                    listview适配器
-                ProductBean netProductBean = productBean;
-                if (netProductBean.isSuccess()) {
-                    productList.addAll(netProductBean.getData().getRows());
-                    goodListAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    private void getCateLabels(String tag_id) {
-        ClientDiscoverAPI.categoryLabel(tag_id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                CategoryLabelListBean categoryLabelListBean = new CategoryLabelListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryLabelListBean>() {
-                    }.getType();
-                    categoryLabelListBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
-                }
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                CategoryLabelListBean netCategory = categoryLabelListBean;
-                if (netCategory.isSuccess()) {
-                    recyclerList.clear();
-                    recyclerList.addAll(netCategory.getData().getTags());
-//                        click(0);
-                    goodListFragmentRecyclerAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netCategory.getMessage());
-//                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
-//                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    protected void requestNet() {
-
-//        progressBar.setVisibility(View.VISIBLE);
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-//        Log.e("<<<", "tag_id = " + tag_id);
-//        progressBar.setVisibility(View.VISIBLE);
-        if (position == 0) {
-            recyclerView.setVisibility(View.GONE);
-            getProducts(null, null, null, page + "", 8 + "", null, null, null, null);
-            return;
-        }
-        if (tag_id == null) {
-            dialog.dismiss();
-            return;
-        }
-        getProducts(categoryBean.getData().getRows().get(position).get_id(), null, null, page + "", 8 + "", null, null, null, null);
-        if (tag_id.equals("0")) {
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            getCateLabels(tag_id);
-        }
-    }
-
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.ADD_PRODUCT_LIST:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-////                    listview适配器
-//                    ProductBean netProductBean = (ProductBean) msg.obj;
-//                    if (netProductBean.isSuccess()) {
-//                        productList.addAll(netProductBean.getData().getRows());
-//                        goodListAdapter.notifyDataSetChanged();
-//                    }
-//                    break;
-//                case DataConstants.CATEGORY_LABEL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    CategoryLabelListBean netCategory = (CategoryLabelListBean) msg.obj;
-//                    if (netCategory.isSuccess()) {
-//                        recyclerList.clear();
-//                        recyclerList.addAll(netCategory.getData().getTags());
-////                        click(0);
-//                        goodListFragmentRecyclerAdapter.notifyDataSetChanged();
-//                    } else {
-//                        ToastUtils.showError(netCategory.getMessage());
-////                        new SVProgressHUD(getActivity()).showErrorWithStatus(netCategory.getMessage());
-////                        Toast.makeText(getActivity(), netCategory.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    break;
-//                case DataConstants.NET_FAIL:
-//                    dialog.dismiss();
-//                    progressBar.setVisibility(View.GONE);
-//                    break;
-//            }
-//        }
-//    };
-
 
     @Override
-    public void click(int postion) {
-//        progressBar.setVisibility(View.VISIBLE);
+    protected void initList() {
+        gridView.setNumColumns(2);
+        gridView.setSelector(R.color.nothing);
+        gridView.setHorizontalSpacing(DensityUtils.dp2px(getActivity(), 15));
+        gridView.setVerticalSpacing(DensityUtils.dp2px(getActivity(), 15));
+        list = new ArrayList<>();
+        goodListFragmentAdapter = new GoodListFragmentAdapter(list);
+        gridView.setAdapter(goodListFragmentAdapter);
+        gridView.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void requestNet() {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        for (int i = 0; i < recyclerList.size(); i++) {
-            if (i == postion) {
-                recyclerList.get(postion).setIsSelect(true);
-            } else {
-                recyclerList.get(i).setIsSelect(false);
-            }
-        }
-        goodListFragmentRecyclerAdapter.notifyDataSetChanged();
-        pos = postion;
-        page = 1;
-        productList.clear();
-        goodListAdapter.notifyDataSetChanged();
-//        dialog.show();
-
-//        Log.e("<<<", "id=" + recyclerList.get(postion).get_id());
-        getProducts(categoryBean.getData().getRows().get(this.position).get_id(), null, recyclerList.get(postion).get_id(), page + "", 8 + "", null, null, null, null);
+        productList();
     }
 
+    //根据子分类获取商品列表
+    private void productList() {
+        ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,
+                null, null, new RequestCallBack<String>() {
+
+                    @Override
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
+                        pullRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
+                        ProductBean productBean = new ProductBean();
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<ProductBean>() {
+                            }.getType();
+                            productBean = gson.fromJson(responseInfo.result, type);
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                        if (productBean.isSuccess()) {
+                            if (page == 1) {
+                                list.clear();
+                                pullRefreshView.lastTotalItem = -1;
+                                pullRefreshView.lastSavedFirstVisibleItem = -1;
+                            }
+                            list.addAll(productBean.getData().getRows());
+                            goodListFragmentAdapter.notifyDataSetChanged();
+                            if (list.size() <= 0) {
+                                empthView.setText("暂无产品");
+                                empthView.setVisibility(View.VISIBLE);
+                            } else {
+                                empthView.setVisibility(View.GONE);
+                            }
+                            return;
+                        }
+                        ToastUtils.showError(productBean.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
+                        pullRefreshView.onRefreshComplete();
+                        progressBar.setVisibility(View.GONE);
+                        ToastUtils.showError(R.string.net_fail);
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ProductBean.ProductListItem productListItem = (ProductBean.ProductListItem) gridView.getAdapter().getItem(position);
+        Intent intent = new Intent(getActivity(), BuyGoodsDetailsActivity.class);
+        intent.putExtra("id", productListItem.get_id());
+        startActivity(intent);
+    }
 }

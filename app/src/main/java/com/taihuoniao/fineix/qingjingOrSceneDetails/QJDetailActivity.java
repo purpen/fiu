@@ -25,10 +25,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +46,7 @@ import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
@@ -73,6 +76,8 @@ public class QJDetailActivity extends BaseActivity {
     private String id;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
+    @Bind(R.id.map_linear)
+    LinearLayout mapLinear;
     @Bind(R.id.head_img)
     RoundedImageView headImg;
     @Bind(R.id.v_img)
@@ -402,9 +407,9 @@ public class QJDetailActivity extends BaseActivity {
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
                 labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
-                labelView.pointRelative.setLayoutParams(layoutParams1);
+                labelView.pointContainer.setLayoutParams(layoutParams1);
             }
             labelView.post(new Runnable() {
                 @Override
@@ -416,9 +421,9 @@ public class QJDetailActivity extends BaseActivity {
                         labelView.setLayoutParams(lp);
                     } else {
                         labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                         layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
-                        labelView.pointRelative.setLayoutParams(layoutParams1);
+                        labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
@@ -435,10 +440,10 @@ public class QJDetailActivity extends BaseActivity {
                     Intent intent = new Intent();
                     switch (productBean.getType()) {
                         case 2:
-                            intent.setClass(activity, GoodsDetailActivity.class);
+                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
+                            intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
                     intent.putExtra("id", productBean.getId());
@@ -454,6 +459,19 @@ public class QJDetailActivity extends BaseActivity {
                 long l = Long.valueOf(qjDetailBean.getData().getUser_info().getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
                 startActivity(intent);
+            }
+        });
+        //跳转情景地图
+        mapLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                跳转到地图界面，查看附近的情境
+                String address = qjDetailBean.getData().getAddress();
+                LatLng ll = new LatLng(qjDetailBean.getData().getLocation().getCoordinates().get(1), qjDetailBean.getData().getLocation().getCoordinates().get(0));
+                Intent intent2 = new Intent(activity, MapNearByCJActivity.class);
+                intent2.putExtra("address", address);
+                intent2.putExtra(MapNearByCJActivity.class.getSimpleName(), ll);
+                activity.startActivity(intent2);
             }
         });
         //关注或取消关注

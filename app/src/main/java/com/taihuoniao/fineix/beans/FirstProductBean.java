@@ -64,8 +64,8 @@ public class FirstProductBean extends NetBean {
             return items;
         }
 
-        public void setItems(List<ItemsBean> items) {
-            this.items = items;
+        public void setItems(List<ItemsBean> rows) {
+            this.items = rows;
         }
 
         public static class ItemsBean {

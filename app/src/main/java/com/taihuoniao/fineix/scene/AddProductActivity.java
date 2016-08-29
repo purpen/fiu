@@ -1,8 +1,8 @@
 package com.taihuoniao.fineix.scene;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,7 +31,6 @@ import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.CustomSlidingTab;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -42,14 +41,14 @@ import java.lang.reflect.Type;
  */
 public class AddProductActivity extends BaseActivity implements View.OnClickListener {
     private GlobalTitleLayout titleLayout;
-    private CustomSlidingTab slidingTab;
+    private TabLayout slidingTab;
     private AddProductViewPagerAdapter addProductViewPagerAdapter;
     private ViewPager viewPager;
     private RelativeLayout search;
     private EditText editText;
     private ImageView deleteImg;
     private TextView cancelTv;
-    private WaittingDialog dialog;
+    public WaittingDialog dialog;
     private int searchPage = 1;
     //viewpager当前页面
 //    private int pos = 0;
@@ -66,7 +65,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.categoryList(1 + "", 1+ "", 1 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                dialog.dismiss();
@@ -83,7 +82,11 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 if (categoryListBean.isSuccess()) {
                     addProductViewPagerAdapter = new AddProductViewPagerAdapter(getSupportFragmentManager(), categoryListBean);
                     viewPager.setAdapter(addProductViewPagerAdapter);
-                    slidingTab.setViewPager(viewPager);
+                    viewPager.setOffscreenPageLimit(categoryListBean.getData().getRows().size());
+                    slidingTab.setupWithViewPager(viewPager);
+                }else{
+                    dialog.dismiss();
+                    ToastUtils.showError(categoryListBean.getMessage());
                 }
             }
 
@@ -103,18 +106,32 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         titleLayout.setBackImgVisible(false);
         titleLayout.setCancelImgVisible(true);
         titleLayout.setCancelImg(R.mipmap.cancel_black);
-        slidingTab.setIndicatorColor(getResources().getColor(R.color.yellow_bd8913));
-        slidingTab.setTextColor(getResources().getColor(R.color.black333333));
-        slidingTab.setCurTabTextColor(getResources().getColor(R.color.yellow_bd8913));
-        slidingTab.setTypeface(null, Typeface.NORMAL);
-        slidingTab.setTextSize(getResources().getDimensionPixelSize(R.dimen.sp14));
+        slidingTab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Intent intent = new Intent(DataConstants.BroadSearchFragment);
+                intent.putExtra("search", false);
+                sendBroadcast(intent);
+                editText.setText("");
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_add_product);
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_add_product_title);
-        slidingTab = (CustomSlidingTab) findViewById(R.id.activity_add_product_slidingtab);
+        slidingTab = (TabLayout) findViewById(R.id.activity_add_product_slidingtab);
         viewPager = (ViewPager) findViewById(R.id.activity_add_product_viewpager);
         search = (RelativeLayout) findViewById(R.id.rl);
         editText = (EditText) findViewById(R.id.activity_add_product_edit);
@@ -175,15 +192,6 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             }
         });
         cancelTv.setOnClickListener(this);
-        slidingTab.setAddProductActivity(true, new CancelSearch() {
-            @Override
-            public void cancelSearch() {
-                Intent intent = new Intent(DataConstants.BroadSearchFragment);
-                intent.putExtra("search", false);
-                sendBroadcast(intent);
-                editText.setText("");
-            }
-        });
         deleteImg.setOnClickListener(this);
     }
 
@@ -194,7 +202,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
             case R.id.activity_add_product_cancel:
                 if (editText.getText().toString().length() > 0) {
                     editText.setText("");
-                }else{
+                } else {
                     onBackPressed();
                 }
                 break;

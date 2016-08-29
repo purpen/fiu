@@ -175,12 +175,14 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     //改变右侧按钮的名称、颜色，并设置监听
     public void setRightTv(int resid, int color, OnClickListener onClickListener) {
         continueTv.setText(resid);
+        continueTv.setVisibility(VISIBLE);
         continueTv.setTextColor(color);
         continueTv.setOnClickListener(onClickListener);
     }
 
     //设置继续监听
     public void setContinueListener(OnClickListener onClickListener) {
+        continueTv.setVisibility(VISIBLE);
         continueTv.setOnClickListener(onClickListener);
     }
 

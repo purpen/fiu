@@ -24,7 +24,8 @@ import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
 
@@ -37,7 +38,7 @@ import java.util.List;
  */
 public class SelectAddressActivity extends Activity implements View.OnClickListener {
     //控件
-    private MyGlobalTitleLayout titleLayout;
+    private GlobalTitleLayout titleLayout;
     private LinearLayout addNewAddressTv;
     private LinearLayout emptyView;
     private PullToRefreshListView pullToRefresh;
@@ -56,43 +57,20 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_address);
         initView();
+        WindowUtils.chenjin(this);
         setData();
-        if(!dialog.isShowing()){
+        if (!dialog.isShowing()) {
             dialog.show();
         }
         getAddressList(currentPage + "");
     }
 
-    @Override
-    protected void onDestroy() {
-//        cancelNet();
-        super.onDestroy();
-    }
 
     private void setData() {
-        titleLayout.setTitle("选择收货地址");
-        titleLayout.setTitleColor(getResources().getColor(android.R.color.white));
-        titleLayout.setBackImg(R.mipmap.back_white);
-        titleLayout.setRightShopCartButton(false);
-        titleLayout.setRightSearchButton(false);
-        titleLayout.setBackButtonListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).isSelect()) {
-                        intent.putExtra("addressBean", list.get(i));
-                        setResult(DataConstants.RESULTCODE_ADDRESS, intent);
-                        break;
-                    }
-                }
-                setResult(DataConstants.RESULTCODE_ADDRESS, intent);
-                finish();
-            }
-        });
+        titleLayout.setTitle("收货地址");
+        titleLayout.setContinueTvVisible(false);
         addNewAddressTv.setOnClickListener(this);
         pullToRefresh.setPullToRefreshEnabled(false);
-//        listView.setEmptyView(emptyView);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this);
@@ -120,7 +98,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     }
 
     private void initView() {
-        titleLayout = (MyGlobalTitleLayout) findViewById(R.id.activity_select_address_title);
+        titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_select_address_title);
         addNewAddressTv = (LinearLayout) findViewById(R.id.activity_select_address_addnewaddresstv);
         emptyView = (LinearLayout) findViewById(R.id.activity_select_address_emptylinear);
         pullToRefresh = (PullToRefreshListView) findViewById(R.id.activity_select_address_listview);
@@ -150,7 +128,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                 if (result == 1) {
                     list.clear();
                     currentPage = 1;
-                    if(!dialog.isShowing()){
+                    if (!dialog.isShowing()) {
                         dialog.show();
                     }
                     getAddressList(currentPage + "");
@@ -174,7 +152,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     }
 
     public void deleteAddress(String id) {
-        if(!dialog.isShowing()){
+        if (!dialog.isShowing()) {
             dialog.show();
         }
         ClientDiscoverAPI.deleteAddressNet(id, new RequestCallBack<String>() {
@@ -209,7 +187,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
     }
 
     //获得收货地址列表
-    private void getAddressList( String page) {
+    private void getAddressList(String page) {
         ClientDiscoverAPI.getAddressList(page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -226,7 +204,7 @@ public class SelectAddressActivity extends Activity implements View.OnClickListe
                 progressBar.setVisibility(View.GONE);
                 AddressListBean netAddressList = addressListBean;
                 if (netAddressList.isSuccess()) {
-                    if(currentPage==1){
+                    if (currentPage == 1) {
                         list.clear();
                     }
                     list.addAll(netAddressList.getData().getRows());

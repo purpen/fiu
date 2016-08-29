@@ -32,7 +32,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
-import com.taihuoniao.fineix.user.AllOrderActivity;
 import com.taihuoniao.fineix.user.ChooseSubjectActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
@@ -43,6 +42,7 @@ import com.taihuoniao.fineix.user.HasLoveActivity;
 import com.taihuoniao.fineix.user.MessageActivity;
 import com.taihuoniao.fineix.user.OrderQJActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
+import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.user.SystemSettingsActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -413,7 +413,7 @@ public class MineFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:  //订单
-                        startActivity(new Intent(activity, AllOrderActivity.class));
+                        startActivity(new Intent(activity, ShopOrderListActivity.class));
                         break;
                     case 1:
                         startActivity(new Intent(activity, MessageActivity.class));

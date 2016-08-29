@@ -38,7 +38,12 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsQJActivity;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
+import com.taihuoniao.fineix.user.ChooseSubjectActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
@@ -122,6 +127,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     public void onRefresh() {
+        userList.clear();
         currentPage = 1;
         sneceComplete = 0;
         if (!dialog.isShowing()) {
@@ -143,8 +149,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.more_theme_img:
-                ToastUtils.showError("更多主题");
-
+                startActivity(new Intent(getActivity(), ChooseSubjectActivity.class));
                 break;
             case R.id.search_img:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
@@ -380,6 +385,25 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     public void click(int postion) {
-        ToastUtils.showError("跳转主题详情");
+      Intent intent = new Intent();
+        switch (subjectList.get(postion).getType()) {
+            case 1:
+                intent.setClass(getActivity(), ArticalDetailActivity.class);
+                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                break;
+            case 2:
+                intent.setClass(getActivity(), ActivityDetailActivity.class);
+                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                break;
+            case 3:
+                intent.setClass(getActivity(), SalePromotionDetailActivity.class);
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                break;
+            default:
+                intent.setClass(getActivity(), NewProductDetailActivity.class);
+                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                break;
+        }
+        startActivity(intent);
     }
 }

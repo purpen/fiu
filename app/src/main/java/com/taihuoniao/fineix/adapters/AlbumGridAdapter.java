@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.PhotoItem;
@@ -23,21 +22,21 @@ import java.util.List;
 public class AlbumGridAdapter extends BaseAdapter {
     private Context context;
     private List<PhotoItem> photoList;
-    private DisplayImageOptions options;
+//    private DisplayImageOptions options;
 //    private BitmapUtils bitmapUtils;
 
     public AlbumGridAdapter(Context context, List<PhotoItem> photoList) {
         this.context = context;
         this.photoList = photoList;
 //        bitmapUtils = new BitmapUtils(context);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheOnDisk(true)
-                .cacheInMemory(true)
-                .considerExifParams(true)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.default_background_750_1334)
+//                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+//                .showImageOnFail(R.mipmap.default_background_750_1334)
+//                .cacheOnDisk(true)
+//                .cacheInMemory(true)
+//                .considerExifParams(true)
+//                .build();
     }
 
     @Override
@@ -77,7 +76,7 @@ public class AlbumGridAdapter extends BaseAdapter {
 //        opt.inDither = false;
 //        Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), photoList.get(position).getId(), MediaStore.Images.Thumbnails.MINI_KIND, opt);
 //        hold.img.setImageBitmap(bitmap);
-        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img, options);
+        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
         if (photoList.get(position).isChecked()) {
             hold.tv.setBackgroundResource(R.drawable.yellow_album_ground);
         } else {

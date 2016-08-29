@@ -22,7 +22,7 @@ import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BrandDetailActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -105,7 +105,7 @@ public class NewProductDetailActivity extends BaseActivity {
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
-                    intent = new Intent(activity, QingjingDetailActivity.class);
+                    intent = new Intent(activity, QJDetailActivity.class);
                     intent.putExtra("id", infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题

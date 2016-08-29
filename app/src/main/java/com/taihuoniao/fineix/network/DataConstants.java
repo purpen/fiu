@@ -6,11 +6,8 @@ package com.taihuoniao.fineix.network;
  */
 public class DataConstants {
     //判断从哪个activity跳转到登录界面
-    public static final int ViewPagerActivity = 105;
     public static final int SceneDetailActivity = 101;
     public static final int ElseActivity = 102;//其他不需要刷新界面的activity
-    public static final int QingjingDetailActivity = 103;
-    public static final int MyGoodsDetailsActivity = 104;
     public static final int IndexFragment = 105;//首页
     public static final int FindFragment = 106;//发现页
     public static final int SearchActivity = 107;//搜索页
@@ -18,6 +15,12 @@ public class DataConstants {
     public static final int QJDetailActivity = 109;//情景详情
     public static final int BuyGoodDetailsActivity = 110;//可以购买的商品详情
     public static final int ActivityDetail = 111;//活动详情
+    public static final int QJCategoryActivity = 112;//情景分类
+    public static final int GoodDetailsActivity = 113;//不可购买的商品详情
+    public static final int BrandDetailsActivity = 114;//品牌详情
+    public static final String BroadBrandDetails = "com.taihuoniao.fiu.branddetails";
+    public static final String BroadGoodDetails = "com.taihuoniao.fiu.gooddetails";
+    public static final String BroadQJCategory = "com.taihuoniao.fiu.qjcategory";
     public static final String BroadBuyGoodDetails = "com.taihuoniao.fiu.buygooddetail";
     public static final String BroadQJDetail = "con.taihuoniao.fiu.qjdetail";
     public static final String BroadSearch = "com.taihuoniao.fiu.search";

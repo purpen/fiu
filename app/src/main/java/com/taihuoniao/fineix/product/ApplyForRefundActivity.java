@@ -25,7 +25,8 @@ import com.taihuoniao.fineix.beans.OrderDetailsAddress;
 import com.taihuoniao.fineix.beans.OrderDetailsProducts;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import org.json.JSONArray;
@@ -42,58 +43,13 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     private EditText mEditTextReason;
     private RelativeLayout mReasonLayout;
     private PopupWindow popupWindow = null;
-    private MyGlobalTitleLayout title = null;
+    private GlobalTitleLayout title = null;
     private Button mCommit;
     private ImageView mImage;
     private String mRid;
     private String mReasonCode = "1";
     private String mReasonEditTxt = "";
     private List<OrderDetails> mList = new ArrayList<>();
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_ORDER_DETAILS:
-//                    if (mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof List) {
-//                            mList.clear();
-//                            mList.addAll((Collection<? extends OrderDetails>) msg.obj);
-//
-//                            for (int i = 0; i < mList.size(); i++) {
-//                                mMoney.setText("¥" + mList.get(i).getPay_money());
-//                            }
-//                        }
-//                    }
-//                    break;
-//                case DataConstants.PARSER_APPLY_REFUND:
-//                    if (mDialog.isShowing()) {
-//                        mDialog.dismiss();
-//                    }
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof ApplyForRefund) {
-//                            ApplyForRefund refund = (ApplyForRefund) msg.obj;
-//
-//                            if ("true".equals(refund.getSuccess())) {
-//                                ToastUtils.showSuccess(refund.getMessage());
-////                                new SVProgressHUD(ApplyForRefundActivity.this).showSuccessWithStatus(refund.getMessage());
-//                                onBackPressed();
-//                            } else {
-//                                ToastUtils.showError(refund.getMessage());
-////                                new SVProgressHUD(ApplyForRefundActivity.this).showErrorWithStatus(refund.getMessage());
-//                            }
-//                        }
-//                    }
-//                case DataConstants.NETWORK_FAILURE:
-//                    mDialog.dismiss();
-//                    break;
-//            }
-//        }
-//    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +57,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_apply_for_refund);
         mDialog = new WaittingDialog(this);
         initView();
+        WindowUtils.chenjin(this);
         initPopwindow();
         initData();
     }
@@ -182,14 +139,9 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     }
 
     private void initView() {
-        title = (MyGlobalTitleLayout) findViewById(R.id.title_refund);
+        title = (GlobalTitleLayout) findViewById(R.id.title_refund);
         title.setTitle("申请退款");
-        title.setBackgroundResource(R.color.white);
-        title.setBackImg(R.mipmap.back_black);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackButtonVisibility(true);
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
+    title.setContinueTvVisible(false);
         mEditTextReason = (EditText) findViewById(R.id.et_refund);
         mCommit = (Button) findViewById(R.id.bt_commit_refund);
         mMoney = (TextView) findViewById(R.id.tv_money_refund);

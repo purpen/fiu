@@ -30,7 +30,8 @@ public class LabelView extends LinearLayout {
     private float parentHeight = 0;
     private boolean isLeft = true;
     public TextView nameTv;
-    public RelativeLayout pointRelative;
+    public RelativeLayout pointContainer;
+    public RelativeLayout waveContainer;
     private ImageView deleteImg;
 
     public TagItem getTagInfo() {
@@ -61,9 +62,9 @@ public class LabelView extends LinearLayout {
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointRelative.getLayoutParams();
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointContainer.getLayoutParams();
                     layoutParams.leftMargin = (int) (nameTv.getMeasuredWidth() - pointWidth - labelMargin);
-                    pointRelative.setLayoutParams(layoutParams);
+                    pointContainer.setLayoutParams(layoutParams);
                     tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentWidth));
                     tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
                     Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
@@ -77,9 +78,9 @@ public class LabelView extends LinearLayout {
             nameTv.post(new Runnable() {
                 @Override
                 public void run() {
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointRelative.getLayoutParams();
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pointContainer.getLayoutParams();
                     layoutParams.leftMargin = (int) labelMargin;
-                    pointRelative.setLayoutParams(layoutParams);
+                    pointContainer.setLayoutParams(layoutParams);
                     if (deleteImg.getVisibility() == GONE) {
                         tagInfo.setX(than(left + labelMargin + pointWidth / 2, parentWidth));
                     } else {
@@ -99,7 +100,8 @@ public class LabelView extends LinearLayout {
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_label, this);
         nameTv = (TextView) findViewById(R.id.name);
-        pointRelative = (RelativeLayout) findViewById(R.id.point_relative);
+        pointContainer = (RelativeLayout) findViewById(R.id.point_container);
+        waveContainer = (RelativeLayout) findViewById(R.id.wave_container);
         deleteImg = (ImageView) findViewById(R.id.delete);
         pointWidth = getResources().getDimension(R.dimen.label_point_width);
         labelMargin = getResources().getDimension(R.dimen.label_point_margin);
@@ -197,8 +199,8 @@ public class LabelView extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                pointRelative.clearAnimation();
-                pointRelative.startAnimation(scaleAnimation1);
+                waveContainer.clearAnimation();
+                waveContainer.startAnimation(scaleAnimation1);
             }
 
             @Override
@@ -214,8 +216,8 @@ public class LabelView extends LinearLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                pointRelative.clearAnimation();
-                pointRelative.startAnimation(scaleAnimation);
+                waveContainer.clearAnimation();
+                waveContainer.startAnimation(scaleAnimation);
             }
 
             @Override
@@ -223,12 +225,12 @@ public class LabelView extends LinearLayout {
 
             }
         });
-        pointRelative.clearAnimation();
-        pointRelative.startAnimation(scaleAnimation);
+        waveContainer.clearAnimation();
+        waveContainer.startAnimation(scaleAnimation);
     }
 
     public void stopAnim() {
-        pointRelative.clearAnimation();
+        waveContainer.clearAnimation();
     }
 
     public void updateLocation(int x, int y) {

@@ -29,8 +29,13 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -53,12 +58,21 @@ public class FindQJAdapter extends BaseAdapter {
     private List<SubjectListBean.DataBean.RowsBean> subjectList;
     private List<SceneList.DataBean.RowsBean> sceneList;
     private WaittingDialog dialog;
+    private int page;
 
     public FindQJAdapter(Activity activity, List<SubjectListBean.DataBean.RowsBean> subjectList, List<SceneList.DataBean.RowsBean> sceneList) {
         this.activity = activity;
         this.subjectList = subjectList;
         this.sceneList = sceneList;
         dialog = new WaittingDialog(activity);
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     @Override
@@ -94,7 +108,7 @@ public class FindQJAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_find_qj, null);
@@ -151,7 +165,11 @@ public class FindQJAdapter extends BaseAdapter {
                 holder.qjBackgroundImg1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtils.showError("跳转" + qjPosition);
+                        Intent intent = new Intent(activity, FindActivity.class);
+                        intent.putExtra("page", page);
+                        intent.putExtra(FindFragment.class.getSimpleName(), qjPosition);
+                        MainApplication.sceneList = sceneList;
+                        activity.startActivity(intent);
                     }
                 });
                 holder.qjHeadImg1.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +248,11 @@ public class FindQJAdapter extends BaseAdapter {
                     holder.qjBackgroundImg2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ToastUtils.showError("跳转" + (1 + qjPosition));
+                            Intent intent = new Intent(activity, FindActivity.class);
+                            intent.putExtra("page", page);
+                            intent.putExtra(FindFragment.class.getSimpleName(), qjPosition + 1);
+                            MainApplication.sceneList = sceneList;
+                            activity.startActivity(intent);
                         }
                     });
                     holder.qjHeadImg2.setOnClickListener(new View.OnClickListener() {
@@ -292,7 +314,26 @@ public class FindQJAdapter extends BaseAdapter {
                 holder.subjectContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtils.showError("点击主题" + subjectPosition);
+                        Intent intent = new Intent();
+                        switch (subjectList.get(subjectPosition).getType()) {
+                            case 1:
+                                intent.setClass(activity, ArticalDetailActivity.class);
+                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            case 2:
+                                intent.setClass(activity, ActivityDetailActivity.class);
+                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            case 3:
+                                intent.setClass(activity, SalePromotionDetailActivity.class);
+                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                            default:
+                                intent.setClass(activity, NewProductDetailActivity.class);
+                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),subjectList.get(subjectPosition).get_id());
+                                break;
+                        }
+                        activity.startActivity(intent);
                     }
                 });
                 switch (subjectList.get(subjectPosition).getType()) {

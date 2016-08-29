@@ -3,7 +3,9 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -66,7 +67,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
     private List<CommentsBean.CommentItem> commentList;
     private CommentsListAdapter commentsListAdapter;
     private EditText editText;
-    private Button sendBtn;
+    private TextView sendBtn;
     private PopupWindow popupWindow;
     //网络请求
     private WaittingDialog dialog;
@@ -91,7 +92,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         listView = pullToRefreshLayout.getRefreshableView();
         listView.setSelector(R.color.nothing);
         editText = (EditText) findViewById(R.id.activity_commentlist_edit);
-        sendBtn = (Button) findViewById(R.id.activity_commentlist_send);
+        sendBtn = (TextView) findViewById(R.id.activity_commentlist_send);
         dialog = new WaittingDialog(this);
         WindowUtils.chenjin(this);
         initPopupWindow();
@@ -99,6 +100,28 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initList() {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    sendBtn.setTextColor(getResources().getColor(R.color.black));
+                    sendBtn.setEnabled(true);
+                } else {
+                    sendBtn.setTextColor(getResources().getColor(R.color.color_ccc));
+                    sendBtn.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         target_id = getIntent().getStringExtra("target_id");
         type = getIntent().getStringExtra("type");
         target_user_id = getIntent().getStringExtra("target_user_id");

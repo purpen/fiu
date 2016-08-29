@@ -9,6 +9,7 @@ import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 
 /**
  * Created by taihuoniao on 2016/5/25.
@@ -17,14 +18,16 @@ public class LoginCompleteUtils {
 
     public static void goFrom(Activity activity) {
         switch (MainApplication.which_activity) {
+            case DataConstants.GoodDetailsActivity:
+                activity.sendBroadcast(new Intent(DataConstants.BroadGoodDetails));
+                break;
+            case DataConstants.QJCategoryActivity:
+                activity.sendBroadcast(new Intent(DataConstants.BroadQJCategory));
+                Intent intent3 = new Intent(activity, QJCategoryActivity.class);
+                activity.startActivity(intent3);
+                break;
             case DataConstants.BuyGoodDetailsActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadBuyGoodDetails));
-                break;
-            case DataConstants.QingjingDetailActivity:
-                activity.sendBroadcast(new Intent(DataConstants.BroadQingjingDetail));
-                break;
-            case DataConstants.SceneDetailActivity:
-                activity.sendBroadcast(new Intent(DataConstants.BroadSceneDetail));
                 break;
             case DataConstants.ActivityDetail:
                 activity.sendBroadcast(new Intent(DataConstants.BroadSceneActivityDetail));

@@ -25,24 +25,18 @@
                 android:layout_height="90dp"
                 />
 
-            <ImageView
-                android:id="@+id/dialog_cart_cancelimg"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:paddingLeft="30dp"
-                android:src="@mipmap/cancel"/>
 
             <TextView
                 android:id="@+id/dialog_cart_producttitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@id/dialog_cart_cancelimg"
                 android:layout_toRightOf="@id/dialog_cart_productimg"
                 android:maxLines="2"
-                android:textColor="#000000"
-                android:textSize="14sp"/>
+                android:maxWidth="200dp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="#666666"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/dialog_cart_price"
@@ -51,7 +45,6 @@
                 android:layout_below="@id/dialog_cart_producttitle"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@id/dialog_cart_cancelimg"
                 android:layout_toRightOf="@id/dialog_cart_productimg"
                 android:singleLine="true"
                 android:textColor="@color/yellow_bd8913"
@@ -63,7 +56,6 @@
                 android:layout_below="@id/dialog_cart_price"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@id/dialog_cart_cancelimg"
                 android:layout_toRightOf="@id/dialog_cart_productimg"
                 android:orientation="horizontal">
 
@@ -101,7 +93,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="7dp"
             android:text="@string/color_category"
-            android:textColor="#000000"
+            android:textColor="#212121"
             android:textSize="14sp"/>
 
 
@@ -124,7 +116,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="3dp"
-                    android:background="@drawable/corner_yellow"
+                    android:background="@drawable/corner_black"
                     android:gravity="center"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
@@ -207,7 +199,7 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="#da9d17"
+            android:background="#666666"
             android:text="@string/add_to_cart"
             android:textColor="@color/white"
             android:textSize="16sp"/>
@@ -218,7 +210,7 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="@color/yellow_bd8913"
+            android:background="#212121"
             android:text="@string/buy_now"
             android:textColor="@color/white"
             android:textSize="16sp"/>

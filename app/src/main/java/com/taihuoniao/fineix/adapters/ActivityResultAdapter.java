@@ -87,9 +87,9 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
             labelView.setLayoutParams(layoutParams);
             if (productBean.loc == 2) {
                 labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                 layoutParams1.leftMargin = (int) labelView.labelMargin;
-                labelView.pointRelative.setLayoutParams(layoutParams1);
+                labelView.pointContainer.setLayoutParams(layoutParams1);
             }
             labelView.post(new Runnable() {
                 @Override
@@ -101,9 +101,9 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
                         labelView.setLayoutParams(lp);
                     } else {
                         labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
+                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
                         layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
-                        labelView.pointRelative.setLayoutParams(layoutParams1);
+                        labelView.pointContainer.setLayoutParams(layoutParams1);
                         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                         lp.leftMargin = (int) (productBean.x * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
                         lp.topMargin = (int) (productBean.y * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);

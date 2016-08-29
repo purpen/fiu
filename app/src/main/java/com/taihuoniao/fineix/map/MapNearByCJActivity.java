@@ -34,6 +34,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.MapUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -100,6 +101,7 @@ public class MapNearByCJActivity extends BaseActivity<SceneListBean> {
 //        mBDMap.setMyLocationEnabled(true);
 //        startLocate();
         loadCurrentData();
+        WindowUtils.chenjin(this);
     }
 
     private void move2CurrentLocation() {

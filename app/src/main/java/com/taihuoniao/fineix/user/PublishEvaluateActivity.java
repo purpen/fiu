@@ -21,8 +21,9 @@ import com.taihuoniao.fineix.beans.OrderDetailsAddress;
 import com.taihuoniao.fineix.beans.OrderDetailsProducts;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import org.json.JSONArray;
@@ -50,26 +51,6 @@ public class PublishEvaluateActivity extends Activity {
     private String mEditContent;
     private WaittingDialog dialog;
 
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_ORDER_DETAILS:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof List) {
-//                            mList.clear();
-//                            mList.addAll((Collection<? extends OrderDetails>) msg.obj);
-//                            mListProducts.clear();
-//                            mListProducts.addAll(mList.get(0).getProducts());
-//
-//                            mAdapter.notifyDataSetChanged();
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +59,13 @@ public class PublishEvaluateActivity extends Activity {
         setContentView(R.layout.activity_publish_evaluate);
         initData();
         initView();
-
+        WindowUtils.chenjin(this);
     }
 
     private void initView() {
-        MyGlobalTitleLayout title = (MyGlobalTitleLayout) findViewById(R.id.title_evaluate);
+        GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_evaluate);
         title.setTitle("发表评价");
-        title.setBackgroundResource(R.color.white);
-        title.setBackImg(R.mipmap.back_black);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackButtonVisibility(true);
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
+        title.setContinueTvVisible(false);
         mListView = (ListViewForScrollView) findViewById(R.id.lv_evaluate);
         mAdapter = new EvaluateAdapter(mListProducts, this);
         mListView.setAdapter(mAdapter);
@@ -111,7 +87,7 @@ public class PublishEvaluateActivity extends Activity {
 //                        dialog.showErrorWithStatus("评论内容不能为空!");
 //                        Toast.makeText(PublishEvaluateActivity.this, "评价内容不能为空！", Toast.LENGTH_LONG).show();
                     } else {
-                        if(!dialog.isShowing()){
+                        if (!dialog.isShowing()) {
                             dialog.show();
                         }
                         StringBuilder builder = new StringBuilder();

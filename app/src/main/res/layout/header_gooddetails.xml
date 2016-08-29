@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#f8f8f8"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="211dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_background_750_1334"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@color/black_touming_60"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="产品标题"
+        android:textColor="@color/title_black"
+        android:textSize="14sp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/brand_container"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/arrow_right_gray"/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/brand_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_launcher"
+            app:riv_border_color="#d7d7d7"
+            app:riv_border_width="1px"
+            app:riv_corner_radius="100dp"/>
+
+        <TextView
+            android:id="@+id/brand_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/img"
+            android:layout_toRightOf="@id/brand_img"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="品牌名称"
+            android:textColor="#444444"
+            android:textSize="15sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#e4e4e4"/>
+    </RelativeLayout>
+</LinearLayout>

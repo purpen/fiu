@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -51,8 +52,6 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         type = getIntent().getStringExtra("type");
         if (target_id == null || type == null) {
             ToastUtils.showError("暂不可举报");
-//            new SVProgressHUD(this).showErrorWithStatus("暂不可举报");
-//            Toast.makeText(ReportActivity.this, "暂不可举报", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -63,11 +62,11 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initView() {
-        titleLayout.setBackgroundResource(R.color.white);
         titleLayout.setBackImgVisible(false);
-        titleLayout.setTitle(R.string.report, getResources().getColor(R.color.black333333));
-        titleLayout.setRightTv(R.string.cancel, getResources().getColor(R.color.black333333), ReportActivity.this);
+        titleLayout.setTitle(R.string.report);
+        titleLayout.setRightTv(R.string.cancel, getResources().getColor(R.color.white), ReportActivity.this);
         dialog = new WaittingDialog(ReportActivity.this);
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.activity_report_sexual_violence, R.id.activity_report_steal_picture, R.id.activity_report_advertising_cheat})
@@ -115,7 +114,7 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
                 if (netBean.isSuccess()) {
                     reportLinear.setVisibility(View.GONE);
                     successTv.setVisibility(View.VISIBLE);
-                    titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.black333333), ReportActivity.this);
+                    titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), ReportActivity.this);
                 }
             }
 

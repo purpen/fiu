@@ -1,11 +1,11 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -15,9 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -30,7 +28,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -38,7 +35,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.BonusBean;
-import com.taihuoniao.fineix.beans.SceneDetailsBean;
+import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.ShareCJRecyclerAdapter;
 import com.taihuoniao.fineix.beans.ShareDemoBean;
 import com.taihuoniao.fineix.main.MainApplication;
@@ -46,12 +43,10 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
-import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -85,16 +80,16 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private View activity_view;
     //网络请求对话框
     private WaittingDialog dialog;
-    private DisplayImageOptions options750_1334, options500_500;
-    private int[] shareImgs = {R.mipmap.share1, R.mipmap.share4, R.mipmap.share5, R.mipmap.share7};
+    private int[] shareImgs = {R.mipmap.share1};
     private List<ShareDemoBean> shareList;
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
-    private SceneDetailsBean netScene;
+    private QJDetailBean netScene;
     //分享成功后的popwindow
     private PopupWindow popupWindow;
     private LinearLayout linearLayout;
     private TextView textView, expTv;
     private TestShareUtils testShareUtils;
+
     public TestShare() {
         super(0);
     }
@@ -104,7 +99,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         id = getIntent().getStringExtra("id");
         if (id == null) {
             ToastUtils.showError("数据异常");
-//            dialog.showErrorWithStatus("数据异常");
             finish();
         }
     }
@@ -122,22 +116,8 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         titleLayout.setBackImgVisible(false);
         titleLayout.setContinueTvVisible(false);
         titleLayout.setCancelImgVisible(true);
-//        titleLayout.setRightTv(R.string.share, getResources().getColor(R.color.white), this);
+        titleLayout.setColor(R.color.title_black);
         dialog = new WaittingDialog(TestShare.this);
-        options750_1334 = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-                .build();
-        options500_500 = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-                .build();
         shareList = new ArrayList<>();
         for (int imgId : shareImgs) {
             ShareDemoBean shareDemoBean = new ShareDemoBean(imgId, false);
@@ -233,9 +213,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         sceneDetails(id);
     }
 
-    private Bitmap loadImg = null;
-
-
     //动态设置container和imgview的宽高
     private void setImgParams() {
         RelativeLayout.LayoutParams cLp = (RelativeLayout.LayoutParams) container.getLayoutParams();
@@ -256,7 +233,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 imgWidth = loadedImage.getWidth();
-//                imgHeight = loadedImage.getHeight();
                 imgHeight = imgWidth * 16 / 9;
                 Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
             }
@@ -290,7 +266,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 popupWindow.dismiss();
                 break;
             case R.id.title_share:
-//                showPopup();
                 if (imgHeight == 0 || imgWidth == 0) {
                     if (netScene == null) {
                         requestNet();
@@ -299,9 +274,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     }
                     return;
                 }
-//                if (netScene.getData().getOid() != null) {
-//                    DataPaser.commitShareCJ(netScene.getData().getOid());
-//                }
                 PopupWindowUtil.show(TestShare.this, initPop());
                 break;
         }
@@ -329,20 +301,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
     private int currentPosition = 0;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        switch (resultCode) {
-            case 2:
-                netScene = (SceneDetailsBean) data.getSerializableExtra("scene");
-                click(currentPosition);
-                break;
-        }
-    }
-
-
     private Bitmap inflateView() {
         int layout;
         switch (currentPosition) {
@@ -362,44 +320,30 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         View view = View.inflate(this, layout, null);
         //启用绘图缓存
         view.setDrawingCacheEnabled(true);
-        ImageView img = (ImageView) view.findViewById(R.id.activity_share_img);
-        ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), img, options750_1334);
-        RoundedImageView userHeadImg = (RoundedImageView) view.findViewById(R.id.activity_share_user_headimg);
-        RelativeLayout userRightRelative = (RelativeLayout) view.findViewById(R.id.activity_share_user_right_relative);
-        TextView userName = (TextView) view.findViewById(R.id.activity_share_user_name);
-        TextView userInfo = (TextView) view.findViewById(R.id.activity_share_user_info);
-        LinearLayout locationLinear = (LinearLayout) view.findViewById(R.id.activity_share_location_linear);
-        ImageView locationImg = (ImageView) view.findViewById(R.id.activity_share_location_img);
-        TextView locationTv = (TextView) view.findViewById(R.id.activity_share_location);
-        ImageView erweima = (ImageView) view.findViewById(R.id.erweima);
-        TextView line = (TextView) view.findViewById(R.id.activity_share_scene_line);
-        final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.activity_share_frame);
-        final ImageView titleImg = (ImageView) view.findViewById(R.id.activity_share_title_img);
-        final TextView sceneTitle = (TextView) view.findViewById(R.id.activity_share_scene_title);
-        final TextView desTv = (TextView) view.findViewById(R.id.activity_share_scene_des);
-        final ImageView addImg = (ImageView) view.findViewById(R.id.activity_share_scene_add_img);
-        ImageView fiuImg = (ImageView) view.findViewById(R.id.activity_share_fiu_img);
-        TextView fiuTv = (TextView) view.findViewById(R.id.activity_share_fiu_tv);
-        if (currentPosition == 2 || currentPosition == 3) {
-            userName.setTextColor(getResources().getColor(R.color.black));
-            userInfo.setTextColor(getResources().getColor(R.color.black969696));
-            locationTv.setTextColor(getResources().getColor(R.color.black969696));
-            locationImg.setImageResource(R.mipmap.location_height_22px);
-            desTv.setTextColor(getResources().getColor(R.color.black969696));
-            line.setTextColor(getResources().getColor(R.color.black969696));
-        }
-        ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), userHeadImg, options500_500);
-        userName.setText(netScene.getData().getUser_info().getNickname());
-        userInfo.setText(netScene.getData().getUser_info().getSummary());
-        locationTv.setText(netScene.getData().getAddress());
-        sceneTitle.setText(netScene.getData().getTitle());
-        desTv.setText(netScene.getData().getDes());
-        if(testShareUtils.isShowL){
-            addImg.setVisibility(View.VISIBLE);
+        TestShareUtils.ViewHolder holder = new TestShareUtils.ViewHolder(view);
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.imgContainer.getLayoutParams();
+        lp.width = MainApplication.getContext().getScreenWidth();
+        lp.height = lp.width;
+        holder.imgContainer.setLayoutParams(lp);
+        ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), holder.backgroundImg);
+        if(TextUtils.isEmpty(testShareUtils.title1)){
+            holder.qjTitleTv.setText(netScene.getData().getTitle());
+            holder.qjTitleTv2.setVisibility(View.GONE);
         }else{
-            addImg.setVisibility(View.INVISIBLE);
+            holder.qjTitleTv2.setText(testShareUtils.title1);
+            holder.qjTitleTv.setText(testShareUtils.title2);
+            holder.qjTitleTv2.setVisibility(View.VISIBLE);
         }
-        SceneTitleSetUtils.setTitle(sceneTitle, frameLayout, titleImg, 12, /*(double) container.getWidth() / MainApplication.getContext().getScreenWidth()*/1);
+        ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), holder.userImg);
+        if (netScene.getData().getUser_info().getIs_expert() == 1) {
+            holder.vImg.setVisibility(View.VISIBLE);
+        } else {
+            holder.vImg.setVisibility(View.GONE);
+        }
+        holder.userName.setText(netScene.getData().getUser_info().getNickname());
+        holder.publishTime.setText(netScene.getData().getCreated_at());
+        holder.locationTv.setText(netScene.getData().getAddress());
+        holder.des.setText(netScene.getData().getDes());
         //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
         view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
@@ -420,10 +364,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             if (!dialog.isShowing()) {
                 dialog.show();
             }
-//            Bitmap bitmap = Bitmap.createBitmap(container.getWidth(), container.getHeight(), Bitmap.Config.ARGB_8888);
-//            Canvas canvas = new Canvas(bitmap);//创建空图片变成画布
-//            container.draw(canvas);//绘制画布上
-//            canvas.save();
             Bitmap returnedBitmap = inflateView();
             if (returnedBitmap == null) {
                 dialog.dismiss();
@@ -432,13 +372,6 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                 imgHeight = imgWidth * 16 / 9;
                 return;
             }
-//            try {
-//                ImageUtils.saveToFile(imgPath, false, returnedBitmap);
-//            } catch (IOException e) {
-//                dialog.dismiss();
-//                ToastUtils.showError("图片保存失败");
-//                return;
-//            }
             boolean isSuccess = FileUtils.bitmapToFile(returnedBitmap, imgPath);
             if (!isSuccess) {
                 dialog.dismiss();
@@ -551,45 +484,43 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         });
     }
 
-    //场景详情
+    //情境详情
     private void sceneDetails(String id) {
         ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        SceneDetailsBean sceneDetails = new SceneDetailsBean();
-                        try {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<SceneDetailsBean>() {
-                            }.getType();
-                            sceneDetails = gson.fromJson(responseInfo.result, type);
-                        } catch (JsonSyntaxException e) {
-                            Log.e("<<<场景详情", "解析异常");
-                        }
-                        dialog.dismiss();
-                        SceneDetailsBean netScene = sceneDetails;
-                        if (netScene.isSuccess()) {
-                            TestShare.this.netScene = netScene;
-                            setImgParams();
-                            recyclerView.setVisibility(View.VISIBLE);
-                            new Handler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    click(0);
-                                }
-                            });
-                        } else {
-                            ToastUtils.showError(netScene.getMessage());
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-                        dialog.dismiss();
-                        ToastUtils.showError(R.string.net_fail);
-                    }
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<情景详情", responseInfo.result);
+                QJDetailBean qjDetailBean = new QJDetailBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<QJDetailBean>() {
+                    }.getType();
+                    qjDetailBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<情景详情", "解析异常=" + e.toString());
                 }
+                if (qjDetailBean.isSuccess()) {
+                    netScene = qjDetailBean;
+                    setImgParams();
+                    recyclerView.setVisibility(View.VISIBLE);
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            click(0);
+                        }
+                    });
+                } else {
+                    ToastUtils.showError(qjDetailBean.getMessage());
+                }
+            }
 
-        );
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                Log.e("<<<", "网络错误=" + msg);
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
     }
 }

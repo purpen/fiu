@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.wheelview.ArrayWheelAdapter;
@@ -88,6 +89,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         activity_view = View.inflate(AddNewAddressActivity.this, R.layout.activity_addnewaddress, null);
         setContentView(activity_view);
         initView();
+        WindowUtils.chenjin(this);
         setData();
         putData();
         getProvinceData();
@@ -227,7 +229,11 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void setData() {
         addressBean = (AddressListBean.AddressListItem) getIntent().getSerializableExtra("addressBean");
-        titleLayout.setTitle(R.string.edit_address, getResources().getColor(android.R.color.white));
+        if (addressBean != null) {
+            titleLayout.setTitle(R.string.edit_address);
+        } else {
+            titleLayout.setTitle("新建收货地址");
+        }
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
@@ -242,8 +248,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void initView() {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_addnewaddress_title);
-        titleLayout.setBackgroundResource(android.R.color.black);
-        titleLayout.setBackImg(R.mipmap.back_white);
+        titleLayout.setContinueTvVisible(false);
         commitBtn = (Button) findViewById(R.id.activity_addnewaddress_commitbtn);
         nameEdt = (EditText) findViewById(R.id.activity_addnewaddress_name);
         phoneEdt = (EditText) findViewById(R.id.activity_addnewaddress_phone);
@@ -405,7 +410,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 
     private void putData() {
         if (addressBean != null) {
-            titleLayout.setRightTv(R.string.delete, getResources().getColor(R.color.black333333), new View.OnClickListener() {
+            titleLayout.setRightTv(R.string.delete, getResources().getColor(R.color.white), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(AddNewAddressActivity.this);
@@ -414,8 +419,8 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            if (! AddNewAddressActivity.this.dialog.isShowing()) {
-                                AddNewAddressActivity.this. dialog.show();
+                            if (!AddNewAddressActivity.this.dialog.isShowing()) {
+                                AddNewAddressActivity.this.dialog.show();
                             }
 //                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
                             ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {

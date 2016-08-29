@@ -20,7 +20,7 @@ import com.taihuoniao.fineix.beans.DataSubscribedQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -99,7 +99,7 @@ public class OrderQJActivity extends BaseActivity {
         pull_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(activity, QingjingDetailActivity.class);
+                Intent intent = new Intent(activity, QJDetailActivity.class);
                 intent.putExtra("id", mList.get(i)._id);
                 startActivity(intent);
             }

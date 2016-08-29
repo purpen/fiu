@@ -27,10 +27,10 @@ import com.taihuoniao.fineix.pay.alipay.AliPay;
 import com.taihuoniao.fineix.pay.jdpay.JdPay;
 import com.taihuoniao.fineix.pay.wxpay.WXPay;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
-import com.taihuoniao.fineix.utils.ActivityUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.wxapi.WXPayEntryActivity;
 
 import java.io.BufferedInputStream;
@@ -69,120 +69,6 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     private String orderId;
     private Handler mHandler = new Handler();
 
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PARSER_PAY_ALIPAY:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof PayNow) {
-//                            PayNow payNow = null;
-//                            payNow = (PayNow) msg.obj;
-//                            if (mWaittingDialog.isShowing()) {
-//                                mWaittingDialog.dismiss();
-//                            }
-//                            pay(mPayNow, payNow.getStr());
-//                        }
-//                    }
-//                    break;
-//                case DataConstants.PARSER_PAY_WECHAT:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof PayNowWeChat) {
-//                            PayNowWeChat payNowWeChat = null;
-//                            payNowWeChat = (PayNowWeChat) msg.obj;
-//                            if (mWaittingDialog.isShowing()) {
-//                                mWaittingDialog.dismiss();
-//                            }
-//                            PayReq req = new PayReq();
-//                            req.appId = payNowWeChat.getAppid();
-//                            req.partnerId = payNowWeChat.getPartner_id();
-//                            req.prepayId = payNowWeChat.getPrepay_id();
-//                            req.nonceStr = payNowWeChat.getNonce_str();
-//                            req.timeStamp = payNowWeChat.getTime_stamp();
-//                            req.packageValue = "Sign=WXPay";
-//                            req.sign = payNowWeChat.getNew_sign();
-//                            Log.e(">>>", ">>>req.partnerId>>>" +req.partnerId);
-//                            Log.e(">>>", ">>>req.prepayId>>>" + req.prepayId);
-//                            Log.e(">>>", ">>>req.nonceStr>>>" +req.nonceStr);
-//                            Log.e(">>>", ">>>req.timeStamp>>>" +req.timeStamp);
-//                            Log.e(">>>", ">>>req.packageValue>>>" +req.packageValue);
-//                            Log.e(">>>", ">>>req.sign>>>" +req.sign);
-//                            Log.e(">>>", ">>>req.appId>>>" +req.appId);
-//
-//                            // 将该app注册到微信
-//                            api.registerApp(APP_ID);
-//                            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-//                            api.sendReq(req);
-//                        }
-//                    }
-//                    break;
-//                case SDK_PAY_FLAG: {
-//                    PayResult payResult = new PayResult((String) msg.obj);
-//                    /**
-//                     * 同步返回的结果必须放置到服务端进行验证（验证的规则请看https://doc.open.alipay.com/doc2/
-//                     * detail.htm?spm=0.0.0.0.xdvAU6&treeId=59&articleId=103665&
-//                     * docType=1) 建议商户依赖异步通知
-//                     */
-//                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-//
-//                    String resultStatus = payResult.getResultStatus();
-//                    // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
-//                    if (TextUtils.equals(resultStatus, "9000")) {
-//                        delayThreeSeconds();
-//                    } else {
-//                        // 判断resultStatus 为非"9000"则代表可能支付失败
-//                        // "8000"代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
-//                        if (TextUtils.equals(resultStatus, "8000")) {
-//                            delayThreeSeconds();
-//                        } else {
-//                            delayThreeSeconds();
-//                        }
-//                    }
-//                    break;
-//                }
-//                default:
-//                    break;
-//            }
-//        }
-//    };
-
-    //跳到订单支付详情界面
-//    private void toPayDetailsActivity() {
-//        Intent intent = new Intent(PayWayActivity.this, PayDetailsActivity.class);
-//        intent.putExtra("rid", mRid);
-//        intent.putExtra("payway", mPayway);
-//        startActivity(intent);
-//    }
-
-    //延时三秒再跳转去订单支付详情界面是为给服务器留时间以确保其及时更新数据
-//    private void delayThreeSeconds() {
-//        mBack = false;
-//        mDialog.show();
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mDialog.dismiss();
-//                toPayDetailsActivity();
-//            }
-//        }, 3000);
-//    }
-
-//    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            int respondCode = Integer.valueOf(intent.getExtras().getString("respondcode"));
-//            if (respondCode == 0) {
-//                //支付成功
-//                delayThreeSeconds();
-//            } else if (respondCode == -1) {
-//                //支付异常
-//                delayThreeSeconds();
-//            } else {
-//                delayThreeSeconds();
-//            }
-//        }
-//    };
 
     @Override
     protected void onDestroy() {
@@ -259,12 +145,10 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
         activity_view = View.inflate(this, R.layout.activity_pay_way, null);
         setContentView(activity_view);
         mDialog = new CustomDialogForPay(this);
-        ActivityUtil.getInstance().addActivity(this);
-//        mWaittingDialog = new WaittingDialog(this);
-//        regToWx();
         getIntentData();
         initData();
         initView();
+        WindowUtils.chenjin(this);
         initPop();
     }
 
@@ -291,19 +175,9 @@ public class PayWayActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        MyGlobalTitleLayout title = (MyGlobalTitleLayout) findViewById(R.id.title_payway);
-        title.setTitle("支付方式");
-        title.setBackgroundResource(R.color.white);
-        title.setTitleColor(getResources().getColor(R.color.black333333));
-        title.setBackImg(R.mipmap.back_black);
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
-        title.setBackButtonListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        GlobalTitleLayout title = (GlobalTitleLayout) findViewById(R.id.title_payway);
+        title.setTitle("订单支付");
+        title.setContinueTvVisible(false);
         mLinearAlipay = (LinearLayout) findViewById(R.id.linear_alipay);
         mLinearAlipay.setOnClickListener(this);
         mLinearWechat = (LinearLayout) findViewById(R.id.linear_wechat);

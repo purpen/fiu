@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,8 +20,11 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.SearchSubjectAdapter;
 import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
@@ -126,7 +130,26 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ToastUtils.showError("主题详情跳转" + position);
+        Intent intent = new Intent();
+        switch (searchList.get(position).getType()) {
+            case 1:
+                intent.setClass(activity, ArticalDetailActivity.class);
+                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                break;
+            case 2:
+                intent.setClass(activity, ActivityDetailActivity.class);
+                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                break;
+            case 3:
+                intent.setClass(activity, SalePromotionDetailActivity.class);
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                break;
+            default:
+                intent.setClass(activity, NewProductDetailActivity.class);
+                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                break;
+        }
+        activity.startActivity(intent);
     }
 
     private void search() {
@@ -134,7 +157,7 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索主题", responseInfo.result);
-                WriteJsonToSD.writeToSD("json", responseInfo.result);
+//                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();

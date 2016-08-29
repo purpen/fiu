@@ -6,6 +6,7 @@
                 android:paddingTop="10dp">
 
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:paddingLeft="16dp"
         android:id="@+id/pull_refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

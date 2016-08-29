@@ -21,8 +21,7 @@ import com.taihuoniao.fineix.beans.SystemNoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -95,12 +94,12 @@ public class SystemNoticeActivity extends BaseActivity {
                             startActivity(intent);
                             break;
                         case 1: //情景
-                            intent=new Intent(activity, QingjingDetailActivity.class);
+                            intent=new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id",item.url);
                             startActivity(intent);
                             break;
                         case 2: //场景
-                            intent=new Intent(activity, SceneDetailActivity.class);
+                            intent=new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id",item.url);
                             startActivity(intent);
                             break;

@@ -24,8 +24,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -70,6 +69,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
     @Override
     public int getCount() {
         // Infinite loop
+        if (size == 0) {
+            return 0;
+        }
         return isInfiniteLoop ? Integer.MAX_VALUE : size;
     }
 
@@ -145,7 +147,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 8:     //场景详情
-                            intent = new Intent(activity, SceneDetailActivity.class);
+                            intent = new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                             break;
@@ -155,7 +157,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 10:    //情景
-                            intent = new Intent(activity, QingjingDetailActivity.class);
+                            intent = new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                         case 11:    //专题
@@ -234,7 +236,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
      * 判断是否需要输入邀请码
      */
     private void isNeedCode() {
-        if(!dialog.isShowing()){
+        if (!dialog.isShowing()) {
             dialog.show();
         }
         ClientDiscoverAPI.isInvited(new RequestCallBack<String>() {

@@ -41,14 +41,14 @@ import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QingjingDetailActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.SceneDetailActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.zxing.camera.CameraManager;
 import com.taihuoniao.fineix.zxing.utils.BeepManager;
@@ -126,6 +126,7 @@ public final class CaptureActivity extends BaseActivity implements
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
+        WindowUtils.chenjin(this);
     }
 
 //    @SuppressLint("NewApi")
@@ -267,11 +268,11 @@ public final class CaptureActivity extends BaseActivity implements
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, Long.valueOf(infoId));
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情景详情
-                    intent = new Intent(CaptureActivity.this, QingjingDetailActivity.class);
+                    intent = new Intent(CaptureActivity.this, QJDetailActivity.class);
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CJ, infoType)) {//跳转场景详情
-                    intent = new Intent(CaptureActivity.this, SceneDetailActivity.class);
+                    intent = new Intent(CaptureActivity.this, QJDetailActivity.class);
                     intent.putExtra("id",infoId);
                     startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//跳转产品详情
