@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -121,6 +122,22 @@ public class SalePromotionDetailActivity extends BaseActivity {
                 customShareView.setOnShareSuccessListener(new CustomShareView.OnShareSuccessListener() {
                     @Override
                     public void onSuccess() {
+                        ClientDiscoverAPI.updateShareCount(id, new RequestCallBack<String>() {
+                            @Override
+                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                                if (TextUtils.isEmpty(responseInfo.result)) return;
+                                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                                if (response.isSuccess()) {
+                                    return;
+                                }
+                                LogUtil.e(TAG, "更新分享数量失败");
+                            }
+
+                            @Override
+                            public void onFailure(HttpException e, String s) {
+                                LogUtil.e(TAG, "更新分享数量失败：" + s);
+                            }
+                        });
                         ibtnShare.setText(String.valueOf(data.share_count + 1));
                     }
                 });

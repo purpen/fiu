@@ -1682,4 +1682,17 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
+    /**
+     * 更新分享数量
+     *
+     * @param id
+     * @param callBack
+     */
+    public static void updateShareCount(String id, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/scene_subject/record_share_count";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
 }
