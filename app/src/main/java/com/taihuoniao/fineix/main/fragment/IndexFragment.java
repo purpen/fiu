@@ -277,7 +277,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取精选主题
     private void subjectList() {
-        ClientDiscoverAPI.subjectList("1", "4", null, "1", null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<精选主题", responseInfo.result);
@@ -385,23 +385,23 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     public void click(int postion) {
-      Intent intent = new Intent();
+        Intent intent = new Intent();
         switch (subjectList.get(postion).getType()) {
             case 1:
                 intent.setClass(getActivity(), ArticalDetailActivity.class);
-                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
             case 2:
                 intent.setClass(getActivity(), ActivityDetailActivity.class);
-                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
             case 3:
                 intent.setClass(getActivity(), SalePromotionDetailActivity.class);
-                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
             default:
                 intent.setClass(getActivity(), NewProductDetailActivity.class);
-                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),subjectList.get(postion).get_id());
+                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
         }
         startActivity(intent);

@@ -166,7 +166,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<分类列表",responseInfo.result);
+                Log.e("<<<分类列表", responseInfo.result);
                 CategoryListBean categoryListBean = new CategoryListBean();
                 try {
                     Gson gson = new Gson();
@@ -196,7 +196,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表嵌入的主题列表
     private void subjectList() {
-        ClientDiscoverAPI.subjectList("1", "2", "1", null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.subjectList("1", "2", null, null, "1,2", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<精选主题", responseInfo.result);
@@ -338,8 +338,8 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public void click(int postion) {
         Intent intent = new Intent(getActivity(), QJCategoryActivity.class);
-        intent.putExtra("id",categoryList.get(postion).get_id());
-        intent.putExtra("name",categoryList.get(postion).getTitle());
+        intent.putExtra("id", categoryList.get(postion).get_id());
+        intent.putExtra("name", categoryList.get(postion).getTitle());
         startActivity(intent);
 //        ToastUtils.showError("情景分类=" + categoryList.get(postion).get_id());
     }
