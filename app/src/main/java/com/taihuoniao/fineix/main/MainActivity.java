@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
-        WindowUtils.chenjin(this);
+        WindowUtils.showStatusBar(this);
     }
 
     private void recoverAllState(Bundle savedInstanceState) {

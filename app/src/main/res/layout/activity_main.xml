@@ -3,7 +3,6 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
                 tools:context="com.taihuoniao.fineix.main.MainActivity">
 
     <!--<com.taihuoniao.fineix.view.CustomHeadView-->
@@ -16,6 +15,7 @@
         android:id="@+id/activity_main_fragment_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         />
 
     <LinearLayout

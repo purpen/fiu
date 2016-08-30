@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.main.fragment;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -57,7 +58,8 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/23.
  */
 public class WellGoodsFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
-
+    @Bind(R.id.relative)
+    RelativeLayout titleRelative;
     @Bind(R.id.title_left)
     ImageView titleLeft;
     @Bind(R.id.title_right)
@@ -102,9 +104,20 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         dialog = new WaittingDialog(getActivity());
         return view;
     }
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         titleLeft.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
         titleRight.setOnClickListener(this);

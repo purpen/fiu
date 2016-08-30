@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -65,6 +66,8 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     RecyclerView recyclerView;
     @Bind(R.id.gone_relative)
     RelativeLayout goneRelative;
+    @Bind(R.id.relative)
+    RelativeLayout titleRelative;
     @Bind(R.id.title_left)
     ImageView titleLeft;
     @Bind(R.id.title_right)
@@ -102,8 +105,20 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         return view;
     }
 
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         titleLeft.setOnClickListener(this);
         titleRight.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
