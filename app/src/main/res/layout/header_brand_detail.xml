@@ -66,7 +66,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="产品列表"
+                android:text="@string/product_list"
                 android:textColor="@color/yellow_bd8913"
                 android:textSize="13sp"/>
 
@@ -76,7 +76,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="情境"
+                android:text="@string/qingjing"
                 android:textColor="@color/color_666"
                 android:textSize="13sp"/>
         </LinearLayout>

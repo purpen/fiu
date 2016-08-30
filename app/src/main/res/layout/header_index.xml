@@ -42,7 +42,7 @@
             android:layout_toLeftOf="@id/more_theme_img"
             android:layout_toRightOf="@id/img"
             android:gravity="center_vertical"
-            android:text="精选主题"
+            android:text="@string/choiceness_subject"
             android:textColor="@color/black"
             android:textSize="14sp"/>
     </RelativeLayout>
@@ -72,7 +72,7 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/img2"
             android:gravity="center_vertical"
-            android:text="精选情景"
+            android:text="@string/choiceness_qingjing"
             android:textColor="@color/black"
             android:textSize="14sp"/>
     </LinearLayout>

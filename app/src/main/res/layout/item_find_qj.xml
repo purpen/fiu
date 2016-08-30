@@ -69,7 +69,6 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
-                    android:text="狗蛋"
                     android:textColor="@color/white"
                     android:textSize="10sp"/>
             </RelativeLayout>
@@ -84,7 +83,6 @@
                 android:maxWidth="135dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
-                android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -99,7 +97,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:singleLine="true"
-                android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone"/>
@@ -157,7 +154,6 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
-                    android:text="狗蛋"
                     android:textColor="@color/white"
                     android:textSize="10sp"/>
             </RelativeLayout>
@@ -172,7 +168,6 @@
                 android:maxWidth="135dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
-                android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -187,8 +182,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:singleLine="true"
-                android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
-                android:textColor="@color/white"
+                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone"/>
         </RelativeLayout>
@@ -227,8 +221,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:paddingTop="7dp"
-                    android:text="一次骑行的约会"
-                    android:textColor="@color/white"
+                     android:textColor="@color/white"
                     android:textSize="16sp"/>
 
                 <View
@@ -245,8 +238,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="a date of youth"
-                android:textColor="@color/white"
+                 android:textColor="@color/white"
                 android:textSize="16sp"/>
 
         </LinearLayout>

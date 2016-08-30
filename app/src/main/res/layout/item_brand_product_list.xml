@@ -35,7 +35,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="自行车"
                 android:textColor="@color/white"
                 android:textSize="10sp"/>
 
@@ -46,7 +45,6 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="￥1980"
                 android:textColor="@color/yellow_bd8913"
                 android:textSize="10sp"/>
         </LinearLayout>
@@ -81,7 +79,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="自行车"
                 android:textColor="@color/white"
                 android:textSize="10sp"/>
 
@@ -92,7 +89,6 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="￥1980"
                 android:textColor="@color/yellow_bd8913"
                 android:textSize="10sp"/>
         </LinearLayout>

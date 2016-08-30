@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ShopCarActivity extends Activity implements View.OnClickListener, PullRefreshLayout.OnPullListener, PullRefreshLayout.OnPullStateListener {
@@ -522,7 +523,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         return dateFormat.format(date);
     }
 
-    private  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
 
 

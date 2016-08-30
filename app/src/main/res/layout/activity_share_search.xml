@@ -46,7 +46,7 @@
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/delete_title"
                 android:background="@null"
-                android:hint="添加20字以内的标题"
+                android:hint="@string/add_title_less20"
                 android:paddingLeft="17dp"
                 android:paddingRight="15dp"
                 android:singleLine="true"
@@ -76,7 +76,7 @@
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/delete_des"
                 android:background="@null"
-                android:hint="说说现在的想法"
+                android:hint="@string/say_your_thinking"
                 android:paddingLeft="17dp"
                 android:paddingRight="15dp"
                 android:textColor="@color/white"
@@ -180,7 +180,6 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="#Fiu app上线 "
             android:textColor="#666666"
             android:textSize="14sp"/>
 

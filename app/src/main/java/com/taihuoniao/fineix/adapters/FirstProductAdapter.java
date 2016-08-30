@@ -38,11 +38,11 @@ public class FirstProductAdapter extends RecyclerView.Adapter<FirstProductAdapte
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);

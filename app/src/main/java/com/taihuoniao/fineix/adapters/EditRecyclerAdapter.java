@@ -37,17 +37,17 @@ public class EditRecyclerAdapter extends RecyclerView.Adapter<EditRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(final VH holder,  int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (position != lastClick) {
-                    filterList.selectFilter(position);
-                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(position)), position);
+                if (holder.getAdapterPosition() != lastClick) {
+                    filterList.selectFilter(holder.getAdapterPosition());
+                    listener.onGpuImageFilterChosenListener(GPUImageFilterTools.createFilterForType(context, filterList.filters.get(holder.getAdapterPosition())), holder.getAdapterPosition());
                     notifyDataSetChanged();
-                    lastClick = position;
+                    lastClick = holder.getAdapterPosition();
                 } else {
-                    itemClick.click(position);
+                    itemClick.click(holder.getAdapterPosition());
                 }
             }
         });

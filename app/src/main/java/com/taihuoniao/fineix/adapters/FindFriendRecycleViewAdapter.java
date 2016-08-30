@@ -70,14 +70,14 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnItemClickLitener.onItemClick(holder.itemView, position);
+                    mOnItemClickLitener.onItemClick(holder.itemView, holder.getAdapterPosition());
                 }
             });
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    mOnItemClickLitener.onItemLongClick(holder.itemView, position);
+                    mOnItemClickLitener.onItemLongClick(holder.itemView, holder.getAdapterPosition());
                     return false;
                 }
             });

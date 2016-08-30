@@ -36,11 +36,11 @@ public class GoodListCategoryAdapter extends RecyclerView.Adapter<GoodListCatego
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
 //        ImageLoader.getInstance().displayImage(list.get(position).get);

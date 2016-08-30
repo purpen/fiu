@@ -40,7 +40,6 @@
                     android:paddingRight="16dp"
                     android:paddingTop="7dp"
                     android:singleLine="true"
-                    android:text="一次骑行的约会"
                     android:textColor="@color/white"
                     android:textSize="16sp"/>
 
@@ -60,7 +59,6 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="a date of youth"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
 

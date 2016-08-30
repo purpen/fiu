@@ -25,7 +25,6 @@
         android:ellipsize="end"
         android:lineSpacingExtra="3dp"
         android:maxLines="2"
-        android:text="Index Fragment
-        sadfasdfas;dflkasdjjff;laskjdf;a;slkdjf;laskdjf;laskdjf;laskdjf;laskdjff"
+        android:text=""
         android:textSize="12sp"/>
 </RelativeLayout>

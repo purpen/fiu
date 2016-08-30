@@ -69,7 +69,7 @@
                 android:layout_toLeftOf="@id/activity_add_product_delete"
                 android:layout_toRightOf="@+id/brand_name"
                 android:background="@null"
-                android:hint="搜索品牌"
+                android:hint="@string/search_brand"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
                 android:textSize="12sp"
@@ -107,7 +107,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/img"
             android:gravity="center"
-            android:text="点击添加品牌:"
+            android:text="@string/click_add_brand"
             android:textColor="#666666"
             android:textSize="13sp"/>
 
@@ -151,7 +151,7 @@
             android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/img1"
             android:gravity="center"
-            android:text="点击添加产品:"
+            android:text="@string/click_add_product"
             android:textColor="#666666"
             android:textSize="13sp"/>
 

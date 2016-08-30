@@ -561,7 +561,7 @@ public class QJDetailActivity extends BaseActivity {
         shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent4 = new Intent(activity, TestShare.class);
+                Intent intent4 = new Intent(activity, ShareActivity.class);
                 intent4.putExtra("id", id);
                 activity.startActivity(intent4);
             }

@@ -17,7 +17,7 @@
     <string name="known_more">关于你我们想了解更多</string>
     <string name="theme_subtitle">每个人心中都有一个不曾到过的美景，每个人心中都有一个不曾拥有的美物</string>
     <string name="focus_subtitle">栖息了全球数千万希望用创意和梦想去改变平凡世界的品质生活家</string>
-    <string name="about_us" translatable="false">关于我们</string>
+    <string name="about_us">关于我们</string>
     <string name="feed_back">意见与反馈</string>
     <string name="partners">战略伙伴App</string>
     <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
@@ -30,7 +30,7 @@
     <!-- EditPictureActivity -->
     <string name="tools">工具</string>
     <string name="biaoji_chanpin">标记产品</string>
-    <string name="filter">选择滤镜</string>
+    <string name="filter">滤镜</string>
     <string name="more_three_products">您最多可以添加三个商品</string>
     <string name="more_three_chaining">您最多可以添加三个链接</string>
     <!-- SelectStoreActivity -->
@@ -345,7 +345,7 @@
     <string name="search_user">搜索用户</string>
     <string name="search_text">搜索文字</string>
     <string name="select_all">全选</string>
-    <string name="account" translatable="false">结算</string>
+    <string name="account">结算</string>
     <string name="cart_is_empty">购物车又空啦，回“好货”入点新货吧</string>
     <string name="go_for_stroll">去逛逛</string>
     <string name="inventory">库存:</string>
@@ -418,5 +418,27 @@
     <string name="search_envir">搜索语境</string>
     <string name="recommend_labels">推荐标签</string>
     <string name="user_protocol">注册即表明同意 [ Fiu浮游&#8482;用户条款 ]</string>
+    <string name="add_title">添加标题</string>
+    <string name="say_your_thinking">说说现在的想法</string>
+    <string name="go_to_buy">去购买</string>
+    <string name="sign_product">标记产品</string>
+    <string name="click_pic_sign_message">点击图片标记相关信息</string>
+    <string name="search_brand">搜索品牌</string>
+    <string name="click_add_brand">点击添加品牌:</string>
+    <string name="click_add_product">点击添加产品:</string>
+    <string name="add_title_less20">添加20字以内的标题</string>
+    <string name="has_subs_many_qjcategory">已订阅0个情境主题</string>
+    <string name="search_product_or_brand">搜索产品或品牌</string>
+    <string name="new_recommend">最新推荐</string>
+    <string name="product_list">产品列表</string>
+    <string name="qingjing">情境</string>
+    <string name="new_qingjing">最新情境</string>
+    <string name="detail_introduct">详情介绍</string>
+    <string name="product_bright">产品亮点</string>
+    <string name="choiceness_subject">精选主题</string>
+    <string name="choiceness_qingjing">精选情景</string>
+    <string name="select_product_to_pic">选择产品添加到当前图片中</string>
+    <string name="or_input_message_self">或自行输入产品信息</string>
+    <string name="product_name">产品名称</string>
 
 </resources>

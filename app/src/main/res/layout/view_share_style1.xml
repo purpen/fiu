@@ -103,9 +103,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="铁锤妹妹"
                 android:textColor="@color/black"
-                android:textSize="7dp"/>
+                android:textSize="7sp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -126,7 +125,6 @@
                     android:layout_marginLeft="4dp"
                     android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="30分钟前"
                     android:textColor="#8e8e8e"
                     android:textSize="7sp"/>
 
@@ -143,7 +141,6 @@
                     android:layout_marginLeft="4dp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="北京市"
                     android:textColor="#8e8e8e"
                     android:textSize="7sp"/>
 
@@ -174,9 +171,8 @@
                 android:lineSpacingExtra="4dp"
                 android:maxLines="3"
                 android:singleLine="false"
-                android:text="哈哈哈哈"
                 android:textColor="#666666"
-                android:textSize="7dp"/>
+                android:textSize="7sp"/>
 
             <ImageView
                 android:layout_width="60dp"

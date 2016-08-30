@@ -63,7 +63,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
-        dialog = new WaittingDialog(activity);
+        if (activity instanceof UserGuideActivity) {
+            dialog = new WaittingDialog(activity);
+        }
     }
 
     @Override

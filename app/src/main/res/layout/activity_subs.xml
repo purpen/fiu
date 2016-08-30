@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="已订阅0个情境主题"
+            android:text="@string/has_subs_many_qjcategory"
             android:textColor="#666666"
             android:textSize="14sp"/>
 
