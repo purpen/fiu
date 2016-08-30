@@ -38,8 +38,8 @@ import butterknife.ButterKnife;
  */
 public class SalePromotionFragment extends MyBaseFragment {
     public static final String PAGE_TYPE = "3"; //0.全部；1.文章；2.活动；3.促销；4.新品；5.--
-    public static final String FINE = "1"; //0.全部；-1.否；1.是
-    public static final String SORT = "2";
+    public static final String FINE = "0"; //0.全部；-1.否；1.是
+    public static final String SORT = "0";
     public int curPage = 1;
     @Bind(R.id.pull_lv)
     PullToRefreshListView pullLv;
