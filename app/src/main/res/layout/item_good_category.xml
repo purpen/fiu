@@ -34,8 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="智能家居"
-            android:textColor="@color/white"
-            android:textSize="8dp"/>
+             android:textColor="@color/white"
+            android:textSize="8sp"/>
     </LinearLayout>
 </RelativeLayout>

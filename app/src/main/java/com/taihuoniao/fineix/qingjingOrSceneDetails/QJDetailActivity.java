@@ -440,9 +440,11 @@ public class QJDetailActivity extends BaseActivity {
                     Intent intent = new Intent();
                     switch (productBean.getType()) {
                         case 2:
+                            Log.e("<<<","可购买");
                             intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
+                            Log.e("<<<","不可购买");
                             intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
@@ -559,7 +561,7 @@ public class QJDetailActivity extends BaseActivity {
         shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent4 = new Intent(activity, TestShare.class);
+                Intent intent4 = new Intent(activity, ShareActivity.class);
                 intent4.putExtra("id", id);
                 activity.startActivity(intent4);
             }

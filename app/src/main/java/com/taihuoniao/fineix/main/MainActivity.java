@@ -278,7 +278,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                    return;
 //                }
                 if (LoginInfo.isUserLogin()) {
-                    MainApplication.tag = 1;
+//                    MainApplication.tag = 1;
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 } else {
                     MainApplication.which_activity = 0;

@@ -328,11 +328,8 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
         android.hardware.Camera.getCameraInfo(cameraId, info);
         int rotation = activity.getWindowManager().getDefaultDisplay()
                 .getRotation();
-        int degrees = 0;
+        int degrees;
         switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
             case Surface.ROTATION_90:
                 degrees = 90;
                 break;
@@ -341,6 +338,9 @@ public class CameraFragment extends BaseFragment implements View.OnClickListener
                 break;
             case Surface.ROTATION_270:
                 degrees = 270;
+                break;
+            default:
+                degrees = 0;
                 break;
         }
         int result;

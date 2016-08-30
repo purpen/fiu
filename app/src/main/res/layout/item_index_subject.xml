@@ -23,7 +23,6 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="活动名称哈哈哈哈哈哈哈哈哈"
             android:singleLine="true"
             android:maxWidth="130dp"
             android:ellipsize="end"
@@ -49,7 +48,6 @@
                 android:layout_below="@id/title"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/i"
-                android:text="100人参加"
                 android:textColor="@color/white"
                 android:textSize="10sp"/>
         </LinearLayout>

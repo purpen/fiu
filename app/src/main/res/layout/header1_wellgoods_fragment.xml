@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
             android:gravity="center_vertical"
-            android:text="最新推荐"
+            android:text="@string/new_recommend"
             android:textColor="#212121"
             android:textSize="13sp"/>
     </LinearLayout>

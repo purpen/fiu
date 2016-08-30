@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,32 +46,24 @@ import butterknife.ButterKnife;
  */
 public class BrandQJAdapter extends BaseAdapter {
     private Activity activity;
-    private List<ProductAndSceneListBean.ProductAndSceneItem> list;
+    private List<ProductAndSceneListBean.ProductAndSceneItem> sceneList;
     private WaittingDialog dialog;
-    private int page;
 
-    public BrandQJAdapter(Activity activity, List<ProductAndSceneListBean.ProductAndSceneItem> list) {
+    public BrandQJAdapter(Activity activity, List<ProductAndSceneListBean.ProductAndSceneItem> sceneList) {
         this.activity = activity;
-        this.list = list;
+        this.sceneList = sceneList;
         dialog = new WaittingDialog(activity);
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return (sceneList.size() + 1) / 2;
     }
+
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return sceneList.get(position);
     }
 
     @Override
@@ -79,86 +72,93 @@ public class BrandQJAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.item_search_qj, null);
+            convertView = View.inflate(activity, R.layout.item_find_qj, null);
             holder = new ViewHolder(convertView);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.qjBackgroundImg.getLayoutParams();
-            layoutParams.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(activity, 45)) / 2;
-            layoutParams.height = layoutParams.width;
-            holder.qjBackgroundImg.setLayoutParams(layoutParams);
+            holder.subjectContainer.setVisibility(View.GONE);
+            holder.qjContainer.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.qjBackgroundImg1.getLayoutParams();
+            lp.width = (MainApplication.getContext().getScreenWidth() - DensityUtils.dp2px(activity, 45)) / 2;
+            lp.height = lp.width;
+            holder.qjBackgroundImg1.setLayoutParams(lp);
+            RelativeLayout.LayoutParams lp2 = (RelativeLayout.LayoutParams) holder.qjBackgroundImg2.getLayoutParams();
+            lp2.width = lp.width;
+            lp2.height = lp.width;
+            holder.qjBackgroundImg2.setLayoutParams(lp2);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getSight().getCover_url(), holder.qjBackgroundImg);
-        ImageLoader.getInstance().displayImage(list.get(position).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg);
-        if (list.get(position).getSight().getIs_love() == 1) {
-            holder.qjLove.setImageResource(R.mipmap.find_has_love);
-        } else {
-            holder.qjLove.setImageResource(R.mipmap.find_love);
-        }
-        holder.qjName.setText(list.get(position).getSight().getUser_info().getNickname());
+        final int qjPosition = 2 * position;
+        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
         //设置情景标题
-        holder.qjTitleTv1.setText(list.get(position).getSight().getTitle());
-        holder.qjTitleTv1.post(new Runnable() {
+        holder.qjTitle1Tv1.setText(sceneList.get(qjPosition).getSight().getTitle());
+        holder.qjTitle1Tv1.post(new Runnable() {
             @Override
             public void run() {
-                if (holder.qjTitleTv1.getLineCount() >= 2) {
-                    Layout layout = holder.qjTitleTv1.getLayout();
-                    StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv1.getText().toString());
+                if (holder.qjTitle1Tv1.getLineCount() >= 2) {
+                    Layout layout = holder.qjTitle1Tv1.getLayout();
+                    StringBuilder SrcStr = new StringBuilder(holder.qjTitle1Tv1.getText().toString());
                     String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
                     String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                    holder.qjTitleTv2.setText(str0);
-                    holder.qjTitleTv1.setText(str1);
-                    holder.qjTitleTv2.setVisibility(View.VISIBLE);
+                    holder.qjTitle1Tv2.setText(str0);
+                    holder.qjTitle1Tv1.setText(str1);
+                    holder.qjTitle1Tv2.setVisibility(View.VISIBLE);
                 } else {
-                    holder.qjTitleTv2.setVisibility(View.GONE);
+                    holder.qjTitle1Tv2.setVisibility(View.GONE);
                 }
             }
         });
-        holder.qjBackgroundImg.setOnClickListener(new View.OnClickListener() {
+        ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
+        holder.qjName1.setText(sceneList.get(qjPosition).getSight().getUser_info().getNickname());
+        if (sceneList.get(qjPosition).getSight().getIs_love() == 1) {
+            holder.qjLove1.setImageResource(R.mipmap.find_has_love);
+        } else {
+            holder.qjLove1.setImageResource(R.mipmap.find_love);
+        }
+        holder.qjBackgroundImg1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, QJDetailActivity.class);
-                intent.putExtra("id", list.get(position).getSight().get_id());
+                intent.putExtra("id", sceneList.get(qjPosition).getSight().get_id());
                 activity.startActivity(intent);
             }
         });
-        holder.qjHeadImg.setOnClickListener(new View.OnClickListener() {
+        holder.qjHeadImg1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(parent.getContext(), UserCenterActivity.class);
-                long l = Long.valueOf(list.get(position).getSight().getUser_info().getUser_id());
+                Intent intent = new Intent(activity, UserCenterActivity.class);
+                long l = Long.valueOf(sceneList.get(qjPosition).getSight().getUser_info().getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
-                parent.getContext().startActivity(intent);
+                activity.startActivity(intent);
             }
         });
-        holder.qjName.setOnClickListener(new View.OnClickListener() {
+        holder.qjName1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(parent.getContext(), UserCenterActivity.class);
-                long l = Long.valueOf(list.get(position).getSight().getUser_info().getUser_id());
+                Intent intent = new Intent(activity, UserCenterActivity.class);
+                long l = Long.valueOf(sceneList.get(qjPosition).getSight().getUser_info().getUser_id());
                 intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
-                parent.getContext().startActivity(intent);
+                activity.startActivity(intent);
             }
         });
-        holder.qjLove.setOnClickListener(new View.OnClickListener() {
+        holder.qjLove1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
-                    if (list.get(position).getSight().getIs_love() == 1) {
+                    if (sceneList.get(qjPosition).getSight().getIs_love() == 1) {
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
-                        cancelLoveQJ(position, list.get(position).getSight().get_id(), holder);
+                        cancelLoveQJ(qjPosition, sceneList.get(qjPosition).getSight().get_id(), holder, false);
                     } else {
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
-                        loveQJ(position, list.get(position).getSight().get_id(), holder);
+                        loveQJ(qjPosition, sceneList.get(qjPosition).getSight().get_id(), holder, false);
                     }
                     return;
                 }
@@ -166,11 +166,145 @@ public class BrandQJAdapter extends BaseAdapter {
                 activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
             }
         });
+        if (qjPosition + 1 >= sceneList.size()) {
+            holder.qjItem2.setVisibility(View.GONE);
+        } else {
+            holder.qjItem2.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
+            //设置情景标题
+            holder.qjTitle2Tv1.setText(sceneList.get(qjPosition + 1).getSight().getTitle());
+            holder.qjTitle2Tv1.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (holder.qjTitle2Tv1.getLineCount() >= 2) {
+                        Layout layout = holder.qjTitle2Tv1.getLayout();
+                        StringBuilder SrcStr = new StringBuilder(holder.qjTitle2Tv1.getText().toString());
+                        String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
+                        String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
+                        holder.qjTitle2Tv2.setText(str0);
+                        holder.qjTitle2Tv1.setText(str1);
+                        holder.qjTitle2Tv2.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.qjTitle2Tv2.setVisibility(View.GONE);
+                    }
+                }
+            });
+            ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
+            holder.qjName2.setText(sceneList.get(qjPosition + 1).getSight().getUser_info().getNickname());
+            if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {
+                holder.qjLove2.setImageResource(R.mipmap.find_has_love);
+            } else {
+                holder.qjLove2.setImageResource(R.mipmap.find_love);
+            }
+            holder.qjBackgroundImg2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, QJDetailActivity.class);
+                    intent.putExtra("id", sceneList.get(qjPosition + 1).getSight().get_id());
+                    activity.startActivity(intent);
+                }
+            });
+            holder.qjHeadImg2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, UserCenterActivity.class);
+                    long l = Long.valueOf(sceneList.get(qjPosition + 1).getSight().getUser_info().getUser_id());
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
+                    activity.startActivity(intent);
+                }
+            });
+            holder.qjName2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(activity, UserCenterActivity.class);
+                    long l = Long.valueOf(sceneList.get(qjPosition + 1).getSight().getUser_info().getUser_id());
+                    intent.putExtra(FocusActivity.USER_ID_EXTRA, l);
+                    activity.startActivity(intent);
+                }
+            });
+            holder.qjLove2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (LoginInfo.isUserLogin()) {
+                        //已经登录
+                        if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
+                            cancelLoveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).getSight().get_id(), holder, true);
+                        } else {
+                            if (!dialog.isShowing()) {
+                                dialog.show();
+                            }
+                            loveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).getSight().get_id(), holder, true);
+                        }
+                        return;
+                    }
+                    MainApplication.which_activity = DataConstants.BrandDetailsActivity;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                }
+            });
+        }
+
         return convertView;
     }
 
+    static class ViewHolder {
+        //情景页
+        @Bind(R.id.qj_container)
+        LinearLayout qjContainer;
+        @Bind(R.id.qj_background_img1)
+        ImageView qjBackgroundImg1;
+        @Bind(R.id.qj_head_img1)
+        RoundedImageView qjHeadImg1;
+        @Bind(R.id.qj_love1)
+        ImageView qjLove1;
+        @Bind(R.id.qj_name1)
+        TextView qjName1;
+        @Bind(R.id.qj_bottom_container1)
+        RelativeLayout qjBottomContainer1;
+        @Bind(R.id.qj_title1_tv1)
+        TextView qjTitle1Tv1;
+        @Bind(R.id.qj_title1_tv2)
+        TextView qjTitle1Tv2;
+        @Bind(R.id.qj_item1)
+        RelativeLayout qjItem1;
+        @Bind(R.id.qj_background_img2)
+        ImageView qjBackgroundImg2;
+        @Bind(R.id.qj_head_img2)
+        RoundedImageView qjHeadImg2;
+        @Bind(R.id.qj_love2)
+        ImageView qjLove2;
+        @Bind(R.id.qj_name2)
+        TextView qjName2;
+        @Bind(R.id.qj_bottom_container2)
+        RelativeLayout qjBottomContainer2;
+        @Bind(R.id.qj_title2_tv1)
+        TextView qjTitle2Tv1;
+        @Bind(R.id.qj_title2_tv2)
+        TextView qjTitle2Tv2;
+        @Bind(R.id.qj_item2)
+        RelativeLayout qjItem2;
+        //主题页
+        @Bind(R.id.subject_container)
+        RelativeLayout subjectContainer;
+        @Bind(R.id.subject_img)
+        ImageView subjectImg;
+        @Bind(R.id.subject_name)
+        TextView subjectName;
+        @Bind(R.id.subject_name2)
+        TextView subjectName2;
+        @Bind(R.id.subject_label)
+        ImageView subjectLabel;
+
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
     //取消点赞
-    private void cancelLoveQJ(final int position, String id, final ViewHolder holder) {
+    private void cancelLoveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -185,8 +319,12 @@ public class BrandQJAdapter extends BaseAdapter {
                     Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
-                    holder.qjLove.setImageResource(R.mipmap.find_love);
-                    list.get(position).getSight().setIs_love(0);
+                    if (isRight) {
+                        holder.qjLove2.setImageResource(R.mipmap.find_love);
+                    } else {
+                        holder.qjLove1.setImageResource(R.mipmap.find_love);
+                    }
+                    sceneList.get(position).getSight().setIs_love(0);
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -201,7 +339,7 @@ public class BrandQJAdapter extends BaseAdapter {
     }
 
     //点赞情景
-    private void loveQJ(final int position, String id, final ViewHolder holder) {
+    private void loveQJ(final int position, String id, final ViewHolder holder, final boolean isRight) {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -216,8 +354,12 @@ public class BrandQJAdapter extends BaseAdapter {
                     Log.e("<<<", "解析异常");
                 }
                 if (sceneLoveBean.isSuccess()) {
-                    holder.qjLove.setImageResource(R.mipmap.find_has_love);
-                    list.get(position).getSight().setIs_love(1);
+                    if (isRight) {
+                        holder.qjLove2.setImageResource(R.mipmap.find_has_love);
+                    } else {
+                        holder.qjLove1.setImageResource(R.mipmap.find_has_love);
+                    }
+                    sceneList.get(position).getSight().setIs_love(1);
                 } else {
                     ToastUtils.showError(sceneLoveBean.getMessage());
                 }
@@ -229,24 +371,5 @@ public class BrandQJAdapter extends BaseAdapter {
                 ToastUtils.showError(R.string.net_fail);
             }
         });
-    }
-
-    static class ViewHolder {
-        @Bind(R.id.qj_background_img)
-        ImageView qjBackgroundImg;
-        @Bind(R.id.qj_head_img)
-        RoundedImageView qjHeadImg;
-        @Bind(R.id.qj_love)
-        ImageView qjLove;
-        @Bind(R.id.qj_name)
-        TextView qjName;
-        @Bind(R.id.qj_title_tv1)
-        TextView qjTitleTv1;
-        @Bind(R.id.qj_title_tv2)
-        TextView qjTitleTv2;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
     }
 }

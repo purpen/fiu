@@ -33,7 +33,6 @@
             android:layout_alignParentRight="true"
             android:background="@null"
             android:textSize="@dimen/sp14"
-            android:text="选取"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 </RelativeLayout>

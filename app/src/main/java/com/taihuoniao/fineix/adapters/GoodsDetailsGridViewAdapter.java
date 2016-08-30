@@ -38,14 +38,14 @@ public class GoodsDetailsGridViewAdapter extends RecyclerView.Adapter<GoodsDetai
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         ImageLoader.getInstance().displayImage(relationProductsBeanList.get(position).getCover_url(), holder.img);
         holder.titleTv.setText(relationProductsBeanList.get(position).getTitle());
         holder.priceTv.setText("¥" + relationProductsBeanList.get(position).getSale_price());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
     }

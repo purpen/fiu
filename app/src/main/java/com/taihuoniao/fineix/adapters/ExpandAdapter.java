@@ -32,11 +32,11 @@ public class ExpandAdapter extends RecyclerView.Adapter<ExpandAdapter.VH> {
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         holder.name.setText("#" + list.get(position) + " ");

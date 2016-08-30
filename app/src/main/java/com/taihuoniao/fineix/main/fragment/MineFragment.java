@@ -409,6 +409,7 @@ public class MineFragment extends MyBaseFragment {
     protected void installListener() {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Intent intent;
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
@@ -420,7 +421,7 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 2:  //订阅
                         intent = new Intent(activity, OrderQJActivity.class);
-                        if (user.interest_scene_cate != null) {
+                        if (user != null && user.interest_scene_cate != null) {
                             intent.putStringArrayListExtra(OrderQJActivity.class.getSimpleName(), user.interest_scene_cate);
                         }
                         startActivity(intent);

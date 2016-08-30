@@ -32,7 +32,6 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
-        android:text="产品标题"
         android:textColor="@color/title_black"
         android:textSize="14sp"/>
 
@@ -44,14 +43,6 @@
         android:layout_marginTop="10dp"
         android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="8dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/arrow_right_gray"/>
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/brand_img"
@@ -73,7 +64,6 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="品牌名称"
             android:textColor="#444444"
             android:textSize="15sp"/>
 

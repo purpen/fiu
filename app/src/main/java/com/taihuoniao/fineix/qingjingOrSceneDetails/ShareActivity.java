@@ -66,7 +66,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 /**
  * Created by taihuoniao on 2016/5/24.
  */
-public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemClick, View.OnClickListener, PlatformActionListener {
+public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.ItemClick, View.OnClickListener, PlatformActionListener {
     //上个界面传递过来的场景id
     private String id;
     @Bind(R.id.activity_share_title)
@@ -90,7 +90,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     private TextView textView, expTv;
     private TestShareUtils testShareUtils;
 
-    public TestShare() {
+    public ShareActivity() {
         super(0);
     }
 
@@ -117,13 +117,13 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         titleLayout.setContinueTvVisible(false);
         titleLayout.setCancelImgVisible(true);
         titleLayout.setColor(R.color.title_black);
-        dialog = new WaittingDialog(TestShare.this);
+        dialog = new WaittingDialog(this);
         shareList = new ArrayList<>();
         for (int imgId : shareImgs) {
             ShareDemoBean shareDemoBean = new ShareDemoBean(imgId, false);
             shareList.add(shareDemoBean);
         }
-        shareCJRecyclerAdapter = new ShareCJRecyclerAdapter(shareList, TestShare.this);
+        shareCJRecyclerAdapter = new ShareCJRecyclerAdapter(shareList, this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -157,7 +157,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
 
             }
         });
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(TestShare.this,
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this,
                 R.drawable.corner_white_4dp));
         popupWindow.setTouchInterceptor(new View.OnTouchListener() {
 
@@ -179,7 +179,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
     }
 
     private View initPop() {
-        View view = View.inflate(TestShare.this, R.layout.share_layout, null);
+        View view = View.inflate(this, R.layout.share_layout, null);
         GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
         View tv_cancel = view.findViewById(R.id.tv_cancel);
         int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone};
@@ -191,7 +191,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
             map.put("text", name[i]);
             shareList.add(map);
         }
-        SimpleAdapter adapter = new SimpleAdapter(TestShare.this, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
+        SimpleAdapter adapter = new SimpleAdapter(this, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
         gv_share.setAdapter(adapter);
         gv_share.setOnItemClickListener(itemClicklistener);
         tv_cancel.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +274,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     }
                     return;
                 }
-                PopupWindowUtil.show(TestShare.this, initPop());
+                PopupWindowUtil.show(this, initPop());
                 break;
         }
     }
@@ -355,7 +355,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
         return bitmap;
     }
 
-    private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
+    private  AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
@@ -385,7 +385,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform qzone = ShareSDK.getPlatform(QZone.NAME);
-                    qzone.setPlatformActionListener(TestShare.this); // 设置分享事件回调
+                    qzone.setPlatformActionListener(ShareActivity.this); // 设置分享事件回调
                     qzone.share(params);
                     break;
                 case 2:
@@ -394,7 +394,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
-                    weibo.setPlatformActionListener(TestShare.this); // 设置分享事件回调
+                    weibo.setPlatformActionListener(ShareActivity.this); // 设置分享事件回调
                     weibo.share(params);
                     break;
                 case 0:
@@ -403,7 +403,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-                    wechat.setPlatformActionListener(TestShare.this);
+                    wechat.setPlatformActionListener(ShareActivity.this);
                     wechat.share(params);
                     break;
                 case 1:
@@ -412,7 +412,7 @@ public class TestShare extends BaseActivity implements EditRecyclerAdapter.ItemC
                     params.setShareType(Platform.SHARE_IMAGE);
                     params.setImagePath(imgPath);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-                    wechatMoments.setPlatformActionListener(TestShare.this);
+                    wechatMoments.setPlatformActionListener(ShareActivity.this);
                     wechatMoments.share(params);
                     break;
             }

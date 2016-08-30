@@ -68,7 +68,7 @@
             android:name=".qingjingOrSceneDetails.QJDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".qingjingOrSceneDetails.TestShare"
+            android:name=".qingjingOrSceneDetails.ShareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <activity
@@ -114,10 +114,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".scene.SelectAllQingjingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
             android:name=".user.CompleteUserInfoActivity"
             android:screenOrientation="portrait"
             />
@@ -151,10 +147,6 @@
             android:name=".product.AllFiuerActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".scene.CategoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
             android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -171,7 +163,7 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".product.BrandDetailActivity"
-           />
+            />
         <activity
             android:name=".user.HasLoveActivity"
             android:screenOrientation="portrait"

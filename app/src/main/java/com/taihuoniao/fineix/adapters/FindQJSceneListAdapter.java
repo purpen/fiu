@@ -50,7 +50,7 @@ import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.TestShare;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -341,9 +341,11 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     Intent intent = new Intent();
                     switch (productBean.getType()){
                         case 2:
+                            Log.e("<<<","可购买");
                             intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
+                            Log.e("<<<","不可购买");
                             intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
@@ -463,7 +465,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         holder.shareImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent4 = new Intent(activity, TestShare.class);
+                Intent intent4 = new Intent(activity, ShareActivity.class);
                 intent4.putExtra("id", sceneList.get(position).get_id());
                 activity.startActivity(intent4);
             }

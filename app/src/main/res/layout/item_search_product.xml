@@ -9,7 +9,6 @@
         android:layout_height="45dp"
         android:layout_marginLeft="16dp"
         android:gravity="center"
-        android:text="apple"
         android:textColor="#999999"
         android:textSize="13sp"/>
 
@@ -20,7 +19,6 @@
         android:layout_marginLeft="6dp"
         android:layout_toRightOf="@id/brand_name"
         android:gravity="center"
-        android:text="apple"
         android:textColor="@color/black"
         android:textSize="13sp"/>
 

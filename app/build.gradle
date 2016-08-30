@@ -85,7 +85,7 @@ dependencies {
             mavenCentral()
         }
     }
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.android.support:support-v4:22.2.1'
 //    compile 'com.android.support:design:22.2.0'

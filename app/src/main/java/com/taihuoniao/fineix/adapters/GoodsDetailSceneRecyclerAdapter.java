@@ -48,7 +48,7 @@ public class GoodsDetailSceneRecyclerAdapter extends RecyclerView.Adapter<GoodsD
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(DensityUtils.dp2px(context, 300) * 9 / 16, DensityUtils.dp2px(context, 280));

@@ -28,7 +28,6 @@
             android:ellipsize="end"
             android:padding="3dp"
             android:singleLine="true"
-            android:text="自行车哒哒哒嗒嗒嗒嗒嗒嗒"
             android:textColor="@color/white"
             android:textSize="10sp"/>
         <TextView
@@ -36,7 +35,6 @@
             android:id="@+id/price"
             android:textSize="10sp"
             android:textColor="@color/yellow_bd8913"
-            android:text="￥1980"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

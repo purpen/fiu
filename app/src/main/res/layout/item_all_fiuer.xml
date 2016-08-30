@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:text="4"
         android:textColor="#999999"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -69,7 +68,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="狗蛋"
             android:textColor="#222222"
             android:textSize="12sp"/>
 
@@ -79,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/item_all_fiuer_name"
             android:layout_marginTop="4dp"
-            android:text="LV12"
             android:textColor="@color/yellow_bd8913"
             android:textSize="9sp"/>
 
@@ -93,7 +90,6 @@
             android:layout_toRightOf="@id/item_all_fiuer_rank"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="狗蛋 | 哈哈"
             android:textColor="#999999"
             android:textSize="9sp"/>
     </RelativeLayout>

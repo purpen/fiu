@@ -136,7 +136,6 @@
             android:paddingBottom="@dimen/dp5"
             android:paddingTop="@dimen/dp5"
             android:paddingRight="12dp"
-            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -151,8 +150,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
             android:singleLine="true"
-            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
-            android:textColor="@color/white"
+             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 
 public class LoadingLayout extends FrameLayout {
@@ -94,7 +95,7 @@ public class LoadingLayout extends FrameLayout {
 
     //刷新完毕后显示刷新时间
     public void setLoadingTime() {
-        headerTime.setText("上一次刷新：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
+        headerTime.setText("上一次刷新：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis()));
     }
 
     //首页下拉动画的改变

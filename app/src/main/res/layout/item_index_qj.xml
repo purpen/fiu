@@ -75,7 +75,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="嘿嘿"
                 android:textColor="@color/white"
                 android:textSize="13sp"/>
 
@@ -100,7 +99,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:singleLine="true"
-                    android:text="30分钟前"
                     android:textColor="#8e8e8e"
                     android:textSize="10sp"/>
 
@@ -116,7 +114,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:singleLine="true"
-                    android:text="北京市"
                     android:ellipsize="end"
                     android:textColor="#8e8e8e"
                     android:textSize="10sp"/>
@@ -155,7 +152,6 @@
             android:maxWidth="188dp"
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
-            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
@@ -170,7 +166,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
             android:singleLine="true"
-            android:text="黑啊是；的楼房卡卡是；零点咖啡阿斯兰的饭卡上；了打开附件"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone"/>
@@ -200,7 +195,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/img1"
-            android:text="63"
             android:textColor="#666666"
             android:textSize="10sp"/>
 
@@ -252,7 +246,6 @@
                 android:layout_toRightOf="@id/love_img"
                 android:paddingLeft="5dp"
                 android:paddingTop="8dp"
-                android:text="163"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
         </RelativeLayout>
@@ -278,7 +271,6 @@
             android:lineSpacingExtra="5dp"
             android:maxLines="3"
             android:singleLine="false"
-            android:text="Being the savage's bowsman, thaasdffasdfasdfasdfasdfasdfasdfasdfasdft is, the person who pulled the bow-oar in his boat (the second one from forward),it was my cheerful dufy to attend upon"
             android:textColor="#666666"
             android:textSize="12sp"/>
     </RelativeLayout>
@@ -305,7 +297,6 @@
         android:background="#f4f4f4"
         android:paddingBottom="15dp"
         android:paddingLeft="11dp"
-        android:text="查看所有8条评论"
         android:textColor="#999999"
         android:textSize="10sp"/>
 </LinearLayout>
