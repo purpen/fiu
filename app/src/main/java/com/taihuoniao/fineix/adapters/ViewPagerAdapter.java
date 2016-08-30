@@ -148,7 +148,18 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             intent = new Intent(Intent.ACTION_VIEW, uri);
                             activity.startActivity(intent);
                             break;
-                        case 8:     //场景详情
+                        case 2://商品
+                            intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                            intent.putExtra("id", banner.web_url);
+                            activity.startActivity(intent);
+                            break;
+                        case 4://app专题
+                            intent = new Intent(activity, SubjectActivity.class);
+                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
+                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
+                            activity.startActivity(intent);
+                            break;
+                        case 8:     //情境
                             intent = new Intent(activity, QJDetailActivity.class);
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
@@ -158,11 +169,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             intent.putExtra("id", banner.web_url);
                             activity.startActivity(intent);
                             break;
-                        case 10:    //情景
-                            intent = new Intent(activity, QJDetailActivity.class);
-                            intent.putExtra("id", banner.web_url);
-                            activity.startActivity(intent);
-                        case 11:    //专题
+                        case 11:    //情境专题
                             intent = new Intent(activity, SubjectActivity.class);
                             intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
                             intent.putExtra(SubjectActivity.class.getName(), banner.title);
