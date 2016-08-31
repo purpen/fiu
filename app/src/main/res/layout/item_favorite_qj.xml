@@ -23,7 +23,6 @@
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
             android:layout_alignParentBottom="true"
-            android:text="@string/app_name"
             android:textSize="@dimen/sp12"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="2"

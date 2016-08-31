@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textSize="@dimen/sp12"
-            android:textColor="@android:color/white"
+            android:textColor="@color/color_ccc"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp3" />
     </RelativeLayout>

@@ -299,6 +299,14 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     protected void refreshUI() {
         if (data == null) return;
         ImageLoader.getInstance().displayImage(data.banner_url, imageView);
+        tvDesc.setText(data.short_title);
+        if (data.evt == 2) {
+            rlResult.setVisibility(View.VISIBLE);
+            tvDuring.setText("已结束");
+        } else {
+            rlResult.setVisibility(View.GONE);
+            tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
+        }
         if (!TextUtils.isEmpty(data.title)) {
             tvTitle.setText(data.title);
             tvTitle.setBackgroundColor(getResources().getColor(android.R.color.black));
@@ -318,16 +326,10 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 }
             });
         }
-        tvDesc.setText(data.short_title);
-        if (data.evt == 2) {
-            tvDuring.setText("已结束");
-        } else {
-            tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
-        }
+
         ActivityResultAdapter resultAdapter = new ActivityResultAdapter(data.sights, activity);
         pullRule.setAdapter(new RuleContentAdapter(data, activity));
         pullLv.setAdapter(resultAdapter);
-//        initTabLayout();
     }
 
     @Override

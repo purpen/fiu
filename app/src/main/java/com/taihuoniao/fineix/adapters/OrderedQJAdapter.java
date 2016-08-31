@@ -53,7 +53,10 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
         ImageLoader.getInstance().displayImage(item.user_info.avatar_url, holder.riv, options);
         holder.tvName.setText(item.user_info.nickname);
-        holder.tv_title.setText(item.title);
+        if (!TextUtils.isEmpty(item.title)) {
+            holder.tv_title.setText(item.title);
+            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+        }
         if (item.is_love == 1) {
             holder.ibtn.setImageResource(R.mipmap.zaned);
         } else {

@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 
 /**
  * @author lilin  文章和新品是H5，每个item去购买是促销
@@ -211,11 +212,14 @@ public class ArticalDetailActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.ibtn_share: //分享
                 ShareContent content = new ShareContent();
-                content.shareTxt = data.title;
+                content.title = data.title;
+                content.shareTxt = data.summary;
                 content.url = data.content_view_url;
                 content.titleUrl = data.share_view_url;
+                content.imageUrl = data.banner_url;
                 content.site = getResources().getString(R.string.app_name);
-                content.siteUrl = "http://www.taihuoniao.com/";
+                content.siteUrl = data.share_view_url;
+                content.shareType = Platform.SHARE_WEBPAGE;
                 CustomShareView customShareView = new CustomShareView(activity, content);
                 customShareView.setOnShareSuccessListener(new CustomShareView.OnShareSuccessListener() {
                     @Override

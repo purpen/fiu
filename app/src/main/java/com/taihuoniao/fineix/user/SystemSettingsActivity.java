@@ -11,12 +11,12 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.utils.DataCleanUtil;
 import com.taihuoniao.fineix.utils.FileUtils;
@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.view.CustomShareView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 
 /**
  * @author lilin
@@ -111,10 +112,14 @@ public class SystemSettingsActivity extends BaseActivity{
                 break;
             case R.id.item_share:
                 ShareContent content = new ShareContent();
+                content.shareType = Platform.SHARE_TEXT;
                 content.shareTxt = getResources().getString(R.string.share_txt);
+                content.title = getResources().getString(R.string.app_name);
                 content.titleUrl = getResources().getString(R.string.title_url);
                 content.site = getResources().getString(R.string.app_name);
-                content.siteUrl = "http://www.taihuoniao.com/";
+                content.imageUrl = getResources().getString(R.string.title_url);
+                content.siteUrl = getResources().getString(R.string.title_url);
+                content.url = getResources().getString(R.string.title_url);
                 PopupWindowUtil.show(activity, new CustomShareView(activity, content));
                 break;
             case R.id.item_exit:

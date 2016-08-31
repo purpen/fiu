@@ -15,7 +15,7 @@ public class ShareContent implements Parcelable {
     public String imageUrl;
     public String site;
     public String siteUrl;
-
+    public int shareType;
     public ShareContent() {
     }
 

@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.view;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,15 +99,13 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 3:
                     //qqzong
                     params = new Platform.ShareParams();
-                    if (TextUtils.isEmpty(content.url)) {
-                        params.setText(content.shareTxt);
-                    } else {
-                        params.setText(content.shareTxt + content.url);
-                    }
-                    params.setTitle(content.shareTxt);
+                    params.setText(content.shareTxt);
+                    params.setTitle(content.title);
                     params.setTitleUrl(content.titleUrl); // 标题的超链接
                     params.setSite(content.site);
                     params.setSiteUrl(content.siteUrl);
+                    params.setImageUrl(content.imageUrl);
+                    params.setUrl(content.url);
                     Platform qzone = ShareSDK.getPlatform(QZone.NAME);
                     qzone.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     qzone.share(params);
@@ -116,16 +113,13 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 2:
                     //sina
                     params = new Platform.ShareParams();
-//                    params.setTitle(getResources().getString(R.string.share_title_url));
-                    if (TextUtils.isEmpty(content.url)) {
-                        params.setText(content.shareTxt);
-                    } else {
-                        params.setText(content.shareTxt + content.url);
-                    }
-
-                    if (!TextUtils.isEmpty(content.imageUrl)) {
-                        params.setImageUrl(content.imageUrl);
-                    }
+                    params.setTitle(content.title);
+                    params.setTitleUrl(content.titleUrl);
+                    params.setText(content.shareTxt);
+                    params.setSite(content.site);
+                    params.setSiteUrl(content.siteUrl);
+                    params.setImageUrl(content.imageUrl);
+                    params.setUrl(content.url);
                     Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                     weibo.setPlatformActionListener(CustomShareView.this); // 设置分享事件回调
                     weibo.share(params);
@@ -133,17 +127,14 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 0:
                     //wechat
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_TEXT);
-//                params.setUrl("http://m.taihuoniao.com/guide/fiu");
-                    params.setTitle(content.shareTxt);
-                    if (TextUtils.isEmpty(content.url)) {
-                        params.setText(content.shareTxt);
-                    } else {
-                        params.setText(content.shareTxt + content.url);
-                    }
-                    if (!TextUtils.isEmpty(content.imageUrl)) {
-                        params.setImageUrl(content.imageUrl);
-                    }
+                    params.setShareType(content.shareType);
+                    params.setUrl(content.titleUrl);
+                    params.setTitle(content.title);
+                    params.setTitleUrl(content.titleUrl);
+                    params.setText(content.shareTxt);
+                    params.setSite(content.site);
+                    params.setSiteUrl(content.siteUrl);
+                    params.setImageUrl(content.imageUrl);
                     Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
                     wechat.setPlatformActionListener(CustomShareView.this);
                     wechat.share(params);
@@ -151,15 +142,14 @@ public class CustomShareView extends RelativeLayout implements PlatformActionLis
                 case 1:
                     //wechatmoment
                     params = new Platform.ShareParams();
-                    params.setShareType(Platform.SHARE_TEXT);
-//                    params.setUrl("http://www.taihuoniao.com/");
-                    params.setTitle(content.shareTxt);
-                    if (TextUtils.isEmpty(content.url)) {
-                        params.setText(content.shareTxt);
-                    } else {
-                        params.setText(content.shareTxt + content.url);
-                    }
-//                    params.setImageUrl(LoginInfo.getHeadPicUrl());
+                    params.setShareType(content.shareType);
+                    params.setUrl(content.titleUrl);
+                    params.setTitle(content.title);
+                    params.setTitleUrl(content.titleUrl);
+                    params.setText(content.shareTxt);
+                    params.setSite(content.site);
+                    params.setSiteUrl(content.siteUrl);
+                    params.setImageUrl(content.imageUrl);
                     Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                     wechatMoments.setPlatformActionListener(CustomShareView.this);
                     wechatMoments.share(params);
