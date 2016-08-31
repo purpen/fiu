@@ -35,72 +35,76 @@
     <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:background="@color/black">
-
-        <ImageView
-            android:id="@+id/title_left"
-            android:layout_width="48.5dp"
-            android:layout_height="match_parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="14dp"
-            android:src="@mipmap/wellgoods_saomiao"/>
-
-        <RelativeLayout
-            android:id="@+id/title_right"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            >
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:paddingLeft="9dp"
-                android:paddingRight="16dp"
-                android:src="@mipmap/wellgoods_cart"
-                />
-
-            <TextView
-                android:id="@+id/cart_number"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/yellow_circle"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:visibility="gone"/>
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/search_linear"
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:layout_centerInParent="true"
-            android:layout_toLeftOf="@id/title_right"
-            android:layout_toRightOf="@id/title_left"
-            android:background="@drawable/background_corner_gray"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="13dp"
-                android:src="@mipmap/search_height_26px"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/title_left"
+                    android:layout_width="48.5dp"
+                    android:layout_height="45dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="14dp"
+                    android:src="@mipmap/wellgoods_saomiao"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:text="@string/search_product_or_brand"
-                android:textColor="#878787"
-                android:textSize="12sp"/>
-        </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/title_right"
+                    android:layout_width="48dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentRight="true"
+                    >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="9dp"
+                        android:paddingRight="16dp"
+                        android:src="@mipmap/wellgoods_cart"
+                        />
+
+                    <TextView
+                        android:id="@+id/cart_number"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/yellow_circle"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/search_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@id/title_right"
+                    android:layout_toRightOf="@id/title_left"
+                    android:background="@drawable/background_corner_gray"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="13dp"
+                        android:src="@mipmap/search_height_26px"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="7dp"
+                        android:text="@string/search_product_or_brand"
+                        android:textColor="#878787"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
     </RelativeLayout>
 
     <ProgressBar

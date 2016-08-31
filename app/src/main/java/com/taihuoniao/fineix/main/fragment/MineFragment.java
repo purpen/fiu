@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -169,7 +170,19 @@ public class MineFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.setFragmentLayout(R.layout.fragment_personalcenter);
         super.onCreateView(inflater, container, savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            rl.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         return view;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
