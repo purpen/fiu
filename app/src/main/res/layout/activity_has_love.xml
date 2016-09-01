@@ -17,9 +17,7 @@
         android:layout_below="@id/custom_head"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
-        android:paddingTop="@dimen/dp16"
-        android:paddingBottom="@dimen/dp16"
-        android:verticalSpacing="@dimen/dp16"
         android:horizontalSpacing="@dimen/dp16"
+        android:background="@color/color_f8f8f8"
         android:numColumns="2" />
 </RelativeLayout>

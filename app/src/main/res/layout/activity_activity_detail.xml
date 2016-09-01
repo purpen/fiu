@@ -14,19 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:background="@color/color_f8f8f8" />
 
     <ListView
         android:id="@+id/pull_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:divider="@null" />
+        android:divider="@null"
+        android:background="@color/color_f8f8f8" />
 
     <ListView
         android:id="@+id/pull_rule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:divider="@null" />
+        android:divider="@null"
+        android:background="@color/color_f8f8f8" />
 </LinearLayout>

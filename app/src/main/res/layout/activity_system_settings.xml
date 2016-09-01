@@ -48,6 +48,10 @@
         android:id="@+id/item_welcome_page"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.taihuoniao.fineix.view.CustomItemLayout
         android:id="@+id/item_about_us"
@@ -69,11 +73,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
         android:layout_marginTop="@dimen/dp10"
-        android:background="@android:color/white"
+        android:background="@drawable/shap_redbutton_commit"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
         android:gravity="center"
         android:text="退出当前账户"
-        android:textColor="@color/color_af8323"
-        android:textSize="@dimen/sp12" />
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp16" />
 
     <Button
         android:id="@+id/btn_logout"

@@ -5,11 +5,12 @@
                 android:background="@color/black"
     >
     <!-- 左侧按钮和文字-->
-    <ImageView
+    <ImageButton
         android:id="@+id/title_back"
-        android:layout_width="50dp"
+        android:layout_width="45dp"
         android:layout_height="match_parent"
         android:contentDescription="@null"
+        android:background="@null"
         android:padding="16dp"
         android:src="@mipmap/back_white"/>
 

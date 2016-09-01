@@ -36,6 +36,7 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 
 /**
  * @author lilin  文章和新品是H5，每个item去购买是促销
@@ -94,7 +95,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
             @Override
             public void onGlobalLayout() {
                 int width = tv_title.getMeasuredWidth();
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp1));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, activity.getResources().getDimensionPixelSize(R.dimen.dp2));
                 params.gravity = Gravity.CENTER_HORIZONTAL;
                 view_line.setLayoutParams(params);
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -113,11 +114,14 @@ public class SalePromotionDetailActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.ibtn_share: //分享
                 ShareContent content = new ShareContent();
-                content.shareTxt = data.title;
+                content.title = data.title;
+                content.shareTxt = data.summary;
                 content.url = data.content_view_url;
                 content.titleUrl = data.share_view_url;
+                content.imageUrl = data.banner_url;
                 content.site = getResources().getString(R.string.app_name);
-                content.siteUrl = "http://www.taihuoniao.com/";
+                content.siteUrl = data.share_view_url;
+                content.shareType = Platform.SHARE_WEBPAGE;
                 CustomShareView customShareView = new CustomShareView(activity, content);
                 customShareView.setOnShareSuccessListener(new CustomShareView.OnShareSuccessListener() {
                     @Override
@@ -205,7 +209,10 @@ public class SalePromotionDetailActivity extends BaseActivity {
         ibtnComment.setText(String.valueOf(data.comment_count));
         ibtnShare.setText(String.valueOf(data.share_count));
         ibtnFavorite.setText(String.valueOf(data.view_count));
-        tv_title.setText(data.title);
+        if (!TextUtils.isEmpty(data.title)) {
+            tv_title.setText(data.title);
+            tv_title.setBackgroundColor(getResources().getColor(android.R.color.black));
+        }
         tv_short_title.setText(data.short_title);
         tvDesc.setText(data.summary);
         tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));

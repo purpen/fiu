@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.DataSupportQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -55,12 +57,23 @@ public class SupportQJAdapter extends CommonBaseAdapter<DataSupportQJ.ItemSuppor
             ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
             holder.tvName.setText(item.sight.user_info.nickname);
         }
-        holder.tv_title.setText(item.sight.scene_title);
+        if (!TextUtils.isEmpty(item.sight.title)) {
+            holder.tv_title.setText(item.sight.title);
+            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+        }
         if (item.sight.is_love == 1) {
             holder.ibtn.setImageResource(R.mipmap.zaned);
         } else {
             holder.ibtn.setImageResource(R.mipmap.zan_normal);
         }
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, QJDetailActivity.class);
+                intent.putExtra("id", item.sight._id);
+                activity.startActivity(intent);
+            }
+        });
         setClickListener(holder.ibtn, item);
         return convertView;
     }

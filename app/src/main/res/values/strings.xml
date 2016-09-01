@@ -108,7 +108,7 @@
         <item>收藏</item>
         <item>赞过</item>
         <item>积分</item>
-        <item>礼券</item>
+        <item>红包</item>
         <item>收货地址</item>
     </string-array>
 
@@ -234,7 +234,7 @@
     <string name="hot_labels">热门标签</string>
     <string name="all_labels">全部标签</string>
     <string name="please_select_one">请在情绪、环境、时间、人物中各选一个</string>
-    <string name="commit">提交申请</string>
+    <string name="commit">提交</string>
     <string name="consignee_name">收货人姓名</string>
     <string name="phone">手机</string>
     <string name="postcode">邮政编码</string>

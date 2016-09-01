@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,7 +18,7 @@ import com.taihuoniao.fineix.R;
 public class GlobalTitleLayout extends RelativeLayout implements View.OnClickListener {
     private Context context;
     private View view;
-    private ImageView backImg;
+    private ImageButton backImg;
     private ImageView shareImg;
     private ImageView cancelImg;//默认隐藏
     private LinearLayout titleLinear;
@@ -43,7 +44,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
     private void initView() {
         view = View.inflate(context, R.layout.title, GlobalTitleLayout.this);
         view.setBackgroundResource(R.color.black);
-        backImg = (ImageView) view.findViewById(R.id.title_back);
+        backImg = (ImageButton) view.findViewById(R.id.title_back);
         shareImg = (ImageView) view.findViewById(R.id.title_share);
         cancelImg = (ImageView) view.findViewById(R.id.title_cancel);
         titleLinear = (LinearLayout) view.findViewById(R.id.title_linear);

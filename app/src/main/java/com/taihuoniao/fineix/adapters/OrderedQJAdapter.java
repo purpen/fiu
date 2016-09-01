@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -62,6 +64,14 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         } else {
             holder.ibtn.setImageResource(R.mipmap.zan_normal);
         }
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, QJDetailActivity.class);
+                intent.putExtra("id", String.valueOf(item._id));
+                activity.startActivity(intent);
+            }
+        });
         setClickListener(holder.ibtn, item);
         return convertView;
     }

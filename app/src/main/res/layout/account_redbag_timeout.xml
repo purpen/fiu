@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="10dp"
     android:fitsSystemWindows="true"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
@@ -11,8 +10,7 @@
     <LinearLayout
         android:id="@+id/linear_bg_redbag"
         android:layout_width="match_parent"
-        android:layout_height="115dp"
-        android:baselineAligned="false"
+        android:layout_height="122dp"
         android:background="@mipmap/bg_timeout_redbag"
         android:orientation="horizontal">
 
@@ -27,26 +25,28 @@
                 android:id="@+id/tv_thn_redbag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
                 android:text="@string/fiu_redbag"
                 android:textColor="@color/color_af8323"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp12" />
 
             <TextView
                 android:id="@+id/tv_redbag_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
                 android:text="@string/redbag_code"
-                android:textSize="12sp" />
+                android:layout_marginTop="@dimen/dp10"
+                android:textColor="@color/color_666"
+                android:textSize="@dimen/sp10" />
 
             <TextView
                 android:id="@+id/tv_min_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/less_money"
-                android:layout_marginTop="@dimen/dp40"
                 android:textColor="@color/color_333"
-                android:textSize="12sp" />
+                android:layout_marginTop="@dimen/dp40"
+                android:textSize="@dimen/sp10" />
         </LinearLayout>
 
         <LinearLayout
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/money"
                 android:textColor="@color/color_af8323"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/tv_money"
@@ -69,7 +69,7 @@
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp2"
                 android:textColor="@color/color_af8323"
-                android:textSize="40sp" />
+                android:textSize="35sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

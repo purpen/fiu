@@ -33,7 +33,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
-import com.taihuoniao.fineix.user.ChooseSubjectActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
@@ -414,7 +413,7 @@ public class MineFragment extends MyBaseFragment {
 //                startActivity(new Intent(activity, MapSearchAddressActivity.class));
 //                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
 //                startActivity(new Intent(activity, BindPhoneActivity.class));
-                startActivity(new Intent(activity, ChooseSubjectActivity.class));
+//                startActivity(new Intent(activity, ChooseSubjectActivity.class));
         }
     }
 
@@ -457,13 +456,6 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 7:
                         startActivity(new Intent(activity, SelectAddressActivity.class));
-                        break;
-                    case 8:
-                        String url1 = NetworkConstance.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
-                        intent = new Intent(activity, AboutUsActivity.class);
-                        intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
-                        intent.putExtra(AboutUsActivity.class.getName(), "服务条款");
-                        startActivity(intent);
                         break;
                 }
             }

@@ -66,7 +66,7 @@ public class ItemQJCollect implements Parcelable {
         public int _id;
         public String cover_url;
         public UserInfoBean user_info;
-        public String scene_title;
+        public String title;
 
         public static class UserInfoBean implements Parcelable {
             public int user_id;
@@ -122,6 +122,9 @@ public class ItemQJCollect implements Parcelable {
             };
         }
 
+        public SightBean() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -132,17 +135,14 @@ public class ItemQJCollect implements Parcelable {
             dest.writeInt(this._id);
             dest.writeString(this.cover_url);
             dest.writeParcelable(this.user_info, flags);
-            dest.writeString(this.scene_title);
-        }
-
-        public SightBean() {
+            dest.writeString(this.title);
         }
 
         protected SightBean(Parcel in) {
             this._id = in.readInt();
             this.cover_url = in.readString();
             this.user_info = in.readParcelable(UserInfoBean.class.getClassLoader());
-            this.scene_title = in.readString();
+            this.title = in.readString();
         }
 
         public static final Creator<SightBean> CREATOR = new Creator<SightBean>() {

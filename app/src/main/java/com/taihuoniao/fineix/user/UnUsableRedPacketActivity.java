@@ -26,7 +26,6 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -176,7 +175,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "过期礼券");
+        custom_head.setHeadCenterTxtShow(true, "过期红包");
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");
@@ -201,13 +200,13 @@ public class UnUsableRedPacketActivity extends BaseActivity{
                     refreshUI(rows);
                     return;
                 }
-                Util.makeToast(response.getMessage());
+                ToastUtils.showError(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
                 if (mDialog!=null) mDialog.dismiss();
-                Util.makeToast("网络异常,请确保网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }

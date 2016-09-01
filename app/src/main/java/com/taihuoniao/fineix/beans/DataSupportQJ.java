@@ -64,7 +64,7 @@ public class DataSupportQJ implements Parcelable {
             public String cover_url;
             public String created_at;
             public UserInfoBean user_info;
-            public String scene_title;
+            public String title;
             public int is_love;
             public static class UserInfoBean implements Parcelable {
                 public String user_id;
@@ -134,7 +134,7 @@ public class DataSupportQJ implements Parcelable {
                 dest.writeString(this.cover_url);
                 dest.writeString(this.created_at);
                 dest.writeParcelable(this.user_info, flags);
-                dest.writeString(this.scene_title);
+                dest.writeString(this.title);
                 dest.writeInt(this.is_love);
             }
 
@@ -143,7 +143,7 @@ public class DataSupportQJ implements Parcelable {
                 this.cover_url = in.readString();
                 this.created_at = in.readString();
                 this.user_info = in.readParcelable(UserInfoBean.class.getClassLoader());
-                this.scene_title = in.readString();
+                this.title = in.readString();
                 this.is_love = in.readInt();
             }
 

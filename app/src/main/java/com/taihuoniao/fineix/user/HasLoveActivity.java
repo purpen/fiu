@@ -1,9 +1,6 @@
 package com.taihuoniao.fineix.user;
 
-import android.content.Intent;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.google.gson.reflect.TypeToken;
@@ -17,9 +14,7 @@ import com.taihuoniao.fineix.adapters.SupportQJAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.DataSupportQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.ItemSubscribedQJ;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -82,15 +77,15 @@ public class HasLoveActivity extends BaseActivity {
             }
         });
 
-        pullGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ItemSubscribedQJ item = (ItemSubscribedQJ) pullGv.getRefreshableView().getAdapter().getItem(position);
-                Intent intent = new Intent(HasLoveActivity.this, QJDetailActivity.class);
-                intent.putExtra("id", item._id);
-                startActivity(intent);
-            }
-        });
+//        pullGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ItemSubscribedQJ item = (ItemSubscribedQJ) pullGv.getRefreshableView().getAdapter().getItem(position);
+//                Intent intent = new Intent(HasLoveActivity.this, QJDetailActivity.class);
+//                intent.putExtra("id", item._id);
+//                startActivity(intent);
+//            }
+//        });
     }
 
 

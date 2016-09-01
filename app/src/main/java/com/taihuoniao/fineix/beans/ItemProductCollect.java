@@ -16,7 +16,7 @@ public class ItemProductCollect implements Parcelable {
     public int type;
     public int event;
     public UserBean user;
-    public SceneProductBean scene_product;
+    public SceneProductBean product;
     public int is_follow;
 
     public static class UserBean implements Parcelable {
@@ -66,48 +66,11 @@ public class ItemProductCollect implements Parcelable {
         public String title;
         public String cover_url;
         public int attrbute;
-        public UserBean user;
         public String sale_price;
         public String market_price;
         public List<String> banner_asset;
 
-        public static class UserBean implements Parcelable {
-            public int _id;
-            public String nickname;
-            public String avatar_url;
-
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-                dest.writeInt(this._id);
-                dest.writeString(this.nickname);
-                dest.writeString(this.avatar_url);
-            }
-
-            public UserBean() {
-            }
-
-            protected UserBean(Parcel in) {
-                this._id = in.readInt();
-                this.nickname = in.readString();
-                this.avatar_url = in.readString();
-            }
-
-            public static final Creator<UserBean> CREATOR = new Creator<UserBean>() {
-                @Override
-                public UserBean createFromParcel(Parcel source) {
-                    return new UserBean(source);
-                }
-
-                @Override
-                public UserBean[] newArray(int size) {
-                    return new UserBean[size];
-                }
-            };
+        public SceneProductBean() {
         }
 
         @Override
@@ -121,13 +84,9 @@ public class ItemProductCollect implements Parcelable {
             dest.writeString(this.title);
             dest.writeString(this.cover_url);
             dest.writeInt(this.attrbute);
-            dest.writeParcelable(this.user, flags);
             dest.writeString(this.sale_price);
             dest.writeString(this.market_price);
             dest.writeStringList(this.banner_asset);
-        }
-
-        public SceneProductBean() {
         }
 
         protected SceneProductBean(Parcel in) {
@@ -135,7 +94,6 @@ public class ItemProductCollect implements Parcelable {
             this.title = in.readString();
             this.cover_url = in.readString();
             this.attrbute = in.readInt();
-            this.user = in.readParcelable(UserBean.class.getClassLoader());
             this.sale_price = in.readString();
             this.market_price = in.readString();
             this.banner_asset = in.createStringArrayList();
@@ -170,7 +128,7 @@ public class ItemProductCollect implements Parcelable {
         dest.writeInt(this.type);
         dest.writeInt(this.event);
         dest.writeParcelable(this.user, flags);
-        dest.writeParcelable(this.scene_product, flags);
+        dest.writeParcelable(this.product, flags);
         dest.writeInt(this.is_follow);
     }
 
@@ -181,7 +139,7 @@ public class ItemProductCollect implements Parcelable {
         this.type = in.readInt();
         this.event = in.readInt();
         this.user = in.readParcelable(UserBean.class.getClassLoader());
-        this.scene_product = in.readParcelable(SceneProductBean.class.getClassLoader());
+        this.product = in.readParcelable(SceneProductBean.class.getClassLoader());
         this.is_follow = in.readInt();
     }
 

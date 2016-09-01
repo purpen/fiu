@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp16"
+        android:background="@android:color/transparent" />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160">
+        android:layout_height="@dimen/dp160"
+        android:background="@android:color/white">
 
         <ImageView
             android:id="@+id/imageView"
@@ -23,8 +27,7 @@
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
             android:layout_alignParentBottom="true"
-            android:text="@string/app_name"
-            android:textSize="@dimen/sp12"
+            android:textSize="@dimen/sp10"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="2"
             android:singleLine="true"
@@ -48,8 +51,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="@dimen/sp12"
+            android:textSize="@dimen/sp10"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
             android:singleLine="true"
@@ -60,8 +62,7 @@
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="@dimen/sp12"
+            android:textSize="@dimen/sp10"
             android:layout_centerHorizontal="true"
             android:textColor="@color/color_af8323"
             android:singleLine="true"

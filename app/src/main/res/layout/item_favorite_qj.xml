@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dp150"
+    android:layout_width="@dimen/dp160"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp16"
+        android:background="@android:color/transparent" />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp150">
-
+        android:layout_height="@dimen/dp160"
+        android:background="@android:color/white">
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -52,8 +55,7 @@
             android:layout_toRightOf="@+id/riv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="@dimen/sp12"
+            android:textSize="@dimen/sp10"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
             android:layout_marginLeft="@dimen/dp5"

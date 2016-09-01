@@ -103,7 +103,7 @@ public class UsableRedPacketActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, "我的礼券");
+        custom_head.setHeadCenterTxtShow(true, "我的红包");
         foot_view.setVisibility(View.VISIBLE);
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);

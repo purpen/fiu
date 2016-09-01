@@ -14,6 +14,7 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ShareContent;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -50,6 +51,8 @@ public class SystemSettingsActivity extends BaseActivity{
     CustomItemLayout item_to_comment;
     @Bind(R.id.item_welcome_page)
     CustomItemLayout item_welcome_page;
+    @Bind(R.id.item_service)
+    CustomItemLayout item_service;
     @Bind(R.id.item_feedback)
     CustomItemLayout item_feedback;
     @Bind(R.id.item_about_us)
@@ -68,6 +71,7 @@ public class SystemSettingsActivity extends BaseActivity{
         item_clear_cache.setTVStyle(0, "清空缓存", R.color.color_333);
         item_to_comment.setTVStyle(0,"去评价", R.color.color_333);
         item_welcome_page.setTVStyle(0, "欢迎页", R.color.color_333);
+        item_service.setTVStyle(0, "服务条款", R.color.color_333);
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
         item_share.setTVStyle(0,"分享给好友", R.color.color_333);
@@ -79,7 +83,7 @@ public class SystemSettingsActivity extends BaseActivity{
 //        LogUtil.e("ImageLoaderCache",ImageLoader.getInstance().getDiskCache().getDirectory().getAbsolutePath());
     }
 
-    @OnClick({R.id.item_update_psd, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit})
+    @OnClick({R.id.item_update_psd, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_service, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit})
     void onClick(View view){
         Intent intent;
         switch (view.getId()){
@@ -98,6 +102,13 @@ public class SystemSettingsActivity extends BaseActivity{
             case R.id.item_welcome_page:
                 intent=new Intent(activity,UserGuideActivity.class);
                 intent.putExtra(getClass().getSimpleName(),getClass().getSimpleName());
+                startActivity(intent);
+                break;
+            case R.id.item_service:
+                String url1 = NetworkConstance.BASE_URL + "/view/fiu_service_term?uuid=" + MainApplication.uuid + "&from_to=2&app_type=2";
+                intent = new Intent(activity, AboutUsActivity.class);
+                intent.putExtra(AboutUsActivity.class.getSimpleName(), url1);
+                intent.putExtra(AboutUsActivity.class.getName(), "服务条款");
                 startActivity(intent);
                 break;
             case R.id.item_about_us:

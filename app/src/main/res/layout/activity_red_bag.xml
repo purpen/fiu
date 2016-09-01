@@ -15,7 +15,8 @@
         android:layout_height="0dp"
         pullrefresh:actionViewId="@+id/action_view"
         pullrefresh:toolViewId="@+id/tool_view"
-        android:divider="@null"
+        android:divider="@color/color_transparent"
+        android:dividerHeight="@dimen/dp10"
         android:layout_weight="1"
         />
     <include

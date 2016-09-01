@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemProductCollect;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -38,7 +40,7 @@ import butterknife.ButterKnife;
  *         created at 2016/8/10 17:24
  */
 public class FavoriteProductFragment extends MyBaseFragment {
-    public static final String PAGE_TYPE = "10"; //10. 情境产品；11.地盘；12.情境；13.情境专题；
+    public static final String PAGE_TYPE = "1"; //1. 情境产品；11.地盘；12.情境；13.情境专题；
     public static final String PAGE_EVENT = "1";
     public int curPage = 1;
     @Bind(R.id.pull_gv)
@@ -97,12 +99,11 @@ public class FavoriteProductFragment extends MyBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mList != null) {
-//                    ItemProductCollect itemProductCollect = mList.get(position);
-//                    Intent intent=new Intent(activity,);
-//                    intent.putExtra("_id",itemProductCollect.scene_product._id);
-//                    startActivity(intent);
+                    ItemProductCollect itemProductCollect = mList.get(position);
+                    Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                    intent.putExtra("id", String.valueOf(itemProductCollect.product._id));
+                    startActivity(intent);
                 }
-                ToastUtils.showInfo("跳转产品详情");
             }
         });
     }

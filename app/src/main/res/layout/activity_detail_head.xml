@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp5"
                 android:ellipsize="end"
-                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp14" />
@@ -72,7 +72,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp45">
+        android:layout_height="@dimen/dp45"
+        android:background="@android:color/white">
 
         <RelativeLayout
             android:id="@+id/rl_rule"

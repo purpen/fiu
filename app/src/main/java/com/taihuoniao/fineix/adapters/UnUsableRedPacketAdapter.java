@@ -35,7 +35,7 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tv_redbag_code.setText(item.code);
+        holder.tv_redbag_code.setText(String.format("红包码:%s", item.code));
         if (item.min_amount<=0){
             holder.tv_min_money.setText("无限制");
         }else {

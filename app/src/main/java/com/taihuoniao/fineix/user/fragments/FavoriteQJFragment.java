@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.ItemQJCollect;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -96,12 +98,11 @@ public class FavoriteQJFragment extends MyBaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mList != null) {
-//                    ItemQJCollect itemQJCollect = mList.get(position);
-//                    Intent intent=new Intent(activity,);
-//                    intent.putExtra("_id",itemQJCollect.sight._id);
-//                    startActivity(intent);
+                    ItemQJCollect itemQJCollect = mList.get(position);
+                    Intent intent = new Intent(activity, QJDetailActivity.class);
+                    intent.putExtra("id", String.valueOf(itemQJCollect.sight._id));
+                    startActivity(intent);
                 }
-                ToastUtils.showInfo("跳转情境详情");
             }
         });
     }
