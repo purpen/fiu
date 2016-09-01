@@ -50,8 +50,10 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(item.sight.cover_url, holder.imageView, options);
-        ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
-        holder.tvName.setText(item.sight.user_info.nickname);
+        if (item.sight.user_info != null) {
+            ImageLoader.getInstance().displayImage(item.sight.user_info.avatar_url, holder.riv, options);
+            holder.tvName.setText(item.sight.user_info.nickname);
+        }
         if (!TextUtils.isEmpty(item.sight.title)) {
             holder.tv_title.setText(item.sight.title);
             holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
