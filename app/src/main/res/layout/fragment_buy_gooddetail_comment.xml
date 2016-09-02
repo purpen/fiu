@@ -6,18 +6,19 @@
                 android:paddingTop="10dp">
 
     <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
-        android:paddingLeft="16dp"
         android:id="@+id/pull_refresh_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"/>
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_comments"
-        android:visibility="gone"/>
+        android:gravity="center_horizontal"
+        android:paddingTop="50dp"
+        android:text="快购买商品评论一下吧"
+        android:visibility="visible"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
