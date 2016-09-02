@@ -99,6 +99,7 @@
                 android:layout_width="100dp"
                 android:layout_height="44dp"
                 android:layout_alignParentRight="true"
+                android:background="@color/title_black"
                 android:text="@string/account"
                 android:textColor="@color/white"/>
         </RelativeLayout>

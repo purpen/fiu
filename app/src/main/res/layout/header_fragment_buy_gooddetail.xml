@@ -33,10 +33,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/detail_introduct"
+                android:includeFontPadding="false"
                 android:textColor="#999999"
                 android:textSize="12sp"/>
 
             <ImageView
+                android:layout_marginLeft="9dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@mipmap/arrow_right_gray"/>

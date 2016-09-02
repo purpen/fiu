@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -131,4 +132,24 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data==null){
+            return;
+        }
+        switch (requestCode){
+            case RESULT_OK:
+                if(findQJSceneListAdapter==null){
+                    return;
+                }
+                int count = data.getIntExtra(CommentListActivity.class.getSimpleName(), -1);
+                if (count == -1) {
+                    return;
+                }
+                Log.e("<<<首页接收评论数量", "count=" + count);
+                sceneList.get(findQJSceneListAdapter.getPos()).setComment_count(count);
+                findQJSceneListAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
 }

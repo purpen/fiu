@@ -145,14 +145,16 @@ public class QJCateogryAdapter extends BaseAdapter {
                     return;
                 }
                 if (list.get(position).getIs_love() == 1) {
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
+//                    if (!dialog.isShowing()) {
+//                        dialog.show();
+//                    }
+                    holder.qjLove.setEnabled(false);
                     cancelLoveQJ(position, list.get(position).get_id(), holder);
                 } else {
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
+//                    if (!dialog.isShowing()) {
+//                        dialog.show();
+//                    }
+                    holder.qjLove.setEnabled(false);
                     loveQJ(position, list.get(position).get_id(), holder);
                 }
             }
@@ -165,6 +167,7 @@ public class QJCateogryAdapter extends BaseAdapter {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -185,6 +188,7 @@ public class QJCateogryAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -196,6 +200,7 @@ public class QJCateogryAdapter extends BaseAdapter {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -216,6 +221,7 @@ public class QJCateogryAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.qjLove.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

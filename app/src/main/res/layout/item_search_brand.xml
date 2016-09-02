@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="76dp"
             android:background="#e0e0e0"/>
     </RelativeLayout>
 

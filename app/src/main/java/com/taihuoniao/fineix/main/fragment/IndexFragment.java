@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsQJActivity;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
@@ -405,5 +407,27 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                 break;
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("<<<","评论返回,requestCode="+requestCode+",resultCode="+resultCode+",intent="+data);
+        if (data == null) {
+            return;
+        }
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                if (indexQJListAdapter == null) {
+                    return;
+                }
+                int count = data.getIntExtra(CommentListActivity.class.getSimpleName(), -1);
+                if (count == -1) {
+                    return;
+                }
+                Log.e("<<<首页接收评论数量", "count=" + count);
+                sceneList.get(indexQJListAdapter.getPos()).setComment_count(count);
+                indexQJListAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 }

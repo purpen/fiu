@@ -55,8 +55,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="@drawable/shape_corner_969696_nothing"
-            android:text="+ 关注"
+            android:background="@mipmap/index_attention"
             android:textColor="@color/white"
             android:textSize="12sp"/>
 

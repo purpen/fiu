@@ -35,20 +35,17 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
         holder.title.setText(list.get(position).getTitle());
         holder.person.setText(list.get(position).getAttend_count() + "人参加");
         switch (list.get(position).getType()) {
-            case 1:
-                holder.label.setImageResource(R.mipmap.subject_wenzhang);
-                break;
             case 2:
                 holder.label.setImageResource(R.mipmap.subject_huodong);
                 break;
@@ -57,6 +54,10 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
                 break;
             case 4:
                 holder.label.setImageResource(R.mipmap.subject_xinpin);
+                break;
+            default:
+                holder.label.setImageResource(R.mipmap.subject_wenzhang);
+                holder.person.setText(list.get(position).getAttend_count() + "人已读");
                 break;
         }
     }

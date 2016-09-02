@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,7 +119,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 bottomLinear.setTranslationY(0);
                 animFlag = 0;
             }
-        }else if(intent.hasExtra(FindFragment.class.getSimpleName())){
+        } else if (intent.hasExtra(FindFragment.class.getSimpleName())) {
             which = FindFragment.class.getSimpleName();
         }
         which2Switch();
@@ -133,7 +134,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             switchFragmentandImg(MineFragment.class);
         } else if (TextUtils.equals(WellGoodsFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(WellGoodsFragment.class);
-        }else if(TextUtils.equals(FindFragment.class.getSimpleName(),which)){
+        } else if (TextUtils.equals(FindFragment.class.getSimpleName(), which)) {
             switchFragmentandImg(FindFragment.class);
         }
     }
@@ -173,6 +174,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         intentFilter.addAction(DataConstants.BroadShopCart);
         registerReceiver(mainReceiver, intentFilter);
         WindowUtils.showStatusBar(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private void recoverAllState(Bundle savedInstanceState) {
@@ -432,7 +445,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstRelative.setVisibility(View.GONE);
                                 firstRightImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.nothing);
-                                firstRelative.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -461,7 +473,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstRelative.setVisibility(View.GONE);
                                 firstRightImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.nothing);
-                                firstRelative.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -490,7 +501,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 firstRelative.setVisibility(View.GONE);
                                 firstRightImg.setVisibility(View.GONE);
                                 firstRelative.setBackgroundResource(R.color.nothing);
-                                firstRelative.setPadding(0, 0, 0, 0);
                             }
                         }
                     });
@@ -612,6 +622,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private int animFlag = 0;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("<<<", "MainActivity,,onActivityResult");
+        for (Fragment fragment : fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     /**
      * 菜单、返回键响应

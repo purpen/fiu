@@ -12,7 +12,7 @@
     <string name="forget_password">忘记登录密码?</string>
     <string name="forget_password_tips">如果您忘记了密码,可以通过手机号找回</string>
     <string name="network_err">网络异常,请确认网络畅通或请联系我们</string>
-    <string name="subscribe_theme">订阅你感兴趣的情景主题</string>
+    <string name="subscribe_theme">订阅你感兴趣的情境主题</string>
     <string name="focus_user">关注你感兴趣的人</string>
     <string name="known_more">关于你我们想了解更多</string>
     <string name="theme_subtitle">每个人心中都有一个不曾到过的美景，每个人心中都有一个不曾拥有的美物</string>
@@ -41,7 +41,7 @@
     <string name="tianmao">天猫</string>
     <string name="yamaxun">亚马逊</string>
     <string name="select_qj">选择情境</string>
-    <string name="search_qj">搜索情景</string>
+    <string name="search_qj">搜索情境</string>
     <string name="focus">关注</string>
     <string name="focused">已关注</string>
     <!-- SelectURLActivity -->
@@ -345,7 +345,7 @@
     <string name="search_user">搜索用户</string>
     <string name="search_text">搜索文字</string>
     <string name="select_all">全选</string>
-    <string name="account">结算</string>
+    <string name="account">去结算</string>
     <string name="cart_is_empty">购物车又空啦，回“好货”入点新货吧</string>
     <string name="go_for_stroll">去逛逛</string>
     <string name="inventory">库存:</string>
@@ -436,7 +436,7 @@
     <string name="detail_introduct">详情介绍</string>
     <string name="product_bright">产品亮点</string>
     <string name="choiceness_subject">精选主题</string>
-    <string name="choiceness_qingjing">精选情景</string>
+    <string name="choiceness_qingjing">精选情境</string>
     <string name="select_product_to_pic">选择产品添加到当前图片中</string>
     <string name="or_input_message_self">或自行输入产品信息</string>
     <string name="product_name">产品名称</string>

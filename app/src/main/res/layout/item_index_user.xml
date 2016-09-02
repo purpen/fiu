@@ -23,6 +23,8 @@
                 android:id="@+id/head_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                app:riv_border_width="1px"
+                app:riv_border_color="#cccccc"
                 android:src="@mipmap/default_head"
                 app:riv_corner_radius="100dp"/>
 
@@ -37,14 +39,26 @@
                 android:textSize="12sp"/>
 
             <TextView
-                android:id="@+id/summary"
+                android:id="@+id/label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
-                android:maxLines="2"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textColor="#666666"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
                 android:textColor="#666666"
                 android:textSize="10sp"/>
 

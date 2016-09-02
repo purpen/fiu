@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +114,7 @@ public class ShopCartAdapter extends BaseAdapter {
             mHolder.mCount = (TextView) convertView.findViewById(R.id.tv_count_shopcart_item);
             mHolder.mColor = (TextView) convertView.findViewById(R.id.tv_color_shopcart_item);
             mHolder.mPrice = (TextView) convertView.findViewById(R.id.tv_price_shopcart_item);
-            mHolder.mImageGoods = (ImageView) convertView.findViewById(R.id.image_shopcart_item);
+            mHolder.mImageGoods = (RoundedImageView) convertView.findViewById(R.id.image_shopcart_item);
             mHolder.mTittle = (TextView) convertView.findViewById(R.id.tv_title_shopcart_item);
             mHolder.mCheckBox = (CheckBox) convertView.findViewById(R.id.checkbox_shopcart_item);
             mHolder.mRightItem = (LinearLayout) convertView.findViewById(R.id.linear_item_right);
@@ -215,7 +215,7 @@ public class ShopCartAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        public ImageView mImageGoods;
+        public RoundedImageView mImageGoods;
         TextView mTittle;
         TextView mPrice;
         TextView mCount;

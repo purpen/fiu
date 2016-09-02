@@ -8,14 +8,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -292,13 +289,13 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                 Log.e("<<<", "action_move=x=" + event.getX() + ",y=" + event.getY());
                 nowP = new PointF(event.getRawX(), event.getRawY());
                 if (startP != null && container.getPaddingTop() <= 0 && container.getPaddingTop() >= -MainApplication.getContext().getScreenWidth()) {
-                    if (nowP.y < startP.y) {
+                    if (nowP.y < startP.y && startP.y >= titleLayout.getMeasuredHeight() + MainApplication.getContext().getScreenWidth()) {
                         Log.e("<<<", "nowp<startp");
                         if (container.getPaddingTop() == -MainApplication.getContext().getScreenWidth()) {
                             return true;
                         }
                         container.setPadding(0, (int) (nowP.y - startP.y), 0, 0);
-                    } else {
+                    } else if (nowP.y > startP.y && startP.y <= titleLayout.getMeasuredHeight() + arrowContainer.getMeasuredHeight()) {
                         Log.e("<<<", "nowp>startp");
                         if (container.getPaddingTop() == 0) {
                             return true;
@@ -364,32 +361,32 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                     }
                     //滑动
                     if (container.getPaddingTop() > -MainApplication.getContext().getScreenWidth() &&
-                            container.getPaddingTop() < -MainApplication.getContext().getScreenWidth() / 2) {
-                        ValueAnimator valueAnimator = ValueAnimator.ofFloat(container.getPaddingTop(), -MainApplication.getContext().getScreenWidth());
+                            container.getPaddingTop() <= -MainApplication.getContext().getScreenWidth() / 2) {
+                        ValueAnimator valueAnimator = ValueAnimator.ofInt(container.getPaddingTop(), -MainApplication.getContext().getScreenWidth());
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                float f = (float) animation.getAnimatedValue();
+                                int f = (int) animation.getAnimatedValue();
                                 container.setPadding(0, (int) f, 0, 0);
                                 arrowImg.setRotation(animation.getAnimatedFraction() * 180);
                             }
                         });
-                        valueAnimator.setDuration((long) (((long) (MainApplication.getContext().getScreenWidth()) + container.getTranslationY()) * 500 / MainApplication.getContext().getScreenWidth()))
+                        valueAnimator.setDuration(((long) (MainApplication.getContext().getScreenWidth()) + container.getPaddingTop()) * 500 / MainApplication.getContext().getScreenWidth())
                                 .start();
                         startP = null;
                         nowP = null;
                         return true;
                     } else if (container.getPaddingTop() < 0 && container.getPaddingTop() > -MainApplication.getContext().getScreenWidth() / 2) {
-                        ValueAnimator valueAnimator = ValueAnimator.ofFloat(container.getPaddingTop(), 0);
+                        ValueAnimator valueAnimator = ValueAnimator.ofInt(container.getPaddingTop(), 0);
                         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                float f = (float) animation.getAnimatedValue();
+                                int f = (int) animation.getAnimatedValue();
                                 container.setPadding(0, (int) f, 0, 0);
-                                arrowImg.setRotation((1 - animation.getAnimatedFraction()) * 180);
+                                arrowImg.setRotation((1f - animation.getAnimatedFraction()) * 180);
                             }
                         });
-                        valueAnimator.setDuration((long) (-container.getTranslationY() * 500 / MainApplication.getContext().getScreenWidth()))
+                        valueAnimator.setDuration((long) (-container.getPaddingTop() * 500 / MainApplication.getContext().getScreenWidth()))
                                 .start();
 //                        ObjectAnimator.ofFloat(container, "translationY", 0)
 //                                .setDuration((long) (-container.getTranslationY() * 500 / MainApplication.getContext().getScreenWidth()))
@@ -414,11 +411,4 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 }

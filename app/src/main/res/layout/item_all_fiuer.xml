@@ -40,7 +40,7 @@
             android:layout_width="41dp"
             android:layout_height="41dp"
             app:riv_border_color="#a5a6a5"
-            app:riv_border_width="1dp"
+            app:riv_border_width="1px"
             app:riv_corner_radius="@dimen/dp100"/>
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView

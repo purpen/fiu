@@ -203,14 +203,16 @@ public class FindQJAdapter extends BaseAdapter {
                         if (LoginInfo.isUserLogin()) {
                             //已经登录
                             if (sceneList.get(qjPosition).getIs_love() == 1) {
-                                if (!dialog.isShowing()) {
-                                    dialog.show();
-                                }
+//                                if (!dialog.isShowing()) {
+//                                    dialog.show();
+//                                }
+                                holder.qjLove1.setEnabled(false);
                                 cancelLoveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             } else {
-                                if (!dialog.isShowing()) {
-                                    dialog.show();
-                                }
+//                                if (!dialog.isShowing()) {
+//                                    dialog.show();
+//                                }
+                                holder.qjLove1.setEnabled(false);
                                 loveQJ(qjPosition, sceneList.get(qjPosition).get_id(), holder, false);
                             }
                             return;
@@ -291,14 +293,16 @@ public class FindQJAdapter extends BaseAdapter {
                             if (LoginInfo.isUserLogin()) {
                                 //已经登录
                                 if (sceneList.get(qjPosition + 1).getIs_love() == 1) {
-                                    if (!dialog.isShowing()) {
-                                        dialog.show();
-                                    }
+//                                    if (!dialog.isShowing()) {
+//                                        dialog.show();
+//                                    }
+                                    holder.qjLove2.setEnabled(false);
                                     cancelLoveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, true);
                                 } else {
-                                    if (!dialog.isShowing()) {
-                                        dialog.show();
-                                    }
+//                                    if (!dialog.isShowing()) {
+//                                        dialog.show();
+//                                    }
+                                    holder.qjLove2.setEnabled(false);
                                     loveQJ(qjPosition + 1, sceneList.get(qjPosition + 1).get_id(), holder, true);
                                 }
                                 return;
@@ -426,6 +430,8 @@ public class FindQJAdapter extends BaseAdapter {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.qjLove1.setEnabled(true);
+                holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -450,6 +456,8 @@ public class FindQJAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.qjLove1.setEnabled(true);
+                holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -461,6 +469,8 @@ public class FindQJAdapter extends BaseAdapter {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.qjLove1.setEnabled(true);
+                holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -485,6 +495,8 @@ public class FindQJAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.qjLove1.setEnabled(true);
+                holder.qjLove2.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

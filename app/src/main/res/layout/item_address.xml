@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/item_address_editimg"
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

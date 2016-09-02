@@ -72,7 +72,8 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/yellow_bd8913"
         app:tabTextAppearance="@style/searchTab"
-        app:tabTextColor="#666666"/>
+        app:tabTextColor="#666666"
+        />
 
     <View
         android:layout_width="match_parent"

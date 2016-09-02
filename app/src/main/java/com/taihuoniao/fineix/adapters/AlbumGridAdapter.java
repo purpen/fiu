@@ -70,17 +70,14 @@ public class AlbumGridAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
-//        Log.e("<<<加载图片的路径",photoList.get(position).getImageUri());
-//        BitmapFactory.Options opt = new BitmapFactory.Options();
-//        opt.inPreferredConfig = Bitmap.Config.RGB_565;
-//        opt.inDither = false;
-//        Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), photoList.get(position).getId(), MediaStore.Images.Thumbnails.MINI_KIND, opt);
-//        hold.img.setImageBitmap(bitmap);
-        ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
         if (photoList.get(position).isChecked()) {
             hold.tv.setBackgroundResource(R.drawable.yellow_album_ground);
         } else {
             hold.tv.setBackgroundResource(R.color.nothing);
+        }
+        if (hold.img.getTag() == null || !((String) hold.img.getTag()).equals(photoList.get(position).getImageUri())) {
+            ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
+            hold.img.setTag(photoList.get(position).getImageUri());
         }
         return convertView;
     }
