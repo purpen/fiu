@@ -222,7 +222,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         if (dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
-                LogUtil.e("result", responseInfo.result);
+//                LogUtil.e("result", responseInfo.result);
 
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
