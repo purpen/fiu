@@ -184,7 +184,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         lv_cj.addHeaderView(headView);
         adapterCJ = new UserQJListAdapter1(mSceneList, activity);
         lv_cj.setAdapter(adapterCJ);
-        lv_cj.setSelectionFromTop(0, getResources().getDimensionPixelSize(R.dimen.dp50));
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.INVISIBLE);
         } else {
