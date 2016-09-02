@@ -1,14 +1,21 @@
 package com.taihuoniao.fineix.scene;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -167,6 +174,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             //设置背景图片
             backgroundImg.setImageBitmap(MainApplication.editBitmap);
             //添加标签
+            if (MainApplication.tagInfoList == null) {
+                return;
+            }
             for (final TagItem tagItem : MainApplication.tagInfoList) {
                 final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 final LabelView labelView = new LabelView(this);
@@ -409,7 +419,15 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             case R.id.des_tv:
             case R.id.qj_title_tv:
             case R.id.qj_title_tv2:
-                showSelectEnvirPop();
+                Intent intent1 = new Intent(CreateQJActivity.this, AddEnvirActivity.class);
+                if (qjTitleTv2.getVisibility() == View.VISIBLE) {
+                    intent1.putExtra("title", qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());
+                } else {
+                    intent1.putExtra("title", qjTitleTv.getText().toString());
+                }
+                intent1.putExtra("des", desTv.getText().toString());
+                startActivityForResult(intent1, 1);
+                overridePendingTransition(R.anim.bottom_to_up, R.anim.abc_fade_out);
                 break;
             case R.id.title_continue:
                 long now = System.currentTimeMillis();
@@ -505,6 +523,21 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 });
                 thread.start();
                 break;
+        }
+    }
+
+    private void blurActivity() {
+        try {
+            MainApplication.blurBitmap = blur(myShot(CreateQJActivity.this), 25f);
+        } catch (Exception e) {
+            MainApplication.blurBitmap = myShot(CreateQJActivity.this);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            blurActivity();
         }
     }
 
@@ -625,9 +658,58 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
+                case 2:
+                    final String titleIntent = data.getStringExtra("title");
+                    String desIntent = data.getStringExtra("des");
+                    if (titleIntent != null) {
+                        qjTitleTv.setText(titleIntent);
+                        qjTitleTv.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (qjTitleTv.getLineCount() >= 2) {
+                                    Layout layout = qjTitleTv.getLayout();
+                                    StringBuilder SrcStr = new StringBuilder(titleIntent);
+                                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
+                                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
+                                    qjTitleTv2.setText(str0);
+                                    qjTitleTv.setText(str1);
+                                    qjTitleTv2.setVisibility(View.VISIBLE);
+                                } else {
+                                    qjTitleTv2.setText("");
+                                    qjTitleTv2.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+                    if (desIntent != null) {
+                        tags = new StringBuilder();
+                        int sta = 0;
+                        SpannableString spannableStringBuilder = new SpannableString(desIntent);
+                        while (desIntent.substring(sta).contains("#")) {
+                            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
+                            sta = desIntent.indexOf("#", sta);
+                            if (desIntent.substring(sta).contains(" ")) {
+                                int en = desIntent.indexOf(" ", sta);
+                                tags.append(",").append(desIntent.substring(sta + 1, en));
+                                spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                sta = en;
+                            } else {
+                                tags.append(",").append(desIntent.substring(sta + 1));
+                                spannableStringBuilder.setSpan(foregroundColorSpan, sta, desIntent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                break;
+                            }
+                        }
+                        if (tags.length() > 0) {
+                            tags.deleteCharAt(0);
+                        }
+                        desTv.setText(spannableStringBuilder);
+                    }
+                    blurActivity();
+                    break;
                 case 1:
                     String str = data.getStringExtra(AddLabelActivity.class.getSimpleName());
                     holder.des.getText().insert(holder.des.getSelectionStart(), str);
+                    blurActivity();
                     break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
                     PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
@@ -1113,5 +1195,39 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public Bitmap myShot(Activity activity) {
+        // 获取windows中最顶层的view
+        View view = activity.getWindow().getDecorView();
+        view.buildDrawingCache();
+        // 获取屏幕宽和高
+        int widths = MainApplication.getContext().getScreenWidth();
+        int heights = MainApplication.getContext().getScreenHeight();
+        // 允许当前窗口保存缓存信息
+        view.setDrawingCacheEnabled(true);
+        // 去掉状态栏
+        Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache(), 0,
+                0, widths, heights);
+        // 销毁缓存信息
+        view.destroyDrawingCache();
+        return bmp;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private Bitmap blur(Bitmap bkg, float radius) throws Exception {
+        Bitmap overlay = Bitmap.createBitmap(bkg.getWidth(), bkg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(overlay);
+        canvas.drawBitmap(bkg, 0, 0, null);
+        RenderScript rs = RenderScript.create(this);
+        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
+        ScriptIntrinsicBlur blur;
+        blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
+        blur.setInput(overlayAlloc);
+        blur.setRadius(radius);
+        blur.forEach(overlayAlloc);
+        overlayAlloc.copyTo(overlay);
+        rs.destroy();
+        return overlay;
     }
 }

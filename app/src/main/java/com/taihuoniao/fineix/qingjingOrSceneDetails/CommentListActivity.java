@@ -109,10 +109,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    sendBtn.setTextColor(getResources().getColor(R.color.black));
+//                    sendBtn.setTextColor(getResources().getColor(R.color.black));
                     sendBtn.setEnabled(true);
                 } else {
-                    sendBtn.setTextColor(getResources().getColor(R.color.color_ccc));
+//                    sendBtn.setTextColor(getResources().getColor(R.color.color_ccc));
                     sendBtn.setEnabled(false);
                 }
             }
@@ -338,6 +338,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<评论列表", responseInfo.result);
                 CommentsBean netComments = new CommentsBean();
                 try {
                     Gson gson = new Gson();
@@ -379,7 +380,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        if (commentList != null) {
+        if (commentList != null && nothingTv.getVisibility() != View.VISIBLE) {
             Intent intent = new Intent();
             intent.putExtra(CommentListActivity.class.getSimpleName(), commentList.size());
             setResult(RESULT_OK, intent);

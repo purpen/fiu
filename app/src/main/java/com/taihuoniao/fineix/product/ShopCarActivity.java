@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.product;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -146,7 +145,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             }
                             mPayMoneyAll = 0.0;//全局的
                             mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
-                            mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                             adapter.notifyDataSetChanged();
                             if (!totalList.isEmpty()) {
                                 mEmptyLayout.setVisibility(View.GONE);
@@ -252,7 +250,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     title.setRightButton("完成");
                     mDeleteCalculate.setText("删除");
                     mAllPrice.setVisibility(View.INVISIBLE);
-                    mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                     DataPaser.shopCartParser(mHandler);
                     mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -275,14 +272,12 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 //                                }
 //                            });
                             mAllCheck.setChecked(false);
-                            mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                             totalList.get(position).put("status", viewHolder.mCheckBox.isChecked());
                             int count = 0;
                             mPayMoneyAll = 0.0;//全局的
                             for (int i = 0; i < totalList.size(); i++) {
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
-                                    mDeleteCalculate.setBackgroundResource(R.color.title_black);
                                 }
                             }
                             if (count == totalList.size()) {
@@ -319,18 +314,14 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     title.setRightButton("编缉");
                     mAllPrice.setVisibility(View.VISIBLE);
                     mAllPrice.setText("¥0.00");
-                    mDeleteCalculate.setText("结算");
-                    mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
-//                    DataPaser.shopCartParser(mHandler);
+                    mDeleteCalculate.setText("去结算");
                     mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             ShopCartAdapter.ViewHolder viewHolder = (ShopCartAdapter.ViewHolder) view.getTag();
                             // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                             viewHolder.mCheckBox.toggle();
-
                             mAllCheck.setChecked(false);
-                            mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                             totalList.get(position).put("status", viewHolder.mCheckBox.isChecked());
                             int count = 0;
                             mPayMoneyAll = 0.0;//全局的
@@ -339,7 +330,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                                 if (totalList.get(i).get("status").equals(true)) {
                                     count = count + 1;
                                     mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                                    mDeleteCalculate.setBackgroundResource(R.color.title_black);
                                 }
                             }
                             mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
@@ -361,7 +351,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 // 让当前checkbox的勾选项变为相反状态，即如被勾则改为勾，反之改为不勾
                 viewHolder.mCheckBox.toggle();
                 mAllCheck.setChecked(false);
-                mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                 totalList.get(position).put("status", viewHolder.mCheckBox.isChecked());
                 int count = 0;
                 mPayMoneyAll = 0.00;//全局的
@@ -370,7 +359,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                     if (totalList.get(i).get("status").equals(true)) {
                         count = count + 1;
                         mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
-                        mDeleteCalculate.setBackgroundResource(R.color.title_black);
                     }
                 }
                 mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
@@ -396,33 +384,18 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
             case R.id.checkbox_choice_all_shopcart_item://全选
                 for (int i = 0; i < totalList.size(); i++) {
                     if (mAllCheck.isChecked()) {
-                        //在这change为1是因为在上面切换了“编缉”、“完成”这一按钮后，change在括号内最后一行代码处被赋为了1，
-                        // 所以，在这里1所代表的状态即是上面0所代表的状态，反之亦然
-                        if (change == 1) {
-                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
-                        } else if (change == 0) {
-                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
-                        } else {
-                            mDeleteCalculate.setBackgroundResource(R.color.title_black);
-                        }
-
                         totalList.get(i).put("status", true);
                         mPayMoneyAll = mPayMoneyAll + Double.parseDouble(totalList.get(i).get("keyPrice").toString());
                     } else {
                         totalList.get(i).put("status", false);
                         mPayMoneyAll = 0.00;
-
-                        mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
-
                     }
                 }
                 mAllPrice.setText(String.format("¥%s", df.format(mPayMoneyAll)));
                 adapter.reloadListView();
                 break;
             case R.id.bt_delete_calculate_shopcart_item://结算、删除按钮
-                if (!mDialog.isShowing()) {
-                    mDialog.show();
-                }
+
                 //拼接数组作为字符串参数访问网络
                 StringBuilder builder = new StringBuilder();
                 builder.append("[");
@@ -442,8 +415,14 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 builder.replace(builder.length() - 2, builder.length() - 1, "");
                 String array = builder.toString();
                 if (change == 0 && !list_delete.isEmpty()) {
+                    if (!mDialog.isShowing()) {
+                        mDialog.show();
+                    }
                     DataPaser.shopCartCalculateParser(array, mHandler);
                 } else if (change == 1 && !list_delete.isEmpty()) {
+                    if (!mDialog.isShowing()) {
+                        mDialog.show();
+                    }
                     ClientDiscoverAPI.deletShopCartNet(array, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -453,7 +432,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             if (mAllCheck.isChecked()) {
                                 mAllCheck.setChecked(false);
                             }
-                            mDeleteCalculate.setBackgroundColor(Color.parseColor("#e0e0e0"));
                             DataPaser.shopCartNumberParser(mHandler);
                             if (totalList.size() == list_delete.size()) {
                                 mEmptyLayout.setVisibility(View.VISIBLE);
@@ -472,6 +450,9 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 
                 } else {
                     if (!list_delete.isEmpty()) {
+                        if (!mDialog.isShowing()) {
+                            mDialog.show();
+                        }
                         DataPaser.shopCartCalculateParser(array, mHandler);
                     }
 
@@ -519,12 +500,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     }
 
     //定义日期格式，照搬即可
-    public  String formatDate(Date date) {
+    public String formatDate(Date date) {
         return dateFormat.format(date);
     }
 
-    private  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
 
     @Override

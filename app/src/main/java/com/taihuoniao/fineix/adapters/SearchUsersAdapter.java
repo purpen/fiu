@@ -28,7 +28,10 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -97,6 +100,8 @@ public class SearchUsersAdapter extends BaseAdapter {
         if (list.get(position).getIs_follow() == 1) {
             holder.focusBtn.setBackgroundResource(R.drawable.border_radius5_pressed);
             holder.focusBtn.setText("已关注");
+            holder.focusBtn.setPadding(DensityUtils.dp2px(activity, 7), 0, DensityUtils.dp2px(activity, 7), 0);
+            holder.focusBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
             holder.focusBtn.setTextColor(activity.getResources().getColor(R.color.white));
 //            setFocusBtnStyle(holder.focusBtn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
         } else {
@@ -120,10 +125,7 @@ public class SearchUsersAdapter extends BaseAdapter {
                         }
                         fllow(position, list.get(position).getUser_id(), holder);
                     } else {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
-                        cancelFollow(position, list.get(position).getUser_id(), holder);
+                        showFocusFansConfirmView(list.get(position), holder);
                     }
                     return;
                 }
@@ -154,6 +156,8 @@ public class SearchUsersAdapter extends BaseAdapter {
                 if (netBean.isSuccess()) {
                     holder.focusBtn.setBackgroundResource(R.drawable.border_radius5_pressed);
                     holder.focusBtn.setText("已关注");
+                    holder.focusBtn.setPadding(DensityUtils.dp2px(activity, 7), 0, DensityUtils.dp2px(activity, 7), 0);
+                    holder.focusBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
                     holder.focusBtn.setTextColor(activity.getResources().getColor(R.color.white));
                     list.get(position).setIs_follow(1);
                 } else {
@@ -169,9 +173,39 @@ public class SearchUsersAdapter extends BaseAdapter {
         });
     }
 
+    //取消关注弹窗
+    private void showFocusFansConfirmView(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
+        View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
+        RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
+        TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
+        TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
+        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        ImageLoader.getInstance().displayImage(item.getAvatar_url(), riv);
+        tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getNickname()));
+        tv_album.setText("取消关注");
+        tv_album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                cancelFollow(item, holder);
+            }
+        });
+        tv_album.setTag(item);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+            }
+        });
+        PopupWindowUtil.show(activity, view);
+    }
+
     //取消关注
-    private void cancelFollow(final int position, final String otherUserId, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelFocusOperate(otherUserId, new RequestCallBack<String>() {
+    private void cancelFollow(final SearchBean.Data.SearchItem item, final ViewHolder holder) {
+        ClientDiscoverAPI.cancelFocusOperate(item.getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -188,7 +222,7 @@ public class SearchUsersAdapter extends BaseAdapter {
                     holder.focusBtn.setBackgroundResource(R.drawable.shape_subscribe_theme);
                     holder.focusBtn.setText("+关注");
                     holder.focusBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
-                    list.get(position).setIs_follow(0);
+                    item.setIs_follow(0);
                     return;
                 }
                 ToastUtils.showError(netBean.getMessage());

@@ -80,10 +80,16 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void requestNet() {
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-        categoryList();
+//        if (!dialog.isShowing()) {
+//            dialog.show();
+//        }
+
+        fragmentList.add(GoodListFragment.newInstance(id, null));
+        titleList.add("");
+        tabLayout.setVisibility(View.GONE);
+        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        viewPager.setAdapter(searchViewPagerAdapter);
+//        categoryList();
     }
 
     @Override

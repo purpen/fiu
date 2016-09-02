@@ -54,7 +54,9 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -73,6 +75,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private WaittingDialog dialog;
+    private int pos;
     //popupwindow下的控件
     private View popup_view;
     private PopupWindow popupWindow;
@@ -85,6 +88,10 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         this.sceneList = sceneList;
         dialog = new WaittingDialog(activity);
         initPopupWindow();
+    }
+
+    public int getPos() {
+        return pos;
     }
 
     private void initPopupWindow() {
@@ -240,11 +247,10 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
-                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                holder.attentionBtn.setText("已关注");
+                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+//                setFocusBtnStyle(holder.attentionBtn,false);
             } else {
-                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                holder.attentionBtn.setText("+ 关注");
+                holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
             }
         }
         ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
@@ -339,13 +345,13 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    switch (productBean.getType()){
+                    switch (productBean.getType()) {
                         case 2:
-                            Log.e("<<<","可购买");
+                            Log.e("<<<", "可购买");
                             intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
-                            Log.e("<<<","不可购买");
+                            Log.e("<<<", "不可购买");
                             intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
@@ -393,10 +399,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                         }
                         fllow(position, sceneList.get(position).getUser_id(), holder);
                     } else {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
-                        cancelFollow(position, sceneList.get(position).getUser_id(), holder);
+                        showFocusFansConfirmView(sceneList.get(position), holder);
                     }
                     return;
                 }
@@ -413,15 +416,17 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     //已经登录
                     if (sceneList.get(position).getIs_love() == 1) {
 //                        holder.loveImg.setImageResource(R.mipmap.has_love);
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+                        holder.loveRelative.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
 //                        holder.loveImg.setImageResource(R.mipmap.index_love);
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+                        holder.loveRelative.setEnabled(false);
                         loveQJ(position, sceneList.get(position).get_id(), holder);
                     }
                     return;
@@ -438,7 +443,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivity(intent3);
+                activity.startActivityForResult(intent3,1);
+                pos = position;
             }
         });
         holder.commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -448,7 +454,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivity(intent3);
+                activity.startActivityForResult(intent3,1);
+                pos = position;
             }
         });
         holder.moreComment.setOnClickListener(new View.OnClickListener() {
@@ -458,7 +465,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivity(intent3);
+                activity.startActivityForResult(intent3,1);
+                pos = position;
             }
         });
         //跳转到分享页面
@@ -491,6 +499,36 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
         });
         return convertView;
+    }
+
+    //取消关注弹窗
+    private void showFocusFansConfirmView(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
+        View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
+        RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
+        TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
+        TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
+        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
+        tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getUser_info().getNickname()));
+        tv_album.setText("取消关注");
+        tv_album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                cancelFollow(item, holder);
+            }
+        });
+        tv_album.setTag(item);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+            }
+        });
+        PopupWindowUtil.show(activity, view);
     }
 
     //取消收藏情景
@@ -591,6 +629,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -613,6 +652,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -624,6 +664,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -646,6 +687,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                holder.loveRelative.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -669,8 +711,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
-                    holder.attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
-                    holder.attentionBtn.setText("已关注");
+                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                     sceneList.get(position).getUser_info().setIs_follow(1);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
@@ -691,8 +732,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     }
 
     //取消关注
-    private void cancelFollow(final int position, final String otherUserId, final ViewHolder holder) {
-        ClientDiscoverAPI.cancelFocusOperate(otherUserId, new RequestCallBack<String>() {
+    private void cancelFollow(final SceneList.DataBean.RowsBean item, final ViewHolder holder) {
+        ClientDiscoverAPI.cancelFocusOperate(item.getUser_info().getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -706,10 +747,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                     Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
-                    holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                    holder.attentionBtn.setText("+ 关注");
+                    holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
-                        if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
+                        if (rowsBean.getUser_id().equals(item.getUser_info().getUser_id())) {
                             rowsBean.getUser_info().setIs_follow(0);
                         }
                     }

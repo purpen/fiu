@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -12,9 +13,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
@@ -29,8 +32,10 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchProductFragme
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchQJFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchSubjectFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchUserFragment;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +132,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         titleList = new ArrayList<>();
         if (!getIntent().hasExtra(WellGoodsFragment.class.getSimpleName())) {
             //添加tab 9
-            titleList.add("情景");
+            titleList.add("情境");
             searchQJFragment = SearchQJFragment.newInstance(q, isContent);
             fragmentList.add(searchQJFragment);
             //添加tab 14
@@ -162,6 +167,23 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         viewPager.setAdapter(searchViewPagerAdapter);
         viewPager.addOnPageChangeListener(this);
         tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.setViewPager(viewPager);
+        tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                try {
+                    setIndicatorWidth();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    tabLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+//        tabLayout.setOnPageChangeListener(this);
         viewPager.setOffscreenPageLimit(fragmentList.size());
         switch (t) {
             case 14:
@@ -179,6 +201,31 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
             default:
                 viewPager.setCurrentItem(fragmentList.indexOf(searchQJFragment), false);
                 break;
+        }
+    }
+
+    private void setIndicatorWidth() throws NoSuchFieldException, IllegalAccessException {
+//        int margin = activity.getResources().getDimensionPixelSize(R.dimen.dp15);
+        if (fragmentList.size() <= 0) {
+            return;
+        }
+        int margin = (int) (((double) tabLayout.getMeasuredWidth() / fragmentList.size() - DensityUtils.sp2px(this, 42)) / 2);
+        Class<?> tablayout = tabLayout.getClass();
+        Field tabStrip = tablayout.getDeclaredField("mTabStrip");
+        tabStrip.setAccessible(true);
+        LinearLayout ll_tab = (LinearLayout) tabStrip.get(tabLayout);
+        for (int i = 0; i < ll_tab.getChildCount(); i++) {
+            View child = ll_tab.getChildAt(i);
+            child.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                params.setMarginStart(margin);
+                params.setMarginEnd(margin);
+            } else {
+                params.setMargins(margin, 0, margin, 0);
+            }
+            child.setLayoutParams(params);
+            child.invalidate();
         }
     }
 

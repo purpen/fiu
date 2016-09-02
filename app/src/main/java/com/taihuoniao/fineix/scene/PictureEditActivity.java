@@ -314,7 +314,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     TagItem tagItem = new TagItem();
                     tagItem.setId(productId);
                     tagItem.setType(type);
-                    tagItem.setName(brandTv.getText().toString() + productName.getText().toString());
+                    tagItem.setName(brandTv.getText().toString() + " " + productName.getText().toString());
                     addLabel(tagItem);
                     brandTv.setText("");
                     productName.setText("");
@@ -625,7 +625,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 case DataConstants.RESULTCODE_EDIT_ADDPRODUCT:
                     final BuyGoodDetailsBean productListBean = (BuyGoodDetailsBean) data.getSerializableExtra("product");
                     //是自动添加标签还是后添加
-                    TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price()+"");
+                    TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price() + "");
                     tag.setId(productListBean.getData().get_id());
                     tag.setLoc(2);
                     tag.setType(1);

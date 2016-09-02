@@ -22,6 +22,7 @@
         android:id="@+id/activity_main_bottomlinear"
         android:layout_width="match_parent"
         android:layout_height="59dp"
+        android:alpha="0.8"
         android:layout_alignParentBottom="true"
         android:background="@mipmap/main_nav_bg"
         android:orientation="horizontal">

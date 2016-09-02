@@ -54,7 +54,9 @@ import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -135,7 +137,7 @@ public class QJDetailActivity extends BaseActivity {
         id = getIntent().getStringExtra("id");
         Log.e("<<<情景详情", "id=" + id);
         if (id == null) {
-            ToastUtils.showError("访问的情景不存在或已删除");
+            ToastUtils.showError("访问的情境不存在或已删除");
             finish();
         }
     }
@@ -340,11 +342,12 @@ public class QJDetailActivity extends BaseActivity {
         } else {
             attentionBtn.setVisibility(View.VISIBLE);
             if (qjDetailBean.getData().getUser_info().getIs_follow() == 1) {
-                attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                attentionBtn.setText("已关注");
+                attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+//                attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
+//                attentionBtn.setText("已关注");
+//                attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
             } else {
-                attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                attentionBtn.setText("+ 关注");
+                attentionBtn.setBackgroundResource(R.mipmap.index_attention);
             }
         }
         ImageLoader.getInstance().displayImage(qjDetailBean.getData().getCover_url(), qjImg);
@@ -440,11 +443,11 @@ public class QJDetailActivity extends BaseActivity {
                     Intent intent = new Intent();
                     switch (productBean.getType()) {
                         case 2:
-                            Log.e("<<<","可购买");
+                            Log.e("<<<", "可购买");
                             intent.setClass(activity, BuyGoodsDetailsActivity.class);
                             break;
                         default:
-                            Log.e("<<<","不可购买");
+                            Log.e("<<<", "不可购买");
                             intent.setClass(activity, GoodsDetailActivity.class);
                             break;
                     }
@@ -492,10 +495,7 @@ public class QJDetailActivity extends BaseActivity {
                         }
                         fllow();
                     } else {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
-                        cancelFollow();
+                        showFocusFansConfirmView();
                     }
                     return;
                 }
@@ -510,14 +510,16 @@ public class QJDetailActivity extends BaseActivity {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (qjDetailBean.getData().getIs_love() == 1) {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+                        loveContainer.setEnabled(false);
                         cancelLoveQJ();
                     } else {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
-                        }
+//                        if (!dialog.isShowing()) {
+//                            dialog.show();
+//                        }
+                        loveContainer.setEnabled(false);
                         loveQJ();
                     }
                     return;
@@ -673,6 +675,7 @@ public class QJDetailActivity extends BaseActivity {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                loveContainer.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -695,6 +698,7 @@ public class QJDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                loveContainer.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -706,6 +710,7 @@ public class QJDetailActivity extends BaseActivity {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                loveContainer.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -728,6 +733,7 @@ public class QJDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                loveContainer.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -751,8 +757,10 @@ public class QJDetailActivity extends BaseActivity {
                     Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
-                    attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
-                    attentionBtn.setText("已关注");
+                    attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+//                    attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
+//                    attentionBtn.setText("已关注");
+//                    attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
                     qjDetailBean.getData().getUser_info().setIs_follow(1);
                 } else {
                     ToastUtils.showError(netBean.getMessage());
@@ -766,7 +774,35 @@ public class QJDetailActivity extends BaseActivity {
             }
         });
     }
-
+    //取消关注弹窗
+    private void showFocusFansConfirmView() {
+        View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
+        RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
+        TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
+        TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
+        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        ImageLoader.getInstance().displayImage(qjDetailBean.getData().getUser_info().getAvatar_url(), riv);
+        tv_take_photo.setText(String.format("取消关注" + " %s ?", qjDetailBean.getData().getUser_info().getNickname()));
+        tv_album.setText("取消关注");
+        tv_album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                cancelFollow();
+            }
+        });
+        tv_album.setTag(qjDetailBean);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+            }
+        });
+        PopupWindowUtil.show(activity, view);
+    }
     //取消关注
     private void cancelFollow() {
         ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
@@ -783,8 +819,7 @@ public class QJDetailActivity extends BaseActivity {
                     Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
-                    attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
-                    attentionBtn.setText("+ 关注");
+                    attentionBtn.setBackgroundResource(R.mipmap.index_attention);
                     qjDetailBean.getData().getUser_info().setIs_follow(0);
                     return;
                 }
@@ -887,7 +922,7 @@ public class QJDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode){
+        switch (resultCode) {
             case RESULT_OK:
                 if (!dialog.isShowing()) {
                     dialog.show();

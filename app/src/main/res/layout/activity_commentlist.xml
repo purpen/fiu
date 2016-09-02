@@ -36,9 +36,9 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:layout_marginLeft="11dp"
-            android:background="@color/nothing"
+            android:background="@drawable/corner_yellow"
             android:text="@string/send"
-            android:textColor="#cccccc"
+            android:textColor="@color/white"
             android:textSize="14sp" />
 
         <EditText

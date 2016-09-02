@@ -20,6 +20,7 @@ import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
 
@@ -69,23 +70,14 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        if (position == list.size() - 1) {
+            holder.container.setPadding(0, 0, 0, DensityUtils.dp2px(activity, 50));
+        } else {
+            holder.container.setPadding(0, 0, 0, 0);
+        }
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.subjectImg);
         holder.subjectName.setText(list.get(position).getTitle());
         holder.subjectName2.setText(list.get(position).getShort_title());
-        switch (list.get(position).getType()) {
-            case 1:
-                holder.subjectLabel.setImageResource(R.mipmap.subject_wenzhang_big);
-                break;
-            case 2:
-                holder.subjectLabel.setImageResource(R.mipmap.subject_huodong_big);
-                break;
-            case 3:
-                holder.subjectLabel.setImageResource(R.mipmap.subject_cuxiao_big);
-                break;
-            case 4:
-                holder.subjectLabel.setImageResource(R.mipmap.subject_xinpin_big);
-                break;
-        }
         holder.subjectImg.setOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
@@ -115,13 +107,13 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
 
         );
         holder.recyclerView.setAdapter(new RecyclerAdapter(activity, list.get(position).getProducts(), new EditRecyclerAdapter.ItemClick() {
-                    @Override
-                    public void click(int postion) {
-                        Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
-                        intent.putExtra("id", list.get(position).getProducts().get(postion).get_id());
-                        activity.startActivity(intent);
-                    }
-                }
+            @Override
+            public void click(int postion) {
+                Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+                intent.putExtra("id", list.get(position).getProducts().get(postion).get_id());
+                activity.startActivity(intent);
+            }
+        }
 
         ));
 //        holder.recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -196,14 +188,14 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        @Bind(R.id.container)
+        RelativeLayout container;
         @Bind(R.id.subject_img)
         ImageView subjectImg;
         @Bind(R.id.subject_name)
         TextView subjectName;
         @Bind(R.id.subject_name2)
         TextView subjectName2;
-        @Bind(R.id.subject_label)
-        ImageView subjectLabel;
         @Bind(R.id.recycler_view)
         RecyclerView recyclerView;
 

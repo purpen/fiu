@@ -371,16 +371,6 @@
         <activity
             android:name=".scene.SearchBrandActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".scene.SelectStoreActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".scene.SearchURLActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleFullscreen"
-            />
-
 
         <activity
             android:name=".map.MapSearchAddressActivity"
@@ -396,10 +386,14 @@
             android:name=".map.DisplayOverlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-
         <activity
-            android:name=".scene.SelectSearchQingjingActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".scene.SearchEnvirActivity"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".scene.AddEnvirActivity"
+            android:configChanges="keyboardHidden"
+            android:theme="@style/NoTitleFullscreen"
+           />
         <activity
             android:name=".map.MapNearByCJActivity"
             android:screenOrientation="portrait"
@@ -425,14 +419,14 @@
         </service>
 
         <!--此处为测试value，线上版本务必更换-->
-        <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="muQDLN6lCST6qMDvTAydAilM"/>
 
         <!--百度地图线上API_KEY-->
-        <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
+        <!--<meta-data-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>-->
 
         <activity
             android:name="com.mob.tools.MobUIShell"

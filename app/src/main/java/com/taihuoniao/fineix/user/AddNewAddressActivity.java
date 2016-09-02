@@ -232,7 +232,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
         if (addressBean != null) {
             titleLayout.setTitle(R.string.edit_address);
         } else {
-            titleLayout.setTitle("新建收货地址");
+            titleLayout.setTitle("新增收货地址");
         }
         addressLinear.setOnClickListener(this);
         isDefaultImg.setOnClickListener(this);

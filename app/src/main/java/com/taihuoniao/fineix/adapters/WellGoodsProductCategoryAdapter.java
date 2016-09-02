@@ -54,7 +54,7 @@ public class WellGoodsProductCategoryAdapter extends BaseAdapter {
             layoutParams.height = layoutParams.width;
             holder.roundImg.setLayoutParams(layoutParams);
             RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) holder.name.getLayoutParams();
-            layoutParams1.topMargin = layoutParams.width / 2;
+            layoutParams1.topMargin = (int) (1.2 * layoutParams.width / 2);
             holder.name.setLayoutParams(layoutParams1);
             convertView.setTag(holder);
         } else {

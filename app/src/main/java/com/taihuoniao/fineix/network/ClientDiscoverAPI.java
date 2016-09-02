@@ -1670,6 +1670,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/user/find_user";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", "1");
+        params.addQueryStringParameter("type","1");
         params.addQueryStringParameter("size", size + "");
         params.addQueryStringParameter("edit_stick", "1");
         params.addQueryStringParameter("sort", "1");

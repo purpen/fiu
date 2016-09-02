@@ -2,6 +2,7 @@
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                                         android:id="@+id/product_recycler"
                                         android:layout_width="match_parent"
+                                        android:background="@color/white"
                                         android:layout_height="195dp"
                                         android:paddingRight="10dp"
                                         android:paddingLeft="10dp">
