@@ -425,7 +425,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                     SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
-                        startActivity(new Intent(activity, OrderInterestQJActivity.class));
+                        startActivity(new Intent(activity, CompleteUserInfoActivity.class));
                     } else {
 //                        startActivity(new Intent(activity, MainActivity.class));
                         LoginCompleteUtils.goFrom(ToLoginActivity.this);

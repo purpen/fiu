@@ -22,7 +22,9 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.album.ImageLoaderEngine;
 import com.taihuoniao.fineix.album.Picker;
@@ -71,7 +73,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     public static final Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
     private String gender = Constants.MALE;
     private Bitmap bitmap;
-
+    private DisplayImageOptions options;
     public static CompleteAvatarNickNameFragment newInstance(UserCompleteData data) {
         CompleteAvatarNickNameFragment fragment = new CompleteAvatarNickNameFragment();
         Bundle bundle = new Bundle();
@@ -86,6 +88,16 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
             data = savedInstanceState.getParcelable("data");
         }
         super.onCreate(savedInstanceState);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -99,7 +111,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-        ImageLoader.getInstance().displayImage(LoginInfo.getHeadPicUrl(), riv);
+        ImageLoader.getInstance().displayImage(LoginInfo.getHeadPicUrl(), riv, options);
         String nickName = LoginInfo.getNickName();
         if (!TextUtils.isEmpty(nickName)) {
             etNickname.setText(nickName);

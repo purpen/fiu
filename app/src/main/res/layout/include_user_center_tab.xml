@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_qj"
                 android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp5"
                 android:drawableLeft="@mipmap/focus_qj"
                 android:drawablePadding="@dimen/dp5"
@@ -79,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_focus"
                 android:layout_centerInParent="true"
+                android:gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp5"
                 android:drawableLeft="@mipmap/focus_user"
                 android:drawablePadding="@dimen/dp5"
@@ -117,6 +119,7 @@
             android:layout_marginTop="@dimen/dp5"
             android:drawableLeft="@mipmap/fans_user"
             android:drawablePadding="@dimen/dp5"
+            android:gravity="center_vertical"
             android:text="粉丝"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp13" />

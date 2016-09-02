@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -42,11 +43,13 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -63,13 +66,13 @@ import butterknife.ButterKnife;
  */
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     private int curPage = 1;
-    private static final String PAGE_SIZE = "10";
     private UserQJListAdapter1 adapterCJ;
     private UserQJListAdapter adapterQJ;
     private List<SceneListBean> mSceneList = new ArrayList<>();
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
     private LinearLayout ll_box;
     private LinearLayout ll_btn_box;
+    //    private RelativeLayout rl_head;
     @Bind(R.id.tv_title)
     TextView tv_title;
     @Bind(R.id.ll_tips)
@@ -91,6 +94,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
     ImageButton iv_right;
+    @Bind(R.id.rl_head)
+    RelativeLayout rl_head;
     private RelativeLayout rl_focus;
     private LinearLayout ll_fans;
     private RelativeLayout rl_qj;
@@ -145,10 +150,17 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
+        WindowUtils.showStatusBar(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            rl_head.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         View headView = Util.inflateView(R.layout.user_center_headview, null);
         if (LoginInfo.getUserId() != userId) {
             iv_right.setVisibility(View.GONE);
         }
+//        rl_head = ButterKnife.findById(headView, R.id.rl_head);
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Util.getScreenWidth());
+//        rl_head.setLayoutParams(params);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
         tv_label = ButterKnife.findById(headView, R.id.tv_label);
         riv = ButterKnife.findById(headView, R.id.riv);
@@ -169,14 +181,24 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         riv_auth = ButterKnife.findById(headView, R.id.riv_auth);
 
         dialog = new WaittingDialog(this);
-
         lv_cj.addHeaderView(headView);
+        adapterCJ = new UserQJListAdapter1(mSceneList, activity);
         lv_cj.setAdapter(adapterCJ);
+        lv_cj.setSelectionFromTop(0, getResources().getDimensionPixelSize(R.dimen.dp50));
         if (userId == LoginInfo.getUserId()) {
             ll_btn_box.setVisibility(View.INVISIBLE);
         } else {
             ll_btn_box.setVisibility(View.VISIBLE);
         }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
@@ -241,7 +263,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情境数据
      */
     private void loadCJData() {
-        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {
@@ -312,12 +334,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    /**
-     * 加载情景数据
-     */
+    @Deprecated
     private void loadQJData() {
-        LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, PAGE_SIZE, userId));
-        ClientDiscoverAPI.getQJList(String.valueOf(curPage), PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
+        LogUtil.e("loadQJData", String.format("curPage==%s;;PAGE_SIZE==%s;;userId==%s", curPage, Constants.PAGE_SIZE, userId));
+        ClientDiscoverAPI.getQJList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {
@@ -505,40 +525,40 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
+//
+//        lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int i) {
+//                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
+//                    if (absListView.getLastVisiblePosition() == mSceneList.size()) {
+//                        LogUtil.e("curPage==", curPage + "");
+//                        isFirstLoad = false;
+//                        loadCJData();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+//            }
+//        });
 
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
-                    if (absListView.getLastVisiblePosition() == mSceneList.size()) {
-                        LogUtil.e("curPage==", curPage + "");
-                        isFirstLoad = false;
-                        loadCJData();
-                    }
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-            }
-        });
-
-        lv_qj.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
                     LogUtil.e("getLastVisiblePosition", absListView.getLastVisiblePosition() + "");
-                    LogUtil.e("mQJList.size", mQJList.size() + "");
+                    LogUtil.e("mQJList.size", mSceneList.size() + "");
                     isFirstLoad = false;
-                    if (mQJList.size() % 2 == 0) {
-                        if (absListView.getLastVisiblePosition() == mQJList.size() / 2) {
+                    if (mSceneList.size() % 2 == 0) {
+                        if (absListView.getLastVisiblePosition() == mSceneList.size() / 2) {
                             LogUtil.e("curPage==偶数", curPage + "");
-                            loadQJData();
+                            loadCJData();
                         }
                     } else {
-                        if (absListView.getLastVisiblePosition() == mQJList.size() / 2 + 1) {
+                        if (absListView.getLastVisiblePosition() == mSceneList.size() / 2 + 1) {
                             LogUtil.e("curPage==奇数", curPage + "");
-                            loadQJData();
+                            loadCJData();
                         }
                     }
                 }

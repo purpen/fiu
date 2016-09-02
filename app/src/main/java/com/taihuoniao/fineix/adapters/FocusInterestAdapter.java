@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,7 +45,11 @@ public class FocusInterestAdapter extends CommonBaseAdapter<User> {
             holder.v.setVisibility(View.GONE);
         }
         holder.tv_nickname.setText(item.nickname);
-        holder.tv_info.setText(item.expert_label);
+        if (TextUtils.isEmpty(item.expert_label)) {
+            holder.tv_info.setText(item.label);
+        } else {
+            holder.tv_info.setText(item.expert_label);
+        }
         if (item.is_love == 1) {
             holder.btn_focus.setPadding(activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0, activity.getResources().getDimensionPixelSize(R.dimen.dp10), 0);
             holder.btn_focus.setText(R.string.focused);

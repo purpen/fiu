@@ -96,6 +96,7 @@ public class FindFriendsActivity extends BaseActivity<FindFriendData.User> imple
         lv = pull_lv.getRefreshableView();
 //        lv.setDividerHeight(getResources().getDimensionPixelSize(R.dimen.dp05));
         pull_lv.getRefreshableView().addHeaderView(view);
+        pull_lv.getRefreshableView().setHeaderDividersEnabled(false);
         pull_lv.setPullToRefreshEnabled(false);
         WindowUtils.chenjin(this);
     }
