@@ -1,5 +1,7 @@
 package com.taihuoniao.fineix.scene;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.design.widget.TabLayout;
@@ -251,13 +253,38 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         if (isShow) {
             Log.e("<<<", "显示软键盘");
             goneLinear.setBottom(r.bottom);
-            goneLinear.setTop(r.bottom- DensityUtils.dp2px(AddEnvirActivity.this,44));
+            goneLinear.setTop(r.bottom - DensityUtils.dp2px(AddEnvirActivity.this, 44));
+            goneLinear.setAlpha(0f);
             goneLinear.setVisibility(View.VISIBLE);
+            ObjectAnimator.ofFloat(goneLinear, "alpha", 0, 1).start();
+
         } else {
             Log.e("<<<", "隐藏软键盘");
-            goneLinear.setVisibility(View.GONE);
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(goneLinear, "alpha", 1, 0);
+            objectAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    goneLinear.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            objectAnimator.start();
         }
-        Log.e("<<<","goneLinear,top="+goneLinear.getTop()+",bottom="+goneLinear.getBottom());
+        Log.e("<<<", "goneLinear,top=" + goneLinear.getTop() + ",bottom=" + goneLinear.getBottom());
     }
 
     @Override

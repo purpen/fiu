@@ -872,10 +872,18 @@ public class IndexQJListAdapter extends BaseAdapter {
             if (userList.get(position).getIdentify().getIs_expert() == 1) {
                 holder.label.setText(userList.get(position).getExpert_label());
                 holder.info.setText(userList.get(position).getExpert_info());
-                holder.info.setVisibility(View.VISIBLE);
             } else {
                 holder.label.setText(userList.get(position).getLabel());
+            }
+            if(TextUtils.isEmpty(holder.label.getText())){
+                holder.label.setVisibility(View.INVISIBLE);
+            }else{
+                holder.label.setVisibility(View.VISIBLE);
+            }
+            if(TextUtils.isEmpty(holder.info.getText())){
                 holder.info.setVisibility(View.INVISIBLE);
+            }else{
+                holder.info.setVisibility(View.VISIBLE);
             }
             if (userList.get(position).getIs_follow() == 1) {
                 holder.followBtn.setBackgroundResource(R.drawable.corner_yellow);
