@@ -180,17 +180,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         dialog = new WaittingDialog(this);
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-//        des.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                Log.e("<<<", "hasFocus=" + hasFocus);
-//                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                Log.e("<<<", "isActive=" + inputMethodManager.isActive(des));
-//                if (hasFocus && inputMethodManager.isActive(des)) {
-//
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -212,6 +201,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 Intent intent = new Intent();
                 intent.putExtra("title", title.getText().toString());
                 intent.putExtra("des", des.getText().toString());
+                intent.putExtra("activeBean", activeTagsBean);
                 setResult(2, intent);
                 onBackPressed();
                 break;
@@ -241,7 +231,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         Log.e("<<<", "跟布局onLayoutChange");
-//        final int softKeyboardHeight = activityView.getBottom() / 4;
         Rect r = new Rect();
         activityView.getWindowVisibleDisplayFrame(r);
         boolean isShow = false;
@@ -257,7 +246,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             goneLinear.setAlpha(0f);
             goneLinear.setVisibility(View.VISIBLE);
             ObjectAnimator.ofFloat(goneLinear, "alpha", 0, 1).start();
-
         } else {
             Log.e("<<<", "隐藏软键盘");
             ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(goneLinear, "alpha", 1, 0);
@@ -294,17 +282,24 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.up_to_bottom);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
-                case 2:
+                case 3:
                     String titleIntent = data.getStringExtra("title");
                     String desIntent = data.getStringExtra("des");
                     Intent intent = new Intent();
                     intent.putExtra("title", titleIntent);
                     intent.putExtra("des", desIntent);
+                    intent.putExtra("activeBean", activeTagsBean);
                     setResult(2, intent);
-                    onBackPressed();
+                    finish();
                     break;
                 case 1:
                     String str = data.getStringExtra(AddLabelActivity.class.getSimpleName());

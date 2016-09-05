@@ -106,7 +106,9 @@ public class SearchUsersAdapter extends BaseAdapter {
 //            setFocusBtnStyle(holder.focusBtn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
         } else {
 //            setFocusBtnStyle(holder.focusBtn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
-            holder.focusBtn.setBackgroundResource(R.drawable.shape_subscribe_theme);
+            holder.focusBtn.setPadding(0, 0, 0, 0);
+            holder.focusBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            holder.focusBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
             holder.focusBtn.setText("+关注");
             holder.focusBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
         }
@@ -219,7 +221,9 @@ public class SearchUsersAdapter extends BaseAdapter {
                     Log.e("<<<", "解析异常");
                 }
                 if (netBean.isSuccess()) {
-                    holder.focusBtn.setBackgroundResource(R.drawable.shape_subscribe_theme);
+                    holder.focusBtn.setPadding(0, 0, 0, 0);
+                    holder.focusBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    holder.focusBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                     holder.focusBtn.setText("+关注");
                     holder.focusBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
                     item.setIs_follow(0);

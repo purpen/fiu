@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,25 +69,7 @@ public class TestShareUtils {
 //            labelView.wave();
 //        }
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), holder.backgroundImg);
-        holder.qjTitleTv.setText(sceneDetails.getData().getTitle());
-        holder.qjTitleTv.post(new Runnable() {
-            @Override
-            public void run() {
-                if (holder.qjTitleTv.getLineCount() >= 2) {
-                    Layout layout = holder.qjTitleTv.getLayout();
-                    StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv.getText().toString());
-                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                    holder.qjTitleTv2.setText(str0);
-                    holder.qjTitleTv.setText(str1);
-                    holder.qjTitleTv2.setVisibility(View.VISIBLE);
-                    title1 = str0;
-                    title2 = str1;
-                } else {
-                    holder.qjTitleTv2.setVisibility(View.GONE);
-                }
-            }
-        });
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,sceneDetails.getData().getTitle());
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getUser_info().getAvatar_url(), holder.userImg);
         if (sceneDetails.getData().getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
@@ -99,20 +80,6 @@ public class TestShareUtils {
         holder.publishTime.setText(sceneDetails.getData().getCreated_at());
         holder.locationTv.setText(sceneDetails.getData().getAddress());
         holder.des.setText(sceneDetails.getData().getDes());
-//        holder.des.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (holder.des.getLineCount() >3) {
-//                    Layout layout = holder.des.getLayout();
-//                    StringBuilder SrcStr = new StringBuilder(holder.des.getText().toString());
-//                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(2)).toString();
-//                    SpannableString spannableString = new SpannableString(str0);
-//                    ImageSpan imageSpan = new ImageSpan(context,R.mipmap.share_des_add);
-//                    spannableString.setSpan(imageSpan,str0.length()-2,str0.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                    holder.des.setText(spannableString);
-//                }
-//            }
-//        });
         return view;
     }
 

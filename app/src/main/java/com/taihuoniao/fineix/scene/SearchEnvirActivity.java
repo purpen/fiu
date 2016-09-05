@@ -68,9 +68,8 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         dialog = new WaittingDialog(this);
         backgroundImg.setImageBitmap(MainApplication.blurBitmap);
-        titleLayout.setBackImgVisible(false);
         titleLayout.setTitle("搜索语境");
-        titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), this);
+        titleLayout.setContinueTvVisible(false);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,9 +133,6 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.title_continue:
-                onBackPressed();
-                break;
             case R.id.search_delete:
                 editText.setText("");
                 break;
@@ -182,7 +178,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) listView.getAdapter().getItem(position);
+        SearchBean.Data.SearchItem searchItem = list.get(position);
         if (searchItem == null) {
             return;
         }
@@ -191,6 +187,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
         Intent intent = new Intent();
         intent.putExtra("title", titleIntent);
         intent.putExtra("des", desIntent);
-        setResult(2, intent);
+        setResult(3, intent);
+        onBackPressed();
     }
 }

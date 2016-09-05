@@ -81,7 +81,7 @@ public class LoadingLayout extends FrameLayout {
                 headerImage.setImageResource(R.mipmap.goicon);
                 break;
         }
-        animImg.setImageDrawable(ContextCompat.getDrawable(context,R.anim.pull_to_refresh_animation));
+        animImg.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.pull_to_refresh_animation));
         animationDrawable = (AnimationDrawable) animImg.getDrawable();
 //        animationDrawable = new AnimationDrawable();
 //        for(int i=0;i<48;i++){

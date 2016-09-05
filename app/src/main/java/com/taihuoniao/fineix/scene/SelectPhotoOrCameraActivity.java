@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.fragments.CameraFragment;
 import com.taihuoniao.fineix.scene.fragments.PictureFragment;
 
@@ -107,7 +108,15 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
                 break;
         }
     }
-//    @Override
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainApplication.blurBitmap = null;
+        MainApplication.editBitmap = null;
+        MainApplication.cropBitmap = null;
+    }
+    //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {
 //        super.onWindowFocusChanged(hasFocus);
 //        if (hasFocus) {

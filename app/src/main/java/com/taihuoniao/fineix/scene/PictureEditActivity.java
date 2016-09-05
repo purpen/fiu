@@ -649,7 +649,6 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                                 dialog.dismiss();
-
                                 EffectUtil.addStickerImage(imageViewTouch, PictureEditActivity.this, loadedImage);
                             }
 

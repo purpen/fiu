@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -60,6 +59,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.LabelView;
@@ -260,15 +260,24 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
         holder.locationTv.setText(sceneList.get(position).getAddress());
+        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
             holder.attentionBtn.setVisibility(View.GONE);
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
-                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
+                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.attentionBtn.setText("已关注");
+                holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                holder.attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
             } else {
                 holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                holder.attentionBtn.setText("");
+                holder.attentionBtn.setPadding(0, 0, 0, 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
         ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
@@ -298,7 +307,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
-//        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
+        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
         if (sceneList.get(position).getComment_count() > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
@@ -307,29 +316,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        if (TextUtils.isEmpty(sceneList.get(position).getTitle())) {
-            holder.qjTitleTv.setVisibility(View.GONE);
-            holder.qjTitleTv2.setVisibility(View.GONE);
-        } else {
-            holder.qjTitleTv.setVisibility(View.VISIBLE);
-            holder.qjTitleTv.setText(sceneList.get(position).getTitle());
-            holder.qjTitleTv.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (holder.qjTitleTv.getLineCount() >= 2) {
-                        Layout layout = holder.qjTitleTv.getLayout();
-                        StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv.getText().toString());
-                        String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                        String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                        holder.qjTitleTv2.setText(str0);
-                        holder.qjTitleTv.setText(str1);
-                        holder.qjTitleTv2.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.qjTitleTv2.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -439,17 +426,9 @@ public class IndexQJListAdapter extends BaseAdapter {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (sceneList.get(position).getIs_love() == 1) {
-//                        holder.loveImg.setImageResource(R.mipmap.has_love);
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.loveRelative.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
-//                        holder.loveImg.setImageResource(R.mipmap.index_love);
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.loveRelative.setEnabled(false);
                         loveQJ(position, sceneList.get(position).get_id(), holder);
                     }
@@ -736,10 +715,9 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-//                    holder.attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
-//                    holder.attentionBtn.setText("已关注");
-//                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
-                    sceneList.get(position).getUser_info().setIs_follow(1);
+                    holder.attentionBtn.setText("");
+                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
                             rowsBean.getUser_info().setIs_follow(1);
@@ -775,6 +753,9 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                    holder.attentionBtn.setText("");
+                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(userInfoBean.getUser_id())) {
                             rowsBean.getUser_info().setIs_follow(0);
@@ -875,14 +856,14 @@ public class IndexQJListAdapter extends BaseAdapter {
             } else {
                 holder.label.setText(userList.get(position).getLabel());
             }
-            if(TextUtils.isEmpty(holder.label.getText())){
+            if (TextUtils.isEmpty(holder.label.getText())) {
                 holder.label.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 holder.label.setVisibility(View.VISIBLE);
             }
-            if(TextUtils.isEmpty(holder.info.getText())){
+            if (TextUtils.isEmpty(holder.info.getText())) {
                 holder.info.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 holder.info.setVisibility(View.VISIBLE);
             }
             if (userList.get(position).getIs_follow() == 1) {
@@ -892,9 +873,11 @@ public class IndexQJListAdapter extends BaseAdapter {
                 holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
                 holder.followBtn.setPadding(DensityUtils.dp2px(activity, 15), 0, DensityUtils.dp2px(activity, 15), 0);
             } else {
+                holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.followBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
                 holder.followBtn.setText("+关注");
+                holder.followBtn.setPadding(0, 0, 0, 0);
             }
             holder.headImg.setTag(userList.get(position).get_id());
             holder.headImg.setOnClickListener(this);
@@ -1046,9 +1029,11 @@ public class IndexQJListAdapter extends BaseAdapter {
                         Log.e("<<<", "解析异常");
                     }
                     if (netBean.isSuccess()) {
+                        holder.followBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         holder.followBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                         holder.followBtn.setTextColor(activity.getResources().getColor(R.color.title_black));
                         holder.followBtn.setText("+关注");
+                        holder.followBtn.setPadding(0, 0, 0, 0);
                         usersBean.setIs_follow(0);
                         return;
                     }

@@ -6,39 +6,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,18 +33,11 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.adapters.EditRecyclerAdapter;
-import com.taihuoniao.fineix.adapters.SearchEnvirAdapter;
-import com.taihuoniao.fineix.adapters.ShareCJSelectListAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.ActiveTagsBean;
-import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.CreateQJBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.beans.TagItem;
-import com.taihuoniao.fineix.blurview.BlurView;
-import com.taihuoniao.fineix.blurview.RenderScriptBlur;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
@@ -71,6 +47,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
@@ -78,17 +55,14 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/8/15.
  * 创建情景/编辑情景
  */
-public class CreateQJActivity extends BaseActivity implements View.OnClickListener, EditRecyclerAdapter.ItemClick, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class CreateQJActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.background_img)
@@ -113,8 +87,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private float pointWidth;//LabelView动画点的宽高
     private float labelMargin;//LabelView动画点左间距
     private View activityView;
-    //选择语境popupwindow
-    private PopupWindow selectEnvirPop;
     private StringBuilder tags;//用来存储标签
 
     public CreateQJActivity() {
@@ -140,7 +112,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         labelMargin = getResources().getDimension(R.dimen.label_point_margin);
         dialog = new WaittingDialog(this);
         tags = new StringBuilder();
-        initSelectEnvirPop();
     }
 
     @Override
@@ -342,41 +313,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    private ActiveTagsBean activeTagsBean;//当前活动javabean
 
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<活动标签", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json",responseInfo.result);
-//                activeTagsBean = new ActiveTagsBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ActiveTagsBean>() {
-                    }.getType();
-                    activeTagsBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "解析异常" + e.toString());
-                }
-                if (activeTagsBean.isSuccess()) {
-                    try {
-                        holder.goneDemoLabel.setText("#" + activeTagsBean.getData().getItems().get(0).get(0) + " ");
-                    } catch (Exception e) {
-                        Log.e("<<<", "没有活动");
-                    }
-
-                } else {
-                    holder.goneDemoLabel.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                holder.goneDemoLabel.setVisibility(View.GONE);
-            }
-        });
     }
 
     private Thread thread;
@@ -384,26 +323,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.gone_label:
-                if (holder.des.hasFocus()) {
-                    holder.des.getText().insert(holder.des.getSelectionStart(), holder.goneLabel.getText());
-                }
-                break;
-            case R.id.gone_demo_label:
-                if (holder.des.hasFocus()) {
-                    holder.des.getText().insert(holder.des.getSelectionStart(), holder.goneDemoLabel.getText());
-                }
-                break;
-            case R.id.delete_title:
-                holder.title.setText("");
-                break;
-            case R.id.delete_des:
-                holder.des.setText("");
-                break;
-            case R.id.search_delete:
-                holder.editText.setText("");
-                break;
-
             case R.id.delete_address:
                 locationTv.setText("");
                 cityTv.setText("");
@@ -453,15 +372,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public void run() {
                         Log.e("<<<", "显示对话框");
-                        String title = null;
-                        if (!TextUtils.isEmpty(holder.title.getText().toString())) {
-                            title = holder.title.getText().toString();
-                        }
+                        String title = titleIntent;
                         Log.e("<<<", "初始化名称");
-                        String des = null;
-                        if (!TextUtils.isEmpty(holder.des.getText().toString())) {
-                            des = holder.des.getText().toString();
-                        }
+                        String des = desIntent;
                         Log.e("<<<", "初始化描述");
                         StringBuilder products = new StringBuilder();
                         if (MainApplication.tagInfoList != null && MainApplication.tagInfoList.size() > 0) {
@@ -637,6 +550,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     EffectUtil.clear();
+                    MainApplication.blurBitmap = null;
+                    MainApplication.cropBitmap = null;
+                    MainApplication.editBitmap = null;
                     startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
                 }
             });
@@ -654,32 +570,19 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         super.onDestroy();
     }
 
+    private String titleIntent;
+    private String desIntent;
+    private ActiveTagsBean activeTagsBean;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             switch (resultCode) {
                 case 2:
-                    final String titleIntent = data.getStringExtra("title");
-                    String desIntent = data.getStringExtra("des");
+                    titleIntent = data.getStringExtra("title");
+                    desIntent = data.getStringExtra("des");
+                    activeTagsBean = (ActiveTagsBean) data.getSerializableExtra("activeBean");
                     if (titleIntent != null) {
-                        qjTitleTv.setText(titleIntent);
-                        qjTitleTv.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (qjTitleTv.getLineCount() >= 2) {
-                                    Layout layout = qjTitleTv.getLayout();
-                                    StringBuilder SrcStr = new StringBuilder(titleIntent);
-                                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                                    qjTitleTv2.setText(str0);
-                                    qjTitleTv.setText(str1);
-                                    qjTitleTv2.setVisibility(View.VISIBLE);
-                                } else {
-                                    qjTitleTv2.setText("");
-                                    qjTitleTv2.setVisibility(View.GONE);
-                                }
-                            }
-                        });
+                        SceneTitleSetUtils.setTitle(qjTitleTv,qjTitleTv2,titleIntent);
                     }
                     if (desIntent != null) {
                         tags = new StringBuilder();
@@ -706,17 +609,10 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     }
                     blurActivity();
                     break;
-                case 1:
-                    String str = data.getStringExtra(AddLabelActivity.class.getSimpleName());
-                    holder.des.getText().insert(holder.des.getSelectionStart(), str);
-                    blurActivity();
-                    break;
                 case DataConstants.RESULTCODE_CREATESCENE_BDSEARCH:
                     PoiInfo poiInfo = data.getParcelableExtra(PoiInfo.class.getSimpleName());
                     city = data.getStringExtra("city");
                     if (poiInfo != null) {
-//                        locationTv.setText(poiInfo.name);
-//                        deleteAddress.setVisibility(View.VISIBLE);
                         cityTv.setText(city);
                         cityTv.setVisibility(View.VISIBLE);
                         lng = poiInfo.location.longitude + "";
@@ -731,471 +627,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private String lat, lng;
     private String city;
 
-    private List<SearchBean.Data.SearchItem> list = new ArrayList<>();
-    private ShareCJSelectListAdapter shareCJSelectListAdapter;
-    private int page = 1;//搜索页码
-    private String searchStr;
-    private String cid;
-    private ViewHolder holder;
-    //语境分类
-    private List<CategoryListBean.CategoryListItem> envirList;
-    private SearchEnvirAdapter searchEnvirAdapter;
-    private int lastTotalItem = -1;
-    private int lastSavedFirstVisibleItem = -1;
-
-    private void setupBlurView() {
-        final float radius = 16f;
-
-        final View decorView = getWindow().getDecorView();
-        //Activity's root View. Can also be root View of your layout
-        final View rootView = decorView.findViewById(android.R.id.content);
-        //set background, if your root layout doesn't have one
-        final Drawable windowBackground = decorView.getBackground();
-        holder.blurView.setupWith(rootView)
-                .windowBackground(windowBackground)
-                .blurAlgorithm(new RenderScriptBlur(this, true)) //Preferable algorithm, needs RenderScript support mode enabled
-                .blurRadius(radius);
-    }
-
-    private void initSelectEnvirPop() {
-        View view = View.inflate(this, R.layout.activity_share_search, null);
-        holder = new ViewHolder(view);
-        view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.e("<<<pop改变布局", "left=" + left + ",top=" + top + ",right=" + right + ",bottom=" + bottom + ",oldLeft=" + oldLeft + ",oldTop=" + oldTop
-                        + ",oldRight=" + oldRight + ",oldBottom=" + oldBottom);
-                if (bottom < oldBottom - MainApplication.getContext().getScreenHeight() / 4) {
-                    //显示软键盘
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.goneLinear.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-                } else if (oldBottom < bottom - MainApplication.getContext().getScreenHeight() / 4) {
-                    //软键盘消失
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.goneLinear.setVisibility(View.GONE);
-                        }
-                    });
-
-                }
-            }
-        });
-        setupBlurView();
-        holder.goneLabel.setOnClickListener(this);
-        holder.goneDemoLabel.setOnClickListener(this);
-        holder.titleLayout.setBackImg(R.mipmap.cancel_white);
-        holder.titleLayout.setBackListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectEnvirPop.dismiss();
-            }
-        });
-        holder.titleLayout.setTitle(R.string.add_envir, getResources().getColor(R.color.white));
-        holder.titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tags = new StringBuilder();
-                qjTitleTv.setText(holder.title.getText().toString());
-                qjTitleTv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (qjTitleTv.getLineCount() >= 2) {
-                            Layout layout = qjTitleTv.getLayout();
-                            StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
-                            String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                            String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                            qjTitleTv2.setText(str0);
-                            qjTitleTv.setText(str1);
-                            qjTitleTv2.setVisibility(View.VISIBLE);
-                        } else {
-                            qjTitleTv2.setText("");
-                            qjTitleTv2.setVisibility(View.GONE);
-                        }
-                    }
-                });
-                int sta = 0;
-                SpannableString spannableStringBuilder = new SpannableString(holder.des.getText().toString());
-                while (holder.des.getText().toString().substring(sta).contains("#")) {
-                    ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
-                    sta = holder.des.getText().toString().indexOf("#", sta);
-                    if (holder.des.getText().toString().substring(sta).contains(" ")) {
-                        int en = holder.des.getText().toString().indexOf(" ", sta);
-                        tags.append(",").append(holder.des.getText().toString().substring(sta + 1, en));
-                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        sta = en;
-                    } else {
-                        tags.append(",").append(holder.des.getText().toString().substring(sta + 1));
-                        spannableStringBuilder.setSpan(foregroundColorSpan, sta, holder.des.getText().toString().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        break;
-                    }
-                }
-                if (tags.length() > 0) {
-                    tags.deleteCharAt(0);
-                }
-                desTv.setText(spannableStringBuilder);
-                selectEnvirPop.dismiss();
-            }
-        });
-        holder.deleteTitle.setOnClickListener(this);
-        holder.deleteDes.setOnClickListener(this);
-        holder.title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    if (s.length() > 20) {
-                        holder.title.setText(s.subSequence(0, 20));
-                    }
-                    holder.deleteTitle.setVisibility(View.VISIBLE);
-                } else {
-                    holder.deleteTitle.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        holder.des.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.e("<<<", "before:s=" + s + ",start=" + start + ",count=" + count + ",after=" + after);
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    holder.deleteDes.setVisibility(View.VISIBLE);
-                } else {
-                    holder.deleteDes.setVisibility(View.GONE);
-                }
-                Log.e("<<<", "change:s=" + s + ",start=" + start
-                        + ",before=" + before + ",count=" + count);
-                if (count == before + 1 && before == 0 && s.toString().charAt(start) == '#') {
-                    String s1 = s.toString().substring(0, start);
-                    String s2 = "";
-                    if (s.toString().length() > start + 1) {
-                        s2 = s.toString().substring(start + 1, s.length());
-                    }
-                    holder.des.setText(s1 + s2);
-                    holder.des.setSelection(start);
-                    Intent intent = new Intent(CreateQJActivity.this, AddLabelActivity.class);
-                    if (activeTagsBean != null) {
-                        intent.putExtra(CreateQJActivity.class.getSimpleName(), activeTagsBean);
-                    }
-                    startActivityForResult(intent, 1);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.e("<<<", "after:s=" + s);
-            }
-        });
-        holder.editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    holder.searchDelete.setVisibility(View.VISIBLE);
-                } else {
-                    holder.searchDelete.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        holder.editText.setOnKeyListener(new View.OnKeyListener() {//输入完后按键盘上的搜索键【回车键改为了搜索键】
-
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    if (getCurrentFocus() != null) {
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    }
-                    //开始搜索
-                    searchStr = holder.editText.getText().toString();
-                    if (TextUtils.isEmpty(searchStr)) {
-                        ToastUtils.showInfo("请输入搜索关键字");
-//                        new SVProgressHUD(ShareSearchActivity.this).showInfoWithStatus("请输入搜索关键字");
-                        return false;
-                    }
-                    page = 1;
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
-                    search();
-                }
-                return false;
-            }
-        });
-        holder.recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        holder.recyclerView.setLayoutManager(linearLayoutManager);
-        //设置适配器
-        envirList = new ArrayList<>();
-        searchEnvirAdapter = new SearchEnvirAdapter(this, envirList, this);
-        holder.recyclerView.setAdapter(searchEnvirAdapter);
-        shareCJSelectListAdapter = new ShareCJSelectListAdapter(this, list);
-        holder.listView.setAdapter(shareCJSelectListAdapter);
-        holder.listView.setOnScrollListener(this);
-        holder.listView.setOnItemClickListener(this);
-        holder.searchDelete.setOnClickListener(this);
-        selectEnvirPop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        selectEnvirPop.setAnimationStyle(R.style.popupwindow_style);
-        selectEnvirPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        selectEnvirPop.setBackgroundDrawable(ContextCompat.getDrawable(this,
-                R.color.nothing));
-        selectEnvirPop.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
-        selectEnvirPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-    }
-
-    private void showSelectEnvirPop() {
-        holder.title.setText(qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());
-        holder.des.setText(desTv.getText().toString());
-        categoryList();
-        lastSavedFirstVisibleItem = -1;
-        lastTotalItem = -1;
-        selectEnvirPop.showAtLocation(activityView, Gravity.CENTER, 0, 0);
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount > 0 && (firstVisibleItem + visibleItemCount >= totalItemCount)
-                && firstVisibleItem != lastSavedFirstVisibleItem && lastTotalItem != totalItemCount
-                ) {
-            lastSavedFirstVisibleItem = firstVisibleItem;
-            lastTotalItem = totalItemCount;
-            page++;
-            holder.progressBar.setVisibility(View.VISIBLE);
-            if (holder.editText.getText().toString().length() > 0) {
-                search();
-            } else {
-                envirList();
-            }
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) holder.listView.getAdapter().getItem(position);
-        //设置语境
-        holder.title.setText(searchItem.getTitle());
-        holder.des.setText(searchItem.getDes());
-    }
-
-
-    @Override
-    public void click(int postion) {
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-        for (int i = 0; i < envirList.size(); i++) {
-            if (i == postion) {
-                envirList.get(i).setIsSelect(true);
-            } else {
-                envirList.get(i).setIsSelect(false);
-            }
-        }
-        searchEnvirAdapter.notifyDataSetChanged();
-        list.clear();
-        shareCJSelectListAdapter.notifyDataSetChanged();
-        cid = envirList.get(postion).get_id();
-        page = 1;
-        if (holder.editText.getText().toString().length() > 0) {
-            search();
-        } else {
-            envirList();
-        }
-    }
-
-    private void search() {
-        ClientDiscoverAPI.search(holder.editText.getText().toString(), 11 + "", cid, page + "", "content", 0 + "", new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
-                holder.progressBar.setVisibility(View.GONE);
-                SearchBean netSearch = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    netSearch = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
-                }
-                if (netSearch.isSuccess()) {
-                    if (page == 1) {
-                        list.clear();
-                        lastTotalItem = -1;
-                        lastSavedFirstVisibleItem = -1;
-                    }
-                    list.addAll(netSearch.getData().getRows());
-                    shareCJSelectListAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netSearch.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                holder.progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
-            }
-        });
-    }
-
-    //分类列表
-    private void categoryList() {
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-        ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                dialog.dismiss();
-                CategoryListBean categoryListBean = new CategoryListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryListBean>() {
-                    }.getType();
-                    categoryListBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<分类列表", "数据解析异常" + e.toString());
-                }
-                if (categoryListBean.isSuccess()) {
-                    envirList.clear();
-                    envirList.addAll(categoryListBean.getData().getRows());
-                    searchEnvirAdapter.notifyDataSetChanged();
-                    click(0);
-                } else {
-                    ToastUtils.showError(categoryListBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
-
-    //语境列表
-    private void envirList() {
-        ClientDiscoverAPI.envirList(page + "", 8 + "", 1 + "", cid, null, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
-                holder.progressBar.setVisibility(View.GONE);
-                SearchBean netSearch = new SearchBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<SearchBean>() {
-                    }.getType();
-                    netSearch = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
-                }
-                if (netSearch.isSuccess()) {
-                    if (page == 1) {
-                        list.clear();
-                        lastTotalItem = -1;
-                        lastSavedFirstVisibleItem = -1;
-                    }
-                    list.addAll(netSearch.getData().getRows());
-                    shareCJSelectListAdapter.notifyDataSetChanged();
-                } else {
-                    ToastUtils.showError(netSearch.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
-
-    static class ViewHolder {
-        @Bind(R.id.blur_view)
-        BlurView blurView;
-        @Bind(R.id.title_layout)
-        GlobalTitleLayout titleLayout;
-        @Bind(R.id.delete_title)
-        ImageView deleteTitle;
-        @Bind(R.id.title)
-        EditText title;
-        @Bind(R.id.delete_des)
-        ImageView deleteDes;
-        @Bind(R.id.des)
-        EditText des;
-        @Bind(R.id.search1)
-        ImageView search1;
-        @Bind(R.id.search_delete)
-        ImageView searchDelete;
-        @Bind(R.id.edit_text)
-        EditText editText;
-        @Bind(R.id.recycler_view)
-        RecyclerView recyclerView;
-        @Bind(R.id.line)
-        TextView line;
-        @Bind(R.id.linear1)
-        LinearLayout linear1;
-        @Bind(R.id.gone_label)
-        TextView goneLabel;
-        @Bind(R.id.gone_demo_label)
-        TextView goneDemoLabel;
-        @Bind(R.id.gone_linear)
-        RelativeLayout goneLinear;
-        @Bind(R.id.list_view)
-        ListView listView;
-        @Bind(R.id.progress_bar)
-        ProgressBar progressBar;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 
     public Bitmap myShot(Activity activity) {
         // 获取windows中最顶层的view

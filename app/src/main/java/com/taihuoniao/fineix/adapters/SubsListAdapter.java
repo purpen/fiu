@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.SubsQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -108,23 +108,7 @@ public class SubsListAdapter extends BaseAdapter {
         }
         holder.qjName.setText(list.get(position).getUser_info().getNickname());
         //设置情景标题
-        holder.qjTitleTv1.setText(list.get(position).getTitle());
-        holder.qjTitleTv1.post(new Runnable() {
-            @Override
-            public void run() {
-                if (holder.qjTitleTv1.getLineCount() >= 2) {
-                    Layout layout = holder.qjTitleTv1.getLayout();
-                    StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv1.getText().toString());
-                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                    holder.qjTitleTv2.setText(str0);
-                    holder.qjTitleTv1.setText(str1);
-                    holder.qjTitleTv2.setVisibility(View.VISIBLE);
-                } else {
-                    holder.qjTitleTv2.setVisibility(View.GONE);
-                }
-            }
-        });
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv1,holder.qjTitleTv2,list.get(position).getTitle());
         holder.qjBackgroundImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

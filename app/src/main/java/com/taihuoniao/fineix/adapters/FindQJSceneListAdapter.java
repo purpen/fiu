@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -54,7 +53,9 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.LabelView;
@@ -247,10 +248,16 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
-                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-//                setFocusBtnStyle(holder.attentionBtn,false);
+                holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                holder.attentionBtn.setText("已关注");
+                holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                holder.attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
             } else {
                 holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                holder.attentionBtn.setText("");
+                holder.attentionBtn.setPadding(0, 0, 0, 0);
+                holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
         ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
@@ -289,23 +296,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             holder.moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        holder.qjTitleTv.setText(sceneList.get(position).getTitle());
-        holder.qjTitleTv.post(new Runnable() {
-            @Override
-            public void run() {
-                if (holder.qjTitleTv.getLineCount() >= 2) {
-                    Layout layout = holder.qjTitleTv.getLayout();
-                    StringBuilder SrcStr = new StringBuilder(holder.qjTitleTv.getText().toString());
-                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                    holder.qjTitleTv2.setText(str0);
-                    holder.qjTitleTv.setText(str1);
-                    holder.qjTitleTv2.setVisibility(View.VISIBLE);
-                } else {
-                    holder.qjTitleTv2.setVisibility(View.GONE);
-                }
-            }
-        });
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,sceneList.get(position).getTitle());
         //添加商品标签
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -712,7 +703,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-                    sceneList.get(position).getUser_info().setIs_follow(1);
+                    holder.attentionBtn.setText("");
+                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(sceneList.get(position).getUser_id())) {
                             rowsBean.getUser_info().setIs_follow(1);
@@ -748,6 +741,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 }
                 if (netBean.isSuccess()) {
                     holder.attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                    holder.attentionBtn.setText("");
+                    holder.attentionBtn.setPadding(0, 0, 0, 0);
+                    holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     for (SceneList.DataBean.RowsBean rowsBean : sceneList) {
                         if (rowsBean.getUser_id().equals(item.getUser_info().getUser_id())) {
                             rowsBean.getUser_info().setIs_follow(0);

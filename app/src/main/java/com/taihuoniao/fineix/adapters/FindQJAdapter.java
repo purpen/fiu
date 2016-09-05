@@ -2,8 +2,6 @@ package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.Layout;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +37,7 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
@@ -139,29 +138,7 @@ public class FindQJAdapter extends BaseAdapter {
                 final int qjPosition = 2 * (position - cha);
                 ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
                 //设置情景标题
-                if (!TextUtils.isEmpty(sceneList.get(qjPosition).getTitle())) {
-                    holder.qjTitle1Tv1.setText(sceneList.get(qjPosition).getTitle());
-                    holder.qjTitle1Tv1.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.qjTitle1Tv1.getLineCount() >= 2) {
-                                Layout layout = holder.qjTitle1Tv1.getLayout();
-                                StringBuilder SrcStr = new StringBuilder(holder.qjTitle1Tv1.getText().toString());
-                                String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                                String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                                holder.qjTitle1Tv2.setText(str0);
-                                holder.qjTitle1Tv1.setText(str1);
-                                holder.qjTitle1Tv2.setVisibility(View.VISIBLE);
-                            } else {
-                                holder.qjTitle1Tv2.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                } else {
-                    holder.qjTitle1Tv2.setVisibility(View.GONE);
-                    holder.qjTitle1Tv1.setVisibility(View.GONE);
-                }
-
+                SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1,holder.qjTitle1Tv2,sceneList.get(qjPosition).getTitle());
                 ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getUser_info().getAvatar_url(), holder.qjHeadImg1);
                 holder.qjName1.setText(sceneList.get(qjPosition).getUser_info().getNickname());
                 if (sceneList.get(qjPosition).getIs_love() == 1) {
@@ -230,28 +207,7 @@ public class FindQJAdapter extends BaseAdapter {
                     holder.qjItem2.setVisibility(View.VISIBLE);
                     ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
                     //设置情景标题
-                    if (TextUtils.isEmpty(sceneList.get(qjPosition + 1).getTitle())) {
-                        holder.qjTitle2Tv1.setVisibility(View.GONE);
-                        holder.qjTitle2Tv2.setVisibility(View.GONE);
-                    } else {
-                        holder.qjTitle2Tv1.setText(sceneList.get(qjPosition + 1).getTitle());
-                        holder.qjTitle2Tv1.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (holder.qjTitle2Tv1.getLineCount() >= 2) {
-                                    Layout layout = holder.qjTitle2Tv1.getLayout();
-                                    StringBuilder SrcStr = new StringBuilder(holder.qjTitle2Tv1.getText().toString());
-                                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                                    holder.qjTitle2Tv2.setText(str0);
-                                    holder.qjTitle2Tv1.setText(str1);
-                                    holder.qjTitle2Tv2.setVisibility(View.VISIBLE);
-                                } else {
-                                    holder.qjTitle2Tv2.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                    }
+                    SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1,holder.qjTitle2Tv2,sceneList.get(qjPosition+1).getTitle());
                     ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getUser_info().getAvatar_url(), holder.qjHeadImg2);
                     holder.qjName2.setText(sceneList.get(qjPosition + 1).getUser_info().getNickname());
                     if (sceneList.get(qjPosition + 1).getIs_love() == 1) {
