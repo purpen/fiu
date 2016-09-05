@@ -115,6 +115,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
         String nickName = LoginInfo.getNickName();
         if (!TextUtils.isEmpty(nickName)) {
             etNickname.setText(nickName);
+            etNickname.setSelection(nickName.length());
         }
 
         String gender = LoginInfo.getGender();
