@@ -176,14 +176,13 @@
 
     <Button
         android:id="@+id/btn_next"
-        android:layout_width="@dimen/dp70"
+        android:layout_width="@dimen/dp60"
         android:layout_height="wrap_content"
         android:drawableRight="@mipmap/more"
         android:background="@null"
         android:text="下一步"
         android:textColor="@color/white"
         android:textSize="@dimen/sp14"
-        android:drawablePadding="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp32"
         android:layout_marginRight="@dimen/dp16"
         android:layout_alignParentRight="true"
