@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,7 +72,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
+        convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, activity.getResources().getDimensionPixelSize(R.dimen.dp55)));
         imageLoader.displayImage(item.follows.avatar_url, holder.riv);
         if (item.follows.is_expert == 1) {
             holder.riv_auth.setVisibility(View.VISIBLE);

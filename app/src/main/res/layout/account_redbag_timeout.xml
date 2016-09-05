@@ -25,10 +25,10 @@
                 android:id="@+id/tv_thn_redbag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
+                android:layout_marginTop="@dimen/dp15"
                 android:text="@string/fiu_redbag"
                 android:textColor="@color/color_af8323"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/tv_redbag_code"
@@ -45,14 +45,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/less_money"
                 android:textColor="@color/color_333"
-                android:layout_marginTop="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp30"
                 android:textSize="@dimen/sp10" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginTop="@dimen/dp10"
             android:gravity="right">
             <TextView
                 android:id="@+id/tv_money_sign"
@@ -68,6 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp2"
+                android:includeFontPadding="false"
+                android:text="30"
                 android:textColor="@color/color_af8323"
                 android:textSize="35sp" />
         </LinearLayout>

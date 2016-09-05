@@ -28,9 +28,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@string/fiu_redbag"
-                android:layout_marginTop="@dimen/dp5"
+                android:layout_marginTop="@dimen/dp15"
                 android:textColor="@color/color_af8323"
-                android:textSize="@dimen/sp12" />
+                android:textSize="@dimen/sp14" />
 
             <TextView
                 android:id="@+id/tv_redbag_code"
@@ -43,7 +43,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp40">
+                android:layout_marginTop="@dimen/dp30">
 
                 <TextView
                     android:id="@+id/tv_min_money"
@@ -62,11 +62,11 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
+            android:layout_marginTop="@dimen/dp10"
             >
             <TextView
                 android:id="@+id/tv_money_sign"
@@ -75,18 +75,20 @@
                 android:layout_alignBottom="@+id/tv_money"
                 android:layout_toLeftOf="@+id/tv_money"
                 android:text="¥"
+                android:layout_marginBottom="@dimen/dp5"
                 android:textColor="@color/color_af8323"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp14" />
             <TextView
                 android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="30"
+                android:includeFontPadding="false"
                 android:textColor="@color/color_af8323"
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp2"
                 android:textSize="35sp" />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

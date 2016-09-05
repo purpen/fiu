@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
@@ -67,18 +68,15 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         }
         if (item.is_love==FansAdapter.NOT_LOVE){
             setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
-//            holder.btn.setText("关注");
-//            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-//            holder.btn.setBackgroundResource(R.drawable.border_radius5);
         }else {
             setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
-//            holder.btn.setText("已关注");
-//            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-//            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
         }
 
         setOnClickListener(holder.btn,item);
         LinearLayoutManager manager = new LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Util.getScreenWidth() / 3);
+        holder.recycler_view.setLayoutParams(params);
+        holder.recycler_view.setHasFixedSize(true);
         holder.recycler_view.setLayoutManager(manager);
         if (item.scene_sight !=null || item.scene_sight.size()>0){
             FindFriendRecycleViewAdapter adapter = new FindFriendRecycleViewAdapter(activity, item.scene_sight);
@@ -86,7 +84,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
             adapter.setmOnItemClickLitener(new FindFriendRecycleViewAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-//                    Util.makeToast("positon=="+position);
                     Intent intent = new Intent(activity, QJDetailActivity.class);
                     LogUtil.e(TAG,item.scene_sight.get(position)._id+"");
                     intent.putExtra("id", item.scene_sight.get(position)._id);//场景ID
@@ -136,9 +133,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             if (response.isSuccess()) {
                                 item.is_love=FansAdapter.LOVE;
                                 setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
-//                                button.setText("已关注");
-//                                button.setTextColor(activity.getResources().getColor(android.R.color.white));
-//                                button.setBackgroundResource(R.drawable.border_radius5_pressed);
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());
@@ -163,10 +157,6 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
                             if (response.isSuccess()){
                                 item.is_love=FansAdapter.NOT_LOVE;
                                 setFocusBtnStyle(button, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
-//                                button.setText("关注");
-//                                button.setTextColor(activity.getResources().getColor(R.color.color_333));
-//                                button.setBackgroundResource(R.drawable.border_radius5);
-//                                ToastUtils.showSuccess("已取消关注");
                                 return;
                             }
                             ToastUtils.showError(response.getMessage());

@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:text="@string/search_user"
             android:drawablePadding="@dimen/dp5"
+            android:textSize="@dimen/sp12"
+            android:textColor="@color/color_999"
             android:drawableLeft="@mipmap/search" />
     </RelativeLayout>
 

@@ -22,7 +22,7 @@
             android:src="@mipmap/default_head"
             app:riv_corner_radius="@dimen/dp100"
             app:riv_border_color="@color/color_eee"
-            app:riv_border_width="@dimen/dp1"
+            app:riv_border_width="@dimen/dp05"
             android:layout_centerVertical="true"
             />
         <LinearLayout
@@ -77,5 +77,5 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -30,8 +30,8 @@
 
         <RelativeLayout
             android:id="@+id/capture_crop_view"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/dp250"
+            android:layout_height="@dimen/dp250"
             android:layout_below="@id/capture_mask_top"
             android:layout_centerHorizontal="true"
             android:background="@drawable/qr_capture" >
@@ -66,7 +66,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/qr_scan_tips"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp12" />
         <TextView
             android:id="@+id/tv_bar"
             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
             android:layout_marginTop="30dp"
             android:text="我的二维码"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp16" />
+            android:textSize="@dimen/sp14" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -104,13 +104,12 @@
         android:gravity="center"
         android:padding="10dip" >
 
-        <ImageView
+        <Button
             android:id="@+id/capture_flash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp30"
+            android:layout_height="28dp"
             android:layout_gravity="center"
             android:background="@mipmap/flash_default"
-            android:clickable="true"
             android:tag="1" />
     </LinearLayout>
 

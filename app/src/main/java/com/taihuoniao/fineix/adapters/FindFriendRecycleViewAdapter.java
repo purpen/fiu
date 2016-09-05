@@ -1,19 +1,18 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FindFriendData;
+import com.taihuoniao.fineix.utils.Util;
 
 import java.util.ArrayList;
 
@@ -46,15 +45,15 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
         this.activity = activity;
         this.list = list;
         imageLoader = ImageLoader.getInstance();
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
+//        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.default_background_750_1334)
+//                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+//                .showImageOnFail(R.mipmap.default_background_750_1334)
+//                .cacheInMemory(true)
+//                .cacheOnDisk(true)
+//                .considerExifParams(true)
+//                .bitmapConfig(Bitmap.Config.RGB_565)
+//                .build();
     }
 
     @Override
@@ -82,13 +81,14 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
                 }
             });
         }
-
-        imageLoader.displayImage(item.cover_url, holder.iv_cover, options);
-        if (!TextUtils.isEmpty(item.title)) {
-            holder.tv_title.setText(item.title);
-            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-        }
-        holder.tv_desc.setText(item.address);
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(Util.getScreenWidth() / 3, ViewGroup.LayoutParams.MATCH_PARENT);
+        holder.rl_box.setLayoutParams(params);
+        imageLoader.displayImage(item.cover_url, holder.iv_cover);
+//        if (!TextUtils.isEmpty(item.title)) {
+//            holder.tv_title.setText(item.title);
+//            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+//        }
+//        holder.tv_desc.setText(item.address);
     }
 
     @Override
@@ -97,12 +97,15 @@ public class FindFriendRecycleViewAdapter extends RecyclerView.Adapter<FindFrien
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.rl_box)
+        RelativeLayout rl_box;
         @Bind(R.id.iv_cover)
         ImageView iv_cover;
-        @Bind(R.id.tv_title)
-        TextView tv_title;
-        @Bind(R.id.tv_desc)
-        TextView tv_desc;
+
+        //        @Bind(R.id.tv_title)
+//        TextView tv_title;
+//        @Bind(R.id.tv_desc)
+//        TextView tv_desc;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

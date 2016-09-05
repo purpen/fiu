@@ -3,24 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
-    android:descendantFocusability="blocksDescendants"
-    android:paddingBottom="@dimen/dp5"
-    android:paddingLeft="@dimen/dp16"
-    android:paddingRight="@dimen/dp16"
-    android:paddingTop="@dimen/dp5">
+    android:descendantFocusability="blocksDescendants">
 
     <RelativeLayout
         android:id="@+id/rl"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="@dimen/dp35"
+        android:layout_height="@dimen/dp35"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_centerVertical="true">
 
         <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
             android:id="@+id/riv"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_centerVertical="true"
-            app:riv_border_width="@dimen/dp1"
+            android:layout_width="@dimen/dp35"
+            android:layout_height="@dimen/dp35"
+            app:riv_border_width="@dimen/dp05"
             app:riv_border_color="@color/color_eee"
             android:src="@mipmap/default_focus_head"
             app:riv_corner_radius="@dimen/dp100" />
@@ -62,7 +58,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@string/app_name"
-            android:textColor="@color/color_666"
+            android:textColor="@color/color_999"
             android:textSize="@dimen/sp10" />
     </LinearLayout>
 
@@ -75,6 +71,14 @@
         android:layout_centerVertical="true"
         android:background="@drawable/border_radius5"
         android:text="关注"
+        android:layout_marginRight="@dimen/dp16"
         android:textColor="@color/color_333"
         android:textSize="@dimen/sp12" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp05"
+        android:background="@color/color_ddd"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dp60" />
 </RelativeLayout>

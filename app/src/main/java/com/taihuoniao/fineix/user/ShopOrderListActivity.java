@@ -39,7 +39,7 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
 
     protected void initView() {
         custom_head.setContinueTvVisible(false);
-        custom_head.setTitle("全部");
+        custom_head.setTitle("我的订单");
         TabLayout tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         //手动添加tab

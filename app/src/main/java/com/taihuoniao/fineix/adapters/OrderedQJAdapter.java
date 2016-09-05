@@ -56,8 +56,17 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         ImageLoader.getInstance().displayImage(item.user_info.avatar_url, holder.riv, options);
         holder.tvName.setText(item.user_info.nickname);
         if (!TextUtils.isEmpty(item.title)) {
-            holder.tv_title.setText(item.title);
-            holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+            if (item.title.length() <= 10) {
+                holder.tv_title.setText("");
+                holder.tv_title1.setText(item.title);
+                holder.tv_title1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                holder.tv_title.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
+            } else {
+                holder.tv_title.setText(item.title.substring(0, 10));
+                holder.tv_title1.setText(item.title.substring(10, item.title.length() - 1));
+                holder.tv_title1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+            }
         }
         if (item.is_love == 1) {
             holder.ibtn.setImageResource(R.mipmap.zaned);
@@ -151,6 +160,8 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         TextView tvName;
         @Bind(R.id.tv_title)
         TextView tv_title;
+        @Bind(R.id.tv_title1)
+        TextView tv_title1;
         @Bind(R.id.ibtn)
         ImageButton ibtn;
 

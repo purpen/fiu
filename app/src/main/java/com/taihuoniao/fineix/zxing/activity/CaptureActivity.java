@@ -33,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,7 +85,7 @@ public final class CaptureActivity extends BaseActivity implements
     private SurfaceView scanPreview = null;
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
-    private ImageView mFlash;
+    private Button mFlash;
 
     private Rect mCropRect = null;
 
@@ -111,7 +112,7 @@ public final class CaptureActivity extends BaseActivity implements
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
         ImageView scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        mFlash = (ImageView) findViewById(R.id.capture_flash);
+        mFlash = (Button) findViewById(R.id.capture_flash);
         mFlash.setOnClickListener(this);
         tv_bar.setOnClickListener(this);
         inactivityTimer = new InactivityTimer(this);

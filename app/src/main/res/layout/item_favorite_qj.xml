@@ -25,10 +25,21 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
+            android:layout_above="@+id/tv_title1"
+            android:textSize="@dimen/sp12"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="@dimen/dp2" />
+
+        <TextView
+            android:id="@+id/tv_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
             android:layout_alignParentBottom="true"
             android:textSize="@dimen/sp12"
-            android:lineSpacingMultiplier="1.2"
-            android:maxLines="2"
             android:singleLine="true"
             android:ellipsize="end"
             android:textColor="@android:color/white"
@@ -48,7 +59,9 @@
             android:layout_height="@dimen/dp20"
             app:riv_corner_radius="@dimen/dp100"
             android:layout_centerVertical="true"
-            android:src="@mipmap/default_head" />
+            android:src="@mipmap/default_head"
+            app:riv_border_width="@dimen/dp05"
+            app:riv_border_color="@color/color_4a4a4a" />
 
         <TextView
             android:id="@+id/tv_name"

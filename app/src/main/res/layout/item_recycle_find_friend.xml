@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dp160"
-    android:layout_height="@dimen/dp160"
+    android:id="@+id/rl_box"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     >
 
     <ImageView
         android:id="@+id/iv_cover"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp300"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_title"
@@ -43,6 +45,8 @@
             android:singleLine="true"
             android:text="北京市 七星集团"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp12" />
+            android:textSize="@dimen/sp12"
+
+            />
     </LinearLayout>
 </RelativeLayout>
