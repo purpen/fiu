@@ -1,7 +1,9 @@
 package com.taihuoniao.fineix.scene;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.os.Handler;
+import android.graphics.Rect;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -29,6 +31,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.scene.fragments.AddEnvirFragment;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -177,13 +180,17 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         dialog = new WaittingDialog(this);
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-        des.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.e("<<<","hasFocus="+hasFocus);
-            }
-        });
-
+//        des.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                Log.e("<<<", "hasFocus=" + hasFocus);
+//                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                Log.e("<<<", "isActive=" + inputMethodManager.isActive(des));
+//                if (hasFocus && inputMethodManager.isActive(des)) {
+//
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -233,25 +240,51 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        if (bottom < oldBottom - MainApplication.getContext().getScreenHeight() / 4) {
-            //显示软键盘
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    goneLinear.setVisibility(View.VISIBLE);
-                }
-            });
+        Log.e("<<<", "跟布局onLayoutChange");
+//        final int softKeyboardHeight = activityView.getBottom() / 4;
+        Rect r = new Rect();
+        activityView.getWindowVisibleDisplayFrame(r);
+        boolean isShow = false;
+        if (r.bottom < activityView.getBottom() * 3 / 4) {
+            isShow = true;
+        } else if (r.bottom == activityView.getBottom()) {
+            isShow = false;
+        }
+        if (isShow) {
+            Log.e("<<<", "显示软键盘");
+            goneLinear.setBottom(r.bottom);
+            goneLinear.setTop(r.bottom - DensityUtils.dp2px(AddEnvirActivity.this, 44));
+            goneLinear.setAlpha(0f);
+            goneLinear.setVisibility(View.VISIBLE);
+            ObjectAnimator.ofFloat(goneLinear, "alpha", 0, 1).start();
 
-        } else if (oldBottom < bottom - MainApplication.getContext().getScreenHeight() / 4) {
-            //软键盘消失
-            new Handler().post(new Runnable() {
+        } else {
+            Log.e("<<<", "隐藏软键盘");
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(goneLinear, "alpha", 1, 0);
+            objectAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void run() {
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
                     goneLinear.setVisibility(View.GONE);
                 }
-            });
 
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            objectAnimator.start();
         }
+        Log.e("<<<", "goneLinear,top=" + goneLinear.getTop() + ",bottom=" + goneLinear.getBottom());
     }
 
     @Override

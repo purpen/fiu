@@ -59,6 +59,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     private int page = 1;
     private List<SearchBean.Data.SearchItem> list;
     private ShareCJSelectListAdapter shareCJSelectListAdapter;
+
     public SearchEnvirActivity() {
         super(R.layout.activity_search_envir);
     }
@@ -68,6 +69,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
         dialog = new WaittingDialog(this);
         backgroundImg.setImageBitmap(MainApplication.blurBitmap);
         titleLayout.setBackImgVisible(false);
+        titleLayout.setTitle("搜索语境");
         titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), this);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,7 +124,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
             }
         });
         list = new ArrayList<>();
-        shareCJSelectListAdapter = new ShareCJSelectListAdapter(this,list);
+        shareCJSelectListAdapter = new ShareCJSelectListAdapter(this, list);
         listView.setDividerHeight(0);
         listView.setSelector(R.color.nothing);
         listView.setAdapter(shareCJSelectListAdapter);
@@ -140,6 +142,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
     private void search() {
         ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "content", 0 + "", new RequestCallBack<String>() {
             @Override
@@ -180,14 +183,14 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SearchBean.Data.SearchItem searchItem = (SearchBean.Data.SearchItem) listView.getAdapter().getItem(position);
-        if(searchItem==null){
+        if (searchItem == null) {
             return;
         }
         String titleIntent = searchItem.getTitle();
         String desIntent = searchItem.getDes();
         Intent intent = new Intent();
-        intent.putExtra("title",titleIntent);
-        intent.putExtra("des",desIntent);
-        setResult(2,intent);
+        intent.putExtra("title", titleIntent);
+        intent.putExtra("des", desIntent);
+        setResult(2, intent);
     }
 }
