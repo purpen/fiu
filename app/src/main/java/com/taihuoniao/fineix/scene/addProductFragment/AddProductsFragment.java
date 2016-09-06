@@ -79,7 +79,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void search(String q, String t, String page, String evt, String sort) {
-        ClientDiscoverAPI.search(q, 3 + "", null, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, 7 + "", null, page, evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

@@ -49,19 +49,23 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
                 holder.label.setImageResource(R.mipmap.subject_huodong);
                 holder.person.setText(list.get(position).getAttend_count() + "人参加");
                 holder.person.setVisibility(View.VISIBLE);
+                holder.imageView.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 holder.label.setImageResource(R.mipmap.subject_cuxiao);
                 holder.person.setVisibility(View.INVISIBLE);
+                holder.imageView.setVisibility(View.INVISIBLE);
                 break;
             case 4:
                 holder.label.setImageResource(R.mipmap.subject_xinpin);
                 holder.person.setVisibility(View.INVISIBLE);
+                holder.imageView.setVisibility(View.INVISIBLE);
                 break;
             default:
                 holder.label.setImageResource(R.mipmap.subject_wenzhang);
                 holder.person.setText(list.get(position).getAttend_count() + "人阅读");
                 holder.person.setVisibility(View.VISIBLE);
+                holder.imageView.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -76,6 +80,8 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
         ImageView backgroundImg;
         @Bind(R.id.title)
         TextView title;
+        @Bind(R.id.i)
+        ImageView imageView;
         @Bind(R.id.person)
         TextView person;
         @Bind(R.id.label)

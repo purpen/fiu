@@ -1,35 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f8f8f8"
-              android:fitsSystemWindows="true"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f8f8f8"
+                android:fitsSystemWindows="true"
+               >
 
-    <com.taihuoniao.fineix.view.GlobalTitleLayout
-        android:id="@+id/title_layout"
+    <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+        <com.taihuoniao.fineix.view.GlobalTitleLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/yellow_bd8913"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/yellow_bd8913"
+            app:tabTextColor="@color/title_black"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#d2d2d2"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_linear"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/white"
-        app:tabIndicatorColor="@color/yellow_bd8913"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/yellow_bd8913"
-        app:tabTextColor="@color/title_black"/>
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/shoucang_linear"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/shoucang_img"
+                android:layout_width="wrap_content"
+                android:layout_height="16.5dp"
+                android:src="@mipmap/shoucang_not"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/collect"
+                android:textColor="#999999"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buy_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#212121"
+            android:text="@string/go_to_buy"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+    </LinearLayout>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#d2d2d2"/>
+        android:layout_above="@id/bottom_linear"
+        android:background="#e1e1e1"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@id/line"
+        android:layout_below="@id/linear"/>
+
+</RelativeLayout>

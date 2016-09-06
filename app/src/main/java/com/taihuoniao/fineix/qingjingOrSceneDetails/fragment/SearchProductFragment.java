@@ -126,7 +126,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "3", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, "7", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索产品", responseInfo.result);

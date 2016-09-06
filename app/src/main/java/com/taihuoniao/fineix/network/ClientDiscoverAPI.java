@@ -63,6 +63,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("ignore_ids", ignore_ids);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("fine", fine);
+        params.addQueryStringParameter("stage", "9");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1670,14 +1671,15 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/user/find_user";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", "1");
-        params.addQueryStringParameter("type","1");
+        params.addQueryStringParameter("type", "1");
         params.addQueryStringParameter("size", size + "");
         params.addQueryStringParameter("edit_stick", "1");
         params.addQueryStringParameter("sort", "1");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
+
     //临时产品库
-    public static void getTempGoods(String id,RequestCallBack<String>callBack){
+    public static void getTempGoods(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/user_temp/view";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
