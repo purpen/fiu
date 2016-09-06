@@ -66,6 +66,7 @@ public class MainApplication extends Application {
     public static Bitmap cropBitmap = null;//前切好的图片
     public static Bitmap editBitmap = null;//编辑好的图片
     public static Bitmap blurBitmap = null;//模糊的图片
+    public static String subjectId = null;//活动id
     public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
 
     public static MainApplication getContext() {

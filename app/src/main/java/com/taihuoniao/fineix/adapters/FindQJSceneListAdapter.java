@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -242,12 +242,14 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
         holder.locationTv.setText(sceneList.get(position).getAddress());
+        Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
             holder.attentionBtn.setVisibility(View.GONE);
         } else {
             holder.attentionBtn.setVisibility(View.VISIBLE);
             if (sceneList.get(position).getUser_info().getIs_follow() == 1) {
+//                holder.attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
                 holder.attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
                 holder.attentionBtn.setText("已关注");
                 holder.attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
@@ -268,26 +270,20 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
         }
-        int sta = 0;
-        SpannableString spannableStringBuilder = new SpannableString(sceneList.get(position).getDes());
-        while (sceneList.get(position).getDes().substring(sta).contains("#")) {
-            TextClick textClick;
-            sta = sceneList.get(position).getDes().indexOf("#", sta);
-            if (sceneList.get(position).getDes().substring(sta).contains(" ")) {
-                int en = sceneList.get(position).getDes().indexOf(" ", sta);
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, en));
-                spannableStringBuilder.setSpan(textClick, sta, en + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                sta = en;
-            } else {
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, sceneList.get(position).getDes().length()));
-                spannableStringBuilder.setSpan(textClick, sta, sceneList.get(position).getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                break;
-            }
-        }
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
-//        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
+        holder.qjDesTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (holder.qjDesTv.getLineCount() > 3) {
+                    Layout layout = holder.qjDesTv.getLayout();
+                    String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                    holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                }
+            }
+        });
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
         if (sceneList.get(position).getComment_count() > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
@@ -296,7 +292,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             holder.moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,sceneList.get(position).getTitle());
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneList.get(position).getTitle());
         //添加商品标签
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -406,17 +402,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (sceneList.get(position).getIs_love() == 1) {
-//                        holder.loveImg.setImageResource(R.mipmap.has_love);
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.loveRelative.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
-//                        holder.loveImg.setImageResource(R.mipmap.index_love);
-//                        if (!dialog.isShowing()) {
-//                            dialog.show();
-//                        }
                         holder.loveRelative.setEnabled(false);
                         loveQJ(position, sceneList.get(position).get_id(), holder);
                     }
@@ -434,7 +422,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivityForResult(intent3,1);
+                activity.startActivityForResult(intent3, 1);
                 pos = position;
             }
         });
@@ -445,7 +433,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivityForResult(intent3,1);
+                activity.startActivityForResult(intent3, 1);
                 pos = position;
             }
         });
@@ -456,7 +444,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 intent3.putExtra("target_id", sceneList.get(position).get_id());
                 intent3.putExtra("type", 12 + "");
                 intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivityForResult(intent3,1);
+                activity.startActivityForResult(intent3, 1);
                 pos = position;
             }
         });
@@ -482,8 +470,14 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (holder.qjDesTv.getMaxLines() == 3) {
+                        holder.qjDesTv.setText(SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity));
                         holder.qjDesTv.setMaxLines(Integer.MAX_VALUE);
                     } else {
+                        if (holder.qjDesTv.getLineCount() > 3) {
+                            Layout layout = holder.qjDesTv.getLayout();
+                            String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                            holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                        }
                         holder.qjDesTv.setMaxLines(3);
                     }
                 }

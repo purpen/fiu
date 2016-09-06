@@ -316,9 +316,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     tagItem.setType(type);
                     tagItem.setName(brandTv.getText().toString() + " " + productName.getText().toString());
                     addLabel(tagItem);
-                    brandTv.setText("");
-                    productName.setText("");
                 }
+                brandTv.setText("");
+                productName.setText("");
+                type = 1;
                 break;
             case R.id.delete_brand:
                 brandTv.setText("");
@@ -628,7 +629,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price() + "");
                     tag.setId(productListBean.getData().get_id());
                     tag.setLoc(2);
-                    tag.setType(1);
+                    tag.setType(2);
                     addLabel(tag);
                     try {
                         String url = productListBean.getData().getPng_asset().get(0).getUrl();

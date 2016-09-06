@@ -134,7 +134,7 @@ public class QJDetailBean extends NetBean {
          * y : 0.71302083333333
          */
 
-        private List<ProductBean> product;
+        private List<SceneList.DataBean.RowsBean.ProductBean> product;
         private List<SceneList.DataBean.RowsBean.CommentsBean> comments;
 
         public String get_id() {
@@ -401,11 +401,11 @@ public class QJDetailBean extends NetBean {
             this.tags = tags;
         }
 
-        public List<ProductBean> getProduct() {
+        public List<SceneList.DataBean.RowsBean.ProductBean> getProduct() {
             return product;
         }
 
-        public void setProduct(List<ProductBean> product) {
+        public void setProduct(List<SceneList.DataBean.RowsBean.ProductBean> product) {
             this.product = product;
         }
 
@@ -705,70 +705,5 @@ public class QJDetailBean extends NetBean {
             }
         }
 
-        public static class ProductBean {
-            private String id;
-            private String title;
-            private double price;
-            private double x;
-            private double y;
-            private int loc;
-            private int type;
-
-            public int getLoc() {
-                return loc;
-            }
-
-            public void setLoc(int loc) {
-                this.loc = loc;
-            }
-
-            public int getType() {
-                return type;
-            }
-
-            public void setType(int type) {
-                this.type = type;
-            }
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public double getPrice() {
-                return price;
-            }
-
-            public void setPrice(double price) {
-                this.price = price;
-            }
-
-            public double getX() {
-                return x;
-            }
-
-            public void setX(double x) {
-                this.x = x;
-            }
-
-            public double getY() {
-                return y;
-            }
-
-            public void setY(double y) {
-                this.y = y;
-            }
-        }
     }
 }

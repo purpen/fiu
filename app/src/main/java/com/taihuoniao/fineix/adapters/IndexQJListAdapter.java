@@ -6,10 +6,10 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -288,26 +288,20 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
         }
-        int sta = 0;
-        SpannableString spannableStringBuilder = new SpannableString(sceneList.get(position).getDes());
-        while (sceneList.get(position).getDes().substring(sta).contains("#")) {
-            TextClick textClick;
-            sta = sceneList.get(position).getDes().indexOf("#", sta);
-            if (sceneList.get(position).getDes().substring(sta).contains(" ")) {
-                int en = sceneList.get(position).getDes().indexOf(" ", sta);
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, en));
-                spannableStringBuilder.setSpan(textClick, sta, en + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                sta = en;
-            } else {
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, sceneList.get(position).getDes().length()));
-                spannableStringBuilder.setSpan(textClick, sta, sceneList.get(position).getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                break;
-            }
-        }
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
-        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
+        holder.qjDesTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (holder.qjDesTv.getLineCount() > 3) {
+                    Layout layout = holder.qjDesTv.getLayout();
+                    String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                    holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                }
+            }
+        });
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
         if (sceneList.get(position).getComment_count() > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
@@ -320,7 +314,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         //添加商品标签
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            final LabelView labelView = new LabelView(parent.getContext());
+            final LabelView labelView = new LabelView(activity);
             labelView.nameTv.setText(productBean.getTitle());
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
@@ -494,8 +488,14 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (holder.qjDesTv.getMaxLines() == 3) {
+                        holder.qjDesTv.setText(SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity));
                         holder.qjDesTv.setMaxLines(Integer.MAX_VALUE);
                     } else {
+                        if (holder.qjDesTv.getLineCount() > 3) {
+                            Layout layout = holder.qjDesTv.getLayout();
+                            String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                            holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                        }
                         holder.qjDesTv.setMaxLines(3);
                     }
                 }
@@ -1076,7 +1076,7 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     //设置部分文字可以点击
-    static class TextClick extends ClickableSpan {
+    public static class TextClick extends ClickableSpan {
         private Activity activity;
         private String q;
 

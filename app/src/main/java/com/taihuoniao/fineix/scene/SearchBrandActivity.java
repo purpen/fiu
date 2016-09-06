@@ -395,6 +395,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             Intent intent = new Intent();
             intent.putExtra("product", productList.get(position).getTitle());
             intent.putExtra("productId", productList.get(position).get_id());
+            intent.putExtra("type",2);
             setResult(1, intent);
             finish();
             return;
