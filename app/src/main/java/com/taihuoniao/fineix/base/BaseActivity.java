@@ -72,18 +72,19 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         initList();
         requestNet();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
+
+
 
     protected void setContenttView(){}
 

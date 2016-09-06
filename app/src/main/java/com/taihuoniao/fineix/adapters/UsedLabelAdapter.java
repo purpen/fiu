@@ -62,7 +62,7 @@ public class UsedLabelAdapter extends BaseAdapter {
         if (activeTagsBean == null) {
             return "#" + list.get(position - 1) + " ";
         }
-        if (position + 1 <= activeTagsBean.getData().getItems().size()) {
+        if (position  <= activeTagsBean.getData().getItems().size()) {
             return "#" + activeTagsBean.getData().getItems().get(position - 1).get(0) + " ";
         }
         return "#" + list.get(position - 2 - activeTagsBean.getData().getItems().size()) + " ";

@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,8 +88,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //用户第一次进入app会用到
     @Bind(R.id.activity_main_first_relative)
     RelativeLayout firstRelative;
-    @Bind(R.id.activity_main_first_img)
-    ImageView firstImg;
     @Bind(R.id.activity_main_first_left_img)
     ImageView firstLeftImg;
     @Bind(R.id.activity_main_first_right_img)
@@ -157,10 +154,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewGroup.LayoutParams layoutParams = firstImg.getLayoutParams();
-        layoutParams.width = MainApplication.getContext().getScreenWidth();
-        layoutParams.height = layoutParams.width * 1013 / 750;
-        firstImg.setLayoutParams(layoutParams);
         if (fragments == null) {
             fragments = new ArrayList<>();
         }

@@ -65,7 +65,6 @@
             android:editable="false"
             android:gravity="top"
             android:hint="@string/say_your_thinking"
-            android:inputType="none"
             android:paddingBottom="16dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.ContextCompat;
-import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -54,7 +53,9 @@ import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -342,12 +343,16 @@ public class QJDetailActivity extends BaseActivity {
         } else {
             attentionBtn.setVisibility(View.VISIBLE);
             if (qjDetailBean.getData().getUser_info().getIs_follow() == 1) {
-                attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-//                attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
-//                attentionBtn.setText("已关注");
-//                attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                attentionBtn.setBackgroundResource(R.drawable.shape_corner_969696_nothing);
+                attentionBtn.setText("已关注");
+                attentionBtn.setPadding(DensityUtils.dp2px(activity, 6), 0, DensityUtils.dp2px(activity, 6), 0);
+                attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                attentionBtn.setTextColor(activity.getResources().getColor(R.color.white));
             } else {
                 attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                attentionBtn.setText("");
+                attentionBtn.setPadding(0, 0, 0, 0);
+                attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
         ImageLoader.getInstance().displayImage(qjDetailBean.getData().getCover_url(), qjImg);
@@ -385,23 +390,7 @@ public class QJDetailActivity extends BaseActivity {
             moreComment.setVisibility(View.GONE);
         }
         //设置情景标题
-        qjTitleTv.setText(qjDetailBean.getData().getTitle());
-        qjTitleTv.post(new Runnable() {
-            @Override
-            public void run() {
-                if (qjTitleTv.getLineCount() >= 2) {
-                    Layout layout = qjTitleTv.getLayout();
-                    StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
-                    String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-                    String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-                    qjTitleTv2.setText(str0);
-                    qjTitleTv.setText(str1);
-                    qjTitleTv2.setVisibility(View.VISIBLE);
-                } else {
-                    qjTitleTv2.setVisibility(View.GONE);
-                }
-            }
-        });
+        SceneTitleSetUtils.setTitle(qjTitleTv,qjTitleTv2,qjDetailBean.getData().getTitle());
         //添加商品标签
         for (final QJDetailBean.DataBean.ProductBean productBean : qjDetailBean.getData().getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -758,9 +747,9 @@ public class QJDetailActivity extends BaseActivity {
                 }
                 if (netBean.isSuccess()) {
                     attentionBtn.setBackgroundResource(R.mipmap.index_has_attention);
-//                    attentionBtn.setBackgroundResource(R.drawable.corner_yellow);
-//                    attentionBtn.setText("已关注");
-//                    attentionBtn.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.focus_pic, 0, 0, 0);
+                    attentionBtn.setText("");
+                    attentionBtn.setPadding(0, 0, 0, 0);
+                    attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     qjDetailBean.getData().getUser_info().setIs_follow(1);
                 } else {
                     ToastUtils.showError(netBean.getMessage());
@@ -820,6 +809,9 @@ public class QJDetailActivity extends BaseActivity {
                 }
                 if (netBean.isSuccess()) {
                     attentionBtn.setBackgroundResource(R.mipmap.index_attention);
+                    attentionBtn.setText("");
+                    attentionBtn.setPadding(0, 0, 0, 0);
+                    attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     qjDetailBean.getData().getUser_info().setIs_follow(0);
                     return;
                 }

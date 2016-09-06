@@ -93,7 +93,7 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
 
         private List<SkusBean> skus;
         private List<RelationProductsBean> relation_products;
-        public static class PngBean{
+        public static class PngBean implements Serializable{
             private String url;
             private int width;
             private int height;
