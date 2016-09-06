@@ -94,7 +94,7 @@ public class BrandQJAdapter extends BaseAdapter {
         final int qjPosition = 2 * position;
         ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getCover_url(), holder.qjBackgroundImg1);
         //设置情景标题
-        SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1,holder.qjTitle1Tv2,sceneList.get(qjPosition).getSight().getTitle());
+        SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1, holder.qjTitle1Tv2, sceneList.get(qjPosition).getSight().getTitle());
         ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg1);
         holder.qjName1.setText(sceneList.get(qjPosition).getSight().getUser_info().getNickname());
         if (sceneList.get(qjPosition).getSight().getIs_love() == 1) {
@@ -152,13 +152,14 @@ public class BrandQJAdapter extends BaseAdapter {
                 activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
             }
         });
+        Log.e("<<<", "sceneList.size=" + sceneList.size());
         if (qjPosition + 1 >= sceneList.size()) {
             holder.qjItem2.setVisibility(View.GONE);
         } else {
             holder.qjItem2.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getCover_url(), holder.qjBackgroundImg2);
             //设置情景标题
-            SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1,holder.qjTitle2Tv2,sceneList.get(qjPosition+1).getSight().getTitle());
+            SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1, holder.qjTitle2Tv2, sceneList.get(qjPosition + 1).getSight().getTitle());
             ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getSight().getUser_info().getAvatar_url(), holder.qjHeadImg2);
             holder.qjName2.setText(sceneList.get(qjPosition + 1).getSight().getUser_info().getNickname());
             if (sceneList.get(qjPosition + 1).getSight().getIs_love() == 1) {

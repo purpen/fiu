@@ -4,6 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:paddingTop="13dp"
     >
 
@@ -78,7 +79,7 @@
             android:layout_below="@id/item_all_fiuer_name"
             android:layout_marginTop="4dp"
             android:textColor="@color/yellow_bd8913"
-            android:textSize="9sp"/>
+            android:textSize="10sp"/>
 
         <TextView
             android:id="@+id/item_all_fiuer_info"
@@ -91,7 +92,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#999999"
-            android:textSize="9sp"/>
+            android:textSize="10sp"/>
     </RelativeLayout>
 
     <TextView

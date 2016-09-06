@@ -330,7 +330,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             case R.id.search_linear:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra(WellGoodsFragment.class.getSimpleName(), false);
-                intent.putExtra("t", 3);
+                intent.putExtra("t", 7);
                 startActivity(intent);
                 break;
         }

@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:paddingTop="50dp"
+        android:paddingTop="20dp"
         android:text="快购买商品评论一下吧"
         android:visibility="visible"/>
 

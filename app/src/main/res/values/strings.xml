@@ -428,9 +428,9 @@
     <string name="click_add_product">点击添加产品:</string>
     <string name="add_title_less20">添加20字以内的标题</string>
     <string name="has_subs_many_qjcategory">已订阅0个情境主题</string>
-    <string name="search_product_or_brand">搜索产品或品牌</string>
+    <string name="search_product_or_brand">搜索好货或品牌</string>
     <string name="new_recommend">最新推荐</string>
-    <string name="product_list">产品列表</string>
+    <string name="product_list">好货列表</string>
     <string name="qingjing">情境</string>
     <string name="new_qingjing">最新情境</string>
     <string name="detail_introduct">详情介绍</string>

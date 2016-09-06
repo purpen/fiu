@@ -47,7 +47,7 @@ import butterknife.Bind;
 public class SearchActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     //上个界面传递过来的数据
     private String q;//搜索关键字
-    private int t;//搜索什么 3.商品;9.情境；11.情境语境；12.主题；13.品牌；14.用户
+    private int t;//搜索什么 7.商品;9.情境；11.情境语境；12.主题；13.品牌；14.用户
 
     @Bind(R.id.cancel)
     TextView cancel;
@@ -143,7 +143,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 return;
             }
         }
-        //添加tab 3
+        //添加tab 7
         titleList.add("产品");
         searchProductFragment = SearchProductFragment.newInstance(q, isContent);
         fragmentList.add(searchProductFragment);
