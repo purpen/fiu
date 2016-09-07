@@ -73,12 +73,18 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
 
         if (position == list.size() / 2) {
             holder.rlRight.setVisibility(View.INVISIBLE);
+            holder.rl_zan_right.setVisibility(View.INVISIBLE);
         } else {
             holder.rlRight.setLayoutParams(params);
             holder.rlRight.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.cover_url, holder.ivCoverRight, options);
             imageLoader.displayImage(right_qj.user_info.avatar_url, holder.rivRight, options);
+            if (right_qj.is_love == 1) {
+                holder.ibtnRight.setImageResource(R.mipmap.zaned);
+            } else {
+                holder.ibtnRight.setImageResource(R.mipmap.zan_normal);
+            }
             holder.tvName.setText(right_qj.user_info.nickname);
             if (!TextUtils.isEmpty(left_qj.title)) {
                 holder.tvTitleRight.setText(right_qj.title);
@@ -90,12 +96,6 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             holder.ibtn.setImageResource(R.mipmap.zaned);
         } else {
             holder.ibtn.setImageResource(R.mipmap.zan_normal);
-        }
-
-        if (right_qj.is_love == 1) {
-            holder.ibtnRight.setImageResource(R.mipmap.zaned);
-        } else {
-            holder.ibtnRight.setImageResource(R.mipmap.zan_normal);
         }
 
         imageLoader.displayImage(left_qj.cover_url, holder.ivCoverLeft, options);

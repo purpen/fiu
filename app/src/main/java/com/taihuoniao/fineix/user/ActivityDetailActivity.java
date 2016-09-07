@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,11 +31,10 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
-import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
-import com.taihuoniao.fineix.user.fragments.RuleFragment;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -44,7 +43,6 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,6 +58,8 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     ListView pullGv;
     @Bind(R.id.pull_lv)
     ListView pullLv;
+    @Bind(R.id.btn_participate)
+    Button btn_participate;
     @Bind(R.id.pull_rule)
     ListView pullRule;
     //    @Bind(R.id.imageView)
@@ -87,7 +87,6 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     private View lineParticipate;
     private View lineResult;
     private int curPage = 1;
-    private boolean isLoadMore = false;
     private ArrayList<DataParticipateQJ.ItemParticipateQJ> mList = new ArrayList<>();
 
     public ActivityDetailActivity() {
@@ -136,41 +135,12 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         pullRule.setAdapter(null);
         loadData();
     }
-
-    private void initTabLayout() {
-        if (data == null) return;
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        bundle.putString("summary", data.summary);
-        bundle.putInt("evt", data.evt);
-        String[] array = getResources().getStringArray(R.array.activity_detail_tab);
-        Fragment[] fragments = {RuleFragment.newInstance(bundle), ParticipateQJFragment.newInstance(id), ActivityResultFragment.newInstance(data.sights)};
-        if (data.evt != 2) {//2活动未结束展示两项
-            array = Arrays.copyOf(array, 2);
-            fragments = Arrays.copyOf(fragments, 2);
-        }
-//        for (int i = 0; i < array.length; i++) {
-//            if (i == 0) {
-//                tabLayout.addTab(tabLayout.newTab().setText(array[0]), true);
-//            } else {
-//                tabLayout.addTab(tabLayout.newTab().setText(array[i]), false);
-//            }
-//        }
-
-//        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
-//        viewPager.setAdapter(adapter);
-//        viewPager.setOffscreenPageLimit(2);
-//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-//        tabLayout.setupWithViewPager(viewPager);
-    }
-
-
     @Override
     protected void installListener() {
         rlRule.setOnClickListener(this);
         rlParticipate.setOnClickListener(this);
         rlResult.setOnClickListener(this);
-
+        btn_participate.setOnClickListener(this);
         pullGv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -203,6 +173,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 resetUI();
                 pullRule.setVisibility(View.VISIBLE);
                 lineRule.setVisibility(View.VISIBLE);
+                btn_participate.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_participate:
                 resetUI();
@@ -214,10 +185,16 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 pullLv.setVisibility(View.VISIBLE);
                 lineResult.setVisibility(View.VISIBLE);
                 break;
+            case R.id.btn_participate:
+                Intent intent = new Intent(activity, SelectPhotoOrCameraActivity.class);
+                MainApplication.id = String.valueOf(data._id);
+                activity.startActivity(intent);
+                break;
         }
     }
 
     private void resetUI() {
+        btn_participate.setVisibility(View.GONE);
         pullRule.setVisibility(View.GONE);
         pullGv.setVisibility(View.GONE);
         pullLv.setVisibility(View.GONE);
@@ -301,10 +278,19 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         ImageLoader.getInstance().displayImage(data.banner_url, imageView);
         tvDesc.setText(data.short_title);
         if (data.evt == 2) {
+            rlRule.setVisibility(View.VISIBLE);
+            rlParticipate.setVisibility(View.VISIBLE);
             rlResult.setVisibility(View.VISIBLE);
             tvDuring.setText("已结束");
         } else {
-            rlResult.setVisibility(View.GONE);
+            if (data.evt == 0) {
+                rlParticipate.setVisibility(View.INVISIBLE);
+            } else {
+                rlParticipate.setVisibility(View.VISIBLE);
+            }
+            rlResult.setVisibility(View.INVISIBLE);
+            rlRule.setVisibility(View.VISIBLE);
+            btn_participate.setVisibility(View.VISIBLE);
             tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         }
         if (!TextUtils.isEmpty(data.title)) {

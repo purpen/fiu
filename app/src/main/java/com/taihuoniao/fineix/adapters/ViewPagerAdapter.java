@@ -170,10 +170,11 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 11:    //情境专题
-                            intent = new Intent(activity, SubjectActivity.class);
-                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
-                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
-                            activity.startActivity(intent);
+//                            intent = new Intent(activity, SubjectActivity.class);
+//                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
+//                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
+//                            activity.startActivity(intent);
+
                             break;
                     }
 

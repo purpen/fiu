@@ -15,23 +15,33 @@ public class DataParticipateQJ implements Parcelable {
     public ArrayList<ItemParticipateQJ> rows;
 
     public static class ItemParticipateQJ implements Parcelable {
-        public String _id;
+        public int _id;
         public String title;
-        public String user_id;
+        public int user_id;
         public String des;
-        public String scene_id;
-        public String category_id;
+        public int scene_id;
+        public int category_id;
+        public LocationBean location;
         public String city;
         public String address;
+        public int used_count;
+        public int view_count;
+        public int love_count;
+        public int comment_count;
+        public int stick;
+        public int fine;
         public int is_check;
         public int status;
         public int deleted;
+        public int created_on;
+        public int updated_on;
         public String tags_s;
         public String subject_ids_s;
         public String cover_url;
         public String created_at;
         public UserInfoBean user_info;
         public int is_love;
+        public int is_favorite;
         public List<String> tags;
         public List<ProductBean> product;
         public List<Integer> subject_ids;
@@ -96,8 +106,13 @@ public class DataParticipateQJ implements Parcelable {
                 public int comment_count;
                 public int people_count;
                 public int fiu_alert_count;
-                public int fiu_notice_count;
                 public int fiu_comment_count;
+                public int fiu_notice_count;
+                public int sight_love_count;
+                public int order_wait_payment;
+                public int order_ready_goods;
+                public int order_sended_goods;
+                public int order_evaluate;
 
                 @Override
                 public int describeContents() {
@@ -113,8 +128,13 @@ public class DataParticipateQJ implements Parcelable {
                     dest.writeInt(this.comment_count);
                     dest.writeInt(this.people_count);
                     dest.writeInt(this.fiu_alert_count);
-                    dest.writeInt(this.fiu_notice_count);
                     dest.writeInt(this.fiu_comment_count);
+                    dest.writeInt(this.fiu_notice_count);
+                    dest.writeInt(this.sight_love_count);
+                    dest.writeInt(this.order_wait_payment);
+                    dest.writeInt(this.order_ready_goods);
+                    dest.writeInt(this.order_sended_goods);
+                    dest.writeInt(this.order_evaluate);
                 }
 
                 public CounterBean() {
@@ -128,8 +148,13 @@ public class DataParticipateQJ implements Parcelable {
                     this.comment_count = in.readInt();
                     this.people_count = in.readInt();
                     this.fiu_alert_count = in.readInt();
-                    this.fiu_notice_count = in.readInt();
                     this.fiu_comment_count = in.readInt();
+                    this.fiu_notice_count = in.readInt();
+                    this.sight_love_count = in.readInt();
+                    this.order_wait_payment = in.readInt();
+                    this.order_ready_goods = in.readInt();
+                    this.order_sended_goods = in.readInt();
+                    this.order_evaluate = in.readInt();
                 }
 
                 public static final Creator<CounterBean> CREATOR = new Creator<CounterBean>() {
@@ -205,9 +230,7 @@ public class DataParticipateQJ implements Parcelable {
             public double x;
             public double y;
             public int loc;
-        }
-
-        public ItemParticipateQJ() {
+            public int type;
         }
 
         @Override
@@ -217,46 +240,69 @@ public class DataParticipateQJ implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(this._id);
+            dest.writeInt(this._id);
             dest.writeString(this.title);
-            dest.writeString(this.user_id);
+            dest.writeInt(this.user_id);
             dest.writeString(this.des);
-            dest.writeString(this.scene_id);
-            dest.writeString(this.category_id);
+            dest.writeInt(this.scene_id);
+            dest.writeInt(this.category_id);
+            dest.writeParcelable(this.location, flags);
             dest.writeString(this.city);
             dest.writeString(this.address);
+            dest.writeInt(this.used_count);
+            dest.writeInt(this.view_count);
+            dest.writeInt(this.love_count);
+            dest.writeInt(this.comment_count);
+            dest.writeInt(this.stick);
+            dest.writeInt(this.fine);
             dest.writeInt(this.is_check);
             dest.writeInt(this.status);
             dest.writeInt(this.deleted);
+            dest.writeInt(this.created_on);
+            dest.writeInt(this.updated_on);
             dest.writeString(this.tags_s);
             dest.writeString(this.subject_ids_s);
             dest.writeString(this.cover_url);
             dest.writeString(this.created_at);
             dest.writeParcelable(this.user_info, flags);
             dest.writeInt(this.is_love);
+            dest.writeInt(this.is_favorite);
             dest.writeStringList(this.tags);
             dest.writeList(this.product);
             dest.writeList(this.subject_ids);
         }
 
+        public ItemParticipateQJ() {
+        }
+
         protected ItemParticipateQJ(Parcel in) {
-            this._id = in.readString();
+            this._id = in.readInt();
             this.title = in.readString();
-            this.user_id = in.readString();
+            this.user_id = in.readInt();
             this.des = in.readString();
-            this.scene_id = in.readString();
-            this.category_id = in.readString();
+            this.scene_id = in.readInt();
+            this.category_id = in.readInt();
+            this.location = in.readParcelable(LocationBean.class.getClassLoader());
             this.city = in.readString();
             this.address = in.readString();
+            this.used_count = in.readInt();
+            this.view_count = in.readInt();
+            this.love_count = in.readInt();
+            this.comment_count = in.readInt();
+            this.stick = in.readInt();
+            this.fine = in.readInt();
             this.is_check = in.readInt();
             this.status = in.readInt();
             this.deleted = in.readInt();
+            this.created_on = in.readInt();
+            this.updated_on = in.readInt();
             this.tags_s = in.readString();
             this.subject_ids_s = in.readString();
             this.cover_url = in.readString();
             this.created_at = in.readString();
             this.user_info = in.readParcelable(UserInfoBean.class.getClassLoader());
             this.is_love = in.readInt();
+            this.is_favorite = in.readInt();
             this.tags = in.createStringArrayList();
             this.product = new ArrayList<ProductBean>();
             in.readList(this.product, ProductBean.class.getClassLoader());
@@ -284,14 +330,15 @@ public class DataParticipateQJ implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.rows);
+        dest.writeList(this.rows);
     }
 
     public DataParticipateQJ() {
     }
 
     protected DataParticipateQJ(Parcel in) {
-        this.rows = in.createTypedArrayList(ItemParticipateQJ.CREATOR);
+        this.rows = new ArrayList<ItemParticipateQJ>();
+        in.readList(this.rows, ItemParticipateQJ.class.getClassLoader());
     }
 
     public static final Creator<DataParticipateQJ> CREATOR = new Creator<DataParticipateQJ>() {

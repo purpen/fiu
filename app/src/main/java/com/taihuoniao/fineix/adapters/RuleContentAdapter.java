@@ -1,17 +1,17 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
-import android.graphics.Rect;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.SubjectData;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.main.MainApplication;
 
 /**
  * @author lilin
@@ -20,7 +20,6 @@ import com.taihuoniao.fineix.utils.Util;
 public class RuleContentAdapter extends BaseAdapter {
     private SubjectData data;
     private Activity activity;
-
     public RuleContentAdapter(SubjectData data, Activity activity) {
         this.data = data;
         this.activity = activity;
@@ -43,24 +42,38 @@ public class RuleContentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Rect outRect = new Rect();
-        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect);
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        View view = Util.inflateView(R.layout.activity_detail_footer, null);
-        params.height = outRect.height() - activity.getResources().getDimensionPixelSize(R.dimen.dp300);
-        view.setLayoutParams(params);
-        TextView tv_rule_content = (TextView) view.findViewById(R.id.tv_rule_content);
-        tv_rule_content.setText(data.summary);
-        Button btn = (Button) view.findViewById(R.id.btn);
-        if (data.evt == 2) {
-            btn.setVisibility(View.GONE);
+        final WebView webView = new WebView(MainApplication.getContext());
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setBuiltInZoomControls(false);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+        } else {
+            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         }
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //参加活动
-            }
-        });
-        return view;
+        webView.setWebViewClient(webViewClient);
+        webView.loadUrl(data.content_view_url);
+        return webView;
     }
+
+    private WebViewClient webViewClient = new WebViewClient() {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+        }
+    };
 }
