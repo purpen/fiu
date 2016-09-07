@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -36,9 +35,6 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
-import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
-import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
-import com.taihuoniao.fineix.user.fragments.RuleFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -47,7 +43,6 @@ import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -92,7 +87,6 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     private View lineParticipate;
     private View lineResult;
     private int curPage = 1;
-    private boolean isLoadMore = false;
     private ArrayList<DataParticipateQJ.ItemParticipateQJ> mList = new ArrayList<>();
 
     public ActivityDetailActivity() {
@@ -141,35 +135,6 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         pullRule.setAdapter(null);
         loadData();
     }
-
-    private void initTabLayout() {
-        if (data == null) return;
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        bundle.putString("summary", data.summary);
-        bundle.putInt("evt", data.evt);
-        String[] array = getResources().getStringArray(R.array.activity_detail_tab);
-        Fragment[] fragments = {RuleFragment.newInstance(bundle), ParticipateQJFragment.newInstance(id), ActivityResultFragment.newInstance(data.sights)};
-        if (data.evt != 2) {//2活动未结束展示两项
-            array = Arrays.copyOf(array, 2);
-            fragments = Arrays.copyOf(fragments, 2);
-        }
-//        for (int i = 0; i < array.length; i++) {
-//            if (i == 0) {
-//                tabLayout.addTab(tabLayout.newTab().setText(array[0]), true);
-//            } else {
-//                tabLayout.addTab(tabLayout.newTab().setText(array[i]), false);
-//            }
-//        }
-
-//        adapter = new CollectViewPagerAdapter(getSupportFragmentManager(), fragments, array);
-//        viewPager.setAdapter(adapter);
-//        viewPager.setOffscreenPageLimit(2);
-//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-//        tabLayout.setupWithViewPager(viewPager);
-    }
-
-
     @Override
     protected void installListener() {
         rlRule.setOnClickListener(this);
