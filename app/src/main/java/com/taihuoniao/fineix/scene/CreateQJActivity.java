@@ -74,7 +74,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.container)
     RelativeLayout container;
     @Bind(R.id.des_tv)
-    EditText desTv;
+    TextView desTv;
     @Bind(R.id.location_relative)
     RelativeLayout locationRelative;
     @Bind(R.id.delete_address)
@@ -337,6 +337,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             case R.id.des_tv:
             case R.id.qj_title_tv:
             case R.id.qj_title_tv2:
+                Log.e("<<<", "点击desTv");
                 Intent intent1 = new Intent(CreateQJActivity.this, AddEnvirActivity.class);
                 if (qjTitleTv2.getVisibility() == View.VISIBLE) {
                     intent1.putExtra("title", qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());

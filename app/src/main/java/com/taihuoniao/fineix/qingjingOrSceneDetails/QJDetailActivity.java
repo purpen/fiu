@@ -10,6 +10,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -48,7 +49,6 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -92,6 +92,8 @@ public class QJDetailActivity extends BaseActivity {
     ImageView img;
     @Bind(R.id.publish_time)
     TextView publishTime;
+    @Bind(R.id.location_img)
+    ImageView locationImg;
     @Bind(R.id.location_tv)
     TextView locationTv;
     @Bind(R.id.qj_img)
@@ -335,10 +337,17 @@ public class QJDetailActivity extends BaseActivity {
         }
         userNameTv.setText(qjDetailBean.getData().getUser_info().getNickname());
         publishTime.setText(qjDetailBean.getData().getCreated_at());
-        locationTv.setText(qjDetailBean.getData().getAddress());
+        if (TextUtils.isEmpty(qjDetailBean.getData().getAddress())) {
+            locationImg.setVisibility(View.GONE);
+            locationTv.setVisibility(View.GONE);
+        } else {
+            locationTv.setText(qjDetailBean.getData().getCity() + " " + qjDetailBean.getData().getAddress());
+            locationImg.setVisibility(View.VISIBLE);
+            locationTv.setVisibility(View.VISIBLE);
+        }
         if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
             //自己的话隐藏关注按钮
-           attentionBtn.setVisibility(View.GONE);
+            attentionBtn.setVisibility(View.GONE);
         } else {
             attentionBtn.setVisibility(View.VISIBLE);
             if (qjDetailBean.getData().getUser_info().getIs_follow() == 1) {
@@ -415,18 +424,9 @@ public class QJDetailActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    switch (productBean.getType()) {
-                        case 2:
-                            Log.e("<<<", "可购买");
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                            break;
-                        default:
-                            Log.e("<<<", "不可购买");
-                            intent.setClass(activity, GoodsDetailActivity.class);
-                            break;
-                    }
+                    intent.setClass(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", productBean.getId());
-                   startActivity(intent);
+                    startActivity(intent);
                 }
             });
         }
@@ -743,6 +743,7 @@ public class QJDetailActivity extends BaseActivity {
             }
         });
     }
+
     //取消关注弹窗
     private void showFocusFansConfirmView() {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
@@ -772,6 +773,7 @@ public class QJDetailActivity extends BaseActivity {
         });
         PopupWindowUtil.show(activity, view);
     }
+
     //取消关注
     private void cancelFollow() {
         ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {

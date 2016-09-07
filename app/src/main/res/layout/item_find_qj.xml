@@ -5,7 +5,7 @@
               android:layout_height="wrap_content"
               android:background="#f8f8f8"
               android:orientation="horizontal"
-              android:paddingBottom="15dp"
+              android:paddingTop="15dp"
     >
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/default_background_750_1334"/>
 
             <RelativeLayout
                 android:id="@+id/qj_bottom_container1"
@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/default_background_750_1334"/>
 
             <RelativeLayout
                 android:id="@+id/qj_bottom_container2"

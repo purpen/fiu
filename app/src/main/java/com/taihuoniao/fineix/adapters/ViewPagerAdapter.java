@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -20,11 +21,16 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.Banner;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
+import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.user.ActivityDetailActivity;
+import com.taihuoniao.fineix.user.ArticalDetailActivity;
+import com.taihuoniao.fineix.user.NewProductDetailActivity;
+import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.user.SubjectActivity;
 import com.taihuoniao.fineix.user.UserGuideActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
@@ -140,8 +146,9 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Banner banner = (Banner) content;
+                    final Banner banner = (Banner) content;
                     Intent intent;
+                    Log.e("<<<","banner.type="+banner.type+",web_url="+banner.web_url+",title="+banner.title);
                     switch (banner.type) {
                         case 1:      //url地址
                             Uri uri = Uri.parse(banner.web_url);
@@ -170,11 +177,48 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 11:    //情境专题
-//                            intent = new Intent(activity, SubjectActivity.class);
-//                            intent.putExtra(SubjectActivity.class.getSimpleName(), banner.web_url);
-//                            intent.putExtra(SubjectActivity.class.getName(), banner.title);
-//                            activity.startActivity(intent);
+                            Log.e("<<<","banner.toString="+banner.toString());
+                            ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
+                                    HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                                    });
 
+                                    if (response.isSuccess()) {
+                                        SubjectData data = response.getData();
+                                        Intent intent;
+                                        switch (data.type) {
+                                            case 1: //文章详情
+                                                intent = new Intent(activity, ArticalDetailActivity.class);
+                                                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), banner.web_url);
+                                                activity.startActivity(intent);
+                                                break;
+                                            case 2: //活动详情
+                                                intent = new Intent(activity, ActivityDetailActivity.class);
+                                                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), banner.web_url);
+                                                activity.startActivity(intent);
+                                                break;
+                                            case 4: //新品
+                                                intent = new Intent(activity, NewProductDetailActivity.class);
+                                                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), banner.web_url);
+                                                activity.startActivity(intent);
+                                                break;
+                                            case 3: //促销
+                                                intent = new Intent(activity, SalePromotionDetailActivity.class);
+                                                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), banner.web_url);
+                                                activity.startActivity(intent);
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    ToastUtils.showError(response.getMessage());
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    ToastUtils.showError(R.string.network_err);
+                                }
+                            });
                             break;
                     }
 

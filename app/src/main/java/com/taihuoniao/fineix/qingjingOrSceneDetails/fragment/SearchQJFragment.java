@@ -122,7 +122,7 @@ public class SearchQJFragment extends SearchFragment {
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "9", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, "9", null, page + "","8",  isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索情景", responseInfo.result);

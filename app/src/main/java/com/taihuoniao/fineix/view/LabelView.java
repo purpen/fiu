@@ -27,7 +27,7 @@ public class LabelView extends LinearLayout {
 
     private TagItem tagInfo = new TagItem();
     private float parentWidth = 0;
-    private float parentHeight = 0;
+    public float parentHeight = 0;
     private boolean isLeft = true;
     public TextView nameTv;
     public RelativeLayout pointContainer;
@@ -129,6 +129,7 @@ public class LabelView extends LinearLayout {
      * @param top
      */
     public void addTo(OnClickListener deleteListener, final MyImageViewTouch overlay, RelativeLayout parent, final int left, final int top) {
+        Log.e("<<<","addTo方法");
         if (deleteListener != null) {
             deleteImg.setOnClickListener(deleteListener);
         }
@@ -141,6 +142,7 @@ public class LabelView extends LinearLayout {
     }
 
     private void setupLocation(int leftLoc, int topLoc) {
+        Log.e("<<<","setupLocation");
         //在移动的时候，left的位置是相对于overlay的位置，而不是整个relative，。。。。。
         this.left = leftLoc;
         this.top = topLoc;
@@ -172,10 +174,10 @@ public class LabelView extends LinearLayout {
             tagInfo.setX(than(left + getMeasuredWidth() - labelMargin - pointWidth / 2, parentHeight));
         }
         tagInfo.setY(than(top + getMeasuredHeight() - pointWidth / 2, parentHeight));
-        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY());
+        Log.e("<<<", "x=" + tagInfo.getX() + ",y=" + tagInfo.getY()+",measureHeight="+getMeasuredHeight());
     }
 
-    private double than(double num1, double num2) {
+    public double than(double num1, double num2) {
         return num2 == 0 ? 0 : (num1 / num2);
     }
 

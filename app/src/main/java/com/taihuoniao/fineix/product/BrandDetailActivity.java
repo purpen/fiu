@@ -167,7 +167,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null,"9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

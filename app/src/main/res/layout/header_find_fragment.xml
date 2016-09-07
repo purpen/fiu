@@ -16,24 +16,32 @@
         android:paddingTop="5dp"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="41dp"
+        android:layout_height="26dp"
         android:background="#f8f8f8">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/find_new_qj"/>
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="6dp"
-            android:gravity="center_vertical"
-            android:text="@string/new_qingjing"
-            android:textColor="#212121"
-            android:textSize="13sp"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/find_new_qj"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:gravity="center_vertical"
+                android:text="@string/new_qingjing"
+                android:textColor="#212121"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 </LinearLayout>

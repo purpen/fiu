@@ -187,7 +187,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.btn_participate:
                 Intent intent = new Intent(activity, SelectPhotoOrCameraActivity.class);
-                MainApplication.id = String.valueOf(data._id);
+                MainApplication.subjectId = String.valueOf(data._id);
                 activity.startActivity(intent);
                 break;
         }

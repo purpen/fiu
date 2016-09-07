@@ -41,7 +41,6 @@ import com.taihuoniao.fineix.beans.OrderDetailsAddress;
 import com.taihuoniao.fineix.beans.OrderDetailsProducts;
 import com.taihuoniao.fineix.beans.OrderEntity;
 import com.taihuoniao.fineix.beans.OrderItem;
-import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.beans.QingJingListBean;
 import com.taihuoniao.fineix.beans.QingjingDetailBean;
@@ -100,40 +99,6 @@ public class DataPaser {
         });
     }
 
-    //产品
-    //列表
-    public static void getProductList(String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
-                                      String stick, String fine, final Handler handler) {
-        ClientDiscoverAPI.getProductList(null,null, category_id, brand_id, category_tag_ids, page, size, ids, ignore_ids, stick, fine, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<商品列表", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json", responseInfo.result);
-                if (handler == null) {
-                    return;
-                }
-                Message msg = handler.obtainMessage();
-                msg.what = DataConstants.ADD_PRODUCT_LIST;
-                ProductBean productBean = new ProductBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ProductBean>() {
-                    }.getType();
-                    productBean = gson.fromJson(responseInfo.result, type);
-                    msg.obj = productBean;
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                handler.sendMessage(msg);
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-//                Log.e("<<<failure>>>", "error = " + error.toString() + ",msg = " + msg);
-                handler.sendEmptyMessage(DataConstants.NET_FAIL);
-            }
-        });
-    }
 
     //产品
     //用户添加产品
@@ -953,7 +918,7 @@ public class DataPaser {
     //公共
     //搜索列表
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, null, page, evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t, null, page,"8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<搜索", responseInfo.result);

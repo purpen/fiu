@@ -49,7 +49,6 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
@@ -77,6 +76,7 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/10.
  */
 public class IndexQJListAdapter extends BaseAdapter {
+    private boolean isNoUser;
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表
@@ -95,6 +95,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         this.userList = userList;
         dialog = new WaittingDialog(activity);
         initPopupWindow();
+    }
+
+    public boolean isNoUser() {
+        return isNoUser;
+    }
+
+    public void setNoUser(boolean noUser) {
+        isNoUser = noUser;
     }
 
     public int getPos() {
@@ -234,12 +242,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (position == 6) {
-            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
-            holder.userRecycler.setVisibility(View.VISIBLE);
-        } else if (position == 17) {
-            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
-            holder.userRecycler.setVisibility(View.VISIBLE);
+        if (userList.size() > 0) {
+            if (position == 6) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            } else if (position == 17) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.userRecycler.setAdapter(null);
             holder.userRecycler.setVisibility(View.GONE);
@@ -259,7 +269,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
-        holder.locationTv.setText(sceneList.get(position).getAddress());
+        if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
+            holder.locationImg.setVisibility(View.GONE);
+            holder.locationTv.setVisibility(View.GONE);
+        } else {
+            holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
+            holder.locationImg.setVisibility(View.VISIBLE);
+            holder.locationTv.setVisibility(View.VISIBLE);
+        }
         Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
@@ -344,22 +361,11 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             });
             holder.labelContainer.addView(labelView);
-//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    switch (productBean.getType()) {
-                        case 2:
-                            Log.e("<<<", "可购买");
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                            break;
-                        default:
-                            Log.e("<<<", "不可购买");
-                            intent.setClass(activity, GoodsDetailActivity.class);
-                            break;
-                    }
+                    Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", productBean.getId());
                     parent.getContext().startActivity(intent);
                 }
@@ -789,6 +795,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         LinearLayout mapLinear;
         @Bind(R.id.publish_time)
         TextView publishTime;
+        @Bind(R.id.location_img)
+        ImageView locationImg;
         @Bind(R.id.location_tv)
         TextView locationTv;
         @Bind(R.id.container)
@@ -830,11 +838,13 @@ public class IndexQJListAdapter extends BaseAdapter {
     //用户列表适配器
     static class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
         private Activity activity;
+        private IndexQJListAdapter indexQJListAdapter;
         private List<IndexUserListBean.DataBean.UsersBean> userList;
         private WaittingDialog dialog;
 
-        public UserAdapter(Activity activity, List<IndexUserListBean.DataBean.UsersBean> userList) {
+        public UserAdapter(Activity activity, IndexQJListAdapter indexQJListAdapter, List<IndexUserListBean.DataBean.UsersBean> userList) {
             this.activity = activity;
+            this.indexQJListAdapter = indexQJListAdapter;
             this.userList = userList;
             dialog = new WaittingDialog(activity);
         }
@@ -943,6 +953,12 @@ public class IndexQJListAdapter extends BaseAdapter {
                     }
                     userList.remove(i);
                     notifyItemRemoved(i);
+                    if (userList.size() <= 0) {
+                        indexQJListAdapter.setNoUser(true);
+                        indexQJListAdapter.notifyDataSetChanged();
+                    } else {
+                        indexQJListAdapter.setNoUser(false);
+                    }
                     break;
             }
         }

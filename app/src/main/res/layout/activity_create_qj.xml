@@ -57,7 +57,7 @@
                 android:visibility="gone"/>
         </RelativeLayout>
 
-        <EditText
+        <TextView
             android:id="@+id/des_tv"
             android:layout_width="match_parent"
             android:layout_height="89dp"
@@ -133,9 +133,9 @@
                     android:layout_marginTop="3dp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:visibility="gone"
                     android:textColor="#999999"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </RelativeLayout>

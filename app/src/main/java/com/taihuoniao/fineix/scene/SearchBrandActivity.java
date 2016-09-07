@@ -26,8 +26,8 @@ import com.taihuoniao.fineix.adapters.SearchProductAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.AddBrandBean;
 import com.taihuoniao.fineix.beans.AddProductBean;
-import com.taihuoniao.fineix.beans.BrandListBean;
 import com.taihuoniao.fineix.beans.ProductBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -67,7 +67,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     @Bind(R.id.add_product_name)
     TextView addProductName;
     private ListView listView;
-    private List<BrandListBean.DataBean.RowsBean> brandList;
+    private List<SearchBean.Data.SearchItem> brandList;
     private SearchBrandAdapter searchBrandAdapter;
     private String currentInBrand;//正在输入的品牌名称
     private WaittingDialog dialog;
@@ -149,7 +149,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }
                     if (onlyProduct) {
                         if (searchEditText.getText().toString().length() > 0) {
-                            addProduct(searchEditText.getText().toString(), null,null);
+                            addProduct(searchEditText.getText().toString(), null);
                             return false;
                         }
                         finish();
@@ -158,7 +158,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     //如果选择品牌，则返回品牌，如果没有品牌。则不返回
                     if (brandName.getText().toString().length() > 0) {
                         if (searchEditText.getText().toString().length() > 0) {
-                            addProduct(searchEditText.getText().toString(), cuurentBrandId,currentBrandName);
+                            addProduct(searchEditText.getText().toString(), cuurentBrandId);
                             return false;
                         }
                         Intent intent = new Intent();
@@ -213,10 +213,10 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.add_product_relative:
                 if (onlyProduct) {
-                    addProduct(addProductName.getText().toString(), null,null);
+                    addProduct(addProductName.getText().toString(), null);
                     return;
                 }
-                addProduct(addProductName.getText().toString(), cuurentBrandId,currentBrandName);
+                addProduct(addProductName.getText().toString(), cuurentBrandId);
                 break;
             case R.id.add_brand_relative:
                 addBrand(currentInBrand);
@@ -234,11 +234,11 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void addProduct(String title, String brand_id,String brand_name) {
+    private void addProduct(String title, String brand_id) {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addProduct(title,brand_id,brand_name, new RequestCallBack<String>() {
+        ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -316,22 +316,22 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void searchBrand(final String q) {
-        ClientDiscoverAPI.brandList(1, 100, null, null, null, q, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索品牌", responseInfo.result);
-                BrandListBean brandListBean = new BrandListBean();
+                SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
-                    Type type = new TypeToken<BrandListBean>() {
+                    Type type = new TypeToken<SearchBean>() {
                     }.getType();
-                    brandListBean = gson.fromJson(responseInfo.result, type);
+                    searchBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据异常" + e.toString());
+                    Log.e("<<<", "数据解析异常" + e.toString());
                 }
-                if (brandListBean.isSuccess()) {
+                if (searchBean.isSuccess()) {
                     brandList.clear();
-                    brandList.addAll(brandListBean.getData().getRows());
+                    brandList.addAll(searchBean.getData().getRows());
                     searchBrandAdapter.notifyDataSetChanged();
                     if (brandList.size() <= 0) {
                         addBrandName.setText(q);
@@ -344,6 +344,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                ToastUtils.showError(R.string.net_fail);
             }
         });
     }
@@ -352,10 +353,10 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
     private SearchProductAdapter searchProductAdapter;
 
     private void searchProduct(String title, String brand_id) {
-        ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, 1 + "", 300 + "", null, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<", "产品列表:" + responseInfo.result);
+                Log.e("<<<品牌下的产品",responseInfo.result);
                 ProductBean productBean = new ProductBean();
                 try {
                     Gson gson = new Gson();
@@ -363,7 +364,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                     }.getType();
                     productBean = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
+                    Log.e("<<<品牌下的产品","解析异常"+e.toString());
                 }
                 if (productBean.isSuccess()) {
                     productList = new ArrayList<>();
@@ -381,7 +382,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(HttpException error, String msg) {
-
+                ToastUtils.showError(R.string.net_fail);
             }
         });
     }
@@ -395,7 +396,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
             Intent intent = new Intent();
             intent.putExtra("product", productList.get(position).getTitle());
             intent.putExtra("productId", productList.get(position).get_id());
-            intent.putExtra("type",2);
+            intent.putExtra("type", 2);
             setResult(1, intent);
             finish();
             return;

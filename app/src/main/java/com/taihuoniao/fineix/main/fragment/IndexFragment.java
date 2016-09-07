@@ -143,6 +143,11 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         sceneNet();
         subjectList();
         getBanners();
+        if (indexQJListAdapter.isNoUser()) {
+            userList.clear();
+            sneceComplete = 2;
+            return;
+        }
         getUserList();
     }
 
@@ -239,7 +244,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取中间插入的用户列表
     private void getUserList() {
-        ClientDiscoverAPI.getUserList(20, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<首页用户列表", responseInfo.result);
@@ -411,7 +416,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("<<<","评论返回,requestCode="+requestCode+",resultCode="+resultCode+",intent="+data);
+        Log.e("<<<", "评论返回,requestCode=" + requestCode + ",resultCode=" + resultCode + ",intent=" + data);
         if (data == null) {
             return;
         }

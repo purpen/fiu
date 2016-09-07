@@ -9,6 +9,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -45,7 +46,6 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
@@ -241,7 +241,14 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         }
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
-        holder.locationTv.setText(sceneList.get(position).getAddress());
+        if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
+            holder.locationImg.setVisibility(View.GONE);
+            holder.locationTv.setVisibility(View.GONE);
+        } else {
+            holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
+            holder.locationImg.setVisibility(View.VISIBLE);
+            holder.locationTv.setVisibility(View.VISIBLE);
+        }
         Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
@@ -332,16 +339,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    switch (productBean.getType()) {
-                        case 2:
-                            Log.e("<<<", "可购买");
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                            break;
-                        default:
-                            Log.e("<<<", "不可购买");
-                            intent.setClass(activity, GoodsDetailActivity.class);
-                            break;
-                    }
+                    intent.setClass(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", productBean.getId());
                     parent.getContext().startActivity(intent);
                 }
@@ -769,6 +767,8 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         TextView userNameTv;
         @Bind(R.id.publish_time)
         TextView publishTime;
+        @Bind(R.id.location_img)
+        ImageView locationImg;
         @Bind(R.id.location_tv)
         TextView locationTv;
         @Bind(R.id.container)

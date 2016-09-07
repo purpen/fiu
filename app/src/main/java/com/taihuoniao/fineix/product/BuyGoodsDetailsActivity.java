@@ -144,8 +144,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         viewPager.setAdapter(searchViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(fragmentList.size());
-        shoucangLinear.setOnClickListener(this);
-        buyBtn.setOnClickListener(this);
     }
 
 
@@ -378,6 +376,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     Log.e("<<<商品详情", "解析异常=" + e.toString());
                 }
                 if (buyGoodDetailsBean.isSuccess()) {
+
+                    //刷新数据
                     buyGoodsDetailsFragment.refreshData(buyGoodDetailsBean);
                     webFragment.refreshData(buyGoodDetailsBean.getData().getContent_view_url());
                     if (buyGoodDetailsBean.getData().getIs_favorite() == 1) {
@@ -392,10 +392,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     maxNumber = buyGoodDetailsBean.getData().getInventory();
                     quantity.setText(maxNumber + "");
                     addSkuToLinear();
+                    shoucangLinear.setOnClickListener(BuyGoodsDetailsActivity.this);
+                    buyBtn.setOnClickListener(BuyGoodsDetailsActivity.this);
                     return;
                 }
                 ToastUtils.showError(buyGoodDetailsBean.getMessage());
-                finish();
+//                finish();
             }
 
             @Override

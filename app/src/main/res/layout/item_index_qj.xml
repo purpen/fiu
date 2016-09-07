@@ -33,7 +33,7 @@
                 android:id="@+id/head_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/default_background_750_1334"
                 app:riv_border_color="@color/white"
                 app:riv_border_width="1px"
                 app:riv_corner_radius="100dp"/>
@@ -102,6 +102,7 @@
                     android:textSize="10sp"/>
 
                 <ImageView
+                    android:id="@+id/location_img"
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"
                     android:layout_marginLeft="10dp"
@@ -139,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/default_background_750_1334"/>
 
         <TextView
             android:id="@+id/qj_title_tv"

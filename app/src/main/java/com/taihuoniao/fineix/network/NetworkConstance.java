@@ -22,11 +22,11 @@ public class NetworkConstance {
     //统计用户想购买的数量
     public static final String want_buy = BASE_URL + "/scene_product/sight_click_stat";
     //删除用户添加的产品
-    public static final String delete_product = BASE_URL + "/scene_product/deleted";
+    public static final String delete_product = BASE_URL + "/product/deleted";
     //列表
     public static final String urlString_productsList = BASE_URL + "/product/getlist";
     //添加产品
-    public static final String add_product = BASE_URL + "/user_temp/add";
+    public static final String add_product = BASE_URL + "/product/submit";
     //产品详情
     public static final String good_details = BASE_URL + "/product/view";
     // 自营商品详情

@@ -211,7 +211,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景列表嵌入的主题列表
     private void subjectList() {
-        ClientDiscoverAPI.subjectList("1", "2", null, null, "1,2", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<精选主题", responseInfo.result);
@@ -225,7 +225,6 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                     Log.e("<<<", "解析异常=" + e.toString());
                 }
                 if (subjectListBean.isSuccess()) {
-
                     subjectList.clear();
                     subjectList.addAll(subjectListBean.getData().getRows());
                     if (sneceComplete == 1) {
@@ -347,7 +346,10 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        click(position);
+        Intent intent = new Intent(getActivity(), QJCategoryActivity.class);
+        intent.putExtra("id", categoryList.get(position).get_id());
+        intent.putExtra("name", categoryList.get(position).getTitle());
+        startActivity(intent);
     }
 
     @Override

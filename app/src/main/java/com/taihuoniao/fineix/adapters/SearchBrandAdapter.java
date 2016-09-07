@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
-import com.taihuoniao.fineix.beans.BrandListBean;
+import com.taihuoniao.fineix.beans.SearchBean;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/17.
  */
 public class SearchBrandAdapter extends BaseAdapter {
-    private List<BrandListBean.DataBean.RowsBean> brandList;
+    private List<SearchBean.Data.SearchItem> brandList;
 
-    public SearchBrandAdapter(List<BrandListBean.DataBean.RowsBean> brandList) {
+    public SearchBrandAdapter(List<SearchBean.Data.SearchItem> brandList) {
         this.brandList = brandList;
     }
 

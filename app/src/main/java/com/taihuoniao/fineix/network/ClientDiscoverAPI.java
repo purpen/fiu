@@ -39,6 +39,20 @@ public class ClientDiscoverAPI {
 
     //产品
     //删除用户添加的产品
+    public static void deleteProduct(String id) {
+        deleteProduct(id, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
     public static void deleteProduct(String id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.delete_product;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
@@ -49,7 +63,7 @@ public class ClientDiscoverAPI {
     //产品
     //列表
     public static void getProductList(String title, String sort, String category_id, String brand_id, String category_tag_ids, String page, String size, String ids, String ignore_ids,
-                                      String stick, String fine, RequestCallBack<String> callBack) {
+                                      String stick, String fine, String stage, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_productsList;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
@@ -63,7 +77,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("ignore_ids", ignore_ids);
         params.addQueryStringParameter("stick", stick);
         params.addQueryStringParameter("fine", fine);
-        params.addQueryStringParameter("stage", "9");
+        params.addQueryStringParameter("stage", stage);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -87,13 +101,11 @@ public class ClientDiscoverAPI {
 
     //产品
     //添加产品
-    public static void addProduct(String title, String brand_id, String brand_name, RequestCallBack<String> callBack) {
+    public static void addProduct(String title, String brand_id, RequestCallBack<String> callBack) {
         String url = NetworkConstance.add_product;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
-        params.addQueryStringParameter("type", 1 + "");
         params.addQueryStringParameter("brand_id", brand_id);
-        params.addQueryStringParameter("brand_name", brand_name);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -532,16 +544,16 @@ public class ClientDiscoverAPI {
 
     //公共
     //搜索列表
-    public static void search(String q, String t, String cid, String page, String evt, String sort, RequestCallBack<String> callBack) {
+    public static void search(String q, String t, String cid, String page, String size, String evt, String sort, RequestCallBack<String> callBack) {
         String url = NetworkConstance.search;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("q", q);
         params.addQueryStringParameter("t", t);
-        params.addQueryStringParameter("cid", cid);
+        params.addQueryStringParameter("tid", cid);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("evt", evt);
         params.addQueryStringParameter("sort", sort);
-        params.addQueryStringParameter("size", 8 + "");
+        params.addQueryStringParameter("size", size);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1558,10 +1570,9 @@ public class ClientDiscoverAPI {
 
     //添加品牌
     public static void addBrand(String title, RequestCallBack<String> callBack) {
-        String url = NetworkConstance.BASE_URL + "/user_temp/add";
+        String url = NetworkConstance.BASE_URL + "/scene_brands/submit";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("title", title);
-        params.addQueryStringParameter("type", 2 + "");
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 

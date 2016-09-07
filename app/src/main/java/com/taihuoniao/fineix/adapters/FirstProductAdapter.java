@@ -46,7 +46,7 @@ public class FirstProductAdapter extends RecyclerView.Adapter<FirstProductAdapte
             }
         });
         ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
-//        ImageLoader.getInstance().displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
+        ImageLoader.getInstance().displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
         holder.name.setText(list.get(position).getTitle());
         holder.price.setText("¥" + list.get(position).getSale_price());
     }

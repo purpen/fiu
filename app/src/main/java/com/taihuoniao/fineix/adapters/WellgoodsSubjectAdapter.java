@@ -83,21 +83,26 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
                                                  public void onClick(View v) {
                                                      Intent intent = new Intent();
                                                      switch (list.get(position).getType()) {
-                                                         case 1:
-                                                             intent.setClass(activity, ArticalDetailActivity.class);
+                                                         case 1: //文章详情
+                                                             intent = new Intent(activity, ArticalDetailActivity.class);
                                                              intent.putExtra(ArticalDetailActivity.class.getSimpleName(), list.get(position).get_id());
+//                                                             activity.startActivity(intent);
                                                              break;
-                                                         case 2:
-                                                             intent.setClass(activity, ActivityDetailActivity.class);
+                                                         case 2: //活动详情
+                                                             intent = new Intent(activity, ActivityDetailActivity.class);
                                                              intent.putExtra(ActivityDetailActivity.class.getSimpleName(), list.get(position).get_id());
+//                                                             activity.startActivity(intent);
                                                              break;
-                                                         case 3:
-                                                             intent.setClass(activity, SalePromotionDetailActivity.class);
-                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
-                                                             break;
-                                                         default:
-                                                             intent.setClass(activity, NewProductDetailActivity.class);
+                                                         case 4: //新品
+                                                             intent = new Intent(activity, NewProductDetailActivity.class);
                                                              intent.putExtra(NewProductDetailActivity.class.getSimpleName(), list.get(position).get_id());
+//                                                             activity.startActivity(intent);
+                                                             break;
+                                                         case 3: //促销
+                                                         case 5://好货
+                                                             intent = new Intent(activity, SalePromotionDetailActivity.class);
+                                                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), list.get(position).get_id());
+//                                                             activity.startActivity(intent);
                                                              break;
                                                      }
                                                      activity.startActivity(intent);
