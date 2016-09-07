@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:visibility="gone"
-        android:background="@color/color_f8f8f8" />
+        android:background="@color/color_f8f8f8"
+        android:layout_weight="1" />
 
     <ListView
         android:id="@+id/pull_lv"
@@ -23,6 +24,7 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:divider="@null"
+        android:layout_weight="1"
         android:background="@color/color_f8f8f8" />
 
     <ListView
@@ -31,5 +33,17 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:divider="@null"
+        android:layout_weight="1"
         android:background="@color/color_f8f8f8" />
+
+    <Button
+        android:id="@+id/btn_participate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_af8323"
+        android:text="参加活动"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp14"
+        android:visibility="gone" />
 </LinearLayout>

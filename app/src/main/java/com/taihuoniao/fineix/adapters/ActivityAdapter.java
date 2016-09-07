@@ -42,7 +42,7 @@ public class ActivityAdapter extends CommonBaseAdapter<DataChooseSubject.ItemCho
             holder = (ViewHolder) convertView.getTag();
         }
         ImageLoader.getInstance().displayImage(item.cover_url, holder.imageView, options);
-        holder.tvDuring.setText(String.format("活动时间：%s-%s", item.begin_time_at, item.end_time_at));
+        holder.tvDuring.setText(String.format("%s-%s", item.begin_time_at, item.end_time_at));
         if (TextUtils.equals("2", item.evt)) {
             holder.ivFinish.setVisibility(View.VISIBLE);
         } else {

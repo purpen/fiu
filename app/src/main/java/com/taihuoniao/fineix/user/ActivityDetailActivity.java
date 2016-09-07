@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,8 +32,10 @@ import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.user.fragments.ActivityResultFragment;
 import com.taihuoniao.fineix.user.fragments.ParticipateQJFragment;
 import com.taihuoniao.fineix.user.fragments.RuleFragment;
@@ -60,6 +63,8 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     ListView pullGv;
     @Bind(R.id.pull_lv)
     ListView pullLv;
+    @Bind(R.id.btn_participate)
+    Button btn_participate;
     @Bind(R.id.pull_rule)
     ListView pullRule;
     //    @Bind(R.id.imageView)
@@ -170,7 +175,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         rlRule.setOnClickListener(this);
         rlParticipate.setOnClickListener(this);
         rlResult.setOnClickListener(this);
-
+        btn_participate.setOnClickListener(this);
         pullGv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -203,6 +208,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 resetUI();
                 pullRule.setVisibility(View.VISIBLE);
                 lineRule.setVisibility(View.VISIBLE);
+                btn_participate.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_participate:
                 resetUI();
@@ -214,10 +220,16 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 pullLv.setVisibility(View.VISIBLE);
                 lineResult.setVisibility(View.VISIBLE);
                 break;
+            case R.id.btn_participate:
+                Intent intent = new Intent(activity, SelectPhotoOrCameraActivity.class);
+                MainApplication.id = String.valueOf(data._id);
+                activity.startActivity(intent);
+                break;
         }
     }
 
     private void resetUI() {
+        btn_participate.setVisibility(View.GONE);
         pullRule.setVisibility(View.GONE);
         pullGv.setVisibility(View.GONE);
         pullLv.setVisibility(View.GONE);
@@ -301,10 +313,19 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
         ImageLoader.getInstance().displayImage(data.banner_url, imageView);
         tvDesc.setText(data.short_title);
         if (data.evt == 2) {
+            rlRule.setVisibility(View.VISIBLE);
+            rlParticipate.setVisibility(View.VISIBLE);
             rlResult.setVisibility(View.VISIBLE);
             tvDuring.setText("已结束");
         } else {
-            rlResult.setVisibility(View.GONE);
+            if (data.evt == 0) {
+                rlParticipate.setVisibility(View.INVISIBLE);
+            } else {
+                rlParticipate.setVisibility(View.VISIBLE);
+            }
+            rlResult.setVisibility(View.INVISIBLE);
+            rlRule.setVisibility(View.VISIBLE);
+            btn_participate.setVisibility(View.VISIBLE);
             tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
         }
         if (!TextUtils.isEmpty(data.title)) {

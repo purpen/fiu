@@ -101,7 +101,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
         initDays();
     }
 
-    private void setCalendarCurrentTime(){
+    private void setCalendarCurrentTime() {
         calendar = Calendar.getInstance();
 //        calendar.setTimeInMillis(1394380800*1000l);// 测试代码
     }
@@ -121,17 +121,17 @@ public class CustomBirthdaySelectView extends LinearLayout {
         int monthLen = 0;
         if (isCurrentYear) {
             monthLen = calendar.get(Calendar.MONTH) + 1;
-            if (monthLen==1){
-                isCurrentMonth=true;
+            if (monthLen == 1) {
+                isCurrentMonth = true;
             }
         } else {
             monthLen = MONTHS_OF_YEAR;
         }
         LogUtil.e("monthLen", monthLen + "");
         for (int i = 1; i <= monthLen; i++) {
-            if (i<10){
+            if (i < 10) {
                 months.add(String.format("0%s", String.valueOf(i)));
-            }else {
+            } else {
                 months.add(String.valueOf(i));
             }
         }
@@ -149,9 +149,9 @@ public class CustomBirthdaySelectView extends LinearLayout {
         }
 
         for (int i = 1; i <= dayLen; i++) {
-            if (i<10){
+            if (i < 10) {
                 days.add(String.format("0%s", String.valueOf(i)));
-            }else {
+            } else {
                 days.add(String.valueOf(i));
             }
         }
@@ -168,7 +168,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
                     initDays();
                 } else {
                     isCurrentYear = false;
-                    isCurrentMonth=false;
+                    isCurrentMonth = false;
                     setCalendarCurrentSelected();
                     initMonths();
                     initDays();
@@ -182,7 +182,7 @@ public class CustomBirthdaySelectView extends LinearLayout {
         wv_center.addChangingListener(new OnWheelChangedListener() {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
-                if (isCurrentYear&&newValue == months.size() - 1) {//是今年的当前月
+                if (isCurrentYear && newValue == months.size() - 1) {//是今年的当前月
                     isCurrentMonth = true;
                     setCalendarCurrentTime();
                 } else {
@@ -199,10 +199,10 @@ public class CustomBirthdaySelectView extends LinearLayout {
     /**
      * 设置为当前选择日期
      */
-    private void setCalendarCurrentSelected(){
+    private void setCalendarCurrentSelected() {
         try {
-            LogUtil.e("getBithday", TimeUtil.getMillonsecond(getBithday(),"yyyy-MM-dd")+"");
-            calendar.setTimeInMillis(TimeUtil.getMillonsecond(getBithday(),"yyyy-MM-dd"));
+            LogUtil.e("getBithday", TimeUtil.getMillonsecond(getBithday(), "yyyy-MM-dd") + "");
+            calendar.setTimeInMillis(TimeUtil.getMillonsecond(getBithday(), "yyyy-MM-dd"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -219,27 +219,37 @@ public class CustomBirthdaySelectView extends LinearLayout {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date parse = simpleDateFormat.parse(date);
         calendar.setTime(parse);
+        int curYear = calendar.get(Calendar.YEAR);
         for (int i = 0; i < years.size(); i++) {
-            LogUtil.e("Calendar.YEAR", calendar.get(Calendar.YEAR) + "");
-            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.YEAR)), years.get(i))) {
-                LogUtil.e("i===", i + "");
+            if (TextUtils.equals(String.valueOf(curYear), years.get(i))) {
                 wv_left.setCurrentItem(i);
                 break;
             }
         }
 
+        int curMonth = calendar.get(Calendar.MONTH);
+        String monthStr;
         for (int j = 0; j < months.size(); j++) {
-            LogUtil.e("Calendar.MONTH", calendar.get(Calendar.MONTH) + "");
-            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.MONTH)), months.get(j))) {
-                LogUtil.e("j===", j + "");
+            if (curMonth < 10) {
+                monthStr = "0" + (curMonth + 1);
+            } else {
+                monthStr = String.valueOf(curMonth + 1);
+            }
+            if (TextUtils.equals(monthStr, months.get(j))) {
                 wv_center.setCurrentItem(j);
                 break;
             }
         }
+
+        int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+        String dayStr;
         for (int k = 0; k < days.size(); k++) {
-            LogUtil.e("DAY_OF_MONTH", calendar.get(Calendar.DAY_OF_MONTH) + "");
-            if (TextUtils.equals(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)), days.get(k))) {
-                LogUtil.e("k===", k + "");
+            if (curDay < 10) {
+                dayStr = "0" + curDay;
+            } else {
+                dayStr = String.valueOf(curDay);
+            }
+            if (TextUtils.equals(dayStr, days.get(k))) {
                 wv_right.setCurrentItem(k);
                 break;
             }
