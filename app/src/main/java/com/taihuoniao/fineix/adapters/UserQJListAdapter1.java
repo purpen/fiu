@@ -75,7 +75,7 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
                     holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
                 } else {
                     holder.tv_title_right.setText(right_qj.getTitle().substring(0, 10));
-                    holder.tv_title_right1.setText(right_qj.getTitle().substring(10, left_qj.getTitle().length() - 1));
+                    holder.tv_title_right1.setText(right_qj.getTitle().substring(10, right_qj.getTitle().length() - 1));
                     holder.tv_title_right1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                     holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 }
