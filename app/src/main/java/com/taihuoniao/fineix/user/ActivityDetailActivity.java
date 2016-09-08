@@ -282,9 +282,12 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             rlParticipate.setVisibility(View.VISIBLE);
             rlResult.setVisibility(View.VISIBLE);
             tvDuring.setText("已结束");
+            btn_participate.setVisibility(View.VISIBLE);
+            btn_participate.setBackgroundResource(R.color.color_aaa);
         } else {
             if (data.evt == 0) {
                 rlParticipate.setVisibility(View.GONE);
+                btn_participate.setText("即将开始");
             } else {
                 rlParticipate.setVisibility(View.VISIBLE);
             }
