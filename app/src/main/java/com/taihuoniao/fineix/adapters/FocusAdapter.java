@@ -22,7 +22,6 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -39,11 +38,10 @@ import butterknife.ButterKnife;
  */
 public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements View.OnClickListener {
     private ImageLoader imageLoader;
-    private static final int TYPE1 = 1; //单向关注
-    private static final int TYPE2 = 2; //互向关注
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
+
     public FocusAdapter(List<FocusFansItem> list, Activity activity, long userId) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
@@ -73,53 +71,51 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
             holder = (ViewHolder) convertView.getTag();
         }
         convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, activity.getResources().getDimensionPixelSize(R.dimen.dp55)));
-        imageLoader.displayImage(item.follows.avatar_url, holder.riv);
-        if (item.follows.is_expert == 1) {
-            holder.riv_auth.setVisibility(View.VISIBLE);
-        } else {
-            holder.riv_auth.setVisibility(View.GONE);
-        }
-        holder.tv_name.setText(item.follows.nickname);
-        if (!TextUtils.isEmpty(item.follows.expert_label) && !TextUtils.isEmpty(item.follows.expert_info)) {
-            holder.tv_desc.setText(String.format("%s | %s", item.follows.expert_label, item.follows.expert_info));
-        } else {
-            holder.tv_desc.setText(item.follows.summary);
+
+        if (item != null) {
+            if (item.follows != null) {
+                imageLoader.displayImage(item.follows.avatar_url, holder.riv);
+                if (item.follows.is_expert == 1) {
+                    holder.riv_auth.setVisibility(View.VISIBLE);
+                } else {
+                    holder.riv_auth.setVisibility(View.GONE);
+                }
+                holder.tv_name.setText(item.follows.nickname);
+                if (!TextUtils.isEmpty(item.follows.expert_label) && !TextUtils.isEmpty(item.follows.expert_info)) {
+                    holder.tv_desc.setText(String.format("%s | %s", item.follows.expert_label, item.follows.expert_info));
+                } else {
+                    holder.tv_desc.setText(item.follows.summary);
+                }
+            }
+            //关注界面
+            if (userId == LoginInfo.getUserId()) { //是自己
+                if (item.focus_flag) {
+                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
+                    holder.btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {//关注
+                            doFocus(item, view);
+                        }
+                    });
+                } else {
+                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
+                    holder.btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {//取消关注
+                            showFocusFansConfirmView(item, "停止关注");
+                        }
+                    });
+                }
+            } else { //处理别人的关注列表
+                dealOthersFoucsFansStyle(item, holder);
+            }
         }
 
-        //关注界面
-        if (userId == LoginInfo.getUserId()) { //是自己
-            if (item.focus_flag) {
-//                holder.btn.setText("关注");
-//                holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-//                holder.btn.setBackgroundResource(R.drawable.border_radius5);
-                setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
-                holder.btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {//关注
-                        doFocus(item, view);
-                    }
-                });
-            } else {
-//                holder.btn.setText("已关注");
-//                holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-//                holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
-                setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
-                holder.btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {//取消关注
-                        showFocusFansConfirmView(item, "停止关注");
-                    }
-                });
-            }
-        } else { //处理别人的关注列表
-            dealOthersFoucsFansStyle(item, holder);
-        }
         return convertView;
     }
 
     private void doFocus(final FocusFansItem item, final View view) {
         if (userId == LoginInfo.getUserId()) { //关注列表做关注操作
-            if (item == null) return;
             if (item.focus_flag) {
                 ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                     @Override
@@ -132,7 +128,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                         if (response.isSuccess()) {
                             item.focus_flag = false;
                             notifyDataSetChanged();
-//                            Util.makeToast(response.getMessage());
                             return;
                         }
                         ToastUtils.showError(response.getMessage());
@@ -177,7 +172,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 view.setEnabled(false);
                 final FocusFansItem item = (FocusFansItem) view.getTag();
                 if (userId == LoginInfo.getUserId()) { //关注列表做取消关注操作
-                    if (item == null) return;
+                    if (item == null || item.follows == null) return;
                     if (item.focus_flag) {
                         ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                             @Override
@@ -200,7 +195,6 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                                 view.setEnabled(true);
                                 PopupWindowUtil.dismiss();
                                 ToastUtils.showError("网络异常，请确认网络畅通");
-//                                svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
                             }
                         });
                     } else {
@@ -240,27 +234,20 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 
     /**
      * 需求只考虑LoginInfo.getUserId()与别人的关注用户和粉丝的关系
+     *
      * @param item
      * @param holder
      */
     private void dealOthersFoucsFansStyle(final FocusFansItem item, final ViewHolder holder) {
-        LogUtil.e("dealOthersFoucsFansStyle", "is_love===" + item.follows.is_love);
         if (item.follows.is_love == NOT_LOVE) {
-//            holder.btn.setText("关注");
-//            holder.btn.setTextColor(activity.getResources().getColor(R.color.color_333));
-//            holder.btn.setBackgroundResource(R.drawable.border_radius5);
             setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    showFocusFansConfirmView(item,"开始关注");
                     doFocus(item, view);
                 }
             });
         } else if (item.follows.is_love == LOVE) {
-//            holder.btn.setText("已关注");
-//            holder.btn.setTextColor(activity.getResources().getColor(android.R.color.white));
-//            holder.btn.setBackgroundResource(R.drawable.border_radius5_pressed);
             setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -280,7 +267,7 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
     }
 
     private void dealOthersFocus(final FocusFansItem item, final View view) {
-        LogUtil.e("dealOthersFocusFans", "is_love===" + item.follows.is_love);
+        if (item == null || item.follows == null) return;
         if (item.follows.is_love == NOT_LOVE) { //别人的关注列表做关注操作
             ClientDiscoverAPI.focusOperate(item.follows.user_id + "", new RequestCallBack<String>() {
                 @Override
