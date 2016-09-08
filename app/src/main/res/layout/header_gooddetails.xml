@@ -50,7 +50,7 @@
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/default_background_750_1334"
             app:riv_border_color="#d7d7d7"
             app:riv_border_width="1px"
             app:riv_corner_radius="100dp"/>

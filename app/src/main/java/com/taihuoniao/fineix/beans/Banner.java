@@ -20,4 +20,23 @@ public class Banner implements Serializable{
         public long created_on;
         public int state;
         public String cover_url;
+
+    @Override
+    public String toString() {
+        return "Banner{" +
+                "_id=" + _id +
+                ", title='" + title + '\'' +
+                ", space_id=" + space_id +
+                ", sub_title='" + sub_title + '\'' +
+                ", web_url='" + web_url + '\'' +
+                ", summary='" + summary + '\'' +
+                ", cover_id='" + cover_id + '\'' +
+                ", type=" + type +
+                ", ordby=" + ordby +
+                ", kind=" + kind +
+                ", created_on=" + created_on +
+                ", state=" + state +
+                ", cover_url='" + cover_url + '\'' +
+                '}';
+    }
 }

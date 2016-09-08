@@ -73,6 +73,7 @@ public class BrandQJAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.e("<<<品牌下的情景", sceneList.size() + "");
         final ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(activity, R.layout.item_find_qj, null);

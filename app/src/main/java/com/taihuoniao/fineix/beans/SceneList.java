@@ -694,15 +694,15 @@ public class SceneList extends NetBean implements Serializable {
                 private double x;
                 private double y;
                 private int loc;//1 点在右边 2点在左边
-                private int type;//1 自建 2产品
+//                private int type;//1 自建 2产品
 
-                public int getType() {
-                    return type;
-                }
-
-                public void setType(int type) {
-                    this.type = type;
-                }
+//                public int getType() {
+//                    return type;
+//                }
+//
+//                public void setType(int type) {
+//                    this.type = type;
+//                }
 
                 public String getId() {
                     return id;

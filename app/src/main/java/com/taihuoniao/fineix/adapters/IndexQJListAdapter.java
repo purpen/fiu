@@ -6,10 +6,10 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -49,7 +49,6 @@ import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
@@ -77,6 +76,7 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/10.
  */
 public class IndexQJListAdapter extends BaseAdapter {
+    private boolean isNoUser;
     private Activity activity;
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<IndexUserListBean.DataBean.UsersBean> userList;//插入情景列表
@@ -95,6 +95,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         this.userList = userList;
         dialog = new WaittingDialog(activity);
         initPopupWindow();
+    }
+
+    public boolean isNoUser() {
+        return isNoUser;
+    }
+
+    public void setNoUser(boolean noUser) {
+        isNoUser = noUser;
     }
 
     public int getPos() {
@@ -234,12 +242,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (position == 6) {
-            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
-            holder.userRecycler.setVisibility(View.VISIBLE);
-        } else if (position == 17) {
-            holder.userRecycler.setAdapter(new UserAdapter(activity, userList));
-            holder.userRecycler.setVisibility(View.VISIBLE);
+        if (userList.size() > 0) {
+            if (position == 6) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            } else if (position == 17) {
+                holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
+                holder.userRecycler.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.userRecycler.setAdapter(null);
             holder.userRecycler.setVisibility(View.GONE);
@@ -259,7 +269,14 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
         holder.userNameTv.setText(sceneList.get(position).getUser_info().getNickname());
         holder.publishTime.setText(sceneList.get(position).getCreated_at());
-        holder.locationTv.setText(sceneList.get(position).getAddress());
+        if (TextUtils.isEmpty(sceneList.get(position).getAddress())) {
+            holder.locationImg.setVisibility(View.GONE);
+            holder.locationTv.setVisibility(View.GONE);
+        } else {
+            holder.locationTv.setText(sceneList.get(position).getCity() + " " + sceneList.get(position).getAddress());
+            holder.locationImg.setVisibility(View.VISIBLE);
+            holder.locationTv.setVisibility(View.VISIBLE);
+        }
         Log.e("<<<", "本人id=" + LoginInfo.getUserId() + ",情景id=" + sceneList.get(position).getUser_id());
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己的话隐藏关注按钮
@@ -288,26 +305,20 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder.loveImg.setImageResource(R.mipmap.index_love);
         }
-        int sta = 0;
-        SpannableString spannableStringBuilder = new SpannableString(sceneList.get(position).getDes());
-        while (sceneList.get(position).getDes().substring(sta).contains("#")) {
-            TextClick textClick;
-            sta = sceneList.get(position).getDes().indexOf("#", sta);
-            if (sceneList.get(position).getDes().substring(sta).contains(" ")) {
-                int en = sceneList.get(position).getDes().indexOf(" ", sta);
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, en));
-                spannableStringBuilder.setSpan(textClick, sta, en + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                sta = en;
-            } else {
-                textClick = new TextClick(activity, sceneList.get(position).getDes().substring(sta + 1, sceneList.get(position).getDes().length()));
-                spannableStringBuilder.setSpan(textClick, sta, sceneList.get(position).getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                break;
-            }
-        }
+        SpannableString spannableStringBuilder = SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity);
         holder.qjDesTv.setText(spannableStringBuilder);
         holder.qjDesTv.setMovementMethod(LinkMovementMethod.getInstance());
         holder.qjDesTv.setMaxLines(3);
-        holder.qjDesTv.setEllipsize(TextUtils.TruncateAt.END);
+        holder.qjDesTv.post(new Runnable() {
+            @Override
+            public void run() {
+                if (holder.qjDesTv.getLineCount() > 3) {
+                    Layout layout = holder.qjDesTv.getLayout();
+                    String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                    holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                }
+            }
+        });
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
         if (sceneList.get(position).getComment_count() > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
@@ -320,7 +331,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         //添加商品标签
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneList.get(position).getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            final LabelView labelView = new LabelView(parent.getContext());
+            final LabelView labelView = new LabelView(activity);
             labelView.nameTv.setText(productBean.getTitle());
             labelView.setLayoutParams(layoutParams);
             if (productBean.getLoc() == 2) {
@@ -350,22 +361,11 @@ public class IndexQJListAdapter extends BaseAdapter {
                 }
             });
             holder.labelContainer.addView(labelView);
-//            Log.e("<<<", "开启动画" + holder.qjTitleTv.getText() + ",现在位置=" + position);
             labelView.wave();
             labelView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    switch (productBean.getType()) {
-                        case 2:
-                            Log.e("<<<", "可购买");
-                            intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                            break;
-                        default:
-                            Log.e("<<<", "不可购买");
-                            intent.setClass(activity, GoodsDetailActivity.class);
-                            break;
-                    }
+                    Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", productBean.getId());
                     parent.getContext().startActivity(intent);
                 }
@@ -494,8 +494,14 @@ public class IndexQJListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (holder.qjDesTv.getMaxLines() == 3) {
+                        holder.qjDesTv.setText(SceneTitleSetUtils.setDes(sceneList.get(position).getDes(), activity));
                         holder.qjDesTv.setMaxLines(Integer.MAX_VALUE);
                     } else {
+                        if (holder.qjDesTv.getLineCount() > 3) {
+                            Layout layout = holder.qjDesTv.getLayout();
+                            String str = sceneList.get(position).getDes().substring(layout.getLineStart(0), layout.getLineEnd(2) - 1) + "…";
+                            holder.qjDesTv.setText(SceneTitleSetUtils.setDes(str, activity));
+                        }
                         holder.qjDesTv.setMaxLines(3);
                     }
                 }
@@ -789,6 +795,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         LinearLayout mapLinear;
         @Bind(R.id.publish_time)
         TextView publishTime;
+        @Bind(R.id.location_img)
+        ImageView locationImg;
         @Bind(R.id.location_tv)
         TextView locationTv;
         @Bind(R.id.container)
@@ -830,11 +838,13 @@ public class IndexQJListAdapter extends BaseAdapter {
     //用户列表适配器
     static class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
         private Activity activity;
+        private IndexQJListAdapter indexQJListAdapter;
         private List<IndexUserListBean.DataBean.UsersBean> userList;
         private WaittingDialog dialog;
 
-        public UserAdapter(Activity activity, List<IndexUserListBean.DataBean.UsersBean> userList) {
+        public UserAdapter(Activity activity, IndexQJListAdapter indexQJListAdapter, List<IndexUserListBean.DataBean.UsersBean> userList) {
             this.activity = activity;
+            this.indexQJListAdapter = indexQJListAdapter;
             this.userList = userList;
             dialog = new WaittingDialog(activity);
         }
@@ -943,6 +953,12 @@ public class IndexQJListAdapter extends BaseAdapter {
                     }
                     userList.remove(i);
                     notifyItemRemoved(i);
+                    if (userList.size() <= 0) {
+                        indexQJListAdapter.setNoUser(true);
+                        indexQJListAdapter.notifyDataSetChanged();
+                    } else {
+                        indexQJListAdapter.setNoUser(false);
+                    }
                     break;
             }
         }
@@ -1076,7 +1092,7 @@ public class IndexQJListAdapter extends BaseAdapter {
     }
 
     //设置部分文字可以点击
-    static class TextClick extends ClickableSpan {
+    public static class TextClick extends ClickableSpan {
         private Activity activity;
         private String q;
 

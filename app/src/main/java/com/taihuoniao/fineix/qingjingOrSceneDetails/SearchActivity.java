@@ -83,6 +83,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         if (!TextUtils.isEmpty(q)) {
             editText.setText(q);
             isContent = false;
+            cancel.setFocusable(true);
+            cancel.setFocusableInTouchMode(true);
+            cancel.requestFocus();
         } else {
             isContent = true;
         }

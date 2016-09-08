@@ -2,7 +2,7 @@
     <string name="app_name">Fiu浮游</string>
     <string name="qing">精选</string>
     <string name="jing">发现</string>
-    <string name="fiu">FIU 浮游</string>
+    <string name="fiu">Fiu</string>
     <string name="pin">好货</string>
     <string name="mine">个人</string>
     <string name="login">登录</string>
@@ -11,7 +11,7 @@
     <string name="qj_theme">情境主题</string>
     <string name="forget_password">忘记登录密码?</string>
     <string name="forget_password_tips">如果您忘记了密码,可以通过手机号找回</string>
-    <string name="network_err">网络异常,请确认网络畅通或请联系我们</string>
+    <string name="network_err">网络错误</string>
     <string name="subscribe_theme">订阅你感兴趣的情境主题</string>
     <string name="focus_user">关注你感兴趣的人</string>
     <string name="known_more">关于你我们想了解更多</string>

@@ -74,7 +74,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.container)
     RelativeLayout container;
     @Bind(R.id.des_tv)
-    EditText desTv;
+    TextView desTv;
     @Bind(R.id.location_relative)
     RelativeLayout locationRelative;
     @Bind(R.id.delete_address)
@@ -176,7 +176,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - pointWidth - labelMargin);
                             labelView.pointContainer.setLayoutParams(layoutParams1);
                             Log.e("<<<", "nameTv.width=" + labelView.nameTv.getMeasuredWidth() + ",pointWidth=" + pointWidth + ",labelMargin=" + labelMargin + ",point.leftMargin=" + layoutParams1.leftMargin);
-
                             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
                             lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelMargin + pointWidth / 2);
                             lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
@@ -338,6 +337,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
             case R.id.des_tv:
             case R.id.qj_title_tv:
             case R.id.qj_title_tv2:
+                Log.e("<<<", "点击desTv");
                 Intent intent1 = new Intent(CreateQJActivity.this, AddEnvirActivity.class);
                 if (qjTitleTv2.getVisibility() == View.VISIBLE) {
                     intent1.putExtra("title", qjTitleTv2.getText().toString() + qjTitleTv.getText().toString());
@@ -425,6 +425,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     sub_ids.append(",").append(activeTagsBean.getData().getItems().get(i).get(1));
                                 }
                             }
+                            if (MainApplication.subjectId != null) {
+                                sub_ids.append(",").append(MainApplication.subjectId);
+                            }
                             if (sub_ids.length() > 0) {
                                 sub_ids.deleteCharAt(0);
                                 sids = sub_ids.toString();
@@ -481,9 +484,12 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     MainApplication.cropBitmap = null;
                                     MainApplication.editBitmap = null;
                                     MainApplication.blurBitmap = null;
+                                    MainApplication.subjectId = null;
                                     EffectUtil.clear();
                                     ToastUtils.showSuccess("创建成功");
-                                    sendBroadcast(new Intent(DataConstants.BroadFind));
+                                    Intent intent1 = new Intent(DataConstants.BroadFind);
+                                    intent1.putExtra("id", createQJBean.getData().getId());
+                                    sendBroadcast(intent1);
                                     Intent intent = new Intent(CreateQJActivity.this, MainActivity.class);
                                     intent.putExtra(FindFragment.class.getSimpleName(), false);
                                     startActivity(intent);
@@ -553,6 +559,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     MainApplication.blurBitmap = null;
                     MainApplication.cropBitmap = null;
                     MainApplication.editBitmap = null;
+                    MainApplication.subjectId = null;
                     startActivity(new Intent(CreateQJActivity.this, MainActivity.class));
                 }
             });
@@ -573,6 +580,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     private String titleIntent;
     private String desIntent;
     private ActiveTagsBean activeTagsBean;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -582,7 +590,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                     desIntent = data.getStringExtra("des");
                     activeTagsBean = (ActiveTagsBean) data.getSerializableExtra("activeBean");
                     if (titleIntent != null) {
-                        SceneTitleSetUtils.setTitle(qjTitleTv,qjTitleTv2,titleIntent);
+                        SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, titleIntent);
                     }
                     if (desIntent != null) {
                         tags = new StringBuilder();

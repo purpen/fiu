@@ -140,7 +140,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void search() {
-        ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "content", 0 + "", new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();

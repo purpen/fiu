@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.product.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -124,6 +125,11 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     @Override
     public void refreshData(BuyGoodDetailsBean buyGoodDetailsBean) {
         this.buyGoodDetailsBean = buyGoodDetailsBean;
+        if(buyGoodDetailsBean.getData().getStage()==16){
+            holder.detailContainer.setVisibility(View.GONE);
+            holder.price.setVisibility(View.GONE);
+            holder.liangdianContainer.setVisibility(View.GONE);
+        }
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter<String>(activity, buyGoodDetailsBean.getData().getAsset());
             holder.scrollableView.setAdapter(viewPagerAdapter.setInfiniteLoop(true));
@@ -136,13 +142,17 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         }
         holder.title.setText(buyGoodDetailsBean.getData().getTitle());
         holder.price.setText("¥" + buyGoodDetailsBean.getData().getSale_price());
-        holder.liangdian.setText(buyGoodDetailsBean.getData().getAdvantage());
+        if (TextUtils.isEmpty(buyGoodDetailsBean.getData().getAdvantage())) {
+            holder.liangdianContainer.setVisibility(View.GONE);
+        } else {
+            holder.liangdian.setText(buyGoodDetailsBean.getData().getAdvantage());
+        }
         try {
             holder.brandName.setText(buyGoodDetailsBean.getData().getBrand().getTitle());
             ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
             holder.brandContainer.setOnClickListener(this);
         } catch (Exception e) {
-            Log.e("<<<", "没有品牌");
+           holder.brandContainer.setVisibility(View.GONE);
         }
 
     }
@@ -242,6 +252,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         TextView title;
         @Bind(R.id.price)
         TextView price;
+        @Bind(R.id.liangdian_container)
+        LinearLayout liangdianContainer;
         @Bind(R.id.liangdian)
         TextView liangdian;
         @Bind(R.id.brand_container)

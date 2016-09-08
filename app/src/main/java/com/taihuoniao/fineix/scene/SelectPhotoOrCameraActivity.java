@@ -12,6 +12,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.scene.fragments.CameraFragment;
 import com.taihuoniao.fineix.scene.fragments.PictureFragment;
+import com.taihuoniao.fineix.utils.EffectUtil;
 
 /**
  * Created by taihuoniao on 2016/3/14.
@@ -21,7 +22,7 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     private RelativeLayout photoRelative, cameraRelative;
     private TextView photoTv, cameraTv;
     private FragmentManager fm;
-//    private PhotoFragment photoFragment;
+    //    private PhotoFragment photoFragment;
     private PictureFragment photoFragment;
     private CameraFragment cameraFragment;
 
@@ -112,9 +113,11 @@ public class SelectPhotoOrCameraActivity extends FragmentActivity implements Vie
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        EffectUtil.clear();
         MainApplication.blurBitmap = null;
-        MainApplication.editBitmap = null;
         MainApplication.cropBitmap = null;
+        MainApplication.editBitmap = null;
+        MainApplication.subjectId = null;
     }
     //    @Override
 //    public void onWindowFocusChanged(boolean hasFocus) {

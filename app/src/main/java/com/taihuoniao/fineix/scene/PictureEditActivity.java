@@ -42,6 +42,7 @@ import com.taihuoniao.fineix.beans.BuyGoodDetailsBean;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.utils.EffectUtil;
 import com.taihuoniao.fineix.utils.GPUImageFilterTools;
@@ -316,9 +317,10 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     tagItem.setType(type);
                     tagItem.setName(brandTv.getText().toString() + " " + productName.getText().toString());
                     addLabel(tagItem);
-                    brandTv.setText("");
-                    productName.setText("");
                 }
+                brandTv.setText("");
+                productName.setText("");
+                type = 1;
                 break;
             case R.id.delete_brand:
                 brandTv.setText("");
@@ -377,6 +379,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         cv.drawBitmap(MainApplication.cropBitmap, null, dst, null);
         //加商品
         EffectUtil.applyOnSave(cv, imageViewTouch);
+        Log.e("<<<", "屏幕宽度=" + w + ",图片尺寸=width=" + MainApplication.cropBitmap.getWidth() + ",height=" + MainApplication.cropBitmap.getHeight());
         img.setImage(newBitmap);
         onGpuImageFilterChosenListener(currentFilter, currentPosition);
         Bitmap bitmap = null;
@@ -421,7 +424,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
         deleteProduct = (ImageView) productPopView.findViewById(R.id.delete_product);
         cancel = (TextView) productPopView.findViewById(R.id.cancel);
         confirm = (TextView) productPopView.findViewById(R.id.confirm);
-        productPop = new PopupWindow(productPopView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        productPop = new PopupWindow(productPopView, ViewGroup.LayoutParams.MATCH_PARENT, MainApplication.getContext().getScreenHeight(), true);
         productPop.setAnimationStyle(R.style.alpha);
         productPop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         productPop.setBackgroundDrawable(ContextCompat.getDrawable(this,
@@ -535,7 +538,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     }
 
     //添加标签
-    private void addLabel(TagItem tagItem) {
+    private void addLabel(final TagItem tagItem) {
         if (labels.size() >= 3) {
             ToastUtils.showInfo("您最多可以添加三个链接");
             return;
@@ -558,8 +561,18 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 EffectUtil.removeLabelEditable(imageViewTouch, container, labelView);
                 labels.remove(labelView);
                 setHint();
+                if (label.getTagInfo().getType() == 1) {
+                    ClientDiscoverAPI.deleteProduct(label.getTagInfo().getId() + "");
+                }
             }
         }, imageViewTouch, container, label, left, top);
+        final int finalTop = top;
+        label.post(new Runnable() {
+            @Override
+            public void run() {
+                tagItem.setY(label.than(finalTop + label.getMeasuredHeight() - label.pointWidth / 2, label.parentHeight));
+            }
+        });
         labels.add(label);
         if (labels != null && labels.size() > 0) {
             for (LabelView labelView : labels) {
@@ -572,7 +585,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
     private void setHint() {
         switch (labels.size()) {
             case 0:
-                hintTv.setText("点击图片标记相关信息");
+                hintTv.setText("点击图片标记产品信息");
                 break;
             case 1:
                 hintTv.setText("您还可以继续标记2个产品(￣▽￣)");
@@ -628,7 +641,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                     TagItem tag = new TagItem(productListBean.getData().getTitle(), productListBean.getData().getSale_price() + "");
                     tag.setId(productListBean.getData().get_id());
                     tag.setLoc(2);
-                    tag.setType(1);
+                    tag.setType(2);
                     addLabel(tag);
                     try {
                         String url = productListBean.getData().getPng_asset().get(0).getUrl();
@@ -704,5 +717,11 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
         img.requestRender();
+    }
+
+    @Override
+    public void onBackPressed() {
+        EffectUtil.clear();
+        super.onBackPressed();
     }
 }

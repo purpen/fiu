@@ -143,12 +143,15 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     Log.e("<<<品牌下的情景", "解析异常=" + e.toString());
                 }
                 if (productAndSceneListBean.isSuccess()) {
-                    if (productPage == 1) {
+                    if (qjPage == 1) {
                         qjList.clear();
                         qjLastSavedFirstVisibleItem = -1;
                         qjLastTotalItem = -1;
                     }
                     qjList.addAll(productAndSceneListBean.getData().getRows());
+                    if (!isQJ) {
+                        return;
+                    }
                     brandQJAdapter.notifyDataSetChanged();
                 } else {
                     ToastUtils.showError(productAndSceneListBean.getMessage());
@@ -167,7 +170,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -189,6 +192,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     }
                     productList.addAll(productBean.getData().getRows());
 //                    if (!isQJ) {
+                    if(isQJ){
+                        return;
+                    }
                     brandProductAdapter.notifyDataSetChanged();
 //                    }
 //                    addProductGridAdapter.notifyDataSetChanged();
@@ -358,7 +364,6 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
         if (visibleItemCount > listView.getHeaderViewsCount()
                 && (firstVisibleItem + visibleItemCount >= totalItemCount)) {
             if (isQJ) {

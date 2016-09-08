@@ -135,11 +135,10 @@ public class SearchBrandFragment extends SearchFragment implements AdapterView.O
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "13", null, page + "", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, "13", null, page + "","8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索品牌", responseInfo.result);
-//                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();

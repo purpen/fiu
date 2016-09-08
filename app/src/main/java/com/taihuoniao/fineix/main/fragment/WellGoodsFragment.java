@@ -219,7 +219,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //好货专题列表
     private void subjectList() {
-        ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<好货专题列表", responseInfo.result);
@@ -371,7 +371,10 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        click(position);
+        Intent intent = new Intent(getActivity(), GoodsListActivity.class);
+        intent.putExtra("id",categoryList.get(position).get_id());
+        intent.putExtra("name",categoryList.get(position).getTitle());
+        startActivity(intent);
     }
 
     @Override

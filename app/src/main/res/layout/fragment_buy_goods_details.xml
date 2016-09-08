@@ -8,13 +8,13 @@
     >
 
 
-
     <ListView
         android:id="@+id/pull_refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/line"
         android:background="#f8f8f8"
+        android:divider="@color/nothing"
         android:dividerHeight="0dp"
         android:listSelector="@color/nothing"
         />

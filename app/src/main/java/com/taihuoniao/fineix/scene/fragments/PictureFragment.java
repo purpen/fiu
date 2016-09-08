@@ -314,7 +314,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 Log.e("<<<", "action_up");
-                if (nowP == null) {
+                if (nowP == null || Math.sqrt((startP.x - nowP.x) * (startP.x - nowP.x) + (startP.y - nowP.y) * (startP.y - nowP.y)) < DensityUtils.dp2px(getActivity(), 10)) {
                     //单击
                     if (container.getPaddingTop() == 0) {
                         ValueAnimator valueAnimator = ValueAnimator.ofFloat(-MainApplication.getContext().getScreenWidth());

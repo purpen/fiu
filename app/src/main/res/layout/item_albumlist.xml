@@ -3,8 +3,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ff121212"
+                android:paddingLeft="15dp"
                 android:paddingTop="7dp"
-                android:paddingBottom="7dp"
     >
 
     <ImageView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
-       />
+        />
 
     <TextView
         android:id="@+id/item_albumlist_number"
@@ -37,4 +37,11 @@
         android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="15sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/item_albumlist_img"
+        android:layout_marginTop="7dp"
+        android:background="#666666"/>
 </RelativeLayout>

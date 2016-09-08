@@ -38,7 +38,7 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
         private double market_price;
         private String cover_id;
         private String category_id;
-        private String stage;
+        private int stage;
         private String summary;
         private String tags_s;
         private String snatched_time;
@@ -186,11 +186,11 @@ public class BuyGoodDetailsBean extends NetBean implements Serializable {
             this.category_id = category_id;
         }
 
-        public String getStage() {
+        public int getStage() {
             return stage;
         }
 
-        public void setStage(String stage) {
+        public void setStage(int stage) {
             this.stage = stage;
         }
 

@@ -115,7 +115,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
     //根据子分类获取商品列表
     private void productList() {
         ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,
-                null, null, new RequestCallBack<String>() {
+                null, null,"9", new RequestCallBack<String>() {
 
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {

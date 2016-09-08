@@ -106,8 +106,10 @@ public class AddEnvirFragment extends SearchFragment implements AdapterView.OnIt
                 if (netSearch.isSuccess()) {
                     if (page == 1) {
                         list.clear();
-                        pullRefreshView.lastSavedFirstVisibleItem = -1;
-                        pullRefreshView.lastTotalItem = -1;
+                        if (pullRefreshView != null) {
+                            pullRefreshView.lastSavedFirstVisibleItem = -1;
+                            pullRefreshView.lastTotalItem = -1;
+                        }
                     }
                     list.addAll(netSearch.getData().getRows());
                     shareCJSelectListAdapter.notifyDataSetChanged();
