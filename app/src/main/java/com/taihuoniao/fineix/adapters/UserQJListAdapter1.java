@@ -63,18 +63,44 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
             holder.rl_right.setVisibility(View.VISIBLE);
             right_qj = list.get(2 * position + 1);
             imageLoader.displayImage(right_qj.getCover_url(), holder.iv_cover_right, options);
-            if (!TextUtils.isEmpty(left_qj.getTitle())) {
-                holder.tv_title_right.setText(right_qj.getTitle());
-                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+//            if (!TextUtils.isEmpty(left_qj.getTitle())) {
+//                holder.tv_title_right.setText(right_qj.getTitle());
+//                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+//            }
+            if (!TextUtils.isEmpty(right_qj.getTitle())) {
+                if (right_qj.getTitle().length() <= 10) {
+                    holder.tv_title_right.setText("");
+                    holder.tv_title_right1.setText(right_qj.getTitle());
+                    holder.tv_title_right1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                    holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
+                } else {
+                    holder.tv_title_right.setText(right_qj.getTitle().substring(0, 10));
+                    holder.tv_title_right1.setText(right_qj.getTitle().substring(10, left_qj.getTitle().length() - 1));
+                    holder.tv_title_right1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                    holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                }
             }
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
         if (!TextUtils.isEmpty(left_qj.getTitle())) {
-            holder.tv_title_left.setText(left_qj.getTitle());
-            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+            if (left_qj.getTitle().length() <= 10) {
+                holder.tv_title_left.setText("");
+                holder.tv_title_left1.setText(left_qj.getTitle());
+                holder.tv_title_left1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
+            } else {
+                holder.tv_title_left.setText(left_qj.getTitle().substring(0, 10));
+                holder.tv_title_left1.setText(left_qj.getTitle().substring(10, left_qj.getTitle().length() - 1));
+                holder.tv_title_left1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+                holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+            }
         }
+//        if (!TextUtils.isEmpty(left_qj.getTitle())) {
+//            holder.tv_title_left.setText(left_qj.getTitle());
+//            holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
+//        }
         holder.rl_left.setLayoutParams(params);
         holder.tv_desc_left.setText(left_qj.getAddress());
         holder.rl_left.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +131,9 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         ImageView iv_cover_left;
         @Bind(R.id.tv_title_left)
         TextView tv_title_left;
+        @Bind(R.id.tv_title_left1)
+        TextView tv_title_left1;
+
         @Bind(R.id.tv_desc_left)
         TextView tv_desc_left;
 
@@ -114,6 +143,8 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
         ImageView iv_cover_right;
         @Bind(R.id.tv_title_right)
         TextView tv_title_right;
+        @Bind(R.id.tv_title_right1)
+        TextView tv_title_right1;
         @Bind(R.id.tv_desc_right)
         TextView tv_desc_right;
 

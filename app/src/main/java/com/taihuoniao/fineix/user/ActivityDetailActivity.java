@@ -284,11 +284,11 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             tvDuring.setText("已结束");
         } else {
             if (data.evt == 0) {
-                rlParticipate.setVisibility(View.INVISIBLE);
+                rlParticipate.setVisibility(View.GONE);
             } else {
                 rlParticipate.setVisibility(View.VISIBLE);
             }
-            rlResult.setVisibility(View.INVISIBLE);
+            rlResult.setVisibility(View.GONE);
             rlRule.setVisibility(View.VISIBLE);
             btn_participate.setVisibility(View.VISIBLE);
             tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
