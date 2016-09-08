@@ -65,6 +65,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     GlobalTitleLayout titleLayout;
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
+    @Bind(R.id.tab_line)
+    View tabLine;
     @Bind(R.id.view_pager)
     public ViewPager viewPager;
     @Bind(R.id.shoucang_img)
@@ -101,7 +103,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     protected void setContenttView() {
-        activityView = View.inflate(this,R.layout.activity_buy_goods_details,null);
+        activityView = View.inflate(this, R.layout.activity_buy_goods_details, null);
         setContentView(activityView);
     }
 
@@ -130,20 +132,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     protected void initList() {
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-        titleList.add("好货");
-        buyGoodsDetailsFragment = BuyGoodsDetailsFragment.newInstance(id);
-        fragmentList.add(buyGoodsDetailsFragment);
-        titleList.add("商品详情");
-        webFragment = WebFragment.newInstance();
-        fragmentList.add(webFragment);
-        titleList.add("评价");
-        commentFragment = CommentFragment.newInstance(id);
-        fragmentList.add(commentFragment);
-        //设置适配器
-        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
-        viewPager.setAdapter(searchViewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(fragmentList.size());
+
     }
 
 
@@ -271,6 +260,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         //获取购物车数量
         cartNumber();
     }
+
     private void initPopuptWindow() {
         View popup_view = View.inflate(this, R.layout.dialog_cart, null);
         productsImg = (ImageView) popup_view.findViewById(R.id.dialog_cart_productimg);
@@ -376,10 +366,31 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     Log.e("<<<商品详情", "解析异常=" + e.toString());
                 }
                 if (buyGoodDetailsBean.isSuccess()) {
-
+                    titleList.add("好货");
+                    buyGoodsDetailsFragment = BuyGoodsDetailsFragment.newInstance(id);
+                    fragmentList.add(buyGoodsDetailsFragment);
+                    if (buyGoodDetailsBean.getData().getStage() == 9) {
+                        titleList.add("商品详情");
+                        webFragment = WebFragment.newInstance();
+                        fragmentList.add(webFragment);
+                        titleList.add("评价");
+                        commentFragment = CommentFragment.newInstance(id);
+                        fragmentList.add(commentFragment);
+                    } else if (buyGoodDetailsBean.getData().getStage() == 16) {
+                        tabLayout.setVisibility(View.GONE);
+                        tabLine.setVisibility(View.GONE);
+                        buyBtn.setVisibility(View.GONE);
+                    }
+                    //设置适配器
+                    searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+                    viewPager.setAdapter(searchViewPagerAdapter);
+                    tabLayout.setupWithViewPager(viewPager);
+                    viewPager.setOffscreenPageLimit(fragmentList.size());
                     //刷新数据
                     buyGoodsDetailsFragment.refreshData(buyGoodDetailsBean);
-                    webFragment.refreshData(buyGoodDetailsBean.getData().getContent_view_url());
+                    if (buyGoodDetailsBean.getData().getStage() == 9) {
+                        webFragment.refreshData(buyGoodDetailsBean.getData().getContent_view_url());
+                    }
                     if (buyGoodDetailsBean.getData().getIs_favorite() == 1) {
                         shoucangImg.setImageResource(R.mipmap.shoucang_yes);
                     } else {
@@ -436,6 +447,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
     //取消收藏
     private void cancelFavorate() {
         ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
@@ -499,6 +511,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
     //立即购买
     private void buyNow(String target_id, String type, String n) {
         ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
@@ -554,7 +567,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     ToastUtils.showError(netBean.getMessage());
                 }
                 popupWindow.dismiss();
-               cartNumber();
+                cartNumber();
             }
 
             @Override
@@ -564,6 +577,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
     @Override
     protected void onDestroy() {
         unregisterReceiver(buyReceiver);

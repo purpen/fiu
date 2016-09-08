@@ -487,7 +487,9 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     MainApplication.subjectId = null;
                                     EffectUtil.clear();
                                     ToastUtils.showSuccess("创建成功");
-                                    sendBroadcast(new Intent(DataConstants.BroadFind));
+                                    Intent intent1 = new Intent(DataConstants.BroadFind);
+                                    intent1.putExtra("id", createQJBean.getData().getId());
+                                    sendBroadcast(intent1);
                                     Intent intent = new Intent(CreateQJActivity.this, MainActivity.class);
                                     intent.putExtra(FindFragment.class.getSimpleName(), false);
                                     startActivity(intent);

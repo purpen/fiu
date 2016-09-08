@@ -6,15 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -40,7 +48,9 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
+import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -58,6 +68,7 @@ import butterknife.ButterKnife;
  * Created by taihuoniao on 2016/8/22.
  */
 public class FindFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener, View.OnClickListener, EditRecyclerAdapter.ItemClick {
+    private View fragmentView;
     @Bind(R.id.pull_to_refresh_view)
     PullToRefreshListView pullRefreshView;
     @Bind(R.id.blur_view)
@@ -89,11 +100,13 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private FindQJAdapter findQJAdapter;//情景列表适配器
+    //SharePop
+    private PopupWindow sharePop;
 
     @Override
     protected View initView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_find, null);
-        ButterKnife.bind(this, view);
+        fragmentView = View.inflate(getActivity(), R.layout.fragment_find, null);
+        ButterKnife.bind(this, fragmentView);
         listView = pullRefreshView.getRefreshableView();
         View header = View.inflate(getActivity(), R.layout.header_find_fragment, null);
         gridView = (GridViewForScrollView) header.findViewById(R.id.grid_view);
@@ -102,7 +115,41 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadFind);
         getActivity().registerReceiver(findReceiver, intentFilter);
-        return view;
+        initSharePop();
+        return fragmentView;
+    }
+
+    private void initSharePop() {
+        View popup_view = View.inflate(getActivity(), R.layout.pop_share_scene_detail, null);
+        ImageView cancelImg = (ImageView) popup_view.findViewById(R.id.pop_share_scene_detail_cancel);
+        Button shareBtn = (Button) popup_view.findViewById(R.id.pop_share_scene_detail_share_btn);
+        cancelImg.setOnClickListener(this);
+        shareBtn.setOnClickListener(this);
+        sharePop = new PopupWindow(popup_view, DensityUtils.dp2px(getActivity(), 300), ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        sharePop.setAnimationStyle(R.style.popup_style);
+        sharePop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        sharePop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+                params.alpha = 1f;
+                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getActivity().getWindow().setAttributes(params);
+            }
+        });
+        sharePop.setBackgroundDrawable(ContextCompat.getDrawable(getActivity(),
+                R.drawable.corner_white_4dp));
+        sharePop.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
     }
 
     public int getStatusBarHeight() {
@@ -297,6 +344,15 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.pop_share_scene_detail_share_btn:
+                sharePop.dismiss();
+                Intent intent1 = new Intent(getActivity(), ShareActivity.class);
+                intent1.putExtra("id", qjId);
+                startActivity(intent1);
+                break;
+            case R.id.pop_share_scene_detail_cancel:
+                sharePop.dismiss();
+                break;
             case R.id.title_left:
                 startActivity(new Intent(getActivity(), FindFriendsActivity.class));
                 break;
@@ -361,10 +417,21 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 //        ToastUtils.showError("情景分类=" + categoryList.get(postion).get_id());
     }
 
+    private String qjId;
     private BroadcastReceiver findReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onRefresh();
+            if (intent.hasExtra("id")) {
+                qjId = intent.getStringExtra("id");
+                if (!TextUtils.isEmpty(qjId)) {
+                    WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+                    params.alpha = 0.4f;
+                    getActivity().getWindow().setAttributes(params);
+                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                    sharePop.showAtLocation(fragmentView, Gravity.CENTER, 0, 0);
+                }
+            }
         }
     };
 

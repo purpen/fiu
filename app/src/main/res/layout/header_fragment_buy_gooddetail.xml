@@ -8,6 +8,7 @@
 
     <com.taihuoniao.fineix.view.ScrollableView
         android:id="@+id/scrollableView"
+        android:background="@color/black_touming_80"
         android:layout_width="match_parent"
         android:layout_height="211dp"/>
 
@@ -71,32 +72,38 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e2e2e2"/>
+    <LinearLayout
+        android:id="@+id/liangdian_container"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="18dp"
+            android:text="@string/product_bright"
+            android:textColor="@color/title_black"
+            android:textSize="14sp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingTop="18dp"
-        android:text="@string/product_bright"
-        android:textColor="@color/title_black"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/liangdian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="15dp"
+            android:paddingTop="16dp"
+            android:textColor="#212121"
+            android:textSize="13sp"/>
 
-    <TextView
-        android:id="@+id/liangdian"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="5dp"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="15dp"
-        android:paddingTop="16dp"
-        android:textColor="#212121"
-        android:textSize="13sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e2e2e2"/>
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#e2e2e2"/>
 
     <RelativeLayout
         android:id="@+id/brand_container"

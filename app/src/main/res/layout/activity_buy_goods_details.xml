@@ -30,6 +30,7 @@
             app:tabTextColor="@color/title_black"/>
 
         <View
+            android:id="@+id/tab_line"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#d2d2d2"/>
