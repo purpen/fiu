@@ -78,7 +78,7 @@ public class FindFriendAdapter extends CommonBaseAdapter<FindFriendData.User>{
         holder.recycler_view.setLayoutParams(params);
         holder.recycler_view.setHasFixedSize(true);
         holder.recycler_view.setLayoutManager(manager);
-        if (item.scene_sight !=null || item.scene_sight.size()>0){
+        if (item.scene_sight != null && item.scene_sight.size() > 0) {
             FindFriendRecycleViewAdapter adapter = new FindFriendRecycleViewAdapter(activity, item.scene_sight);
             holder.recycler_view.setAdapter(adapter);
             adapter.setmOnItemClickLitener(new FindFriendRecycleViewAdapter.OnItemClickListener() {

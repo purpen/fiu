@@ -29,7 +29,6 @@ public class EmailUtils {
 	 * 
 	 * @param qString
 	 *            要检查的数据
-	 * @param regx
 	 *            特殊字符正则表达式
 	 * @return boolean 如果包含正则表达式<code>regx</code>中定义的特殊字符，返回true； 否则返回false
 	 */
@@ -44,9 +43,9 @@ public class EmailUtils {
 		return false;
 	}
 //检查输入的是不是手机号
-	public static boolean isMobileNO(String mobiles){  
-    	Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,2-9]))\\d{8}$");  
-    	Matcher m = p.matcher(mobiles);  
+	public static boolean isMobileNO(String mobiles){
+		Pattern p = Pattern.compile("^1((3[0-9])|(4[57])|(5[0-35-9])|(7[6780])|(8[0-9]))\\d{8}$");
+		Matcher m = p.matcher(mobiles);
     	return m.matches();
 	}
 	}
