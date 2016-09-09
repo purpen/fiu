@@ -12,7 +12,6 @@
         android:id="@+id/rl"
         android:layout_width="@dimen/dp50"
         android:layout_height="@dimen/dp50"
-        android:layout_below="@+id/tv_known_more"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal">
 

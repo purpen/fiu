@@ -34,12 +34,12 @@ public class PinLabelRecyclerAdapter extends RecyclerView.Adapter<PinLabelRecycl
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(final VH holder,  int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
-                PinLabelRecyclerAdapter.this.notifyItemChanged(position);
+                itemClick.click(holder.getAdapterPosition());
+                PinLabelRecyclerAdapter.this.notifyItemChanged(holder.getAdapterPosition());
             }
         });
         holder.textView.setText(hotLabelList.get(position));

@@ -857,7 +857,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
 
         @Override
-        public void onBindViewHolder(final VH holder, final int position) {
+        public void onBindViewHolder(final VH holder,  int position) {
             ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
             holder.name.setText(userList.get(position).getNickname());
             if (userList.get(position).getIdentify().getIs_expert() == 1) {
@@ -915,7 +915,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                             return;
                         }
                         if (userList.get(k).getIs_follow() == 1) {
-                            showFocusFansConfirmView(userList.get(position), holder);
+                            showFocusFansConfirmView(userList.get(holder.getAdapterPosition()), holder);
                         } else {
                             if (!dialog.isShowing()) {
                                 dialog.show();

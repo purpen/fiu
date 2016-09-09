@@ -126,10 +126,10 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
-    private HttpHandler<String> listHandler;
+
     //获取订阅的情景
     private void getSubsQJ() {
-      listHandler =   ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
+        HttpHandler<String> listHandler = ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -166,11 +166,12 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(listHandler);
     }
 
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<个人信息", responseInfo.result);
@@ -220,6 +221,7 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

@@ -141,7 +141,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.e("<<<", "before:s=" + s + ",start=" + start + ",count=" + count + ",after=" + after);
-
             }
 
             @Override

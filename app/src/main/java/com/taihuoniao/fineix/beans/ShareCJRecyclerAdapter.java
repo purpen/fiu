@@ -31,11 +31,11 @@ public class ShareCJRecyclerAdapter extends RecyclerView.Adapter<ShareCJRecycler
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         holder.img.setImageResource(shareList.get(position).getImgId());
