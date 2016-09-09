@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -194,13 +195,16 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
         WindowUtils.chenjin(this);
     }
 
+    private HttpHandler<String> cartHandler;
+    private  HttpHandler<String> numHandler;
+
     @Override
     protected void onResume() {
         super.onResume();
 
         initView();
-        DataPaser.shopCartParser(mHandler);
-        DataPaser.shopCartNumberParser(mHandler);
+        cartHandler = DataPaser.shopCartParser(mHandler);
+       numHandler =  DataPaser.shopCartNumberParser(mHandler);
     }
 
     private void initView() {

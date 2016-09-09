@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.QrCodeUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
@@ -122,7 +123,7 @@ public class MyBarCodeActivity extends BaseActivity implements PlatformActionLis
         } catch (WriterException e) {
             e.printStackTrace();
         }
-
+        WindowUtils.chenjin(this);
 
     }
 

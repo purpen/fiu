@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -159,9 +160,11 @@ public class QJDetailActivity extends BaseActivity {
         initPopupWindow();
     }
 
+    private HttpHandler<String> detailHandler;
+
     @Override
     protected void requestNet() {
-        ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
+        detailHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -546,9 +549,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> cancelShoucangHandler;
+
     //取消收藏情景
     private void cancelShoucang() {
-        ClientDiscoverAPI.cancelShoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
+        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -577,9 +582,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> shoucangHandler;
+
     //收藏情景
     private void shoucang() {
-        ClientDiscoverAPI.shoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
+        shoucangHandler = ClientDiscoverAPI.shoucang(qjDetailBean.getData().get_id(), "12", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -608,9 +615,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> deleteHandler;
+
     //删除情景
     private void deleteScene() {
-        ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
+        detailHandler = ClientDiscoverAPI.deleteScene(qjDetailBean.getData().get_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -639,9 +648,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> cancelLoveHandler;
+
     //取消点赞
     private void cancelLoveQJ() {
-        ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
+        cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 loveContainer.setEnabled(true);
@@ -674,9 +685,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> loveHandler;
+
     //点赞情景
     private void loveQJ() {
-        ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
+        loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 loveContainer.setEnabled(true);
@@ -709,9 +722,11 @@ public class QJDetailActivity extends BaseActivity {
         });
     }
 
+    private HttpHandler<String> followHandler;
+
     //关注用户
     private void fllow() {
-        ClientDiscoverAPI.focusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
+        followHandler = ClientDiscoverAPI.focusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -774,9 +789,11 @@ public class QJDetailActivity extends BaseActivity {
         PopupWindowUtil.show(activity, view);
     }
 
+    private HttpHandler<String> cancelFollowHandler;
+
     //取消关注
     private void cancelFollow() {
-        ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
+        cancelShoucangHandler = ClientDiscoverAPI.cancelFocusOperate(qjDetailBean.getData().getUser_id(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -908,6 +925,22 @@ public class QJDetailActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (shoucangHandler != null)
+            shoucangHandler.cancel();
+        if (loveHandler != null)
+            loveHandler.cancel();
+        if (followHandler != null)
+            followHandler.cancel();
+        if (detailHandler != null)
+            detailHandler.cancel();
+        if (deleteHandler != null)
+            deleteHandler.cancel();
+        if (cancelShoucangHandler != null)
+            cancelShoucangHandler.cancel();
+        if (cancelLoveHandler != null)
+            cancelLoveHandler.cancel();
+        if (cancelFollowHandler != null)
+            cancelFollowHandler.cancel();
         unregisterReceiver(qjDetailReceiver);
         super.onDestroy();
     }

@@ -15,6 +15,7 @@ import com.taihuoniao.fineix.beans.ItemQJCollect;
 import com.taihuoniao.fineix.user.fragments.FavoriteProductFragment;
 import com.taihuoniao.fineix.user.fragments.FavoriteQJFragment;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.lang.reflect.Field;
@@ -55,7 +56,7 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
         viewPager.setAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
-
+        WindowUtils.chenjin(this);
     }
 
 

@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -50,6 +51,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     private String mReasonCode = "1";
     private String mReasonEditTxt = "";
     private List<OrderDetails> mList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,13 +64,15 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         initData();
     }
 
+    private HttpHandler<String> orderHandler;
+
     private void initData() {
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
         mRid = getIntent().getStringExtra("rid");
 //        DataPaser.orderPayDetailsParser(mRid, mHandler);
-        ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
+        orderHandler = ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
@@ -141,7 +145,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     private void initView() {
         title = (GlobalTitleLayout) findViewById(R.id.title_refund);
         title.setTitle("申请退款");
-    title.setContinueTvVisible(false);
+        title.setContinueTvVisible(false);
         mEditTextReason = (EditText) findViewById(R.id.et_refund);
         mCommit = (Button) findViewById(R.id.bt_commit_refund);
         mMoney = (TextView) findViewById(R.id.tv_money_refund);
@@ -153,6 +157,8 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
         mReasonLayout.setOnClickListener(this);
         mImage.setOnClickListener(this);
     }
+
+    private HttpHandler<String> applyRefundHandler;
 
     @Override
     public void onClick(View v) {
@@ -166,7 +172,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                 }
                 mReasonEditTxt = mEditTextReason.getText() + "";
 //                DataPaser.applyForRefundParser(mRid, mReasonCode, mReasonEditTxt, mHandler);
-                ClientDiscoverAPI.applyForRefundNet(mRid, mReasonCode, mReasonEditTxt, new RequestCallBack<String>() {
+                applyRefundHandler = ClientDiscoverAPI.applyForRefundNet(mRid, mReasonCode, mReasonEditTxt, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
 //                        Log.e("<<<申请退款", responseInfo.result);
@@ -212,7 +218,7 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     }
 
     private void initPopwindow() {
-        View view = View.inflate(this,R.layout.popupwindow_refund,null);
+        View view = View.inflate(this, R.layout.popupwindow_refund, null);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow.setContentView(view);
@@ -282,5 +288,14 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
     public void showPopupWindow() {
         popupWindow.setAnimationStyle(R.style.dialogstyle);
         popupWindow.showAsDropDown(title);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (applyRefundHandler != null)
+            applyRefundHandler.cancel();
+        if (orderHandler != null)
+            orderHandler.cancel();
+        super.onDestroy();
     }
 }

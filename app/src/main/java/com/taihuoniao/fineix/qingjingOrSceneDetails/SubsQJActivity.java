@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -125,10 +126,10 @@ public class SubsQJActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
-
+    private HttpHandler<String> listHandler;
     //获取订阅的情景
     private void getSubsQJ() {
-        ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
+      listHandler =   ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, ids, null, null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);

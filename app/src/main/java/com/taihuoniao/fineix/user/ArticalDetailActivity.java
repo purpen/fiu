@@ -30,6 +30,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -87,6 +88,7 @@ public class ArticalDetailActivity extends BaseActivity {
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
         webViewAbout.setWebViewClient(webViewClient);
+        WindowUtils.chenjin(this);
     }
 
     private WebViewClient webViewClient = new WebViewClient() {

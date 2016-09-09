@@ -19,6 +19,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -62,6 +63,7 @@ public class MessageActivity extends BaseActivity {
         item_clear_cache.setTVStyle(R.mipmap.icon_comment, "评论", R.color.color_333);
         item_to_comment.setTVStyle(R.mipmap.private_msg, "私信", R.color.color_333);
         item_notice.setTVStyle(R.mipmap.notice, "提醒", R.color.color_333);
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.item_push_setting, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_notice})

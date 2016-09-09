@@ -8,6 +8,7 @@ import android.webkit.WebViewClient;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -76,6 +77,7 @@ public class AboutUsActivity extends BaseActivity {
 //        });
 //        "http://m.taihuoniao.com/app/api/view/about"
         webView.loadUrl(url);
+        WindowUtils.chenjin(this);
     }
 
     private WebViewClient webViewClient = new WebViewClient() {

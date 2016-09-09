@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -42,6 +43,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
     PullToRefreshListView pullRefreshView;
     private ListView listView;
     private WaittingDialog dialog;
+    private HttpHandler<String> userHandler;
 
     public AllFiuerActivity() {
         super(R.layout.activity_all_fiuer);
@@ -66,7 +68,7 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
+        userHandler = ClientDiscoverAPI.fiuUserList(1 + "", 100 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<用户排行", responseInfo.result);
@@ -113,5 +115,13 @@ public class AllFiuerActivity extends BaseActivity implements View.OnClickListen
         long _id = netUsers.getData().getRows().get(position).get_id();
         intent.putExtra(FocusActivity.USER_ID_EXTRA, _id);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (userHandler != null) {
+            userHandler.cancel();
+        }
+        super.onDestroy();
     }
 }

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
+import com.lidroid.xutils.http.HttpHandler;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -24,7 +26,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     protected Activity activity;
     private int layoutResID;
     protected DisplayImageOptions options;
-
+    private List<HttpHandler<String>> handlerList;
 
 
     public BaseActivity(int layoutResID) {
@@ -72,21 +74,37 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         initList();
         requestNet();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
     }
 
+    protected void addNet(HttpHandler<String> httpHandler) {
+        if (handlerList == null) {
+            handlerList = new ArrayList<>();
+        }
+        handlerList.add(httpHandler);
+    }
+    private void clearNet(){
+        if (handlerList != null) {
+            for (HttpHandler<String> httpHandler : handlerList) {
+                if (httpHandler != null) {
+                    httpHandler.cancel();
+                }
+            }
+        }
+    }
 
-
-
-    protected void setContenttView(){}
+    protected void setContenttView() {
+    }
 
     protected void getIntentData() {
     }
@@ -114,5 +132,11 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         MobclickAgent.onKillProcess(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        clearNet();
+        super.onDestroy();
     }
 }

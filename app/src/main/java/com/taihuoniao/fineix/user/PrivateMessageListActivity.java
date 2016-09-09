@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -52,6 +53,7 @@ public class PrivateMessageListActivity extends BaseActivity{
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,"私信");
         dialog=new WaittingDialog(this);
+        WindowUtils.chenjin(this);
     }
 
     @Override

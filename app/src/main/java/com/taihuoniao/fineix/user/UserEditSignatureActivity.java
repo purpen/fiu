@@ -18,6 +18,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
@@ -76,6 +77,7 @@ public class UserEditSignatureActivity extends BaseActivity{
                 tv_hint.setVisibility(View.VISIBLE);
             }
         }
+        WindowUtils.chenjin(this);
     }
 
     @Override

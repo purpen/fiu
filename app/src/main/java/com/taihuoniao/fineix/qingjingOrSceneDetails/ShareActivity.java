@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -26,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,6 +43,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
+import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -326,14 +327,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         lp.height = lp.width;
         holder.imgContainer.setLayoutParams(lp);
         ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), holder.backgroundImg);
-        if(TextUtils.isEmpty(testShareUtils.title1)){
-            holder.qjTitleTv.setText(netScene.getData().getTitle());
-            holder.qjTitleTv2.setVisibility(View.GONE);
-        }else{
-            holder.qjTitleTv2.setText(testShareUtils.title1);
-            holder.qjTitleTv.setText(testShareUtils.title2);
-            holder.qjTitleTv2.setVisibility(View.VISIBLE);
-        }
+        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,netScene.getData().getTitle());
         ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), holder.userImg);
         if (netScene.getData().getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
@@ -355,7 +349,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         return bitmap;
     }
 
-    private  AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
@@ -420,6 +414,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         }
     };
 
+    private HttpHandler<String> bonusHandler;
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -429,7 +424,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
 //                ToastUtils.showSuccess("分享成功");
 //                DataPaser.getBonus(2 + "", 1 + "", id);
-                ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
+                bonusHandler = ClientDiscoverAPI.getBonus(2 + "", 1 + "", id, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -484,9 +479,11 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         });
     }
 
+    private HttpHandler<String> detailsHandler;
+
     //情境详情
     private void sceneDetails(String id) {
-        ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
+        detailsHandler = ClientDiscoverAPI.sceneDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -522,5 +519,14 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (bonusHandler != null)
+            bonusHandler.cancel();
+        if (detailsHandler != null)
+            detailsHandler.cancel();
+        super.onDestroy();
     }
 }

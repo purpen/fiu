@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.util.HashMap;
@@ -56,6 +57,7 @@ public class UserEditNameActivity extends BaseActivity {
         if (user != null) {
             et_nickname.setText(user.nickname);
         }
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.tv_head_right, R.id.ibtn})

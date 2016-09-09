@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
@@ -112,6 +113,7 @@ public class OfficialCertificateActivity extends BaseActivity implements View.On
             ImageLoader.getInstance().displayImage(authData.id_card_cover_url,iv_id,options);
             ImageLoader.getInstance().displayImage(authData.business_card_cover_url,iv_card,options);
         }
+        WindowUtils.chenjin(this);
     }
 
     @Override

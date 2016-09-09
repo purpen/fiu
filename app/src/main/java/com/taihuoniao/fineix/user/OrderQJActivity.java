@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -65,6 +66,7 @@ public class OrderQJActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, R.string.subscribe);
         dialog = new WaittingDialog(this);
+        WindowUtils.chenjin(this);
         pull_gv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
     }
 

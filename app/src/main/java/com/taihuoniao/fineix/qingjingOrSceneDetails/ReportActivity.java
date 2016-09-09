@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -97,8 +98,10 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private HttpHandler<String> reportHandler;
+
     private void report(String target_id, String type, String evt) {
-        ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
+        reportHandler = ClientDiscoverAPI.report(target_id, type, evt, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -126,7 +129,13 @@ public class ReportActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-//    private Handler handler = new Handler() {
+    @Override
+    protected void onDestroy() {
+        if (reportHandler != null)
+            reportHandler.cancel();
+        super.onDestroy();
+    }
+    //    private Handler handler = new Handler() {
 //        @Override
 //        public void handleMessage(Message msg) {
 //            switch (msg.what) {
