@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -107,60 +108,61 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
         cartNumber();
     }
 
-    //获取子分类
-    private void categoryList() {
-        ClientDiscoverAPI.categoryLabel(id, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
+    //    //获取子分类
+//    private void categoryList() {
+//        ClientDiscoverAPI.categoryLabel(id, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+////                dialog.dismiss();
+//                CategoryLabelListBean categoryLabelListBean = new CategoryLabelListBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<CategoryLabelListBean>() {
+//                    }.getType();
+//                    categoryLabelListBean = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<", "数据解析异常" + e.toString());
+//                }
+//                if (categoryLabelListBean.isSuccess()) {
+//                    fragmentList.clear();
+//                    categoryList.clear();
+//                    titleList.clear();
+//                    categoryList.addAll(categoryLabelListBean.getData().getTags());
+//                    for (int i = 0; i < categoryList.size(); i++) {
+//                        titleList.add(categoryList.get(i).getTitle_cn());
+//                        fragmentList.add(GoodListFragment.newInstance(id, categoryList.get(i).get_id()));
+//                    }
+//                    if (fragmentList.size() == 0) {
+//                        fragmentList.add(GoodListFragment.newInstance(id, null));
+//                        titleList.add("");
+//                        tabLayout.setVisibility(View.GONE);
+//                        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+//                        viewPager.setAdapter(searchViewPagerAdapter);
+//                        return;
+//                    }
+//                    tabLayout.setVisibility(View.VISIBLE);
+//                    SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+//                    viewPager.setAdapter(searchViewPagerAdapter);
+//                    tabLayout.setupWithViewPager(viewPager);
+//                    viewPager.setOffscreenPageLimit(fragmentList.size());
+//                } else {
+//                    dialog.dismiss();
+//                    ToastUtils.showError(categoryLabelListBean.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
 //                dialog.dismiss();
-                CategoryLabelListBean categoryLabelListBean = new CategoryLabelListBean();
-                try {
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<CategoryLabelListBean>() {
-                    }.getType();
-                    categoryLabelListBean = gson.fromJson(responseInfo.result, type);
-                } catch (JsonSyntaxException e) {
-                    Log.e("<<<", "数据解析异常" + e.toString());
-                }
-                if (categoryLabelListBean.isSuccess()) {
-                    fragmentList.clear();
-                    categoryList.clear();
-                    titleList.clear();
-                    categoryList.addAll(categoryLabelListBean.getData().getTags());
-                    for (int i = 0; i < categoryList.size(); i++) {
-                        titleList.add(categoryList.get(i).getTitle_cn());
-                        fragmentList.add(GoodListFragment.newInstance(id, categoryList.get(i).get_id()));
-                    }
-                    if (fragmentList.size() == 0) {
-                        fragmentList.add(GoodListFragment.newInstance(id, null));
-                        titleList.add("");
-                        tabLayout.setVisibility(View.GONE);
-                        SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
-                        viewPager.setAdapter(searchViewPagerAdapter);
-                        return;
-                    }
-                    tabLayout.setVisibility(View.VISIBLE);
-                    SearchViewPagerAdapter searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
-                    viewPager.setAdapter(searchViewPagerAdapter);
-                    tabLayout.setupWithViewPager(viewPager);
-                    viewPager.setOffscreenPageLimit(fragmentList.size());
-                } else {
-                    dialog.dismiss();
-                    ToastUtils.showError(categoryLabelListBean.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                dialog.dismiss();
-                ToastUtils.showError(R.string.net_fail);
-            }
-        });
-    }
+//                ToastUtils.showError(R.string.net_fail);
+//            }
+//        });
+//    }
+    private HttpHandler<String> cartHandler;
 
     //获取购物车数量
     public void cartNumber() {
-        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CartBean cartBean = new CartBean();
@@ -185,5 +187,12 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                 titleLayout.setCartNum(0);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (cartHandler != null)
+            cartHandler.cancel();
+        super.onDestroy();
     }
 }

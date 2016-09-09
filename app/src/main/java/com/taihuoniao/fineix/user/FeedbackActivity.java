@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import org.json.JSONException;
@@ -34,6 +35,7 @@ public class FeedbackActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "意见反馈");
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.bt_commit})

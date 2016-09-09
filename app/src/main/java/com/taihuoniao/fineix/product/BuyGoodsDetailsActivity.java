@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -96,6 +97,9 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private int maxNumber = 1;//库存数量，最大不得超过
     //判断用户加入或立即购买的sku是第几个
     private int which = -1;
+    private HttpHandler<String> detailHandler;
+    private HttpHandler<String> cartHandler;
+    private HttpHandler<String> cancelShoucangHandler;
 
     public BuyGoodsDetailsActivity() {
         super(0);
@@ -352,7 +356,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //获取商品详情
     private void goodDetails() {
-        ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
+        detailHandler = ClientDiscoverAPI.goodsDetails(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -421,7 +425,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //获取购物车数量
     public void cartNumber() {
-        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CartBean cartBean = new CartBean();
@@ -450,7 +454,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //取消收藏
     private void cancelFavorate() {
-        ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
+        cancelShoucangHandler = ClientDiscoverAPI.cancelShoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -480,9 +484,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    private HttpHandler<String> shoucangHandler;
+
     //收藏
     private void favorate() {
-        ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
+        shoucangHandler = ClientDiscoverAPI.shoucang(id, "1", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -512,9 +518,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    private HttpHandler<String> buyHandler;
+
     //立即购买
     private void buyNow(String target_id, String type, String n) {
-        ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
+        buyHandler = ClientDiscoverAPI.buyNow(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -546,9 +554,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    private HttpHandler<String> addCartHandler;
+
     //加入购物车
     private void addToCart(String target_id, String type, String n) {
-        ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
+        addCartHandler = ClientDiscoverAPI.addToCartNet(target_id, type, n, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -580,6 +590,18 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     @Override
     protected void onDestroy() {
+        if (addCartHandler != null)
+            addCartHandler.cancel();
+        if (buyHandler != null)
+            buyHandler.cancel();
+        if (cancelShoucangHandler != null)
+            cancelShoucangHandler.cancel();
+        if (cartHandler != null)
+            cartHandler.cancel();
+        if (shoucangHandler != null)
+            shoucangHandler.cancel();
+        if (detailHandler != null)
+            detailHandler.cancel();
         unregisterReceiver(buyReceiver);
         super.onDestroy();
     }

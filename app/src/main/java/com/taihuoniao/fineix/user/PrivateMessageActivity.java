@@ -25,6 +25,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -82,6 +83,7 @@ public class PrivateMessageActivity extends BaseActivity{
                 custom_head.setHeadCenterTxtShow(true,user.nickname);
             }
         }
+        WindowUtils.chenjin(this);
     }
 
     @Override

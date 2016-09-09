@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -108,9 +109,11 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         hasSubsCount();
     }
 
+    private HttpHandler<String> userCenterHandler;
+
     //获取订阅情境主题个数
     private void hasSubsCount() {
-        ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
+        userCenterHandler = ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -177,12 +180,14 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    private HttpHandler<String> cancelSubsHandler;
+
     //取消订阅分类
     private void cancelSubs() {
-        ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
+        cancelSubsHandler = ClientDiscoverAPI.cancelSubscribe(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<取消订阅",responseInfo.result);
+                Log.e("<<<取消订阅", responseInfo.result);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -209,12 +214,14 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
         });
     }
 
+    private HttpHandler<String> subsHandler;
+
     //订阅分类
     private void subs() {
-        ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
+        subsHandler = ClientDiscoverAPI.subscribe(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<订阅",responseInfo.result);
+                Log.e("<<<订阅", responseInfo.result);
                 dialog.dismiss();
                 NetBean netBean = new NetBean();
                 try {
@@ -243,6 +250,12 @@ public class QJCategoryActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
+        if (userCenterHandler != null)
+            userCenterHandler.cancel();
+        if (cancelSubsHandler != null)
+            cancelSubsHandler.cancel();
+        if (subsHandler != null)
+            subsHandler.cancel();
         unregisterReceiver(qjcategoryReceiver);
         super.onDestroy();
     }

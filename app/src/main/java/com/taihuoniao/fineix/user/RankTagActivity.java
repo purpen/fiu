@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.labelview.AutoLabelUI;
 import com.taihuoniao.fineix.view.labelview.Label;
@@ -63,6 +64,7 @@ public class RankTagActivity extends BaseActivity{
         for (String aStringArray : stringArray) {
             label_view.addLabel(aStringArray);
         }
+        WindowUtils.chenjin(this);
     }
 
     @Override

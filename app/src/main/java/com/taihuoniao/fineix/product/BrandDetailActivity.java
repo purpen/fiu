@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -72,6 +73,9 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
     private BrandProductAdapter brandProductAdapter;//品牌下的产品列表
     private List<ProductAndSceneListBean.ProductAndSceneItem> qjList;//情景列表
     private BrandQJAdapter brandQJAdapter;//品牌下的情景列表
+    private HttpHandler<String> productHandler;
+    private HttpHandler<String> qjHandler;
+    private HttpHandler<String> brandHandler;
 
     @Override
     protected void getIntentData() {
@@ -127,7 +131,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //获取品牌下的情景
     private void getQJList() {
-        ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
+        qjHandler = ClientDiscoverAPI.productAndScene(qjPage + "", 8 + "", null, null, id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -170,7 +174,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌下产品列表
     private void getProductList() {
-        ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
+        productHandler = ClientDiscoverAPI.getProductList(null, null, null, id, null, productPage + "", 8 + "", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -192,7 +196,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
                     }
                     productList.addAll(productBean.getData().getRows());
 //                    if (!isQJ) {
-                    if(isQJ){
+                    if (isQJ) {
                         return;
                     }
                     brandProductAdapter.notifyDataSetChanged();
@@ -214,7 +218,7 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     //品牌详情
     private void brandDetails() {
-        ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
+        brandHandler = ClientDiscoverAPI.brandDetail(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 BrandDetailBean brandDetailBean = new BrandDetailBean();
@@ -346,6 +350,12 @@ public class BrandDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
+        if (brandHandler != null)
+            brandHandler.cancel();
+        if (productHandler != null)
+            productHandler.cancel();
+        if (qjHandler != null)
+            qjHandler.cancel();
         unregisterReceiver(brandReceiver);
         super.onDestroy();
     }

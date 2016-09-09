@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -256,9 +257,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
     }
 
+    private HttpHandler<String> delelteHandler;
+
     //删除评论
     private void deleteComment(String id) {
-        ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
+        delelteHandler = ClientDiscoverAPI.deleteComment(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Message msg = handler.obtainMessage();
@@ -292,9 +295,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    private HttpHandler<String> sendHandler;
+
     //发表评论
     private void sendComments(String target_i, String conten, String typ, String target_user_id, String is_r, String reply_i, String reply_user_i) {
-        ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
+        sendHandler = ClientDiscoverAPI.sendComment(target_i, conten, typ, target_user_id, is_r, reply_i, reply_user_i, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NetBean netBean = new NetBean();
@@ -333,9 +338,11 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    private HttpHandler<String> commentsHander;
+
     //评论列表
     private void getComments(String page, String size, String target_id, String target_user_id, String type) {
-        ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
+        commentsHander = ClientDiscoverAPI.commentsList(page, size, target_id, target_user_id, type, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<评论列表", responseInfo.result);
@@ -496,5 +503,16 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
             //2.调用showSoftInput方法显示软键盘，其中view为聚焦的view组件
             imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (commentsHander != null)
+            commentsHander.cancel();
+        if (delelteHandler != null)
+            delelteHandler.cancel();
+        if (sendHandler != null)
+            sendHandler.cancel();
+        super.onDestroy();
     }
 }

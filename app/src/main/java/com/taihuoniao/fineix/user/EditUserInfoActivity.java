@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ProvinceUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomAddressSelectView;
 import com.taihuoniao.fineix.view.CustomBirthdaySelectView;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -111,6 +112,7 @@ public class EditUserInfoActivity extends BaseActivity {
         custom_code.setTVStyle(0, R.string.user_code, R.color.color_333);
         custom_code.setIvArrowLeftShow(true);
         custom_auth.setTVStyle(0, R.string.user_auth, R.color.color_333);
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.custom_nick_name, R.id.custom_user_avatar,R.id.custom_area,R.id.custom_signature, R.id.custom_auth, R.id.custom_user_sex, R.id.custom_user_birthday, R.id.custom_code})

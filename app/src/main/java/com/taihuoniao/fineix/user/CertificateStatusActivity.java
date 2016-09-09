@@ -19,6 +19,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -56,6 +57,7 @@ public class CertificateStatusActivity extends BaseActivity{
         custom_head.setHeadCenterTxtShow(true,"官方认证");
         instance=this;
         dialog=new WaittingDialog(this);
+        WindowUtils.chenjin(this);
     }
 
     @Override

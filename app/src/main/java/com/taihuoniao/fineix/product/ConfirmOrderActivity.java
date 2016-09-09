@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -26,7 +27,6 @@ import com.taihuoniao.fineix.beans.NowBuyBean;
 import com.taihuoniao.fineix.beans.NowConfirmBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
@@ -100,9 +100,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
         }
         getDefaultAddress();
     }
-
+    private HttpHandler<String> addressHandler;
     private void getDefaultAddress() {
-        ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
+      addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<默认收货地址", responseInfo.result);
@@ -255,9 +255,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 break;
         }
     }
-
+    private  HttpHandler<String> confirmHandler;
     private void confirmOrder(String rrid, String addbook_id, String is_nowbuy, String summary, String transfer_time, String bonus_code) {
-        ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
+       confirmHandler =  ClientDiscoverAPI.nowConfirmOrder(rrid, addbook_id, is_nowbuy, summary, transfer_time, bonus_code, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 NowConfirmBean nowConfirmBean = new NowConfirmBean();
@@ -418,8 +418,10 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
 
 
     private void cancelNet() {
-        NetworkManager.getInstance().cancel("getDefaultAddress");
-        NetworkManager.getInstance().cancel("nowConfirmOrder");
+        if(addressHandler!=null)
+            addressHandler.cancel();
+        if(confirmHandler!=null)
+            confirmHandler.cancel();
     }
 
 }

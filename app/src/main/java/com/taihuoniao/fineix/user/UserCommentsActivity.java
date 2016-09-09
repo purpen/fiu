@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -61,6 +62,7 @@ public class UserCommentsActivity extends BaseActivity {
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true, "评论");
         dialog = new WaittingDialog(this);
+        WindowUtils.chenjin(this);
     }
 
     @Override

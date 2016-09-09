@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.CustomShareView;
@@ -81,6 +82,7 @@ public class SystemSettingsActivity extends BaseActivity{
 //        LogUtil.e("getExternalCacheDir",getExternalCacheDir().getAbsolutePath());
 //        LogUtil.e("getExternalCacheDirLen",getExternalCacheDir().length()+"");
 //        LogUtil.e("ImageLoaderCache",ImageLoader.getInstance().getDiskCache().getDirectory().getAbsolutePath());
+        WindowUtils.chenjin(this);
     }
 
     @OnClick({R.id.item_update_psd, R.id.btn_logout, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_welcome_page, R.id.item_service, R.id.item_about_us, R.id.item_feedback, R.id.item_share, R.id.item_exit})

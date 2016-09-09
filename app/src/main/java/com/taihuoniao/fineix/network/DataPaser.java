@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.base.NetBean;
@@ -523,7 +524,6 @@ public class DataPaser {
     }
 
 
-
     //标签
     //标签列表
     public static void labelList(String parent_id, int page, String size, int sort, int is_hot, final Handler handler) {
@@ -832,7 +832,7 @@ public class DataPaser {
     //公共
     //品牌列表
     public static void brandList(int page, int size, String mark, String self_run, String stick, final Handler handler) {
-        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick,null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.brandList(page, size, mark, self_run, stick, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<品牌列表", responseInfo.result);
@@ -918,7 +918,7 @@ public class DataPaser {
     //公共
     //搜索列表
     public static void search(String q, String t, String page, String evt, String sort, final Handler handler) {
-        ClientDiscoverAPI.search(q, t, null, page,"8", evt, sort, new RequestCallBack<String>() {
+        ClientDiscoverAPI.search(q, t, null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                Log.e("<<<搜索", responseInfo.result);
@@ -1458,8 +1458,8 @@ public class DataPaser {
     }
 
     //购物车
-    public static void shopCartParser(final Handler handler) {
-        ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
+    public static HttpHandler<String> shopCartParser(final Handler handler) {
+        return ClientDiscoverAPI.shopCartNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 List<ShopCart> list = null;
@@ -1505,8 +1505,8 @@ public class DataPaser {
     }
 
     //购物车数量
-    public static void shopCartNumberParser(final Handler handler) {
-        ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
+    public static  HttpHandler<String> shopCartNumberParser(final Handler handler) {
+        return ClientDiscoverAPI.shopCartNumberNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 ShopCartNumber shopCartNumber = null;

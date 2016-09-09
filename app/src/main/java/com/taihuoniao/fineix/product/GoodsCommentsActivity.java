@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -17,7 +18,6 @@ import com.taihuoniao.fineix.adapters.GoodsDetailsCommentListsAdapter;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataPaser;
-import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -64,8 +64,10 @@ public class GoodsCommentsActivity extends Activity {
         super.onDestroy();
     }
 
+    private HttpHandler<String> commentHandler;
+
     private void getComments(String target_id, String page) {
-        ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page, new RequestCallBack<String>() {
+        commentHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(responseInfo.result);
@@ -151,6 +153,7 @@ public class GoodsCommentsActivity extends Activity {
 //    };
 
     private void cancelNet() {
-        NetworkManager.getInstance().cancel("goodsDetailsCommentsList");
+        if (commentHandler != null)
+            commentHandler.cancel();
     }
 }

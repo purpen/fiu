@@ -14,6 +14,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -42,6 +43,7 @@ public class UpdatePasswordActivity extends BaseActivity {
         dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "修改密码");
         custom_head.setHeadRightTxtShow(true, R.string.complete);
+        WindowUtils.chenjin(this);
     }
 
     @OnClick(R.id.tv_head_right)

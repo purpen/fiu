@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -179,6 +180,7 @@ public class UnUsableRedPacketActivity extends BaseActivity{
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");
+        WindowUtils.chenjin(this);
     }
 
     @Override

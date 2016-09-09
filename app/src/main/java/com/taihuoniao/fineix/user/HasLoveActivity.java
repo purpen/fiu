@@ -17,6 +17,7 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -50,6 +51,7 @@ public class HasLoveActivity extends BaseActivity {
         dialog = new WaittingDialog(HasLoveActivity.this);
         mList = new ArrayList<>();
         pullGv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        WindowUtils.chenjin(this);
     }
 
 

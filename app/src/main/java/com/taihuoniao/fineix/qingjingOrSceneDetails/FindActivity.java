@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -97,9 +98,11 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
         }
     }
 
+    private HttpHandler<String> listHandler;
+
     //获取情景列表
     private void getSceneList(final int page, String size, String scene_id, String category_ids, String sort, String fine, String dis, String lng, String lat) {
-        ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
+        listHandler = ClientDiscoverAPI.getSceneList(page + "", size, scene_id, category_ids, sort, fine, dis, lng, lat, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 pullRefreshView.onRefreshComplete();
@@ -134,12 +137,12 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(data==null){
+        if (data == null) {
             return;
         }
-        switch (requestCode){
+        switch (requestCode) {
             case RESULT_OK:
-                if(findQJSceneListAdapter==null){
+                if (findQJSceneListAdapter == null) {
                     return;
                 }
                 int count = data.getIntExtra(CommentListActivity.class.getSimpleName(), -1);
@@ -151,5 +154,12 @@ public class FindActivity extends BaseActivity implements PullToRefreshBase.OnLa
                 findQJSceneListAdapter.notifyDataSetChanged();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (listHandler != null)
+            listHandler.cancel();
+        super.onDestroy();
     }
 }

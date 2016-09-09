@@ -26,6 +26,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -65,6 +66,7 @@ public class SystemNoticeActivity extends BaseActivity {
     protected void initView() {
         dialog = new WaittingDialog(this);
         custom_head.setHeadCenterTxtShow(true, "系统通知");
+        WindowUtils.chenjin(this);
     }
 
     @OnClick(R.id.tv_head_right)

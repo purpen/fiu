@@ -419,14 +419,14 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                         String tmp = Base64Utils.encodeLines(stream.toByteArray());
                         String sids = null;
                         StringBuilder sub_ids = new StringBuilder();
+                        if (MainApplication.subjectId != null) {
+                            sub_ids.append(",").append(MainApplication.subjectId);
+                        }
                         if (des != null && activeTagsBean != null && activeTagsBean.getData() != null && activeTagsBean.getData().getItems() != null) {
                             for (int i = 0; i < activeTagsBean.getData().getItems().size(); i++) {
                                 if (des.contains("#" + activeTagsBean.getData().getItems().get(i).get(0) + " ")) {
                                     sub_ids.append(",").append(activeTagsBean.getData().getItems().get(i).get(1));
                                 }
-                            }
-                            if (MainApplication.subjectId != null) {
-                                sub_ids.append(",").append(MainApplication.subjectId);
                             }
                             if (sub_ids.length() > 0) {
                                 sub_ids.deleteCharAt(0);

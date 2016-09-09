@@ -15,7 +15,6 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ProductBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.GoodsDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 
 import java.util.List;
@@ -68,7 +67,7 @@ public class BrandProductAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Log.e("<<<品牌下的产品","list.size="+list.size());
+        Log.e("<<<品牌下的产品", "list.size=" + list.size());
         final int leftPosition = position * 2;
         final int rightPosition = leftPosition + 1;
         ImageLoader.getInstance().displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
@@ -86,16 +85,16 @@ public class BrandProductAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                switch (list.get(leftPosition).getStage()) {
-                    case 9:
-                        Log.e("<<<", "可购买");
-                        intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                        break;
-                    default:
-                        Log.e("<<<", "不可购买");
-                        intent.setClass(activity, GoodsDetailActivity.class);
-                        break;
-                }
+//                switch (list.get(leftPosition).getStage()) {
+//                    case 9:
+//                        Log.e("<<<", "可购买");
+                intent.setClass(activity, BuyGoodsDetailsActivity.class);
+//                        break;
+//                    default:
+//                        Log.e("<<<", "不可购买");
+//                        intent.setClass(activity, GoodsDetailActivity.class);
+//                        break;
+//                }
                 intent.putExtra("id", list.get(leftPosition).get_id());
                 activity.startActivity(intent);
             }
@@ -104,16 +103,7 @@ public class BrandProductAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                switch (list.get(rightPosition).getStage()) {
-                    case 9:
-                        Log.e("<<<", "可购买");
                         intent.setClass(activity, BuyGoodsDetailsActivity.class);
-                        break;
-                    default:
-                        Log.e("<<<", "不可购买");
-                        intent.setClass(activity, GoodsDetailActivity.class);
-                        break;
-                }
                 intent.putExtra("id", list.get(rightPosition).get_id());
                 activity.startActivity(intent);
             }

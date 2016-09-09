@@ -16,6 +16,7 @@ import com.taihuoniao.fineix.user.fragments.ActivityFragment;
 import com.taihuoniao.fineix.user.fragments.ArticleFragment;
 import com.taihuoniao.fineix.user.fragments.NewProductFragment;
 import com.taihuoniao.fineix.user.fragments.SalePromotionFragment;
+import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 
 import java.lang.reflect.Field;
@@ -57,7 +58,7 @@ public class ChooseSubjectActivity extends BaseActivity<ItemQJCollect> {
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
-
+        WindowUtils.chenjin(this);
     }
 
 

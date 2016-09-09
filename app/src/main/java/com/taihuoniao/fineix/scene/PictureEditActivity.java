@@ -564,6 +564,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
                 if (label.getTagInfo().getType() == 1) {
                     ClientDiscoverAPI.deleteProduct(label.getTagInfo().getId() + "");
                 }
+                imageViewTouch.invalidate();
             }
         }, imageViewTouch, container, label, left, top);
         final int finalTop = top;
