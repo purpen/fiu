@@ -1,11 +1,7 @@
 package com.taihuoniao.fineix.main;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -112,10 +108,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (exit) tv_msg_indicator.setVisibility(View.GONE);
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-            if (bottomLinear != null) {
-                bottomLinear.setTranslationY(0);
-                animFlag = 0;
-            }
+//            if (bottomLinear != null) {
+//                bottomLinear.setTranslationY(0);
+//                animFlag = 0;
+//            }
         } else if (intent.hasExtra(FindFragment.class.getSimpleName())) {
             which = FindFragment.class.getSimpleName();
         }
@@ -143,10 +139,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-            if (bottomLinear != null) {
-                bottomLinear.setTranslationY(0);
-                animFlag = 0;
-            }
+//            if (bottomLinear != null) {
+//                bottomLinear.setTranslationY(0);
+//                animFlag = 0;
+//            }
         }
 
     }
@@ -163,9 +159,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             which2Switch();
         }
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DataConstants.BroadShopCart);
-        registerReceiver(mainReceiver, intentFilter);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(DataConstants.BroadShopCart);
+//        registerReceiver(mainReceiver, intentFilter);
         WindowUtils.showStatusBar(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
@@ -322,10 +318,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         try {
             switchImgAndTxtStyle(clazz);
             switchFragment(clazz);
-            if (bottomLinear != null) {
-                bottomLinear.setTranslationY(0);
-                animFlag = 0;
-            }
+//            if (bottomLinear != null) {
+//                bottomLinear.setTranslationY(0);
+//                animFlag = 0;
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -405,7 +401,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mainReceiver);
+//        unregisterReceiver(mainReceiver);
         MapUtil.destroyGeoCoder();
         super.onDestroy();
     }
@@ -536,85 +532,85 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            Log.e("<<<", "接收到广播");
-            if (1 == intent.getIntExtra("index", -1)) {
-                moveToDown();
-            } else if (2 == intent.getIntExtra("index", -1)) {
-//                WindowUtils.chenjin(MainActivity.this);
-                moveToReset();
-            }
-        }
-    };
+//    private BroadcastReceiver mainReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+////            Log.e("<<<", "接收到广播");
+//            if (1 == intent.getIntExtra("index", -1)) {
+//                moveToDown();
+//            } else if (2 == intent.getIntExtra("index", -1)) {
+////                WindowUtils.chenjin(MainActivity.this);
+//                moveToReset();
+//            }
+//        }
+//    };
 
-    public void moveToDown() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            container.setSystemUiVisibility(View.INVISIBLE);
-        }
-        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(300);
-        downAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                animFlag = 1;
-            }
+//    public void moveToDown() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            container.setSystemUiVisibility(View.INVISIBLE);
+//        }
+//        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight()).setDuration(300);
+//        downAnimator.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                animFlag = 1;
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                animFlag = 2;
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
+//        if (animFlag == 0) {
+//            downAnimator.start();
+//        }
+//    }
+//
+//    public void moveToReset() {
+//        if (bottomLinear.getTranslationY() <= 0) {
+//            return;
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        }
+//        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(300);
+//        upAnimator.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                animFlag = 1;
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                animFlag = 0;
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
+//        if (animFlag == 2) {
+//            upAnimator.start();
+//        }
+//    }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animFlag = 2;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        if (animFlag == 0) {
-            downAnimator.start();
-        }
-    }
-
-    public void moveToReset() {
-        if (bottomLinear.getTranslationY() <= 0) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
-        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(bottomLinear, "translationY", 0).setDuration(300);
-        upAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                animFlag = 1;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animFlag = 0;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        if (animFlag == 2) {
-            upAnimator.start();
-        }
-    }
-
-    private int animFlag = 0;
+//    private int animFlag = 0;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

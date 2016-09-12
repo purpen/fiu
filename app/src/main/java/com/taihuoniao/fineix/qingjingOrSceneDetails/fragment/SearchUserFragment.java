@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -95,7 +96,7 @@ public class SearchUserFragment extends SearchFragment {
         listView.setDividerHeight(0);
         listView.setSelector(R.color.nothing);
         searchList = new ArrayList<>();
-        searchUsersAdapter = new SearchUsersAdapter(getActivity(),searchList);
+        searchUsersAdapter = new SearchUsersAdapter(getActivity(), searchList);
         listView.setAdapter(searchUsersAdapter);
     }
 
@@ -112,7 +113,7 @@ public class SearchUserFragment extends SearchFragment {
     }
 
     public void refreshData(String q) {
-        if (dialog==null||TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
+        if (dialog == null || TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
             return;
         }
         this.q = q;
@@ -121,10 +122,10 @@ public class SearchUserFragment extends SearchFragment {
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "14", null, page + "","8",  isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "14", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<搜索用户",responseInfo.result);
+                Log.e("<<<搜索用户", responseInfo.result);
                 SearchBean searchBean = new SearchBean();
                 try {
                     Gson gson = new Gson();
@@ -152,7 +153,7 @@ public class SearchUserFragment extends SearchFragment {
                         emptyView.setVisibility(View.GONE);
                     }
                     searchUsersAdapter.notifyDataSetChanged();
-                }else{
+                } else {
                     ToastUtils.showError(netSearch.getMessage());
                 }
             }
@@ -164,6 +165,7 @@ public class SearchUserFragment extends SearchFragment {
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -238,7 +239,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler= ClientDiscoverAPI.addProduct(title, brand_id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -272,13 +273,14 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     private void addBrand(String title) {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler= ClientDiscoverAPI.addBrand(title, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -313,10 +315,11 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     private void searchBrand(final String q) {
-        ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler= ClientDiscoverAPI.search(q, "13", null,"1","100", "content", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索品牌", responseInfo.result);
@@ -347,13 +350,14 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     private List<ProductBean.ProductListItem> productList;
     private SearchProductAdapter searchProductAdapter;
 
     private void searchProduct(String title, String brand_id) {
-        ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler=  ClientDiscoverAPI.getProductList(title, null, null, brand_id, null, "1", "300", null, null, null, null, "9,16", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<品牌下的产品",responseInfo.result);
@@ -385,6 +389,7 @@ public class SearchBrandActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     private String currentBrandName;

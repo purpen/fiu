@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -144,7 +145,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler =  ClientDiscoverAPI.usedLabelList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -169,6 +170,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
                 dialog.dismiss();
             }
         });
+        addNet(httpHandler);
     }
 
     @Override
@@ -192,7 +194,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void searchExpand(String str) {
-        ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler=  ClientDiscoverAPI.searchExpand(str, 20 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<索搜建议", responseInfo.result);
@@ -217,6 +219,7 @@ public class AddLabelActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

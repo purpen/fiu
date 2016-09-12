@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -159,7 +160,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
 
     //获取商品相关的情境列表
     private void getSceneList() {
-        ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler= ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -196,6 +197,7 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

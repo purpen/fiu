@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -122,7 +123,7 @@ public class SearchQJFragment extends SearchFragment {
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "9", null, page + "","8",  isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "9", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索情景", responseInfo.result);
@@ -164,6 +165,7 @@ public class SearchQJFragment extends SearchFragment {
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

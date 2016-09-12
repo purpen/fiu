@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -65,7 +66,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
         if (!dialog.isShowing()) {
             dialog.show();
         }
-        ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler= ClientDiscoverAPI.categoryList(1 + "", 1 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                dialog.dismiss();
@@ -96,6 +97,7 @@ public class AddProductActivity extends BaseActivity implements View.OnClickList
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

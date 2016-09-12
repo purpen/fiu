@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -225,7 +226,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     //获取情景分类列表
     private void sceneCategoryList() {
-        ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "13", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<分类列表", responseInfo.result);
@@ -254,11 +255,12 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 gridView.setVisibility(View.GONE);
             }
         });
+        addNet(httpHandler);
     }
 
     //获取情景列表嵌入的主题列表
     private void subjectList() {
-        ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "2", null, "1", "1,2", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<精选主题", responseInfo.result);
@@ -294,11 +296,12 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 }
             }
         });
+        addNet(httpHandler);
     }
 
     //获取情景列表
     private void sceneNet() {
-        ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 10 + "", null, null, 0 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -339,6 +342,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

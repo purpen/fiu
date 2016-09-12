@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -117,7 +118,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
     }
 
     public void refreshData(String q) {
-        if (dialog==null||TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
+        if (dialog == null || TextUtils.isEmpty(q) || TextUtils.equals(this.q, q)) {
             return;
         }
         this.q = q;
@@ -126,7 +127,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "7", null, page + "","8",  isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "7", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索产品", responseInfo.result);
@@ -168,6 +169,7 @@ public class SearchProductFragment extends SearchFragment implements AdapterView
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

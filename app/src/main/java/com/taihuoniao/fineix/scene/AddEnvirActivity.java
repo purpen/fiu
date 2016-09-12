@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -313,7 +314,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     //分类列表
     private void categoryList() {
-        ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler=ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                dialog.dismiss();
@@ -349,13 +350,14 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     private ActiveTagsBean activeTagsBean;//活动标签
 
     //获取活动标签
     private void activeTags() {
-        ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
+       HttpHandler<String> httpHandler= ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<活动标签", responseInfo.result);
@@ -385,5 +387,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 goneDemoLabel.setVisibility(View.GONE);
             }
         });
+        addNet(httpHandler);
     }
 }
