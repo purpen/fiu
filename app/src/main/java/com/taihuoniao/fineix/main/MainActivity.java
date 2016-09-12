@@ -303,7 +303,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (getVisibleFragment() instanceof MineFragment) return;
                 if (LoginInfo.isUserLogin()) {
                     switchFragmentandImg(MineFragment.class);
-                    onWindowFocusChanged(true);
+//                    onWindowFocusChanged(true);
                 } else {
                     MainApplication.which_activity = 0;
                     which = MineFragment.class.getSimpleName();

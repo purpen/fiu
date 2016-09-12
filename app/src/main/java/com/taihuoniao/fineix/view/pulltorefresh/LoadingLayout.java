@@ -74,14 +74,16 @@ public class LoadingLayout extends FrameLayout {
 
         switch (mode) {
             case PullToRefreshBase.MODE_PULL_UP_TO_REFRESH:
-                headerImage.setImageResource(R.mipmap.pulltorefresh_up_arrow);
+//                headerImage.setImageResource(R.mipmap.pulltorefresh_up_arrow);
+                headerImage.setRotation(180f);
                 break;
             case PullToRefreshBase.MODE_PULL_DOWN_TO_REFRESH:
             default:
                 headerImage.setImageResource(R.mipmap.goicon);
+                headerImage.setRotation(0f);
                 break;
         }
-        animImg.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.pull_to_refresh_animation));
+        animImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pull_to_refresh_animation));
         animationDrawable = (AnimationDrawable) animImg.getDrawable();
 //        animationDrawable = new AnimationDrawable();
 //        for(int i=0;i<48;i++){
@@ -131,10 +133,12 @@ public class LoadingLayout extends FrameLayout {
         animImg.setImageDrawable(animationDrawable);
         animationDrawable.start();
     }
-    public void setAnimImg(int resid){
+
+    public void setAnimImg(int resid) {
         animImg.setImageResource(resid);
     }
-    public void setAnimImg(Drawable drawable){
+
+    public void setAnimImg(Drawable drawable) {
         animImg.setImageDrawable(drawable);
     }
 

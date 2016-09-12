@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by taihuoniao on 2016/8/24.
+ * 搜索页面搜索用户
  */
 public class SearchUsersAdapter extends BaseAdapter {
     private Activity activity;

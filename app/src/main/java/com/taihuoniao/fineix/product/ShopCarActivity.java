@@ -30,8 +30,8 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
-import com.taihuoniao.fineix.view.MyGlobalTitleLayout;
 import com.taihuoniao.fineix.view.PullRefreshLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.svprogress.SVProgressHUD;
@@ -55,7 +55,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
     HashMap<Integer, String> hashMap = new HashMap<>();
     private ShopCartAdapter adapter;
     private int mCarNum = 0;
-    private MyGlobalTitleLayout title = null;
+    private GlobalTitleLayout title = null;
     //该变量是为了切换购物车标题右边的“编缉”和“完成”二字所在的button
     private int change = 0;
     Map<String, Object> map;
@@ -103,11 +103,13 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             ShopCartNumber numberCart;
                             numberCart = (ShopCartNumber) msg.obj;
                             if (numberCart.isSuccess() && numberCart.getCount() > 0) {
-                                title.setRightButtomVisible(true);
+//                                title.setRightButtomVisible(true);
+                                title.setContinueTvVisible(true);
                                 title.setTitle("购物车(" + numberCart.getCount() + ")");
                             } else {
                                 title.setTitle("购物车");
-                                title.setRightButtomVisible(false);
+                                title.setContinueTvVisible(false);
+//                                title.setRightButtomVisible(false);
                             }
 //                            if (!numberCart.isSuccess() || "0".equals(numberCart.getCount())) {
 //                                title.setTitle("购物车");
@@ -150,9 +152,11 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                             if (!totalList.isEmpty()) {
                                 mEmptyLayout.setVisibility(View.GONE);
                                 mFullLayout.setVisibility(View.VISIBLE);
-                                title.setRightButtomVisible(true);
+//                                title.setRightButtomVisible(true);
+                                title.setContinueTvVisible(true);
                             } else {
-                                title.setRightButtomVisible(false);
+                                title.setContinueTvVisible(false);
+//                                title.setRightButtomVisible(false);
                                 mEmptyLayout.setVisibility(View.VISIBLE);
                                 mFullLayout.setVisibility(View.GONE);
                             }
@@ -233,25 +237,20 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 ShopCarActivity.this.hashMap = hashMap;
             }
         });
-        title = (MyGlobalTitleLayout) findViewById(R.id.title_shopcart);
-        title.setTitleColor(getResources().getColor(R.color.white));
-        title.setBackImg(R.mipmap.back_white);
-        title.setRightColor(getResources().getColor(R.color.white));
+        title = (GlobalTitleLayout) findViewById(R.id.title_shopcart);
         if (mCarNum > 0) {
             title.setTitle("购物车（" + mCarNum + "）");
         } else {
             title.setTitle("购物车");
         }
-        title.setRightSearchButton(false);
-        title.setRightShopCartButton(false);
-        title.setRightButton("编缉", new View.OnClickListener() {
+        title.setRightTv(R.string.edit,getResources().getColor(R.color.white),new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (change == 0) {
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
-                    title.setRightButton("完成");
+                    title.setRightTv(R.string.complete,getResources().getColor(R.color.white),null);
                     mDeleteCalculate.setText("删除");
                     mAllPrice.setVisibility(View.INVISIBLE);
                     DataPaser.shopCartParser(mHandler);
@@ -315,7 +314,7 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
 
                         }
                     });
-                    title.setRightButton("编缉");
+                    title.setRightTv(R.string.edit,getResources().getColor(R.color.white),null);
                     mAllPrice.setVisibility(View.VISIBLE);
                     mAllPrice.setText("¥0.00");
                     mDeleteCalculate.setText("去结算");
@@ -347,7 +346,6 @@ public class ShopCarActivity extends Activity implements View.OnClickListener, P
                 }
             }
         });
-//        title.setRightButtomVisible(false);
         mShopCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {

@@ -48,6 +48,7 @@
         android:clickable="true"
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
+        android:visibility="gone"
         android:src="@mipmap/cart" />
 
     <!--“购物车上标记所购数量的小黑圆圈”的图标按钮-->

@@ -147,7 +147,6 @@
                 android:textSize="11sp"/>
         </LinearLayout>
     </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/activity_main_first_relative"
         android:layout_width="match_parent"
@@ -156,16 +155,16 @@
 
         <ImageView
             android:id="@+id/activity_main_first_left_img"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-21dp"
+            android:layout_marginTop="-24dp"
             android:visibility="gone"/>
         <ImageView
             android:id="@+id/activity_main_first_right_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="-21dp"
+            android:layout_marginTop="-24dp"
             android:visibility="gone"/>
     </RelativeLayout>
 

@@ -188,6 +188,11 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.title_cart:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.BuyGoodDetailsActivity;
+                    startActivity(new Intent(this, OptRegisterLoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(this, ShopCarActivity.class);
                 startActivity(intent);
                 break;
@@ -261,8 +266,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        //获取购物车数量
-        cartNumber();
+        if (LoginInfo.isUserLogin()) {
+            //获取购物车数量
+            cartNumber();
+        } else {
+            titleLayout.setCartNum(0);
+        }
     }
 
     private void initPopuptWindow() {

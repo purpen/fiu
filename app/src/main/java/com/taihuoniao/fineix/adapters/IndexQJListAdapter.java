@@ -61,6 +61,7 @@ import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -420,7 +421,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         });
 
         //点赞或取消点赞
-        holder.loveRelative.setOnClickListener(new View.OnClickListener() {
+        holder.loveImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
@@ -822,7 +823,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         @Bind(R.id.love_count)
         TextView loveCount;
         @Bind(R.id.love_img)
-        ImageView loveImg;
+        ClickImageView loveImg;
         @Bind(R.id.qj_des_tv)
         TextView qjDesTv;
         @Bind(R.id.comment_list)
