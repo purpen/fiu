@@ -303,13 +303,10 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
             token = platDB.getToken();
             userId = null;
             if (TextUtils.equals(LOGIN_TYPE_QQ, loginType)) {
-                //QQ的ID得这样获取，这是MOB公司的错，不是字段写错了
                 userId = platform.getDb().get("weibo");
             } else if (TextUtils.equals(LOGIN_TYPE_WX, loginType)) {
-                //微信这个神坑，我已无力吐槽，干嘛要搞两个ID出来，泥马，后台说要传的是这个ID，字段没有错！用platDB.getUserId()不行！
                 userId = platform.getDb().get("unionid");
             } else {
-                //除QQ和微信两特例，其他的ID这样取就行了
                 userId = platDB.getUserId();
             }
             doThirdLogin();

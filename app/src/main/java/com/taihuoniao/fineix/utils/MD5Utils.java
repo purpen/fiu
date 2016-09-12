@@ -56,7 +56,7 @@ public class MD5Utils {
         params.addQueryStringParameter("uuid", MainApplication.uuid);
         params.addQueryStringParameter("app_type", "2");
         params.addQueryStringParameter("channel", Util.getAppMetaData(MainApplication.getContext().getResources().getString(R.string.channel_name)));
-        params.addQueryStringParameter("time", NetworkConstance.CONN_TIMEOUT + "");
+        params.addQueryStringParameter("time", System.currentTimeMillis() / 1000 + "");
         List<NameValuePair> list = params.getQueryStringParams();
         Collections.sort(list, new Comparator<NameValuePair>() {
             @Override

@@ -1554,8 +1554,8 @@ public class ClientDiscoverAPI {
     public static void submitCheckCode(String phone, String code, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/check_verify_code";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("phone", phone);
-        params.addBodyParameter("code", code);
+        params.addQueryStringParameter("phone", phone);
+        params.addQueryStringParameter("code", code);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1563,10 +1563,10 @@ public class ClientDiscoverAPI {
     public static void registerUser(String mobile, String password, String verify_code, RequestCallBack<String> callBack) {
         String url = NetworkConstance.BASE_URL + "/auth/register";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addBodyParameter("mobile", mobile);
-        params.addBodyParameter("password", password);
-        params.addBodyParameter("verify_code", verify_code);
-        params.addBodyParameter("from_to", "2"); //1.ios;2.android;3.win;
+        params.addQueryStringParameter("mobile", mobile);
+        params.addQueryStringParameter("password", password);
+        params.addQueryStringParameter("verify_code", verify_code);
+        params.addQueryStringParameter("from_to", "2"); //1.ios;2.android;3.win;
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
