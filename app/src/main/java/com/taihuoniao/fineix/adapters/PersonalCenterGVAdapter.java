@@ -1,12 +1,15 @@
 package com.taihuoniao.fineix.adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.utils.Util;
@@ -23,6 +26,17 @@ import butterknife.ButterKnife;
 public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
     public PersonalCenterGVAdapter(ArrayList<ImgTxtItem> list, Activity activity){
         super(list,activity);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.default_background_750_1334)
+                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
+                .showImageOnFail(R.mipmap.default_background_750_1334)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
+                .considerExifParams(true)
+                .delayBeforeLoading(0)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
