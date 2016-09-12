@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -79,7 +80,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
     }
 
     private void search(String q, String t, String page, String evt, String sort) {
-        ClientDiscoverAPI.search(q, 7 + "", null, page,"8",  evt, sort, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, 7 + "", null, page, "8", evt, sort, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -122,6 +123,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override
@@ -130,7 +132,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
             search(q, "10", currentPage + "", null, null);
         } else {
             if (position == 0) {
-                ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
+                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, null, null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -147,8 +149,9 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                         ToastUtils.showError("网络错误");
                     }
                 });
+                addNet(httpHandler);
             } else {
-                ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
+                HttpHandler<String> httpHandler = ClientDiscoverAPI.getProductList(null, null, categoryBean.getData().getRows().get(position).get_id(), null, null, currentPage + "", 8 + "", null, null, null, null, "9", new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         dialog.dismiss();
@@ -165,6 +168,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                         ToastUtils.showError("网络错误");
                     }
                 });
+                addNet(httpHandler);
             }
         }
     }
@@ -295,7 +299,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
         } else if (searchList.size() > 0) {
             ids = searchList.get(position).get_id();
         }
-        ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.goodsDetails(ids, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -325,6 +329,7 @@ public class AddProductsFragment extends BaseFragment implements AdapterView.OnI
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
 
     }
 

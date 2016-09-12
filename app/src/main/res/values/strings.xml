@@ -440,5 +440,8 @@
     <string name="select_product_to_pic">选择产品添加到当前图片中</string>
     <string name="or_input_message_self">或自行输入产品信息</string>
     <string name="product_name">产品名称</string>
+    <string name="jinghao">#</string>
+    <string name="to_buy_and_take_comment">快购买商品评论一下吧</string>
+    <string name="search_qj_and_user">搜索情境或用户</string>
 
 </resources>

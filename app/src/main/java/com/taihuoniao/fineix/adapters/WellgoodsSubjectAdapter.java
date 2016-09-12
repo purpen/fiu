@@ -160,11 +160,11 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         }
 
         @Override
-        public void onBindViewHolder(VH holder, final int position) {
+        public void onBindViewHolder(final VH holder, int position) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClick.click(position);
+                    itemClick.click(holder.getAdapterPosition());
                 }
             });
             ImageLoader.getInstance().displayImage(list.get(position).getBanner_url(), holder.backgroundImg);

@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -114,7 +115,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
 
     //根据子分类获取商品列表
     private void productList() {
-        ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,
+      HttpHandler<String> httpHandler= ClientDiscoverAPI.getProductList(null, null, id, null, tag_id, page + "", 8 + "", null, null,
                 null, null,"9", new RequestCallBack<String>() {
 
                     @Override
@@ -158,6 +159,7 @@ public class GoodListFragment extends SearchFragment implements AdapterView.OnIt
                         ToastUtils.showError(R.string.net_fail);
                     }
                 });
+        addNet(httpHandler);
     }
 
     @Override

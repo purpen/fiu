@@ -51,11 +51,11 @@ public class JingQingjingRecyclerAdapter extends RecyclerView.Adapter<JingQingji
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         ViewGroup.LayoutParams lp = holder.container.getLayoutParams();

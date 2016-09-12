@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.user;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,16 +21,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.beans.CityBean;
 import com.taihuoniao.fineix.beans.ProvinceBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -53,7 +53,7 @@ import java.util.Map;
 /**
  * Created by taihuoniao on 2016/2/2.
  */
-public class AddNewAddressActivity extends Activity implements View.OnClickListener, OnWheelChangedListener {
+public class AddNewAddressActivity extends BaseActivity implements View.OnClickListener, OnWheelChangedListener {
     //从选择地址界面传递过来的数据
     private AddressListBean.AddressListItem addressBean;
     //界面下控件
@@ -83,6 +83,10 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     //网络请求
     private WaittingDialog dialog;
 
+    public AddNewAddressActivity() {
+        super(0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +114,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
             dialog.show();
         }
 //        DataPaser.getProvinceList(mHandler);
-        ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler= ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -156,6 +160,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
 
@@ -246,7 +251,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
 //        });
     }
 
-    private void initView() {
+    protected void initView() {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_addnewaddress_title);
         titleLayout.setContinueTvVisible(false);
         commitBtn = (Button) findViewById(R.id.activity_addnewaddress_commitbtn);
@@ -318,7 +323,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
             dialog.show();
         }
 //        DataPaser.commitAddressParser(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", mHandler);
-        ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
+      HttpHandler<String> httpHandler = ClientDiscoverAPI.commitAddressNet(addressBean == null ? null : addressBean.get_id(), nameEdt.getText().toString(), phoneEdt.getText().toString(), provinceId, cityId, detailsAddressEdt.getText().toString(), postcodeEdt.getText().toString(), isdefault ? "1" : "0", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -353,6 +358,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
 
@@ -423,7 +429,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                                 AddNewAddressActivity.this.dialog.show();
                             }
 //                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
-                            ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
+                         HttpHandler<String> httpHandler=   ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
                                 @Override
                                 public void onSuccess(ResponseInfo<String> responseInfo) {
 //                                    Message msg = handler.obtainMessage();
@@ -460,6 +466,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
                                     ToastUtils.showError("网络错误");
                                 }
                             });
+                            addNet(httpHandler);
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -541,9 +548,7 @@ public class AddNewAddressActivity extends Activity implements View.OnClickListe
     }
 
     private void cancelNet() {
-        NetworkManager.getInstance().cancel("getProvinceList");
-        NetworkManager.getInstance().cancel("commitAddress");
-        NetworkManager.getInstance().cancel("deleteAddress");
+
     }
 
 

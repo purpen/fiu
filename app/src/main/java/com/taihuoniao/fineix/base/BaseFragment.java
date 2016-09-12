@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lidroid.xutils.http.HttpHandler;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public abstract class BaseFragment<T> extends Fragment {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             List<Fragment> fragments = fm.getFragments();
             for (Fragment fragment : fragments) {
-                if (fragment==null||fragment.getTag()==null||TextUtils.isEmpty(fragment.getTag())) {
+                if (fragment == null || fragment.getTag() == null || TextUtils.isEmpty(fragment.getTag())) {
                     continue;
                 }
                 if (TextUtils.equals(TAG, fragment.getTag())) {
@@ -126,10 +126,27 @@ public abstract class BaseFragment<T> extends Fragment {
 
     @Override
     public void onDestroyView() {
+        clearNet();
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
-    public void handMessage(Message msg) {
+    protected void addNet(HttpHandler<String> httpHandler) {
+        if (handlerList == null) {
+            handlerList = new ArrayList<>();
+        }
+        handlerList.add(httpHandler);
     }
+
+    private void clearNet() {
+        if (handlerList != null) {
+            for (HttpHandler<String> httpHandler : handlerList) {
+                if (httpHandler != null) {
+                    httpHandler.cancel();
+                }
+            }
+        }
+    }
+
+    private List<HttpHandler<String>> handlerList;
 }

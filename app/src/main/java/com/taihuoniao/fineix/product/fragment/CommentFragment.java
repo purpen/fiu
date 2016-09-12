@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -46,7 +47,7 @@ public class CommentFragment extends SearchFragment {
     public static CommentFragment newInstance(String id) {
 
         Bundle args = new Bundle();
-        args.putString("id",id);
+        args.putString("id", id);
         CommentFragment fragment = new CommentFragment();
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +56,7 @@ public class CommentFragment extends SearchFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        target_id =getArguments().getString("id");
+        target_id = getArguments().getString("id");
 
     }
 
@@ -90,10 +91,10 @@ public class CommentFragment extends SearchFragment {
     //获得评论列表
     private void getCommentList() {
         progressBar.setVisibility(View.VISIBLE);
-        ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getGoodsDetailsCommentsList(target_id, page + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<商品评论",responseInfo.result);
+                Log.e("<<<商品评论", responseInfo.result);
 //                WriteJsonToSD.writeToSD("json",responseInfo.result);
                 List<TryCommentsBean> list = DataPaser.parserTryDetailsCommentsList(responseInfo.result);
                 progressBar.setVisibility(View.GONE);
@@ -117,6 +118,7 @@ public class CommentFragment extends SearchFragment {
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

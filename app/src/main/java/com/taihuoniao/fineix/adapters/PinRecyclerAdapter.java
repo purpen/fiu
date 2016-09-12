@@ -44,12 +44,12 @@ public class PinRecyclerAdapter extends RecyclerView.Adapter<PinRecyclerAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PinRecyclerAdapter.VH holder, final int position) {
+    public void onBindViewHolder(final PinRecyclerAdapter.VH holder, int position) {
         ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.img, options);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         holder.tv.setText(list.get(position).getTitle());

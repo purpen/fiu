@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -114,10 +115,10 @@ public class QJFragment extends SearchFragment {
         }
         requestNet();
     }
-
+    private HttpHandler<String> sceneListHandler;
     //获取订阅的情景
     private void getSubsQJ() {
-        ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
+     sceneListHandler =    ClientDiscoverAPI.getSceneList(page + "", 8 + "", null, id, pos == 0 ? "2" : "0", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -157,6 +158,9 @@ public class QJFragment extends SearchFragment {
 
     @Override
     public void onDestroyView() {
+        if(sceneListHandler!=null){
+            sceneListHandler.cancel();
+        }
         super.onDestroyView();
         ButterKnife.unbind(this);
     }

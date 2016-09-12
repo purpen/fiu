@@ -6,7 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.taihuoniao.fineix.view.CustomHeadView
             android:id="@+id/custom_head"

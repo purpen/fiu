@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -140,7 +141,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void search() {
-        ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
+     HttpHandler<String> httpHandler= ClientDiscoverAPI.search(editText.getText().toString(), 11 + "", null, page + "", "8", "content", 0 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
@@ -174,6 +175,7 @@ public class SearchEnvirActivity extends BaseActivity implements View.OnClickLis
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

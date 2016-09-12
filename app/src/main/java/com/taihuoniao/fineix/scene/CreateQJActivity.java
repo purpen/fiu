@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -463,7 +464,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                           String products, String address, String city, String tmp, String lat, String lng,
                           String subject_ids) {
         Log.e("<<<", "开始上传");
-        ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.createScene(id, title, des, scene_id, tags, products, address, city,
                 tmp, lat, lng, subject_ids, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(final ResponseInfo<String> responseInfo) {
@@ -512,6 +513,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                         });
                     }
                 });
+        addNet(httpHandler);
     }
 
     @Override

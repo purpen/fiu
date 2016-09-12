@@ -33,11 +33,11 @@ public class SearchEnvirAdapter extends RecyclerView.Adapter<SearchEnvirAdapter.
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.click(position);
+                itemClick.click(holder.getAdapterPosition());
             }
         });
         holder.tv.setText(envirList.get(position).getTitle());

@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -134,26 +135,26 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
         switch (searchList.get(position).getType()) {
             case 1:
                 intent.setClass(activity, ArticalDetailActivity.class);
-                intent.putExtra(ArticalDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                intent.putExtra(ArticalDetailActivity.class.getSimpleName(), searchList.get(position).get_id());
                 break;
             case 2:
                 intent.setClass(activity, ActivityDetailActivity.class);
-                intent.putExtra(ActivityDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                intent.putExtra(ActivityDetailActivity.class.getSimpleName(), searchList.get(position).get_id());
                 break;
             case 3:
                 intent.setClass(activity, SalePromotionDetailActivity.class);
-                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), searchList.get(position).get_id());
                 break;
             default:
                 intent.setClass(activity, NewProductDetailActivity.class);
-                intent.putExtra(NewProductDetailActivity.class.getSimpleName(),searchList.get(position).get_id());
+                intent.putExtra(NewProductDetailActivity.class.getSimpleName(), searchList.get(position).get_id());
                 break;
         }
         activity.startActivity(intent);
     }
 
     private void search() {
-        ClientDiscoverAPI.search(q, "12", null, page + "","8",  isContent ? "content" : "tag", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.search(q, "12", null, page + "", "8", isContent ? "content" : "tag", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<搜索主题", responseInfo.result);
@@ -196,6 +197,7 @@ public class SearchSubjectFragment extends SearchFragment implements AdapterView
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
     @Override

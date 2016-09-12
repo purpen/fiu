@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -104,6 +105,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         dialog = new WaittingDialog(getActivity());
         return view;
     }
+
     public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -187,7 +189,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //获取购物车数量
     public void cartNumber() {
-        ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 CartBean cartBean = new CartBean();
@@ -215,11 +217,12 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 cartNumber.setVisibility(View.GONE);
             }
         });
+        addNet(httpHandler);
     }
 
     //好货专题列表
     private void subjectList() {
-        ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList(currentPage + "", 8 + "", null, null, 5 + "", "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<好货专题列表", responseInfo.result);
@@ -253,11 +256,12 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 ToastUtils.showError(R.string.net_fail);
             }
         });
+        addNet(httpHandler);
     }
 
     //最新好货推荐
     private void firstProducts() {
-        ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.firstProducts(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<最新好货推荐", responseInfo.result);
@@ -283,11 +287,12 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
             }
         });
+        addNet(httpHandler);
     }
 
     //获取产品分类列表
     private void productCategoryList() {
-        ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList("1", "1", null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<分类列表", responseInfo.result);
@@ -316,6 +321,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 gridView.setVisibility(View.GONE);
             }
         });
+        addNet(httpHandler);
     }
 
     @Override
@@ -372,16 +378,16 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), GoodsListActivity.class);
-        intent.putExtra("id",categoryList.get(position).get_id());
-        intent.putExtra("name",categoryList.get(position).getTitle());
+        intent.putExtra("id", categoryList.get(position).get_id());
+        intent.putExtra("name", categoryList.get(position).getTitle());
         startActivity(intent);
     }
 
     @Override
     public void click(int postion) {
         Intent intent = new Intent(getActivity(), GoodsListActivity.class);
-        intent.putExtra("id",categoryList.get(postion).get_id());
-        intent.putExtra("name",categoryList.get(postion).getTitle());
+        intent.putExtra("id", categoryList.get(postion).get_id());
+        intent.putExtra("name", categoryList.get(postion).getTitle());
         startActivity(intent);
 //        ToastUtils.showError("产品分类=" + postion);
     }

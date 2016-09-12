@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
@@ -208,7 +209,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     }
 
     private void getBanners() {
-        ClientDiscoverAPI.getBanners("app_fiu_sight_index_slide", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getBanners("app_fiu_sight_index_slide", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<首页banner图", responseInfo.result);
@@ -238,13 +239,14 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
             }
         });
+        addNet(httpHandler);
     }
 
     private int sneceComplete;//判断情景是否加载完毕 0，情景用户都没加载 1,情景加载完毕等待用户加载 2，用户加载完毕等待情景加载
 
     //获取中间插入的用户列表
     private void getUserList() {
-        ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getUserList(5, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<首页用户列表", responseInfo.result);
@@ -280,11 +282,12 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                 }
             }
         });
+        addNet(httpHandler);
     }
 
     //获取精选主题
     private void subjectList() {
-        ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<精选主题", responseInfo.result);
@@ -309,11 +312,12 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
             }
         });
+        addNet(httpHandler);
     }
 
     //获取情景列表
     private void sceneNet() {
-        ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<情景列表", responseInfo.result);
@@ -354,6 +358,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                 ToastUtils.showError("网络错误");
             }
         });
+        addNet(httpHandler);
     }
 
 
