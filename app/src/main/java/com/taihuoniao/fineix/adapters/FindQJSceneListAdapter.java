@@ -58,6 +58,7 @@ import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -394,16 +395,16 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         });
 
         //点赞或取消点赞
-        holder.loveRelative.setOnClickListener(new View.OnClickListener() {
+        holder.loveImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (sceneList.get(position).getIs_love() == 1) {
-                        holder.loveRelative.setEnabled(false);
+                        holder.loveImg.setEnabled(false);
                         cancelLoveQJ(position, sceneList.get(position).get_id(), holder);
                     } else {
-                        holder.loveRelative.setEnabled(false);
+                        holder.loveImg.setEnabled(false);
                         loveQJ(position, sceneList.get(position).get_id(), holder);
                     }
                     return;
@@ -612,7 +613,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                holder.loveRelative.setEnabled(true);
+                holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -635,7 +636,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                holder.loveRelative.setEnabled(true);
+                holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -647,7 +648,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                holder.loveRelative.setEnabled(true);
+                holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -670,7 +671,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                holder.loveRelative.setEnabled(true);
+                holder.loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -789,12 +790,12 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ImageView shareImg;
         @Bind(R.id.comment_img)
         ImageView commentImg;
-        @Bind(R.id.love_container)
-        RelativeLayout loveRelative;
+//        @Bind(R.id.love_container)
+//        RelativeLayout loveRelative;
         @Bind(R.id.love_count)
         TextView loveCount;
         @Bind(R.id.love_img)
-        ImageView loveImg;
+        ClickImageView loveImg;
         @Bind(R.id.qj_des_tv)
         TextView qjDesTv;
         @Bind(R.id.comment_list)

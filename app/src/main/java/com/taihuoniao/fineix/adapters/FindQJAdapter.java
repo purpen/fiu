@@ -39,6 +39,7 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
+import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -336,7 +337,7 @@ public class FindQJAdapter extends BaseAdapter {
         @Bind(R.id.qj_head_img1)
         RoundedImageView qjHeadImg1;
         @Bind(R.id.qj_love1)
-        ImageView qjLove1;
+        ClickImageView qjLove1;
         @Bind(R.id.qj_name1)
         TextView qjName1;
         @Bind(R.id.qj_bottom_container1)
@@ -352,7 +353,7 @@ public class FindQJAdapter extends BaseAdapter {
         @Bind(R.id.qj_head_img2)
         RoundedImageView qjHeadImg2;
         @Bind(R.id.qj_love2)
-        ImageView qjLove2;
+        ClickImageView qjLove2;
         @Bind(R.id.qj_name2)
         TextView qjName2;
         @Bind(R.id.qj_bottom_container2)

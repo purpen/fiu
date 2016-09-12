@@ -178,7 +178,9 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         continueTv.setText(resid);
         continueTv.setVisibility(VISIBLE);
         continueTv.setTextColor(color);
-        continueTv.setOnClickListener(onClickListener);
+        if (onClickListener != null) {
+            continueTv.setOnClickListener(onClickListener);
+        }
     }
 
     //设置继续监听

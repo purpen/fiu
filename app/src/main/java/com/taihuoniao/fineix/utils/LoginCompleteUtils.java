@@ -7,6 +7,7 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
 import com.taihuoniao.fineix.main.fragment.IndexFragment;
+import com.taihuoniao.fineix.main.fragment.WellGoodsFragment;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.FindActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
@@ -18,8 +19,11 @@ public class LoginCompleteUtils {
 
     public static void goFrom(Activity activity) {
         switch (MainApplication.which_activity) {
-            case DataConstants.GoodDetailsActivity:
-                activity.sendBroadcast(new Intent(DataConstants.BroadGoodDetails));
+            case DataConstants.WellGoodsFragment:
+                activity.sendBroadcast(new Intent(DataConstants.BroadWellGoods));
+                Intent intent5 = new Intent(activity, MainActivity.class);
+                intent5.putExtra(WellGoodsFragment.class.getSimpleName(), false);
+                activity.startActivity(intent5);
                 break;
             case DataConstants.QJCategoryActivity:
                 activity.sendBroadcast(new Intent(DataConstants.BroadQJCategory));

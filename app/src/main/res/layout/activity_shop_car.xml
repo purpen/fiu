@@ -6,11 +6,11 @@
                 android:fitsSystemWindows="true"
                 android:orientation="vertical">
 
-    <com.taihuoniao.fineix.view.MyGlobalTitleLayout
+    <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/title_shopcart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        />
 
     <RelativeLayout
         android:id="@+id/relative_full_shopcart"

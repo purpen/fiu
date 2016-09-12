@@ -1,7 +1,10 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,14 +36,18 @@ import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.beans.FirstProductBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
 import com.taihuoniao.fineix.product.ShopCarActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -103,6 +110,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         listView.addHeaderView(header1);
         productRecycler = (RecyclerView) header1.findViewById(R.id.product_recycler);
         dialog = new WaittingDialog(getActivity());
+        IntentFilter intentFilter = new IntentFilter(DataConstants.BroadWellGoods);
+        getActivity().registerReceiver(wellGoodsReceiver, intentFilter);
         return view;
     }
 
@@ -189,6 +198,10 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     //获取购物车数量
     public void cartNumber() {
+        if (!LoginInfo.isUserLogin()) {
+            cartNumber.setVisibility(View.GONE);
+            return;
+        }
         HttpHandler<String> httpHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -331,6 +344,11 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 startActivity(new Intent(getActivity(), CaptureActivity.class));
                 break;
             case R.id.title_right:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.WellGoodsFragment;
+                    startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(getActivity(), ShopCarActivity.class));
                 break;
             case R.id.search_linear:
@@ -392,8 +410,19 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 //        ToastUtils.showError("产品分类=" + postion);
     }
 
+    private BroadcastReceiver wellGoodsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!dialog.isShowing())
+                dialog.show();
+            currentPage = 1;
+            requestNet();
+        }
+    };
+
     @Override
     public void onDestroyView() {
+        getActivity().unregisterReceiver(wellGoodsReceiver);
         super.onDestroyView();
         ButterKnife.unbind(this);
     }

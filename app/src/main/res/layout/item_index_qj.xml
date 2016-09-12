@@ -231,7 +231,7 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/comment_img">
 
-            <ImageView
+            <com.taihuoniao.fineix.view.ClickImageView
                 android:id="@+id/love_img"
                 android:layout_width="24dp"
                 android:layout_height="match_parent"

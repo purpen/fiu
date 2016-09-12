@@ -59,6 +59,7 @@ import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.ClickImageView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -116,11 +117,9 @@ public class QJDetailActivity extends BaseActivity {
     @Bind(R.id.comment_img)
     ImageView commentImg;
     @Bind(R.id.love_img)
-    ImageView loveImg;
+    ClickImageView loveImg;
     @Bind(R.id.love_count)
     TextView loveCount;
-    @Bind(R.id.love_container)
-    RelativeLayout loveContainer;
     @Bind(R.id.qj_des_tv)
     TextView qjDesTv;
     @Bind(R.id.comment_list)
@@ -482,16 +481,16 @@ public class QJDetailActivity extends BaseActivity {
         });
 
         //点赞或取消点赞
-        loveContainer.setOnClickListener(new View.OnClickListener() {
+        loveImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (LoginInfo.isUserLogin()) {
                     //已经登录
                     if (qjDetailBean.getData().getIs_love() == 1) {
-                        loveContainer.setEnabled(false);
+                        loveImg.setEnabled(false);
                         cancelLoveQJ();
                     } else {
-                        loveContainer.setEnabled(false);
+                        loveImg.setEnabled(false);
                         loveQJ();
                     }
                     return;
@@ -655,7 +654,7 @@ public class QJDetailActivity extends BaseActivity {
         cancelShoucangHandler = ClientDiscoverAPI.cancelLoveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                loveContainer.setEnabled(true);
+                loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -678,7 +677,7 @@ public class QJDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                loveContainer.setEnabled(true);
+                loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }
@@ -692,7 +691,7 @@ public class QJDetailActivity extends BaseActivity {
         loveHandler = ClientDiscoverAPI.loveQJ(id, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                loveContainer.setEnabled(true);
+                loveImg.setEnabled(true);
                 dialog.dismiss();
                 SceneLoveBean sceneLoveBean = new SceneLoveBean();
                 try {
@@ -715,7 +714,7 @@ public class QJDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                loveContainer.setEnabled(true);
+                loveImg.setEnabled(true);
                 dialog.dismiss();
                 ToastUtils.showError(R.string.net_fail);
             }

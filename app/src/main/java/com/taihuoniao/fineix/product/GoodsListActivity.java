@@ -18,9 +18,13 @@ import com.taihuoniao.fineix.adapters.SearchViewPagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.CartBean;
 import com.taihuoniao.fineix.beans.CategoryLabelListBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.fragment.GoodListFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
+import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -97,6 +101,11 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_cart:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.ElseActivity;
+                    startActivity(new Intent(this, OptRegisterLoginActivity.class));
+                    return;
+                }
                 startActivity(new Intent(this, ShopCarActivity.class));
                 break;
         }
@@ -105,7 +114,11 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        cartNumber();
+        if (LoginInfo.isUserLogin()) {
+            cartNumber();
+        }else{
+            titleLayout.setCartNum(0);
+        }
     }
 
     //    //获取子分类

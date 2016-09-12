@@ -98,9 +98,9 @@
         <activity
             android:name=".product.ConfirmOrderActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".product.GoodsCommentsActivity"
-            android:screenOrientation="portrait"/>
+        <!--<activity-->
+            <!--android:name=".product.GoodsCommentsActivity"-->
+            <!--android:screenOrientation="portrait"/>-->
         <activity
             android:name=".product.PayWayActivity"
             android:screenOrientation="portrait"/>
@@ -353,10 +353,10 @@
             android:name=".scene.AddLabelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
-        <activity
-            android:name=".map.HotCitiesActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+        <!--<activity-->
+            <!--android:name=".map.HotCitiesActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/AppTheme"/>-->
         <activity
             android:name=".map.MapAddressDetailActivity"
             android:screenOrientation="portrait"

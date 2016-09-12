@@ -32,7 +32,7 @@
             app:riv_border_width="1dp"
             app:riv_corner_radius="100dp"/>
 
-        <ImageView
+        <com.taihuoniao.fineix.view.ClickImageView
             android:id="@+id/qj_love"
             android:layout_width="35.5dp"
             android:layout_height="match_parent"
