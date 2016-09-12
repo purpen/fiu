@@ -38,7 +38,7 @@
 
             <ImageButton
                 android:id="@+id/ibn_volume"
-                android:src="@mipmap/volume"
+                android:src="@mipmap/volume_mute"
                 android:layout_width="@dimen/dp30"
                 android:layout_height="@dimen/dp30"
                 android:layout_centerVertical="true"

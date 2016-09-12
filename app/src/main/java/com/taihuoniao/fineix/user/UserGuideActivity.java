@@ -51,7 +51,7 @@ public class UserGuideActivity extends BaseActivity {
     private Intent intent;
     private boolean isGuide = false;
     private List<Integer> list;
-    private boolean flag = true;
+    private boolean flag = false;
     public static String fromPage;
     private int currentPosition;
     private MediaPlayer mediaPlayer;
@@ -140,7 +140,7 @@ public class UserGuideActivity extends BaseActivity {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mediaPlayer = mp;
-                setVolume(80);
+                setVolume(0);
             }
         });
     }
@@ -234,10 +234,10 @@ public class UserGuideActivity extends BaseActivity {
                     ibnVolume.setImageResource(R.mipmap.volume_mute);
                     flag = false;
                     setVolume(0);
-                } else {//
+                } else {
                     ibnVolume.setImageResource(R.mipmap.volume);
                     flag = true;
-                    setVolume(80);
+                    setVolume(50);
                 }
                 break;
             case R.id.btn_pass:
