@@ -23,12 +23,35 @@
             android:visibility="gone"
             />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_tips"
+        android:layout_below="@+id/rl_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@mipmap/default_cjqj"
+            />
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp12"
+            android:textColor="@color/color_333"
+            android:layout_marginTop="@dimen/dp5"
+            />
+    </LinearLayout>
+
     <RelativeLayout
-        android:id="@+id/rl_head"
+        android:id="@+id/rl_head_center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/jianbian_head"
-        >
+        android:background="@android:color/black">
+
         <ImageButton
             android:id="@+id/iv_detail"
             android:layout_width="@dimen/dp45"
@@ -61,26 +84,4 @@
             android:background="@null"
             android:src="@mipmap/edit_info" />
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/ll_tips"
-        android:layout_below="@+id/rl_box"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        >
-        <ImageView
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
-            android:src="@mipmap/default_cjqj"
-            />
-        <TextView
-            android:id="@+id/tv_tips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp12"
-            android:textColor="@color/color_333"
-            android:layout_marginTop="@dimen/dp5"
-            />
-    </LinearLayout>
 </RelativeLayout>

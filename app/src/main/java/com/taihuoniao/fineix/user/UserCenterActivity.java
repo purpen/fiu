@@ -75,7 +75,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private List<QingJingListBean.QingJingItem> mQJList = new ArrayList<>();
     private LinearLayout ll_box;
     private LinearLayout ll_btn_box;
-    //    private RelativeLayout rl_head;
     @Bind(R.id.tv_title)
     TextView tv_title;
     @Bind(R.id.ll_tips)
@@ -97,7 +96,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     ImageButton iv_detail;
     @Bind(R.id.iv_right)
     ImageButton iv_right;
-    @Bind(R.id.rl_head)
+    @Bind(R.id.rl_head_center)
     RelativeLayout rl_head;
     private RelativeLayout rl_focus;
     private LinearLayout ll_fans;
@@ -118,7 +117,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     TextView tv_tips;
     private boolean isFirstLoad = true;
     private String flag;
-
+    private View headView;
     public UserCenterActivity() {
         super(R.layout.activity_user_center);
     }
@@ -167,13 +166,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             rl_head.setPadding(0, getStatusBarHeight(), 0, 0);
         }
-        View headView = Util.inflateView(R.layout.user_center_headview, null);
+        rl_head.getBackground().mutate().setAlpha(25);
+        headView = Util.inflateView(R.layout.user_center_headview, null);
         if (LoginInfo.getUserId() != userId) {
             iv_right.setVisibility(View.GONE);
         }
-//        rl_head = ButterKnife.findById(headView, R.id.rl_head);
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Util.getScreenWidth());
-//        rl_head.setLayoutParams(params);
         iv_bg = ButterKnife.findById(headView, R.id.iv_bg);
         tv_label = ButterKnife.findById(headView, R.id.tv_label);
         riv = ButterKnife.findById(headView, R.id.riv);
@@ -235,7 +232,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         if (dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
-//                LogUtil.e("result", responseInfo.result);
 
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
@@ -551,8 +547,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 //            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 //            }
 //        });
-
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int headerHeight = 0;
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
@@ -575,9 +571,32 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
+                int height = getResources().getDimensionPixelSize(R.dimen.dp150);
+                if (null != headView) {
+                    int top = -(headView.getTop());
+                    headerHeight = headView.getMeasuredHeight();
+                    if (top > 0 && top <= height) {
+                        float scale = (float) top / headerHeight;
+                        float alpha = (255 * scale);
+                        rl_head.getBackground().mutate().setAlpha((int) alpha);
+                    } else if (top == 0) {
+                        rl_head.getBackground().mutate().setAlpha(25);
+                    } else if (top > height) {
+                        rl_head.getBackground().mutate().setAlpha(204);
+                    }
+                }
             }
         });
+    }
+
+    public int getScrollY() {
+        View c = lv_cj.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        int firstVisiblePosition = lv_cj.getFirstVisiblePosition();
+        int top = c.getTop();
+        return -top + firstVisiblePosition * c.getHeight();
     }
 
     @Override
@@ -718,11 +737,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                     .forResult(REQUEST_CODE_PICK_IMAGE);
         } else {
             ToastUtils.showError("未检测到SD卡");
-//            dialog.showErrorWithStatus("未检测到SD卡");
         }
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType("image/*");//相片类型
-//        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
     protected void getImageFromCamera() {
@@ -733,7 +748,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
         } else {
             ToastUtils.showError("未检测到SD卡");
-//            dialog.showErrorWithStatus("未检测到SD卡");
         }
     }
 
