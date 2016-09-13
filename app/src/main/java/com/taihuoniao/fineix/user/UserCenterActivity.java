@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -24,7 +25,9 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.adapters.UserQJListAdapter;
@@ -150,6 +153,16 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initView() {
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.user_center_bg)
+                .showImageForEmptyUri(R.mipmap.user_center_bg)
+                .showImageOnFail(R.mipmap.user_center_bg)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
         WindowUtils.showStatusBar(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             rl_head.setPadding(0, getStatusBarHeight(), 0, 0);
@@ -423,10 +436,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
-//        if (!TextUtils.isEmpty(user.head_pic_url)) {
-        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
-//        }
-
+        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
         if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);
         } else {

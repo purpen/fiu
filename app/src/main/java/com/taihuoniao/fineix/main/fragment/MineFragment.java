@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.main.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,9 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.PersonalCenterGVAdapter;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -62,6 +65,7 @@ import butterknife.OnClick;
 
 public class MineFragment extends MyBaseFragment {
     private static OnMessageCountChangeListener listener;
+    private DisplayImageOptions options;
 
     public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
         MineFragment.listener = listener;
@@ -128,6 +132,16 @@ public class MineFragment extends MyBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.user_center_bg)
+                .showImageForEmptyUri(R.mipmap.user_center_bg)
+                .showImageOnFail(R.mipmap.user_center_bg)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
         initData();
     }
 
@@ -301,7 +315,7 @@ public class MineFragment extends MyBaseFragment {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
 //        if (!TextUtils.isEmpty(user.head_pic_url)) {
-        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg);
+        ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
 //        }
 
         if (user.identify.is_expert == 1) {
