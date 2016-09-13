@@ -314,9 +314,7 @@ public class MineFragment extends MyBaseFragment {
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
             ImageLoader.getInstance().displayImage(user.medium_avatar_url, riv);
         }
-//        if (!TextUtils.isEmpty(user.head_pic_url)) {
         ImageLoader.getInstance().displayImage(user.head_pic_url, iv_bg, options);
-//        }
 
         if (user.identify.is_expert == 1) {
             riv_auth.setVisibility(View.VISIBLE);

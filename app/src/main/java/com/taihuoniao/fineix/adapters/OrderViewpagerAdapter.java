@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,15 +13,16 @@ import java.util.List;
 public class OrderViewpagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments;
+    private ArrayList<String> titles;
 
-    public OrderViewpagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public OrderViewpagerAdapter(FragmentManager fm, List<Fragment> fragments, ArrayList<String> titles) {
         super(fm);
         this.fragments = fragments;
+        this.titles = titles;
     }
 
     @Override
     public Fragment getItem(int position) {
-
         return fragments.get(position);
     }
 
@@ -35,35 +37,8 @@ public class OrderViewpagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-
-            case 1:
-                return "待付款";
-
-            case 2:
-                return "待发货";
-
-            case 3:
-                return "待收货";
-
-            case 4:
-                return "待评价";
-
-            case 5:
-                return "退款/售后";
-            default:
-                return "全部";
-        }
+        return titles.get(position);
     }
-    //    @Override
-//    public int getItemPosition(Object object) {
-//        return POSITION_NONE;
-//    }
-//    @Override
-//    public void destroyItem(ViewGroup container, int position, Object object) {
-//        super.destroyItem(container, position, object);
-//
-//    }
 }
 
 
