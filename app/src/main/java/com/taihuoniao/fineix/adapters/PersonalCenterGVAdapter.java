@@ -31,7 +31,7 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
                 .showImageOnFail(R.mipmap.default_background_750_1334)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-                .cacheInMemory(false)
+                .cacheInMemory(true)
                 .cacheOnDisk(false)
                 .considerExifParams(true)
                 .delayBeforeLoading(0)
