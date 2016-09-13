@@ -46,6 +46,13 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
             holder.tvTitle.setText(item.title);
             holder.tvTitle.setBackgroundColor(activity.getResources().getColor(android.R.color.black));
         }
+        if (TextUtils.equals("2", item.evt)) {
+            holder.ivFinish.setVisibility(View.VISIBLE);
+            holder.tvDuring.setText("已结束");
+        } else {
+            holder.ivFinish.setVisibility(View.GONE);
+            holder.tvDuring.setText(String.format("%s-%s", item.begin_time_at, item.end_time_at));
+        }
         holder.tvDesc.setText(item.short_title);
         holder.tvCount.setText(String.format("%s人浏览", item.view_count));
         holder.tvTitle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -97,12 +104,16 @@ public class SalePromotionAdapter extends CommonBaseAdapter<DataChooseSubject.It
         ImageView imageView;
         @Bind(R.id.tv_title)
         TextView tvTitle;
+        @Bind(R.id.iv_finish)
+        ImageView ivFinish;
         @Bind(R.id.tv_desc)
         TextView tvDesc;
         @Bind(R.id.tv_count)
         TextView tvCount;
         @Bind(R.id.view_line)
         View viewLine;
+        @Bind(R.id.tv_during)
+        TextView tvDuring;
 //        @Bind(R.id.recycler_view)
 //        RecyclerView recyclerView;
 

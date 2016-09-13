@@ -217,7 +217,11 @@ public class SalePromotionDetailActivity extends BaseActivity {
         }
         tv_short_title.setText(data.short_title);
         tvDesc.setText(data.summary);
-        tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
+        if (data.evt == 2) {
+            tv_during.setText("已结束");
+        } else {
+            tv_during.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
+        }
         ImageLoader.getInstance().displayImage(data.banner_url, iv_banner);
         if (data.products == null) return;
         SalePromotionDetailAdapter adapter = new SalePromotionDetailAdapter(data.products, activity);

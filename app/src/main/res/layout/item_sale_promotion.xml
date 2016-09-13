@@ -64,10 +64,23 @@
             android:textSize="@dimen/sp10" />
     </LinearLayout>
 
-    <!-- <android.support.v7.widget.RecyclerView
-         android:id="@+id/recycler_view"
-         android:layout_width="match_parent"
-         android:layout_height="190dp"
-         android:layout_marginTop="@dimen/dp5"
-         android:visibility="gone" />-->
+    <TextView
+        android:id="@+id/tv_during"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/during"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp10"
+        android:text="@string/app_name"
+        android:textColor="@color/color_ccc"
+        android:drawablePadding="@dimen/dp5"
+        android:textSize="@dimen/sp12" />
+
+    <ImageView
+        android:id="@+id/iv_finish"
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:src="@mipmap/activity_finish"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
 </RelativeLayout>

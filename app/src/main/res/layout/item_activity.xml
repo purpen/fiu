@@ -85,5 +85,6 @@
         android:layout_width="@dimen/dp60"
         android:layout_height="@dimen/dp60"
         android:src="@mipmap/activity_finish"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
 </RelativeLayout>
