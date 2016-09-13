@@ -13,10 +13,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -43,6 +46,7 @@ import com.taihuoniao.fineix.product.fragment.CommentFragment;
 import com.taihuoniao.fineix.product.fragment.WebFragment;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.fragment.SearchFragment;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
+import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -50,9 +54,16 @@ import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by taihuoniao on 2016/2/22.
@@ -74,6 +85,10 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     ImageView shoucangImg;
     @Bind(R.id.shoucang_linear)
     LinearLayout shoucangLinear;
+    @Bind(R.id.share_linear)
+    LinearLayout shareLinear;
+    @Bind(R.id.add_cart_btn)
+    Button addCartBtn;
     @Bind(R.id.buy_btn)
     Button buyBtn;
     private WaittingDialog dialog;
@@ -100,6 +115,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     private HttpHandler<String> detailHandler;
     private HttpHandler<String> cartHandler;
     private HttpHandler<String> cancelShoucangHandler;
+    private boolean isBuy;//判断点击的是购买还是添加购物车
 
     public BuyGoodsDetailsActivity() {
         super(0);
@@ -136,7 +152,10 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     protected void initList() {
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-
+        shoucangLinear.setOnClickListener(BuyGoodsDetailsActivity.this);
+        shareLinear.setOnClickListener(this);
+        addCartBtn.setOnClickListener(this);
+        buyBtn.setOnClickListener(BuyGoodsDetailsActivity.this);
     }
 
 
@@ -148,9 +167,56 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         goodDetails();
     }
 
+    private View initPop() {
+        View view = View.inflate(this, R.layout.share_layout, null);
+        GridView gv_share = (GridView) view.findViewById(R.id.gv_share);
+        View tv_cancel = view.findViewById(R.id.tv_cancel);
+        int[] image = {R.mipmap.wechat, R.mipmap.wechatmoment, R.mipmap.sina, R.mipmap.qqzone};
+        String[] name = {"微信好友", "微信朋友圈", "新浪微博", "QQ空间",};
+        List<HashMap<String, Object>> shareList = new ArrayList<>();
+        for (int i = 0; i < image.length; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("image", image[i]);
+            map.put("text", name[i]);
+            shareList.add(map);
+        }
+        SimpleAdapter adapter = new SimpleAdapter(this, shareList, R.layout.share_item_layout, new String[]{"image", "text"}, new int[]{R.id.iv_plat_logo, R.id.tv_plat_name});
+        gv_share.setAdapter(adapter);
+        gv_share.setOnItemClickListener(itemClicklistener);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindowUtil.dismiss();
+            }
+        });
+        return view;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.add_cart_btn:
+                if (!LoginInfo.isUserLogin()) {
+                    MainApplication.which_activity = DataConstants.BuyGoodDetailsActivity;
+                    activity.startActivity(new Intent(activity, OptRegisterLoginActivity.class));
+                    return;
+                }
+                if (buyGoodDetailsBean == null) {
+                    requestNet();
+                    cartNumber();
+                    return;
+                }
+                isBuy = false;
+                showPopupWindow();
+                break;
+            case R.id.share_linear:
+                if (buyGoodDetailsBean == null) {
+                    requestNet();
+                    cartNumber();
+                    return;
+                }
+                PopupWindowUtil.show(this, initPop());
+                break;
             case R.id.buy_btn:
                 if (!LoginInfo.isUserLogin()) {
                     MainApplication.which_activity = DataConstants.BuyGoodDetailsActivity;
@@ -162,6 +228,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     cartNumber();
                     return;
                 }
+                isBuy = true;
                 showPopupWindow();
                 break;
             case R.id.shoucang_linear:
@@ -215,7 +282,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 numberTv.setText(number + "");
                 break;
-            case R.id.dialog_cart_tocartbtn:
+            case R.id.dialog_confirm_btn:
                 if (buyGoodDetailsBean == null) {
                     requestNet();
                     cartNumber();
@@ -228,37 +295,22 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                         if (!dialog.isShowing()) {
                             dialog.show();
                         }
-                        addToCart(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
-                    }
-                } else {
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
-                    addToCart(id, "1", numberTv.getText().toString());
-                }
-                break;
-            case R.id.dialog_cart_buybtn:
-                if (buyGoodDetailsBean == null) {
-                    requestNet();
-                    cartNumber();
-                    return;
-                }
-                if (buyGoodDetailsBean.getData().getSkus_count() > 0) {
-                    if (which == -1) {
-                        ToastUtils.showError("请选择颜色/分类");
-                    } else {
-                        if (!dialog.isShowing()) {
-                            dialog.show();
+                        if (isBuy) {
+                            buyNow(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
+                        } else {
+                            addToCart(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                         }
-                        buyNow(buyGoodDetailsBean.getData().getSkus().get(which).get_id(), "2", numberTv.getText().toString());
                     }
                 } else {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
-                    buyNow(id, "1", numberTv.getText().toString());
+                    if (isBuy) {
+                        buyNow(id, "1", numberTv.getText().toString());
+                    } else {
+                        addToCart(id, "1", numberTv.getText().toString());
+                    }
                 }
-
                 break;
         }
     }
@@ -266,12 +318,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (LoginInfo.isUserLogin()) {
-            //获取购物车数量
-            cartNumber();
-        } else {
-            titleLayout.setCartNum(0);
-        }
+        //获取购物车数量
+        cartNumber();
     }
 
     private void initPopuptWindow() {
@@ -280,20 +328,20 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         productsTitle = (TextView) popup_view.findViewById(R.id.dialog_cart_producttitle);
         priceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_price);
         quantity = (TextView) popup_view.findViewById(R.id.dialog_cart_skusnumber);
-        Button toBuyBtn = (Button) popup_view.findViewById(R.id.dialog_cart_buybtn);
+//        Button toBuyBtn = (Button) popup_view.findViewById(R.id.dialog_cart_buybtn);
         scrollLinear = (LinearLayout) popup_view.findViewById(R.id.dialog_cart_scrolllinear);
         TextView reduceTv = (TextView) popup_view.findViewById(R.id.dialog_cart_reduce);
         numberTv = (TextView) popup_view.findViewById(R.id.dialog_cart_number);
         TextView addTv = (TextView) popup_view.findViewById(R.id.dialog_cart_add);
-        Button toCartBtn = (Button) popup_view.findViewById(R.id.dialog_cart_tocartbtn);
+//        Button toCartBtn = (Button) popup_view.findViewById(R.id.dialog_cart_tocartbtn);
+        Button confirmBtn = (Button) popup_view.findViewById(R.id.dialog_confirm_btn);
         popupWindow = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.popupwindow_style);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         reduceTv.setOnClickListener(this);
         addTv.setOnClickListener(this);
-        toCartBtn.setOnClickListener(this);
-        toBuyBtn.setOnClickListener(this);
+        confirmBtn.setOnClickListener(this);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -349,8 +397,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 });
                 scrollLinear.addView(view);
             }
-
-
         }
     }
 
@@ -361,7 +407,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//这行代码可以使window后的所有东西边暗淡
         popupWindow.showAtLocation(activityView, Gravity.BOTTOM, 0, 0);
     }
-
 
     //获取商品详情
     private void goodDetails() {
@@ -393,6 +438,8 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                         tabLayout.setVisibility(View.GONE);
                         tabLine.setVisibility(View.GONE);
                         buyBtn.setVisibility(View.GONE);
+                        shareLinear.setVisibility(View.GONE);
+                        addCartBtn.setVisibility(View.GONE);
                     }
                     //设置适配器
                     searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
@@ -416,8 +463,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     maxNumber = buyGoodDetailsBean.getData().getInventory();
                     quantity.setText(maxNumber + "");
                     addSkuToLinear();
-                    shoucangLinear.setOnClickListener(BuyGoodsDetailsActivity.this);
-                    buyBtn.setOnClickListener(BuyGoodsDetailsActivity.this);
+
                     return;
                 }
                 ToastUtils.showError(buyGoodDetailsBean.getMessage());
@@ -434,6 +480,10 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
 
     //获取购物车数量
     public void cartNumber() {
+        if (!LoginInfo.isUserLogin()) {
+            titleLayout.setCartNum(0);
+            return;
+        }
         cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -596,6 +646,72 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
+    private AdapterView.OnItemClickListener itemClicklistener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.e("<<<", "imgPath=" + MainApplication.getContext().getCacheDirPath());
+            Platform.ShareParams params;
+
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
+
+            switch (position) {
+                case 3:
+                    //qqzong
+                    params = new Platform.ShareParams();
+                    params.setShareType(Platform.SHARE_WEBPAGE);
+                    params.setTitle(buyGoodDetailsBean.getData().getTitle());
+                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    params.setTitleUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    if (buyGoodDetailsBean.getData().getCover_url() != null) {
+                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                    }
+                    Platform qzone = ShareSDK.getPlatform(QZone.NAME);
+                    qzone.share(params);
+                    break;
+                case 2:
+                    //sina
+                    params = new Platform.ShareParams();
+                    params.setShareType(Platform.SHARE_WEBPAGE);
+                    params.setText(buyGoodDetailsBean.getData().getShare_desc()+buyGoodDetailsBean.getData().getShare_view_url());
+                    if (buyGoodDetailsBean.getData().getCover_url() != null) {
+                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                    }
+                    Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                    weibo.share(params);
+                    break;
+                case 0:
+                    //wechat
+                    params = new Platform.ShareParams();
+                    params.setShareType(Platform.SHARE_WEBPAGE);
+                    params.setTitle(buyGoodDetailsBean.getData().getTitle());
+                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    if (buyGoodDetailsBean.getData().getCover_url() != null) {
+                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                    }
+                    params.setUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                    wechat.share(params);
+                    break;
+                case 1:
+                    //wechatmoment
+                    params = new Platform.ShareParams();
+                    params.setShareType(Platform.SHARE_WEBPAGE);
+                    params.setTitle(buyGoodDetailsBean.getData().getTitle());
+                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    if (buyGoodDetailsBean.getData().getCover_url() != null) {
+                        params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
+                    }
+                    params.setUrl(buyGoodDetailsBean.getData().getShare_view_url());
+                    Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                    wechatMoments.share(params);
+                    break;
+            }
+            PopupWindowUtil.dismiss();
+        }
+    };
 
     @Override
     protected void onDestroy() {

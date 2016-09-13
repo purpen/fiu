@@ -32,9 +32,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/dialog_cart_productimg"
+                android:lineSpacingExtra="3dp"
                 android:maxLines="2"
                 android:maxWidth="200dp"
-                android:lineSpacingExtra="3dp"
                 android:textColor="#666666"
                 android:textSize="15sp"/>
 
@@ -186,34 +186,15 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/dialog_confirm_btn"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="45dp"
         android:layout_marginTop="80dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/dialog_cart_tocartbtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:background="#666666"
-            android:text="@string/add_to_cart"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-
-        <Button
-            android:id="@+id/dialog_cart_buybtn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:background="#212121"
-            android:text="@string/buy_now"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-    </LinearLayout>
+        android:background="#212121"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
 
 </LinearLayout>

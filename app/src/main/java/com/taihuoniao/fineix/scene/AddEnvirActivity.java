@@ -125,6 +125,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 if (s.length() > 0) {
                     if (s.length() > 20) {
                         title.setText(s.subSequence(0, 20));
+                        title.setSelection(20);
                     }
                     deleteTitle.setVisibility(View.VISIBLE);
                 } else {
@@ -314,7 +315,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     //分类列表
     private void categoryList() {
-      HttpHandler<String> httpHandler=ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.categoryList(1 + "", 11 + "", 1 + "", new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 //                dialog.dismiss();
@@ -357,7 +358,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
     //获取活动标签
     private void activeTags() {
-       HttpHandler<String> httpHandler= ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.activeTags(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<活动标签", responseInfo.result);
