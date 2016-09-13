@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -378,6 +379,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     }
 
     private ObjectAnimator downAnimator, upAnimator;
+    private int animFlag = 0;
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -392,13 +394,61 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
             }
         }
         if (firstVisibleItem >= 1 && goneRelative.getTranslationY() == -goneRelative.getMeasuredHeight()) {
+            if (animFlag != 0) {
+                return;
+            }
             if (downAnimator == null) {
                 downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
+                downAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 2;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
             downAnimator.start();
         } else if (firstVisibleItem < 1 && goneRelative.getTranslationY() == 0) {
+            if (animFlag != 2) {
+                return;
+            }
             if (upAnimator == null) {
                 upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
+                upAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 0;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
             upAnimator.start();
         }

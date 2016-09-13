@@ -114,11 +114,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        if (LoginInfo.isUserLogin()) {
             cartNumber();
-        }else{
-            titleLayout.setCartNum(0);
-        }
     }
 
     //    //获取子分类
@@ -175,6 +171,10 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
 
     //获取购物车数量
     public void cartNumber() {
+        if (!LoginInfo.isUserLogin()) {
+            titleLayout.setCartNum(0);
+            return;
+        }
         cartHandler = ClientDiscoverAPI.cartNum(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

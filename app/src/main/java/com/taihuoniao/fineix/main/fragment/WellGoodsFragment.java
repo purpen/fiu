@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main.fragment;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,6 +54,7 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 import com.taihuoniao.fineix.zxing.activity.CaptureActivity;
 
 import java.lang.reflect.Type;
@@ -84,6 +86,8 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     RelativeLayout goneRelative;
     @Bind(R.id.pull_refresh_view)
     PullToRefreshListView pullRefreshView;
+    @Bind(R.id.to_top_img)
+    RoundedImageView toTopImg;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private ListView listView;
@@ -132,6 +136,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         titleLeft.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
         titleRight.setOnClickListener(this);
+        toTopImg.setOnClickListener(this);
         setupBlurView();
         categoryList = new ArrayList<>();
         wellGoodsProductCategoryAdapter = new WellGoodsProductCategoryAdapter(categoryList);
@@ -340,6 +345,9 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.to_top_img:
+                listView.setSelection(0);
+                break;
             case R.id.title_left:
                 startActivity(new Intent(getActivity(), CaptureActivity.class));
                 break;
@@ -366,6 +374,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     }
 
     private ObjectAnimator downAnimator, upAnimator;
+    private int animFlag = 0;
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -381,15 +390,65 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
             }
         }
         if (firstVisibleItem >= 1 && goneRelative.getTranslationY() == -goneRelative.getMeasuredHeight()) {
+            if (animFlag != 0) {
+                return;
+            }
             if (downAnimator == null) {
                 downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
+                downAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 2;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
             downAnimator.start();
+            toTopImg.setVisibility(View.VISIBLE);
         } else if (firstVisibleItem < 1 && goneRelative.getTranslationY() == 0) {
+            if (animFlag != 2) {
+                return;
+            }
             if (upAnimator == null) {
                 upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
+                upAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        animFlag = 1;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animFlag = 0;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
             upAnimator.start();
+            toTopImg.setVisibility(View.GONE);
         }
     }
 
