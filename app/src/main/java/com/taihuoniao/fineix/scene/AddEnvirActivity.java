@@ -122,10 +122,10 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Log.e("<<<", "length=" + s.length() + ",start=" + start + ",before=" + before + ",count=" + count);
                 if (s.length() > 0) {
                     if (s.length() > 20) {
-                        title.setText(s.subSequence(0, 20));
-                        title.setSelection(20);
+                        ToastUtils.showInfo("标题不能超过20字");
                     }
                     deleteTitle.setVisibility(View.VISIBLE);
                 } else {
@@ -199,8 +199,12 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 onBackPressed();
                 break;
             case R.id.title_continue:
+                String str = des.getText().toString();
+                if (str.length() > 20) {
+                    str = str.substring(0, 20);
+                }
                 Intent intent = new Intent();
-                intent.putExtra("title", title.getText().toString());
+                intent.putExtra("title", str);
                 intent.putExtra("des", des.getText().toString());
                 intent.putExtra("activeBean", activeTagsBean);
                 setResult(2, intent);
