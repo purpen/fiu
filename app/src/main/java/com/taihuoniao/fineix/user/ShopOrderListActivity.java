@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.view.BadgeView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 import java.util.ArrayList;
@@ -113,49 +114,54 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         WindowUtils.chenjin(this);
     }
 
-
     private void setUpTabs(int position) {
         TabLayout.Tab tab = tabBar.getTabAt(position);
         if (tab != null) {
             View view = Util.inflateView(R.layout.tab_title_layout, null);
-            ((TextView) view.findViewById(R.id.tv_title)).setText(mTitles.get(position));
-            TextView tvNum = (TextView) view.findViewById(R.id.tv_num);
+            TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+            BadgeView badgeView = (BadgeView) view.findViewById(R.id.badgeView);
+            tvTitle.setText(mTitles.get(position));
+//          TextView tvNum = (TextView) view.findViewById(R.id.tv_num);
             int count;
             switch (position) {
                 case 1: //待支付
                     count = user.counter.order_wait_payment;
-                    setTipsNum(tvNum, count);
+                    setTipsNum(badgeView, count);
                     break;
                 case 2: // 待发货
                     count = user.counter.order_ready_goods;
-                    setTipsNum(tvNum, count);
+                    setTipsNum(badgeView, count);
                     break;
                 case 3: // 待收货
                     count = user.counter.order_sended_goods;
-                    setTipsNum(tvNum, count);
+                    setTipsNum(badgeView, count);
                     break;
                 case 4: // 待评价
                     count = user.counter.order_evaluate;
-                    setTipsNum(tvNum, count);
+                    setTipsNum(badgeView, count);
                     break;
                 default:
-                    tvNum.setVisibility(View.GONE);
+//                    tvNum.setVisibility(View.GONE);
                     break;
             }
             tab.setCustomView(view);
         }
     }
 
-    private void setTipsNum(TextView tvNum, int count) {
+    private void setTipsNum(BadgeView badgeView, int count) {
         if (count > 0) {
-            tvNum.setVisibility(View.VISIBLE);
-            if (count <= 99)
-                tvNum.setText(String.valueOf(count));
-            else {
-                tvNum.setText("+99");
-            }
+            badgeView.setVisibility(View.VISIBLE);
+//            if (count <= 99)
+//                tvNum.setText(String.valueOf(count));
+//            else {
+//                tvNum.setText("99...");
+//            }
+//            badgeView.setBadgeGravity(Gravity.RIGHT);
+//            badgeView.setBadgeMargin(0,0,0, 0);
+            badgeView.setBackground(15, getResources().getColor(R.color.color_af8323));
+            badgeView.setBadgeCount(count);
         } else {
-            tvNum.setVisibility(View.GONE);
+            badgeView.setVisibility(View.GONE);
         }
     }
 

@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.BadgeView;
 
 import java.util.ArrayList;
 
@@ -52,14 +53,11 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
         ImageLoader.getInstance().displayImage("drawable://" + item.imgId,holder.iv,options);
         holder.tv.setText(item.txt);
         if (item.count>0){
-            holder.tv_num.setVisibility(View.VISIBLE);
-            if (item.count<=99)
-                holder.tv_num.setText(String.valueOf(item.count));
-            else {
-                holder.tv_num.setText("+99");
-            }
+            holder.badgeView.setVisibility(View.VISIBLE);
+            holder.badgeView.setBackground(15, activity.getResources().getColor(R.color.color_af8323));
+            holder.badgeView.setBadgeCount(item.count);
         }else {
-            holder.tv_num.setVisibility(View.GONE);
+            holder.badgeView.setVisibility(View.GONE);
         }
         return convertView;
     }
@@ -69,8 +67,8 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
         ImageView iv;
         @Bind(R.id.tv)
         TextView tv;
-        @Bind(R.id.tv_num)
-        TextView tv_num;
+        @Bind(R.id.badgeView)
+        BadgeView badgeView;
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }

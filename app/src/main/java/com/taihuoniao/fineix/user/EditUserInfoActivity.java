@@ -388,19 +388,15 @@ public class EditUserInfoActivity extends BaseActivity {
                 if (response.isSuccess()){
                     user = response.getData();
                     ToastUtils.showSuccess(response.getMessage());
-//                    dialog.showSuccessWithStatus(response.getMessage());
                     return;
                 }
 
                 ToastUtils.showError(response.getMessage());
-//                dialog.showErrorWithStatus(response.getMessage());
-
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.network_err);
             }
         });
 

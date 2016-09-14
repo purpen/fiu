@@ -355,7 +355,7 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                         instance.setNickname(thirdLogin.user.nickname);
                         instance.setSex(thirdLogin.user.sex);
                         instance.areas = thirdLogin.user.areas;
-                        instance.setMedium_avatar_url(thirdLogin.user.medium_avatar_url);
+                        instance.setMedium_avatar_url(avatarUrl);
                         instance.identify = thirdLogin.user.identify;
                         SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(instance));
                         if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅

@@ -55,6 +55,11 @@ public class PopupWindowUtil {
         Window window = activity.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = f;
+        if (f == 1) {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        } else {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
         window.setAttributes(lp);
     }
 

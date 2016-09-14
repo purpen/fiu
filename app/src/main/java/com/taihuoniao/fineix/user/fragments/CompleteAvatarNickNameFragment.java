@@ -40,7 +40,6 @@ import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.ImageCropActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -74,6 +73,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
     private String gender = Constants.MALE;
     private Bitmap bitmap;
     private DisplayImageOptions options;
+
     public static CompleteAvatarNickNameFragment newInstance(UserCompleteData data) {
         CompleteAvatarNickNameFragment fragment = new CompleteAvatarNickNameFragment();
         Bundle bundle = new Bundle();
@@ -174,12 +174,15 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                         HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                         });
                         if (response.isSuccess()) {
-                            User user = response.getData();
+//                            User user = response.getData();
                             LoginInfo loginInfo = LoginInfo.getLoginInfo();
                             loginInfo.setSex(gender);
                             loginInfo.setNickname(nickName);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
-                            LogUtil.e(TAG, "更新成功");
+                            if (activity instanceof CompleteUserInfoActivity) {
+                                ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
+                                if (null != viewPager) viewPager.setCurrentItem(1);
+                            }
                             return;
                         }
                         ToastUtils.showError(response.getMessage());
@@ -191,10 +194,7 @@ public class CompleteAvatarNickNameFragment extends MyBaseFragment {
                         ToastUtils.showError(R.string.network_err);
                     }
                 });
-                if (activity instanceof CompleteUserInfoActivity) {
-                    ViewPager viewPager = ((CompleteUserInfoActivity) activity).getViewPager();
-                    if (null != viewPager) viewPager.setCurrentItem(1);
-                }
+
                 break;
             case R.id.riv:
                 PopupWindowUtil.show(activity, initPopView(R.layout.popup_upload_avatar, "上传头像"));

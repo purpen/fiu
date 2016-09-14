@@ -197,7 +197,6 @@ public class ImageCropActivity extends BaseActivity {
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                     if (response.isSuccess()){
                         ToastUtils.showSuccess("头像上传成功");
-//                        svProgressHUD.showSuccessWithStatus("头像上传成功");
                         if (listener!=null){
                             listener.onClipComplete(bitmap);
                         }
@@ -205,15 +204,13 @@ public class ImageCropActivity extends BaseActivity {
                         return;
                     }
                     ToastUtils.showError(response.getMessage());
-//                    svProgressHUD.showErrorWithStatus(response.getMessage());
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     if (dialog!=null && !activity.isFinishing()) dialog.dismiss();
                     setViewEnable(true);
-                    ToastUtils.showError("网络异常，请确认网络畅通");
-//                    svProgressHUD.showErrorWithStatus("网络异常，请确认网络畅通");
+                    ToastUtils.showError(R.string.network_err);
                 }
             });
         } catch (Exception e) {
