@@ -109,7 +109,7 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, QJDetailActivity.class);
-                intent.putExtra("id", left_qj._id);
+                intent.putExtra("id", String.valueOf(left_qj._id));
                 activity.startActivity(intent);
             }
         });
@@ -118,7 +118,7 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, QJDetailActivity.class);
-                intent.putExtra("id", finalRight_qj._id);
+                intent.putExtra("id", String.valueOf(finalRight_qj._id));
                 activity.startActivity(intent);
             }
         });
