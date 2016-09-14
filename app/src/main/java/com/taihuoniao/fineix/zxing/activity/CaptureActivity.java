@@ -71,9 +71,9 @@ import java.lang.reflect.Field;
  */
 public final class CaptureActivity extends BaseActivity implements
         SurfaceHolder.Callback {
-    private static final String INFO_TYPE_QJ = "10";
+    private static final String INFO_TYPE_QJ = "11";
     private static final String INFO_TYPE_CJ = "11";
-    private static final String INFO_TYPE_CP = "12";
+    private static final String INFO_TYPE_CP = "1";
     private static final String INFO_TYPE_USER = "13";
     private static final String TAG = CaptureActivity.class.getSimpleName();
 

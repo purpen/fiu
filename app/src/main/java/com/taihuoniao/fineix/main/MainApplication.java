@@ -67,6 +67,7 @@ public class MainApplication extends Application {
     public static Bitmap blurBitmap = null;//模糊的图片
     public static String subjectId = null;//活动id
     public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
+    public static List<String> picList;//跳转PictureActivity
 
     public static MainApplication getContext() {
         return instance;
@@ -174,10 +175,20 @@ public class MainApplication extends Application {
         return getCacheDisk().getAbsolutePath();
     }
 
-    //获取缓存文件
-    public File getCacheDisk() {
+    public boolean isSD() {
         if (Environment.MEDIA_MOUNTED.equals(Environment
                 .getExternalStorageState())) {
+            File file = getExternalCacheDir();
+            if (file != null && file.canWrite()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //获取缓存文件
+    public File getCacheDisk() {
+        if (isSD()) {
             File cacheDir = getExternalCacheDir();
             if (cacheDir != null) {
                 if (cacheDir.canWrite()) {

@@ -53,17 +53,6 @@ public class ClipImageLayout extends RelativeLayout {
 //        mClipImageView.setHorizontalPadding(mHorizontalPadding);
     }
 
-    /**
-     * 对外公布设置边距的方法,单位为dp
-     *
-     * @param mHorizontalPadding
-     */
-    public void setHorizontalPadding(int mHorizontalPadding) {
-        /*
-      这里测试，直接写死了大小，真正使用过程中，可以提取为自定义属性
-     */
-        int mHorizontalPadding1 = mHorizontalPadding;
-    }
 
     /**
      * 裁切图片

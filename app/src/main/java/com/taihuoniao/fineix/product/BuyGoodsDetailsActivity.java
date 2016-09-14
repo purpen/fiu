@@ -663,7 +663,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
                     params.setTitle(buyGoodDetailsBean.getData().getTitle());
-                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage());
                     params.setTitleUrl(buyGoodDetailsBean.getData().getShare_view_url());
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
@@ -675,7 +675,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     //sina
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setText(buyGoodDetailsBean.getData().getShare_desc()+buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage()+buyGoodDetailsBean.getData().getShare_view_url());
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
@@ -687,7 +687,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
                     params.setTitle(buyGoodDetailsBean.getData().getTitle());
-                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage());
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }
@@ -700,7 +700,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
                     params.setTitle(buyGoodDetailsBean.getData().getTitle());
-                    params.setText(buyGoodDetailsBean.getData().getShare_desc());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage());
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }

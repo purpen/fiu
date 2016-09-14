@@ -8,14 +8,14 @@
     <declare-styleable name="RoundProgressBar">
         <attr name="proundColor" format="color"/>
         <attr name="proundProgressColor" format="color"/>
-        <attr name="proundWidth" format="dimension" />
+        <attr name="proundWidth" format="dimension"/>
         <attr name="textColor" format="color"/>
         <attr name="textSize" format="dimension"/>
-        <attr name="pmax" format="integer" />
-        <attr name="textIsDisplayable" format="boolean" />
+        <attr name="pmax" format="integer"/>
+        <attr name="textIsDisplayable" format="boolean"/>
         <attr name="pstyle">
-            <enum name="STROKE" value="0" />
-            <enum name="FILL" value="1" />
+            <enum name="STROKE" value="0"/>
+            <enum name="FILL" value="1"/>
         </attr>
     </declare-styleable>
 
@@ -85,8 +85,8 @@
     </declare-styleable>
 
     <!--<declare-styleable name="FlowLayout">-->
-        <!--<attr name="horizontal_spacing" format="dimension"/>-->
-        <!--<attr name="vertical_spacing" format="dimension"/>-->
+    <!--<attr name="horizontal_spacing" format="dimension"/>-->
+    <!--<attr name="vertical_spacing" format="dimension"/>-->
     <!--</declare-styleable>-->
 
     <declare-styleable name="MyView">
@@ -99,12 +99,12 @@
         </attr>
     </declare-styleable>
     <declare-styleable name="FlowLayout">
-        <attr name="horizontalSpacing" format="dimension" />
-        <attr name="verticalSpacing" format="dimension" />
+        <attr name="horizontalSpacing" format="dimension"/>
+        <attr name="verticalSpacing" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="FlowLayout_LayoutParams">
-        <attr name="layout_breakLine" format="boolean" />
-        <attr name="layout_horizontalSpacing" format="dimension" />
+        <attr name="layout_breakLine" format="boolean"/>
+        <attr name="layout_horizontalSpacing" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="ClipSquareImageView">
@@ -113,15 +113,18 @@
         <attr name="ClipSquareIV_BorderColor" format="color"/>
         <attr name="ClipSquareIV_OutsideColor" format="color"/>
     </declare-styleable>
+    <declare-styleable name="ClipZoomImageView">
+        <attr name="wTh" format="float"/>
+    </declare-styleable>
 
     <declare-styleable name="LabelsView">
-        <attr name="max_labels" format="integer" />
-        <attr name="show_cross" format="boolean" />
-        <attr name="icon_cross" format="reference" />
+        <attr name="max_labels" format="integer"/>
+        <attr name="show_cross" format="boolean"/>
+        <attr name="icon_cross" format="reference"/>
         <attr name="text_color" format="color"/>
         <attr name="text_size" format="dimension"/>
         <attr name="label_background_res" format="reference"/>
-        <attr name="label_clickable" format="boolean" />
+        <attr name="label_clickable" format="boolean"/>
         <attr name="label_padding" format="dimension"/>
     </declare-styleable>
     <!-- From: file:/Users/Sai/Documents/workpace/android/github/Android-SVProgressHUD/svprogresshud/src/main/res/values/colors.xml -->
@@ -132,7 +135,16 @@
     <color name="roundColor_svprogresshuddefault">#e5e5e5</color>
     <color name="roundProgressColor_svprogresshuddefault">@android:color/black</color>
     <color name="textColor_svprogresshuddefault_msg">#000000</color>
-    <declare-styleable name="SVCircleProgressBar"><attr format="color" name="roundColor"/><attr format="color" name="roundProgressColor"/><attr format="dimension" name="roundWidth"/><attr format="integer" name="max"/><attr name="style"><enum name="STROKE" value="0"/><enum name="FILL" value="1"/></attr></declare-styleable>
+    <declare-styleable name="SVCircleProgressBar">
+        <attr name="roundColor" format="color"/>
+        <attr name="roundProgressColor" format="color"/>
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="max" format="integer"/>
+        <attr name="style">
+            <enum name="STROKE" value="0"/>
+            <enum name="FILL" value="1"/>
+        </attr>
+    </declare-styleable>
     <!-- From: file:/Users/Sai/Documents/workpace/android/github/Android-SVProgressHUD/svprogresshud/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="margintop_svprogresshuddefault_msg">10dp</dimen>
@@ -147,6 +159,7 @@
     <integer name="svanimation_default_duration">300</integer>
     <!-- From: file:/Users/Sai/Documents/workpace/android/github/Android-SVProgressHUD/svprogresshud/src/main/res/values/styles.xml -->
     <eat-comment/>
+
     <style name="AlertActivity_AlertStyle" parent="android:Theme.Dialog">
         <!--<item name="android:windowAnimationStyle">@style/AnimAlert</item>-->
         <!-- 边框 -->
@@ -164,13 +177,13 @@
     </style>
 
     <declare-styleable name="MaskedEditText">
-        <attr name="mask" format="string" />
-        <attr name="notMaskedSymbol" format="string" />
-        <attr name="replacementChar" format="string" />
-        <attr name="deleteChar" format="string" />
-        <attr name="format" format="string" />
-        <attr name="maskIcon" format="reference" />
-        <attr name="maskIconColor" format="reference" />
-        <attr name="android:inputType" />
+        <attr name="mask" format="string"/>
+        <attr name="notMaskedSymbol" format="string"/>
+        <attr name="replacementChar" format="string"/>
+        <attr name="deleteChar" format="string"/>
+        <attr name="format" format="string"/>
+        <attr name="maskIcon" format="reference"/>
+        <attr name="maskIconColor" format="reference"/>
+        <attr name="android:inputType"/>
     </declare-styleable>
 </resources>

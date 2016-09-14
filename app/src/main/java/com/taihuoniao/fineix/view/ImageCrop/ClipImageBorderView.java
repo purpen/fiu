@@ -84,10 +84,10 @@ public class ClipImageBorderView extends View {
         canvas.drawRect(mHorizontalPadding, mVerticalPadding, getWidth() - mHorizontalPadding, getHeight() - mVerticalPadding, mPaint);
 
     }
-
-//    public void setHorizontalPadding(int mHorizontalPadding) {
-//        this.mHorizontalPadding = mHorizontalPadding;
-//
-//    }
+    private int mHorizontalPadding,mVerticalPadding;
+    public void setHorizontalPadding(int mHorizontalPadding,int mVerticalPadding) {
+        this.mHorizontalPadding = mHorizontalPadding;
+        this.mVerticalPadding = mVerticalPadding;
+    }
 
 }

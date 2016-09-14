@@ -475,6 +475,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
         headerLayout.animLayout();
     }
 
+
     protected final int getHeaderHeight() {
         return headerHeight;
     }

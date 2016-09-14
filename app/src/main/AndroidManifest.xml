@@ -6,7 +6,7 @@
     <uses-feature android:name="android:hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -99,8 +99,8 @@
             android:name=".product.ConfirmOrderActivity"
             android:screenOrientation="portrait"/>
         <!--<activity-->
-            <!--android:name=".product.GoodsCommentsActivity"-->
-            <!--android:screenOrientation="portrait"/>-->
+        <!--android:name=".product.GoodsCommentsActivity"-->
+        <!--android:screenOrientation="portrait"/>-->
         <activity
             android:name=".product.PayWayActivity"
             android:screenOrientation="portrait"/>
@@ -152,6 +152,14 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".product.BannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
+        <activity
+            android:name=".qingjingOrSceneDetails.QJPictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleFullscreen"/>
         <activity
             android:name=".zxing.activity.CaptureActivity"
             android:launchMode="singleTask"
@@ -354,9 +362,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen"/>
         <!--<activity-->
-            <!--android:name=".map.HotCitiesActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/AppTheme"/>-->
+        <!--android:name=".map.HotCitiesActivity"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:theme="@style/AppTheme"/>-->
         <activity
             android:name=".map.MapAddressDetailActivity"
             android:screenOrientation="portrait"
@@ -390,7 +398,7 @@
             android:name=".scene.AddEnvirActivity"
             android:configChanges="keyboardHidden"
             android:theme="@style/NoTitleFullscreen"
-           />
+            />
         <activity
             android:name=".map.MapNearByCJActivity"
             android:screenOrientation="portrait"
@@ -417,13 +425,13 @@
 
         <!--此处为测试value，线上版本务必更换-->
         <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
+        <!--android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--android:value="muQDLN6lCST6qMDvTAydAilM"/>-->
 
         <!--百度地图线上API_KEY-->
         <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="PdSsDfKeCfOsEguqytnEbAeuh5cfTke4"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

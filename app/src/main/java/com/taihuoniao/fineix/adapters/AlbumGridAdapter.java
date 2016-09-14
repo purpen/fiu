@@ -75,7 +75,7 @@ public class AlbumGridAdapter extends BaseAdapter {
         } else {
             hold.tv.setBackgroundResource(R.color.nothing);
         }
-        if (hold.img.getTag() == null || !((String) hold.img.getTag()).equals(photoList.get(position).getImageUri())) {
+        if (hold.img.getTag() == null || !hold.img.getTag().equals(photoList.get(position).getImageUri())) {
             ImageLoader.getInstance().displayImage("file://" + photoList.get(position).getImageUri(), hold.img);
             hold.img.setTag(photoList.get(position).getImageUri());
         }

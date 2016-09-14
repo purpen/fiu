@@ -62,4 +62,7 @@
     <dimen name="label_point_width">32dp</dimen>
     <dimen name="label_point_margin">3dp</dimen>
     <dimen name="delete_width">24dp</dimen>
+    <!-- wellgoodsfragment -->
+    <dimen name="title_height">45dp</dimen>
+    <dimen name="gone_height">60dp</dimen>
 </resources>

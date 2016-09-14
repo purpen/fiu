@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.view.ImageCrop;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+
+import com.taihuoniao.fineix.R;
 
 /**
  * http://blog.csdn.net/lmj623565791/article/details/39761281
@@ -75,6 +78,7 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
      * 垂直方向与View的边距
      */
     private int mVerticalPadding = 0;
+    private float WidthToHeight = 0f;//宽高比
 
     public ClipZoomImageView(Context context) {
         this(context, null);
@@ -82,7 +86,9 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
 
     public ClipZoomImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ClipZoomImageView);
+        WidthToHeight = a.getFloat(R.styleable.ClipZoomImageView_wTh, 0f);
+        a.recycle();
         setScaleType(ScaleType.MATRIX);
 
         mGestureDetector = new GestureDetector(context, onDoubleListener);
@@ -92,7 +98,36 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
         getViewTreeObserver().addOnGlobalLayoutListener(onLayoutListener);
     }
 
+    private OnLongClickListener onLongClickListener;
+    private OnClickListener onClickListener;
+
+    @Override
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        onLongClickListener = l;
+    }
+
     private SimpleOnGestureListener onDoubleListener = new SimpleOnGestureListener() {
+        @Override
+        public void onLongPress(MotionEvent e) {
+            if (onLongClickListener != null) {
+                onLongClickListener.onLongClick(ClipZoomImageView.this);
+            }
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            if (onClickListener != null) {
+                onClickListener.onClick(ClipZoomImageView.this);
+                return true;
+            }
+            return false;
+        }
+
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             if (isAutoScale)
@@ -244,7 +279,7 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
+        setWAH();
         if (mGestureDetector.onTouchEvent(event))
             return true;
         mScaleGestureDetector.onTouchEvent(event);
@@ -317,7 +352,30 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
         initScale();
     }
 
+    private boolean isSet;
+
+    private void setWAH() {
+        if (isSet) {
+            return;
+        }
+        if (WidthToHeight != 0f && getHeight() != 0) {
+            int nW = (int) (WidthToHeight * getHeight());
+            if (nW == getWidth()) {
+                mHorizontalPadding = 0;
+                mVerticalPadding = 0;
+            } else if (nW < getWidth()) {
+                mVerticalPadding = 0;
+                mHorizontalPadding = (getWidth() - nW) / 2;
+            } else if (nW > getWidth()) {
+                mHorizontalPadding = 0;
+                mVerticalPadding = (int) ((getHeight() - (double) getWidth() / WidthToHeight) / 2);
+            }
+            isSet = true;
+        }
+    }
+
     private void initScale() {
+        setWAH();
         Drawable d = getDrawable();
         if (d == null)
             return;
@@ -405,7 +463,7 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
      * 边界检测
      */
     private void checkBorder() {
-
+        setWAH();
         RectF rect = getMatrixRectF();
         float deltaX = 0;
         float deltaY = 0;
@@ -444,7 +502,4 @@ public class ClipZoomImageView extends ImageView implements OnTouchListener {
         return Math.sqrt((dx * dx) + (dy * dy)) >= mTouchSlop;
     }
 
-    public void setHorizontalPadding(int mHorizontalPadding) {
-        this.mHorizontalPadding = mHorizontalPadding;
-    }
 }

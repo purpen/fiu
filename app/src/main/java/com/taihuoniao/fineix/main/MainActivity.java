@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.main;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,15 +110,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (exit) tv_msg_indicator.setVisibility(View.GONE);
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-//            if (bottomLinear != null) {
-//                bottomLinear.setTranslationY(0);
-//                animFlag = 0;
-//            }
         } else if (intent.hasExtra(FindFragment.class.getSimpleName())) {
             which = FindFragment.class.getSimpleName();
         }
         which2Switch();
-
+//        show();
         super.onNewIntent(intent);
     }
 
@@ -139,12 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             which = IndexFragment.class.getSimpleName();
         } else if (intent.hasExtra(WellGoodsFragment.class.getSimpleName())) {
             which = WellGoodsFragment.class.getSimpleName();
-//            if (bottomLinear != null) {
-//                bottomLinear.setTranslationY(0);
-//                animFlag = 0;
-//            }
         }
-
     }
 
     @Override
@@ -159,13 +152,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             which2Switch();
         }
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(DataConstants.BroadShopCart);
-//        registerReceiver(mainReceiver, intentFilter);
-        WindowUtils.showStatusBar(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            WindowUtils.show(this);
+            WindowUtils.showStatusBar(this);
             firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
         }
+    }
+
+    public void hint() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowUtils.hide(this);
+        }
+        ObjectAnimator.ofFloat(bottomLinear, "translationY", bottomLinear.getMeasuredHeight())
+                .setDuration(300)
+                .start();
+    }
+
+    public void show() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowUtils.show(this);
+        }
+        ObjectAnimator.ofFloat(bottomLinear, "translationY", 0)
+                .setDuration(300)
+                .start();
     }
 
     public int getStatusBarHeight() {
@@ -257,30 +268,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_nav2:
-//                SharedPreferences firstInSp = getSharedPreferences(DataConstants.SHAREDPREFRENCES_FIRST_IN, Context.MODE_PRIVATE);
-//                boolean first = firstInSp.getBoolean(DataConstants.FIRST_IN_FIU, true);
-//                if (first) {
-//                    firstRelative.setVisibility(View.VISIBLE);
-//                    firstRelative.setBackgroundResource(R.color.black_touming_80);
-//                    firstImg.setImageResource(R.mipmap.first_in_fiu);
-//                    firstRelative.setTag(2);
-//                    firstImg.setVisibility(View.VISIBLE);
-//                    firstRelative.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if ((int) (v.getTag()) == 2) {
-//                                firstRelative.setVisibility(View.GONE);
-//                                firstImg.setVisibility(View.GONE);
-//                            }
-//                        }
-//                    });
-//                    SharedPreferences.Editor editor = firstInSp.edit();
-//                    editor.putBoolean(DataConstants.FIRST_IN_FIU, false);
-//                    editor.apply();
-//                    return;
-//                }
                 if (LoginInfo.isUserLogin()) {
-//                    MainApplication.tag = 1;
                     startActivity(new Intent(MainActivity.this, SelectPhotoOrCameraActivity.class));
                 } else {
                     MainApplication.which_activity = 0;

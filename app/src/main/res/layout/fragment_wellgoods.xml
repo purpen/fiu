@@ -12,27 +12,6 @@
         android:background="#f8f8f8"/>
 
     <RelativeLayout
-        android:id="@+id/gone_relative"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/relative"
-        android:translationY="-60dp">
-
-        <com.taihuoniao.fineix.blurview.BlurView
-            android:id="@+id/blur_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:blurOverlayColor="#50ffffff"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="7.5dp"
-            android:paddingRight="7.5dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,12 +19,12 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/title_height">
 
             <ImageView
                 android:id="@+id/title_left"
                 android:layout_width="48.5dp"
-                android:layout_height="45dp"
+                android:layout_height="match_parent"
                 android:paddingLeft="15dp"
                 android:paddingRight="14dp"
                 android:src="@mipmap/wellgoods_saomiao"/>
@@ -53,7 +32,7 @@
             <RelativeLayout
                 android:id="@+id/title_right"
                 android:layout_width="48dp"
-                android:layout_height="45dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 >
 
@@ -113,13 +92,13 @@
         android:id="@+id/to_top_img"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:visibility="gone"
-        app:riv_corner_radius="100dp"
-        android:src="@mipmap/to_top"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="60dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/to_top"
+        android:visibility="gone"
+        app:riv_corner_radius="100dp"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -128,4 +107,24 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
+    <RelativeLayout
+        android:id="@+id/gone_relative"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/gone_height"
+       >
+
+        <com.taihuoniao.fineix.blurview.BlurView
+            android:id="@+id/blur_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#50ffffff"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"/>
+    </RelativeLayout>
 </RelativeLayout>
