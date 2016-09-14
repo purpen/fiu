@@ -168,6 +168,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                         if (response.isSuccess()) {
                             LoginInfo loginInfo = response.getData();
+                            loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                             loginSuccess(loginInfo);
                         } else {
@@ -205,6 +206,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                         if (response.isSuccess()) {
                             LoginInfo loginInfo = response.getData();
+                            loginInfo.setMedium_avatar_url(avatarUrl);
                             SPUtil.write(DataConstants.LOGIN_INFO, JsonUtil.toJson(loginInfo));
                             loginSuccess(loginInfo);
                         } else {

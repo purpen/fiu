@@ -31,6 +31,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.user.PublishEvaluateActivity;
+import com.taihuoniao.fineix.user.ShopOrderListActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -183,6 +184,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
                                         mdialog.dismiss();
                                         removeItem(position);
+                                        //TODO 待付款
+                                        ((ShopOrderListActivity) context).changeNum(1);
                                         notifyDataSetChanged();
                                     }
 
@@ -301,6 +304,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
                                         removeItem(position);
+                                        //TODO 待收货
+                                        ((ShopOrderListActivity) context).changeNum(3);
                                         notifyDataSetChanged();
                                     }
 
@@ -338,6 +343,7 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                                     @Override
                                     public void onSuccess(ResponseInfo<String> responseInfo) {
                                         removeItem(position);
+                                        ((ShopOrderListActivity) context).changeNum(4);
                                         notifyDataSetChanged();
                                     }
 
