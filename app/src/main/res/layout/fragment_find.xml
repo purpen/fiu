@@ -12,26 +12,6 @@
         android:layout_below="@id/relative"
         />
 
-    <RelativeLayout
-        android:id="@+id/gone_relative"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/relative"
-        android:translationY="-60dp">
-
-        <com.taihuoniao.fineix.blurview.BlurView
-            android:id="@+id/blur_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:blurOverlayColor="#50ffffff"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="7.5dp"
-            android:paddingRight="7.5dp"/>
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -88,6 +68,38 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/gone_relative"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+       >
+
+        <com.taihuoniao.fineix.blurview.BlurView
+            android:id="@+id/blur_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#50ffffff"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"/>
+    </RelativeLayout>
+
+    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+        android:id="@+id/to_top_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/to_top"
+        android:visibility="gone"
+        app:riv_corner_radius="100dp"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

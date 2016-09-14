@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.main.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -41,6 +43,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -67,7 +70,7 @@ import butterknife.ButterKnife;
 /**
  * Created by taihuoniao on 2016/8/23.
  */
-public class WellGoodsFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick {
+public class WellGoodsFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener, EditRecyclerAdapter.ItemClick, View.OnTouchListener {
     @Bind(R.id.relative)
     RelativeLayout titleRelative;
     @Bind(R.id.title_left)
@@ -128,11 +131,21 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         return result;
     }
 
+    private int goneTranslation;
+
     @Override
     protected void initList() {
+        goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
+                    recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
             titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) goneRelative.getLayoutParams();
+            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + getStatusBarHeight());
+            goneRelative.setLayoutParams(layoutParams);
+            goneTranslation = (int) (-getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
         }
+        goneRelative.setTranslationY(goneTranslation);
         titleLeft.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
         titleRight.setOnClickListener(this);
@@ -171,17 +184,17 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         listView.setSelector(R.color.nothing);
         listView.setDividerHeight(0);
         listView.setOnScrollListener(this);
+        listView.setOnTouchListener(this);
         subjectList = new ArrayList<>();
         wellgoodsSubjectAdapter = new WellgoodsSubjectAdapter(getActivity(), subjectList);
         listView.setAdapter(wellgoodsSubjectAdapter);
-
         if (!dialog.isShowing()) {
             dialog.show();
         }
     }
 
     private void setupBlurView() {
-        final float radius = 16f;
+        final float radius = 25f;
         blurView.setupWith(listView)
                 .windowBackground(listView.getBackground())
                 .blurAlgorithm(new RenderScriptBlur(getActivity(), true))
@@ -269,6 +282,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                pullRefreshView.onRefreshComplete();
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
                 ToastUtils.showError(R.string.net_fail);
@@ -370,7 +384,13 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (scrollState == SCROLL_STATE_FLING) {
+            if (isUp) {
+                downAnim();
+            } else {
+                upAnim();
+            }
+        }
     }
 
     private ObjectAnimator downAnimator, upAnimator;
@@ -389,67 +409,92 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                 subjectList();
             }
         }
-        if (firstVisibleItem >= 1 && goneRelative.getTranslationY() == -goneRelative.getMeasuredHeight()) {
-            if (animFlag != 0) {
-                return;
-            }
-            if (downAnimator == null) {
-                downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
-                downAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 2;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-            downAnimator.start();
+        if (firstVisibleItem >= 1 && toTopImg.getVisibility() == View.GONE) {
             toTopImg.setVisibility(View.VISIBLE);
-        } else if (firstVisibleItem < 1 && goneRelative.getTranslationY() == 0) {
-            if (animFlag != 2) {
-                return;
+        } else if (firstVisibleItem < 1) {
+            if (goneRelative.getTranslationY() == 0 && toTopImg.getVisibility() == View.VISIBLE) {
+                upAnim();
             }
-            if (upAnimator == null) {
-                upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
-                upAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 0;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-            upAnimator.start();
             toTopImg.setVisibility(View.GONE);
         }
+    }
+
+    private void downAnim() {
+        if (animFlag != 0) {
+            return;
+        }
+        if (downAnimator == null) {
+            downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
+            downAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    titleRelative.setScaleY(1f - animation.getAnimatedFraction());
+                }
+            });
+            downAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    animFlag = 1;
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.hint();
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    animFlag = 2;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+        downAnimator.start();
+    }
+
+    private void upAnim() {
+        if (animFlag != 2) {
+            return;
+        }
+        if (upAnimator == null) {
+            upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
+            upAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    titleRelative.setScaleY(animation.getAnimatedFraction());
+                }
+            });
+            upAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    animFlag = 1;
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.show();
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    animFlag = 0;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+        upAnimator.start();
     }
 
     @Override
@@ -466,7 +511,6 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         intent.putExtra("id", categoryList.get(postion).get_id());
         intent.putExtra("name", categoryList.get(postion).getTitle());
         startActivity(intent);
-//        ToastUtils.showError("产品分类=" + postion);
     }
 
     private BroadcastReceiver wellGoodsReceiver = new BroadcastReceiver() {
@@ -486,5 +530,19 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
         ButterKnife.unbind(this);
     }
 
+    private float lastY;
+    private boolean isUp;
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getRawY() != lastY) {
+            if (event.getRawY() > lastY) {
+                isUp = false;
+            } else {
+                isUp = true;
+            }
+            lastY = event.getRawY();
+        }
+        return false;
+    }
 }

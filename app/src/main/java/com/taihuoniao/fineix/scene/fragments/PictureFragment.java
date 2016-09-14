@@ -367,7 +367,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
                                 int f = (int) animation.getAnimatedValue();
-                                container.setPadding(0, (int) f, 0, 0);
+                                container.setPadding(0, f, 0, 0);
                                 arrowImg.setRotation(animation.getAnimatedFraction() * 180);
                             }
                         });
@@ -382,7 +382,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
                                 int f = (int) animation.getAnimatedValue();
-                                container.setPadding(0, (int) f, 0, 0);
+                                container.setPadding(0, f, 0, 0);
                                 arrowImg.setRotation((1f - animation.getAnimatedFraction()) * 180);
                             }
                         });

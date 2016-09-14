@@ -47,6 +47,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
@@ -271,6 +272,14 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             }
         }
         ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
+        holder.qjImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, QJPictureActivity.class);
+                intent.putExtra("img",sceneList.get(position).getCover_url());
+                activity.startActivity(intent);
+            }
+        });
         holder.viewCount.setText(sceneList.get(position).getView_count());
         holder.loveCount.setText(sceneList.get(position).getLove_count());
         if (sceneList.get(position).getIs_love() == 1) {

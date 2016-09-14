@@ -367,6 +367,14 @@ public class QJDetailActivity extends BaseActivity {
             }
         }
         ImageLoader.getInstance().displayImage(qjDetailBean.getData().getCover_url(), qjImg);
+        qjImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QJDetailActivity.this,QJPictureActivity.class);
+                intent.putExtra("img",qjDetailBean.getData().getCover_url());
+                startActivity(intent);
+            }
+        });
         viewCount.setText(qjDetailBean.getData().getView_count());
         loveCount.setText(qjDetailBean.getData().getLove_count());
         if (qjDetailBean.getData().getIs_love() == 1) {

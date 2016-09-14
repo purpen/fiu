@@ -2,17 +2,20 @@ package com.taihuoniao.fineix.main.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,7 @@ import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SubjectListBean;
 import com.taihuoniao.fineix.blurview.BlurView;
 import com.taihuoniao.fineix.blurview.RenderScriptBlur;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.AllFiuerActivity;
@@ -58,6 +62,7 @@ import com.taihuoniao.fineix.view.GridViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView;
+import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -69,7 +74,9 @@ import butterknife.ButterKnife;
 /**
  * Created by taihuoniao on 2016/8/22.
  */
-public class FindFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener, View.OnClickListener, EditRecyclerAdapter.ItemClick {
+public class FindFragment extends BaseFragment implements AbsListView.OnScrollListener, AdapterView.OnItemClickListener, PullToRefreshBase.OnRefreshListener, View.OnClickListener, EditRecyclerAdapter.ItemClick, View.OnTouchListener {
+    @Bind(R.id.to_top_img)
+    RoundedImageView toTopImg;
     private View fragmentView;
     @Bind(R.id.pull_to_refresh_view)
     PullToRefreshListView pullRefreshView;
@@ -163,14 +170,26 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         return result;
     }
 
+    private int goneTranslation;
+
     @Override
     protected void initList() {
+        goneTranslation = (int) -getResources().getDimension(R.dimen.gone_height);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop() + getStatusBarHeight() / 2,
+                    recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
             titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) goneRelative.getLayoutParams();
+            layoutParams.height = (int) (getResources().getDimension(R.dimen.gone_height) + getStatusBarHeight());
+            goneRelative.setLayoutParams(layoutParams);
+            goneTranslation = (int) (-getStatusBarHeight() - getResources().getDimension(R.dimen.gone_height));
         }
+        goneRelative.setTranslationY(goneTranslation);
+        listView.setOnTouchListener(this);
         titleLeft.setOnClickListener(this);
         titleRight.setOnClickListener(this);
         searchLinear.setOnClickListener(this);
+        toTopImg.setOnClickListener(this);
         setupBlurView();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -349,6 +368,9 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.to_top_img:
+                listView.setSelection(0);
+                break;
             case R.id.pop_share_scene_detail_share_btn:
                 sharePop.dismiss();
                 Intent intent1 = new Intent(getActivity(), ShareActivity.class);
@@ -375,7 +397,13 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (scrollState == SCROLL_STATE_FLING) {
+            if (isUp) {
+                downAnim();
+            } else {
+                upAnim();
+            }
+        }
     }
 
     private ObjectAnimator downAnimator, upAnimator;
@@ -393,65 +421,92 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
                 sceneNet();
             }
         }
-        if (firstVisibleItem >= 1 && goneRelative.getTranslationY() == -goneRelative.getMeasuredHeight()) {
-            if (animFlag != 0) {
-                return;
+        if (firstVisibleItem >= 1 && toTopImg.getVisibility() == View.GONE) {
+            toTopImg.setVisibility(View.VISIBLE);
+        } else if (firstVisibleItem < 1) {
+            if (goneRelative.getTranslationY() == 0 && toTopImg.getVisibility() == View.VISIBLE) {
+                upAnim();
             }
-            if (downAnimator == null) {
-                downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
-                downAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 2;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-            downAnimator.start();
-        } else if (firstVisibleItem < 1 && goneRelative.getTranslationY() == 0) {
-            if (animFlag != 2) {
-                return;
-            }
-            if (upAnimator == null) {
-                upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
-                upAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        animFlag = 1;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        animFlag = 0;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-            upAnimator.start();
+            toTopImg.setVisibility(View.GONE);
         }
+    }
+
+    private void downAnim() {
+        if (animFlag != 0) {
+            return;
+        }
+        if (downAnimator == null) {
+            downAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", 0).setDuration(300);
+            downAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    titleRelative.setScaleY(1f - animation.getAnimatedFraction());
+                }
+            });
+            downAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    animFlag = 1;
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.hint();
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    animFlag = 2;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+        downAnimator.start();
+    }
+
+    private void upAnim() {
+        if (animFlag != 2) {
+            return;
+        }
+        if (upAnimator == null) {
+            upAnimator = ObjectAnimator.ofFloat(goneRelative, "translationY", -goneRelative.getMeasuredHeight()).setDuration(300);
+            upAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    titleRelative.setScaleY(animation.getAnimatedFraction());
+                }
+            });
+            upAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    animFlag = 1;
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.show();
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    animFlag = 0;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+        upAnimator.start();
     }
 
     @Override
@@ -496,5 +551,27 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         ButterKnife.unbind(this);
     }
 
+    private float lastY;
+    private boolean isUp;
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getRawY() != lastY) {
+            if (event.getRawY() > lastY) {
+                isUp = false;
+            } else {
+                isUp = true;
+            }
+            lastY = event.getRawY();
+        }
+        return false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
 }

@@ -23,8 +23,10 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.IsInviteData;
 import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.MainActivity;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.BannerActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
@@ -148,7 +150,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                 public void onClick(View v) {
                     final Banner banner = (Banner) content;
                     Intent intent;
-                    Log.e("<<<","banner.type="+banner.type+",web_url="+banner.web_url+",title="+banner.title);
+                    Log.e("<<<", "banner.type=" + banner.type + ",web_url=" + banner.web_url + ",title=" + banner.title);
                     switch (banner.type) {
                         case 1:      //url地址
                             Uri uri = Uri.parse(banner.web_url);
@@ -177,7 +179,7 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             activity.startActivity(intent);
                             break;
                         case 11:    //情境专题
-                            Log.e("<<<","banner.toString="+banner.toString());
+                            Log.e("<<<", "banner.toString=" + banner.toString());
                             ClientDiscoverAPI.getSubjectData(banner.web_url, new RequestCallBack<String>() {
                                 @Override
                                 public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -222,6 +224,16 @@ public class ViewPagerAdapter<T> extends RecyclingPagerAdapter {
                             break;
                     }
 
+                }
+            });
+        }
+        if (activity instanceof BuyGoodsDetailsActivity) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainApplication.picList = (List<String>) list;
+                    Intent intent = new Intent(activity, BannerActivity.class);
+                    activity.startActivity(intent);
                 }
             });
         }

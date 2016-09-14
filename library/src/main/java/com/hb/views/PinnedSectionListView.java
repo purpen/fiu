@@ -48,7 +48,7 @@ public class PinnedSectionListView extends ListView {
     /**
      * List adapter to be implemented for being used with PinnedSectionListView adapter.
      */
-    public static interface PinnedSectionListAdapter extends ListAdapter {
+    public interface PinnedSectionListAdapter extends ListAdapter {
         /**
          * This method shall return 'true' if views of given type has to be pinned.
          */
@@ -142,8 +142,6 @@ public class PinnedSectionListView extends ListView {
             }
         }
 
-        ;
-
     };
 
     /**
@@ -154,8 +152,6 @@ public class PinnedSectionListView extends ListView {
         public void onChanged() {
             recreatePinnedShadow();
         }
-
-        ;
 
         @Override
         public void onInvalidated() {
@@ -223,9 +219,9 @@ public class PinnedSectionListView extends ListView {
         View pinnedView = getAdapter().getView(position, pinnedShadow.view, PinnedSectionListView.this);
 
         // read layout parameters
-        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) pinnedView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = pinnedView.getLayoutParams();
         if (layoutParams == null) {
-            layoutParams = (ViewGroup.LayoutParams) generateDefaultLayoutParams();
+            layoutParams = generateDefaultLayoutParams();
             pinnedView.setLayoutParams(layoutParams);
         }
 

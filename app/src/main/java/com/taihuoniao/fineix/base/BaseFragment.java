@@ -112,8 +112,6 @@ public abstract class BaseFragment<T> extends Fragment {
     protected void initList() {
     }
 
-    ;
-
     protected abstract View initView();
 
     protected void refreshUI() {

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -69,6 +71,8 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     private ListView listView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
+    @Bind(R.id.title_layout)
+    RelativeLayout titleRelative;
     @Bind(R.id.search_img)
     ImageView searchImg;
     @Bind(R.id.subs_img)
@@ -97,6 +101,9 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     protected void initList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            titleRelative.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
         listView = pullRefreshView.getRefreshableView();
         View headerView = View.inflate(getActivity(), R.layout.header_index, null);
         scrollableView = (ScrollableView) headerView.findViewById(R.id.scrollableView);
@@ -241,7 +248,14 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         });
         addNet(httpHandler);
     }
-
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
     private int sneceComplete;//判断情景是否加载完毕 0，情景用户都没加载 1,情景加载完毕等待用户加载 2，用户加载完毕等待情景加载
 
     //获取中间插入的用户列表

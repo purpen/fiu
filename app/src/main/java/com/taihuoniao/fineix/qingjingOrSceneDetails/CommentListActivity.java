@@ -351,7 +351,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Type type = new TypeToken<CommentsBean>() {
                     }.getType();
-                    netComments = gson.<CommentsBean>fromJson(responseInfo.result, type);
+                    netComments = gson.fromJson(responseInfo.result, type);
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<评论列表>>>", "数据解析异常" + e.toString());
                 }

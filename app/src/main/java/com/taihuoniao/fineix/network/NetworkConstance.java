@@ -29,8 +29,6 @@ public class NetworkConstance {
     public static final String add_product = BASE_URL + "/product/submit";
     //产品详情
     public static final String good_details = BASE_URL + "/product/view";
-    // 自营商品详情
-    public static final String urlString_goods_details = BASE_URL + "/product/view";
     //获取京东商品信息
     public static final String urlString_JD_productsData = BASE_URL + "/scene_product/jd_view";
     //获取淘宝商品信息
@@ -116,13 +114,8 @@ public class NetworkConstance {
     //分类
     //分类标签
     public static final String category_label = BASE_URL + "/category/fetch_child_tags";
-
-    //热门城市
-    public static final String HOT_CITIES = BASE_URL_ESTORE + "/get_city_list";
     //情景列表
     public static final String QING_JING = BASE_URL + "/scene_scene/";
-    //场景列表
-    public static final String CHANG_JING = BASE_URL + "/scene_sight";
 
     //获得用户信息自己和别人的主页
     public static final String MINE_INFO = BASE_URL + "/user/user_info";

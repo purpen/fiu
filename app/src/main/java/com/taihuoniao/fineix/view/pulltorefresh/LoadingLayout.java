@@ -74,7 +74,6 @@ public class LoadingLayout extends FrameLayout {
 
         switch (mode) {
             case PullToRefreshBase.MODE_PULL_UP_TO_REFRESH:
-//                headerImage.setImageResource(R.mipmap.pulltorefresh_up_arrow);
                 headerImage.setRotation(180f);
                 break;
             case PullToRefreshBase.MODE_PULL_DOWN_TO_REFRESH:
@@ -85,14 +84,6 @@ public class LoadingLayout extends FrameLayout {
         }
         animImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pull_to_refresh_animation));
         animationDrawable = (AnimationDrawable) animImg.getDrawable();
-//        animationDrawable = new AnimationDrawable();
-//        for(int i=0;i<48;i++){
-//            int resID = getResources().getIdentifier("refresh_0" + i, "mipmap", "com.taihuoniao.fineix");
-//            Drawable image = ContextCompat.getDrawable(getContext(), resID);
-//            animationDrawable.addFrame(image,80);
-//        }
-//        animationDrawable.setOneShot(false);
-//        animImg.setImageDrawable(animationDrawable);
     }
 
     //刷新完毕后显示刷新时间
