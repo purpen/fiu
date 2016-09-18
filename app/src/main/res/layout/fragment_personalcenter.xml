@@ -171,6 +171,7 @@
                 android:id="@+id/btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp40"
+                android:visibility="gone"
                 />
 
             <HorizontalScrollView
