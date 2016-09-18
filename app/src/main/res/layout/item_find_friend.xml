@@ -50,7 +50,6 @@
                 android:id="@+id/tv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/qj_location"
                 android:drawablePadding="@dimen/dp5"
                 android:singleLine="true"
                 android:textSize="@dimen/sp10"

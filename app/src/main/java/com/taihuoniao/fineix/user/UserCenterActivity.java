@@ -46,6 +46,7 @@ import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
+import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -115,6 +116,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     ListView lv_qj;
     @Bind(R.id.tv_tips)
     TextView tv_tips;
+    @Bind(R.id.btn_create)
+    Button btnCreate;
     private boolean isFirstLoad = true;
     private String flag;
     private View headView;
@@ -322,9 +325,11 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             if (mSceneList.size() == 0) {
                 ll_tips.setVisibility(View.VISIBLE);
                 if (LoginInfo.getUserId() == userId) {
+                    btnCreate.setVisibility(View.VISIBLE);
                     tv_tips.setText(R.string.user_center_cj_tip);
                 } else {
                     tv_tips.setText(R.string.user_center_cj_tip1);
+                    btnCreate.setVisibility(View.GONE);
                 }
             } else {
                 ll_tips.setVisibility(View.GONE);
@@ -510,6 +515,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         ll_fans.setOnClickListener(this);
         bt_msg.setOnClickListener(this);
         rl_qj.setOnClickListener(this);
+        btnCreate.setOnClickListener(this);
         riv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -638,6 +644,10 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             case R.id.bt_msg:
                 intent = new Intent(activity, PrivateMessageActivity.class);
                 intent.putExtra(UserCenterActivity.class.getSimpleName(), user);
+                startActivity(intent);
+                break;
+            case R.id.btn_create:
+                intent = new Intent(activity, SelectPhotoOrCameraActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bt_focus:

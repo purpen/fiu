@@ -44,6 +44,18 @@
             android:textColor="@color/color_333"
             android:layout_marginTop="@dimen/dp5"
             />
+
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="@dimen/dp70"
+            android:layout_height="@dimen/dp35"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:background="@drawable/shap_redbutton_commit"
+            android:text="去创建"
+            android:textSize="@dimen/sp14"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="@dimen/dp15"
+            android:visibility="gone" />
     </LinearLayout>
 
     <RelativeLayout
