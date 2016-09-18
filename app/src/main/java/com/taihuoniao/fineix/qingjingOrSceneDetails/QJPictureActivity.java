@@ -124,7 +124,7 @@ public class QJPictureActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    ImageUtils.saveToFile(MainApplication.getContext().getFilesDirPath(), true, bitmap);
+                    ImageUtils.saveToFile(MainApplication.systemPhotoPath, true, bitmap);
                 } catch (IOException e) {
                     runOnUiThread(new Runnable() {
                         @Override

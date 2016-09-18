@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:paddingBottom="13dp"
-             android:paddingLeft="15dp"
-             android:paddingTop="20dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="7.5dp"
+                android:paddingRight="7.5dp"
+    >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-        <!--<jp.co.cyberagent.android.gpuimage.GPUImageView-->
-            <!--android:id="@+id/item_edit_recycler_filterimg"-->
-            <!--android:layout_width="70dp"-->
-            <!--android:layout_height="70dp"-->
-            <!--android:layout_centerHorizontal="true"/>-->
-        <ImageView
-        android:id="@+id/item_edit_recycler_filterimg"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        />
+        <RelativeLayout
+            android:layout_width="@dimen/filter_height"
+            android:layout_height="@dimen/filter_height"
+            >
+
+            <ImageView
+                android:id="@+id/item_edit_recycler_filterimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/modeng"
+                />
+
+            <TextView
+                android:id="@+id/item_edit_recycler_red"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/red_filter_ground"
+                android:visibility="visible"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/item_edit_recycler_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/top_margin"
             android:text="@string/filter"
-            android:textColor="@color/white"
-            android:textSize="12sp"/>
-    </RelativeLayout>
+            android:textColor="@color/yellow_bd8913"
+            android:textSize="@dimen/filter_size"/>
+    </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/item_edit_recycler_red"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:visibility="gone"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/red_filter_ground"/>
-    </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

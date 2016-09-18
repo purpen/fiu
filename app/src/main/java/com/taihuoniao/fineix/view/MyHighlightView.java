@@ -268,11 +268,11 @@ public class MyHighlightView implements EditableDrawable.OnSizeChange {
         return mCropRect;
     }
 
-    public Matrix getCropRotationMatrix() {
+    public Matrix getCropRotationMatrix(double bi) {
         final Matrix m = new Matrix();
-        m.postTranslate(-mCropRect.centerX(), -mCropRect.centerY());
+        m.postTranslate((float) (-bi*mCropRect.centerX()), (float) (-bi*mCropRect.centerY()));
         m.postRotate(mRotation);
-        m.postTranslate(mCropRect.centerX(), mCropRect.centerY());
+        m.postTranslate((float) (bi*mCropRect.centerX()), (float) (bi*mCropRect.centerY()));
         return m;
     }
 

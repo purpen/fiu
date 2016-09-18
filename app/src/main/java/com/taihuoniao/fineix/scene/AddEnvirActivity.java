@@ -199,7 +199,7 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 onBackPressed();
                 break;
             case R.id.title_continue:
-                String str = des.getText().toString();
+                String str = title.getText().toString();
                 if (str.length() > 20) {
                     str = str.substring(0, 20);
                 }

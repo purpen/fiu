@@ -304,7 +304,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         holder.commentList.setAdapter(new IndexCommentAdapter(sceneList.get(position).getComments()));
         if (sceneList.get(position).getComment_count() > 0) {
             holder.moreComment.setText("查看所有" + sceneList.get(position).getComment_count() + "条评论");
-            holder.moreComment.setVisibility(View.VISIBLE);
+            holder.moreComment.setVisibility(View.GONE);
         } else {
             holder.moreComment.setVisibility(View.GONE);
         }
@@ -445,17 +445,17 @@ public class FindQJSceneListAdapter extends BaseAdapter {
                 pos = position;
             }
         });
-        holder.moreComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", sceneList.get(position).get_id());
-                intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
-                activity.startActivityForResult(intent3, 1);
-                pos = position;
-            }
-        });
+//        holder.moreComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent3 = new Intent(activity, CommentListActivity.class);
+//                intent3.putExtra("target_id", sceneList.get(position).get_id());
+//                intent3.putExtra("type", 12 + "");
+//                intent3.putExtra("target_user_id", sceneList.get(position).getUser_info().getUser_id());
+//                activity.startActivityForResult(intent3, 1);
+//                pos = position;
+//            }
+//        });
         //跳转到分享页面
         holder.shareImg.setOnClickListener(new View.OnClickListener() {
             @Override

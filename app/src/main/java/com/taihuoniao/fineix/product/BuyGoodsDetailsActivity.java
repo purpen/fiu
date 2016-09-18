@@ -527,7 +527,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
                     buyGoodDetailsBean.getData().setIs_favorite(0);
                     shoucangImg.setImageResource(R.mipmap.shoucang_not);
                 } else {
@@ -561,7 +560,6 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                 }
                 dialog.dismiss();
                 if (netBean.isSuccess()) {
-                    ToastUtils.showSuccess(netBean.getMessage());
                     buyGoodDetailsBean.getData().setIs_favorite(1);
                     shoucangImg.setImageResource(R.mipmap.shoucang_yes);
                 } else {

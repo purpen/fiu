@@ -40,6 +40,7 @@ public class TransferTimeActivity extends Activity implements View.OnClickListen
     private void setData() {
         transfer_time = getIntent().getStringExtra("transfer_time");
         titleLayout.setTitle("送货时间");
+        titleLayout.setContinueTvVisible(false);
         anyLinear.setOnClickListener(this);
         workLinear.setOnClickListener(this);
         restLinear.setOnClickListener(this);

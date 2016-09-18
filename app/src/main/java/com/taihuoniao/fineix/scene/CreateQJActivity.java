@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -75,7 +76,7 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.container)
     RelativeLayout container;
     @Bind(R.id.des_tv)
-    TextView desTv;
+    EditText desTv;
     @Bind(R.id.location_relative)
     RelativeLayout locationRelative;
     @Bind(R.id.delete_address)
@@ -115,6 +116,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         tags = new StringBuilder();
     }
 
+    private boolean isDown;
+
     @Override
     protected void initList() {
         locationTv.addTextChangedListener(new TextWatcher() {
@@ -139,7 +142,30 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
         });
         qjTitleTv.setOnClickListener(this);
         qjTitleTv2.setOnClickListener(this);
-        desTv.setOnClickListener(this);
+        desTv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isDown = true;
+                        Log.e("<<<", "down,x=" + event.getX() + ",y=" + event.getY());
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (isDown && event.getX() >= 0 && event.getY() >= 0 && event.getX() <= desTv.getMeasuredWidth()
+                                && event.getY() <= desTv.getMeasuredHeight()) {
+                            onClick(desTv);
+                            isDown = false;
+                        }
+                        Log.e("<<<", "up,x=" + event.getX() + ",y=" + event.getY()+",height="+desTv.getMeasuredHeight()
+                        +",width="+desTv.getMeasuredWidth());
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        Log.e("<<<", "cancel");
+                        break;
+                }
+                return false;
+            }
+        });
         locationRelative.setOnClickListener(this);
         deleteAddressImg.setOnClickListener(this);
         if (getIntent().hasExtra(PictureEditActivity.class.getSimpleName())) {
@@ -191,126 +217,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 labelView.wave();
             }
         }
-//        else if (getIntent().hasExtra(IndexFragment.class.getSimpleName())) {
-//            titleLayout.setBackImgVisible(false);
-//            titleLayout.setCancelImg(R.mipmap.cancel_white);
-//            titleLayout.setTitle(R.string.bianji_qingjing, getResources().getColor(R.color.white));
-//            titleLayout.setBackImgVisible(true);
-//            sceneBean = (SceneList.DataBean.RowsBean) getIntent().getSerializableExtra(IndexFragment.class.getSimpleName());
-//            id = sceneBean.get_id();
-//            //设置背景图片
-//            ImageLoader.getInstance().displayImage(sceneBean.getCover_url(), backgroundImg, new ImageLoadingListener() {
-//                @Override
-//                public void onLoadingStarted(String imageUri, View view) {
-//
-//                }
-//
-//                @Override
-//                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//
-//                }
-//
-//                @Override
-//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                    MainApplication.editBitmap = loadedImage;
-//                }
-//
-//                @Override
-//                public void onLoadingCancelled(String imageUri, View view) {
-//
-//                }
-//            });
-//            //添加标签
-//            for (final SceneList.DataBean.RowsBean.ProductBean productBean : sceneBean.getProduct()) {
-//                final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//                final LabelView labelView = new LabelView(this);
-//                final TagItem tagItem = new TagItem();
-//                tagItem.setId(productBean.getId());
-//                tagItem.setName(productBean.getTitle());
-//                tagItem.setX(productBean.getX());
-//                tagItem.setY(productBean.getY());
-//                tagItem.setLoc(productBean.getLoc());
-//                labelView.init(tagItem);
-//                labelView.setLayoutParams(layoutParams);
-//                if (tagItem.getLoc() == 2) {
-//                    labelView.nameTv.setBackgroundResource(R.drawable.label_left);
-//                    RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
-//                    layoutParams1.leftMargin = (int) labelMargin;
-//                    labelView.pointRelative.setLayoutParams(layoutParams1);
-//                }
-//                labelView.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (tagItem.getLoc() == 2) {
-//                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-//                            lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelMargin - pointWidth / 2);
-//                            lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
-//                            labelView.setLayoutParams(lp);
-//                        } else {
-//                            labelView.nameTv.setBackgroundResource(R.drawable.label_right);
-//                            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointRelative.getLayoutParams();
-//                            layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - pointWidth - labelMargin);
-//                            labelView.pointRelative.setLayoutParams(layoutParams1);
-//                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
-//                            lp.leftMargin = (int) (tagItem.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelMargin + pointWidth / 2);
-//                            lp.topMargin = (int) (tagItem.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + pointWidth / 2);
-//                            labelView.setLayoutParams(lp);
-//                        }
-//                    }
-//                });
-//                container.addView(labelView);
-//                labelView.wave();
-//            }
-//            //设置标题及描述
-//            tags = new StringBuilder();
-//            qjTitleTv.setText(sceneBean.getTitle());
-//            holder.title.setText(sceneBean.getTitle());
-//            qjTitleTv.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (qjTitleTv.getLineCount() >= 2) {
-//                        Layout layout = qjTitleTv.getLayout();
-//                        StringBuilder SrcStr = new StringBuilder(qjTitleTv.getText().toString());
-//                        String str0 = SrcStr.subSequence(layout.getLineStart(0), layout.getLineEnd(0)).toString();
-//                        String str1 = SrcStr.subSequence(layout.getLineStart(1), layout.getLineEnd(1)).toString();
-//                        qjTitleTv2.setText(str0);
-//                        qjTitleTv.setText(str1);
-//                        qjTitleTv2.setVisibility(View.VISIBLE);
-//                    } else {
-//                        qjTitleTv2.setVisibility(View.GONE);
-//                    }
-//                }
-//            });
-//            holder.des.setText(sceneBean.getDes());
-//            int sta = 0;
-//            SpannableString spannableStringBuilder = new SpannableString(sceneBean.getDes());
-//            while (sceneBean.getDes().substring(sta).contains("#")) {
-//                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
-//                sta = sceneBean.getDes().indexOf("#", sta);
-//                if (sceneBean.getDes().substring(sta).contains(" ")) {
-//                    int en = sceneBean.getDes().indexOf(" ", sta);
-//                    tags.append(",").append(sceneBean.getDes().substring(sta + 1, en));
-//                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                    sta = en;
-//                } else {
-//                    tags.append(",").append(sceneBean.getDes().substring(sta + 1));
-//                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, sceneBean.getDes().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                    break;
-//                }
-//            }
-//            if (tags.length() > 0) {
-//                tags.deleteCharAt(0);
-//            }
-//            desTv.setText(spannableStringBuilder);
-//            //设置地理位置
-//            city = sceneBean.getCity();
-//            cityTv.setText(city);
-//            cityTv.setVisibility(View.VISIBLE);
-//            lng = sceneBean.getLocation().getCoordinates().get(0) + "";
-//            lat = sceneBean.getLocation().getCoordinates().get(1) + "";
-//            locationTv.setText(sceneBean.getAddress());
-//        }
-
     }
 
 
@@ -429,10 +335,10 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     sub_ids.append(",").append(activeTagsBean.getData().getItems().get(i).get(1));
                                 }
                             }
-                            if (sub_ids.length() > 0) {
-                                sub_ids.deleteCharAt(0);
-                                sids = sub_ids.toString();
-                            }
+                        }
+                        if (sub_ids.length() > 0) {
+                            sub_ids.deleteCharAt(0);
+                            sids = sub_ids.toString();
                         }
                         Log.e("<<<", "初始化活动标签");
                         createQJ(null, title, des, null, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, sids);

@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -271,7 +272,10 @@ public class Util {
     public static String getAppMetaData(String key) {
         Context context = MainApplication.getContext();
         String defaultValue = "10"; //默认官方渠道下载
-        if (TextUtils.isEmpty(key)) return defaultValue;
+        if (TextUtils.isEmpty(key)) {
+            Log.e("<<<","键为空");
+            return defaultValue;
+        }
         String resultData = null;
         try {
             PackageManager packageManager = context.getPackageManager();
@@ -280,14 +284,25 @@ public class Util {
                 if (applicationInfo != null) {
                     if (applicationInfo.metaData != null) {
                         resultData = applicationInfo.metaData.getString(key);
+                    }else{
+                        Log.e("<<<","applicationInfo.metaData为空");
                     }
+                }else{
+                    Log.e("<<<","applicationInfo为空");
                 }
+            }else{
+                Log.e("<<<","packageManager为空");
             }
         } catch (PackageManager.NameNotFoundException e) {
+            Log.e("<<<","异常");
             e.printStackTrace();
         }
 
-        if (TextUtils.isEmpty(resultData)) return defaultValue;
+        if (TextUtils.isEmpty(resultData)) {
+            Log.e("<<<", "渠道编号为空");
+            return defaultValue;
+        }
+        Log.e("<<<","获取的渠道编号="+resultData);
         return resultData;
     }
 

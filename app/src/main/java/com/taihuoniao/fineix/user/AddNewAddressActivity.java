@@ -78,7 +78,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
     private EditText detailsAddressEdt;
     private ImageView isDefaultImg;
     private boolean isdefault = true;//设置此地址是否为默认地址
-//    private boolean isEnd = false;
 
     //网络请求
     private WaittingDialog dialog;
@@ -100,26 +99,14 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    @Override
-    protected void onDestroy() {
-        cancelNet();
-//        if(mHandler!=null){
-//            mHandler.removeCallbacksAndMessages(null);
-//        }
-        super.onDestroy();
-    }
-
     private void getProvinceData() {
         if (!dialog.isShowing()) {
             dialog.show();
         }
-//        DataPaser.getProvinceList(mHandler);
       HttpHandler<String> httpHandler= ClientDiscoverAPI.getProvinceList(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
-//                Message msg = handler.obtainMessage();
-//                msg.what = DataConstants.PROVINCE_LIST;
                 List<ProvinceBean> list = new ArrayList<ProvinceBean>();
                 try {
                     JSONObject job = new JSONObject(responseInfo.result);
@@ -143,12 +130,9 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
                         provinceBean.setCityList(cityBeanList);
                         list.add(provinceBean);
                     }
-//                    msg.obj = list;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                handler.sendMessage(msg);
-//                                    List<ProvinceBean> netList = (List<ProvinceBean>) msg.obj;
                 provinceList.clear();
                 provinceList.addAll(list);
                 initPopupWindow();
@@ -233,6 +217,7 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setData() {
+        titleLayout.setContinueTvVisible(false);
         addressBean = (AddressListBean.AddressListItem) getIntent().getSerializableExtra("addressBean");
         if (addressBean != null) {
             titleLayout.setTitle(R.string.edit_address);
@@ -243,17 +228,11 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         isDefaultImg.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
         provinceList = new ArrayList<>();
-//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                cancelNet();
-//            }
-//        });
     }
 
     protected void initView() {
         titleLayout = (GlobalTitleLayout) findViewById(R.id.activity_addnewaddress_title);
-        titleLayout.setContinueTvVisible(false);
+
         commitBtn = (Button) findViewById(R.id.activity_addnewaddress_commitbtn);
         nameEdt = (EditText) findViewById(R.id.activity_addnewaddress_name);
         phoneEdt = (EditText) findViewById(R.id.activity_addnewaddress_phone);
@@ -271,7 +250,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.activity_addnewaddress_addresslinear:
                 if (provinceList.size() == 0) {
-                    cancelNet();
                     getProvinceData();
                     return;
                 }
@@ -294,14 +272,11 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
 
     private void commitAddress() {
         if (provinceList.size() == 0) {
-            cancelNet();
             getProvinceData();
             return;
         }
         if (nameEdt.getText().toString().isEmpty()) {
             ToastUtils.showError("收货人不能为空!");
-//            dialog.showErrorWithStatus("收货人不能为空!");
-//            Toast.makeText(AddNewAddressActivity.this, "收货人不能为空！", Toast.LENGTH_SHORT).show();
             return;
         }
         if (phoneEdt.getText().toString().isEmpty()) {
@@ -360,60 +335,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         });
         addNet(httpHandler);
     }
-
-
-//    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case DataConstants.PROVINCE_LIST:
-//                    dialog.dismiss();
-//                    List<ProvinceBean> netList = (List<ProvinceBean>) msg.obj;
-//                    provinceList.clear();
-//                    provinceList.addAll(netList);
-//                    initPopupWindow();
-//                    break;
-//                case DataConstants.DELETE_ADDRESS:
-//                    dialog.dismiss();
-//                    NetBean netBean1 = (NetBean) msg.obj;
-//                    if(netBean1.isSuccess()){
-//                        ToastUtils.showSuccess("删除成功");
-////                        dialog.showSuccessWithStatus("删除成功");
-////                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent();
-//                        intent.putExtra("address", 1);
-//                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-//                        finish();
-//                    }else{
-//                        ToastUtils.showError(netBean1.getMessage());
-//                    }
-//
-//                    break;
-//                case DataConstants.COMMIT_NEW_ADDRESS:
-//                    dialog.dismiss();
-//                    NetBean netBean = (NetBean) msg.obj;
-//                    if (netBean.isSuccess()) {
-//                        ToastUtils.showSuccess(netBean.getMessage());
-////                        dialog.showSuccessWithStatus(netBean.getMessage());
-//                        Intent intent = new Intent();
-//                        intent.putExtra("address", 1);
-//                        setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
-//                        finish();
-//                    } else {
-//                        ToastUtils.showError(netBean.getMessage());
-////                        dialog.showErrorWithStatus(netBean.getMessage());
-//                    }
-//
-//                    break;
-//                case DataConstants.NETWORK_FAILURE:
-//                    dialog.dismiss();
-//                    Toast.makeText(AddNewAddressActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
-
-
     private void putData() {
         if (addressBean != null) {
             titleLayout.setRightTv(R.string.delete, getResources().getColor(R.color.white), new View.OnClickListener() {
@@ -428,12 +349,9 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
                             if (!AddNewAddressActivity.this.dialog.isShowing()) {
                                 AddNewAddressActivity.this.dialog.show();
                             }
-//                            DataPaser.deleteAddress(addressBean.get_id(), mHandler);
                          HttpHandler<String> httpHandler=   ClientDiscoverAPI.deleteAddressNet(addressBean.get_id(), new RequestCallBack<String>() {
                                 @Override
                                 public void onSuccess(ResponseInfo<String> responseInfo) {
-//                                    Message msg = handler.obtainMessage();
-//                                    msg.what = DataConstants.DELETE_ADDRESS;
                                     AddNewAddressActivity.this.dialog.dismiss();
                                     NetBean netBean = new NetBean();
                                     try {
@@ -441,16 +359,11 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
                                         Type type = new TypeToken<NetBean>() {
                                         }.getType();
                                         netBean = gson.fromJson(responseInfo.result, type);
-//                    JSONObject ojb = new JSONObject(responseInfo.result);
-//                    msg.obj = ojb.optBoolean("success");
                                     } catch (JsonSyntaxException e) {
                                         e.printStackTrace();
                                     }
-//                                    handler.sendMessage(msg);
                                     if (netBean.isSuccess()) {
                                         ToastUtils.showSuccess("删除成功");
-//                        dialog.showSuccessWithStatus("删除成功");
-//                        Toast.makeText(AddNewAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();
                                         intent.putExtra("address", 1);
                                         setResult(DataConstants.RESULTCODE_ADDNEWADDRESS, intent);
@@ -547,9 +460,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         cityView.setCurrentItem(0);
     }
 
-    private void cancelNet() {
-
-    }
 
 
 }

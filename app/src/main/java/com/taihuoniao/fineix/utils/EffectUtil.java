@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.Addon;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.MyHighlightView;
 import com.taihuoniao.fineix.view.MyImageViewTouch;
@@ -134,14 +136,14 @@ public class EffectUtil {
 
 
     //----添加标签-----
-    public static void addLabelEditable(View.OnClickListener deleteListener,MyImageViewTouch mImageView, RelativeLayout gpuRelative,
+    public static void addLabelEditable(View.OnClickListener deleteListener, MyImageViewTouch mImageView, RelativeLayout gpuRelative,
                                         LabelView label, int left, int top) {
-        addLabel(deleteListener,mImageView, gpuRelative, label, left, top);
+        addLabel(deleteListener, mImageView, gpuRelative, label, left, top);
         addLabel2Overlay(mImageView, label);
     }
 
-    private static void addLabel(View.OnClickListener deleteListener,MyImageViewTouch overlay, RelativeLayout container, LabelView label, int left, int top) {
-        label.addTo(deleteListener,overlay, container, left, top);
+    private static void addLabel(View.OnClickListener deleteListener, MyImageViewTouch overlay, RelativeLayout container, LabelView label, int left, int top) {
+        label.addTo(deleteListener, overlay, container, left, top);
     }
 
     public static void removeLabelEditable(MyImageViewTouch overlay, ViewGroup container,
@@ -204,10 +206,12 @@ public class EffectUtil {
 
             final StickerDrawable stickerDrawable = ((StickerDrawable) view.getContent());
             RectF cropRect = view.getCropRectF();
-            Rect rect = new Rect((int) cropRect.left, (int) cropRect.top, (int) cropRect.right,
-                    (int) cropRect.bottom);
+            double bi = (double) mCanvas.getWidth() / MainApplication.getContext().getScreenWidth();
+            Log.e("<<<贴纸位置","rect="+cropRect.toString());
+            Rect rect = new Rect((int) (bi * cropRect.left), (int) (bi* cropRect.top), (int) (bi* cropRect.right),
+                    (int) (bi*cropRect.bottom));
 
-            Matrix rotateMatrix = view.getCropRotationMatrix();
+            Matrix rotateMatrix = view.getCropRotationMatrix(bi);
             Matrix matrix = new Matrix(processImage.getImageMatrix());
             if (!matrix.invert(matrix)) {
             }

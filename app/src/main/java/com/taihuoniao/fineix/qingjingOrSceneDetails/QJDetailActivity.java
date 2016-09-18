@@ -389,7 +389,7 @@ public class QJDetailActivity extends BaseActivity {
         commentList.setAdapter(new IndexCommentAdapter(qjDetailBean.getData().getComments()));
         if (qjDetailBean.getData().getComment_count() > 0) {
             moreComment.setText("查看所有" + qjDetailBean.getData().getComment_count() + "条评论");
-            moreComment.setVisibility(View.VISIBLE);
+            moreComment.setVisibility(View.GONE);
         } else {
             moreComment.setVisibility(View.GONE);
         }
@@ -528,16 +528,16 @@ public class QJDetailActivity extends BaseActivity {
                 activity.startActivityForResult(intent3, 1);
             }
         });
-        moreComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent3 = new Intent(activity, CommentListActivity.class);
-                intent3.putExtra("target_id", qjDetailBean.getData().get_id());
-                intent3.putExtra("type", 12 + "");
-                intent3.putExtra("target_user_id", qjDetailBean.getData().getUser_info().getUser_id());
-                activity.startActivityForResult(intent3, 1);
-            }
-        });
+//        moreComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent3 = new Intent(activity, CommentListActivity.class);
+//                intent3.putExtra("target_id", qjDetailBean.getData().get_id());
+//                intent3.putExtra("type", 12 + "");
+//                intent3.putExtra("target_user_id", qjDetailBean.getData().getUser_info().getUser_id());
+//                activity.startActivityForResult(intent3, 1);
+//            }
+//        });
         //跳转到分享页面
         shareImg.setOnClickListener(new View.OnClickListener() {
             @Override

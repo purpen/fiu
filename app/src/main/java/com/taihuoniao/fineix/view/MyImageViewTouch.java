@@ -575,26 +575,26 @@ public class MyImageViewTouch extends ImageViewTouch {
         return mOverlayView;
     }
 
-    public void commit(Canvas canvas) {
-
-        MyHighlightView hv;
-        for (int i = 0; i < getHighlightCount(); i++) {
-            hv = getHighlightViewAt(i);
-            FeatherDrawable content = hv.getContent();
-            if (content instanceof EditableDrawable) {
-                ((EditableDrawable) content).endEdit();
-            }
-
-            Matrix rotateMatrix = hv.getCropRotationMatrix();
-            Rect rect = hv.getCropRect();
-
-            int saveCount = canvas.save(Canvas.MATRIX_SAVE_FLAG);
-            canvas.concat(rotateMatrix);
-            content.setBounds(rect);
-            content.draw(canvas);
-            canvas.restoreToCount(saveCount);
-        }
-    }
+//    public void commit(Canvas canvas) {
+//
+//        MyHighlightView hv;
+//        for (int i = 0; i < getHighlightCount(); i++) {
+//            hv = getHighlightViewAt(i);
+//            FeatherDrawable content = hv.getContent();
+//            if (content instanceof EditableDrawable) {
+//                ((EditableDrawable) content).endEdit();
+//            }
+//
+//            Matrix rotateMatrix = hv.getCropRotationMatrix();
+//            Rect rect = hv.getCropRect();
+//
+//            int saveCount = canvas.save(Canvas.MATRIX_SAVE_FLAG);
+//            canvas.concat(rotateMatrix);
+//            content.setBounds(rect);
+//            content.draw(canvas);
+//            canvas.restoreToCount(saveCount);
+//        }
+//    }
 
     private MyHighlightView checkSelection(MotionEvent e) {
         Iterator<MyHighlightView> iterator = mOverlayViews.iterator();

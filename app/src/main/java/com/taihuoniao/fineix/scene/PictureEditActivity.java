@@ -182,11 +182,17 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             }
         });
         filterRecycler.setAdapter(recyclerAdapter);
+        final float s = getResources().getDimension(R.dimen.filter_height) + getResources().getDimension(R.dimen.top_margin)
+                + getResources().getDimension(R.dimen.filter_size);
         filterRecycler.post(new Runnable() {
             @Override
             public void run() {
                 filterRecycler.setTranslationY(bottomRelative.getMeasuredHeight());
                 filterRecycler.setVisibility(View.VISIBLE);
+                double t = (bottomRelative.getMeasuredHeight() - s) / 2;
+                filterRecycler.setPadding(filterRecycler.getPaddingLeft(), (int) (t + filterRecycler.getPaddingTop()),
+                        filterRecycler.getPaddingRight(), filterRecycler.getPaddingBottom());
+//                Log.e("<<<底部高度", bottomRelative.getMeasuredHeight() + "");
             }
         });
         currentFilter = new GPUImageFilter();
@@ -370,7 +376,7 @@ public class PictureEditActivity extends BaseActivity implements View.OnClickLis
             ToastUtils.showError("图片信息错误，请重试");
             return;
         }
-        int w = MainApplication.getContext().getScreenWidth();
+        int w = MainApplication.cropBitmap.getWidth();
         //加滤镜
         final Bitmap newBitmap = Bitmap.createBitmap(w, w,
                 Bitmap.Config.ARGB_8888);

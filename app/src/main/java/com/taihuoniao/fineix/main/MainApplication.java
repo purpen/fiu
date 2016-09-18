@@ -56,6 +56,7 @@ public class MainApplication extends Application {
     public static int which_activity;//判断是从哪个界面跳转到登录界面,0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
+    public static String fiuPath = null;//fiu相册
     public static String uuid = null;
     public static boolean hasUser;
     //编辑好的图片标签的list
@@ -80,12 +81,13 @@ public class MainApplication extends Application {
 //        locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
-        MobclickAgent.setDebugMode(true);
+        MobclickAgent.setDebugMode(false);
         instance = this;
         initImageLoader();
         JsonUtil.init();
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
+        fiuPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";
 //        try {
 //            LeakCanary.install(this);
 //        } catch (Exception e) {
