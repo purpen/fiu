@@ -43,7 +43,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.DensityUtils;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
-import com.taihuoniao.fineix.utils.SceneTitleSetUtils;
 import com.taihuoniao.fineix.utils.TestShareUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
@@ -204,7 +203,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         return view;
     }
 
-    private int imgWidth = 0, imgHeight = 0;
+//    private int imgWidth = 0, imgHeight = 0;
 
     @Override
     protected void requestNet() {
@@ -233,9 +232,9 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                imgWidth = loadedImage.getWidth();
-                imgHeight = imgWidth * 16 / 9;
-                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
+//                imgWidth = loadedImage.getWidth();
+//                imgHeight = imgWidth * 16 / 9;
+//                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
             }
 
             @Override
@@ -267,14 +266,16 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                 popupWindow.dismiss();
                 break;
             case R.id.title_share:
-                if (imgHeight == 0 || imgWidth == 0) {
-                    if (netScene == null) {
-                        requestNet();
-                    } else {
-                        setImgParams();
-                    }
+//                if (imgHeight == 0 || imgWidth == 0) {
+                if (netScene == null) {
+                    requestNet();
                     return;
                 }
+//                    else {
+//                        setImgParams();
+//                    }
+
+//                }
                 PopupWindowUtil.show(this, initPop());
                 break;
         }
@@ -302,50 +303,56 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
 
     private int currentPosition = 0;
 
+    //    private Bitmap inflateView() {
+//        int layout;
+//        switch (currentPosition) {
+//            case 1:
+//                layout = R.layout.view_share_style2;
+//                break;
+//            case 2:
+//                layout = R.layout.view_share_style3;
+//                break;
+//            case 3:
+//                layout = R.layout.view_share_style4;
+//                break;
+//            default:
+//                layout = R.layout.view_share_style1;
+//                break;
+//        }
+//        View view = View.inflate(this, layout, null);
+//        //启用绘图缓存
+//        view.setDrawingCacheEnabled(true);
+//        TestShareUtils.ViewHolder holder = new TestShareUtils.ViewHolder(view);
+//        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.imgContainer.getLayoutParams();
+//        lp.width = MainApplication.getContext().getScreenWidth();
+//        lp.height = lp.width;
+//        holder.imgContainer.setLayoutParams(lp);
+//        ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), holder.backgroundImg);
+//        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,netScene.getData().getTitle());
+//        ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), holder.userImg);
+//        if (netScene.getData().getUser_info().getIs_expert() == 1) {
+//            holder.vImg.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.vImg.setVisibility(View.GONE);
+//        }
+//        holder.userName.setText(netScene.getData().getUser_info().getNickname());
+//        holder.publishTime.setText(netScene.getData().getCreated_at());
+//        holder.locationTv.setText(netScene.getData().getAddress());
+//        holder.des.setText(netScene.getData().getDes());
+//        //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
+//        view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
+//                View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
+//        //这个方法也非常重要，设置布局的尺寸和位置
+//        view.layout(0, 0, imgWidth, imgHeight);
+//        Bitmap bitmap = view.getDrawingCache();
+//        //获得绘图缓存中的Bitmap
+//        view.buildDrawingCache();
+//        return bitmap;
+//    }
     private Bitmap inflateView() {
-        int layout;
-        switch (currentPosition) {
-            case 1:
-                layout = R.layout.view_share_style2;
-                break;
-            case 2:
-                layout = R.layout.view_share_style3;
-                break;
-            case 3:
-                layout = R.layout.view_share_style4;
-                break;
-            default:
-                layout = R.layout.view_share_style1;
-                break;
-        }
-        View view = View.inflate(this, layout, null);
-        //启用绘图缓存
-        view.setDrawingCacheEnabled(true);
-        TestShareUtils.ViewHolder holder = new TestShareUtils.ViewHolder(view);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) holder.imgContainer.getLayoutParams();
-        lp.width = MainApplication.getContext().getScreenWidth();
-        lp.height = lp.width;
-        holder.imgContainer.setLayoutParams(lp);
-        ImageLoader.getInstance().displayImage(netScene.getData().getCover_url(), holder.backgroundImg);
-        SceneTitleSetUtils.setTitle(holder.qjTitleTv,holder.qjTitleTv2,netScene.getData().getTitle());
-        ImageLoader.getInstance().displayImage(netScene.getData().getUser_info().getAvatar_url(), holder.userImg);
-        if (netScene.getData().getUser_info().getIs_expert() == 1) {
-            holder.vImg.setVisibility(View.VISIBLE);
-        } else {
-            holder.vImg.setVisibility(View.GONE);
-        }
-        holder.userName.setText(netScene.getData().getUser_info().getNickname());
-        holder.publishTime.setText(netScene.getData().getCreated_at());
-        holder.locationTv.setText(netScene.getData().getAddress());
-        holder.des.setText(netScene.getData().getDes());
-        //调用下面这个方法非常重要，如果没有调用这个方法，得到的bitmap为null
-        view.measure(View.MeasureSpec.makeMeasureSpec(imgWidth, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(imgHeight, View.MeasureSpec.EXACTLY));
-        //这个方法也非常重要，设置布局的尺寸和位置
-        view.layout(0, 0, imgWidth, imgHeight);
-        Bitmap bitmap = view.getDrawingCache();
-        //获得绘图缓存中的Bitmap
-        view.buildDrawingCache();
+        container.setDrawingCacheEnabled(true);
+        Bitmap bitmap = container.getDrawingCache();
+        container.buildDrawingCache();
         return bitmap;
     }
 
@@ -361,9 +368,10 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             Bitmap returnedBitmap = inflateView();
             if (returnedBitmap == null) {
                 dialog.dismiss();
+                System.gc();
                 ToastUtils.showError("获取图片失败,请重试");
-                imgWidth = MainApplication.getContext().getScreenWidth();
-                imgHeight = imgWidth * 16 / 9;
+//                imgWidth = MainApplication.getContext().getScreenWidth();
+//                imgHeight = imgWidth * 16 / 9;
                 return;
             }
             boolean isSuccess = FileUtils.bitmapToFile(returnedBitmap, imgPath);

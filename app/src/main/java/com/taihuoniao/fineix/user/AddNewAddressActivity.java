@@ -96,7 +96,6 @@ public class AddNewAddressActivity extends BaseActivity implements View.OnClickL
         setData();
         putData();
         getProvinceData();
-
     }
 
     private void getProvinceData() {

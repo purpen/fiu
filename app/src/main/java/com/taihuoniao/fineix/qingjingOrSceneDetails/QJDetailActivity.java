@@ -396,6 +396,7 @@ public class QJDetailActivity extends BaseActivity {
         //设置情景标题
         SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, qjDetailBean.getData().getTitle());
         //添加商品标签
+        labelContainer.removeAllViews();
         for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjDetailBean.getData().getProduct()) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(this);

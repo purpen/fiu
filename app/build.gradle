@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.5"
+        versionCode 8
+        versionName "1.6"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制
@@ -53,7 +53,6 @@ android {
             // 移除无用的resource文件
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
         }
     }
     sourceSets {
@@ -63,15 +62,25 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+        abortOnError false
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+
 //    productFlavors {
-//        xiaomi {}
-//        _360 {}
-//        baidu {}
-//        wandoujia {}
+//        yingyongbao {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
+//        }
+//        s360 {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "11"]
+//        }
+//        baidu {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "12"]
+//        }
+//        uc {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "uc"]
+//        }
 //    }
 //
 //    productFlavors.all {
