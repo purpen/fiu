@@ -169,7 +169,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             rl_head.setPadding(0, getStatusBarHeight(), 0, 0);
         }
-        rl_head.getBackground().mutate().setAlpha(25);
+        rl_head.getBackground().mutate().setAlpha(10);
         headView = Util.inflateView(R.layout.user_center_headview, null);
         if (LoginInfo.getUserId() != userId) {
             iv_right.setVisibility(View.GONE);
@@ -586,7 +586,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         float alpha = (255 * scale);
                         rl_head.getBackground().mutate().setAlpha((int) alpha);
                     } else if (top == 0) {
-                        rl_head.getBackground().mutate().setAlpha(25);
+                        rl_head.getBackground().mutate().setAlpha(10);
                     } else if (top > height) {
                         rl_head.getBackground().mutate().setAlpha(204);
                     }
