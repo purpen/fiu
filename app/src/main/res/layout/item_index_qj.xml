@@ -270,7 +270,6 @@
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
             android:maxLines="3"
-            android:text="也许\n很好\n开心\n是么"
             android:singleLine="false"
             android:textColor="#666666"
             android:textSize="11sp"/>

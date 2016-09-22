@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            WindowUtils.show(this);
+//            WindowUtils.show(this);
             WindowUtils.showStatusBar(this);
             firstRelative.setPadding(0, getStatusBarHeight(), 0, 0);
         }
