@@ -43,7 +43,7 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
         }
         holder.tv_money.setText(item.amount);
         if (item.product_id != 0) {
-            holder.tvCondition.setText(String.format("(仅限%s)", item.product_name));
+            holder.tvCondition.setText(String.format("(仅限%s使用)", item.product_name));
         } else {
             holder.tvCondition.setText("");
         }

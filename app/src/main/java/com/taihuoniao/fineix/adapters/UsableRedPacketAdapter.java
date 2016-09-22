@@ -45,7 +45,7 @@ public class UsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.RedP
         holder.tv_desc.setText(item.expired_label);
         holder.tv_money.setText(item.amount);
         if (item.product_id != 0) {
-            holder.tvCondition.setText(String.format("(仅限%s)", item.product_name));
+            holder.tvCondition.setText(String.format("(仅限%s使用)", item.product_name));
         } else {
             holder.tvCondition.setText("");
         }
