@@ -85,16 +85,14 @@ public class UsableRedPacketActivity extends BaseActivity {
                                 //红包可用
                                 Intent intent = new Intent();
                                 intent.putExtra("code", checkRedBagUsable.getCode());//红包码
-
                                 intent.putExtra("money", checkRedBagUsable.getCoin_money());//红包金额
                                 setResult(DataConstants.RESULTCODE_REDBAG, intent);
                                 finish();
-                            } else {
-                                //红包不可用
-                                ToastUtils.showError("这个红包不可用");
-//                                new SVProgressHUD(UsableRedPacketActivity.this).showErrorWithStatus("这个红包不可用");
-//                                Toast.makeText(UsableRedPacketActivity.this, "这个红包不可用", Toast.LENGTH_LONG).show();
                             }
+//                          else {
+//                                //红包不可用
+//                                ToastUtils.showError("这个红包不可用");
+//                            }
                         }
                     }
                     break;

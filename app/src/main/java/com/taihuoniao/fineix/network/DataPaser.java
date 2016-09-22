@@ -58,6 +58,7 @@ import com.taihuoniao.fineix.beans.ThirdLogin;
 import com.taihuoniao.fineix.beans.TryCommentsBean;
 import com.taihuoniao.fineix.beans.TryDetailsUserBean;
 import com.taihuoniao.fineix.beans.UserListBean;
+import com.taihuoniao.fineix.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1367,9 +1368,13 @@ public class DataPaser {
                 try {
                     checkRedBagUsable = new CheckRedBagUsable();
                     JSONObject obj = new JSONObject(responseInfo.result);
+                    if (!obj.optBoolean("success")) {
+                        ToastUtils.showInfo(obj.optString("message"));
+                    }
                     JSONObject redbagObj = obj.getJSONObject("data");
                     checkRedBagUsable.setCode(redbagObj.optString("code"));
                     checkRedBagUsable.setCoin_money(redbagObj.optString("coin_money"));
+                    checkRedBagUsable.setUseful(redbagObj.optString("useful"));
                     checkRedBagUsable.setUseful(redbagObj.optString("useful"));
 
                 } catch (JSONException e) {
