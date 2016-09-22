@@ -68,6 +68,8 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
 //                holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
 //            }
             if (!TextUtils.isEmpty(right_qj.getTitle())) {
+                holder.tv_title_right.setVisibility(View.VISIBLE);
+                holder.tv_title_right1.setVisibility(View.VISIBLE);
                 if (right_qj.getTitle().length() <= 10) {
                     holder.tv_title_right.setText("");
                     holder.tv_title_right1.setText(right_qj.getTitle());
@@ -79,12 +81,17 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
                     holder.tv_title_right1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                     holder.tv_title_right.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 }
+            } else {
+                holder.tv_title_right.setVisibility(View.GONE);
+                holder.tv_title_right1.setVisibility(View.GONE);
             }
             holder.tv_desc_right.setText(right_qj.getAddress());
         }
 
         imageLoader.displayImage(left_qj.getCover_url(), holder.iv_cover_left, options);
         if (!TextUtils.isEmpty(left_qj.getTitle())) {
+            holder.tv_title_left.setVisibility(View.VISIBLE);
+            holder.tv_title_left1.setVisibility(View.VISIBLE);
             if (left_qj.getTitle().length() <= 10) {
                 holder.tv_title_left.setText("");
                 holder.tv_title_left1.setText(left_qj.getTitle());
@@ -96,6 +103,9 @@ public class UserQJListAdapter1 extends CommonBaseAdapter<SceneListBean> {
                 holder.tv_title_left1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 holder.tv_title_left.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
             }
+        } else {
+            holder.tv_title_left.setVisibility(View.GONE);
+            holder.tv_title_left1.setVisibility(View.GONE);
         }
 //        if (!TextUtils.isEmpty(left_qj.getTitle())) {
 //            holder.tv_title_left.setText(left_qj.getTitle());

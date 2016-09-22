@@ -55,6 +55,8 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
             holder.tvName.setText(item.sight.user_info.nickname);
         }
         if (!TextUtils.isEmpty(item.sight.title)) {
+            holder.tv_title.setVisibility(View.VISIBLE);
+            holder.tv_title1.setVisibility(View.VISIBLE);
             if (item.sight.title.length() <= 10) {
                 holder.tv_title.setText("");
                 holder.tv_title1.setText(item.sight.title);
@@ -62,10 +64,13 @@ public class FavoriteQJGVAdapter extends CommonBaseAdapter<ItemQJCollect> {
                 holder.tv_title.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
             } else {
                 holder.tv_title.setText(item.sight.title.substring(0, 10));
-                holder.tv_title1.setText(item.sight.title.substring(10, item.sight.title.length() - 1));
+                holder.tv_title1.setText(item.sight.title.substring(10, item.sight.title.length()));
                 holder.tv_title1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
             }
+        } else {
+            holder.tv_title.setVisibility(View.GONE);
+            holder.tv_title1.setVisibility(View.GONE);
         }
         holder.ibtn.setVisibility(View.GONE);
 //        if (item.is_follow == 1) {

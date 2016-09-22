@@ -15,5 +15,7 @@ public class RedPacketData implements Serializable{
         public String amount;
         public int min_amount;
         public String expired_label;
+        public String product_name;
+        public int product_id;
     }
 }

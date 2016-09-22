@@ -42,6 +42,11 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
             holder.tv_min_money.setText(String.format("最低使用限额: %s元",item.min_amount));
         }
         holder.tv_money.setText(item.amount);
+        if (item.product_id != 0) {
+            holder.tvCondition.setText(String.format("(%s)", item.product_name));
+        } else {
+            holder.tvCondition.setText("");
+        }
         return convertView;
     }
 
@@ -57,6 +62,8 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
 
         @Bind(R.id.tv_money)
         TextView tv_money;
+        @Bind(R.id.tv_condition)
+        TextView tvCondition;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

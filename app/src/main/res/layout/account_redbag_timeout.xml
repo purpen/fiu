@@ -22,15 +22,32 @@
             android:paddingStart="10dp"
             android:paddingLeft="10dp">
 
-            <TextView
-                android:id="@+id/tv_thn_redbag"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp15"
-                android:text="@string/fiu_redbag"
-                android:textColor="@color/color_af8323"
-                android:textSize="@dimen/sp14" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tv_thn_redbag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:text="@string/fiu_redbag"
+                    android:textColor="@color/color_af8323"
+                    android:textSize="@dimen/sp14" />
+
+                <TextView
+                    android:id="@+id/tv_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp5"
+                    android:layout_marginRight="@dimen/dp5"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:textColor="@color/color_af8323"
+                    android:textSize="@dimen/sp10" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_redbag_code"
                 android:layout_width="match_parent"

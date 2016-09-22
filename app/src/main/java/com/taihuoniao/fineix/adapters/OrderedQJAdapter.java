@@ -56,6 +56,8 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
         ImageLoader.getInstance().displayImage(item.user_info.avatar_url, holder.riv, options);
         holder.tvName.setText(item.user_info.nickname);
         if (!TextUtils.isEmpty(item.title)) {
+            holder.tv_title.setVisibility(View.VISIBLE);
+            holder.tv_title1.setVisibility(View.VISIBLE);
             if (item.title.length() <= 10) {
                 holder.tv_title.setText("");
                 holder.tv_title1.setText(item.title);
@@ -63,10 +65,13 @@ public class OrderedQJAdapter extends CommonBaseAdapter<ItemSubscribedQJ> {
                 holder.tv_title.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
             } else {
                 holder.tv_title.setText(item.title.substring(0, 10));
-                holder.tv_title1.setText(item.title.substring(10, item.title.length() - 1));
+                holder.tv_title1.setText(item.title.substring(10, item.title.length()));
                 holder.tv_title1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 holder.tv_title.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
             }
+        } else {
+            holder.tv_title.setVisibility(View.GONE);
+            holder.tv_title1.setVisibility(View.GONE);
         }
         if (item.is_love == 1) {
             holder.ibtn.setImageResource(R.mipmap.zaned);
