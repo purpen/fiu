@@ -237,8 +237,11 @@ public class SubjectData implements Parcelable {
         public String title;
         public String banner_url;
         public String summary;
-        public double market_price;
+        public String market_price;
         public String sale_price;
+
+        public ProductBean() {
+        }
 
         @Override
         public int describeContents() {
@@ -251,11 +254,8 @@ public class SubjectData implements Parcelable {
             dest.writeString(this.title);
             dest.writeString(this.banner_url);
             dest.writeString(this.summary);
-            dest.writeDouble(this.market_price);
+            dest.writeString(this.market_price);
             dest.writeString(this.sale_price);
-        }
-
-        public ProductBean() {
         }
 
         protected ProductBean(Parcel in) {
@@ -263,7 +263,7 @@ public class SubjectData implements Parcelable {
             this.title = in.readString();
             this.banner_url = in.readString();
             this.summary = in.readString();
-            this.market_price = in.readDouble();
+            this.market_price = in.readString();
             this.sale_price = in.readString();
         }
 

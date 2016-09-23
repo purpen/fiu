@@ -42,10 +42,10 @@ public class UnUsableRedPacketAdapter extends CommonBaseAdapter<RedPacketData.Re
             holder.tv_min_money.setText(String.format("最低使用限额: %s元",item.min_amount));
         }
         holder.tv_money.setText(item.amount);
-        if (item.product_id != 0) {
-            holder.tvCondition.setText(String.format("(仅限%s使用)", item.product_name));
-        } else {
+        if (item.product_id == 0) {
             holder.tvCondition.setText("");
+        } else {
+            holder.tvCondition.setText(String.format("(仅限%s使用)", item.product_name));
         }
         return convertView;
     }

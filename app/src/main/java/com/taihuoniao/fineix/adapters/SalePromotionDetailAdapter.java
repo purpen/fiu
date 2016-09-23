@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,7 +45,12 @@ public class SalePromotionDetailAdapter extends CommonBaseAdapter<SubjectData.Pr
         holder.tvTitle.setText(String.format("%s. %s", position + 1, item.title));
         holder.tvDesc.setText(item.summary);
         holder.tvSalePrice.setText(String.format("￥%s", item.sale_price));
-        holder.tvMarketPrice.setText(String.format("￥%s", item.market_price));
+        if (TextUtils.equals(item.sale_price, item.market_price)) {
+            holder.tvMarketPrice.setVisibility(View.GONE);
+        } else {
+            holder.tvMarketPrice.setVisibility(View.VISIBLE);
+            holder.tvMarketPrice.setText(String.format("￥%s", item.market_price));
+        }
         holder.tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
