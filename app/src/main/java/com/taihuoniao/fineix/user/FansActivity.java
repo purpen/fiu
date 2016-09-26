@@ -54,6 +54,8 @@ public class FansActivity extends BaseActivity {
     public static final String USER_ID_EXTRA = "USER_ID_EXTRA";
     private long userId = LoginInfo.getUserId();
     private WaittingDialog dialog;
+    private boolean flag;//判断是不是从消息页面跳转过来的
+    private int fansCount;//新添加的粉丝数量
 
     public FansActivity() {
         super(R.layout.activity_focus_fans);
@@ -65,7 +67,12 @@ public class FansActivity extends BaseActivity {
         if (intent.hasExtra(USER_ID_EXTRA)) {
             userId = intent.getLongExtra(USER_ID_EXTRA, -1);
         }
-
+        if (intent.hasExtra(MessageActivity.class.getSimpleName())) {
+            flag = true;
+            fansCount = intent.getIntExtra(MessageActivity.class.getSimpleName(), 0);
+        } else {
+            flag = false;
+        }
     }
 
     @Override
@@ -100,42 +107,44 @@ public class FansActivity extends BaseActivity {
     protected void requestNet() {
         LogUtil.e(TAG, "requestNet==" + userId);
         dialog.show();
-        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                new Handler().postDelayed(new Runnable() {
+        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE,
+                flag ? "1" : null,
+                new RequestCallBack<String>() {
                     @Override
-                    public void run() {
-                        if (dialog != null) dialog.dismiss();
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (dialog != null) dialog.dismiss();
+                            }
+                        }, DataConstants.DIALOG_DELAY);
+                        if (responseInfo == null) {
+                            return;
+                        }
+
+                        if (TextUtils.isEmpty(responseInfo.result)) {
+                            return;
+                        }
+
+                        LogUtil.e(TAG, responseInfo.result);
+                        FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
+                        });
+
+                        if (data == null) {
+                            return;
+                        }
+
+                        list = data.rows;
+                        refreshUI();
                     }
-                }, DataConstants.DIALOG_DELAY);
-                if (responseInfo == null) {
-                    return;
-                }
 
-                if (TextUtils.isEmpty(responseInfo.result)) {
-                    return;
-                }
-
-                LogUtil.e(TAG, responseInfo.result);
-                FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        dialog.dismiss();
+                        if (TextUtils.isEmpty(s)) return;
+                        Util.makeToast(s);
+                    }
                 });
-
-                if (data == null) {
-                    return;
-                }
-
-                list = data.rows;
-                refreshUI();
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
-                if (TextUtils.isEmpty(s)) return;
-                Util.makeToast(s);
-            }
-        });
     }
 
     @Override
@@ -146,16 +155,16 @@ public class FansActivity extends BaseActivity {
         }
         if (list.size() == 0) {
             ll_tips.setVisibility(View.VISIBLE);
-            if (LoginInfo.getUserId()==userId){
+            if (LoginInfo.getUserId() == userId) {
                 tv_tips.setText(R.string.fans_tips);
-            }else {
+            } else {
                 tv_tips.setText(R.string.fans_tips1);
             }
             return;
         }
 
         if (adapter == null) {
-            adapter = new FansAdapter(list, activity,userId);
+            adapter = new FansAdapter(list, activity, userId, flag,fansCount);
             lv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

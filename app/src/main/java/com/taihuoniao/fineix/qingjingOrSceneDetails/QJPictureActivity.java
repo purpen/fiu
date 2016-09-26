@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -11,6 +12,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;
@@ -95,6 +97,7 @@ public class QJPictureActivity extends BaseActivity {
         });
     }
 
+
     private void savePicture() {
         if (bitmap == null) {
             ImageLoader.getInstance().displayImage(imgStr, clipImg, new ImageLoadingListener() {
@@ -124,6 +127,7 @@ public class QJPictureActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
+//                    保存失败，本地找不到
                     ImageUtils.saveToFile(MainApplication.systemPhotoPath, true, bitmap);
                 } catch (IOException e) {
                     runOnUiThread(new Runnable() {

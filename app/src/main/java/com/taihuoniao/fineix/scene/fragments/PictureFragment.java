@@ -10,6 +10,8 @@ import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -162,8 +164,6 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     }
 
     public Map<String, AlbumBean> findGalleries(Context context) {
-//        List<HashMap<String, String>> list = FileUtils.getAllPictures(context);
-//        Log.e("<<<所有图片", list.toString());
         albumPaths.clear();
         albumPaths.add(MainApplication.systemPhotoPath);
         String[] projection = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA,

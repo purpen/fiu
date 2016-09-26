@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.product.fragment;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -130,6 +131,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             holder.detailContainer.setVisibility(View.GONE);
             holder.price.setVisibility(View.GONE);
             holder.liangdianContainer.setVisibility(View.GONE);
+        }else{
+            holder.marketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (viewPagerAdapter == null) {
             viewPagerAdapter = new ViewPagerAdapter<String>(activity, buyGoodDetailsBean.getData().getAsset());
@@ -143,6 +146,16 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         }
         holder.title.setText(buyGoodDetailsBean.getData().getTitle());
         holder.price.setText("¥" + buyGoodDetailsBean.getData().getSale_price());
+        if(buyGoodDetailsBean.getData().getMarket_price()>buyGoodDetailsBean.getData().getSale_price()){
+            holder.marketPrice.setVisibility(View.VISIBLE);
+            holder.marketPrice.setText("¥" + buyGoodDetailsBean.getData().getMarket_price());
+        }else{
+            holder.marketPrice.setVisibility(View.GONE);
+        }
+        if(buyGoodDetailsBean.getData().getStage()==16){
+            holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
+            holder.marketPrice.setVisibility(View.VISIBLE);
+        }
         if (TextUtils.isEmpty(buyGoodDetailsBean.getData().getAdvantage())) {
             holder.liangdianContainer.setVisibility(View.GONE);
         } else {
@@ -254,6 +267,8 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         TextView title;
         @Bind(R.id.price)
         TextView price;
+        @Bind(R.id.market_price)
+        TextView marketPrice;
         @Bind(R.id.liangdian_container)
         LinearLayout liangdianContainer;
         @Bind(R.id.liangdian)

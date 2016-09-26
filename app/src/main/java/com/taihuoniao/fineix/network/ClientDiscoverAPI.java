@@ -859,7 +859,7 @@ public class ClientDiscoverAPI {
      * @param find_type
      * @param callBack
      */
-    public static void getFocusFansList(String userId, String page, String size, String find_type, RequestCallBack<String> callBack) {
+    public static void getFocusFansList(String userId, String page, String size, String find_type,String clean_remind, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -867,6 +867,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", userId);//924808
 //        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
         params.addQueryStringParameter("find_type", find_type);
+        params.addQueryStringParameter("clean_remind",clean_remind);
         MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
     }
 

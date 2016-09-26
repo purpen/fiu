@@ -101,7 +101,7 @@ public class FocusActivity extends BaseActivity {
         LogUtil.e(TAG, "requestNet==" + userId);
         dialog.show();
         int curPage = 1;
-        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE,null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 new Handler().postDelayed(new Runnable() {

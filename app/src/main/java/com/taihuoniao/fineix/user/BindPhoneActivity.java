@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -53,6 +54,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     private TextView tv_bind;
     private TextView tv_login;
     private Button bindAccount;
+
     public BindPhoneActivity() {
         super(R.layout.activity_bind_phone);
     }
@@ -160,6 +162,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Log.e("<<<登录成功", responseInfo.result);
                         v.setEnabled(true);
                         mDialog.dismiss();
                         if (TextUtils.isEmpty(responseInfo.result)) return;
@@ -197,6 +200,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        Log.e("<<<登录成功", responseInfo.result);
                         v.setEnabled(true);
                         mDialog.dismiss();
                         if (responseInfo == null) return;
@@ -254,21 +258,19 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             updateUserIdentity();
 //            startActivity(new Intent(activity, OrderInterestQJActivity.class));
             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+            if (ToRegisterActivity.instance != null) {
+                ToRegisterActivity.instance.finish();
+            }
+            if (OptRegisterLoginActivity.instance != null) {
+                OptRegisterLoginActivity.instance.finish();
+            }
+            if (ToLoginActivity.instance != null) {
+                ToLoginActivity.instance.finish();
+            }
+            finish();
         } else {
-            LoginCompleteUtils.goFrom(this);
+            LoginCompleteUtils.goFrom(this, loginInfo, null);
         }
-
-        if (ToRegisterActivity.instance != null) {
-            ToRegisterActivity.instance.finish();
-        }
-        if (OptRegisterLoginActivity.instance != null) {
-            OptRegisterLoginActivity.instance.finish();
-        }
-        if (ToLoginActivity.instance != null) {
-            ToLoginActivity.instance.finish();
-        }
-
-        finish();
     }
 
     private void updateUserIdentity() {

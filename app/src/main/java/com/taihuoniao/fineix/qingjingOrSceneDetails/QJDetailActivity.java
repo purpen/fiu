@@ -347,7 +347,7 @@ public class QJDetailActivity extends BaseActivity {
             locationImg.setVisibility(View.VISIBLE);
             locationTv.setVisibility(View.VISIBLE);
         }
-        if (LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
+        if (qjDetailBean.getData().getUser_id() != null && LoginInfo.getUserId() == Long.parseLong(qjDetailBean.getData().getUser_id())) {
             //自己的话隐藏关注按钮
             attentionBtn.setVisibility(View.GONE);
         } else {
@@ -370,8 +370,8 @@ public class QJDetailActivity extends BaseActivity {
         qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QJDetailActivity.this,QJPictureActivity.class);
-                intent.putExtra("img",qjDetailBean.getData().getCover_url());
+                Intent intent = new Intent(QJDetailActivity.this, QJPictureActivity.class);
+                intent.putExtra("img", qjDetailBean.getData().getCover_url());
                 startActivity(intent);
             }
         });

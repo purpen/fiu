@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -304,20 +305,19 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                         if (thirdLogin.user.identify.is_scene_subscribe == 0) { //未订阅
                             updateUserIdentity();
                             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                            if (ToRegisterActivity.instance != null) {
+                                ToRegisterActivity.instance.finish();
+                            }
+                            if (OptRegisterLoginActivity.instance != null) {
+                                OptRegisterLoginActivity.instance.finish();
+                            }
+                            if (ToLoginActivity.instance != null) {
+                                ToLoginActivity.instance.finish();
+                            }
+                            finish();
                         } else {
-                            LoginCompleteUtils.goFrom(activity);
+                            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
                         }
-
-                        if (ToRegisterActivity.instance != null) {
-                            ToRegisterActivity.instance.finish();
-                        }
-                        if (OptRegisterLoginActivity.instance != null) {
-                            OptRegisterLoginActivity.instance.finish();
-                        }
-                        if (ToLoginActivity.instance != null) {
-                            ToLoginActivity.instance.finish();
-                        }
-                        finish();
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());
@@ -411,6 +411,7 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<登录成功",responseInfo.result);
                 v.setEnabled(true);
                 mDialog.dismiss();
                 if (responseInfo == null) return;
@@ -426,20 +427,21 @@ public class ToLoginActivity extends BaseActivity implements Handler.Callback, P
                     if (loginInfo.identify.is_scene_subscribe == 0) { // 未订阅
                         updateUserIdentity();
                         startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                        if (ToRegisterActivity.instance != null) {
+                            ToRegisterActivity.instance.finish();
+                        }
+                        if (OptRegisterLoginActivity.instance != null) {
+                            OptRegisterLoginActivity.instance.finish();
+                        }
+                        if (ToLoginActivity.instance != null) {
+                            ToLoginActivity.instance.finish();
+                        }
+                        finish();
                     } else {
 //                        startActivity(new Intent(activity, MainActivity.class));
-                        LoginCompleteUtils.goFrom(ToLoginActivity.this);
+                        LoginCompleteUtils.goFrom(ToLoginActivity.this,loginInfo,null);
                     }
-                    if (ToRegisterActivity.instance != null) {
-                        ToRegisterActivity.instance.finish();
-                    }
-                    if (OptRegisterLoginActivity.instance != null) {
-                        OptRegisterLoginActivity.instance.finish();
-                    }
-                    if (ToLoginActivity.instance != null) {
-                        ToLoginActivity.instance.finish();
-                    }
-                    finish();
+
                     return;
                 }
                 ToastUtils.showError(response.getMessage());

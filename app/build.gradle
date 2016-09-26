@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 8
-        versionName "1.6"
+        versionCode 9
+        versionName "1.7"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制
@@ -62,7 +62,6 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
-        abortOnError false
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
@@ -97,6 +96,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.android.support:support-v4:22.2.1'
+//    compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile files('libs/baidumapapi_cloud_v3_7_1.jar')
     compile files('libs/baidumapapi_radar_v3_7_1.jar')

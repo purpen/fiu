@@ -75,7 +75,7 @@ public class UserCommentsActivity extends BaseActivity {
 //                startActivity(intent);
                 Intent intent = new Intent(activity, CommentListActivity.class);
                 intent.putExtra("target_id", list.get(i).target_id);
-                intent.putExtra("target_user_id", list.get(i).getUser().get_id());
+                intent.putExtra("target_user_id", commentsBean.getCurrent_user_id());
                 intent.putExtra("type", 12 + "");
                 intent.putExtra(UserCommentsActivity.class.getSimpleName(), list.get(i).getUser().getNickname());
                 intent.putExtra("reply_id", list.get(i).get_id());
@@ -84,7 +84,7 @@ public class UserCommentsActivity extends BaseActivity {
             }
         });
     }
-
+    private CommentsBean commentsBean = new CommentsBean();
     @Override
     protected void requestNet() {
         ClientDiscoverAPI.mycommentsList(String.valueOf(curPage), pageSize, null, LoginInfo.getUserId() + "", COMMENT_TYPE, new RequestCallBack<String>() {
@@ -104,7 +104,7 @@ public class UserCommentsActivity extends BaseActivity {
                 if (responseInfo == null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e(TAG, responseInfo.result);
-                CommentsBean commentsBean = JsonUtil.fromJson(responseInfo.result, CommentsBean.class);
+                commentsBean = JsonUtil.fromJson(responseInfo.result, CommentsBean.class);
                 if (commentsBean.isSuccess()) {
                     if (commentsBean.getData() == null) return;
                     list = commentsBean.getData().getRows();

@@ -2,10 +2,13 @@ package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -14,45 +17,49 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.NoticeAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.NoticeBean;
 import com.taihuoniao.fineix.beans.NoticeData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.CommentListActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
+import com.taihuoniao.fineix.utils.WriteJsonToSD;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import butterknife.Bind;
 
 /**
  * @author lilin
- * created at 2016/5/10 16:46
+ *         created at 2016/5/10 16:46
  */
-public class NoticeActivity extends BaseActivity{
+public class NoticeActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
     @Bind(R.id.lv)
     ListView lv;
-    private int curPage=1;
-    private List<NoticeData.NoticeItem> list;
-    private static final String pageSize="9999";
-    private static final String COMMENT_TYPE="12";
+    private int curPage = 1;
+    private List<NoticeBean.DataBean.RowsBean> list;
+    private static final String pageSize = "9999";
+    private static final String COMMENT_TYPE = "12";
     private WaittingDialog dialog;
     private NoticeAdapter adapter;
 
 
-    public NoticeActivity(){
+    public NoticeActivity() {
         super(R.layout.activity_notice);
     }
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true,"提醒");
-        dialog=new WaittingDialog(this);
+        custom_head.setHeadCenterTxtShow(true, "提醒");
+        dialog = new WaittingDialog(this);
         WindowUtils.chenjin(this);
     }
 
@@ -61,14 +68,20 @@ public class NoticeActivity extends BaseActivity{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                NoticeData.NoticeItem item=list.get(i);
-                Intent intent;
-                if (item.kind==12){ //情景
-                    intent = new Intent(activity, QJDetailActivity.class);
-                    intent.putExtra("id",String.valueOf(item.related_id));
-                }else {
-                    intent = new Intent(activity, QJDetailActivity.class);
-                    intent.putExtra("id",String.valueOf(item.related_id));
+                NoticeBean.DataBean.RowsBean item = list.get(i);
+                Intent intent = new Intent();
+                if (item.getKind() == 12) { //情景
+                    intent.setClass(activity,QJDetailActivity.class);
+                    intent.putExtra("id", item.getTarget_obj().get_id());
+                } else if (item.getKind() == 3) {//评论
+//                    ToastUtils.showError("跳转评论页面缺少参数");
+                    intent.setClass(activity, CommentListActivity.class);
+                    intent.putExtra("target_id", list.get(i).getComment_target_obj().get_id());
+//                    intent.putExtra("target_user_id", list.get(i).getUser().get_id());
+                    intent.putExtra("type", 12 + "");
+                    intent.putExtra(UserCommentsActivity.class.getSimpleName(), list.get(i).getSend_user().getNickname());
+                    intent.putExtra("reply_id", list.get(i).getTarget_obj().get_id());
+                    intent.putExtra("reply_user_id", list.get(i).getSend_user().get_id());
                 }
                 startActivity(intent);
             }
@@ -77,50 +90,59 @@ public class NoticeActivity extends BaseActivity{
 
     @Override
     protected void requestNet() {
-        String type="1"; //Fiu
-        ClientDiscoverAPI.getNoticeList(String.valueOf(curPage),pageSize,type, new RequestCallBack<String>() {
+        String type = "1"; //Fiu
+//        app_type=2, channel=10, client_id=1415289600, page=1, size=9999, time=1474441155, type=1, uuid=ffffffff-b056-1c0b-ffff-ffffa8556b0e, sign=fd2a1e20ff4344c098ac08c98d3b9c22
+        ClientDiscoverAPI.getNoticeList(String.valueOf(curPage), pageSize, type, new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 super.onStart();
-                if (dialog!=null) dialog.show();
+                if (dialog != null) dialog.show();
             }
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<提醒", responseInfo.result);
                 dialog.dismiss();
-                if (responseInfo==null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
-                LogUtil.e(TAG,responseInfo.result);
-                HttpResponse<NoticeData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<NoticeData>>() {
-                });
-                if (response.isSuccess()){
-                    list=response.getData().rows;
-                    refreshUI();
-                }else {
-                    ToastUtils.showError(response.getMessage());
-//                    dialog.showErrorWithStatus(response.getMessage());
+                NoticeBean noticeBean = new NoticeBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type1 = new TypeToken<NoticeBean>() {
+                    }.getType();
+                    noticeBean = gson.fromJson(responseInfo.result, type1);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<提醒列表", "解析异常=" + e.toString());
+                }
+                if (noticeBean.isSuccess()) {
+                    list = noticeBean.getData().getRows();
+                    if (adapter == null) {
+                        adapter = new NoticeAdapter(list, activity);
+                        lv.setAdapter(adapter);
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+                } else {
+                    ToastUtils.showError(noticeBean.getMessage());
                 }
             }
+
             @Override
             public void onFailure(HttpException e, String s) {
                 dialog.dismiss();
-                ToastUtils.showError("网络异常，请确认网络畅通");
-//                dialog.showErrorWithStatus("网络异常，请确认网络畅通");
+                ToastUtils.showError(R.string.net_fail);
             }
         });
     }
 
     @Override
     protected void refreshUI() {
-        if (list==null) return;
-        if (list.size()==0) {
-//            Util.makeToast("暂无提醒");
+        if (list == null) return;
+        if (list.size() == 0) {
             return;
         }
-        if (adapter==null){
-            adapter=new NoticeAdapter(list,activity);
+        if (adapter == null) {
+            adapter = new NoticeAdapter(list, activity);
             lv.setAdapter(adapter);
-        }else {
+        } else {
             adapter.notifyDataSetChanged();
         }
     }

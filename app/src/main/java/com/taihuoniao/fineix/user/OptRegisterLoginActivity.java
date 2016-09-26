@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -225,6 +226,7 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                Log.e("<<<登录成功",responseInfo.result);
                 if (!activity.isFinishing() && mDialog != null) mDialog.dismiss();
                 btnQq.setEnabled(true);
                 btnSina.setEnabled(true);
@@ -261,20 +263,19 @@ public class OptRegisterLoginActivity extends BaseActivity implements Handler.Ca
                             updateUserIdentity();
 //                            startActivity(new Intent(activity, OrderInterestQJActivity.class));
                             startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+                            if (ToRegisterActivity.instance != null) {
+                                ToRegisterActivity.instance.finish();
+                            }
+                            if (OptRegisterLoginActivity.instance != null) {
+                                OptRegisterLoginActivity.instance.finish();
+                            }
+                            if (ToLoginActivity.instance != null) {
+                                ToLoginActivity.instance.finish();
+                            }
+                            finish();
                         } else {
-                            LoginCompleteUtils.goFrom(activity);
+                            LoginCompleteUtils.goFrom(activity,null,thirdLogin);
                         }
-
-                        if (ToRegisterActivity.instance != null) {
-                            ToRegisterActivity.instance.finish();
-                        }
-                        if (OptRegisterLoginActivity.instance != null) {
-                            OptRegisterLoginActivity.instance.finish();
-                        }
-                        if (ToLoginActivity.instance != null) {
-                            ToLoginActivity.instance.finish();
-                        }
-                        finish();
                     }
                 } else {
                     ToastUtils.showError(response.getMessage());

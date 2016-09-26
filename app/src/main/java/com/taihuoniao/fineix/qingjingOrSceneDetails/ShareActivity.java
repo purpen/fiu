@@ -80,7 +80,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
     private View activity_view;
     //网络请求对话框
     private WaittingDialog dialog;
-    private int[] shareImgs = {R.mipmap.share1};
+    private int[] shareImgs = {R.mipmap.share1, R.mipmap.share2, R.mipmap.share3, R.mipmap.share4};
     private List<ShareDemoBean> shareList;
     private ShareCJRecyclerAdapter shareCJRecyclerAdapter;
     private QJDetailBean netScene;
@@ -134,8 +134,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
     }
 
     private void initPopupWindow() {
-        WindowManager windowManager = this.getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
         View popup_view = View.inflate(this, R.layout.pop_share_success, null);
         Button button = (Button) popup_view.findViewById(R.id.pop_share_success_btn);
         linearLayout = (LinearLayout) popup_view.findViewById(R.id.linear);
@@ -219,29 +217,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
         cLp.height = relativeLayout.getHeight();
         cLp.width = cLp.height * 9 / 16;
         container.setLayoutParams(cLp);
-        ImageLoader.getInstance().loadImage(netScene.getData().getCover_url(), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                imgWidth = loadedImage.getWidth();
-//                imgHeight = imgWidth * 16 / 9;
-//                Log.e("<<<图片大小", "width=" + imgWidth + ",height=" + imgHeight);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
     }
 
     @Override
@@ -271,11 +246,6 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
                     requestNet();
                     return;
                 }
-//                    else {
-//                        setImgParams();
-//                    }
-
-//                }
                 PopupWindowUtil.show(this, initPop());
                 break;
         }
@@ -296,7 +266,7 @@ public class ShareActivity extends BaseActivity implements EditRecyclerAdapter.I
             container.removeView(view);
         }
         double b = (double) container.getWidth() / MainApplication.getContext().getScreenWidth();
-        view = testShareUtils.selectStyle(this, position, netScene, b);
+        view = testShareUtils.selectStyle(this, position, netScene, b, container.getHeight(), container.getWidth());
         container.addView(view);
         currentPosition = position;
     }

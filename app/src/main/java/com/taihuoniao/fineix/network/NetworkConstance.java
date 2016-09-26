@@ -8,7 +8,7 @@ public class NetworkConstance {
     public static final String ALI_PAY = "alipay";
     public static final String WX_PAY = "weichat";
     public static final String JD_PAY = "jdpay";
-    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+            public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
 //    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
@@ -183,7 +183,7 @@ public class NetworkConstance {
     public static final String UPDATE_USER_IDENTIFY = BASE_URL + "/my/update_user_identify";
 
     //  提醒
-    public static final String NOTICE_LIST = BASE_URL + "/my/remind_list";
+    public static final String NOTICE_LIST = BASE_URL + "/remind/getlist";
 
     //  退出登录
     public static final String LOGOUT = BASE_URL + "/auth/logout";

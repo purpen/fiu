@@ -42,6 +42,8 @@ public class MessageActivity extends BaseActivity {
     CustomItemLayout item_to_comment;
     @Bind(R.id.item_notice)
     CustomItemLayout item_notice;
+    @Bind(R.id.item_fans)
+    CustomItemLayout itemFans;
     private WaittingDialog dialog;
     private User user;
 
@@ -63,32 +65,38 @@ public class MessageActivity extends BaseActivity {
         item_clear_cache.setTVStyle(R.mipmap.icon_comment, "评论", R.color.color_333);
         item_to_comment.setTVStyle(R.mipmap.private_msg, "私信", R.color.color_333);
         item_notice.setTVStyle(R.mipmap.notice, "提醒", R.color.color_333);
+        itemFans.setTVStyle(R.mipmap.message_fans, "粉丝", R.color.color_333);
         WindowUtils.chenjin(this);
     }
 
-    @OnClick({R.id.item_push_setting, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_notice})
+    @OnClick({R.id.item_push_setting, R.id.item_clear_cache, R.id.item_to_comment, R.id.item_notice, R.id.item_fans})
     void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
             case R.id.item_push_setting: //系统通知
-                intent=new Intent(activity, SystemNoticeActivity.class);
-                if (user!=null){
-                    intent.putExtra(SystemNoticeActivity.class.getSimpleName(),user.counter.fiu_notice_count);
+                intent = new Intent(activity, SystemNoticeActivity.class);
+                if (user != null) {
+                    intent.putExtra(SystemNoticeActivity.class.getSimpleName(), user.counter.fiu_notice_count);
                     startActivity(intent);
                 }
                 break;
             case R.id.item_clear_cache: //评论列表
-                intent=new Intent(activity, UserCommentsActivity.class);
-                if (user!=null){
-                    intent.putExtra(UserCommentsActivity.class.getSimpleName(),user.counter.fiu_comment_count);
+                intent = new Intent(activity, UserCommentsActivity.class);
+                if (user != null) {
+                    intent.putExtra(UserCommentsActivity.class.getSimpleName(), user.counter.fiu_comment_count);
                     startActivity(intent);
                 }
                 break;
             case R.id.item_to_comment: //评论列表
-                startActivity(new Intent(activity,PrivateMessageListActivity.class));
+                startActivity(new Intent(activity, PrivateMessageListActivity.class));
                 break;
             case R.id.item_notice: //提醒
                 startActivity(new Intent(activity, NoticeActivity.class));
+                break;
+            case R.id.item_fans://粉丝
+                Intent intent1 = new Intent(activity, FansActivity.class);
+                intent1.putExtra(MessageActivity.class.getSimpleName(), user.counter.fans_count);
+                startActivity(intent1);
                 break;
         }
     }
@@ -98,7 +106,7 @@ public class MessageActivity extends BaseActivity {
         ClientDiscoverAPI.getUserCenterData(new RequestCallBack<String>() {
             @Override
             public void onStart() {
-                if (!activity.isFinishing()&& dialog!=null)  dialog.show();
+                if (!activity.isFinishing() && dialog != null) dialog.show();
             }
 
             @Override
@@ -106,7 +114,7 @@ public class MessageActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!activity.isFinishing()&& dialog!=null) dialog.dismiss();
+                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                     }
                 }, DataConstants.DIALOG_DELAY);
                 LogUtil.e("result", responseInfo.result);
@@ -115,9 +123,10 @@ public class MessageActivity extends BaseActivity {
                 }
 
                 try {
-                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {});
-                    if (response.isSuccess()){
-                        user=response.getData();
+                    HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
+                    });
+                    if (response.isSuccess()) {
+                        user = response.getData();
                         refreshUI();
                     }
                 } catch (JsonSyntaxException e) {
@@ -146,6 +155,7 @@ public class MessageActivity extends BaseActivity {
             item_clear_cache.setTipsNum(user.counter.fiu_comment_count); //评论
             item_to_comment.setTipsNum(user.counter.message_count);   //私信
             item_notice.setTipsNum(user.counter.fiu_alert_count);   //提醒数量
+            itemFans.setTipsNum(user.counter.fans_count);//粉丝数量
         }
     }
 }

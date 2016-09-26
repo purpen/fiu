@@ -434,6 +434,7 @@ public class MineFragment extends MyBaseFragment {
     protected void installListener() {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Intent intent;
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {

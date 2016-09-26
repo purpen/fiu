@@ -55,9 +55,9 @@ import java.util.List;
  */
 public class CommentListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     //上个界面传递过来的评论关联id
-    private String target_id;
+    private String target_id;//情境id等
     private String type;//类型  12 场景评论
-    private String target_user_id;//关联用户id
+//    private String target_user_id;//关联用户id 创建这个情境的用户id
     //界面下的控件
     private View activityView;
     private GlobalTitleLayout titleLayout;
@@ -125,8 +125,8 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         });
         target_id = getIntent().getStringExtra("target_id");
         type = getIntent().getStringExtra("type");
-        target_user_id = getIntent().getStringExtra("target_user_id");
-        if (target_id == null || type == null || target_user_id == null) {
+//        target_user_id = getIntent().getStringExtra("target_user_id");
+        if (target_id == null || type == null ) {
             ToastUtils.showError("数据错误");
             if (dialog != null) {
                 if (dialog.isShowing()) {
@@ -429,10 +429,10 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
                             ToastUtils.showError("请选择回复评论");
                             return;
                         }
-                        sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, reply_id, reply_user_id);
+                        sendComments(target_id, editText.getText().toString(), type, null, is_reply, reply_id, reply_user_id);
                         break;
                     default:
-                        sendComments(target_id, editText.getText().toString(), type, target_user_id, is_reply, null, null);
+                        sendComments(target_id, editText.getText().toString(), type, null, is_reply, null, null);
                         break;
                 }
                 break;
@@ -492,7 +492,7 @@ public class CommentListActivity extends BaseActivity implements View.OnClickLis
         if (!isFocus && hasFocus && getIntent().hasExtra(UserCommentsActivity.class.getSimpleName())) {
             reply_id = getIntent().getStringExtra("reply_id");
             reply_user_id = getIntent().getStringExtra("reply_user_id");
-            if (target_user_id.equals(reply_user_id)) {
+            if (currentUserId.equals(reply_user_id)) {
                 return;
             }
             isFocus = true;

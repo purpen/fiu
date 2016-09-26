@@ -31,5 +31,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-
+    <com.taihuoniao.fineix.view.CustomItemLayout
+        android:id="@+id/item_fans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

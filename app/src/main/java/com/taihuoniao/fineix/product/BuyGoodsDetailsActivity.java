@@ -463,9 +463,13 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     maxNumber = buyGoodDetailsBean.getData().getInventory();
                     quantity.setText(maxNumber + "");
                     addSkuToLinear();
-
                     return;
                 }
+                tabLayout.setVisibility(View.GONE);
+                tabLine.setVisibility(View.GONE);
+                buyBtn.setVisibility(View.GONE);
+                shareLinear.setVisibility(View.GONE);
+                addCartBtn.setVisibility(View.GONE);
                 ToastUtils.showError(buyGoodDetailsBean.getMessage());
 //                finish();
             }

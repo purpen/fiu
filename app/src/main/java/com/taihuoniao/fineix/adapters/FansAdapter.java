@@ -42,11 +42,15 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     public static final int NOT_LOVE = 0; //别人的粉丝列表和LoginInfo.getUserId()的关系
     public static final int LOVE = 1;
     private long userId;
+    private boolean flag;//判断是不是消息页面跳转过来的。只有消息页面跳转过来。并且id为本人时显示点
+    private int fansCount;//新添加的粉丝数量
 
-    public FansAdapter(List<FocusFansItem> list, Activity activity, long userId) {
+    public FansAdapter(List<FocusFansItem> list, Activity activity, long userId, boolean flag, int fansCount) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
         this.userId = userId;
+        this.flag = flag;
+        this.fansCount = fansCount;
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.default_focus_head)
                 .showImageForEmptyUri(R.mipmap.default_focus_head)
@@ -89,6 +93,11 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 }
             }
             if (userId == LoginInfo.getUserId()) { //是自己
+                if (position >= fansCount) {
+                    holder.dot.setVisibility(View.GONE);
+                } else {
+                    holder.dot.setVisibility(View.VISIBLE);
+                }
                 switch (item.type) {
                     case TYPE1:  //仅当粉丝关注我
                         setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
@@ -217,6 +226,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
 
     /**
      * 需求只考虑LoginInfo.getUserId()与别人的关注用户和粉丝的关系
+     *
      * @param item
      * @param holder
      */
@@ -302,6 +312,8 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         RoundedImageView riv_auth;
         @Bind(R.id.tv_name)
         TextView tv_name;
+        @Bind(R.id.dot)
+        TextView dot;
         @Bind(R.id.tv_desc)
         TextView tv_desc;
         @Bind(R.id.btn)

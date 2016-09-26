@@ -12,6 +12,7 @@ public class ThirdLogin implements Serializable {
     public User user;
 
     public class User implements Serializable{
+        public int is_bonus;
         public long _id;
         public String  nickname;
         public String sex;

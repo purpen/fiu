@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class LoginInfo implements Serializable {
 
     private long _id;
+    private int is_bonus;
     private String message;
     private String account;
     private String nickname;
@@ -104,6 +105,13 @@ public class LoginInfo implements Serializable {
         return !TextUtils.isEmpty(login_info);
     }
 
+    public int getIs_bonus() {
+        return is_bonus;
+    }
+
+    public void setIs_bonus(int is_bonus) {
+        this.is_bonus = is_bonus;
+    }
 
     public String getNickname() {
         return nickname;
