@@ -39,7 +39,12 @@ public class FavoriteProductGVAdapter extends CommonBaseAdapter<ItemProductColle
         if (item.product != null) {
             ImageLoader.getInstance().displayImage(item.product.cover_url, holder.imageView, options);
             holder.tvName.setText(item.product.title);
-            holder.tvPrice.setText("￥" + item.product.sale_price);
+            if (item.product.stage==9){
+                holder.tvPrice.setVisibility(View.VISIBLE);
+                holder.tvPrice.setText("￥" + item.product.sale_price);
+            }else {
+                holder.tvPrice.setVisibility(View.GONE);
+            }
         }
         return convertView;
     }

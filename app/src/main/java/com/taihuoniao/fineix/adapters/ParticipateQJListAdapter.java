@@ -86,11 +86,9 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                 holder.ibtnRight.setImageResource(R.mipmap.zan_normal);
             }
             holder.tvNameRight.setText(right_qj.user_info.nickname);
-//            if (!TextUtils.isEmpty(right_qj.title)) {
-//                holder.tvTitleRight.setText(right_qj.title);
-//                holder.tvTitleRight.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-//            }
             if (!TextUtils.isEmpty(right_qj.title)) {
+                holder.tvTitleRight.setVisibility(View.VISIBLE);
+                holder.tv_title_right1.setVisibility(View.VISIBLE);
                 if (right_qj.title.length() <= 10) {
                     holder.tvTitleRight.setText("");
                     holder.tv_title_right1.setText(right_qj.title);
@@ -102,6 +100,9 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                     holder.tv_title_right1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                     holder.tvTitleRight.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 }
+            }else {
+                holder.tvTitleRight.setVisibility(View.GONE);
+                holder.tv_title_right1.setVisibility(View.GONE);
             }
         }
 
@@ -113,11 +114,9 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
 
         imageLoader.displayImage(left_qj.cover_url, holder.ivCoverLeft, options);
         imageLoader.displayImage(left_qj.user_info.avatar_url, holder.riv, options);
-//        if (!TextUtils.isEmpty(left_qj.title)) {
-//            holder.tvTitleLeft.setText(left_qj.title);
-//            holder.tvTitleLeft.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
-//        }
         if (!TextUtils.isEmpty(left_qj.title)) {
+            holder.tvTitleLeft.setVisibility(View.VISIBLE);
+            holder.tv_title_left1.setVisibility(View.VISIBLE);
             if (left_qj.title.length() <= 10) {
                 holder.tvTitleLeft.setText("");
                 holder.tv_title_left1.setText(left_qj.title);
@@ -129,6 +128,9 @@ public class ParticipateQJListAdapter extends CommonBaseAdapter<DataParticipateQ
                 holder.tv_title_left1.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
                 holder.tvTitleLeft.setBackgroundColor(activity.getResources().getColor(R.color.black_touming_80));
             }
+        }else {
+            holder.tvTitleLeft.setVisibility(View.GONE);
+            holder.tv_title_left1.setVisibility(View.GONE);
         }
         holder.tvName.setText(left_qj.user_info.nickname);
         holder.rlLeft.setLayoutParams(params);

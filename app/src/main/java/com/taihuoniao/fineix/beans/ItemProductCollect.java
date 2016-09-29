@@ -68,6 +68,7 @@ public class ItemProductCollect implements Parcelable {
         public int attrbute;
         public String sale_price;
         public String market_price;
+        public int stage;
         public List<String> banner_asset;
 
         public SceneProductBean() {
@@ -86,6 +87,7 @@ public class ItemProductCollect implements Parcelable {
             dest.writeInt(this.attrbute);
             dest.writeString(this.sale_price);
             dest.writeString(this.market_price);
+            dest.writeInt(this.stage);
             dest.writeStringList(this.banner_asset);
         }
 
@@ -96,6 +98,7 @@ public class ItemProductCollect implements Parcelable {
             this.attrbute = in.readInt();
             this.sale_price = in.readString();
             this.market_price = in.readString();
+            this.stage = in.readInt();
             this.banner_asset = in.createStringArrayList();
         }
 

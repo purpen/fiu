@@ -90,7 +90,7 @@ android {
 dependencies {
     allprojects {
         repositories {
-            mavenCentral()
+            jcenter()
         }
     }
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
