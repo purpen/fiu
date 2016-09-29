@@ -42,6 +42,7 @@ import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.SceneLoveBean;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapNearByCJActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -51,6 +52,7 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QJPictureActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ReportActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.ShareActivity;
+import com.taihuoniao.fineix.scene.CreateQJActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
@@ -82,6 +84,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
     //popupwindow下的控件
     private View popup_view;
     private PopupWindow popupWindow;
+    private TextView bianjiTv;
     private TextView shoucangTv;
     private TextView jubaoTv;
     private TextView cancelTv;
@@ -99,6 +102,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
 
     private void initPopupWindow() {
         popup_view = View.inflate(activity, R.layout.popup_scene_details_more, null);
+        bianjiTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_bianji);
         shoucangTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_shoucang);
         jubaoTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
         cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
@@ -133,7 +137,9 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         if (LoginInfo.getUserId() == Long.parseLong(sceneList.get(position).getUser_id())) {
             //自己不能举报自己。改为删除
             jubaoTv.setText("删除");
+            bianjiTv.setVisibility(View.VISIBLE);
         } else {
+            bianjiTv.setVisibility(View.GONE);
             jubaoTv.setText("举报");
         }
         if (sceneList.get(position).getIs_favorite() == 1) {
@@ -141,6 +147,15 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         } else {
             shoucangTv.setText("收藏");
         }
+        bianjiTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, CreateQJActivity.class);
+                intent.putExtra(IndexFragment.class.getSimpleName(), sceneList.get(position));
+                activity.startActivity(intent);
+                popupWindow.dismiss();
+            }
+        });
         shoucangTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,7 +291,11 @@ public class FindQJSceneListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, QJPictureActivity.class);
-                intent.putExtra("img",sceneList.get(position).getCover_url());
+                intent.putExtra("img", sceneList.get(position).getCover_url());
+                intent.putExtra("fine", sceneList.get(position).getFine() == 1);
+                intent.putExtra("stick", sceneList.get(position).getStick() == 1);
+                intent.putExtra("check", sceneList.get(position).getIs_check() == 0);
+                intent.putExtra("id",sceneList.get(position).get_id());
                 activity.startActivity(intent);
             }
         });
@@ -799,7 +818,7 @@ public class FindQJSceneListAdapter extends BaseAdapter {
         ImageView shareImg;
         @Bind(R.id.comment_img)
         ImageView commentImg;
-//        @Bind(R.id.love_container)
+        //        @Bind(R.id.love_container)
 //        RelativeLayout loveRelative;
         @Bind(R.id.love_count)
         TextView loveCount;

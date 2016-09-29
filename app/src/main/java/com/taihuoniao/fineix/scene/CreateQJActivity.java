@@ -34,18 +34,24 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.ActiveTagsBean;
 import com.taihuoniao.fineix.beans.CreateQJBean;
 import com.taihuoniao.fineix.beans.LoginInfo;
+import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.main.fragment.FindFragment;
+import com.taihuoniao.fineix.main.fragment.IndexFragment;
 import com.taihuoniao.fineix.map.MapSearchAddressActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
+import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.Base64Utils;
 import com.taihuoniao.fineix.utils.EffectUtil;
@@ -65,12 +71,15 @@ import butterknife.Bind;
  * 创建情景/编辑情景
  */
 public class CreateQJActivity extends BaseActivity implements View.OnClickListener {
+    //编辑情境时传过来的情境详情
+    private SceneList.DataBean.RowsBean qjBean;
+    private String qjId;
     @Bind(R.id.title_layout)
     GlobalTitleLayout titleLayout;
     @Bind(R.id.background_img)
     ImageView backgroundImg;
     @Bind(R.id.qj_title_tv)
-    EditText qjTitleTv;
+    TextView qjTitleTv;
     @Bind(R.id.qj_title_tv2)
     TextView qjTitleTv2;
     @Bind(R.id.container)
@@ -156,8 +165,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                             onClick(desTv);
                             isDown = false;
                         }
-                        Log.e("<<<", "up,x=" + event.getX() + ",y=" + event.getY()+",height="+desTv.getMeasuredHeight()
-                        +",width="+desTv.getMeasuredWidth());
+                        Log.e("<<<", "up,x=" + event.getX() + ",y=" + event.getY() + ",height=" + desTv.getMeasuredHeight()
+                                + ",width=" + desTv.getMeasuredWidth());
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         Log.e("<<<", "cancel");
@@ -215,6 +224,108 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 });
                 container.addView(labelView);
                 labelView.wave();
+            }
+        } else if (getIntent().hasExtra(IndexFragment.class.getSimpleName())) {
+            titleLayout.setCancelImgVisible(true);
+            qjBean = (SceneList.DataBean.RowsBean) getIntent().getSerializableExtra(IndexFragment.class.getSimpleName());
+            qjId = qjBean.get_id();
+            titleLayout.setTitle(R.string.bianji_qingjing);
+            titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.yellow_bd8913), this);
+            ImageLoader.getInstance().loadImage(qjBean.getCover_url(), new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String s, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                    MainApplication.editBitmap = bitmap;
+                    backgroundImg.setImageBitmap(bitmap);
+                }
+
+                @Override
+                public void onLoadingCancelled(String s, View view) {
+
+                }
+            });
+            //添加商品标签
+            for (final SceneList.DataBean.RowsBean.ProductBean productBean : qjBean.getProduct()) {
+                final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                final LabelView labelView = new LabelView(activity);
+                labelView.nameTv.setText(productBean.getTitle());
+                labelView.setLayoutParams(layoutParams);
+                if (productBean.getLoc() == 2) {
+                    labelView.nameTv.setBackgroundResource(R.drawable.label_left);
+                    RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
+                    layoutParams1.leftMargin = (int) labelView.labelMargin;
+                    labelView.pointContainer.setLayoutParams(layoutParams1);
+                }
+                labelView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (productBean.getLoc() == 2) {
+                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                            lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.labelMargin - labelView.pointWidth / 2);
+                            lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                            labelView.setLayoutParams(lp);
+                        } else {
+                            labelView.nameTv.setBackgroundResource(R.drawable.label_right);
+                            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) labelView.pointContainer.getLayoutParams();
+                            layoutParams1.leftMargin = (int) (labelView.nameTv.getMeasuredWidth() - labelView.pointWidth - labelView.labelMargin);
+                            labelView.pointContainer.setLayoutParams(layoutParams1);
+                            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) labelView.getLayoutParams();
+                            lp.leftMargin = (int) (productBean.getX() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredWidth() + labelView.labelMargin + labelView.pointWidth / 2);
+                            lp.topMargin = (int) (productBean.getY() * MainApplication.getContext().getScreenWidth() - labelView.getMeasuredHeight() + labelView.pointWidth / 2);
+                            labelView.setLayoutParams(lp);
+                        }
+                    }
+                });
+                container.addView(labelView);
+                labelView.wave();
+            }
+            titleIntent = qjBean.getTitle();
+            SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, titleIntent);
+            desIntent = qjBean.getDes();
+            tags = new StringBuilder();
+            int sta = 0;
+            SpannableString spannableStringBuilder = new SpannableString(desIntent);
+            while (desIntent.substring(sta).contains("#")) {
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.yellow_bd8913));
+                sta = desIntent.indexOf("#", sta);
+                if (desIntent.substring(sta).contains(" ")) {
+                    int en = desIntent.indexOf(" ", sta);
+                    tags.append(",").append(desIntent.substring(sta + 1, en));
+                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, en, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sta = en;
+                } else {
+                    tags.append(",").append(desIntent.substring(sta + 1));
+                    spannableStringBuilder.setSpan(foregroundColorSpan, sta, desIntent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    break;
+                }
+            }
+            if (tags.length() > 0) {
+                tags.deleteCharAt(0);
+            }
+            desTv.setText(spannableStringBuilder);
+            locationTv.setText(qjBean.getAddress());
+            city = qjBean.getCity();
+            if (TextUtils.isEmpty(city)) {
+                cityTv.setVisibility(View.GONE);
+            } else {
+                cityTv.setText(qjBean.getCity());
+                cityTv.setVisibility(View.VISIBLE);
+            }
+            try {
+                lat = qjBean.getLocation().getCoordinates().get(1) + "";
+                lng = qjBean.getLocation().getCoordinates().get(0) + "";
+            } catch (Exception e) {
+                lat = null;
+                lng = null;
             }
         }
     }
@@ -324,24 +435,8 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                         } while (stream.size() > MainApplication.MAXPIC);//最大上传图片不得超过512K
                         Log.e("<<<", "压缩图片");
                         String tmp = Base64Utils.encodeLines(stream.toByteArray());
-                        String sids = null;
-                        StringBuilder sub_ids = new StringBuilder();
-                        if (MainApplication.subjectId != null) {
-                            sub_ids.append(",").append(MainApplication.subjectId);
-                        }
-                        if (des != null && activeTagsBean != null && activeTagsBean.getData() != null && activeTagsBean.getData().getItems() != null) {
-                            for (int i = 0; i < activeTagsBean.getData().getItems().size(); i++) {
-                                if (des.contains("#" + activeTagsBean.getData().getItems().get(i).get(0) + " ")) {
-                                    sub_ids.append(",").append(activeTagsBean.getData().getItems().get(i).get(1));
-                                }
-                            }
-                        }
-                        if (sub_ids.length() > 0) {
-                            sub_ids.deleteCharAt(0);
-                            sids = sub_ids.toString();
-                        }
                         Log.e("<<<", "初始化活动标签");
-                        createQJ(null, title, des, null, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, sids);
+                        createQJ(qjId, title, des, null, tags.length() > 0 ? tags.toString() : null, products.toString(), address, city, tmp, lat, lng, MainApplication.subjectId);
                     }
                 });
                 thread.start();
@@ -393,13 +488,20 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                                     MainApplication.blurBitmap = null;
                                     MainApplication.subjectId = null;
                                     EffectUtil.clear();
-                                    ToastUtils.showSuccess("创建成功");
-                                    Intent intent1 = new Intent(DataConstants.BroadFind);
-                                    intent1.putExtra("id", createQJBean.getData().getId());
-                                    sendBroadcast(intent1);
-                                    Intent intent = new Intent(CreateQJActivity.this, MainActivity.class);
-                                    intent.putExtra(FindFragment.class.getSimpleName(), false);
-                                    startActivity(intent);
+                                    if (qjBean == null) {
+                                        ToastUtils.showSuccess("创建成功");
+                                        Intent intent1 = new Intent(DataConstants.BroadFind);
+                                        intent1.putExtra("id", createQJBean.getData().getId());
+                                        sendBroadcast(intent1);
+                                        Intent intent = new Intent(CreateQJActivity.this, MainActivity.class);
+                                        intent.putExtra(FindFragment.class.getSimpleName(), false);
+                                        startActivity(intent);
+                                    } else {
+                                        ToastUtils.showSuccess("修改成功");
+//                                        Intent intent= new Intent(DataConstants.BroadRefreshQJ);
+//                                        sendBroadcast(intent);
+                                        onBackPressed();
+                                    }
                                 } else {
                                     ToastUtils.showError(createQJBean.getMessage());
                                 }
@@ -487,7 +589,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
 
     private String titleIntent;
     private String desIntent;
-    private ActiveTagsBean activeTagsBean;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -496,7 +597,6 @@ public class CreateQJActivity extends BaseActivity implements View.OnClickListen
                 case 2:
                     titleIntent = data.getStringExtra("title");
                     desIntent = data.getStringExtra("des");
-                    activeTagsBean = (ActiveTagsBean) data.getSerializableExtra("activeBean");
                     if (titleIntent != null) {
                         SceneTitleSetUtils.setTitle(qjTitleTv, qjTitleTv2, titleIntent);
                     }

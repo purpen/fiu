@@ -2,16 +2,34 @@ package com.taihuoniao.fineix.qingjingOrSceneDetails;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.HttpHandler;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.base.NetBean;
+import com.taihuoniao.fineix.beans.IsEditorBean;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.FileUtils;
 import com.taihuoniao.fineix.utils.ImageUtils;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -19,18 +37,31 @@ import com.taihuoniao.fineix.view.ImageCrop.ClipZoomImageView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import butterknife.Bind;
 
 /**
  * Created by taihuoniao on 2016/9/14.
  */
-public class QJPictureActivity extends BaseActivity {
+public class QJPictureActivity extends BaseActivity implements View.OnClickListener {
     private String imgStr;//上个界面传递过来的图片路径
+    private boolean isFine, isStick, isCheck;//是否精选推荐屏蔽
+    private String id;//情景id
     @Bind(R.id.clip_img)
     ClipZoomImageView clipImg;
     private Bitmap bitmap;
     private WaittingDialog dialog;
+    private boolean isEditor;
+    //popupWindow
+    private View popup_view;
+    private PopupWindow popupWindow;
+    private TextView jingxuanTv;
+    private TextView tuijianTv;
+    private TextView pingbiTv;
+    private TextView saveTv;
+    private TextView cancelTv;
+
 
     public QJPictureActivity() {
         super(R.layout.activity_qj_picture);
@@ -39,6 +70,10 @@ public class QJPictureActivity extends BaseActivity {
     @Override
     protected void getIntentData() {
         imgStr = getIntent().getStringExtra("img");
+        isFine = getIntent().getBooleanExtra("fine", false);
+        isStick = getIntent().getBooleanExtra("stick", false);
+        isCheck = getIntent().getBooleanExtra("check", false);
+        id = getIntent().getStringExtra("id");
     }
 
     @Override
@@ -50,27 +85,10 @@ public class QJPictureActivity extends BaseActivity {
                 finish();
             }
         });
-//        clipImg.setLongClickable(true);
         clipImg.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(QJPictureActivity.this);
-                builder.setMessage("保存到本地？");
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        QJPictureActivity.this.dialog.show();
-                        savePicture();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
+                showPop();
                 return true;
             }
         });
@@ -95,9 +113,148 @@ public class QJPictureActivity extends BaseActivity {
 
             }
         });
+        initPopupWindow();
+    }
+
+    private void initPopupWindow() {
+        popup_view = View.inflate(activity, R.layout.popup_scene_details_more, null);
+        jingxuanTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more1);
+        tuijianTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_bianji);
+        pingbiTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_shoucang);
+        saveTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_jubao);
+        cancelTv = (TextView) popup_view.findViewById(R.id.popup_scene_detail_more_cancel);
+        pingbiTv.setTextColor(getResources().getColor(R.color.black));
+        saveTv.setTextColor(getResources().getColor(R.color.black));
+        saveTv.setText("保存图片到本地");
+        saveTv.setOnClickListener(this);
+        cancelTv.setOnClickListener(this);
+        popupWindow = new PopupWindow(popup_view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.popupwindow_style);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+                params.alpha = 1f;
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                activity.getWindow().setAttributes(params);
+            }
+        });
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(activity,
+                R.color.nothing));
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+    }
+
+    @Override
+    protected void requestNet() {
+        if (!LoginInfo.isUserLogin()) {
+            return;
+        }
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
+        isEditor();
+    }
+
+    private void showPop() {
+        if (isEditor) {
+            jingxuanTv.setVisibility(View.VISIBLE);
+            tuijianTv.setVisibility(View.VISIBLE);
+            pingbiTv.setVisibility(View.VISIBLE);
+            if (isFine) {
+                jingxuanTv.setText("取消精选");
+            } else {
+                jingxuanTv.setText("精选");
+            }
+            if (isStick) {
+                tuijianTv.setText("取消推荐");
+            } else {
+                tuijianTv.setText("推荐");
+            }
+            if (isCheck) {
+                pingbiTv.setText("取消屏蔽");
+            } else {
+                pingbiTv.setText("屏蔽");
+            }
+            jingxuanTv.setOnClickListener(this);
+            tuijianTv.setOnClickListener(this);
+            pingbiTv.setOnClickListener(this);
+        } else {
+            jingxuanTv.setVisibility(View.GONE);
+            tuijianTv.setVisibility(View.GONE);
+            pingbiTv.setVisibility(View.GONE);
+        }
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = 0.4f;
+        getWindow().setAttributes(params);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        popupWindow.showAtLocation(popup_view, Gravity.BOTTOM, 0, 0);
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.popup_scene_detail_more1:
+                popupWindow.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                setFine();
+                break;
+            case R.id.popup_scene_detail_more_bianji:
+                popupWindow.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                setStick();
+                break;
+            case R.id.popup_scene_detail_shoucang:
+                popupWindow.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                setCheck();
+                break;
+            case R.id.popup_scene_detail_more_jubao:
+//                AlertDialog.Builder builder = new AlertDialog.Builder(QJPictureActivity.this);
+//                builder.setMessage("保存到本地？");
+//                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+                popupWindow.dismiss();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                savePicture();
+//                    }
+//                });
+//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builder.create().show();
+                break;
+            case R.id.popup_scene_detail_more_cancel:
+                popupWindow.dismiss();
+                break;
+        }
+    }
+
+    //保存图片到本地
     private void savePicture() {
         if (bitmap == null) {
             ImageLoader.getInstance().displayImage(imgStr, clipImg, new ImageLoadingListener() {
@@ -148,5 +305,129 @@ public class QJPictureActivity extends BaseActivity {
             }
         }.start();
 
+    }
+
+    //查看当前用户是否有编辑权限
+    private void isEditor() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.isEditor(new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<权限", responseInfo.result);
+                IsEditorBean isEditorBean = new IsEditorBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<IsEditorBean>() {
+                    }.getType();
+                    isEditorBean = gson.fromJson(responseInfo.result, type);
+                } catch (JsonSyntaxException e) {
+                    Log.e("<<<编辑权限", "解析异常" + e.toString());
+                }
+                isEditor = (isEditorBean.getData().getIs_editor() == 1);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+        addNet(httpHandler);
+    }
+
+    //精选或取消精选
+    private void setFine() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.setFine(id, isFine ? "0" : "1", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<精选", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    netBean = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<精选","解析异常="+e.toString());
+                }
+                if(netBean.isSuccess()){
+                    isFine = !isFine;
+                    ToastUtils.showSuccess(netBean.getMessage());
+                }else{
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+        addNet(httpHandler);
+    }
+
+    //推荐或取消推荐
+    private void setStick() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.setStick(id, isStick ? "0" : "1", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<精选", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    netBean = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<精选","解析异常="+e.toString());
+                }
+                if(netBean.isSuccess()){
+                    isStick = !isStick;
+                    ToastUtils.showSuccess(netBean.getMessage());
+                }else{
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+        addNet(httpHandler);
+    }
+
+    //屏蔽或取消屏蔽
+    private void setCheck() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.setCheck(id, isCheck ? "1" : "0", new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                Log.e("<<<精选", responseInfo.result);
+                NetBean netBean = new NetBean();
+                try {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<NetBean>(){}.getType();
+                    netBean = gson.fromJson(responseInfo.result,type);
+                }catch (JsonSyntaxException e){
+                    Log.e("<<<精选","解析异常="+e.toString());
+                }
+                if(netBean.isSuccess()){
+                    isCheck = !isCheck;
+                    ToastUtils.showSuccess(netBean.getMessage());
+                }else{
+                    ToastUtils.showError(netBean.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                ToastUtils.showError(R.string.net_fail);
+            }
+        });
+        addNet(httpHandler);
     }
 }

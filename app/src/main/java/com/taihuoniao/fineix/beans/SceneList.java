@@ -3,6 +3,7 @@ package com.taihuoniao.fineix.beans;
 import com.taihuoniao.fineix.base.NetBean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -118,9 +119,9 @@ public class SceneList extends NetBean implements Serializable {
             private String view_count;
             private String love_count;
             private int comment_count;
-            private String stick;
-            private String fine;
-            private String is_check;
+            private int stick;//0未推荐 1已推荐
+            private int fine;//0 未精选 1已精选
+            private int is_check;// 1 没有屏蔽 0屏蔽
             private String status;
             private String deleted;
             private String created_on;
@@ -256,28 +257,28 @@ public class SceneList extends NetBean implements Serializable {
                 this.comment_count = comment_count;
             }
 
-            public String getStick() {
+            public int getStick() {
                 return stick;
             }
 
-            public void setStick(String stick) {
+            public void setStick(int stick) {
                 this.stick = stick;
             }
 
-            public String getFine() {
-                return fine;
-            }
-
-            public void setFine(String fine) {
-                this.fine = fine;
-            }
-
-            public String getIs_check() {
+            public int getIs_check() {
                 return is_check;
             }
 
-            public void setIs_check(String is_check) {
+            public void setIs_check(int is_check) {
                 this.is_check = is_check;
+            }
+
+            public int getFine() {
+                return fine;
+            }
+
+            public void setFine(int fine) {
+                this.fine = fine;
             }
 
             public String getStatus() {
@@ -361,6 +362,9 @@ public class SceneList extends NetBean implements Serializable {
             }
 
             public List<ProductBean> getProduct() {
+                if (product == null) {
+                    product = new ArrayList<>();
+                }
                 return product;
             }
 

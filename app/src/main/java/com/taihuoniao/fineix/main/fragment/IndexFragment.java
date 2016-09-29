@@ -95,6 +95,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         View fragmentView = View.inflate(getActivity(), R.layout.fragment_index, null);
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadIndex);
+//        intentFilter.addAction(DataConstants.BroadRefreshQJ);
         getActivity().registerReceiver(indexReceiver, intentFilter);
         return fragmentView;
     }

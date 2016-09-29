@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,6 +57,7 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
         cartNum = (TextView) view.findViewById(R.id.cart_number);
     }
 
+
     public void setCartListener(OnClickListener onClickListener) {
         cartRelative.setVisibility(VISIBLE);
         continueTv.setVisibility(GONE);
@@ -78,10 +80,12 @@ public class GlobalTitleLayout extends RelativeLayout implements View.OnClickLis
 
     //控制取消按钮的显示隐藏
     public void setCancelImgVisible(boolean visible) {
-        if (visible)
+        if (visible) {
             cancelImg.setVisibility(VISIBLE);
-        else
+            backImg.setVisibility(GONE);
+        } else {
             cancelImg.setVisibility(GONE);
+        }
     }
 
     //设置分享按钮的显示隐藏

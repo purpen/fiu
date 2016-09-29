@@ -59,7 +59,7 @@ public class ProductAndSceneListBean extends NetBean {
         private String cover_url;
         private String address;
         private int is_love;
-        private QJDetailBean.DataBean.UserInfoBean user_info;
+        private SceneList.DataBean.RowsBean.UserInfoBean user_info;
 
         public int getIs_love() {
             return is_love;
@@ -69,11 +69,11 @@ public class ProductAndSceneListBean extends NetBean {
             this.is_love = is_love;
         }
 
-        public QJDetailBean.DataBean.UserInfoBean getUser_info() {
+        public SceneList.DataBean.RowsBean.UserInfoBean getUser_info() {
             return user_info;
         }
 
-        public void setUser_info(QJDetailBean.DataBean.UserInfoBean user_info) {
+        public void setUser_info(SceneList.DataBean.RowsBean.UserInfoBean user_info) {
             this.user_info = user_info;
         }
 

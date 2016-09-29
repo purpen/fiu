@@ -246,8 +246,8 @@ public class ClientDiscoverAPI {
     //场景
     //新增情景
     public static HttpHandler<String> createScene(String id, String title, String des, String scene_id, String tags,
-                                   String products, String address, String city, String tmp, String lat, String lng,
-                                   String subject_ids, RequestCallBack<String> callBack) {
+                                                  String products, String address, String city, String tmp, String lat, String lng,
+                                                  String subject_ids, RequestCallBack<String> callBack) {
         String url = NetworkConstance.create_scene;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
@@ -859,7 +859,7 @@ public class ClientDiscoverAPI {
      * @param find_type
      * @param callBack
      */
-    public static void getFocusFansList(String userId, String page, String size, String find_type,String clean_remind, RequestCallBack<String> callBack) {
+    public static void getFocusFansList(String userId, String page, String size, String find_type, String clean_remind, RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
@@ -867,7 +867,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("user_id", userId);//924808
 //        LogUtil.e("userId",LoginInfo.getInstance().getId()+"");
         params.addQueryStringParameter("find_type", find_type);
-        params.addQueryStringParameter("clean_remind",clean_remind);
+        params.addQueryStringParameter("clean_remind", clean_remind);
         MD5Utils.sign(params, NetworkConstance.FOCUS_FAVORITE_URL, callBack, false);
     }
 
@@ -1747,5 +1747,43 @@ public class ClientDiscoverAPI {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    //当前用户是否是管理员
+    public static HttpHandler<String> isEditor(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/user/is_editor";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        return httpHandler;
+    }
+
+    //管理员添加精选或取消精选
+    public static HttpHandler<String> setFine(String id, String evt, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/user/do_fine";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("evt", evt);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        return httpHandler;
+    }
+
+    //管理员添加推荐或取消推荐
+    public static HttpHandler<String> setStick(String id, String evt, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/user/do_stick";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("evt", evt);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        return httpHandler;
+    }
+
+    //管理员添加屏蔽或取消屏蔽
+    public static HttpHandler<String> setCheck(String id, String evt, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/user/do_check";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", id);
+        params.addQueryStringParameter("evt", evt);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        return httpHandler;
     }
 }

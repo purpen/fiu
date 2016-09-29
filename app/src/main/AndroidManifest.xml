@@ -119,10 +119,6 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".user.OrderInterestQJActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity
             android:name=".user.NoticeActivity"
             android:screenOrientation="portrait"
             />
