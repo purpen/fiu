@@ -60,7 +60,7 @@ public class NetworkConstance {
     //场景详情
     public static final String scene_details = BASE_URL + "/scene_sight/view";
     //列表数据
-    public static final String scene_list = BASE_URL + "/scene_sight";
+    public static final String scene_list = BASE_URL + "/scene_sight/getlist";
     //个人中心
     //用户列表
     public static final String user_list = BASE_URL + "/user/";

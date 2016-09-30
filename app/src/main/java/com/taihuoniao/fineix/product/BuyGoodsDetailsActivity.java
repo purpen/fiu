@@ -430,11 +430,12 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     if (buyGoodDetailsBean.getData().getStage() == 9) {
                         titleList.add("商品详情");
                         webFragment = WebFragment.newInstance();
+
                         fragmentList.add(webFragment);
                         titleList.add("评价");
                         commentFragment = CommentFragment.newInstance(id);
                         fragmentList.add(commentFragment);
-                    } else if (buyGoodDetailsBean.getData().getStage() == 16) {
+                    } else {
                         tabLayout.setVisibility(View.GONE);
                         tabLine.setVisibility(View.GONE);
                         buyBtn.setVisibility(View.GONE);
@@ -677,7 +678,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     //sina
                     params = new Platform.ShareParams();
                     params.setShareType(Platform.SHARE_WEBPAGE);
-                    params.setText(buyGoodDetailsBean.getData().getAdvantage()+buyGoodDetailsBean.getData().getShare_view_url());
+                    params.setText(buyGoodDetailsBean.getData().getAdvantage() + buyGoodDetailsBean.getData().getShare_view_url());
                     if (buyGoodDetailsBean.getData().getCover_url() != null) {
                         params.setImageUrl(buyGoodDetailsBean.getData().getCover_url());
                     }

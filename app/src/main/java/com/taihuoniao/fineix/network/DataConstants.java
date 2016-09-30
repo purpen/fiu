@@ -24,7 +24,8 @@ public class DataConstants {
     public static final String BroadSearch = "com.taihuoniao.fiu.search";
     public static final String BroadIndex = "com.taihuoniao.fiu.index";
     public static final String BroadFind = "com.taihuoniao.fiu.find";
-    public static final String BroadWellGoods="com.taihuoniao.fiu.wellgoods";
+    public static final String BroadWellGoods = "com.taihuoniao.fiu.wellgoods";
+//    public static final String BroadRefreshQJ = "com.taihuoniao.fiu.refresh";//刷新所有有情景的界面
     //跳转活动详情
     public static final String BroadSceneActivityDetail = "com.taihuoniao.fiu.activitydetail";
     public static final int NET_FAIL = 404;//网络请求失败

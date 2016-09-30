@@ -72,8 +72,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
     RelativeLayout goneLinear;
     @Bind(R.id.gone_label)
     TextView goneLabel;
-    @Bind(R.id.gone_demo_label)
-    TextView goneDemoLabel;
     public WaittingDialog dialog;
     private List<SearchFragment> fragmentList;
     private List<String> titleList;
@@ -111,7 +109,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
         titleLayout.setRightTv(R.string.confirm, getResources().getColor(R.color.white), this);
         activityView.addOnLayoutChangeListener(this);
         goneLabel.setOnClickListener(this);
-        goneDemoLabel.setOnClickListener(this);
         deleteTitle.setOnClickListener(this);
         deleteDes.setOnClickListener(this);
         title.addTextChangedListener(new TextWatcher() {
@@ -206,18 +203,12 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 Intent intent = new Intent();
                 intent.putExtra("title", str);
                 intent.putExtra("des", des.getText().toString());
-                intent.putExtra("activeBean", activeTagsBean);
                 setResult(2, intent);
                 onBackPressed();
                 break;
             case R.id.gone_label:
                 if (des.hasFocus()) {
                     des.getText().insert(des.getSelectionStart(), goneLabel.getText());
-                }
-                break;
-            case R.id.gone_demo_label:
-                if (des.hasFocus()) {
-                    des.getText().insert(des.getSelectionStart(), goneDemoLabel.getText());
                 }
                 break;
             case R.id.delete_title:
@@ -302,7 +293,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                     Intent intent = new Intent();
                     intent.putExtra("title", titleIntent);
                     intent.putExtra("des", desIntent);
-                    intent.putExtra("activeBean", activeTagsBean);
                     setResult(2, intent);
                     finish();
                     break;
@@ -366,7 +356,6 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Log.e("<<<活动标签", responseInfo.result);
-//                dialog.dismiss();
                 try {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ActiveTagsBean>() {
@@ -375,21 +364,10 @@ public class AddEnvirActivity extends BaseActivity implements View.OnClickListen
                 } catch (JsonSyntaxException e) {
                     Log.e("<<<", "解析异常" + e.toString());
                 }
-                if (activeTagsBean.isSuccess()) {
-                    try {
-                        goneDemoLabel.setText(" #" + activeTagsBean.getData().getItems().get(0).get(0) + " ");
-                    } catch (Exception e) {
-                        Log.e("<<<", "没有活动");
-                    }
-                } else {
-                    goneDemoLabel.setVisibility(View.GONE);
-                }
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
-//                dialog.dismiss();
-                goneDemoLabel.setVisibility(View.GONE);
             }
         });
         addNet(httpHandler);

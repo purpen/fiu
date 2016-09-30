@@ -73,11 +73,21 @@ public class BrandProductAdapter extends BaseAdapter {
         ImageLoader.getInstance().displayImage(list.get(leftPosition).getCover_url(), holder.productImgLeft);
         holder.nameLeft.setText(list.get(leftPosition).getTitle());
         holder.priceLeft.setText("¥" + list.get(leftPosition).getSale_price());
+        if(list.get(leftPosition).getStage()==9){
+            holder.priceLeft.setVisibility(View.VISIBLE);
+        }else{
+            holder.priceLeft.setVisibility(View.INVISIBLE);
+        }
         if (rightPosition < list.size()) {
             holder.rightContainer.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().displayImage(list.get(rightPosition).getCover_url(), holder.productImgRight);
             holder.nameRight.setText(list.get(rightPosition).getTitle());
             holder.priceRight.setText("¥" + list.get(rightPosition).getSale_price());
+            if(list.get(rightPosition).getStage()==9){
+                holder.priceRight.setVisibility(View.VISIBLE);
+            }else{
+                holder.priceRight.setVisibility(View.INVISIBLE);
+            }
         } else {
             holder.rightContainer.setVisibility(View.GONE);
         }

@@ -79,6 +79,7 @@ public class PopupWindowUtil {
         if (popupWindow != null) {
             popupWindow.dismiss();
             popupWindow = null;
+            activity = null;
         }
     }
 }

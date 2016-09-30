@@ -18,6 +18,8 @@ public class SceneTitleSetUtils {
         if (TextUtils.isEmpty(title)) {
             tv1.setVisibility(View.INVISIBLE);
             tv2.setVisibility(View.INVISIBLE);
+            tv1.setText("");
+            tv2.setText("");
             return;
         }
         if (title.length() > 10) {

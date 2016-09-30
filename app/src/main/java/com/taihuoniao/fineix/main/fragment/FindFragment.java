@@ -123,6 +123,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         pullRefreshView.animLayout();
         dialog = new WaittingDialog(getActivity());
         IntentFilter intentFilter = new IntentFilter(DataConstants.BroadFind);
+//        intentFilter.addAction(DataConstants.BroadRefreshQJ);
         getActivity().registerReceiver(findReceiver, intentFilter);
         initSharePop();
         return fragmentView;
@@ -567,11 +568,4 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
         return false;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 }

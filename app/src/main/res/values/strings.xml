@@ -57,6 +57,7 @@
     <string name="bianji_scene">编辑情境</string>
     <string name="bianji_qingjing">编辑情境</string>
     <string name="publish">发布</string>
+    <string name="modify">修改</string>
     <!-- AddLabelActivity -->
     <string name="add_label">添加标签</string>
     <string name="confirm">确定</string>

@@ -13,7 +13,6 @@
         android:background="@null"
         android:padding="16dp"
         android:src="@mipmap/back_white"/>
-
     <ImageView
         android:id="@+id/title_cancel"
         android:layout_width="50dp"

@@ -127,11 +127,11 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
     @Override
     public void refreshData(BuyGoodDetailsBean buyGoodDetailsBean) {
         this.buyGoodDetailsBean = buyGoodDetailsBean;
-        if(buyGoodDetailsBean.getData().getStage()==16){
+        if (buyGoodDetailsBean.getData().getStage() != 9) {
             holder.detailContainer.setVisibility(View.GONE);
             holder.price.setVisibility(View.GONE);
             holder.liangdianContainer.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.marketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         if (viewPagerAdapter == null) {
@@ -146,13 +146,13 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
         }
         holder.title.setText(buyGoodDetailsBean.getData().getTitle());
         holder.price.setText("¥" + buyGoodDetailsBean.getData().getSale_price());
-        if(buyGoodDetailsBean.getData().getMarket_price()>buyGoodDetailsBean.getData().getSale_price()){
+        if (buyGoodDetailsBean.getData().getMarket_price() > buyGoodDetailsBean.getData().getSale_price()) {
             holder.marketPrice.setVisibility(View.VISIBLE);
             holder.marketPrice.setText("¥" + buyGoodDetailsBean.getData().getMarket_price());
-        }else{
+        } else {
             holder.marketPrice.setVisibility(View.GONE);
         }
-        if(buyGoodDetailsBean.getData().getStage()==16){
+        if (buyGoodDetailsBean.getData().getStage() != 9) {
             holder.marketPrice.setText("此产品为用户标记，暂未销售。浮游正在努力上架产品中ing...");
             holder.marketPrice.setVisibility(View.VISIBLE);
         }
@@ -166,14 +166,14 @@ public class BuyGoodsDetailsFragment extends SearchFragment implements AbsListVi
             ImageLoader.getInstance().displayImage(buyGoodDetailsBean.getData().getBrand().getCover_url(), holder.brandImg);
             holder.brandContainer.setOnClickListener(this);
         } catch (Exception e) {
-           holder.brandContainer.setVisibility(View.GONE);
+            holder.brandContainer.setVisibility(View.GONE);
         }
 
     }
 
     //获取商品相关的情境列表
     private void getSceneList() {
-      HttpHandler<String> httpHandler= ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.productAndScene(page + "", 8 + "", null, id, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
