@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,9 +16,9 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
+import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -38,15 +39,16 @@ import butterknife.ButterKnife;
  * @author lilin
  *         created at 2016/8/17 15:29
  */
-public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBean> {
-
-    public ActivityResultAdapter(ArrayList list, Activity activity) {
+public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.PrizeSightsEntity.DataEntity> {
+    private ArrayList<ActivityPrizeData.PrizeSightsEntity> prizeSights;
+    public ActivityResultAdapter(ArrayList<ActivityPrizeData.PrizeSightsEntity> prizeSights, ArrayList list, Activity activity) {
         super(list, activity);
+        this.prizeSights=prizeSights;
     }
 
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
-        final SubjectData.SightBean item = list.get(position);
+        final ActivityPrizeData.PrizeSightsEntity.DataEntity item = list.get(position);
         ViewHolder holder;
         if (convertView == null) {
             convertView = Util.inflateView(R.layout.item_activity_result, null);
@@ -58,12 +60,18 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
         ImageLoader.getInstance().displayImage(item.user.avatar_url, holder.headImg, options);
         ImageLoader.getInstance().displayImage(item.cover_url, holder.qjImg, options);
         holder.publishTime.setText(item.created_at);
-        if (TextUtils.isEmpty(item.user.city) && TextUtils.isEmpty(item.user.address)) {
+        if (TextUtils.isEmpty(item.city) && TextUtils.isEmpty(item.address)) {
             holder.locationTv.setVisibility(View.GONE);
         } else {
-            holder.locationTv.setText(item.user.city + item.user.address);
+            holder.locationTv.setText(item.city + item.address);
         }
-        holder.tv_prize.setText(item.prize);
+        String prize_num = activity.getResources().getString(R.string.prize_num);
+        if (item.flagHead){
+            holder.tv_prize.setVisibility(View.VISIBLE);
+            holder.tv_prize.setText(String.format(prize_num,item.prizeGrade,item.prizeNum));
+        }else {
+            holder.tv_prize.setVisibility(View.GONE);
+        }
         holder.qjTitleTv.setText(item.title);
 //        holder.qjTitleTv2.setText(item.short_title);
         holder.userNameTv.setText(item.user.nickname);
@@ -80,7 +88,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
         }
 
         //添加商品标签
-        for (final SubjectData.SightBean.ProductBean productBean : item.product) {
+        for (final ActivityPrizeData.PrizeSightsEntity.DataEntity.ProductEntity productBean : item.product) {
             final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             final LabelView labelView = new LabelView(parent.getContext());
             labelView.nameTv.setText(productBean.title);
@@ -131,7 +139,7 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
         return convertView;
     }
 
-    private void doFocus(final SubjectData.SightBean item, final View view) {
+    private void doFocus(final ActivityPrizeData.PrizeSightsEntity.DataEntity item, final View view) {
         if (LoginInfo.isUserLogin()) {
             if (item.user.is_follow == 0) {
                 ClientDiscoverAPI.focusOperate(String.valueOf(item.user._id), new RequestCallBack<String>() {
@@ -141,7 +149,12 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()) {
-                            item.user.is_follow = 1;
+                            for (ActivityPrizeData.PrizeSightsEntity.DataEntity dataEntity:list){
+                                if (TextUtils.equals(item.user._id,dataEntity.user._id)){
+                                    dataEntity.user.is_follow=1;
+                                }
+                            }
+//                            item.user.is_follow = 1;
                             setFocusBtnStyle((Button) view, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
                             notifyDataSetChanged();
                             return;
@@ -163,7 +176,12 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
                         if (TextUtils.isEmpty(responseInfo.result)) return;
                         HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                         if (response.isSuccess()) {
-                            item.user.is_follow = 0;
+                            for (ActivityPrizeData.PrizeSightsEntity.DataEntity dataEntity:list){
+                                if (TextUtils.equals(item.user._id,dataEntity.user._id)){
+                                    dataEntity.user.is_follow=0;
+                                }
+                            }
+//                            item.user.is_follow = 0;
                             setFocusBtnStyle((Button) view, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_white, android.R.color.white, R.drawable.shape_subscribe_theme);
                             notifyDataSetChanged();
                             return;
@@ -219,7 +237,8 @@ public class ActivityResultAdapter extends CommonBaseAdapter<SubjectData.SightBe
         RelativeLayout labelContainer;
         @Bind(R.id.container)
         RelativeLayout container;
-
+        @Bind(R.id.ll_title)
+        LinearLayout llTitle;
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

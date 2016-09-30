@@ -28,9 +28,9 @@ import com.taihuoniao.fineix.adapters.ActivityResultAdapter;
 import com.taihuoniao.fineix.adapters.ParticipateQJListAdapter;
 import com.taihuoniao.fineix.adapters.RuleContentAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.beans.DataParticipateQJ;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -83,7 +83,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
     private ParticipateQJListAdapter adapter;
     private WaittingDialog dialog;
     private String id;
-    private SubjectData data;
+    private ActivityPrizeData detailData;
     private View lineRule;
     private View lineParticipate;
     private View lineResult;
@@ -189,7 +189,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.btn_participate:
                 Intent intent = new Intent(activity, SelectPhotoOrCameraActivity.class);
-                MainApplication.subjectId = String.valueOf(data._id);
+                MainApplication.subjectId = String.valueOf(detailData._id);
                 activity.startActivity(intent);
                 break;
         }
@@ -218,11 +218,10 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<SubjectData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<SubjectData>>() {
+                HttpResponse<ActivityPrizeData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ActivityPrizeData>>() {
                 });
-
                 if (response.isSuccess()) {
-                    data = response.getData();
+                    detailData = response.getData();
                     refreshUI();
                     return;
                 }
@@ -276,10 +275,10 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void refreshUI() {
-        if (data == null) return;
-        ImageLoader.getInstance().displayImage(data.banner_url, imageView);
-        tvDesc.setText(data.short_title);
-        if (data.evt == 2) {
+        if (detailData == null) return;
+        ImageLoader.getInstance().displayImage(detailData.banner_url, imageView);
+        tvDesc.setText(detailData.short_title);
+        if (detailData.evt == 2) {
             rlRule.setVisibility(View.VISIBLE);
             rlParticipate.setVisibility(View.VISIBLE);
             rlResult.setVisibility(View.VISIBLE);
@@ -287,7 +286,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             btn_participate.setVisibility(View.VISIBLE);
             btn_participate.setBackgroundResource(R.color.color_aaa);
         } else {
-            if (data.evt == 0) {
+            if (detailData.evt == 0) {
                 rlParticipate.setVisibility(View.GONE);
                 btn_participate.setText("即将开始");
             } else {
@@ -296,10 +295,10 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             rlResult.setVisibility(View.GONE);
             rlRule.setVisibility(View.VISIBLE);
             btn_participate.setVisibility(View.VISIBLE);
-            tvDuring.setText(String.format("%s-%s", data.begin_time_at, data.end_time_at));
+            tvDuring.setText(String.format("%s-%s", detailData.begin_time_at, detailData.end_time_at));
         }
-        if (!TextUtils.isEmpty(data.title)) {
-            tvTitle.setText(data.title);
+        if (!TextUtils.isEmpty(detailData.title)) {
+            tvTitle.setText(detailData.title);
             tvTitle.setBackgroundColor(getResources().getColor(android.R.color.black));
             tvTitle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -317,10 +316,25 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 }
             });
         }
-
-        ActivityResultAdapter resultAdapter = new ActivityResultAdapter(data.sights, activity);
-        pullRule.setAdapter(new RuleContentAdapter(data, activity));
-        pullLv.setAdapter(resultAdapter);
+        if (detailData.prize_sights!=null&&detailData.prize_sights.size()>0){
+            ArrayList<ActivityPrizeData.PrizeSightsEntity.DataEntity> dataBeenList = new ArrayList<>();
+            for (ActivityPrizeData.PrizeSightsEntity prizeSights:detailData.prize_sights){
+                int size = prizeSights.data.size();
+                for (int i=0;i<size;i++){
+                    if (i==0){
+                        prizeSights.data.get(i).prizeGrade=prizeSights.prize;
+                        prizeSights.data.get(i).prizeNum=size;
+                        prizeSights.data.get(i).flagHead=true;
+                    }else {
+                        prizeSights.data.get(i).flagHead=false;
+                    }
+                }
+                dataBeenList.addAll(prizeSights.data);
+            }
+            ActivityResultAdapter resultAdapter = new ActivityResultAdapter(detailData.prize_sights,dataBeenList, activity);
+            pullLv.setAdapter(resultAdapter);
+        }
+        pullRule.setAdapter(new RuleContentAdapter(detailData, activity));
     }
 
     @Override

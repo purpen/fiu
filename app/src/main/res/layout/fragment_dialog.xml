@@ -14,23 +14,8 @@
         <RelativeLayout
             android:id="@+id/rl"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp50"
+            android:layout_height="@dimen/dp48"
             android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/search_view"
-                android:hint="请输入用户名"
-                android:textColorHint="@color/color_999"
-                android:textSize="@dimen/sp13"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:background="@drawable/border_radius5"
-                android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp10"
-                android:drawablePadding="@dimen/dp5"
-                android:drawableLeft="@mipmap/search"
-                android:layout_centerVertical="true"
-                android:layout_height="@dimen/dp35" />
 
             <ImageButton
                 android:id="@+id/ibtn"
@@ -41,12 +26,29 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/search_view"
+                android:hint="请输入用户名"
+                android:textColorHint="@color/color_999"
+                android:textSize="@dimen/sp13"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
+                android:background="@drawable/border_radius5"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/dp10"
+                android:drawablePadding="@dimen/dp5"
+                android:drawableLeft="@mipmap/search"
+                android:layout_height="@dimen/dp32"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/btn"
             android:layout_width="@dimen/dp70"
-            android:layout_height="@dimen/dp35"
+            android:layout_height="@dimen/dp32"
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:text="@string/cancel"

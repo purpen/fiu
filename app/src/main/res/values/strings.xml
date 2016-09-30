@@ -23,6 +23,7 @@
     <string name="push_tip">如果你关闭或开启新消息通知，请在“设置”－“通知和状态栏”功能中，找到应用程序“Fiu”更改</string>
     <string name="net_fail">网络错误</string>
     <string name="input_invite_code">请输入您的邀请码</string>
+    <string name="prize_num">%1$s%2$s名</string>
     <!-- PhotoFragment -->
     <string name="film_album">Camera</string>
     <!-- CropPictureActivity -->

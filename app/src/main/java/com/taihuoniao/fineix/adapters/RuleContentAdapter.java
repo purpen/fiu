@@ -10,19 +10,23 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 
-import com.taihuoniao.fineix.beans.SubjectData;
+import com.taihuoniao.fineix.beans.ActivityPrizeData;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.view.WaittingDialog;
 
 /**
  * @author lilin
  *         created at 2016/8/29 14:16
  */
 public class RuleContentAdapter extends BaseAdapter {
-    private SubjectData data;
+    private ActivityPrizeData data;
     private Activity activity;
-    public RuleContentAdapter(SubjectData data, Activity activity) {
+    private WaittingDialog dialog;
+
+    public RuleContentAdapter(ActivityPrizeData data, Activity activity) {
         this.data = data;
         this.activity = activity;
+        dialog = new WaittingDialog(activity);
     }
 
     @Override
@@ -69,11 +73,13 @@ public class RuleContentAdapter extends BaseAdapter {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            if (!activity.isFinishing() && dialog != null) dialog.show();
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     };
 }
