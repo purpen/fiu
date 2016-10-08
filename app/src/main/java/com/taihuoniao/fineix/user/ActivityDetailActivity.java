@@ -321,6 +321,16 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
             for (ActivityPrizeData.PrizeSightsEntity prizeSights:detailData.prize_sights){
                 int size = prizeSights.data.size();
                 for (int i=0;i<size;i++){
+                    if (size>1){
+                        if (i==size-1){
+                            prizeSights.data.get(i).showBottom=false;
+                        }else {
+                            prizeSights.data.get(i).showBottom=true;
+                        }
+                    } else {
+                        prizeSights.data.get(i).showBottom=false;
+                    }
+
                     if (i==0){
                         prizeSights.data.get(i).prizeGrade=prizeSights.prize;
                         prizeSights.data.get(i).prizeNum=size;

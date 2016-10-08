@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="嘿嘿"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
@@ -93,7 +93,7 @@
                     android:id="@+id/publish_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:text="30分钟前"
                     android:drawableLeft="@mipmap/index_time"
                     android:drawablePadding="@dimen/dp5"
@@ -107,7 +107,7 @@
                     android:layout_marginLeft="6dp"
                     android:drawableLeft="@mipmap/index_location"
                     android:drawableRight="@mipmap/index_arrow_right"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:text="北京市"
                     android:drawablePadding="@dimen/dp5"
                     android:textColor="#8e8e8e"
@@ -121,7 +121,8 @@
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        >
 
         <ImageView
             android:id="@+id/qj_img"
@@ -155,7 +156,7 @@
             android:maxWidth="188dp"
             android:paddingLeft="16dp"
             android:paddingRight="12dp"
-            android:singleLine="true"
+            android:maxLines="1"
              android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />

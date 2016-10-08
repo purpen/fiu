@@ -73,13 +73,13 @@ public class RuleContentAdapter extends BaseAdapter {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            if (!activity.isFinishing() && dialog != null) dialog.show();
+//            if (!activity.isFinishing() && dialog != null) dialog.show();
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
+//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
     };
 }

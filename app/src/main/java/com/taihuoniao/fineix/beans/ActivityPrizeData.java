@@ -138,6 +138,7 @@ public class ActivityPrizeData{
             public String prizeGrade;
             public int prizeNum;
             public boolean flagHead;
+            public boolean showBottom;
             /**
              * type : PoString
              * coordinates : [116.506497,39.992428]

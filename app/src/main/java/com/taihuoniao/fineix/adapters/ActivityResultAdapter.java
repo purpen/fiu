@@ -65,13 +65,20 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
         } else {
             holder.locationTv.setText(item.city + item.address);
         }
-        String prize_num = activity.getResources().getString(R.string.prize_num);
+//        String prize_num = activity.getResources().getString(R.string.prize_num);
         if (item.flagHead){
             holder.tv_prize.setVisibility(View.VISIBLE);
-            holder.tv_prize.setText(String.format(prize_num,item.prizeGrade,item.prizeNum));
+            holder.tv_prize.setText(item.prizeGrade);//String.format(prize_num,item.prizeGrade,item.prizeNum)
         }else {
             holder.tv_prize.setVisibility(View.GONE);
         }
+
+        if (item.showBottom){
+            holder.container.setPadding(0,0,0,activity.getResources().getDimensionPixelSize(R.dimen.dp10));
+        }else {
+            holder.container.setPadding(0,0,0,0);
+        }
+
         holder.qjTitleTv.setText(item.title);
 //        holder.qjTitleTv2.setText(item.short_title);
         holder.userNameTv.setText(item.user.nickname);
