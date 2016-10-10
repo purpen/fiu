@@ -7,7 +7,6 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -1362,7 +1361,6 @@ public class ClientDiscoverAPI {
      */
     public static void logout(RequestCallBack<String> callBack) {
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
-        params.addQueryStringParameter("uuid", MainApplication.uuid);
         params.addQueryStringParameter("from_to", "2"); // 1.ios;2.android;3.win;4.ipad;
         HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.LOGOUT, callBack);
     }
