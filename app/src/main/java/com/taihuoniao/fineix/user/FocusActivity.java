@@ -87,6 +87,7 @@ public class FocusActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FocusFansItem focusFansItem = list.get(i);
+                if (focusFansItem.follows == null) return;
                 Intent intent = new Intent(activity, UserCenterActivity.class);
                 intent.putExtra(USER_ID_EXTRA, focusFansItem.follows.user_id);
                 startActivity(intent);
@@ -97,12 +98,12 @@ public class FocusActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         LogUtil.e(TAG, "requestNet==" + userId);
-        if (!activity.isFinishing()&&dialog != null) dialog.show();
+        if (!activity.isFinishing() && dialog != null) dialog.show();
         int curPage = 1;
-        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE,null, new RequestCallBack<String>() {
+        ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FOCUS_TYPE, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
 
                 if (TextUtils.isEmpty(responseInfo.result)) return;
 
@@ -120,7 +121,7 @@ public class FocusActivity extends BaseActivity {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -134,16 +135,16 @@ public class FocusActivity extends BaseActivity {
         }
         if (list.size() == 0) {
             ll_tips.setVisibility(View.VISIBLE);
-            if (LoginInfo.getUserId()==userId){
+            if (LoginInfo.getUserId() == userId) {
                 tv_tips.setText(R.string.focus_tips);
-            }else {
+            } else {
                 tv_tips.setText(R.string.focus_tips1);
             }
             return;
         }
 
         if (adapter == null) {
-            adapter = new FocusAdapter(list, activity,userId);
+            adapter = new FocusAdapter(list, activity, userId);
             lv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

@@ -91,35 +91,35 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 } else {
                     holder.tv_desc.setText(item.follows.summary);
                 }
-            }
-            if (userId == LoginInfo.getUserId()) { //是自己
-                if (position >= fansCount) {
-                    holder.dot.setVisibility(View.GONE);
-                } else {
-                    holder.dot.setVisibility(View.VISIBLE);
+                if (userId == LoginInfo.getUserId()) { //是自己
+                    if (position >= fansCount) {
+                        holder.dot.setVisibility(View.GONE);
+                    } else {
+                        holder.dot.setVisibility(View.VISIBLE);
+                    }
+                    switch (item.type) {
+                        case TYPE1:  //仅当粉丝关注我
+                            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
+                            holder.btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    doFocus(item, view);
+                                }
+                            });
+                            break;
+                        case TYPE2: //互粉
+                            setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
+                            holder.btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    showFocusFansConfirmView(item, "停止关注");
+                                }
+                            });
+                            break;
+                    }
+                } else { //处理别人的粉丝
+                    dealOthersFoucsFansStyle(item, holder);
                 }
-                switch (item.type) {
-                    case TYPE1:  //仅当粉丝关注我
-                        setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
-                        holder.btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                doFocus(item, view);
-                            }
-                        });
-                        break;
-                    case TYPE2: //互粉
-                        setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
-                        holder.btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                showFocusFansConfirmView(item, "停止关注");
-                            }
-                        });
-                        break;
-                }
-            } else { //处理别人的粉丝
-                dealOthersFoucsFansStyle(item, holder);
             }
         }
         return convertView;

@@ -266,7 +266,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      * 加载情境数据
      */
     private void loadCJData() {
-        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId), new RequestCallBack<String>() {
+        ClientDiscoverAPI.getSceneList(String.valueOf(curPage), Constants.PAGE_SIZE, String.valueOf(userId),"1",new RequestCallBack<String>() {
             @Override
             public void onStart() {
                 if (dialog != null && !activity.isFinishing()) {

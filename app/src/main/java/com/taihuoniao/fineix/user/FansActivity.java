@@ -94,6 +94,7 @@ public class FansActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FocusFansItem focusFansItem = list.get(i);
+                if (focusFansItem.follows == null) return;
                 Intent intent = new Intent(activity, UserCenterActivity.class);
                 intent.putExtra(USER_ID_EXTRA, focusFansItem.follows.user_id);
                 startActivity(intent);
@@ -104,13 +105,13 @@ public class FansActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         LogUtil.e(TAG, "requestNet==" + userId);
-        if (!activity.isFinishing()&&dialog != null) dialog.show();
+        if (!activity.isFinishing() && dialog != null) dialog.show();
         ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE,
                 flag ? "1" : null,
                 new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                         if (TextUtils.isEmpty(responseInfo.result)) return;
 
                         LogUtil.e(TAG, responseInfo.result);
@@ -127,7 +128,7 @@ public class FansActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(HttpException e, String s) {
-                        if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                         ToastUtils.showError(R.string.network_err);
                     }
                 });
@@ -150,7 +151,7 @@ public class FansActivity extends BaseActivity {
         }
 
         if (adapter == null) {
-            adapter = new FansAdapter(list, activity, userId, flag,fansCount);
+            adapter = new FansAdapter(list, activity, userId, flag, fansCount);
             lv.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

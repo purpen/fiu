@@ -86,28 +86,28 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
                 } else {
                     holder.tv_desc.setText(item.follows.summary);
                 }
-            }
-            //关注界面
-            if (userId == LoginInfo.getUserId()) { //是自己
-                if (item.focus_flag) {
-                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
-                    holder.btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {//关注
-                            doFocus(item, view);
-                        }
-                    });
-                } else {
-                    setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
-                    holder.btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {//取消关注
-                            showFocusFansConfirmView(item, "停止关注");
-                        }
-                    });
+                //关注界面
+                if (userId == LoginInfo.getUserId()) { //是自己
+                    if (item.focus_flag) {
+                        setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp16), R.string.focus, R.mipmap.unfocus_pic, android.R.color.black, R.drawable.shape_subscribe_theme);
+                        holder.btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {//关注
+                                doFocus(item, view);
+                            }
+                        });
+                    } else {
+                        setFocusBtnStyle(holder.btn, activity.getResources().getDimensionPixelSize(R.dimen.dp10), R.string.focused, R.mipmap.focus_pic, android.R.color.white, R.drawable.border_radius5_pressed);
+                        holder.btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {//取消关注
+                                showFocusFansConfirmView(item, "停止关注");
+                            }
+                        });
+                    }
+                } else { //处理别人的关注列表
+                    dealOthersFoucsFansStyle(item, holder);
                 }
-            } else { //处理别人的关注列表
-                dealOthersFoucsFansStyle(item, holder);
             }
         }
 

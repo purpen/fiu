@@ -36,7 +36,7 @@ public class PopupWindowUtil {
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         popupWindow.setOnDismissListener(dismissListener);
-        setWindowAlpha(0.5f);
+        setWindowAlpha(activity,0.5f);
     }
 
     public static void show(Activity activity, View view, int gravity) {
@@ -48,10 +48,10 @@ public class PopupWindowUtil {
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.showAtLocation(view, gravity, 0, 0);
         popupWindow.setOnDismissListener(dismissListener);
-        setWindowAlpha(0.5f);
+        setWindowAlpha(activity,0.5f);
     }
 
-    private static void setWindowAlpha(float f) {
+    private static void setWindowAlpha(Activity activity,float f) {
         Window window = activity.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = f;
@@ -66,7 +66,7 @@ public class PopupWindowUtil {
     private static PopupWindow.OnDismissListener dismissListener = new PopupWindow.OnDismissListener() {
         @Override
         public void onDismiss() {
-            setWindowAlpha(1f);
+            setWindowAlpha(activity,1f);
             if (windowListener != null) {
                 windowListener.onDismiss();
                 PopupWindowUtil.windowListener = null;
