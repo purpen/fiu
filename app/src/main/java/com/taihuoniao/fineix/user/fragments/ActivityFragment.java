@@ -22,8 +22,11 @@ import com.taihuoniao.fineix.beans.DataChooseSubject;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.main.fragment.MyBaseFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.network.NetworkManager;
 import com.taihuoniao.fineix.user.ActivityDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.MD5Utils;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
@@ -47,7 +50,6 @@ public class ActivityFragment extends MyBaseFragment {
     private ActivityAdapter adapter;
     private WaittingDialog dialog;
     private boolean isLoadMore = false;
-
     public static ActivityFragment newInstance() {
         return new ActivityFragment();
     }
@@ -153,5 +155,11 @@ public class ActivityFragment extends MyBaseFragment {
         } else {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        NetworkManager.getInstance().cancel(MD5Utils.getMD5(NetworkConstance.CHOOSEN_SUBJECT_URL));
+        super.onDestroy();
     }
 }

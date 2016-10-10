@@ -47,7 +47,7 @@
                 android:paddingRight="@dimen/dp8"
                 android:layout_alignParentBottom="true"
                 android:textSize="@dimen/sp12"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="@dimen/dp10" />
@@ -74,12 +74,11 @@
                 android:layout_toRightOf="@+id/riv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="@dimen/sp12"
+                android:textSize="@dimen/sp10"
                 android:layout_centerVertical="true"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="@dimen/dp5"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_marginRight="@dimen/dp5"
                 android:ellipsize="end" />
 
@@ -134,7 +133,7 @@
                 android:paddingRight="@dimen/dp8"
                 android:layout_alignParentBottom="true"
                 android:textSize="@dimen/sp12"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="@dimen/dp10" />
@@ -161,12 +160,11 @@
                 android:layout_toRightOf="@+id/riv_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="@dimen/sp12"
+                android:textSize="@dimen/sp10"
                 android:layout_centerVertical="true"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="@dimen/dp5"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_marginRight="@dimen/dp5"
                 android:ellipsize="end" />
 

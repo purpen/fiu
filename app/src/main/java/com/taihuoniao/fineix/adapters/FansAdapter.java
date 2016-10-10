@@ -21,9 +21,9 @@ import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.utils.JsonUtil;
-import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.view.MyPopupWindow;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
     private long userId;
     private boolean flag;//判断是不是消息页面跳转过来的。只有消息页面跳转过来。并且id为本人时显示点
     private int fansCount;//新添加的粉丝数量
-
+    private MyPopupWindow myPopupWindow;
     public FansAdapter(List<FocusFansItem> list, Activity activity, long userId, boolean flag, int fansCount) {
         super(list, activity);
         this.imageLoader = ImageLoader.getInstance();
@@ -140,7 +140,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -156,7 +155,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
                     ToastUtils.showError(R.string.network_err);
                 }
             });
@@ -165,7 +163,11 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         }
     }
 
-
+    /**
+     * 显示底部弹框
+     * @param item
+     * @param tips
+     */
     private void showFocusFansConfirmView(FocusFansItem item, String tips) {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
         RoundedImageView riv = (RoundedImageView) view.findViewById(R.id.riv);
@@ -178,14 +180,17 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
         tv_album.setOnClickListener(this);
         tv_album.setTag(item);
         tv_cancel.setOnClickListener(this);
-        PopupWindowUtil.show(activity, view);
+
+        myPopupWindow = new MyPopupWindow(activity,view);
+        myPopupWindow.show();
+//        PopupWindowUtil.show(activity, view);
     }
 
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
-                PopupWindowUtil.dismiss();
+                myPopupWindow.dismiss();
                 break;
             case R.id.tv_album:
                 view.setEnabled(false);
@@ -196,7 +201,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
                             view.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            myPopupWindow.dismiss();
                             if (responseInfo == null) return;
                             if (TextUtils.isEmpty(responseInfo.result)) return;
                             HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -212,7 +217,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                         @Override
                         public void onFailure(HttpException e, String s) {
                             view.setEnabled(true);
-                            PopupWindowUtil.dismiss();
+                            myPopupWindow.dismiss();
                             ToastUtils.showError(R.string.network_err);
                         }
                     });
@@ -256,7 +261,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -272,7 +276,6 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
                     ToastUtils.showError(R.string.network_err);
                 }
             });
@@ -281,7 +284,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    myPopupWindow.dismiss();
                     if (responseInfo == null) return;
                     if (TextUtils.isEmpty(responseInfo.result)) return;
                     HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -297,7 +300,7 @@ public class FansAdapter extends CommonBaseAdapter<FocusFansItem> implements Vie
                 @Override
                 public void onFailure(HttpException e, String s) {
                     view.setEnabled(true);
-                    PopupWindowUtil.dismiss();
+                    myPopupWindow.dismiss();
                     ToastUtils.showError(R.string.network_err);
                 }
             });

@@ -208,4 +208,5 @@ public class NetworkConstance {
     //收藏产品和取消收藏
     public static final String favorite_product = BASE_URL + "/favorite/ajax_favorite";
     public static final String cancel_favorite_product = BASE_URL + "/favorite/ajax_cancel_favorite";
+    public static final String CHOOSEN_SUBJECT_URL=BASE_URL + "/scene_subject/getlist";
 }

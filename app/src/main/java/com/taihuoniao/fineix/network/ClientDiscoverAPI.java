@@ -1686,14 +1686,15 @@ public class ClientDiscoverAPI {
      * @param callBack
      */
     public static void getChoosenSubject(String page, String pageType, String fine, String sort, RequestCallBack<String> callBack) {
-        String url = NetworkConstance.BASE_URL + "/scene_subject/getlist";
+//        String url = NetworkConstance.BASE_URL + "/scene_subject/getlist";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", Constants.PAGE_SIZE);//
         params.addQueryStringParameter("fine", fine);
         params.addQueryStringParameter("type", pageType);
         params.addQueryStringParameter("sort", sort);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, NetworkConstance.CHOOSEN_SUBJECT_URL, callBack);
+        NetworkManager.getInstance().add(MD5Utils.getMD5(NetworkConstance.CHOOSEN_SUBJECT_URL),httpHandler);
     }
 
     //收藏情景

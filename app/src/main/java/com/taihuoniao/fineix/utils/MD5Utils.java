@@ -24,7 +24,7 @@ import java.util.List;
  * Created by taihuoniao on 2016/3/28.
  */
 public class MD5Utils {
-    private static String getMD5(String info) {
+    public static String getMD5(String info) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             md5.update(info.getBytes("UTF-8"));

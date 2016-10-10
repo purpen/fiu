@@ -12,11 +12,11 @@ public class NetworkManager {
     /**
      * 网络请求栈
      */
-    private List<HttpHandler<String>> networkList;
+    private static List<HttpHandler<String>> networkList;
     /**
      * 网络请求标签集合
      */
-    private List<String> tagList;
+    private static List<String> tagList;
     private static NetworkManager ourInstance;
 
     public static NetworkManager getInstance() {
@@ -52,6 +52,8 @@ public class NetworkManager {
      * @param name 任务名
      */
     public void cancel(String name) {
+        if (tagList==null) return;
+        if (networkList==null) return;
         for (int i = 0; i < tagList.size(); i++) {
             if (tagList.get(i).equals(name)) {
                 networkList.get(i).cancel();
@@ -68,6 +70,8 @@ public class NetworkManager {
      * @param httpHandler 任务
      */
     public void add(String name, HttpHandler<String> httpHandler) {
+        if (tagList==null) return;
+        if (networkList==null) return;
         tagList.add(name);
         networkList.add(httpHandler);
     }
