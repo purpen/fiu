@@ -23,6 +23,7 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
+import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -141,6 +142,14 @@ public class ActivityResultAdapter extends CommonBaseAdapter<ActivityPrizeData.P
             @Override
             public void onClick(View view) {//关注
                 doFocus(item, view);
+            }
+        });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, QJDetailActivity.class);
+                intent.putExtra("id", item._id);
+                activity.startActivity(intent);
             }
         });
         return convertView;

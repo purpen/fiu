@@ -536,23 +536,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 startActivity(intent);
             }
         });
-//
-//        lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView absListView, int i) {
-//                if (i == SCROLL_STATE_IDLE || i == SCROLL_STATE_FLING) {
-//                    if (absListView.getLastVisiblePosition() == mSceneList.size()) {
-//                        LogUtil.e("curPage==", curPage + "");
-//                        isFirstLoad = false;
-//                        loadCJData();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-//            }
-//        });
+
         lv_cj.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int headerHeight = 0;
             @Override
