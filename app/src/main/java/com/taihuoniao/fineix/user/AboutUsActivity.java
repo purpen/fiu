@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.webkit.WebSettings;
@@ -17,7 +18,7 @@ import butterknife.Bind;
 public class AboutUsActivity extends BaseActivity {
     @Bind(R.id.custom_head)
     CustomHeadView custom_head;
-    private WaittingDialog dialog;
+//    private WaittingDialog dialog;
     private String url;
     private String title;
     private WebView webView;
@@ -40,9 +41,9 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         custom_head.setHeadCenterTxtShow(true,title);
-        dialog = new WaittingDialog(this);
+//        dialog = new WaittingDialog(this);
         webView = (WebView) findViewById(R.id.webView_about);
-        webView.setWebViewClient(webViewClient);
+        webView.setWebViewClient(new MyWebViewClient(activity));
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
@@ -80,24 +81,25 @@ public class AboutUsActivity extends BaseActivity {
         WindowUtils.chenjin(this);
     }
 
-    private WebViewClient webViewClient = new WebViewClient() {
+    static class MyWebViewClient extends WebViewClient{
+        private WaittingDialog dialog;
+        public MyWebViewClient(Activity activity){
+            dialog=new WaittingDialog(activity);
+        }
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             if (dialog != null) dialog.show();
         }
-
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             if (dialog != null) dialog.dismiss();
         }
-
-    };
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        webViewClient = null;
         webView.removeAllViews();
         webView.destroy();
     }

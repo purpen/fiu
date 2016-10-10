@@ -54,32 +54,23 @@ public class RuleContentAdapter extends BaseAdapter {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLoadsImagesAutomatically(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+            webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         } else {
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+            webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         }
-        webView.setWebViewClient(webViewClient);
+        webView.setWebViewClient(new MyWebViewClient());
         webView.loadUrl(data.content_view_url);
         return webView;
     }
 
-    private WebViewClient webViewClient = new WebViewClient() {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return true;
-        }
-
+    static class MyWebViewClient extends WebViewClient{
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-//            if (!activity.isFinishing() && dialog != null) dialog.show();
         }
-
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
-    };
+    }
 }

@@ -1,6 +1,7 @@
 package com.taihuoniao.fineix.user;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -62,7 +63,6 @@ public class ArticalDetailActivity extends BaseActivity {
     TextView ibtnComment;
     @Bind(R.id.ibtn_share)
     TextView ibtnShare;
-    private WaittingDialog dialog;
     private String id;
     private SubjectData data;
 
@@ -81,17 +81,21 @@ public class ArticalDetailActivity extends BaseActivity {
     @SuppressLint("JavascriptInterface")
     @Override
     protected void initView() {
-//        custom_head.setHeadCenterTxtShow(true, "文章详情");
-        dialog = new WaittingDialog(this);
         WebSettings webSettings = webViewAbout.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setAppCacheEnabled(true);
-        webViewAbout.setWebViewClient(webViewClient);
+        webViewAbout.setWebViewClient(new MyWebViewClient(activity));
         WindowUtils.chenjin(this);
     }
 
-    private WebViewClient webViewClient = new WebViewClient() {
+    static class MyWebViewClient extends WebViewClient{
+        private WaittingDialog dialog;
+        private Activity activity;
+        public MyWebViewClient(Activity activity){
+            this.activity=activity;
+            dialog=new WaittingDialog(activity);
+        }
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.contains("infoType") && url.contains("infoId")) {
@@ -108,21 +112,21 @@ public class ArticalDetailActivity extends BaseActivity {
                 if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
                     intent = new Intent(activity, UserCenterActivity.class);
                     intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
                     intent = new Intent(activity, QJDetailActivity.class);
                     intent.putExtra("id", infoId);
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
-                    jump2ThemeDetail(infoId);
+                    jump2ThemeDetail(activity,infoId);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
                     intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
                     intent = new Intent(activity, BrandDetailActivity.class);
                     intent.putExtra("id", infoId);
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
                     if (url.contains("infoTag")) {
                         String infoTag = args[2].split("=")[1];
@@ -130,13 +134,13 @@ public class ArticalDetailActivity extends BaseActivity {
                             intent = new Intent(activity, SearchActivity.class);
                             intent.putExtra("q", infoTag);
                             intent.putExtra("t", Integer.parseInt(infoId));
-                            startActivity(intent);
+                            activity.startActivity(intent);
                         }
                     }
                 } else if (TextUtils.equals(INFO_TYPE_URL, infoType)) { //用浏览器打开
                     Uri uri = Uri.parse(infoId);
                     intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 }
                 return true;
             }
@@ -162,9 +166,83 @@ public class ArticalDetailActivity extends BaseActivity {
             super.onReceivedError(view, errorCode, description, failingUrl);
             if (!activity.isFinishing() && dialog != null) dialog.dismiss();
         }
-    };
+    }
 
-    private void jump2ThemeDetail(final String id) {
+
+//    private WebViewClient webViewClient = new WebViewClient() {
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            if (url.contains("infoType") && url.contains("infoId")) {
+//                Intent intent;
+//                url = url.substring(url.indexOf("?") + 1, url.length());
+//                String[] args = url.split("&");
+//                String infoType = args[0].split("=")[1];
+//                String infoId = args[1].split("=")[1];
+//                LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
+//                if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
+//                    LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
+//                    return true;
+//                }
+//                if (TextUtils.equals(INFO_TYPE_USER, infoType)) {//跳转个人中心
+//                    intent = new Intent(activity, UserCenterActivity.class);
+//                    intent.putExtra(FocusActivity.USER_ID_EXTRA, infoId);
+//                    startActivity(intent);
+//                } else if (TextUtils.equals(INFO_TYPE_QJ, infoType)) {//跳转情境详情
+//                    intent = new Intent(activity, QJDetailActivity.class);
+//                    intent.putExtra("id", infoId);
+//                    startActivity(intent);
+//                } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
+//                    jump2ThemeDetail(infoId);
+//                } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
+//                    intent = new Intent(activity, BuyGoodsDetailsActivity.class);
+//                    intent.putExtra("id", infoId);
+//                    startActivity(intent);
+//                } else if (TextUtils.equals(INFO_TYPE_PP, infoType)) {//品牌详情
+//                    intent = new Intent(activity, BrandDetailActivity.class);
+//                    intent.putExtra("id", infoId);
+//                    startActivity(intent);
+//                } else if (TextUtils.equals(INFO_TYPE_SEARCH, infoType)) { //搜索界面
+//                    if (url.contains("infoTag")) {
+//                        String infoTag = args[2].split("=")[1];
+//                        if (!TextUtils.isEmpty(infoTag)) {
+//                            intent = new Intent(activity, SearchActivity.class);
+//                            intent.putExtra("q", infoTag);
+//                            intent.putExtra("t", Integer.parseInt(infoId));
+//                            startActivity(intent);
+//                        }
+//                    }
+//                } else if (TextUtils.equals(INFO_TYPE_URL, infoType)) { //用浏览器打开
+//                    Uri uri = Uri.parse(infoId);
+//                    intent = new Intent(Intent.ACTION_VIEW, uri);
+//                    startActivity(intent);
+//                }
+//                return true;
+//            }
+//            return super.shouldOverrideUrlLoading(view, url);
+//        }
+//
+//        @Override
+//        public void onPageFinished(WebView view, String url) {
+//            view.getSettings().setJavaScriptEnabled(true);
+//            super.onPageFinished(view, url);
+//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
+//        }
+//
+//        @Override
+//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//            if (!activity.isFinishing() && dialog != null) dialog.show();
+//            view.getSettings().setJavaScriptEnabled(true);
+//            super.onPageStarted(view, url, favicon);
+//        }
+//
+//        @Override
+//        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+//            super.onReceivedError(view, errorCode, description, failingUrl);
+//            if (!activity.isFinishing() && dialog != null) dialog.dismiss();
+//        }
+//    };
+
+    private static void jump2ThemeDetail(final Activity activity,final String id) {
         if (TextUtils.isEmpty(id)) return;
         ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -309,7 +387,7 @@ public class ArticalDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         webViewAbout.removeAllViews();
-        webViewClient = null;
+//        webViewClient = null;
         webViewAbout.destroy();
     }
 
