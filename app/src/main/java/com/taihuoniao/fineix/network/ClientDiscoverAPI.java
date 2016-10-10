@@ -361,19 +361,20 @@ public class ClientDiscoverAPI {
     }
 
     /**
-     * 根据用户ID查找CJ
+     * 根据用户ID查找情境
      *
      * @param page
      * @param size
      * @param userId
      * @param callBack
      */
-    public static void getSceneList(String page, String size, String userId, RequestCallBack<String> callBack) {
+    public static void getSceneList(String page, String size, String userId,String show_all,RequestCallBack<String> callBack) {
         String url = NetworkConstance.scene_list;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("page", page);
         params.addQueryStringParameter("size", size);
         params.addQueryStringParameter("user_id", userId);
+        params.addQueryStringParameter("show_all", show_all);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
