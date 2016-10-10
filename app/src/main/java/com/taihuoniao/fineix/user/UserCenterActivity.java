@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,7 +43,6 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.beans.UserCJListData;
 import com.taihuoniao.fineix.main.fragment.MineFragment;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.scene.SelectPhotoOrCameraActivity;
 import com.taihuoniao.fineix.utils.Constants;
@@ -229,13 +227,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialog != null) dialog.dismiss();
-                    }
-                }, DataConstants.DIALOG_DELAY);
-
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
                 }
@@ -251,7 +243,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog != null) dialog.dismiss();
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -285,13 +277,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialog != null) dialog.dismiss();
-                    }
-                }, DataConstants.DIALOG_DELAY);
-                if (responseInfo == null) return;
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getSceneList", responseInfo.result);
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
@@ -307,7 +293,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog != null) dialog.dismiss();
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -361,13 +347,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialog != null) dialog.dismiss();
-                    }
-                }, DataConstants.DIALOG_DELAY);
-                if (responseInfo == null) return;
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 LogUtil.e("getQJList", responseInfo.result);
                 QingJingListBean listBean = JsonUtil.fromJson(responseInfo.result, QingJingListBean.class);
@@ -382,7 +362,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (dialog != null) dialog.dismiss();
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });

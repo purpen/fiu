@@ -1,7 +1,6 @@
 package com.taihuoniao.fineix.user;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,13 +17,12 @@ import com.taihuoniao.fineix.adapters.FansAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.FocusFansData;
 import com.taihuoniao.fineix.beans.FocusFansItem;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
-import com.taihuoniao.fineix.utils.Util;
+import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -106,25 +104,14 @@ public class FansActivity extends BaseActivity {
     @Override
     protected void requestNet() {
         LogUtil.e(TAG, "requestNet==" + userId);
-        dialog.show();
+        if (!activity.isFinishing()&&dialog != null) dialog.show();
         ClientDiscoverAPI.getFocusFansList(userId + "", String.valueOf(curPage), PAGE_SIZE, FANS_TYPE,
                 flag ? "1" : null,
                 new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (dialog != null) dialog.dismiss();
-                            }
-                        }, DataConstants.DIALOG_DELAY);
-                        if (responseInfo == null) {
-                            return;
-                        }
-
-                        if (TextUtils.isEmpty(responseInfo.result)) {
-                            return;
-                        }
+                        if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                        if (TextUtils.isEmpty(responseInfo.result)) return;
 
                         LogUtil.e(TAG, responseInfo.result);
                         FocusFansData data = JsonUtil.fromJson(responseInfo.result, new TypeToken<HttpResponse<FocusFansData>>() {
@@ -140,9 +127,8 @@ public class FansActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(HttpException e, String s) {
-                        dialog.dismiss();
-                        if (TextUtils.isEmpty(s)) return;
-                        Util.makeToast(s);
+                        if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                        ToastUtils.showError(R.string.network_err);
                     }
                 });
     }

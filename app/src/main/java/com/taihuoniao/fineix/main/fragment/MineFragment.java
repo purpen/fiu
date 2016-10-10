@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import com.taihuoniao.fineix.interfaces.OnMessageCountChangeListener;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
@@ -219,12 +217,7 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-                    }
-                }, DataConstants.DIALOG_DELAY);
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 LogUtil.e("result", responseInfo.result);
                 if (TextUtils.isEmpty(responseInfo.result)) {
                     return;
@@ -247,7 +240,7 @@ public class MineFragment extends MyBaseFragment {
 
             @Override
             public void onFailure(HttpException e, String s) {
-                dialog.dismiss();
+                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
