@@ -21,7 +21,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.squareup.leakcanary.LeakCanary;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
@@ -57,7 +56,7 @@ public class MainApplication extends Application {
     public static int which_activity;//判断是从哪个界面跳转到登录界面,0是默认从主页面跳
     private DisplayMetrics displayMetrics = null;
     public static String systemPhotoPath = null;//系统相册路径
-//    public static String fiuPath = null;//fiu相册
+    //    public static String fiuPath = null;//fiu相册
     public static String uuid = null;
     public static boolean hasUser;
     //编辑好的图片标签的list
@@ -90,9 +89,14 @@ public class MainApplication extends Application {
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
 //        fiuPath = Environment.getRootDirectory().getAbsolutePath() + "/DCIM/Fiu浮游";
 //        try {
-            LeakCanary.install(this);
+//            LeakCanary.install(this);
 //        } catch (Exception e) {
 //        }
+        initPush();
+    }
+
+    public void initPush() {
+
     }
 
     public int getScreenHeight() {

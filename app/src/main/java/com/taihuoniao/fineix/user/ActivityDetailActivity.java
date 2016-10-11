@@ -1,4 +1,4 @@
-package com.taihuoniao.fineix.user;
+ package com.taihuoniao.fineix.user;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

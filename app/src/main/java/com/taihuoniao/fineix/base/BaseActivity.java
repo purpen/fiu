@@ -73,6 +73,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         installListener();
         initList();
         requestNet();
+//        PushAgent.getInstance(context).onAppStart();
     }
 
     @Override

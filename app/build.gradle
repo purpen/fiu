@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 10
-        versionName "1.8"
+        versionCode 11
+        versionName "1.9"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制
@@ -94,6 +94,7 @@ dependencies {
         }
     }
 //    compile 'org.xutils:xutils:3.3.36'
+//    compile project(':PushSDK')
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.android.support:support-v4:22.2.1'
