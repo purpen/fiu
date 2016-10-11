@@ -33,6 +33,7 @@
                 android:textColorHint="@color/color_999"
                 android:textSize="@dimen/sp13"
                 android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:maxLines="1"
                 android:background="@drawable/border_radius5"
                 android:layout_width="match_parent"
