@@ -1,1 +1,1 @@
-include ':app', ':Gpu-Image', ':pullrefreshlib', ':library'
+include ':app', ':Gpu-Image', ':pullrefreshlib', ':library', ':PushSDK'

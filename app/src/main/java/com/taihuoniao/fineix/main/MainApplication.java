@@ -4,12 +4,14 @@ import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -32,6 +34,8 @@ import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 
 import java.io.File;
 import java.util.List;
@@ -69,6 +73,7 @@ public class MainApplication extends Application {
     public static String subjectId = null;//活动id
     public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
     public static List<String> picList;//跳转PictureActivity
+    private SharedPreferences tempSharedPreference;//检查本地存储是否设置推送的开关
 
     public static MainApplication getContext() {
         return instance;
@@ -95,9 +100,6 @@ public class MainApplication extends Application {
         initPush();
     }
 
-    public void initPush() {
-
-    }
 
     public int getScreenHeight() {
         if (this.displayMetrics == null) {
@@ -237,5 +239,34 @@ public class MainApplication extends Application {
             }
         }
         return true;
+    }
+
+    public void initPush() {
+        tempSharedPreference = getSharedPreferences(DataConstants.PUSH_STATUS, Context.MODE_PRIVATE);
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        //关闭打印log，提高代码效率
+        mPushAgent.setDebugMode(true);
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                Log.e("<<<注册成功","deviceToken="+deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                Log.e("<<<注册失败","s="+s+",s1="+s1);
+            }
+        });
+    }
+
+    public boolean isPush_status() {
+        return tempSharedPreference.getBoolean(DataConstants.STATUS, true);
+    }
+
+    public boolean setPush_status(boolean push_status) {
+        return tempSharedPreference.edit().putBoolean(DataConstants.STATUS, push_status).commit();
     }
 }

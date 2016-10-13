@@ -18,10 +18,6 @@ android {
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
     }
     signingConfigs {
-        debug {
-            // No debug config
-        }
-
         release {
             storeFile file("fiu.jks")
             storePassword "taihuoniao798"
@@ -30,18 +26,6 @@ android {
         }
     }
     buildTypes {
-//        debug {
-//            // 显示Log
-//            buildConfigField "boolean", "LOG_DEBUG", "true"
-//            minifyEnabled true
-//            //Zipalign优化
-//            zipAlignEnabled true
-//
-//            // 移除无用的resource文件
-//            shrinkResources true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
-
         release {
 // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
@@ -66,69 +50,22 @@ android {
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
-
-//    productFlavors {
-//        yingyongbao {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "10"]
-//        }
-//        s360 {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "11"]
-//        }
-//        baidu {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "12"]
-//        }
-//        uc {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "uc"]
-//        }
-//    }
-//
-//    productFlavors.all {
-//        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
-//    }
 }
 
 dependencies {
-    allprojects {
-        repositories {
-            jcenter()
-        }
-    }
-//    compile 'org.xutils:xutils:3.3.36'
-//    compile project(':PushSDK')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.android.support:support-v4:22.2.1'
-//    compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile files('libs/baidumapapi_cloud_v3_7_1.jar')
-    compile files('libs/baidumapapi_radar_v3_7_1.jar')
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile files('libs/baidumapapi_search_v3_7_1.jar')
-    compile files('libs/baidumapapi_base_v3_7_1.jar')
-    compile files('libs/baidumapapi_map_v3_7_1.jar')
-    compile files('libs/baidumapapi_util_v3_7_1.jar')
-    compile files('libs/locSDK_6.23.jar')
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile project(':Gpu-Image')
     compile 'com.google.zxing:core:3.2.0'
-    compile files('libs/xUtils-2.6.14.jar')
     compile project(':pullrefreshlib')
-    compile files('libs/ShareSDK-Core-2.7.0.jar')
-    compile files('libs/ShareSDK-QQ-2.7.0.jar')
-    compile files('libs/ShareSDK-QZone-2.7.0.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.7.0.jar')
-    compile files('libs/ShareSDK-Wechat-2.7.0.jar')
-    compile files('libs/ShareSDK-Wechat-Core-2.7.0.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.7.0.jar')
-    compile files('libs/MobCommons-2016.0301.1053.jar')
-    compile files('libs/MobTools-2016.0301.1053.jar')
-    compile files('libs/alipaySdk-20160223.jar')
-    compile files('libs/libammsdk.jar')
     compile 'com.android.support:design:22.2.1'
-//    compile files('libs/utdid4all-1.0.4.jar')
-//    compile project(':bubblecloud')
     compile project(':library')
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile project(':PushSDK')
 }

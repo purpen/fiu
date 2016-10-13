@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         installListener();
         initList();
         requestNet();
-//        PushAgent.getInstance(context).onAppStart();
+        PushAgent.getInstance(this).onAppStart();
     }
 
     @Override

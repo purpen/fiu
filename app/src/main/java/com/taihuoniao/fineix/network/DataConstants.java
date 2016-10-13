@@ -5,6 +5,8 @@ package com.taihuoniao.fineix.network;
  * 常量
  */
 public class DataConstants {
+    public static final String PUSH_STATUS = "push_status";
+    public static final String STATUS = "status";
     //判断从哪个activity跳转到登录界面
     public static final int ElseActivity = 102;//其他不需要刷新界面的activity
     public static final int WellGoodsFragment = 103;//好货
