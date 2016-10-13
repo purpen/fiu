@@ -124,7 +124,7 @@ public class SceneList extends NetBean implements Serializable {
             private int is_check;// 1 没有屏蔽 0屏蔽
             private String status;
             private String deleted;
-            private String created_on;
+            private long created_on;
             private String updated_on;
             private String tags_s;
             private String cover_url;
@@ -297,11 +297,11 @@ public class SceneList extends NetBean implements Serializable {
                 this.deleted = deleted;
             }
 
-            public String getCreated_on() {
+            public long getCreated_on() {
                 return created_on;
             }
 
-            public void setCreated_on(String created_on) {
+            public void setCreated_on(long created_on) {
                 this.created_on = created_on;
             }
 

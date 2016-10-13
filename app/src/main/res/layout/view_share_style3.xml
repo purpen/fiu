@@ -113,6 +113,7 @@
             android:textSize="7sp" />
 
         <ImageView
+            android:id="@+id/location_img"
             android:layout_width="wrap_content"
             android:layout_height="8dp"
             android:layout_marginLeft="15dp"

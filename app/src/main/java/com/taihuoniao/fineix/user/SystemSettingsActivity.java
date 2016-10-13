@@ -163,6 +163,7 @@ public class SystemSettingsActivity extends BaseActivity {
                     ToastUtils.showSuccess("退出成功");
                 }
                 SPUtil.remove(DataConstants.LOGIN_INFO);
+                ((MainApplication) getApplication()).removeUserId();
                 Intent intent = new Intent(activity, MainActivity.class);
                 intent.putExtra(IndexFragment.class.getSimpleName(), IndexFragment.class.getSimpleName());
                 intent.putExtra("exit", true);

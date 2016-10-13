@@ -1,7 +1,8 @@
 package com.taihuoniao.fineix.utils;
 
 import android.content.Context;
-import android.content.Intent;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,8 +13,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.QJDetailBean;
 import com.taihuoniao.fineix.beans.SceneList;
-import com.taihuoniao.fineix.main.MainApplication;
-import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.view.LabelView;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -37,8 +36,14 @@ public class TestShareUtils {
         ImageLoader.getInstance().displayImage(sceneDetails.getData().getCover_url(), holder.backgroundImg);
         SceneTitleSetUtils.setTitle(holder.qjTitleTv, holder.qjTitleTv2, sceneDetails.getData().getTitle());
         holder.userName.setText(sceneDetails.getData().getUser_info().getNickname());
-        holder.publishTime.setText(sceneDetails.getData().getCreated_at());
+        CharSequence date = DateFormat.format("yyyy-MM-dd", sceneDetails.getData().getCreated_on());
+        holder.publishTime.setText(date);
         holder.locationTv.setText(sceneDetails.getData().getAddress());
+        if (TextUtils.isEmpty(sceneDetails.getData().getAddress())) {
+            holder.locationImg.setVisibility(View.GONE);
+        } else {
+            holder.locationImg.setVisibility(View.VISIBLE);
+        }
         holder.des.setText(sceneDetails.getData().getDes());
         setStyle(position, holder);
         //添加商品标签
@@ -193,6 +198,8 @@ public class TestShareUtils {
         TextView userName;
         @Bind(R.id.publish_time)
         public TextView publishTime;
+        @Bind(R.id.location_img)
+        ImageView locationImg;
         @Bind(R.id.location_tv)
         public TextView locationTv;
         @Bind(R.id.des)

@@ -26,6 +26,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.beans.SceneList;
 import com.taihuoniao.fineix.beans.TagItem;
 import com.taihuoniao.fineix.network.DataConstants;
@@ -36,6 +37,7 @@ import com.taihuoniao.fineix.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import java.io.File;
 import java.util.List;
@@ -73,6 +75,7 @@ public class MainApplication extends Application {
     public static String subjectId = null;//活动id
     public static List<SceneList.DataBean.RowsBean> sceneList;//情景小图跳转大图列表 情景
     public static List<String> picList;//跳转PictureActivity
+    private PushAgent mPushAgent;
     private SharedPreferences tempSharedPreference;//检查本地存储是否设置推送的开关
 
     public static MainApplication getContext() {
@@ -243,7 +246,7 @@ public class MainApplication extends Application {
 
     public void initPush() {
         tempSharedPreference = getSharedPreferences(DataConstants.PUSH_STATUS, Context.MODE_PRIVATE);
-        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent = PushAgent.getInstance(this);
         //关闭打印log，提高代码效率
         mPushAgent.setDebugMode(true);
         //注册推送服务，每次调用register方法都会回调该接口
@@ -252,12 +255,33 @@ public class MainApplication extends Application {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                Log.e("<<<注册成功","deviceToken="+deviceToken);
+                Log.e("<<<注册成功", "deviceToken=" + deviceToken);
+                addUserId();
             }
 
             @Override
             public void onFailure(String s, String s1) {
-                Log.e("<<<注册失败","s="+s+",s1="+s1);
+                Log.e("<<<注册失败", "s=" + s + ",s1=" + s1);
+            }
+        });
+    }
+
+    //绑定用户，方便友盟对指定用户id推送
+    public void addUserId() {
+        mPushAgent.addAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+
+            }
+        });
+    }
+
+    //移除用户
+    public void removeUserId() {
+        mPushAgent.removeAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+
             }
         });
     }

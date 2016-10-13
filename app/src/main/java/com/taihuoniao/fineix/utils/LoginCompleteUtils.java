@@ -8,11 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.LoginInfo;
@@ -28,8 +25,6 @@ import com.taihuoniao.fineix.qingjingOrSceneDetails.QJCategoryActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.ToLoginActivity;
 import com.taihuoniao.fineix.user.ToRegisterActivity;
-
-import static android.R.attr.button;
 
 /**
  * Created by taihuoniao on 2016/5/25.
@@ -155,6 +150,7 @@ public class LoginCompleteUtils {
         if (ToLoginActivity.instance != null) {
             ToLoginActivity.instance.finish();
         }
+        ((MainApplication) activity.getApplication()).addUserId();
         activity.finish();
         activity = null;
     }
