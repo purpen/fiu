@@ -5,7 +5,9 @@ package com.taihuoniao.fineix.network;
  * 常量
  */
 public class DataConstants {
-    public static final String FIU = "fiu浮游";//用户与平台的绑定
+    public static final String TYPE = "type";//推送返回key
+    public static final String TARGET_ID = "target_id";//推送返回的key
+    public static final String FIU = "user_id";//用户与平台的绑定
     public static final String PUSH_STATUS = "push_status";
     public static final String STATUS = "status";
     //判断从哪个activity跳转到登录界面

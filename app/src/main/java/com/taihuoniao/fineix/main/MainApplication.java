@@ -33,11 +33,14 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.PushUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 
 import java.io.File;
 import java.util.List;
@@ -247,8 +250,9 @@ public class MainApplication extends Application {
     public void initPush() {
         tempSharedPreference = getSharedPreferences(DataConstants.PUSH_STATUS, Context.MODE_PRIVATE);
         mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
         //关闭打印log，提高代码效率
-        mPushAgent.setDebugMode(true);
+        mPushAgent.setDebugMode(false);
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
 
@@ -271,20 +275,33 @@ public class MainApplication extends Application {
         mPushAgent.addAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
             @Override
             public void onMessage(boolean isSuccess, String message) {
-
+                Log.e("<<<绑定用户", "userId=" + LoginInfo.getUserId());
             }
         });
     }
 
     //移除用户
     public void removeUserId() {
-        mPushAgent.removeAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
+        mPushAgent.addAlias(LoginInfo.getUserId() + "", DataConstants.FIU, new UTrack.ICallBack() {
             @Override
             public void onMessage(boolean isSuccess, String message) {
 
             }
         });
     }
+
+    //自定义点击通知栏动作
+    UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+        @Override
+        public void dealWithCustomAction(Context context, UMessage msg) {
+            if (msg.extra.containsKey(DataConstants.TYPE) && msg.extra.containsKey(DataConstants.TARGET_ID)) {
+                String type = msg.extra.get(DataConstants.TYPE);
+                String target_id = msg.extra.get(DataConstants.TARGET_ID);
+                PushUtils.switchActivity(type, target_id, MainApplication.this);
+            }
+//            Toast.makeText(context, "自定义行为=" + msg.custom + ",自定义参数=" + msg.extra.toString(), Toast.LENGTH_LONG).show();
+        }
+    };
 
     public boolean isPush_status() {
         return tempSharedPreference.getBoolean(DataConstants.STATUS, true);

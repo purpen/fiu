@@ -457,17 +457,18 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5791f4bae0f55a986e000bd7"/>
+            android:value="5791f4bae0f55a986e000bd7" />
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
-            android:value="2bbe6244ef5c7d7eff3f48f24d85dadd"/>
+            android:value="2bbe6244ef5c7d7eff3f48f24d85dadd" />
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="10" />
 
+        <activity android:name=".push.PushActivity" />
         <activity
             android:name=".pay.jdpay.JDPayActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

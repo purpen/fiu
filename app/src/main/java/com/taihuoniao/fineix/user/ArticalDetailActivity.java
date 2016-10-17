@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -89,13 +90,15 @@ public class ArticalDetailActivity extends BaseActivity {
         WindowUtils.chenjin(this);
     }
 
-    static class MyWebViewClient extends WebViewClient{
+    static class MyWebViewClient extends WebViewClient {
         private WaittingDialog dialog;
         private Activity activity;
-        public MyWebViewClient(Activity activity){
-            this.activity=activity;
-            dialog=new WaittingDialog(activity);
+
+        public MyWebViewClient(Activity activity) {
+            this.activity = activity;
+            dialog = new WaittingDialog(activity);
         }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.contains("infoType") && url.contains("infoId")) {
@@ -118,7 +121,7 @@ public class ArticalDetailActivity extends BaseActivity {
                     intent.putExtra("id", infoId);
                     activity.startActivity(intent);
                 } else if (TextUtils.equals(INFO_TYPE_JXZT, infoType)) {//精选主题
-                    jump2ThemeDetail(activity,infoId);
+                    jump2ThemeDetail(activity, infoId,false);
                 } else if (TextUtils.equals(INFO_TYPE_CP, infoType)) {//转产品详情
                     intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                     intent.putExtra("id", infoId);
@@ -242,7 +245,7 @@ public class ArticalDetailActivity extends BaseActivity {
 //        }
 //    };
 
-    private static void jump2ThemeDetail(final Activity activity,final String id) {
+    public static void jump2ThemeDetail(final Context activity, final String id, final boolean hasFlag) {
         if (TextUtils.isEmpty(id)) return;
         ClientDiscoverAPI.getSubjectData(id, new RequestCallBack<String>() {
             @Override
@@ -257,21 +260,33 @@ public class ArticalDetailActivity extends BaseActivity {
                         case 1: //文章详情
                             intent = new Intent(activity, ArticalDetailActivity.class);
                             intent.putExtra(ArticalDetailActivity.class.getSimpleName(), id);
+                            if(hasFlag){
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
                             activity.startActivity(intent);
                             break;
                         case 2: //活动详情
                             intent = new Intent(activity, ActivityDetailActivity.class);
                             intent.putExtra(ActivityDetailActivity.class.getSimpleName(), id);
+                            if(hasFlag){
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
                             activity.startActivity(intent);
                             break;
                         case 3: //新品
                             intent = new Intent(activity, NewProductDetailActivity.class);
                             intent.putExtra(NewProductDetailActivity.class.getSimpleName(), id);
+                            if(hasFlag){
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
                             activity.startActivity(intent);
                             break;
                         case 4: //促销
                             intent = new Intent(activity, SalePromotionDetailActivity.class);
                             intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), id);
+                            if(hasFlag){
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
                             activity.startActivity(intent);
                             break;
                     }
