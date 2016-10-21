@@ -85,7 +85,7 @@ public class SubscribeThemeFragment extends MyBaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView) view.findViewById(R.id.tv);
                 View view_bg = view.findViewById(R.id.view_bg);
-                ThemeQJ themeQJ = mList.get(position);
+                ThemeQJ themeQJ = adapter.getItem(position);
                 if (themeQJ.stick == 1) {
                     themeQJ.stick = 0;
                     textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.circle_add, 0, 0, 0);
