@@ -24,6 +24,10 @@
     <string name="net_fail">网络错误</string>
     <string name="input_invite_code">请输入您的邀请码</string>
     <string name="prize_num">%1$s%2$s名</string>
+    <string name="please_select">请选择</string>
+    <string name="please_select_address">请选择收货地址</string>
+    <string name="consignee_address_change">收货地址更新</string>
+    <string name="address_change_tips">地址管理优化啦，快来填写一个新地址试试吧。</string>
     <!-- PhotoFragment -->
     <string name="film_album">Camera</string>
     <!-- CropPictureActivity -->
@@ -78,6 +82,7 @@
     <!-- 编辑收货地址界面-->
     <string name="name_is_empty">收货人不能为空！</string>
     <string name="phone_is_empty">手机号码不能为空！</string>
+    <string name="phone_is_err">手机号不正确！</string>
     <string name="address_details_is_empty">详细地址不能为空！</string>
     <string name="zip_is_empty">邮政编码不能为空！</string>
     <string name="no_default_address">默认地址不存在！</string>
@@ -238,6 +243,8 @@
     <string name="please_select_one">请在情绪、环境、时间、人物中各选一个</string>
     <string name="commit">提交</string>
     <string name="consignee_name">收货人姓名</string>
+    <string name="title_consignee_address">收货地址</string>
+    <string name="new_consignee_address">新增收货地址</string>
     <string name="phone">手机</string>
     <string name="postcode">邮政编码</string>
     <string name="beijing">北京市</string>

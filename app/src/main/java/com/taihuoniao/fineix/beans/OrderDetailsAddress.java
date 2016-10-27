@@ -6,21 +6,26 @@ import java.io.Serializable;
  * Created by android on 2016/3/13.
  */
 public class OrderDetailsAddress implements Serializable {
-    private String name,phone,address,city,province;
+    private String name,phone,address,city,province,county,town;
 
-    @Override
-    public String toString() {
-        return "OrderDetailsAddress{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", province='" + province + '\'' +
-                '}';
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public void setName(String name) {

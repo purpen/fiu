@@ -61,11 +61,19 @@ public class IndexSubjectAdapter extends RecyclerView.Adapter<IndexSubjectAdapte
                 holder.person.setVisibility(View.INVISIBLE);
                 holder.imageView.setVisibility(View.INVISIBLE);
                 break;
-            default:
+            case 1:
                 holder.label.setImageResource(R.mipmap.subject_wenzhang);
-                holder.person.setText(list.get(position).getAttend_count() + "人阅读");
+                holder.person.setText(list.get(position).getView_count() + "人阅读");
                 holder.person.setVisibility(View.VISIBLE);
                 holder.imageView.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                holder.label.setVisibility(View.GONE);
+                holder.person.setText(list.get(position).getView_count() + "人阅读");
+                holder.person.setVisibility(View.VISIBLE);
+                holder.imageView.setVisibility(View.VISIBLE);
+                break;
+            default:
                 break;
         }
     }

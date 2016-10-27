@@ -8,9 +8,9 @@ public class NetworkConstance {
     public static final String ALI_PAY = "alipay";
     public static final String WX_PAY = "weichat";
     public static final String JD_PAY = "jdpay";
-    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+//    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
-//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     //热门城市 暂用ESTORE的URL
     public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";
@@ -79,13 +79,13 @@ public class NetworkConstance {
     //省市列表
     public static final String urlString_province_cities = BASE_URL + "/shopping/fetch_areas";
     //  获取用户默认收货地址接口
-    public static final String urlString_default_address = BASE_URL + "/shopping/default_address";
+    public static final String urlString_default_address = BASE_URL + "/delivery_address/defaulted";
     //  获取用户收货地址列表
-    public static final String urlString_address_lists = BASE_URL + "/shopping/address";
+    public static final String urlString_address_lists = BASE_URL + "/delivery_address/get_list";
     //  新增收货地址(编辑)
-    public static final String urlString_new_address = BASE_URL + "/shopping/ajax_address";
+    public static final String urlString_new_address = BASE_URL + "/delivery_address/save";
     //  删除某个收货地址
-    public static final String urlString_delete_address = BASE_URL + "/shopping/remove_address";
+    public static final String urlString_delete_address = BASE_URL + "/delivery_address/deleted";
     //公共
     //举报
     public static final String report = BASE_URL + "/report_tip/save";

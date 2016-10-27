@@ -50,6 +50,7 @@ import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.ScrollableView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -302,10 +303,9 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取精选主题
     private void subjectList() {
-        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
+        HttpHandler<String> httpHandler = ClientDiscoverAPI.getIndexChosenSubject(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                Log.e("<<<精选主题", responseInfo.result);
                 SubjectListBean subjectListBean = new SubjectListBean();
                 try {
                     Gson gson = new Gson();
@@ -323,10 +323,37 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
             }
 
             @Override
-            public void onFailure(HttpException error, String msg) {
-
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                LogUtil.e("getIndexChosenSubject",getResources().getString(R.string.network_err));
             }
         });
+
+//        HttpHandler<String> httpHandler = ClientDiscoverAPI.subjectList("1", "4", null, "1", null, "2", new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                Log.e("<<<精选主题", responseInfo.result);
+//                SubjectListBean subjectListBean = new SubjectListBean();
+//                try {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<SubjectListBean>() {
+//                    }.getType();
+//                    subjectListBean = gson.fromJson(responseInfo.result, type);
+//                } catch (JsonSyntaxException e) {
+//                    Log.e("<<<", "解析异常=" + e.toString());
+//                }
+//                if (subjectListBean.isSuccess()) {
+//                    subjectList.clear();
+//                    subjectList.addAll(subjectListBean.getData().getRows());
+//                    indexSubjectAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//
+//            }
+//        });
         addNet(httpHandler);
     }
 
@@ -414,19 +441,20 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     public void click(int postion) {
         Intent intent = new Intent();
         switch (subjectList.get(postion).getType()) {
-            case 1:
+            case 1: //文章详情
                 intent.setClass(getActivity(), ArticalDetailActivity.class);
                 intent.putExtra(ArticalDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
-            case 2:
+            case 2: //活动详情
                 intent.setClass(getActivity(), ActivityDetailActivity.class);
                 intent.putExtra(ActivityDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
-            case 3:
+            case 3://促销详情
+            case 5://好货
                 intent.setClass(getActivity(), SalePromotionDetailActivity.class);
                 intent.putExtra(SalePromotionDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;
-            default:
+            case 4: //新品详情
                 intent.setClass(getActivity(), NewProductDetailActivity.class);
                 intent.putExtra(NewProductDetailActivity.class.getSimpleName(), subjectList.get(postion).get_id());
                 break;

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -74,6 +75,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private BitmapUtils mBitmapUtils;
     private WaittingDialog mDialog;
     private AlertDialog.Builder alertDialog;
+    private TextView mCounty;
+    private TextView mTown;
 
     private void toShopOrderListActivity() {
         Intent in = new Intent(OrderDetailsActivity.this, ShopOrderListActivity.class);
@@ -130,6 +133,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                     address.setCity(arr.optString("city"));
                     address.setPhone(arr.optString("phone"));
                     address.setProvince(arr.optString("province"));
+                    address.setCounty(arr.optString("county"));
+                    address.setTown(arr.optString("town"));
                     addressList.add(address);
 
                     details.setAddresses(addressList);
@@ -505,13 +510,25 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                             mBottomLayout.setVisibility(View.GONE);
                             break;
                     }
-
-                    for (int j = 0; j < mDetailsList.get(i).getAddresses().size(); j++) {
+                    List<OrderDetailsAddress> addresses = mDetailsList.get(i).getAddresses();
+                    for (int j = 0; j < addresses.size(); j++) {
                         mDeliverMan.setText(String.format("收货人：%s", mDetailsList.get(i).getAddresses().get(j).getName()));
-                        mProvince.setText(mDetailsList.get(i).getAddresses().get(j).getProvince());
-                        mCity.setText(mDetailsList.get(i).getAddresses().get(j).getCity());
-                        mDetailsAddress.setText(mDetailsList.get(i).getAddresses().get(j).getAddress());
-                        mPhone.setText(mDetailsList.get(i).getAddresses().get(j).getPhone());
+                        mProvince.setText(addresses.get(j).getProvince());
+                        mCity.setText(addresses.get(j).getCity());
+                        if (TextUtils.isEmpty(addresses.get(j).getCounty())){
+                            mCounty.setText("");
+                        }else {
+                            mCounty.setText(addresses.get(j).getCounty());
+                        }
+
+                        if (TextUtils.isEmpty(addresses.get(j).getTown())){
+                            mTown.setText("");
+                        }else {
+                            mTown.setText(addresses.get(j).getTown());
+                        }
+
+                        mDetailsAddress.setText(addresses.get(j).getAddress());
+                        mPhone.setText(addresses.get(j).getPhone());
                     }
                     if (mContainerLayout != null) {
                         mContainerLayout.removeAllViews();
@@ -576,6 +593,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         mDeliverMan = (TextView) findViewById(R.id.tv_deliver_man_order_details);
         mProvince = (TextView) findViewById(R.id.tv_province_order_details);
         mCity = (TextView) findViewById(R.id.tv_city_order_details);
+        mCounty = (TextView) findViewById(R.id.tv_county);
+        mTown = (TextView) findViewById(R.id.tv_town);
         mDetailsAddress = (TextView) findViewById(R.id.tv_address_order_details);
         mPhone = (TextView) findViewById(R.id.tv_phone_order_details);
         mOrderNum = (TextView) findViewById(R.id.tv_number_order_details);

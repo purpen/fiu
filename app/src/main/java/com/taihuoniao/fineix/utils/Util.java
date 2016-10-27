@@ -3,10 +3,10 @@ package com.taihuoniao.fineix.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
@@ -273,7 +273,7 @@ public class Util {
         Context context = MainApplication.getContext();
         String defaultValue = "10"; //默认官方渠道下载
         if (TextUtils.isEmpty(key)) {
-            Log.e("<<<","键为空");
+            Log.e("<<<", "键为空");
             return defaultValue;
         }
         String resultData = null;
@@ -284,17 +284,17 @@ public class Util {
                 if (applicationInfo != null) {
                     if (applicationInfo.metaData != null) {
                         resultData = applicationInfo.metaData.getString(key);
-                    }else{
-                        Log.e("<<<","applicationInfo.metaData为空");
+                    } else {
+                        Log.e("<<<", "applicationInfo.metaData为空");
                     }
-                }else{
-                    Log.e("<<<","applicationInfo为空");
+                } else {
+                    Log.e("<<<", "applicationInfo为空");
                 }
-            }else{
-                Log.e("<<<","packageManager为空");
+            } else {
+                Log.e("<<<", "packageManager为空");
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("<<<","异常");
+            Log.e("<<<", "异常");
             e.printStackTrace();
         }
 
@@ -302,7 +302,7 @@ public class Util {
             Log.e("<<<", "渠道编号为空");
             return defaultValue;
         }
-        Log.e("<<<","获取的渠道编号="+resultData);
+        Log.e("<<<", "获取的渠道编号=" + resultData);
         return resultData;
     }
 
@@ -310,35 +310,13 @@ public class Util {
         return URLEncoder.encode(string, NetworkConstance.CHARSET);
     }
 
-    //打开扬声器
-    public static void openVolume() {
-        try {
-            AudioManager audioManager = (AudioManager) MainApplication.getContext().getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setSpeakerphoneOn(true);
-            if (!audioManager.isSpeakerphoneOn()) {
-                audioManager.setSpeakerphoneOn(true);
-                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
-                        audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL),
-                        AudioManager.STREAM_VOICE_CALL);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //关闭扬声器
-    public static void closeVolume() {
-        try {
-            AudioManager audioManager = (AudioManager) MainApplication.getContext().getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager != null) {
-                if (audioManager.isSpeakerphoneOn()) {
-                    audioManager.setSpeakerphoneOn(false);
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0,
-                            AudioManager.FLAG_PLAY_SOUND);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    /**
+     * 获取版本号
+     * @return 当前应用的版本号
+     */
+    public static String getVersionName() throws NameNotFoundException {
+            PackageManager manager = MainApplication.getContext().getPackageManager();
+            PackageInfo info = manager.getPackageInfo(MainApplication.getContext().getPackageName(), 0);
+            return info.versionName;
     }
 }

@@ -157,7 +157,7 @@ public class UserGuideActivity extends BaseActivity {
         ClientDiscoverAPI.activeStatus(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (TextUtils.isEmpty(responseInfo.result)) return;
+                LogUtil.e(TAG,responseInfo.result);
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (!response.isSuccess()) {
                     LogUtil.e(TAG, "提交渠道失败信息:" + response.getMessage());

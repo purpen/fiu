@@ -387,6 +387,10 @@
             android:name=".user.ChooseSubjectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".user.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.baidu.location.f"

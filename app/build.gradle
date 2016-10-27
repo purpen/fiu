@@ -8,8 +8,8 @@ android {
         applicationId "com.taihuoniao.fineix"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 12
-        versionName "1.10"
+        versionCode 14
+        versionName "1.1.2"
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
         // dex突破65535的限制
@@ -19,7 +19,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('D:/AndroidStudioProjects/fiu/app/fiu.jks')
+            storeFile file('C:/AndroidStudioProjects/fiu/app/fiu.jks')
             storePassword 'taihuoniao798'
             keyAlias 'fiu'
             keyPassword 'taihuoniao798'

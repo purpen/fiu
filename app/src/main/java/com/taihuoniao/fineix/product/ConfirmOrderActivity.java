@@ -78,7 +78,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //网络请求返回值
     private DefaultAddressBean addressDefaultBean;
     //收货地址界面选择的返回值
-    private AddressListBean.AddressListItem addressListItem;
+    private AddressListBean.RowsEntity addressListItem;
     //收货时间界面选择的返回值
     private String transfer_time = "a";
     private String bonus_code;
@@ -105,7 +105,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
       addressHandler =   ClientDiscoverAPI.getDefaultAddressNet(new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e("<<<默认收货地址", responseInfo.result);
+                Log.e("<<<默认收货地址", responseInfo.result);
 //                WriteJsonToSD.writeToSD("json", responseInfo.result);
                 DefaultAddressBean defaultAddressBean = new DefaultAddressBean();
                 try {
@@ -249,9 +249,9 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     return;
                 }
                 if (nowBuyBean != null)
-                    confirmOrder(nowBuyBean.getData().getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), nowBuyBean.getData().getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(nowBuyBean.getData().getOrder_info().get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem._id, nowBuyBean.getData().getIs_nowbuy() + "", editText.getText().toString(), transfer_time, bonus_code);
                 else if (cartBean != null)
-                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem.get_id(), cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
+                    confirmOrder(cartBean.get_id(), addressListItem == null ? addressDefaultBean.getData().get_id() : addressListItem._id, cartBean.getIs_nowbuy(), editText.getText().toString(), transfer_time, bonus_code);
                 break;
         }
     }
@@ -302,7 +302,6 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                     }
                 } else {
                     ToastUtils.showError(nowConfirmBean.getMessage());
-//                        dialog.showErrorWithStatus(netConfirmBean.getMessage());
                 }
 
             }
@@ -310,9 +309,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
-                ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -372,7 +369,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 }
                 break;
             case DataConstants.RESULTCODE_ADDRESS:
-                addressListItem = (AddressListBean.AddressListItem) data.getSerializableExtra("addressBean");
+                addressListItem = (AddressListBean.RowsEntity) data.getSerializableExtra("addressBean");
                 if (addressListItem != null) {
                     setAddressData(addressListItem);
                 } else {
@@ -402,18 +399,19 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
 
     private void setAddressData(DefaultAddressBean address) {
         noAddressTv.setVisibility(View.GONE);
-        nameTv.setText(address.getData().getName());
-        addressTv.setText(address.getData().getProvince_name() + "  " + address.getData().getCity_name());
-        addressDetailsTv.setText(address.getData().getAddress());
-        phoneTv.setText(address.getData().getPhone());
+        DefaultAddressBean.Data data = address.getData();
+        nameTv.setText(data.getName());
+        addressTv.setText(data.province + " " + data.city+" "+data.county+" "+data.town);
+        addressDetailsTv.setText(data.getAddress());
+        phoneTv.setText(data.getPhone());
     }
 
-    private void setAddressData(AddressListBean.AddressListItem address) {
+    private void setAddressData(AddressListBean.RowsEntity address) {
         noAddressTv.setVisibility(View.GONE);
-        nameTv.setText(address.getName());
-        addressTv.setText(address.getProvince_name() + "  " + address.getCity_name());
-        addressDetailsTv.setText(address.getAddress());
-        phoneTv.setText(address.getPhone());
+        nameTv.setText(address.name);
+        addressTv.setText(address.province + address.city+address.county+address.town);
+        addressDetailsTv.setText(address.address);
+        phoneTv.setText(address.phone);
     }
 
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f4f4f4"
+    android:background="@color/color_f7f7f7"
     android:fitsSystemWindows="true">
 
     <com.taihuoniao.fineix.view.CustomHeadView
@@ -11,41 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/activity_addnewaddress_commitbtn"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/color_222"
-        android:text="@string/commit"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/activity_addnewaddress_commitbtn"
-        android:layout_below="@id/custom_head"
+        android:layout_above="@+id/btn_commit"
+        android:layout_below="@+id/custom_head"
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16">
 
         <EditText
-            android:id="@+id/activity_addnewaddress_name"
+            android:id="@+id/et_consignee_name"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp45"
             android:layout_marginTop="10dp"
             android:background="@drawable/background_product_white_corner"
             android:hint="@string/consignee_name"
             android:maxLines="1"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="16sp" />
+            android:textSize="@dimen/sp14" />
 
         <EditText
-            android:id="@+id/activity_addnewaddress_phone"
+            android:id="@+id/et_phone"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp45"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
             android:hint="@string/phone"
@@ -53,12 +43,12 @@
             android:maxLines="1"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="16sp" />
+            android:textSize="@dimen/sp14" />
 
         <EditText
-            android:id="@+id/activity_addnewaddress_postcode"
+            android:id="@+id/et_zip_code"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp45"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
             android:hint="@string/postcode"
@@ -66,52 +56,37 @@
             android:maxLines="1"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="16sp" />
+            android:textSize="@dimen/sp14" />
 
-        <LinearLayout
-            android:id="@+id/activity_addnewaddress_addresslinear"
+        <TextView
+            android:id="@+id/tv_address"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:id="@+id/activity_addnewaddress_province"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/beijing"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/activity_addnewaddress_city"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:text="@string/dongcheng"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-        </LinearLayout>
+            android:paddingRight="15dp"
+            android:hint="@string/please_select_address"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_333"
+            android:textSize="@dimen/sp14" />
 
         <EditText
-            android:id="@+id/activity_addnewaddress_addressdetails"
+            android:id="@+id/et_address_details"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp45"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
             android:hint="@string/detail_address"
             android:maxLines="1"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textSize="16sp" />
+            android:textSize="@dimen/sp14" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dp45"
             android:layout_marginTop="5dp"
             android:background="@drawable/background_product_white_corner"
             android:paddingLeft="15dp">
@@ -121,18 +96,29 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/set_default_address"
-                android:textSize="16sp"
+                android:textSize="@dimen/sp14"
                 tools:ignore="RelativeOverlap" />
 
-            <ImageView
-                android:id="@+id/activity_addnewaddress_isdefault"
+            <ImageButton
+                android:id="@+id/ibtn_set_default"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:paddingBottom="7dp"
                 android:paddingRight="12dp"
                 android:paddingTop="7dp"
+                android:background="@null"
                 android:src="@mipmap/switch_on" />
         </RelativeLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_222"
+        android:text="@string/commit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp16" />
 </RelativeLayout>

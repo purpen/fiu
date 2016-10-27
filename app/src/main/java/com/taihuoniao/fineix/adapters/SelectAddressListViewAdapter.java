@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.AddressListBean;
 import com.taihuoniao.fineix.network.DataConstants;
-import com.taihuoniao.fineix.user.AddNewAddressActivity;
+import com.taihuoniao.fineix.user.AddAddressActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 
 import java.util.List;
@@ -29,16 +30,14 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
     private int mScreentWidth;
     private View view;
     private Context context;
-    private List<AddressListBean.AddressListItem> list;
+    private List<AddressListBean.RowsEntity> list;
     private SelectAddressActivity activity;
-//    private WaittingDialog waittingDialog;
 
-    public SelectAddressListViewAdapter(Context context, List<AddressListBean.AddressListItem> list, int mScreentWidth, SelectAddressActivity activity) {
+    public SelectAddressListViewAdapter(Context context, List<AddressListBean.RowsEntity> list, int mScreentWidth, SelectAddressActivity activity) {
         this.context = context;
         this.list = list;
         this.mScreentWidth = mScreentWidth;
         this.activity = activity;
-//        this.waittingDialog = new WaittingDialog(context);
     }
 
     @Override
@@ -58,6 +57,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        final AddressListBean.RowsEntity item = list.get(position);
         ViewHolder hold;
         if (convertView == null) {
             hold = new ViewHolder();
@@ -65,6 +65,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
             hold.isSelectImg = (ImageView) convertView.findViewById(R.id.item_address_checkimg);
             hold.editImg = (ImageView) convertView.findViewById(R.id.item_address_editimg);
             hold.linearLayout = (LinearLayout) convertView.findViewById(R.id.item_address_linear);
+            hold.llBox = (LinearLayout) convertView.findViewById(R.id.ll_box);
             hold.nameTv = (TextView) convertView.findViewById(R.id.item_address_nametv);
             hold.isDefaultTv = (TextView) convertView.findViewById(R.id.item_address_isdefaulttv);
             hold.addressTv = (TextView) convertView.findViewById(R.id.item_address_addresstv);
@@ -81,68 +82,88 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
-        hold.nameTv.setText(list.get(position).getName());
-        switch (list.get(position).getIs_default()) {
-            case "0":
-                hold.isDefaultTv.setVisibility(View.GONE);
-                break;
-            case "1":
-                hold.isDefaultTv.setVisibility(View.VISIBLE);
-                list.get(position).setIsSelect(true);
-                break;
+        hold.nameTv.setText(item.name);
+        if (TextUtils.equals("0",item.is_default)){
+            hold.isDefaultTv.setVisibility(View.GONE);
+        }else if(TextUtils.equals("1",item.is_default)){
+            hold.isDefaultTv.setVisibility(View.VISIBLE);
         }
-        hold.addressTv.setText(list.get(position).getProvince_name() + "  " + list.get(position).getCity_name());
-        hold.detailsAddressTv.setText(list.get(position).getAddress());
-        hold.phoneTv.setText(list.get(position).getPhone());
-        if (list.get(position).isSelect()) {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(item.province);
+        builder.append(" ");
+        builder.append(item.city);
+        builder.append(" ");
+        builder.append(item.county);
+        builder.append(" ");
+        builder.append(item.town);
+        hold.addressTv.setText(builder.toString());
+        hold.detailsAddressTv.setText(item.address);
+        hold.phoneTv.setText(item.phone);
+        if (item.isSelected || TextUtils.equals("1",item.is_default)) {
             hold.isSelectImg.setImageResource(R.mipmap.checked);
         } else {
             hold.isSelectImg.setImageResource(R.mipmap.check);
         }
-        hold.isSelectImg.setOnClickListener(new View.OnClickListener() {
+        hold.llBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (list.get(position).isSelect()) {
-                    list.get(position).setIsSelect(false);
-                } else {
-                    for (int i = 0; i < list.size(); i++) {
-                        if (i == position) {
-                            list.get(i).setIsSelect(true);
-                        } else {
-                            list.get(i).setIsSelect(false);
+                for (AddressListBean.RowsEntity row:list){
+                    if (row.isSelected){
+                        row.isSelected=false;
+                    }else {
+                        if (TextUtils.equals(item._id,row._id)){
+                            row.isSelected=true;
+                        }else {
+                            row.isSelected=false;
                         }
                     }
                 }
                 notifyDataSetChanged();
             }
         });
+//        hold.isSelectImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (item.isSelected) {
+//                    item.isSelected=false;
+//                } else {
+//                    for (int i = 0; i < list.size(); i++) {
+//                        if (i == position) {
+//                            item.isSelected=true;
+//                        } else {
+//                            item.isSelected=false;
+//                        }
+//                    }
+//                }
+//                notifyDataSetChanged();
+//            }
+//        });
         hold.editImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //跳转到编辑地址界面
-                Intent intent = new Intent(context, AddNewAddressActivity.class);
-                intent.putExtra("addressBean", list.get(position));
+                Intent intent = new Intent(context, AddAddressActivity.class);
+                intent.putExtra("addressBean",item);
                 activity.startActivityForResult(intent, DataConstants.REQUESTCODE_EDITADDRESS);
-//                context.startActivity(intent);
             }
         });
-        hold.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (list.get(position).isSelect()) {
-                    list.get(position).setIsSelect(false);
-                } else {
-                    for (int i = 0; i < list.size(); i++) {
-                        if (i == position) {
-                            list.get(i).setIsSelect(true);
-                        } else {
-                            list.get(i).setIsSelect(false);
-                        }
-                    }
-                }
-                notifyDataSetChanged();
-            }
-        });
+//        hold.linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (item.isSelected) {
+//                    item.isSelected=false;
+//                } else {
+//                    for (int i = 0; i < list.size(); i++) {
+//                        if (i == position) {
+//                            item.isSelected=true;
+//                        } else {
+//                            item.isSelected=false;
+//                        }
+//                    }
+//                }
+//                notifyDataSetChanged();
+//            }
+//        });
 
         //实现item的侧滑删除
         hold.deleteTv.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +176,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        activity.deleteAddress(list.get(position).get_id());
+                        activity.deleteAddress(item._id);
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -213,6 +234,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         private ImageView isSelectImg;
         private ImageView editImg;
         private LinearLayout linearLayout;
+        private LinearLayout llBox;
         private TextView nameTv, isDefaultTv, addressTv, detailsAddressTv, phoneTv;
         //为实现item的滑动删除效果
         private HorizontalScrollView scrollView;

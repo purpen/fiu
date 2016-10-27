@@ -746,8 +746,8 @@ public class DataPaser {
 
     //收货地址
 //提交编辑的收货地址返回值解析
-    public static void commitAddressParser(String id, String name, String phone, String province, String city, String address, String zip, String is_default, final Handler handler) {
-        ClientDiscoverAPI.commitAddressNet(id, name, phone, province, city, address, zip, is_default, new RequestCallBack<String>() {
+    public static void commitAddressParser(String id, String name, String phone, String province, String city,String county_id,String town_id,String address, String zip, String is_default, final Handler handler) {
+        ClientDiscoverAPI.commitAddressNet(id, name, phone, province, city,county_id,town_id,address, zip, is_default, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 Message msg = handler.obtainMessage();

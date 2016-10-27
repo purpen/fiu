@@ -21,14 +21,14 @@ public class DefaultAddressBean extends NetBean {
         private String user_id;
         private String name;
         private String phone;
-        private String province;
-        private String city;
+        public String province;
+        public String city;
+        public String county;
+        public String town;
         private String area;
         private String address;
         private String zip;
         private String is_default;
-        private String province_name;
-        private String city_name;
         private int has_default;
         private String current_user_id;
 
@@ -64,13 +64,6 @@ public class DefaultAddressBean extends NetBean {
             this.city = city;
         }
 
-        public String getCity_name() {
-            return city_name;
-        }
-
-        public void setCity_name(String city_name) {
-            this.city_name = city_name;
-        }
 
         public String getCurrent_user_id() {
             return current_user_id;
@@ -118,14 +111,6 @@ public class DefaultAddressBean extends NetBean {
 
         public void setProvince(String province) {
             this.province = province;
-        }
-
-        public String getProvince_name() {
-            return province_name;
-        }
-
-        public void setProvince_name(String province_name) {
-            this.province_name = province_name;
         }
 
         public String getUser_id() {

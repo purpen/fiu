@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_confirmorder_address"
                         android:layout_marginTop="5dp"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:textColor="#212121"
                         android:textSize="11sp"/>
 
@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_confirmorder_fulladdress"
                         android:layout_marginTop="5dp"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:textColor="#212121"
                         android:textSize="11sp"/>
 

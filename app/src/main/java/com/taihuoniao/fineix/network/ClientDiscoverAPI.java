@@ -463,14 +463,16 @@ public class ClientDiscoverAPI {
 
     //收货地址
     //提交正在编辑的收货地址
-    public static HttpHandler<String> commitAddressNet(String id, String name, String phone, String province, String city, String address, String zip, String is_default, RequestCallBack<String> callBack) {
+    public static HttpHandler<String> commitAddressNet(String id, String name, String phone, String province_id, String city_id,String county_id,String town_id,String address, String zip, String is_default, RequestCallBack<String> callBack) {
         String url = NetworkConstance.urlString_new_address;
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("id", id);
         params.addQueryStringParameter("name", name);
         params.addQueryStringParameter("phone", phone);
-        params.addQueryStringParameter("province", province);
-        params.addQueryStringParameter("city", city);
+        params.addQueryStringParameter("province_id", province_id);
+        params.addQueryStringParameter("city_id", city_id);
+        params.addQueryStringParameter("county_id", county_id);
+        params.addQueryStringParameter("town_id", town_id);
         params.addQueryStringParameter("address", address);
         params.addQueryStringParameter("zip", zip);
         params.addQueryStringParameter("is_default", is_default);
@@ -1785,5 +1787,30 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("evt", evt);
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         return httpHandler;
+    }
+
+    /**
+     * 请求地址
+     * @param oid
+     * @param pid
+     * @param layer
+     * @param callBack
+     */
+    public static void requestAddress(String oid, String pid,String layer,RequestCallBack<String> callBack) {
+        String url=NetworkConstance.BASE_URL+"/shopping/fetch_china_city";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("oid",oid);
+        params.addQueryStringParameter("pid",pid);
+        params.addQueryStringParameter("layer",layer);
+        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * @param callBack
+     */
+    public static HttpHandler<String> getIndexChosenSubject(RequestCallBack<String> callBack) {
+        String url=NetworkConstance.BASE_URL+"/scene_subject/index_subject_stick";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        return MD5Utils.sign(params, url, callBack);
     }
 }

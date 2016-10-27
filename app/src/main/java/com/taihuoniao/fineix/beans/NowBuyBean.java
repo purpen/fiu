@@ -556,10 +556,10 @@ public class NowBuyBean extends NetBean implements Serializable {
             private int used_at;
             private int used;
             private String order_rid;
-            private int expired_at;
+            private long expired_at;
             private int status;
-            private int created_on;
-            private int updated_on;
+            private long created_on;
+            private long updated_on;
             private String expired_label;
             private boolean __extend__;
 
@@ -659,7 +659,7 @@ public class NowBuyBean extends NetBean implements Serializable {
                 this.order_rid = order_rid;
             }
 
-            public int getExpired_at() {
+            public long getExpired_at() {
                 return expired_at;
             }
 
@@ -675,7 +675,7 @@ public class NowBuyBean extends NetBean implements Serializable {
                 this.status = status;
             }
 
-            public int getCreated_on() {
+            public long getCreated_on() {
                 return created_on;
             }
 
@@ -683,7 +683,7 @@ public class NowBuyBean extends NetBean implements Serializable {
                 this.created_on = created_on;
             }
 
-            public int getUpdated_on() {
+            public long getUpdated_on() {
                 return updated_on;
             }
 

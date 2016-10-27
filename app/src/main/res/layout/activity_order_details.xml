@@ -54,7 +54,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/image_address"
-                    android:text="@string/province"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -63,10 +62,25 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/tv_province_order_details"
-                    android:paddingLeft="10dp"
-                    android:text="@string/city"
+                    android:paddingLeft="@dimen/dp5"
                     android:textSize="11sp"/>
-
+                <TextView
+                    android:id="@+id/tv_county"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_deliver_man_order_details"
+                    android:layout_toRightOf="@+id/tv_city_order_details"
+                    android:paddingLeft="@dimen/dp5"
+                    android:textSize="11sp"/>
+                <TextView
+                    android:id="@+id/tv_town"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_deliver_man_order_details"
+                    android:layout_toRightOf="@+id/tv_county"
+                    android:paddingLeft="@dimen/dp5"
+                    android:ellipsize="end"
+                    android:textSize="11sp"/>
                 <TextView
                     android:id="@+id/tv_address_order_details"
                     android:layout_width="wrap_content"
