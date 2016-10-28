@@ -179,7 +179,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 progressBar.setVisibility(View.GONE);
-                ToastUtils.showError("网络错误");
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -196,7 +196,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
                 if (response.isSuccess()) {
                     List<AddressListBean.RowsEntity> rows = response.getData().rows;
                     try {
-                        if (!SPUtil.readBool(TAG) && TextUtils.equals("1.1.2", Util.getVersionName()) && rows.size()== 0) {
+                        if (!SPUtil.readBool(TAG) && rows.size()== 0 && TextUtils.equals("1.1.2", Util.getVersionName())) {
                             SPUtil.write(TAG,true);
                             new AddressAPIChangeFragment().show(getFragmentManager(),AddressAPIChangeFragment.class.getSimpleName());
                         }

@@ -36,7 +36,7 @@ public class AddressListBean implements Serializable{
         public String town;
         public String province_id;
         public String city_id;
-        public String conty;
+        public String county_id;
         public String town_id;
         public String zip;
         public String is_default;

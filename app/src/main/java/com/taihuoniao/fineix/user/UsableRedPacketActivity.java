@@ -3,7 +3,6 @@ package com.taihuoniao.fineix.user;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -29,7 +28,6 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.DataPaser;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 import com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshBase;
@@ -107,7 +105,7 @@ public class UsableRedPacketActivity extends BaseActivity {
         lv = pull_lv.getRefreshableView();
         mDialog = new WaittingDialog(this);
         mRid = getIntent().getStringExtra("rid");
-        WindowUtils.chenjin(this);
+//        WindowUtils.chenjin(this);
     }
 
     @Override
@@ -121,8 +119,6 @@ public class UsableRedPacketActivity extends BaseActivity {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (mDialog != null) mDialog.dismiss();
-                if (responseInfo == null) return;
-                if (TextUtils.isEmpty(responseInfo.result)) return;
                 HttpResponse<RedPacketData> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<RedPacketData>>() {
                 });
                 if (response.isSuccess()) {

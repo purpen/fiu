@@ -70,7 +70,7 @@ public class AddAddressActivity extends BaseActivity {
     private AddressData.RowsEntity curCity;
     private AddressData.RowsEntity curCounty;
     private AddressData.RowsEntity curTown;
-
+    private boolean isAddressSelected;
     public AddAddressActivity() {
         super(R.layout.activity_add_address);
     }
@@ -156,7 +156,7 @@ public class AddAddressActivity extends BaseActivity {
             tvAddress.setText(builder.toString());
 //            provinceId = addressBean.province_id;
 //            cityId = addressBean.city_id;
-//            townId=addressBean.town_id;
+//            townId = addressBean.town_id;
             etAddressDetails.setText(addressBean.address);
             etZipCode.setText(addressBean.zip);
             if (addressBean.is_default.equals("0")) {
@@ -208,6 +208,7 @@ public class AddAddressActivity extends BaseActivity {
                                 curTown = town;
                             }
                             tvAddress.setText(builder.toString());
+                            isAddressSelected=true;
                         }
                     });
                 } else {
@@ -258,25 +259,37 @@ public class AddAddressActivity extends BaseActivity {
             ToastUtils.showInfo(R.string.address_details_is_empty);
             return;
         }
-        if (curProvince != null) {
-            provinceId = String.valueOf(curProvince.oid);
-        } else {
-            provinceId = "0";
-        }
-        if (curCity != null) {
-            cityId = String.valueOf(curCity.oid);
-        } else {
-            cityId = "0";
-        }
-        if (curCounty != null) {
-            countyId = String.valueOf(curCounty.oid);
-        } else {
-            countyId = "0";
-        }
-        if (curTown != null) {
-            townId = String.valueOf(curTown.oid);
-        } else {
-            townId = "0";
+
+        if (isAddressSelected){
+            if (curProvince != null) {
+                provinceId = String.valueOf(curProvince.oid);
+            } else {
+                provinceId = "0";
+            }
+            if (curCity != null) {
+                cityId = String.valueOf(curCity.oid);
+            } else {
+                cityId = "0";
+            }
+            if (curCounty != null) {
+                countyId = String.valueOf(curCounty.oid);
+            } else {
+                countyId = "0";
+            }
+            if (curTown != null) {
+                townId = String.valueOf(curTown.oid);
+            }else {
+                townId = "0";
+            }
+        }else {
+            if (addressBean!=null){
+                provinceId=addressBean.province_id;
+                cityId=addressBean.city_id;
+                countyId=addressBean.county_id;
+                townId=addressBean.town_id;
+            }else {
+                ToastUtils.showError(R.string.network_err);
+            }
         }
         String is_default;
         if (isdefault) {
