@@ -196,10 +196,13 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
                 if (response.isSuccess()) {
                     List<AddressListBean.RowsEntity> rows = response.getData().rows;
                     try {
-                        if (!SPUtil.readBool(TAG) && rows.size()== 0 && TextUtils.equals("1.1.2", Util.getVersionName())) {
-                            SPUtil.write(TAG,true);
-                            new AddressAPIChangeFragment().show(getFragmentManager(),AddressAPIChangeFragment.class.getSimpleName());
-                        }
+                       if (TextUtils.equals("1.1.2", Util.getVersionName())){
+                            if (!SPUtil.readBool(TAG)&& rows.size()== 0){
+                                new AddressAPIChangeFragment().show(getFragmentManager(),AddressAPIChangeFragment.class.getSimpleName());
+                            }
+                           SPUtil.write(TAG,true);
+                       }
+
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
