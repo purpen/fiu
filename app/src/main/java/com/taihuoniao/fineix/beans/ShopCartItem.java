@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by android on 2016/3/2.
  */
-public class ShopCartItem implements Serializable {
+public class ShopCartItem implements Serializable{
     private String price;
     private String sku_mode;
     private String cover;
@@ -15,7 +15,8 @@ public class ShopCartItem implements Serializable {
     private String target_id;
     private String type;
     private String product_id;
-
+    public String vop_id;
+    public boolean isFirstJD;
     @Override
     public String toString() {
         return "ShopCartItem{" +

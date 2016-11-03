@@ -29,7 +29,6 @@ import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PopupWindowUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
 import com.taihuoniao.fineix.view.CustomShareView;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -88,7 +87,7 @@ public class SalePromotionDetailActivity extends BaseActivity {
         tvDesc = ButterKnife.findById(view, R.id.tv_desc);
         view_line = ButterKnife.findById(view, R.id.view_line);
         lv.addHeaderView(view);
-        WindowUtils.chenjin(this);
+//        WindowUtils.chenjin(this);
     }
 
     @Override

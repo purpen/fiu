@@ -260,7 +260,7 @@ public class BuyGoodsDetailsActivity extends BaseActivity implements View.OnClic
                     startActivity(new Intent(this, OptRegisterLoginActivity.class));
                     return;
                 }
-                Intent intent = new Intent(this, ShopCarActivity.class);
+                Intent intent = new Intent(this, ShopCartActivity.class);
                 startActivity(intent);
                 break;
             //popupwindow下的控件

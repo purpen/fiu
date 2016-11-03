@@ -12,9 +12,6 @@ public class NetworkConstance {
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
     public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
-    //热门城市 暂用ESTORE的URL
-    public static final String BASE_URL_ESTORE = BASE_URL + "/estore/";
-
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;
     public static final String STATUS_NEED_LOGIN = "4008";

@@ -1,163 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="110dp"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:background="@color/white"
-              android:descendantFocusability="blocksDescendants"
-              android:orientation="horizontal">
-
-    <CheckBox
-        android:id="@+id/checkbox_shopcart_item"
-        style="@style/CustomCheckboxTheme"
-        android:layout_width="29dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:clickable="false"
-        android:layout_marginLeft="14dp"
-        android:paddingRight="10dp"
-        android:text=""/>
-
-    <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
-        android:id="@+id/image_shopcart_item"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:scaleType="centerCrop"
-        android:layout_gravity="center_vertical"
-        app:riv_border_width="1px"
-        app:riv_border_color="#cccccc"
-        />
-
-    <LinearLayout
-        android:id="@+id/linear_item_right"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/tv_tips"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="@dimen/dp48"
+        android:text="@string/order_separate_tips"
+        android:textSize="@dimen/sp12"
+        android:textColor="@color/color_666"
+        android:gravity="center"
+        android:background="@color/color_f7f7f7"
+        android:visibility="gone"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal">
 
+        <CheckBox
+            android:id="@+id/checkbox_shopcart_item"
+            style="@style/CustomCheckboxTheme"
+            android:layout_width="29dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:clickable="false"
+            android:layout_marginLeft="14dp"
+            android:paddingRight="10dp"
+            android:text=""/>
+
+        <com.taihuoniao.fineix.view.roundImageView.RoundedImageView
+            android:id="@+id/image_shopcart_item"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            app:riv_border_width="1px"
+            app:riv_border_color="#cccccc"
+            />
 
         <LinearLayout
-            android:id="@+id/linear_edit_shopcart_item"
+            android:id="@+id/linear_item_right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:focusable="true"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
 
             <LinearLayout
+                android:id="@+id/linear_edit_shopcart_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp">
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:focusable="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_subtract_shopcart_item_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1.3"
+                        android:background="@color/title_black"
+                        android:gravity="center"
+                        android:text="-"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_counts_shopcart_item_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="8"
+                        android:background="@drawable/grey_no_corner"
+                        android:gravity="center"
+                        android:text="@string/number_1"
+                        android:textColor="#333333"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_add_shopcart_item_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1.3"
+                        android:background="@color/title_black"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_color_shopcart_item_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/color_or_category"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_count_shopcart_item_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/the_number"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_complete_shopcart_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tv_subtract_shopcart_item_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1.3"
-                    android:background="@color/title_black"
-                    android:gravity="center"
-                    android:text="-"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/tv_counts_shopcart_item_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="8"
-                    android:background="@drawable/grey_no_corner"
-                    android:gravity="center"
-                    android:text="@string/number_1"
+                    android:id="@+id/tv_title_shopcart_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="2dp"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:paddingRight="10dp"
                     android:textColor="#333333"
-                    android:textSize="16sp"/>
+                    android:textSize="13sp"/>
 
-                <TextView
-                    android:id="@+id/tv_add_shopcart_item_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1.3"
-                    android:background="@color/title_black"
-                    android:gravity="center"
-                    android:text="+"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
-
-                <TextView
-                    android:id="@+id/tv_color_shopcart_item_edit"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/color_or_category"
-                    android:textSize="11sp"/>
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_color_shopcart_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/color_or_category"
+                        android:textSize="11sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_count_shopcart_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/the_number"
+                        android:textSize="11sp"/>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_count_shopcart_item_edit"
+                    android:id="@+id/tv_price_shopcart_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/the_number"
+                    android:text="@string/the_money"
+                    android:textColor="@color/yellow_bd8913"
                     android:textSize="11sp"/>
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_complete_shopcart_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_title_shopcart_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="2dp"
-                android:maxLines="2"
-                android:minLines="2"
-                android:paddingRight="10dp"
-                android:textColor="#333333"
-                android:textSize="13sp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
-
-                <TextView
-                    android:id="@+id/tv_color_shopcart_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/color_or_category"
-                    android:textSize="11sp"/>
-
-                <TextView
-                    android:id="@+id/tv_count_shopcart_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/the_number"
-                    android:textSize="11sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_price_shopcart_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/the_money"
-                android:textColor="@color/yellow_bd8913"
-                android:textSize="11sp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

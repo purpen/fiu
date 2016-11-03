@@ -28,6 +28,7 @@
     <string name="please_select_address">请选择收货地址</string>
     <string name="consignee_address_change">收货地址更新</string>
     <string name="address_change_tips">地址管理优化啦，快来填写一个新地址试试吧。</string>
+    <string name="order_separate_tips">以下商品由京东商城发货，请您分开结算</string>
     <!-- PhotoFragment -->
     <string name="film_album">Camera</string>
     <!-- CropPictureActivity -->

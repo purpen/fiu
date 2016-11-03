@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.network;
 
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -1479,10 +1480,12 @@ public class DataPaser {
                     shopCart.setTotal_price(shopCartObj.optString("total_price"));
 
                     List<ShopCartItem> itemList = new ArrayList<>();
+                    List<ShopCartItem> jdList = new ArrayList<>();
                     JSONArray shopCartArrs = shopCartObj.getJSONArray("items");
                     for (int i = 0; i < shopCartArrs.length(); i++) {
                         JSONObject shopCartArr = shopCartArrs.getJSONObject(i);
                         ShopCartItem shopCartItem = new ShopCartItem();
+                        shopCartItem.vop_id=shopCartArr.optString("vop_id");
                         shopCartItem.setTotal_price(shopCartArr.optString("total_price"));
                         shopCartItem.setCover(shopCartArr.optString("cover"));
                         shopCartItem.setN(shopCartArr.optString("n"));
@@ -1491,8 +1494,16 @@ public class DataPaser {
                         shopCartItem.setType(shopCartArr.optString("type"));
                         shopCartItem.setSku_mode(shopCartArr.optString("sku_mode"));
                         shopCartItem.setTitle(shopCartArr.optString("title"));
-                        itemList.add(shopCartItem);
+                        if (TextUtils.equals("null",shopCartItem.vop_id) || TextUtils.isEmpty(shopCartItem.vop_id)){
+                            itemList.add(shopCartItem);
+                        }else {
+                            jdList.add(shopCartItem);
+                        }
                     }
+                    if (!jdList.isEmpty()){
+                        jdList.get(0).isFirstJD=true;
+                    }
+                    itemList.addAll(jdList);
                     shopCart.setShopCartItemList(itemList);
                     list.add(shopCart);
                 } catch (JSONException e) {
@@ -1546,8 +1557,13 @@ public class DataPaser {
                         Message msg = new Message();
                         msg.what = DataConstants.PARSER_SHOP_CART_CALCULATE;
                         try {
-                            list = new ArrayList<>();
                             JSONObject obj = new JSONObject(responseInfo.result);
+                            if (!obj.optBoolean("success")){
+                                msg.obj=obj.optString("message");
+                                handler.sendMessage(msg);
+                                return;
+                            }
+                            list = new ArrayList<>();
                             JSONObject cartDoOrderObjs = obj.getJSONObject("data");
                             CartDoOrder cartDoOrder = new CartDoOrder();
                             cartDoOrder.setSuccess(obj.optString("success"));

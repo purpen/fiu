@@ -57,8 +57,17 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     private WaittingDialog dialog;
     private int lastSavedFirstVisibleItem = -1;
     private int lastTotalItem = -1;
+    private String addressId;
     public SelectAddressActivity() {
         super(R.layout.activity_select_address);
+    }
+
+    @Override
+    protected void getIntentData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(TAG)){
+            addressId = intent.getStringExtra(TAG);
+        }
     }
 
     protected void initView() {
@@ -77,12 +86,21 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (listViewAdapter!=null){
+            listViewAdapter.setAddressId(addressId);
+            listViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     protected void installListener() {
         addNewAddressTv.setOnClickListener(this);
         pullToRefresh.setPullToRefreshEnabled(false);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels, SelectAddressActivity.this);
+        listViewAdapter = new SelectAddressListViewAdapter(SelectAddressActivity.this, list, dm.widthPixels,addressId);
         listView.setAdapter(listViewAdapter);
         pullToRefresh.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override

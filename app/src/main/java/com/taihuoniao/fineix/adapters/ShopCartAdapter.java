@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,13 +12,12 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ShopCartInventoryItemBean;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.product.ShopCarActivity;
+import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
@@ -35,9 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by android on 2016/3/3.
+ * @author lilin
+ * created at 2016/11/1 15:20
  */
-public class ShopCartAdapter extends BaseAdapter {
+public class ShopCartAdapter extends CommonBaseAdapter<Map<String, Object>> {
     private final static int STATE_COMPLETE = 0;//完成状态
     private final static int STATE_EDIT = 1;//编辑状态
     private int number = 0, maxNumber = 0, minNumber = 1;
@@ -51,66 +50,20 @@ public class ShopCartAdapter extends BaseAdapter {
     public void setOnTwoClickedListener(OnTwoClickedListener listener) {
         this.listener = listener;
     }
-
-
     private LayoutInflater inflater = null;
-    private List<Map<String, Object>> list;
-    private ShopCarActivity shopCarActivity;
-    private Context context;
     private DecimalFormat df = null;
-    //    public BitmapUtils bitmapUtils_listview = null;
-    private DisplayImageOptions options;
-
-    public ShopCartAdapter(List<Map<String, Object>> list, ShopCarActivity shopCarActivity, Context context) {
-        this.shopCarActivity = shopCarActivity;
+    public ShopCartAdapter(List<Map<String, Object>> list, ShopCartActivity activity, Context context) {
+       super(list,activity);
         this.list = list;
-        this.context = context;
-        inflater = (LayoutInflater) shopCarActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true)
-                .build();
-//        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-//        bitmapUtils_listview = new BitmapUtils(context, diskCachePath)
-//                .configMemoryCacheEnabled(true)
-//                .configDefaultCacheExpiry(1024 * 1024 * 4)
-//                .configDefaultBitmapMaxSize(300, 300)
-//                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-////                .configDefaultLoadingImage(R.mipmap.default_shopcart)
-////                .configDefaultLoadFailedImage(R.mipmap.default_shopcart)
-//                .configThreadPoolSize(5);
-////                .configDefaultImageLoadAnimation(
-////                        AnimationUtils.loadAnimation(context, R.anim.fade_in));
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    @Override
-    public int getCount() {
-        // TODO Auto-generated method stub
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return position;
-    }
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder mHolder;
-
         if (convertView == null) {
             mHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_shopcart, parent, false);
+            mHolder.tvTips= (TextView) convertView.findViewById(R.id.tv_tips);
             mHolder.mCount = (TextView) convertView.findViewById(R.id.tv_count_shopcart_item);
             mHolder.mColor = (TextView) convertView.findViewById(R.id.tv_color_shopcart_item);
             mHolder.mPrice = (TextView) convertView.findViewById(R.id.tv_price_shopcart_item);
@@ -131,7 +84,7 @@ public class ShopCartAdapter extends BaseAdapter {
             mHolder = (ViewHolder) convertView.getTag();
         }
         hashMap.put(position, list.get(position).get("keyCount") + "");
-        switch (shopCarActivity.getChange()) {
+        switch (((ShopCartActivity)activity).getChange()) {
             case STATE_COMPLETE:
                 mHolder.mEditLayout.setVisibility(View.GONE);
                 mHolder.mCompleteLayout.setVisibility(View.VISIBLE);
@@ -146,10 +99,10 @@ public class ShopCartAdapter extends BaseAdapter {
                 mHolder.mRightItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (shopCarActivity.getChange() == STATE_COMPLETE) {
-                            Intent intent = new Intent(shopCarActivity, BuyGoodsDetailsActivity.class);
+                        if (((ShopCartActivity)activity).getChange() == STATE_COMPLETE) {
+                            Intent intent = new Intent(activity, BuyGoodsDetailsActivity.class);
                             intent.putExtra("id", list.get(position).get("keyProductId") + "");
-                            shopCarActivity.startActivity(intent);
+                            activity.startActivity(intent);
                         }
                     }
                 });
@@ -171,13 +124,9 @@ public class ShopCartAdapter extends BaseAdapter {
                 mHolder.mSubtract.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        LinearLayout linearLayout= (LinearLayout) v.getParent();
-//                        int p= (int) linearLayout.getChildAt(1).getTag();
-//number= Integer.parseInt(list.get(p).get("keyCount")+"");
                         number = Integer.parseInt(finalMHolder.mText.getText().toString());
                         if (number <= 1) {
                             number = 1;
-//                            Toast.makeText(shopCarActivity, "我这么可爱，您一个都不买真的好吗", Toast.LENGTH_SHORT).show();
                         } else {
                             number--;
                         }
@@ -195,7 +144,6 @@ public class ShopCartAdapter extends BaseAdapter {
                             return;
                         if (number >= maxNumber) {
                             number = maxNumber;
-//                            Toast.makeText(shopCarActivity, "货不够了，再加程序猿就要疯掉了", Toast.LENGTH_SHORT).show();
                         } else {
                             number++;
                         }
@@ -206,11 +154,14 @@ public class ShopCartAdapter extends BaseAdapter {
                 });
                 break;
         }
+        if ((boolean) list.get(position).get("isFirstJD")){
+            mHolder.tvTips.setVisibility(View.VISIBLE);
+        }else {
+            mHolder.tvTips.setVisibility(View.GONE);
+        }
         mHolder.mCheckBox.setChecked((Boolean) list.get(position).get("status"));
         ImageLoader.getInstance().displayImage(list.get(position).get("keyImage") + "", mHolder.mImageGoods);
-//        bitmapUtils_listview.display(mHolder.mImageGoods, list.get(position).get("keyImage") + "");
         listener.onLetterCliced(hashMap);
-
         return convertView;
     }
 
@@ -220,6 +171,7 @@ public class ShopCartAdapter extends BaseAdapter {
         TextView mPrice;
         TextView mCount;
         TextView mColor;
+        public TextView tvTips;
         public LinearLayout mRightItem;
         public CheckBox mCheckBox;
         private LinearLayout mCompleteLayout, mEditLayout;
@@ -243,22 +195,6 @@ public class ShopCartAdapter extends BaseAdapter {
 
     List<ShopCartInventoryItemBean> mInventoryList = new ArrayList<>();
 
-    //    private Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case DataConstants.PASER_SHOPCART_INVENTORY_ITEM:
-//                    if (msg.obj != null) {
-//                        if (msg.obj instanceof List) {
-//                            mInventoryList.clear();
-//                            mInventoryList.addAll((Collection<? extends ShopCartInventoryItemBean>) msg.obj);
-//                        }
-//                    }
-//                    break;
-//            }
-//        }
-//    };
     private void inventory() {
         ClientDiscoverAPI.shopcartInventoryNet(new RequestCallBack<String>() {
             @Override

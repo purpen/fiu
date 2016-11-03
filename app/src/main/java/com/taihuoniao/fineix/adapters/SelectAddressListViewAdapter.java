@@ -1,6 +1,5 @@
 package com.taihuoniao.fineix.adapters;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -29,15 +28,18 @@ import java.util.List;
 public class SelectAddressListViewAdapter extends BaseAdapter {
     private int mScreentWidth;
     private View view;
-    private Context context;
-    private List<AddressListBean.RowsEntity> list;
     private SelectAddressActivity activity;
-
-    public SelectAddressListViewAdapter(Context context, List<AddressListBean.RowsEntity> list, int mScreentWidth, SelectAddressActivity activity) {
-        this.context = context;
+    private List<AddressListBean.RowsEntity> list;
+    private String addressId;
+    public SelectAddressListViewAdapter(SelectAddressActivity activity, List<AddressListBean.RowsEntity> list, int mScreentWidth,String addressId) {
+        this.activity = activity;
         this.list = list;
         this.mScreentWidth = mScreentWidth;
-        this.activity = activity;
+        this.addressId=addressId;
+    }
+
+    public void setAddressId(String addressId){
+        this.addressId = addressId;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         ViewHolder hold;
         if (convertView == null) {
             hold = new ViewHolder();
-            convertView = View.inflate(context, R.layout.item_address, null);
+            convertView = View.inflate(activity, R.layout.item_address, null);
             hold.isSelectImg = (ImageView) convertView.findViewById(R.id.item_address_checkimg);
             hold.editImg = (ImageView) convertView.findViewById(R.id.item_address_editimg);
             hold.linearLayout = (LinearLayout) convertView.findViewById(R.id.item_address_linear);
@@ -100,11 +102,13 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         hold.addressTv.setText(builder.toString());
         hold.detailsAddressTv.setText(item.address);
         hold.phoneTv.setText(item.phone);
-        if (item.isSelected || TextUtils.equals("1",item.is_default)) {
+
+        if (item.isSelected || TextUtils.equals(item._id,addressId)) {
             hold.isSelectImg.setImageResource(R.mipmap.checked);
         } else {
             hold.isSelectImg.setImageResource(R.mipmap.check);
         }
+
         hold.llBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +122,9 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                             row.isSelected=false;
                         }
                     }
+                }
+                if (!TextUtils.equals(item._id,addressId)){
+                    addressId="";
                 }
                 notifyDataSetChanged();
             }
@@ -142,7 +149,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         hold.editImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, AddAddressActivity.class);
+                Intent intent = new Intent(activity, AddAddressActivity.class);
                 intent.putExtra("addressBean",item);
                 activity.startActivityForResult(intent, DataConstants.REQUESTCODE_EDITADDRESS);
             }
@@ -170,7 +177,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //删除某收货地址
-                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                android.support.v7.app.AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setMessage("确认删除此收货地址吗？");
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
@@ -228,6 +235,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
 
 
     private class ViewHolder {

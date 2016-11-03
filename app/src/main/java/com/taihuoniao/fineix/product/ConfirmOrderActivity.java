@@ -31,7 +31,6 @@ import com.taihuoniao.fineix.user.PayDetailsActivity;
 import com.taihuoniao.fineix.user.SelectAddressActivity;
 import com.taihuoniao.fineix.user.UsableRedPacketActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomDialogForPay;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
@@ -87,13 +86,13 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     //rid传递过去的临时订单编号
     //返回数据 money  code
     private CustomDialogForPay mDialog;
-
+    private String curAddressId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmorder);
         initView();
-        WindowUtils.chenjin(this);
+//        WindowUtils.chenjin(this);
         setData();
         if (!dialog.isShowing()) {
             dialog.show();
@@ -121,6 +120,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
                 dialog.dismiss();
                 if (netAddress.getData().getHas_default() == 1) {
                     addressDefaultBean = netAddress;
+                    curAddressId=addressDefaultBean.getData().get_id();
                     setAddressData(addressDefaultBean);
                 } else {
                     ToastUtils.showInfo("默认地址不存在!");
@@ -130,9 +130,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
-                ToastUtils.showError("网络错误");
-//                    dialog.showErrorWithStatus("网络错误");
-//                    Toast.makeText(ConfirmOrderActivity.this, R.string.host_failure, Toast.LENGTH_SHORT).show();
+                ToastUtils.showError(R.string.network_err);
             }
         });
     }
@@ -221,6 +219,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             case R.id.activity_confirmorder_addrelative:
                 //跳转到收货地址界面
                 Intent intent = new Intent(ConfirmOrderActivity.this, SelectAddressActivity.class);
+                intent.putExtra(SelectAddressActivity.class.getSimpleName(),curAddressId);
                 startActivityForResult(intent, DataConstants.REQUESTCODE_ADDRESS);
                 break;
             case R.id.activity_confirmorder_timerelative:
@@ -371,13 +370,13 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
             case DataConstants.RESULTCODE_ADDRESS:
                 addressListItem = (AddressListBean.RowsEntity) data.getSerializableExtra("addressBean");
                 if (addressListItem != null) {
+                    curAddressId=addressListItem._id;
                     setAddressData(addressListItem);
                 } else {
                     if (!dialog.isShowing()) {
                         dialog.show();
                     }
                     getDefaultAddress();
-//                    DataPaser.getDefaultAddress(mHandler);
                 }
                 break;
             case DataConstants.RESULTCODE_TRANSFER_TIME:
@@ -409,7 +408,7 @@ public class ConfirmOrderActivity extends Activity implements View.OnClickListen
     private void setAddressData(AddressListBean.RowsEntity address) {
         noAddressTv.setVisibility(View.GONE);
         nameTv.setText(address.name);
-        addressTv.setText(address.province + address.city+address.county+address.town);
+        addressTv.setText(address.province +" "+address.city+" "+address.county+" "+address.town);
         addressDetailsTv.setText(address.address);
         phoneTv.setText(address.phone);
     }

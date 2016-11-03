@@ -106,7 +106,7 @@ public class GoodsListActivity extends BaseActivity implements View.OnClickListe
                     startActivity(new Intent(this, OptRegisterLoginActivity.class));
                     return;
                 }
-                startActivity(new Intent(this, ShopCarActivity.class));
+                startActivity(new Intent(this, ShopCartActivity.class));
                 break;
         }
     }

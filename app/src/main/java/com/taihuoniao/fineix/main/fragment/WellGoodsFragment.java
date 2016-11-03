@@ -49,7 +49,7 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.GoodsListActivity;
-import com.taihuoniao.fineix.product.ShopCarActivity;
+import com.taihuoniao.fineix.product.ShopCartActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.SearchActivity;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -371,7 +371,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
                     startActivity(new Intent(getActivity(), OptRegisterLoginActivity.class));
                     return;
                 }
-                startActivity(new Intent(getActivity(), ShopCarActivity.class));
+                startActivity(new Intent(getActivity(), ShopCartActivity.class));
                 break;
             case R.id.search_linear:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);

@@ -253,15 +253,15 @@ public class AddressSelectFragment extends DialogFragment {
                 if (response.isSuccess()) {
                     AddressData data = response.getData();
                     if (data.rows.size() == 0) {
-                        StringBuilder builder = new StringBuilder();
-                        builder.append(curProvince.name);
-                        String please_select = getResources().getString(R.string.please_select);
-                        if (!TextUtils.equals(please_select, tvCity.getText()))
-                            builder.append(curCity.name);
-                        if (!TextUtils.equals(please_select, tvCounty.getText()))
-                            builder.append(curCounty.name);
-                        if (!TextUtils.equals(please_select, tvTown.getText()))
-                            builder.append(curTown.name);
+//                        StringBuilder builder = new StringBuilder();
+//                        builder.append(curProvince.name);
+//                        String please_select = getResources().getString(R.string.please_select);
+//                        if (!TextUtils.equals(please_select, tvCity.getText()))
+//                            builder.append(curCity.name);
+//                        if (!TextUtils.equals(please_select, tvCounty.getText()))
+//                            builder.append(curCounty.name);
+//                        if (!TextUtils.equals(please_select, tvTown.getText()))
+//                            builder.append(curTown.name);
 
                         if (listener!=null){
                             listener.onAddressChoosed(curProvince,curCity,curCounty,curTown);

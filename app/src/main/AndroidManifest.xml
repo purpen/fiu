@@ -102,7 +102,7 @@
             android:name=".product.PayWayActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".product.ShopCarActivity"
+            android:name=".product.ShopCartActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".product.TransferTimeActivity"
