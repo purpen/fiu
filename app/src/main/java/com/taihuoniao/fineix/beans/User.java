@@ -73,6 +73,7 @@ public class User implements Serializable {
         public int order_sended_goods;
         public int order_evaluate;
         public int order_total_count;
+        public int fiu_bonus_count;
     }
     public class Identify implements Serializable{
         public int is_expert;

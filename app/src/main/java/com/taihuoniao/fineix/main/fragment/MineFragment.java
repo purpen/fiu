@@ -35,7 +35,6 @@ import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
-import com.taihuoniao.fineix.user.CompleteUserInfoActivity;
 import com.taihuoniao.fineix.user.FansActivity;
 import com.taihuoniao.fineix.user.FeedbackActivity;
 import com.taihuoniao.fineix.user.FindFriendsActivity;
@@ -51,7 +50,6 @@ import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
-import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.CustomGridView;
 import com.taihuoniao.fineix.view.CustomItemLayout;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -218,11 +216,6 @@ public class MineFragment extends MyBaseFragment {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (!activity.isFinishing() && dialog != null) dialog.dismiss();
-                LogUtil.e("result", responseInfo.result);
-                if (TextUtils.isEmpty(responseInfo.result)) {
-                    return;
-                }
-
                 try {
                     HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
                     });
@@ -234,13 +227,13 @@ public class MineFragment extends MyBaseFragment {
 
                 } catch (JsonSyntaxException e) {
                     LogUtil.e(TAG, e.getLocalizedMessage());
-                    Util.makeToast("对不起,数据异常");
+                    ToastUtils.showError(R.string.network_err);
                 }
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                if (!activity.isFinishing()&&dialog != null) dialog.dismiss();
+                if (!activity.isFinishing() && dialog != null) dialog.dismiss();
                 ToastUtils.showError(R.string.network_err);
             }
         });
@@ -297,6 +290,11 @@ public class MineFragment extends MyBaseFragment {
                             gvList.get(i).count = user.counter.message_total_count;
                             if (listener != null)
                                 listener.onMessageCountChange(user.counter.message_total_count);
+                            break;
+                        case 6:
+                            gvList.get(i).count = user.counter.fiu_bonus_count;
+                            break;
+                        default:
                             break;
                     }
 
@@ -417,7 +415,7 @@ public class MineFragment extends MyBaseFragment {
 //                break;
             case R.id.btn:
 //                startActivity(new Intent(activity, MapSearchAddressActivity.class));
-                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
+//                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
 //                startActivity(new Intent(activity, BindPhoneActivity.class));
 //                startActivity(new Intent(activity, ChooseSubjectActivity.class));
         }
