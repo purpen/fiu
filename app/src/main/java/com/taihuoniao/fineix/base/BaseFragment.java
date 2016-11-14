@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lidroid.xutils.http.HttpHandler;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public abstract class BaseFragment<T> extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LogUtil.e("taihuoniao", "---------->onCreate()" + getClass().getSimpleName());
         super.onCreate(savedInstanceState);
         activity = getActivity();
         if (savedInstanceState != null) {
