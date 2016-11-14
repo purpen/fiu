@@ -7,7 +7,7 @@ import android.util.Log;
  *         created at 2016/3/24 14:58
  */
 public class LogUtil {
-    private static final boolean DEV_MODE = false;
+    private static final boolean DEV_MODE = true;
 
     public static void i(String tag, String msg) {
         if (DEV_MODE) {
