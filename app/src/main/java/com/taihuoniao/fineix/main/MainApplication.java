@@ -33,6 +33,7 @@ import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.user.OptRegisterLoginActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.PushUtils;
 import com.taihuoniao.fineix.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
@@ -88,6 +89,7 @@ public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
+        LogUtil.e("taihuoniao", "---------->onCreate()" + getClass().getSimpleName());
         super.onCreate();
 //        locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
