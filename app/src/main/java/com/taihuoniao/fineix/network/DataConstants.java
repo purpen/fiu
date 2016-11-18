@@ -161,7 +161,7 @@ public class DataConstants {
     public static final int RESULTCODE_REDBAG = 56;
     public static final String GUIDE_TAG = "guide";
     public static final String INVITE_CODE_TAG = "INVITE_CODE_TAG";
-    public static final int GUIDE_INTERVAL = 2500;
+    public static final int GUIDE_INTERVAL = 1500;
     public static final String APP_ID = "";
     //帐户处我的红包未过期
     public static final int PARSER_MY_REDBAG_UNTIMEOUT = 19;

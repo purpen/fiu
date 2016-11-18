@@ -2,7 +2,6 @@ package com.taihuoniao.fineix.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Environment;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -14,11 +13,6 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
-import java.io.File;
-
-import love.qingniwan.library_utils.cache.FileUtil;
-import love.qingniwan.library_utils.imageloderconfig.AuthImageDownloader;
-
 /**
  * Created by zsx on 2015/6/30.
  */
@@ -29,7 +23,7 @@ public class UniverImageLoadConfig {
         if (ImageLoader.getInstance().isInited()) {
             return;
         }
-        File cacheDir = new File(FileUtil.URL_DATA_CACHE, Environment.getExternalStorageDirectory().getAbsolutePath() + "/qingniwan/ImageCache");
+//        File cacheDir = new File(FileUtil.URL_DATA_CACHE, Environment.getExternalStorageDirectory().getAbsolutePath() + "/qingniwan/ImageCache");
       /*  File cacheDir = StorageUtils.getOwnCacheDirectory(
                 InviteApplication.getAppInstance()(), "UniversalImageLoader/Cache");*/
         DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -56,7 +50,7 @@ public class UniverImageLoadConfig {
                 .denyCacheImageMultipleSizesInMemory()
                 .discCacheFileNameGenerator(new Md5FileNameGenerator())
                 .memoryCache(new UsingFreqLimitedMemoryCache(5 * 1024 * 1024))
-                .imageDownloader(new AuthImageDownloader(context))
+//                .imageDownloader(new AuthImageDownloader(context))
                 .defaultDisplayImageOptions(options)
                 .build();
 
