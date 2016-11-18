@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -259,6 +260,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        //移除所有标签
+        holder.labelContainer.removeAllViews();
         if (userList.size() > 0) {
             if (position == 6) {
                 holder.userRecycler.setAdapter(new UserAdapter(activity, this, userList));
@@ -274,14 +277,16 @@ public class IndexQJListAdapter extends BaseAdapter {
             holder.userRecycler.setAdapter(null);
             holder.userRecycler.setVisibility(View.GONE);
         }
-        //停止商品动画
-        for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
-            LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
-            view.stopAnim();
-        }
-        //移除所有标签
-        holder.labelContainer.removeAllViews();
-        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
+//        //停止商品动画
+//        for (int i = 0; i < holder.labelContainer.getChildCount(); i++) {
+//            LabelView view = (LabelView) holder.labelContainer.getChildAt(i);
+//            view.stopAnim();
+//        }
+
+//        ImageLoader.getInstance().displayImage(sceneList.get(position).getUser_info().getAvatar_url(), holder.headImg);
+        Glide.with(holder.headImg.getContext())
+                .load(sceneList.get(position).getUser_info().getAvatar_url())
+                .into(holder.headImg);
         if (sceneList.get(position).getUser_info().getIs_expert() == 1) {
             holder.vImg.setVisibility(View.VISIBLE);
         } else {
@@ -317,7 +322,8 @@ public class IndexQJListAdapter extends BaseAdapter {
                 holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-        ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
+//        ImageLoader.getInstance().displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
+        Glide.with(activity).load(sceneList.get(position).getCover_url()).into(holder.qjImg);
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -542,6 +548,63 @@ public class IndexQJListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    class ViewHolder {
+        @Bind(R.id.user_recycler)
+        RecyclerView userRecycler;
+        @Bind(R.id.head_img)
+        RoundedImageView headImg;
+        @Bind(R.id.v_img)
+        ImageView vImg;
+        @Bind(R.id.attention_btn)
+        Button attentionBtn;
+        @Bind(R.id.user_name_tv)
+        TextView userNameTv;
+        @Bind(R.id.map_linear)
+        LinearLayout mapLinear;
+        @Bind(R.id.publish_time)
+        TextView publishTime;
+        @Bind(R.id.location_img)
+        ImageView locationImg;
+        @Bind(R.id.location_tv)
+        TextView locationTv;
+        @Bind(R.id.container)
+        RelativeLayout container;
+        @Bind(R.id.qj_img)
+        ImageView qjImg;
+        @Bind(R.id.qj_title_tv)
+        TextView qjTitleTv;
+        @Bind(R.id.qj_title_tv2)
+        TextView qjTitleTv2;
+        @Bind(R.id.label_container)
+        RelativeLayout labelContainer;
+        @Bind(R.id.view_count)
+        TextView viewCount;
+        @Bind(R.id.more_img)
+        ImageView moreImg;
+        @Bind(R.id.share_img)
+        ImageView shareImg;
+        @Bind(R.id.comment_img)
+        ImageView commentImg;
+        @Bind(R.id.love_container)
+        RelativeLayout loveRelative;
+        @Bind(R.id.love_count)
+        TextView loveCount;
+        @Bind(R.id.love_img)
+        ClickImageView loveImg;
+        @Bind(R.id.qj_des_tv)
+        TextView qjDesTv;
+        @Bind(R.id.comment_list)
+        ListViewForScrollView commentList;
+        @Bind(R.id.more_comment)
+        TextView moreComment;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+
+
     //取消关注弹窗
     private void showFocusFansConfirmView(final SceneList.DataBean.RowsBean item, String tips, final ViewHolder holder) {
         View view = Util.inflateView(activity, R.layout.popup_focus_fans, null);
@@ -549,7 +612,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
         TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
+//        ImageLoader.getInstance().displayImage(item.getUser_info().getAvatar_url(), riv);
+        Glide.with(activity).load(item.getUser_info().getAvatar_url()).into(riv);
         tv_take_photo.setText(String.format(tips + " %s ?", item.getUser_info().getNickname()));
         tv_album.setText(tips);
         tv_album.setOnClickListener(new View.OnClickListener() {
@@ -812,63 +876,8 @@ public class IndexQJListAdapter extends BaseAdapter {
         });
     }
 
-    static class ViewHolder {
-        @Bind(R.id.user_recycler)
-        RecyclerView userRecycler;
-        @Bind(R.id.head_img)
-        RoundedImageView headImg;
-        @Bind(R.id.v_img)
-        ImageView vImg;
-        @Bind(R.id.attention_btn)
-        Button attentionBtn;
-        @Bind(R.id.user_name_tv)
-        TextView userNameTv;
-        @Bind(R.id.map_linear)
-        LinearLayout mapLinear;
-        @Bind(R.id.publish_time)
-        TextView publishTime;
-        @Bind(R.id.location_img)
-        ImageView locationImg;
-        @Bind(R.id.location_tv)
-        TextView locationTv;
-        @Bind(R.id.container)
-        RelativeLayout container;
-        @Bind(R.id.qj_img)
-        ImageView qjImg;
-        @Bind(R.id.qj_title_tv)
-        TextView qjTitleTv;
-        @Bind(R.id.qj_title_tv2)
-        TextView qjTitleTv2;
-        @Bind(R.id.label_container)
-        RelativeLayout labelContainer;
-        @Bind(R.id.view_count)
-        TextView viewCount;
-        @Bind(R.id.more_img)
-        ImageView moreImg;
-        @Bind(R.id.share_img)
-        ImageView shareImg;
-        @Bind(R.id.comment_img)
-        ImageView commentImg;
-        @Bind(R.id.love_container)
-        RelativeLayout loveRelative;
-        @Bind(R.id.love_count)
-        TextView loveCount;
-        @Bind(R.id.love_img)
-        ClickImageView loveImg;
-        @Bind(R.id.qj_des_tv)
-        TextView qjDesTv;
-        @Bind(R.id.comment_list)
-        ListViewForScrollView commentList;
-        @Bind(R.id.more_comment)
-        TextView moreComment;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
-
     //用户列表适配器
-    static class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
+    class UserAdapter extends RecyclerView.Adapter<UserAdapter.VH> implements View.OnClickListener {
         private Activity activity;
         private IndexQJListAdapter indexQJListAdapter;
         private List<IndexUserListBean.DataBean.UsersBean> userList;
@@ -890,7 +899,8 @@ public class IndexQJListAdapter extends BaseAdapter {
 
         @Override
         public void onBindViewHolder(final VH holder, int position) {
-            ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
+//            ImageLoader.getInstance().displayImage(userList.get(position).getMedium_avatar_url(), holder.headImg);
+            Glide.with(activity).load(userList.get(position).getMedium_avatar_url()).into(holder.headImg);
             holder.name.setText(userList.get(position).getNickname());
             if (userList.get(position).getIdentify().getIs_expert() == 1) {
                 holder.label.setText(userList.get(position).getExpert_label());
@@ -1002,7 +1012,8 @@ public class IndexQJListAdapter extends BaseAdapter {
             TextView tv_take_photo = (TextView) view.findViewById(R.id.tv_take_photo);
             TextView tv_album = (TextView) view.findViewById(R.id.tv_album);
             TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
-            ImageLoader.getInstance().displayImage(item.getMedium_avatar_url(), riv);
+//            ImageLoader.getInstance().displayImage(item.getMedium_avatar_url(), riv);
+            Glide.with(activity).load(item.getMedium_avatar_url()).into(riv);
             tv_take_photo.setText(String.format("取消关注" + " %s ?", item.getNickname()));
             tv_album.setText("取消关注");
             tv_album.setOnClickListener(new View.OnClickListener() {
@@ -1102,7 +1113,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
 
 
-        static class VH extends RecyclerView.ViewHolder {
+        class VH extends RecyclerView.ViewHolder {
             @Bind(R.id.head_img)
             RoundedImageView headImg;
             @Bind(R.id.name)
@@ -1148,7 +1159,7 @@ public class IndexQJListAdapter extends BaseAdapter {
         }
     }
 
-    static class IndexCommentAdapter extends BaseAdapter {
+    class IndexCommentAdapter extends BaseAdapter {
         private List<SceneList.DataBean.RowsBean.CommentsBean> commentList;
 
         public IndexCommentAdapter(List<SceneList.DataBean.RowsBean.CommentsBean> commentList) {
@@ -1186,7 +1197,10 @@ public class IndexQJListAdapter extends BaseAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
+//            ImageLoader.getInstance().displayImage(commentList.get(position).getUser_avatar_url(), holder.headImg);
+            Glide.with(holder.headImg.getContext())
+                    .load(commentList.get(position).getUser_avatar_url())
+                    .into(holder.headImg);
             SpannableStringBuilder spannableString = new SpannableStringBuilder(commentList.get(position).getUser_nickname() + ": " + commentList.get(position).getContent());
             ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(parent.getResources().getColor(R.color.black));
             spannableString.setSpan(backgroundColorSpan, 0, commentList.get(position).getUser_nickname().length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1196,7 +1210,7 @@ public class IndexQJListAdapter extends BaseAdapter {
             return convertView;
         }
 
-        static class ViewHolder {
+        class ViewHolder {
             @Bind(R.id.head_img)
             RoundedImageView headImg;
             @Bind(R.id.content_tv)

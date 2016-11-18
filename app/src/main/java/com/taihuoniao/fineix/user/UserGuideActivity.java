@@ -56,6 +56,10 @@ public class UserGuideActivity extends BaseActivity {
     private int currentPosition;
     private MediaPlayer mediaPlayer;
 
+    private boolean empty;
+    private boolean taskRoot;
+    private boolean readBool;
+
     public UserGuideActivity() {
         super(R.layout.activity_user_guide_layout);
     }
@@ -79,24 +83,29 @@ public class UserGuideActivity extends BaseActivity {
         if (intent.hasExtra(SystemSettingsActivity.class.getSimpleName())) {
             fromPage = intent.getStringExtra(SystemSettingsActivity.class.getSimpleName());
         }
+        empty = TextUtils.isEmpty(SPUtil.read(DataConstants.GUIDE_TAG));
+        taskRoot = isTaskRoot();
+        readBool = SPUtil.readBool(DataConstants.INVITE_CODE_TAG);
     }
 
     @Override
     protected void initView() {
         if (TextUtils.isEmpty(fromPage)) {
-            iv_welcome.setVisibility(View.VISIBLE);
             iv_welcome.setImageResource(R.mipmap.welcome);
+            iv_welcome.setVisibility(View.VISIBLE);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     iv_welcome.setVisibility(View.GONE);
-                    if (TextUtils.isEmpty(SPUtil.read(DataConstants.GUIDE_TAG))) {
+                    if (empty) {
                         initVideoRes();
-                    } else if (isTaskRoot()) {
-                        if (SPUtil.readBool(DataConstants.INVITE_CODE_TAG)) {
-                            showInvite();
-                        } else {
-                            goMainPage();
+                    } else {
+                        if (taskRoot) {
+                            if (readBool) {
+                                showInvite();
+                            } else {
+                                goMainPage();
+                            }
                         }
                     }
                 }

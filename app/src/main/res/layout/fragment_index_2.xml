@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.taihuoniao.fineix.main.fragment.IndexFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="38dp"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/logo_white"/>
+
+            <ImageView
+                android:id="@+id/search_img"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:src="@mipmap/head_search_white"/>
+
+            <ImageView
+                android:id="@+id/subs_img"
+                android:layout_width="46dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:src="@mipmap/subscribe_white"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_layout">
+
+
+        <include
+            android:id="@+id/swipe_refresh_header"
+            layout="@layout/layout_twitter_header" />
+
+        <ListView
+            android:id="@+id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@null" />
+
+        <include
+            android:id="@+id/swipe_load_more_footer"
+            layout="@layout/layout_classic_footer" />
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+ <!--   <com.taihuoniao.fineix.view.pulltorefresh.PullToRefreshListView
+        android:id="@+id/pull_refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_layout"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/search_nothing"
+        android:visibility="gone"/>-->
+</RelativeLayout>

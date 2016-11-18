@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,6 +64,8 @@ import java.util.List;
 
 import butterknife.Bind;
 
+import static android.R.attr.handle;
+
 /**
  * Created by taihuoniao on 2016/8/9.
  */
@@ -82,6 +85,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
     private ScrollableView scrollableView;
     private ImageView moreThemeImg;
     private RecyclerView recyclerView;
+
     private WaittingDialog dialog;//网络请求对话框
     private int currentPage = 1;//网络请求页码
     private ViewPagerAdapter viewPagerAdapter;//banner图适配器
@@ -112,12 +116,14 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         moreThemeImg = (ImageView) headerView.findViewById(R.id.more_theme_img);
         recyclerView = (RecyclerView) headerView.findViewById(R.id.recycler_view);
         listView.addHeaderView(headerView);
+
         pullRefreshView.animLayout();
         listView.setDividerHeight(0);
         searchImg.setOnClickListener(this);
         subsImg.setOnClickListener(this);
         pullRefreshView.setOnRefreshListener(this);
         listView.setOnScrollListener(this);
+
         ViewGroup.LayoutParams lp = scrollableView.getLayoutParams();
         lp.width = MainApplication.getContext().getScreenWidth();
         lp.height = lp.width * 422 / 750;
@@ -125,16 +131,15 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
         moreThemeImg.setOnClickListener(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
         subjectList = new ArrayList<>();
         indexSubjectAdapter = new IndexSubjectAdapter(this, subjectList);
         recyclerView.setAdapter(indexSubjectAdapter);
+
         sceneList = new ArrayList<>();
         userList = new ArrayList<>();
         indexQJListAdapter = new IndexQJListAdapter(getActivity(), sceneList, userList);
         listView.setAdapter(indexQJListAdapter);
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
     }
 
     @Override
@@ -150,6 +155,11 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     @Override
     protected void requestNet() {
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
+        Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         sceneNet();
         subjectList();
         getBanners();
@@ -279,13 +289,23 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                     userList.clear();
                     userList.addAll(indexUserListBean.getData().getUsers());
                     if (sneceComplete == 1) {
-                        indexQJListAdapter.notifyDataSetChanged();
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                indexQJListAdapter.notifyDataSetChanged();
+                            }
+                        }, 200);
                         sneceComplete = 2;
                     }
                     return;
                 }
                 if (sneceComplete == 1) {
-                    indexQJListAdapter.notifyDataSetChanged();
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            indexQJListAdapter.notifyDataSetChanged();
+                        }
+                    }, 200);
                     sneceComplete = 0;
                 }
             }
@@ -359,6 +379,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
 
     //获取情景列表
     private void sceneNet() {
+        dialog.show();
         HttpHandler<String> httpHandler = ClientDiscoverAPI.getSceneList(currentPage + "", 8 + "", null, null, 2 + "", null, null, null, null, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -388,7 +409,12 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                         sneceComplete = 1;
                         return;
                     }
-                    indexQJListAdapter.notifyDataSetChanged();
+                   new android.os.Handler().postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                           indexQJListAdapter.notifyDataSetChanged();
+                       }
+                   }, 200);
                 }
             }
 
@@ -432,6 +458,7 @@ public class IndexFragment extends BaseFragment<Banner> implements View.OnClickL
                 pullRefreshView.lastTotalItem = totalItemCount;
                 progressBar.setVisibility(View.VISIBLE);
                 currentPage++;
+
                 sceneNet();
             }
         }
