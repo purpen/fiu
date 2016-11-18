@@ -67,6 +67,7 @@ public class CustomAutoScrollViewPager extends CustomViewPager {
     private boolean isAutoScroll = false;
     private boolean isStopByTouch = false;
     private float downX = 0f;
+    private float downY = 0f;
     private CustomDurationScroller scroller = null;
 
     public static final int SCROLL_WHAT = 0;
@@ -195,18 +196,26 @@ public class CustomAutoScrollViewPager extends CustomViewPager {
 
         if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT || slideBorderMode == SLIDE_BORDER_MODE_CYCLE) {
             float touchX = ev.getX();
+            float touchY = ev.getY();
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
                 downX = touchX;
+                downY = touchY;
             }
             int currentItem = getCurrentItem();
             PagerAdapter adapter = getAdapter();
             int pageCount = adapter == null ? 0 : adapter.getCount();
+
+            if (Math.abs(downY - touchY) > Math.abs(downX - touchX)) {
+                return false;
+            }
+
             /**
              * current index is first one and slide to right or current index is last one and slide to left.<br/>
              * if slide border mode is to parent, then requestDisallowInterceptTouchEvent false.<br/>
              * else scroll to last one when current item is first one, scroll to first one when current item is last
              * one.
              */
+
             if ((currentItem == 0 && downX <= touchX) || (currentItem == pageCount - 1 && downX >= touchX)) {
                 if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT) {
                     getParent().requestDisallowInterceptTouchEvent(false);
@@ -219,7 +228,7 @@ public class CustomAutoScrollViewPager extends CustomViewPager {
                 return super.dispatchTouchEvent(ev);
             }
         }
-        getParent().requestDisallowInterceptTouchEvent(true);
+//        getParent().requestDisallowInterceptTouchEvent(true);
 
         return super.dispatchTouchEvent(ev);
     }

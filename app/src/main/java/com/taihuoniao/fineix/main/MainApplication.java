@@ -96,7 +96,11 @@ public class MainApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
         MobclickAgent.setDebugMode(false);
         instance = this;
-        initImageLoader();
+//        initImageLoader();
+
+        //初始化universal_image_load
+        UniverImageLoadConfig.initUniverImageLoder(this, R.mipmap.default_background_750_1334);
+
         JsonUtil.init();
         uuid = getMyUUID();
         systemPhotoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
@@ -131,6 +135,9 @@ public class MainApplication extends Application {
 
 
     private void initImageLoader() {
+        if (ImageLoader.getInstance().isInited()) {
+            return;
+        }
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(R.mipmap.default_background_750_1334)
                 .showImageOnFail(R.mipmap.default_background_750_1334)
@@ -143,7 +150,7 @@ public class MainApplication extends Application {
                 .cacheOnDisk(true)
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .threadPriority(Thread.MIN_PRIORITY + 3/*Thread.NORM_PRIORITY - 2*/)
                 .defaultDisplayImageOptions(defaultOptions)
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())

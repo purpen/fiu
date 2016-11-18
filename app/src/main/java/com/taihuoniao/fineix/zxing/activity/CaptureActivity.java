@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.google.zxing.Result;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.BarCode;
+import com.taihuoniao.fineix.network.DataConstants;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.qingjingOrSceneDetails.QJDetailActivity;
 import com.taihuoniao.fineix.user.FocusActivity;
@@ -48,6 +49,7 @@ import com.taihuoniao.fineix.user.MyBarCodeActivity;
 import com.taihuoniao.fineix.user.UserCenterActivity;
 import com.taihuoniao.fineix.utils.DialogHelp;
 import com.taihuoniao.fineix.utils.LogUtil;
+import com.taihuoniao.fineix.utils.SPUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -58,6 +60,7 @@ import com.taihuoniao.fineix.zxing.utils.InactivityTimer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 
 /**
@@ -257,8 +260,22 @@ public final class CaptureActivity extends BaseActivity implements
             if (text.contains("infoType") && text.contains("infoId")) { //能正确获取到参数
                 url = url.substring(url.indexOf("?") + 1, url.length());
                 String[] args = url.split("&");
-                String infoType = args[0].split("=")[1];
-                String infoId = args[1].split("=")[1];
+
+                HashMap<String, String> map = new HashMap<>();
+                for (String str: args ) {
+                    if((!TextUtils.isEmpty(str)) || str.contains("=")){
+                        map.put(str.split("=")[0],str.split("=")[1]);
+                    }
+                }
+
+                String infoType = map.get("infoType");
+                String infoId = map.get("infoId");
+
+                //获取推广码 字段referral_code
+                String referral_code = map.get("referral_code");
+                if (!TextUtils.isEmpty(referral_code)) {
+                    SPUtil.write("referral_code", referral_code);
+                }
                 LogUtil.e("text", String.format("infoType=%s;infoId=%s", infoType, infoId));
                 if (TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)) {
                     LogUtil.e("TextUtils.isEmpty(infoType) || TextUtils.isEmpty(infoId)", "参数为空");
