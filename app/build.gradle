@@ -68,5 +68,5 @@ dependencies {
     compile project(':library')
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile project(':PushSDK')
-    compile 'com.github.bumptech.glide:glide:3.5.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

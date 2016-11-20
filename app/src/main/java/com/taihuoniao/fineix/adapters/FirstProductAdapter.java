@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.FirstProductBean;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -45,8 +46,11 @@ public class FirstProductAdapter extends RecyclerView.Adapter<FirstProductAdapte
                 itemClick.click(holder.getAdapterPosition());
             }
         });
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
-        ImageLoader.getInstance().displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(), holder.backgroundImg);
+        GlideUtils.displayImage(list.get(position).getBrand_cover_url(), holder.brandImg);
+
         holder.name.setText(list.get(position).getTitle());
         holder.price.setText("¥" + list.get(position).getSale_price());
     }

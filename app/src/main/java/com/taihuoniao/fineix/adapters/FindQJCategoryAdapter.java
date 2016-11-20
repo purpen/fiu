@@ -11,6 +11,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.CategoryListBean;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.view.roundImageView.RoundedImageView;
 
 import java.util.List;
@@ -57,7 +58,8 @@ public class FindQJCategoryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
+        GlideUtils.displayImage(list.get(position).getApp_cover_url(), holder.roundImg);
         holder.name.setText(list.get(position).getTitle());
         return convertView;
     }
