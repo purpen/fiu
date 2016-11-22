@@ -44,6 +44,7 @@ public class FocusActivity extends BaseActivity {
     TextView tv_tips;
     @Bind(R.id.ll_tips)
     LinearLayout ll_tips;
+
     private static final String PAGE_SIZE = "9999";  //分页大小
     public static final String FOCUS_TYPE = "1";  //关注列表
     private ArrayList<FocusFansItem> list;

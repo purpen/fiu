@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.user.ArticalDetailActivity;
 import com.taihuoniao.fineix.user.NewProductDetailActivity;
 import com.taihuoniao.fineix.user.SalePromotionDetailActivity;
 import com.taihuoniao.fineix.utils.DensityUtils;
+import com.taihuoniao.fineix.utils.GlideUtils;
 
 import java.util.List;
 
@@ -75,7 +76,9 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
         } else {
             holder.container.setPadding(0, 0, 0, 0);
         }
-        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.subjectImg);
+//        ImageLoader.getInstance().displayImage(list.get(position).getCover_url(), holder.subjectImg);
+        GlideUtils.displayImage(list.get(position).getCover_url(), holder.subjectImg);
+
         holder.subjectName.setText(list.get(position).getTitle());
         holder.subjectName2.setText(list.get(position).getShort_title());
         holder.subjectImg.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +170,9 @@ public class WellgoodsSubjectAdapter extends BaseAdapter {
                     itemClick.click(holder.getAdapterPosition());
                 }
             });
-            ImageLoader.getInstance().displayImage(list.get(position).getBanner_url(), holder.backgroundImg);
+//            ImageLoader.getInstance().displayImage(list.get(position).getBanner_url(), holder.backgroundImg);
+            GlideUtils.displayImage(list.get(position).getBanner_url(), holder.backgroundImg);
+
             holder.name.setText(list.get(position).getTitle());
             holder.price.setText("¥" + list.get(position).getSale_price());
         }

@@ -33,6 +33,7 @@ public class CollectionsActivity extends BaseActivity<ItemQJCollect> {
     TabLayout tabLayout;
     @Bind(R.id.viewPager)
     ViewPager viewPager;
+
     private CollectViewPagerAdapter adapter;
 
     public CollectionsActivity() {

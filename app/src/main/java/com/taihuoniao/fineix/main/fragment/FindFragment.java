@@ -96,6 +96,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     LinearLayout searchLinear;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
+
     //不能设置OnItemClickListener
     private ListView listView;
     //HeaderView中控件
@@ -106,9 +107,11 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     private int sneceComplete;//判断情景是否加载完毕 0，情景主题都没加载 1,情景加载完毕等待主题加载 2，主题加载完毕等待情景加载
     private int currentPage = 1;//情景列表页面
     private WaittingDialog dialog;//耗时操作对话框
+
     private List<SceneList.DataBean.RowsBean> sceneList;//情景列表数据
     private List<SubjectListBean.DataBean.RowsBean> subjectList;//主题列表数据
     private FindQJAdapter findQJAdapter;//情景列表适配器
+
     //SharePop
     private PopupWindow sharePop;
 

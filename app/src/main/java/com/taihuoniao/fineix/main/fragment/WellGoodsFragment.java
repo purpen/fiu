@@ -93,6 +93,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     RoundedImageView toTopImg;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
+
     private ListView listView;
     private GridViewForScrollView gridView;//商品分类
     private RecyclerView productRecycler;

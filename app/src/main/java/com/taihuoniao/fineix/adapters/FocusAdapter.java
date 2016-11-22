@@ -21,6 +21,7 @@ import com.taihuoniao.fineix.beans.FocusFansItem;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.LoginInfo;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;
@@ -75,7 +76,9 @@ public class FocusAdapter extends CommonBaseAdapter<FocusFansItem> implements Vi
 
         if (item != null) {
             if (item.follows != null) {
-                imageLoader.displayImage(item.follows.avatar_url, holder.riv);
+//                imageLoader.displayImage(item.follows.avatar_url, holder.riv);
+                GlideUtils.displayImage(item.follows.avatar_url, holder.riv);
+
                 if (item.follows.is_expert == 1) {
                     holder.riv_auth.setVisibility(View.VISIBLE);
                 } else {
