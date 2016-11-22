@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.taihuoniao.fineix.view.CustomHeadView
+        android:id="@+id/custom_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退款金额"
+            android:textColor="#222222" />
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_border_white"
+            android:hint="¥288"
+            android:paddingLeft="15dp"
+            android:textColor="#999999" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="退款原因"
+            android:textColor="#999999" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_border_white"
+            android:drawableRight="@mipmap/option_chargeback_cause"
+            android:hint="退款原因"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="#999999" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="退款说明" />
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_border_white"
+            android:hint="请输入退款说明"
+            android:paddingLeft="15dp"
+            android:textColor="#999999" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/button_commit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#333333"
+        android:text="提交申请"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

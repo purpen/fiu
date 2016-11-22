@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ImgTxtItem;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.view.BadgeView;
 
@@ -25,6 +26,7 @@ import butterknife.ButterKnife;
  * created at 2016/4/11 14:01
  */
 public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
+
     public PersonalCenterGVAdapter(ArrayList<ImgTxtItem> list, Activity activity){
         super(list,activity);
         options = new DisplayImageOptions.Builder()
@@ -51,6 +53,8 @@ public class PersonalCenterGVAdapter extends CommonBaseAdapter<ImgTxtItem>{
             holder = (ViewHolder)convertView.getTag();
         }
         ImageLoader.getInstance().displayImage("drawable://" + item.imgId,holder.iv,options);
+//        GlideUtils.displayImage("drawable://" + item.imgId,holder.iv);
+
         holder.tv.setText(item.txt);
         if (item.count>0){
             holder.badgeView.setVisibility(View.VISIBLE);

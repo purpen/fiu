@@ -33,6 +33,8 @@ import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.personal.ChargeBackActivity;
+import com.taihuoniao.fineix.personal.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;
@@ -61,12 +63,6 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MineFragment extends MyBaseFragment {
-    private static OnMessageCountChangeListener listener;
-    private DisplayImageOptions options;
-
-    public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
-        MineFragment.listener = listener;
-    }
 
     @Bind(R.id.gv)
     CustomGridView gv;
@@ -106,24 +102,23 @@ public class MineFragment extends MyBaseFragment {
     TextView tv_label;
     @Bind(R.id.riv_auth)
     ImageView riv_auth;
+
+    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects,
+            R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address, R.mipmap.icon_personal_chargeback};
+    public static final String[] imgTxt = MainApplication.getContext().getResources().getStringArray(R.array.mine_gv_txt);
     public static final int REQUEST_QJ = 0;
     public static final int REQUEST_CJ = 1;
-    public static final int REQUEST_FOCUS = 2;
-    public static final int REQUEST_FANS = 3;
-    private User user;
+
+    private static OnMessageCountChangeListener listener;
     private ArrayList<ImgTxtItem> gvList;
     private boolean isInitLoad = true;
-    private ArrayList<ImgTxtItem> horizentalList;
     private PersonalCenterGVAdapter adapter;
-    public static final int[] imgIds = {R.mipmap.gv_order, R.mipmap.gv_message, R.mipmap.gv_subscribe, R.mipmap.gv_collects, R.mipmap.gv_support, R.mipmap.gv_integral, R.mipmap.gv_coupon, R.mipmap.gv_address};
-    public String[] imgTxt = null;
-    //    public int[] partnerLogos = {R.mipmap.taobao, R.mipmap.tmall, R.mipmap.jd, R.mipmap.amzon};
-//    public String[] partnerName = null;
     private WaittingDialog dialog;
+    private DisplayImageOptions options;
+    private User user;
 
-
-    public MineFragment() {
-
+    public static void setOnMessageCountChangeListener(OnMessageCountChangeListener listener) {
+        MineFragment.listener = listener;
     }
 
     @Override
@@ -151,8 +146,6 @@ public class MineFragment extends MyBaseFragment {
     }
 
     private void initData() {
-//        partnerName = activity.getResources().getStringArray(R.array.partner_name);
-        imgTxt = activity.getResources().getStringArray(R.array.mine_gv_txt);
         if (imgIds.length == imgTxt.length) {
             gvList = new ArrayList<>();
             ImgTxtItem item;
@@ -163,17 +156,6 @@ public class MineFragment extends MyBaseFragment {
                 gvList.add(item);
             }
         }
-
-//        if (partnerLogos.length == partnerName.length) {
-//            horizentalList = new ArrayList<ImgTxtItem>();
-//            ImgTxtItem item = null;
-//            for (int i = 0; i < partnerLogos.length; i++) {
-//                item = new ImgTxtItem();
-//                item.imgId = partnerLogos[i];
-//                item.txt = partnerName[i];
-//                horizentalList.add(item);
-//            }
-//        }
     }
 
     @Override
@@ -255,52 +237,37 @@ public class MineFragment extends MyBaseFragment {
 
     @Override
     protected void initViews() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            rl.setPadding(0,getStatusBarHeight(),0,0);
-//        }
         if (gvList != null && gvList.size() >= 0) {
             adapter = new PersonalCenterGVAdapter(gvList, activity);
             gv.setAdapter(adapter);
         }
         item_about_us.setTVStyle(0, R.string.about_us, R.color.color_333);
         item_feedback.setTVStyle(0, R.string.feed_back, R.color.color_333);
-//        item_partner.setTVStyle(0, R.string.partners, R.color.color_333, false);
-//        for (ImgTxtItem item : horizentalList) {
-//            View view = Util.inflateView(activity, R.layout.horizontal_scroll_view_layout, null);
-//            ImageView iv = (ImageView) view.findViewById(R.id.iv);
-//            TextView tv = (TextView) view.findViewById(R.id.tv);
-//            ImageLoader.getInstance().displayImage("drawable://" + item.imgId, iv);
-//            tv.setText(item.txt);
-//            ll.addView(view);
-//            setOnClickListener(view, item);
-//        }
     }
 
     @Override
     protected void refreshUIAfterNet() {
         if (user == null) return;
-        if (user.counter != null) {
-            if (adapter != null && gvList != null) {
-                for (int i = 0; i < gvList.size(); i++) {
-                    switch (i) {
-                        case 0:
-                            gvList.get(i).count = user.counter.order_total_count;
-                            break;
-                        case 1:
-                            gvList.get(i).count = user.counter.message_total_count;
-                            if (listener != null)
-                                listener.onMessageCountChange(user.counter.message_total_count);
-                            break;
-                        case 6:
-                            gvList.get(i).count = user.counter.fiu_bonus_count;
-                            break;
-                        default:
-                            break;
-                    }
-
+        if (user.counter != null && adapter != null && gvList != null) {
+            for (int i = 0; i < gvList.size(); i++) {
+                switch (i) {
+                    case 0:
+                        gvList.get(i).count = user.counter.order_total_count;
+                        break;
+                    case 1:
+                        gvList.get(i).count = user.counter.message_total_count;
+                        if (listener != null)
+                            listener.onMessageCountChange(user.counter.message_total_count);
+                        break;
+                    case 6:
+                        gvList.get(i).count = user.counter.fiu_bonus_count;
+                        break;
+                    default:
+                        break;
                 }
-                adapter.notifyDataSetChanged();
+
             }
+            adapter.notifyDataSetChanged();
         }
 
         if (!TextUtils.isEmpty(user.medium_avatar_url)) {
@@ -347,32 +314,9 @@ public class MineFragment extends MyBaseFragment {
 
         tv_lv.setText(String.format("Lv%s", user.rank_id));
         tv_qj.setText(String.valueOf(user.sight_count)); //场景改情景
-//        tv_cj.setText(String.valueOf(user.sight_count)); //情景改地盘
         tv_focus.setText(String.valueOf(user.follow_count));
         tv_fans.setText(String.valueOf(user.fans_count));
     }
-
-//    private void setOnClickListener(View view, final ImgTxtItem item) {
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switch (item.imgId) {
-//                    case R.mipmap.taobao:
-//                        Util.makeToast(activity, "taobao");
-//                        break;
-//                    case R.mipmap.tmall:
-//                        Util.makeToast(activity, "tmall");
-//                        break;
-//                    case R.mipmap.jd:
-//                        Util.makeToast(activity, "jd");
-//                        break;
-//                    case R.mipmap.amzon:
-//                        Util.makeToast(activity, "amzon");
-//                        break;
-//                }
-//            }
-//        });
-//    }
 
     @OnClick({R.id.ibtn_setting, R.id.btn, R.id.ll_box, R.id.iv_detail, R.id.item_about_us, R.id.item_feedback, R.id.item_partner, R.id.rl_qj, R.id.rl_focus, R.id.ll_fans})
     protected void onClick(View v) {
@@ -410,14 +354,7 @@ public class MineFragment extends MyBaseFragment {
             case R.id.item_feedback:
                 startActivity(new Intent(activity, FeedbackActivity.class));
                 break;
-//            case R.id.item_partner:
-//                Util.makeToast(activity, "合作伙伴");
-//                break;
             case R.id.btn:
-//                startActivity(new Intent(activity, MapSearchAddressActivity.class));
-//                startActivity(new Intent(activity, CompleteUserInfoActivity.class));
-//                startActivity(new Intent(activity, BindPhoneActivity.class));
-//                startActivity(new Intent(activity, ChooseSubjectActivity.class));
         }
     }
 
@@ -460,6 +397,9 @@ public class MineFragment extends MyBaseFragment {
                         break;
                     case 7:
                         startActivity(new Intent(activity, SelectAddressActivity.class));
+                        break;
+                    case 8: //退款/售后
+                        startActivity(new Intent(activity, ChargeBackActivity.class));
                         break;
                 }
             }
