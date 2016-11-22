@@ -39,19 +39,22 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
+ *  optFragmentFlag 跳转订单详情时传过去，以便在订单详情页点击“取消订单”或“确认收货”这类立即要跳回订单列表的按钮之
+ *  后，能根据这个值记住跳去之前选中的是哪个碎片，从而能在跳回之后，选中之前的碎片
+ *
  * Created by android on 2016/2/22.
  */
 public class ShopOrderListAdapter extends THNBaseAdapter {
-    private List<OrderEntity> list;
-    //跳转订单详情时传过去，以便在订单详情页点击“取消订单”或“确认收货”这类立即要跳回订单列表的按钮之
-    //后，能根据这个值记住跳去之前选中的是哪个碎片，从而能在跳回之后，选中之前的碎片
-    private String optFragmentFlag;
+
     private LayoutInflater inflater = null;
     private Context context;
-    private View mView;
-    public BitmapUtils bitmapUtils_listview = null;
     private AlertDialog.Builder alertDialog;
     private WaittingDialog mdialog;
+    private View mView;
+
+    private BitmapUtils bitmapUtils_listview = null;
+    private List<OrderEntity> list;
+    private String optFragmentFlag;
 
     public ShopOrderListAdapter(List<OrderEntity> list, Context context, String optFragmentFlag) {
         super(list, context);
@@ -67,13 +70,10 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 .configDefaultCacheExpiry(1024 * 1024 * 4)
                 .configDefaultBitmapMaxSize(300, 300)
                 .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configDefaultLoadingImage(R.mipmap.default_shopcart)
-//                .configDefaultLoadFailedImage(R.mipmap.default_shopcart)
                 .configThreadPoolSize(5)
                 .configDefaultImageLoadAnimation(
                         AnimationUtils.loadAnimation(context, R.anim.fade_in));
         mdialog = new WaittingDialog(context);
-
     }
 
     @Override
@@ -145,7 +145,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             }
                         });
                         alertDialog.show();
-
                     }
                 });
                 break;
@@ -197,7 +196,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             }
                         });
                         alertDialog.show();
-
                     }
                 });
                 break;
@@ -224,14 +222,9 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
 //                                    Log.e("<<<提醒发货", "数据解析异常");
                                 }
                                 if (netBean.isSuccess()) {
-//                                    Toast.makeText(context, "提醒发货成功！", Toast.LENGTH_SHORT).show();
                                     ToastUtils.showSuccess("提醒发货成功!");
-//                                    mdialog.showSuccessWithStatus("提醒发货成功!");
                                 } else {
-//                                    mdialog.showErrorWithStatus(netBean.getMessage());
                                     ToastUtils.showInfo(netBean.getMessage());
-//                                    mdialog.showInfoWithStatus(netBean.getMessage());
-//                                    Toast.makeText(context, netBean.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -239,8 +232,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             public void onFailure(HttpException error, String msg) {
                                 mdialog.dismiss();
                                 ToastUtils.showError("网络错误");
-//                                mdialog.showErrorWithStatus("网络错误");
-//                                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -279,7 +270,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             }
                         });
                         alertDialog.show();
-
                     }
                 });
                 break;
@@ -317,7 +307,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                             }
                         });
                         alertDialog.show();
-
                     }
                 });
                 break;
@@ -360,15 +349,11 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
                 mHolder.mRightButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-////                        Bundle bundle = new Bundle();
-////                        bundle.putSerializable("itemContent",orderItem);
                         Intent in = new Intent(context, PublishEvaluateActivity.class);
                         for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
                             in.putExtra("productId", list.get(position).getOrderItem().get(i).getProduct_id());
                             in.putExtra("skuId", list.get(position).getOrderItem().get(i).getSku());
                             in.putExtra("rid", rid);
-//                            in.putExtra("itemContent", (Serializable) orderItem);
                         }
                         context.startActivity(in);
                     }
@@ -463,7 +448,6 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             mHolder.mItem.removeAllViews();
         }
         for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
-//            mView = LayoutInflater.from(context).inflate(R.layout.item_order_content, null);
             mView = View.inflate(context, R.layout.item_order_content, null);
             ImageView mImageView = (ImageView) mView.findViewById(R.id.image_order_inner);
             TextView mTitle = (TextView) mView.findViewById(R.id.tv_title_order_inner);
@@ -485,10 +469,8 @@ public class ShopOrderListAdapter extends THNBaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent in = new Intent(context, OrderDetailsActivity.class);
-//                for (int i = 0; i < list.get(position).getOrderItem().size(); i++) {
-                    in.putExtra("rid", list.get(position).getRid());
-                    in.putExtra("optFragmentFlag", optFragmentFlag);
-//                }
+                in.putExtra("rid", list.get(position).getRid());
+                in.putExtra("optFragmentFlag", optFragmentFlag);
                 context.startActivity(in);
             }
         });

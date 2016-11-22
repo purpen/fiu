@@ -324,7 +324,7 @@ public class IndexQJListAdapter extends BaseAdapter {
                 holder.attentionBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-        GlideUtils.displayImage(sceneList.get(position).getCover_url(), holder.qjImg);
+        GlideUtils.displayImageFadein(sceneList.get(position).getCover_url(), holder.qjImg);
         holder.qjImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

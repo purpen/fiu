@@ -13,9 +13,9 @@ import com.taihuoniao.fineix.main.MainApplication;
  */
 public class GlideUtils {
 
-    private static final Integer DEFAULT_IMAGEID = R.mipmap.default_background_750_1334;
-    private static final Integer ERROR_IMAGEID = R.mipmap.default_background_750_1334;
-    private static final int FADE_IN_DURATION = 5000;
+    private static final Integer DEFAULT_IMAGEID = R.mipmap.default_load;
+    private static final Integer ERROR_IMAGEID = R.mipmap.default_load;
+    private static final int FADE_IN_DURATION = 300;
 
     public static Context getContext() {
         return MainApplication.getContext();

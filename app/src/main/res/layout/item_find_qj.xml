@@ -27,8 +27,8 @@
                 android:id="@+id/qj_background_img1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/default_background_750_1334"/>
+                android:background="@mipmap/default_load"
+                android:scaleType="centerCrop"/>
 
             <RelativeLayout
                 android:id="@+id/qj_bottom_container1"
@@ -112,8 +112,8 @@
                 android:id="@+id/qj_background_img2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/default_background_750_1334"/>
+                android:background="@mipmap/default_load"
+                android:scaleType="centerCrop"/>
 
             <RelativeLayout
                 android:id="@+id/qj_bottom_container2"

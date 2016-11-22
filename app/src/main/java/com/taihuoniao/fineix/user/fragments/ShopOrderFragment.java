@@ -29,19 +29,20 @@ import java.util.List;
  * Created by android on 2016/2/22.
  */
 public class ShopOrderFragment extends Fragment {
+
     private PullToRefreshListView pullToRefreshListView;
+    private ListView listView_show = null;
     private ProgressBar progressBar_order;
+    private WaittingDialog mDialog;
+    private View footerView;
+
     private ShopOrderListAdapter mAdapter;
     private List<OrderEntity> mList = new ArrayList<>();
     private String status;//根据不同状态值获取订单中不同状态的列表数据
-    private WaittingDialog mDialog;
+    private boolean isBottom = false;
+    private boolean pullVisible;
     private int curPage = 1;
     private int size = 10;
-    private ListView listView_show = null;
-    private boolean isBottom = false;
-    private View footerView;
-    private boolean pullVisible;
-
 
     private Handler mHandler = new Handler() {
         @Override
@@ -60,7 +61,6 @@ public class ShopOrderFragment extends Fragment {
                             progressBar_order.setVisibility(View.GONE);
                             pullToRefreshListView.onRefreshComplete();
                             pullToRefreshListView.setLoadingTime();
-//footerView.setVisibility(View.GONE);
                             mAdapter.notifyDataSetChanged();
                             if (mDialog != null) {
                                 if (mDialog.isShowing()) {
@@ -81,7 +81,6 @@ public class ShopOrderFragment extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -126,7 +125,6 @@ public class ShopOrderFragment extends Fragment {
         }
     };
 
-
     public void initData() {
         mHandler.postDelayed(mLoadData, 600);
     }
@@ -138,78 +136,44 @@ public class ShopOrderFragment extends Fragment {
         listView_show = pullToRefreshListView.getRefreshableView();
         listView_show.setEmptyView(textView_empty);
         listView_show.setCacheColorHint(0);
+
         //下拉监听
         pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //页码从新开始
-                curPage = 1;
+
                 //开始刷新
+                curPage = 1; //页码从新开始
                 Bundle bundle = getArguments();
                 status = String.valueOf(bundle.getInt("status"));
                 DataPaser.orderListParser(status, curPage + "", size + "", mHandler);
-
             }
         });
+
         // 设置上拉加载下一页
         pullToRefreshListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                if (pullVisible&&scrollState==SCROLL_STATE_FLING) {
-//                    footerView.setVisibility(View.VISIBLE);
-//                }
-
                 if (isBottom && scrollState == SCROLL_STATE_IDLE) {
-
                     curPage++;
                     Bundle bundle = getArguments();
                     status = String.valueOf(bundle.getInt("status"));
-//                    mHandler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
                     DataPaser.orderListParser(status, curPage + "", size + "", mHandler);
-
-//                        }
-//                    }, 1000);
-//                    DataParser.orderListParser(THNApplication.uuid, status, curPage + "", size + "", mHandler);
                 }
-
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 isBottom = ((firstVisibleItem + visibleItemCount) == totalItemCount);
-//                pullVisible = totalItemCount > 3;
-
-//                if (view.getLastVisiblePosition()==view.getCount()-1) {
-//                    listView_show.removeFooterView(footerView);
-//                }
-//                Log.e(">>", ">>fff>>" + mList.size());
-//                if (totalItemCount == mList.size() + 1) {
-//                    listView_show.removeFooterView(footerView);
-//                }
             }
         });
-//        // 设置上拉加载下一页
-//        pullToRefreshListView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//                curPage++;
-//                Bundle bundle = getArguments();
-//                status = String.valueOf(bundle.getInt("status"));
-//                DataParser.orderListParser(THNApplication.uuid, status, curPage + "", size + "", mHandler);
-//            }
-//        });
         Bundle bundle = getArguments();
         status = String.valueOf(bundle.getInt("status"));
         mAdapter = new ShopOrderListAdapter(mList, getActivity(), status);
-//        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        footerView = inflater.inflate(R.layout.xlistview_footer, null);
-//        listView_show.addFooterView(footerView);
         listView_show.setAdapter(mAdapter);
+
         // 加载网络数据，刷新ListView
         progressBar_order.setVisibility(View.VISIBLE);
-
     }
 
     @Override

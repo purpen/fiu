@@ -139,7 +139,7 @@ public class FindQJAdapter extends BaseAdapter {
                 }
                 final int qjPosition = 2 * (position - cha);
 //                ImageLoader.getInstance().displayImage(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
-                GlideUtils.displayImage(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
+                GlideUtils.displayImageFadein(sceneList.get(qjPosition).getCover_url(), holder.qjBackgroundImg1);
 
                 //设置情景标题
                 SceneTitleSetUtils.setTitle(holder.qjTitle1Tv1,holder.qjTitle1Tv2,sceneList.get(qjPosition).getTitle());
@@ -212,7 +212,7 @@ public class FindQJAdapter extends BaseAdapter {
                 } else {
                     holder.qjItem2.setVisibility(View.VISIBLE);
 //                    ImageLoader.getInstance().displayImage(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
-                    GlideUtils.displayImage(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
+                    GlideUtils.displayImageFadein(sceneList.get(qjPosition + 1).getCover_url(), holder.qjBackgroundImg2);
 
                     //设置情景标题
                     SceneTitleSetUtils.setTitle(holder.qjTitle2Tv1,holder.qjTitle2Tv2,sceneList.get(qjPosition+1).getTitle());

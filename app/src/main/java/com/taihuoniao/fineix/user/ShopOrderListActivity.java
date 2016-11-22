@@ -27,44 +27,47 @@ import com.taihuoniao.fineix.view.BadgeView;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
 
 public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
-    private ViewPager mPager;
+
     @Bind(R.id.custom_head)
     GlobalTitleLayout custom_head;
-    TabLayout tabBar;
+    private ViewPager mPager;
+    private TabLayout tabBar;
+
+    private static final String[] TITLES = {"全部", "待付款", "待发货", "待收货", "待评价"/*, "退款/售后"*/};
+    private boolean isRestart = false;
     private ArrayList<String> mTitles;
     private User user;
-    private OrderViewpagerAdapter mAdapter;
-    private boolean isRestart = false;
     public ArrayList<BadgeView> badgeViewList;
+
+
     public ShopOrderListActivity() {
         super(R.layout.activity_shop_order_list);
     }
+
     protected void initView() {
         custom_head.setContinueTvVisible(false);
         custom_head.setTitle("我的订单");
         tabBar = (TabLayout) findViewById(R.id.tab_order);
         mPager = (ViewPager) findViewById(R.id.viewpaer_order);
         mTitles = new ArrayList<>();
-        mTitles.add("全部");
-        mTitles.add("待付款");
-        mTitles.add("待发货");
-        mTitles.add("待收货");
-        mTitles.add("待评价");
-        mTitles.add("退款/售后");
+        Collections.addAll(mTitles, TITLES);
         List<Fragment> mFragments = new ArrayList<>();
-        for (int i = 0; i < mTitles.size() - 1; i++) {
+        for (int i = 0; i < mTitles.size(); i++) {
             mFragments.add(ShopOrderFragment.getInstance(i));
         }
-        ReturnGoodsFragment shopOrderFragment = new ReturnGoodsFragment();
-        mFragments.add(shopOrderFragment);
-        mAdapter = new OrderViewpagerAdapter(getSupportFragmentManager(), mFragments, mTitles);
+        //去掉退款和售后
+//        ReturnGoodsFragment shopOrderFragment = new ReturnGoodsFragment();
+//        mFragments.add(shopOrderFragment);
+        OrderViewpagerAdapter mAdapter = new OrderViewpagerAdapter(getSupportFragmentManager(), mFragments, mTitles);
         mPager.setAdapter(mAdapter);
         tabBar.setupWithViewPager(mPager);
+
         //tabBar设置点击联动
         tabBar.setOnTabSelectedListener(ShopOrderListActivity.this);
         mPager.setOffscreenPageLimit(mFragments.size());
@@ -82,62 +85,61 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     public void changeNum(int position) {
         if (badgeViewList == null) return;
         BadgeView badgeView = badgeViewList.get(position);
-        switch (position) {
-            case 1: //待支付
-                user.counter.order_wait_payment = user.counter.order_wait_payment - 1;
-                setTipsNum(badgeView, user.counter.order_wait_payment);
-                break;
-            case 2: // 待发货
-                user.counter.order_ready_goods = user.counter.order_ready_goods - 1;
-                setTipsNum(badgeView, user.counter.order_ready_goods);
-                break;
-            case 3: // 待收货
-                user.counter.order_sended_goods = user.counter.order_sended_goods - 1;
-                setTipsNum(badgeView, user.counter.order_sended_goods);
-                break;
-            case 4: // 待评价
-                user.counter.order_evaluate = user.counter.order_evaluate - 1;
-                setTipsNum(badgeView, user.counter.order_evaluate);
-                break;
-            default:
-                //do nothing
-                break;
+        setClassify(position, badgeView, true);
+    }
+
+    /**
+     * 刷新 badgeView 显示的数量
+     * isRestart == true
+     */
+    private void changeNum() {
+        if (badgeViewList == null) return;
+        for (int i = 0; i < badgeViewList.size(); i++) {
+            if (i > 0 && i < 5) {
+                setClassify(i, badgeViewList.get(i), false);
+            }
         }
     }
 
-    private void setUpTabs(int position) {
-        TabLayout.Tab tab = tabBar.getTabAt(position);
-        if (tab != null) {
-            View view = Util.inflateView(R.layout.tab_title_layout, null);
-            TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-            BadgeView badgeView = (BadgeView) view.findViewById(R.id.badgeView);
-            badgeViewList.add(badgeView);
-            tvTitle.setText(mTitles.get(position));
-            int count;
-            switch (position) {
-                case 1: //待支付
-                    count = user.counter.order_wait_payment;
-                    setTipsNum(badgeView, count);
-                    break;
-                case 2: // 待发货
-                    count = user.counter.order_ready_goods;
-                    setTipsNum(badgeView, count);
-                    break;
-                case 3: // 待收货
-                    count = user.counter.order_sended_goods;
-                    setTipsNum(badgeView, count);
-                    break;
-                case 4: // 待评价
-                    count = user.counter.order_evaluate;
-                    setTipsNum(badgeView, count);
-                    break;
-                default:
-                    //do nothing
-                    break;
+    /**
+     * 刷新 badgeView 显示的数量
+     * isRestart == false
+     */
+    private void setUpTabs() {
+        for (int i = 0; i < mTitles.size(); i++) {
+            TabLayout.Tab tab = tabBar.getTabAt(i);
+            if (tab != null) {
+                View view = Util.inflateView(R.layout.tab_title_layout, null);
+                TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+                BadgeView badgeView = (BadgeView) view.findViewById(R.id.badgeView);
+                badgeViewList.add(badgeView);
+                tvTitle.setText(mTitles.get(i));
+                if (i > 0 && i < 5) {
+                    setClassify(i, badgeView, false);
+                }
+                tab.setCustomView(view);
             }
-
-            tab.setCustomView(view);
         }
+    }
+
+    private void setClassify(int position, BadgeView badgeView, boolean changeNum) {
+        int hintCount = 0;
+        switch (position) {
+            case 1: //待支付
+                hintCount = changeNum ? --user.counter.order_wait_payment : user.counter.order_wait_payment;
+                break;
+            case 2: // 待发货
+                hintCount = changeNum ? --user.counter.order_ready_goods : user.counter.order_ready_goods;
+                break;
+            case 3: // 待收货
+                hintCount = changeNum ? --user.counter.order_sended_goods : user.counter.order_sended_goods;
+                break;
+            case 4: // 待评价
+                hintCount = changeNum ? --user.counter.order_evaluate : user.counter.order_evaluate;
+                break;
+        }
+
+        setTipsNum(badgeView, hintCount);
     }
 
     public void setTipsNum(BadgeView badgeView, int count) {
@@ -156,16 +158,13 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() {
-                });
+                HttpResponse<User> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<User>>() { });
                 if (response.isSuccess()) {
                     user = response.getData();
                     if (isRestart) {
                         changeNum();
                     } else {
-                        for (int i = 0; i < mTitles.size(); i++) {
-                            setUpTabs(i);
-                        }
+                        setUpTabs();
                     }
                 }
             }
@@ -177,60 +176,13 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
         });
     }
 
-    private void changeNum() {
-        if (badgeViewList == null) return;
-        int count;
-        for (int i = 0; i < badgeViewList.size(); i++) {
-            switch (i) {
-                case 1: //待支付
-                    count = user.counter.order_wait_payment;
-                    setTipsNum(badgeViewList.get(1), count);
-                    break;
-                case 2: // 待发货
-                    count = user.counter.order_ready_goods;
-                    setTipsNum(badgeViewList.get(2), count);
-                    break;
-                case 3: // 待收货
-                    count = user.counter.order_sended_goods;
-                    setTipsNum(badgeViewList.get(3), count);
-                    break;
-                case 4: // 待评价
-                    count = user.counter.order_evaluate;
-                    setTipsNum(badgeViewList.get(4), count);
-                    break;
-                default:
-                    //do nothing
-                    break;
-            }
-        }
-    }
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+
         //tabLayout滑动的时候，选中当前pager
         int position = tab.getPosition();
         mPager.setCurrentItem(position);
-        switch (position) {
-            case 0:
-                custom_head.setTitle("我的订单");
-                break;
-            case 1:
-                custom_head.setTitle("待付款");
-                break;
-            case 2:
-                custom_head.setTitle("待发货");
-                break;
-            case 3:
-                custom_head.setTitle("待收货");
-                break;
-            case 4:
-                custom_head.setTitle("待评价");
-                break;
-            case 5:
-                custom_head.setTitle("退款/售后");
-                break;
-        }
-
+        custom_head.setTitle(TITLES[position]);
     }
 
     @Override
@@ -242,5 +194,4 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
-
 }
