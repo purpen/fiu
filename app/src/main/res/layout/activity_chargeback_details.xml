@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7F7F7"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -18,6 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="#FFFFFF"
             android:gravity="center_vertical">
 
             <ImageView
@@ -34,25 +36,55 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#88cccccc" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="44dp">
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/imageView_goods"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:text="退款金额" />
+                android:src="@mipmap/default_load" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="￥288" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_goods_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="wowstick 1f 男人的口袋工具箱
+创意螺丝刀"
+                    android:textColor="#222222"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/textView_specification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="颜色：蓝色，数量＊1"
+                    android:textColor="#999999"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/textView_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="¥288.00"
+                    android:textColor="#BE8914"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -61,19 +93,25 @@
             android:background="#88cccccc" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="44dp">
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#FFFFFF"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="退款原因" />
+                android:text="退款金额"
+                android:textColor="#999999" />
 
             <TextView
+                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="拍错了" />
+                android:layout_marginLeft="15dp"
+                android:text="￥288"
+                android:textColor="#222222" />
         </LinearLayout>
 
         <View
@@ -82,20 +120,58 @@
             android:background="#88cccccc" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="44dp">
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#FFFFFF"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="退款说明" />
+                android:text="退款原因"
+                android:textColor="#999999" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="拍错了"
+                android:textColor="#222222" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#88cccccc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#FFFFFF"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="谢谢" />
+                android:layout_marginLeft="15dp"
+                android:text="退款说明"
+                android:textColor="#999999" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="谢谢"
+                android:textColor="#222222" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#88cccccc" />
 
     </LinearLayout>
 
