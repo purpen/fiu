@@ -34,13 +34,13 @@ import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.bean.ShoppingD;
 import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
-import com.taihuoniao.fineix.user.bean.ShoppingDetailsBean2;
+import com.taihuoniao.fineix.user.bean.ShoppingDetailBean2;
+import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
-import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
 
 import java.lang.reflect.Type;
@@ -79,10 +79,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private AlertDialog.Builder alertDialog;
     private TextView mCounty;
     private TextView mTown;
-
-    private ShoppingDetailBean shoppingdDetailBean;
-    private List<ShoppingDetailBean.ItemsEntity> mListProducts;
-//    private EvaluateAdapter2 mAdapter;
 
     private void toShopOrderListActivity() {
         Intent in = new Intent(OrderDetailsActivity.this, ShopOrderListActivity.class);
@@ -152,14 +148,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                     final String rid = mRid;//订单唯一编号
                     String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款",
                             confirmReceived = "确认收货", publishEvaluate = "发表评价", cancelOrder = "取消订单";
-
-
-                    if (!"1".equals(response.getData().getExist_sub_order())) {
-                        HttpResponse<ShoppingDetailBean> response2 = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() { });
-                        shoppingdDetailBean = response2.getData();
-                    }
-
-
 
 
 //
@@ -568,51 +556,106 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                             break;
                     }
 
-                    ShoppingDetailBean.ExpressInfoEntity express_info = shoppingdDetailBean.getExpress_info();
-                    mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
-                    mProvince.setText(express_info.getProvince());
-                    mCity.setText(express_info.getCity());
-                    mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
-                    mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
-                    mDetailsAddress.setText(express_info.getAddress());
-                    mPhone.setText(express_info.getPhone());
 
-                    if (mContainerLayout != null) {
-                        mContainerLayout.removeAllViews();
-                    }
+//                    ShoppingDetailBean.ExpressInfoEntity express_info;
+//                    List<ShoppingDetailBean.ItemsEntity> itemsEntityList;
 
-                    final List<ShoppingDetailBean.ItemsEntity> itemsEntityList = shoppingdDetailBean.getItems();
-                    for (int k = 0; k < itemsEntityList.size(); k++) {
-                        mItemView = View.inflate(OrderDetailsActivity.this, R.layout.item_order_content, null);
-                        TextView mTitleItem = (TextView) mItemView.findViewById(R.id.tv_title_order_inner);
-                        TextView mColorItem = (TextView) mItemView.findViewById(R.id.tv_color_order_inner);
-                        TextView mMoneyItem = (TextView) mItemView.findViewById(R.id.tv_money_order_inner);
-                        TextView mCountItem = (TextView) mItemView.findViewById(R.id.tv_count_order_inner);
-                        ImageView mImageItem = (ImageView) mItemView.findViewById(R.id.image_order_inner);
-                        mBitmapUtils.display(mImageItem, itemsEntityList.get(k).getCover_url());
-                        mTitleItem.setText(itemsEntityList.get(k).getName());
-                        if ("null".equals(itemsEntityList.get(k).getSku_name())) {
-                            mColorItem.setVisibility(View.INVISIBLE);
-                        } else {
-                            mColorItem.setText(itemsEntityList.get(k).getSku_name());
+
+                    if ("0".equals(response.getData().getExist_sub_order())) {
+                        HttpResponse<ShoppingDetailBean2> response2 = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean2>>() { });
+                        ShoppingDetailBean2 shoppingDetailBean2 = response2.getData();
+                        ShoppingDetailBean2.ExpressInfoEntity express_info = shoppingDetailBean2.getExpress_info();
+                        mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
+                        mProvince.setText(express_info.getProvince());
+                        mCity.setText(express_info.getCity());
+                        mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
+                        mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
+                        mDetailsAddress.setText(express_info.getAddress());
+                        mPhone.setText(express_info.getPhone());
+
+                        if (mContainerLayout != null) {
+                            mContainerLayout.removeAllViews();
                         }
-                        mColorItem.setText(itemsEntityList.get(k).getSku_name());
-                        mCountItem.setText(String.format("× %s", itemsEntityList.get(k).getQuantity()));
-                        mMoneyItem.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
-                        final int y = k;
-                        mItemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-                                intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
-                                OrderDetailsActivity.this.startActivity(intent);
+
+                        final List<ShoppingDetailBean2.ItemsEntity> itemsEntityList = shoppingDetailBean2.getItems();
+                        View view ;
+                        for (int k = 0; k < itemsEntityList.size(); k++) {
+                            view = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
+
+
+                            ImageView imageViewGoods = (ImageView) view.findViewById(R.id.imageView_goods);
+                            TextView textViewGoodsDescription = (TextView) view.findViewById(R.id.textView_goods_description);
+                            TextView textViewSpecification = (TextView) view.findViewById(R.id.textView_specification);
+                            TextView textViewStatus = (TextView) view.findViewById(R.id.textView_status);
+                            TextView textViewPrice = (TextView) view.findViewById(R.id.textView_price);
+
+                            TextView textView1 = (TextView) view.findViewById(R.id.textView1);
+                            TextView textView2 = (TextView) view.findViewById(R.id.textView2);
+
+
+
+                            GlideUtils.displayImage(itemsEntityList.get(k).getCover_url(), imageViewGoods);
+
+                            final int y = k;
+                            view.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
+                                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
+                                    OrderDetailsActivity.this.startActivity(intent);
+                                }
+                            });
+                            mContainerLayout.addView(view);
+                        }
+                    } else {
+                        HttpResponse<ShoppingDetailBean> response2 = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() { });
+                        ShoppingDetailBean shoppingdDetailBean = response2.getData();
+                        ShoppingDetailBean.ExpressInfoEntity express_info = shoppingdDetailBean.getExpress_info();
+                        mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
+                        mProvince.setText(express_info.getProvince());
+                        mCity.setText(express_info.getCity());
+                        mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
+                        mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
+                        mDetailsAddress.setText(express_info.getAddress());
+                        mPhone.setText(express_info.getPhone());
+
+                        if (mContainerLayout != null) {
+                            mContainerLayout.removeAllViews();
+                        }
+
+                        final List<ShoppingDetailBean.ItemsEntity> itemsEntityList = shoppingdDetailBean.getItems();
+                        for (int k = 0; k < itemsEntityList.size(); k++) {
+                            mItemView = View.inflate(OrderDetailsActivity.this, R.layout.item_order_content, null);
+                            TextView mTitleItem = (TextView) mItemView.findViewById(R.id.tv_title_order_inner);
+                            TextView mColorItem = (TextView) mItemView.findViewById(R.id.tv_color_order_inner);
+                            TextView mMoneyItem = (TextView) mItemView.findViewById(R.id.tv_money_order_inner);
+                            TextView mCountItem = (TextView) mItemView.findViewById(R.id.tv_count_order_inner);
+                            ImageView mImageItem = (ImageView) mItemView.findViewById(R.id.image_order_inner);
+                            mBitmapUtils.display(mImageItem, itemsEntityList.get(k).getCover_url());
+                            mTitleItem.setText(itemsEntityList.get(k).getName());
+                            if ("null".equals(itemsEntityList.get(k).getSku_name())) {
+                                mColorItem.setVisibility(View.INVISIBLE);
+                            } else {
+                                mColorItem.setText(itemsEntityList.get(k).getSku_name());
                             }
-                        });
-                        mContainerLayout.addView(mItemView);
+                            mColorItem.setText(itemsEntityList.get(k).getSku_name());
+                            mCountItem.setText(String.format("× %s", itemsEntityList.get(k).getQuantity()));
+                            mMoneyItem.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
+                            final int y = k;
+                            mItemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
+                                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
+                                    OrderDetailsActivity.this.startActivity(intent);
+                                }
+                            });
+                            mContainerLayout.addView(mItemView);
+                        }
                     }
 
 
-//
+
 //                List<OrderDetailsAddress> addresses = mDetailsList.get(i).getAddresses();
 //                    for (int j = 0; j < addresses.size(); j++) {
 //                        mDeliverMan.setText(String.format("收货人：%s", mDetailsList.get(i).getAddresses().get(j).getName()));

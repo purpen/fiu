@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Stephen on 2016/11/23.
  */
 
-public class ShoppingDetailsBean2 {
+public class ShoppingDetailBean2 {
 
     /**
      * _id : 583561a63ffca2043b8b4620

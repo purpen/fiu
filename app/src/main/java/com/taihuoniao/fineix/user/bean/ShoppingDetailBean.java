@@ -240,7 +240,7 @@ public class ShoppingDetailBean {
         this.current_user_id = current_user_id;
     }
 
-    public void setItems(List<ItemsEntity> items) {
+    protected void setItems(List<ItemsEntity> items) {
         this.items = items;
     }
 
