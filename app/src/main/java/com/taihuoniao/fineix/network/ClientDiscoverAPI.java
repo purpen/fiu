@@ -1229,8 +1229,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/shopping/detail";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("rid", rid);
-        HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
-        return httpHandler;
+        return MD5Utils.sign(params, url, callBack);
     }
 
     //申请退款
@@ -1816,6 +1815,36 @@ public class ClientDiscoverAPI {
     public static HttpHandler<String> getIndexChosenSubject(RequestCallBack<String> callBack) {
         String url=NetworkConstance.BASE_URL+"/scene_subject/index_subject_stick";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        return MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * 退款单列表
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> getRefundList(RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/refund_list";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        return MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * 申请退款
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> getApplyProductRefund(String rid, String sku_id, String refund_type,
+                                                            String refund_reason, String refund_content, String refund_price,
+                                                            RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/apply_product_refund";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rid);
+        params.addQueryStringParameter("sku_id", sku_id);
+        params.addQueryStringParameter("refund_type", refund_type);
+        params.addQueryStringParameter("refund_reason", refund_reason);
+        params.addQueryStringParameter("refund_content", refund_content);
+        params.addQueryStringParameter("refund_price", refund_price);
         return MD5Utils.sign(params, url, callBack);
     }
 }

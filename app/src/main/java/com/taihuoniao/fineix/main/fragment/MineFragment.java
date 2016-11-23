@@ -34,7 +34,6 @@ import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
 import com.taihuoniao.fineix.personal.ChargeBackActivity;
-import com.taihuoniao.fineix.personal.ChargeBackAndServiceActivity;
 import com.taihuoniao.fineix.user.AboutUsActivity;
 import com.taihuoniao.fineix.user.CollectionsActivity;
 import com.taihuoniao.fineix.user.FansActivity;

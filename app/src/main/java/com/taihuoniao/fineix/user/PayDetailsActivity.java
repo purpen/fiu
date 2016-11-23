@@ -16,10 +16,10 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.OrderDetails;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.network.NetworkConstance;
+import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.Util;
 import com.taihuoniao.fineix.utils.WindowUtils;
@@ -137,10 +137,10 @@ public class PayDetailsActivity extends BaseActivity {
                 mDialog.dismiss();
                 if (responseInfo==null) return;
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<OrderDetails> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetails>>() {
+                HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() {
                 });
                 if (response.isSuccess()){
-                    OrderDetails data = response.getData();
+                    ShoppingDetailBean data = response.getData();
                     if ("10".equals(data.getStatus())) {
                         mSuccessOrFailed.setText("您的订单已支付成功");
                         mImage.setImageResource(R.mipmap.success);

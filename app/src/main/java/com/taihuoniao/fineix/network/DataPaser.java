@@ -1733,7 +1733,7 @@ public class DataPaser {
     }
 
 
-    //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
+/*    //订单支付详情和订单详情都是这，发表评价界面的产品图片也从这获取
     public static void orderPayDetailsParser(String rid, final Handler handler) {
         ClientDiscoverAPI.OrderPayNet(rid, new RequestCallBack<String>() {
             @Override
@@ -1797,7 +1797,7 @@ public class DataPaser {
                 handler.sendEmptyMessage(DataConstants.NETWORK_FAILURE);
             }
         });
-    }
+    }*/
 
     //申请退款
     public static void applyForRefundParser(String rid, String option, String content, final Handler handler) {

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by android on 2016/3/21.
  */
-public class EvaluateAdapter extends THNBaseAdapter {
+public class EvaluateAdapter2 extends THNBaseAdapter {
     private String editContent = "";
     //定义一个HashMap，用来存放EditText的值，Key是position
     HashMap<Integer, String> hashMap = new HashMap<>();
@@ -45,7 +45,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     }
 
 
-    public EvaluateAdapter(List<ShoppingDetailBean.ItemsEntity> list, Context context) {
+    public EvaluateAdapter2(List<ShoppingDetailBean.ItemsEntity> list, Context context) {
         super(list, context);
         this.list = list;
         this.context = context;

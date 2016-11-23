@@ -2,6 +2,7 @@ package com.taihuoniao.fineix.user;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,19 +17,16 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.adapters.EvaluateAdapter;
 import com.taihuoniao.fineix.base.NetBean;
-import com.taihuoniao.fineix.beans.OrderDetails;
-import com.taihuoniao.fineix.beans.OrderDetailsAddress;
-import com.taihuoniao.fineix.beans.OrderDetailsProducts;
+import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
+import com.taihuoniao.fineix.utils.JsonUtil;
+import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.GlobalTitleLayout;
 import com.taihuoniao.fineix.view.ListViewForScrollView;
 import com.taihuoniao.fineix.view.WaittingDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,12 +34,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PublishEvaluateActivity extends Activity {
+    private static final String TAG = "PublishEvaluateActivity";
+
     private ListViewForScrollView mListView;
     private EvaluateAdapter mAdapter;
     HashMap<Integer, String> mHashMapRatingBar = new HashMap<>();
     HashMap<Integer, String> mHashMap = new HashMap<>();
-    private List<OrderDetails> mList = new ArrayList<>();
-    private List<OrderDetailsProducts> mListProducts = new ArrayList<>();
+//    private List<OrderDetails> mList = new ArrayList<>();
+//    private List<OrderDetailsProducts> mListProducts = new ArrayList<>();
     private TextView mCommit;
     private String mRid;
     private String mEvaluateContent;
@@ -50,6 +50,9 @@ public class PublishEvaluateActivity extends Activity {
     private LinearLayout mLinear;
     private String mEditContent;
     private WaittingDialog dialog;
+
+    private ShoppingDetailBean shoppingDetailBean;
+    private List<ShoppingDetailBean.ItemsEntity> mListProducts;
 
 
     @Override
@@ -67,6 +70,8 @@ public class PublishEvaluateActivity extends Activity {
         title.setTitle("发表评价");
         title.setContinueTvVisible(false);
         mListView = (ListViewForScrollView) findViewById(R.id.lv_evaluate);
+
+        mListProducts = new ArrayList<>();
         mAdapter = new EvaluateAdapter(mListProducts, this);
         mListView.setAdapter(mAdapter);
         mAdapter.setOnTwoClickedListener(new EvaluateAdapter.OnTwoClickedListener() {
@@ -146,57 +151,69 @@ public class PublishEvaluateActivity extends Activity {
         ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-//                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
-                List<OrderDetails> ordersList = new ArrayList<>();
-                try {
-                    JSONObject obj = new JSONObject(responseInfo.result);
-                    JSONObject orderObj = obj.getJSONObject("data");
-                    OrderDetails details = new OrderDetails();
-                    details.setRid(orderObj.optString("rid"));
-                    details.setExpress_company(orderObj.optString("express_company"));
-                    details.setExpress_no(orderObj.optString("express_no"));
-                    details.setCreated_at(orderObj.optString("created_at"));
-                    details.setFreight(orderObj.optString("freight"));
-                    details.setItems_count(orderObj.optString("items_count"));
-                    details.setPay_money(orderObj.optString("pay_money"));
-                    details.setPayment_method(orderObj.optString("payment_method"));
-                    details.setTotal_money(orderObj.optString("total_money"));
-                    details.setStatus(orderObj.optString("status"));
-                    JSONObject arr = orderObj.getJSONObject("express_info");
-                    List<OrderDetailsAddress> addressList = new ArrayList<>();
-                    OrderDetailsAddress address = new OrderDetailsAddress();
-                    address.setAddress(arr.optString("address"));
-                    address.setName(arr.optString("name"));
-                    address.setCity(arr.optString("city"));
-                    address.setPhone(arr.optString("phone"));
-                    address.setProvince(arr.optString("province"));
-                    addressList.add(address);
 
-                    details.setAddresses(addressList);
-                    JSONArray productsArrays = orderObj.getJSONArray("items");
-                    List<OrderDetailsProducts> productsList = new ArrayList<>();
-                    for (int j = 0; j < productsArrays.length(); j++) {
-                        JSONObject productsArr = productsArrays.getJSONObject(j);
-                        OrderDetailsProducts products = new OrderDetailsProducts();
-                        products.setName(productsArr.optString("name"));
-                        products.setCover_url(productsArr.optString("cover_url"));
-                        products.setPrice(productsArr.optString("price"));
-                        products.setProduct_id(productsArr.optString("product_id"));
-                        products.setQuantity(productsArr.optString("quantity"));
-                        products.setSale_price(productsArr.optDouble("sale_price"));
-                        products.setSku(productsArr.optString("sku"));
-                        products.setSku_name(productsArr.optString("sku_name"));
-                        productsList.add(products);
-                    }
-                    details.setProducts(productsList);
-                    ordersList.add(details);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (TextUtils.isEmpty(responseInfo.result)) return;
+                HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() {});
+                if (response.isError()) {
+                    LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
+                    return;
                 }
-                mList.clear();
-                mList.addAll(ordersList);
-                mListProducts.clear();
-                mListProducts.addAll(mList.get(0).getProducts());
+                shoppingDetailBean = response.getData();
+                mListProducts = shoppingDetailBean.getItems();
+
+////                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
+//                List<OrderDetails> ordersList = new ArrayList<>();
+//                try {
+//                    JSONObject obj = new JSONObject(responseInfo.result);
+//                    JSONObject orderObj = obj.getJSONObject("data");
+//                    OrderDetails details = new OrderDetails();
+//                    details.setRid(orderObj.optString("rid"));
+//                    details.setExpress_company(orderObj.optString("express_company"));
+//                    details.setExpress_no(orderObj.optString("express_no"));
+//                    details.setCreated_at(orderObj.optString("created_at"));
+//                    details.setFreight(orderObj.optString("freight"));
+//                    details.setItems_count(orderObj.optString("items_count"));
+//                    details.setPay_money(orderObj.optString("pay_money"));
+//                    details.setPayment_method(orderObj.optString("payment_method"));
+//                    details.setTotal_money(orderObj.optString("total_money"));
+//                    details.setStatus(orderObj.optString("status"));
+//                    JSONObject arr = orderObj.getJSONObject("express_info");
+//                    List<OrderDetailsAddress> addressList = new ArrayList<>();
+//                    OrderDetailsAddress address = new OrderDetailsAddress();
+//                    address.setAddress(arr.optString("address"));
+//                    address.setName(arr.optString("name"));
+//                    address.setCity(arr.optString("city"));
+//                    address.setPhone(arr.optString("phone"));
+//                    address.setProvince(arr.optString("province"));
+//                    addressList.add(address);
+//
+//                    details.setAddresses(addressList);
+//                    JSONArray productsArrays = orderObj.getJSONArray("mListProducts");
+//                    List<OrderDetailsProducts> productsList = new ArrayList<>();
+//                    for (int j = 0; j < productsArrays.length(); j++) {
+//                        JSONObject productsArr = productsArrays.getJSONObject(j);
+//                        OrderDetailsProducts products = new OrderDetailsProducts();
+//                        products.setName(productsArr.optString("name"));
+//                        products.setCover_url(productsArr.optString("cover_url"));
+//                        products.setPrice(productsArr.optString("price"));
+//                        products.setProduct_id(productsArr.optString("product_id"));
+//                        products.setQuantity(productsArr.optString("quantity"));
+//                        products.setSale_price(productsArr.optDouble("sale_price"));
+//                        products.setSku(productsArr.optString("sku"));
+//                        products.setSku_name(productsArr.optString("sku_name"));
+//                        productsList.add(products);
+//                    }
+//                    details.setProducts(productsList);
+//                    ordersList.add(details);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                mList.clear();
+//                mList.addAll(ordersList);
+//                mListProducts.clear();
+//                mListProducts.addAll(mList.get(0).getProducts());
+
+
                 mAdapter.notifyDataSetChanged();
             }
 
