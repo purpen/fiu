@@ -1,13 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#f4f4f4"
-                android:fitsSystemWindows="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f4f4"
+    android:fitsSystemWindows="true">
 
     <com.taihuoniao.fineix.view.GlobalTitleLayout
         android:id="@+id/title_order_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:paddingLeft="25dp"
                     android:paddingRight="10dp"
                     android:paddingTop="25dp"
-                    android:src="@mipmap/seat"/>
+                    android:src="@mipmap/seat" />
 
                 <TextView
                     android:id="@+id/tv_deliver_man_order_details"
@@ -46,7 +46,7 @@
                     android:paddingTop="10dp"
                     android:text="@string/consignee"
                     android:textColor="#333333"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_province_order_details"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/image_address"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_city_order_details"
@@ -63,7 +63,8 @@
                     android:layout_below="@+id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/tv_province_order_details"
                     android:paddingLeft="@dimen/dp5"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
+
                 <TextView
                     android:id="@+id/tv_county"
                     android:layout_width="wrap_content"
@@ -71,16 +72,18 @@
                     android:layout_below="@+id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/tv_city_order_details"
                     android:paddingLeft="@dimen/dp5"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
+
                 <TextView
                     android:id="@+id/tv_town"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_deliver_man_order_details"
                     android:layout_toRightOf="@+id/tv_county"
-                    android:paddingLeft="@dimen/dp5"
                     android:ellipsize="end"
-                    android:textSize="11sp"/>
+                    android:paddingLeft="@dimen/dp5"
+                    android:textSize="11sp" />
+
                 <TextView
                     android:id="@+id/tv_address_order_details"
                     android:layout_width="wrap_content"
@@ -90,7 +93,7 @@
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:text="@string/detail_address"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tv_phone_order_details"
@@ -99,7 +102,7 @@
                     android:layout_below="@id/tv_address_order_details"
                     android:layout_toRightOf="@+id/image_address"
                     android:text="@string/phone_number"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
             </RelativeLayout>
 
             <ScrollView
@@ -111,22 +114,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#f4f4f4"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
             </ScrollView>
 
-            <RelativeLayout style="@style/order_details_layout">
+            <RelativeLayout
+                style="@style/order_details_layout"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_number"
                     style="@style/order_details_textview"
                     android:text="@string/order_number"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_number_order_details"
                     style="@style/order_details_textview"
                     android:layout_toRightOf="@+id/tv_number"
-                    android:textColor="#333333"/>
+                    android:textColor="#333333" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -137,13 +142,13 @@
                     android:id="@+id/tv_number_logistics_company"
                     style="@style/order_details_textview"
                     android:text="@string/logistics_company"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_logistics_company_number_order_details"
                     style="@style/order_details_textview"
                     android:layout_toRightOf="@+id/tv_number_logistics_company"
-                    android:textColor="#333333"/>
+                    android:textColor="#333333" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -154,46 +159,13 @@
                     android:id="@+id/tv_number_logistics"
                     style="@style/order_details_textview"
                     android:text="@string/logistics_odd_number"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_logistics_number_order_details"
                     style="@style/order_details_textview"
                     android:layout_toRightOf="@+id/tv_number_logistics"
-                    android:textColor="#333333"/>
-            </RelativeLayout>
-
-            <RelativeLayout style="@style/order_details_layout">
-
-                <TextView
-                    android:id="@+id/tv_payway"
-                    style="@style/order_details_textview"
-                    android:text="@string/pay_method"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/tv_payway_order_details"
-                    style="@style/order_details_textview"
-                    android:layout_toRightOf="@+id/tv_payway"
-                    android:textColor="#333333"/>
-            </RelativeLayout>
-
-            <RelativeLayout style="@style/order_details_layout">
-
-                <TextView
-                    android:id="@+id/tv_totalmoney"
-                    style="@style/order_details_textview"
-                    android:text="@string/products_money"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/tv_totalmoney_order_details"
-                    style="@style/order_details_textview"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/tv_totalmoney"
-                    android:gravity="right"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/yellow_bd8913"/>
+                    android:textColor="#333333" />
             </RelativeLayout>
 
             <RelativeLayout style="@style/order_details_layout">
@@ -202,7 +174,7 @@
                     android:id="@+id/tv_freight"
                     style="@style/order_details_textview"
                     android:text="@string/freight"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_freight_order_details"
@@ -211,7 +183,43 @@
                     android:layout_toRightOf="@+id/tv_freight"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    android:textColor="@color/yellow_bd8913"/>
+                    android:textColor="@color/yellow_bd8913" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/order_details_layout">
+
+                <TextView
+                    android:id="@+id/tv_payway"
+                    style="@style/order_details_textview"
+                    android:text="@string/pay_method"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_payway_order_details"
+                    style="@style/order_details_textview"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/tv_payway"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    android:textColor="#333333" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/order_details_layout">
+
+                <TextView
+                    android:id="@+id/tv_totalmoney"
+                    style="@style/order_details_textview"
+                    android:text="@string/products_money"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_totalmoney_order_details"
+                    style="@style/order_details_textview"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/tv_totalmoney"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/yellow_bd8913" />
             </RelativeLayout>
 
             <RelativeLayout style="@style/order_details_layout">
@@ -220,7 +228,7 @@
                     android:id="@+id/tv_paymoney"
                     style="@style/order_details_textview"
                     android:text="@string/amount_paid"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_paymoney_order_details"
@@ -229,7 +237,7 @@
                     android:layout_toRightOf="@+id/tv_paymoney"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    android:textColor="@color/yellow_bd8913"/>
+                    android:textColor="@color/yellow_bd8913" />
             </RelativeLayout>
 
             <TextView
@@ -242,7 +250,7 @@
                 android:gravity="center"
                 android:text="@string/contact_customer_service"
                 android:textColor="#666666"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
     </ScrollView>
@@ -268,7 +276,7 @@
             android:paddingTop="8dp"
             android:text="@string/cancel_order"
             android:textColor="@color/yellow_bd8913"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/bt_right_order_details"
@@ -284,7 +292,7 @@
             android:paddingTop="8dp"
             android:text="@string/pay_now"
             android:textColor="@color/yellow_bd8913"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
     </RelativeLayout>
 
 </RelativeLayout>

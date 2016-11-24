@@ -3,14 +3,13 @@ package com.taihuoniao.fineix.user;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,22 +18,19 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.personal.ChargeBackActivity;
+import com.taihuoniao.fineix.personal.SalesReturnActivity;
 import com.taihuoniao.fineix.product.ApplyForRefundActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
-import com.taihuoniao.fineix.user.bean.ShoppingD;
-import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
-import com.taihuoniao.fineix.user.bean.ShoppingDetailBean2;
+import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.utils.GlideUtils;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -65,20 +61,18 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private TextView mLeftButton;//最底部左侧按钮
     private RelativeLayout mBottomLayout;//放最底部那俩按钮的布局
     private LinearLayout mContainerLayout;//动态容纳商品item
-    private View mItemView;//动态商品的一条
 
     private String mRid;
     private String mOptFragmentFlag;//跳回碎片列表时，用该值选中跳来之前的那个碎片
-//    private List<OrderDetails> mDetailsList = new ArrayList<>();
     private RelativeLayout mLogisticsCompanyLayout;//物流公司
     private RelativeLayout mLogisticsNumberLayout;//物流单号
     private TextView mLogisticsNumber, mLogisticsCompany;
 
-    private BitmapUtils mBitmapUtils;
     private WaittingDialog mDialog;
     private AlertDialog.Builder alertDialog;
     private TextView mCounty;
     private TextView mTown;
+    private OrderDetailBean orderDetailBean;
 
     private void toShopOrderListActivity() {
         Intent in = new Intent(OrderDetailsActivity.this, ShopOrderListActivity.class);
@@ -102,621 +96,36 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void initData() {
-//        mListProducts = new ArrayList<>();
-//        mAdapter = new EvaluateAdapter2(mListProducts, this);
-//        listViewForScrollView.setAdapter(mAdapter);
-
-        if(!mDialog.isShowing()){
-            mDialog.show();
-        }
         mRid = getIntent().getStringExtra("rid");
         mOptFragmentFlag = getIntent().getStringExtra("optFragmentFlag");
-//        DataPaser.orderPayDetailsParser(mRid, mHander);
+        requestData();
+    }
+
+    private void requestData() {
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
         ClientDiscoverAPI.OrderPayNet(mRid, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-
                 try {
-                    HttpResponse<ShoppingD> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingD>>() { });
+                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() { });
                     if (response.isError()) {
                         LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
                         return;
                     }
-                    ShoppingD shoppingD = response.getData();
-                    String rid1 = shoppingD.getRid();
-                    String pay_money = shoppingD.getPay_money();
-                    mOrderNum.setText(rid1);
-                    mPayMoney.setText("¥" + pay_money);//实付金额
-
-                    String payment_method = shoppingD.getPayment_method();
-                    mPayway.setText(("a".equals(payment_method) ? "在线支付" : ("b".equals(payment_method) ? "货到付款" : "c".equals(payment_method) ? "其他" : "")));
-
-                    mTotalMoney.setText("¥" + shoppingD.getTotal_money());//商品总额
-                    mFreight.setText("¥" + shoppingD.getFreight());//运费
-                    if (!shoppingD.getExpress_no().isEmpty()) {
-                        mLogisticsCompanyLayout.setVisibility(View.VISIBLE);
-                        mLogisticsNumberLayout.setVisibility(View.VISIBLE);
-                        mLogisticsNumber.setText(shoppingD.getExpress_no());
-                        mLogisticsCompany.setText(shoppingD.getExpress_company());
-                    } else {
-                        mLogisticsCompanyLayout.setVisibility(View.GONE);
-                        mLogisticsNumberLayout.setVisibility(View.GONE);
-                    }
-                    final String paymoney = shoppingD.getPay_money();
-                    final int status = shoppingD.getStatus();
-                    final String rid = mRid;//订单唯一编号
-                    String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款",
-                            confirmReceived = "确认收货", publishEvaluate = "发表评价", cancelOrder = "取消订单";
-
-
-//
-//                final String paymoney = mDetailsList.get(i).getPay_money();
-//                final int status = Integer.parseInt(mDetailsList.get(i).getStatus());
-//
-////                Log.e(">>>", ">>>OOO>>>" + responseInfo.result);
-//                List<OrderDetails> ordersList = new ArrayList<>();
-//                try {
-//                    JSONObject obj = new JSONObject(responseInfo.result);
-//                    JSONObject orderObj = obj.getJSONObject("data");
-//                    OrderDetails details = new OrderDetails();
-//                    details.setRid(orderObj.optString("rid"));
-//                    details.setExpress_company(orderObj.optString("express_company"));
-//                    details.setExpress_no(orderObj.optString("express_no"));
-//                    details.setCreated_at(orderObj.optString("created_at"));
-//                    details.setFreight(orderObj.optString("freight"));
-//                    details.setItems_count(orderObj.optString("items_count"));
-//                    details.setPay_money(orderObj.optString("pay_money"));
-//                    details.setPayment_method(orderObj.optString("payment_method"));
-//                    details.setTotal_money(orderObj.optString("total_money"));
-//                    details.setStatus(orderObj.optString("status"));
-//                    JSONObject arr = orderObj.getJSONObject("express_info");
-//                    List<OrderDetailsAddress> addressList = new ArrayList<>();
-//                    OrderDetailsAddress address = new OrderDetailsAddress();
-//                    address.setAddress(arr.optString("address"));
-//                    address.setName(arr.optString("name"));
-//                    address.setCity(arr.optString("city"));
-//                    address.setPhone(arr.optString("phone"));
-//                    address.setProvince(arr.optString("province"));
-//                    address.setCounty(arr.optString("county"));
-//                    address.setTown(arr.optString("town"));
-//                    addressList.add(address);
-//
-//                    details.setAddresses(addressList);
-//                    JSONArray productsArrays = orderObj.getJSONArray("items");
-//                    List<OrderDetailsProducts> productsList = new ArrayList<>();
-//                    for (int j = 0; j < productsArrays.length(); j++) {
-//                        JSONObject productsArr = productsArrays.getJSONObject(j);
-//                        OrderDetailsProducts products = new OrderDetailsProducts();
-//                        products.setName(productsArr.optString("name"));
-//                        products.setCover_url(productsArr.optString("cover_url"));
-//                        products.setPrice(productsArr.optString("price"));
-//                        products.setProduct_id(productsArr.optString("product_id"));
-//                        products.setQuantity(productsArr.optString("quantity"));
-//                        products.setSale_price(productsArr.optDouble("sale_price"));
-//                        products.setSku(productsArr.optString("sku"));
-//                        products.setSku_name(productsArr.optString("sku_name"));
-//                        productsList.add(products);
-//                    }
-//                    details.setProducts(productsList);
-//                    ordersList.add(details);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                mDetailsList.clear();
-//                mDetailsList.addAll(ordersList);
-//                for (int i = 0; i < mDetailsList.size(); i++) {
-//                    mOrderNum.setText(mDetailsList.get(i).getRid());
-//                    mPayMoney.setText("¥" + mDetailsList.get(i).getPay_money());//实付金额
-//                    if ("a".equals(mDetailsList.get(i).getPayment_method())) {
-//                        mPayway.setText("在线支付");
-//                    } else if ("b".equals(mDetailsList.get(i).getPayment_method())) {
-//                        mPayway.setText("货到付款");
-//                    } else {
-//                        mPayway.setText("其他");
-//                    }
-//                    mTotalMoney.setText("¥" + mDetailsList.get(i).getTotal_money());//商品总额
-//                    mFreight.setText("¥" + mDetailsList.get(i).getFreight());//运费
-//                    if (!mDetailsList.get(i).getExpress_no().isEmpty()) {
-//                        mLogisticsCompanyLayout.setVisibility(View.VISIBLE);
-//                        mLogisticsNumberLayout.setVisibility(View.VISIBLE);
-//                        mLogisticsNumber.setText(mDetailsList.get(i).getExpress_no());
-//                        mLogisticsCompany.setText(mDetailsList.get(i).getExpress_company());
-//                    } else {
-//                        mLogisticsCompanyLayout.setVisibility(View.GONE);
-//                        mLogisticsNumberLayout.setVisibility(View.GONE);
-//                    }
-//
-//                    final String paymoney = mDetailsList.get(i).getPay_money();
-//                    final int status = Integer.parseInt(mDetailsList.get(i).getStatus());
-//                    final String rid = mRid;//订单唯一编号
-//                    String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款",
-//                            confirmReceived = "确认收货", publishEvaluate = "发表评价", cancelOrder = "取消订单";
-                    switch (status) {
-                        case 0://已取消状态
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(deleteOrder);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要删除订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-                                }
-                            });
-                            break;
-                        case 1://待付款
-                            mLeftButton.setText(cancelOrder);
-                            mLeftButton.setVisibility(View.VISIBLE);
-                            mRightButton.setText(payNow);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent paynowIntent = new Intent(OrderDetailsActivity.this, PayWayActivity.class);
-                                    paynowIntent.putExtra("paymoney", paymoney);
-                                    paynowIntent.putExtra("orderId", rid);
-                                    startActivity(paynowIntent);
-                                }
-                            });
-
-                            mLeftButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要取消订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            break;
-                        case 10://待发货
-                            mLeftButton.setText("提醒发货");
-                            mLeftButton.setVisibility(View.VISIBLE);
-                            mRightButton.setText(applyForRefund);
-                            mLeftButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (!mDialog.isShowing()) {
-                                        mDialog.show();
-                                    }
-                                    ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
-                                        @Override
-                                        public void onSuccess(ResponseInfo<String> responseInfo) {
-                                            mDialog.dismiss();
-                                            NetBean netBean = new NetBean();
-                                            try {
-                                                Gson gson = new Gson();
-                                                Type type = new TypeToken<NetBean>() {
-                                                }.getType();
-                                                netBean = gson.fromJson(responseInfo.result, type);
-                                            } catch (JsonSyntaxException e) {
-                                                Log.e("<<<提醒发货", "数据解析异常");
-                                            }
-                                            if (netBean.isSuccess()) {
-                                                ToastUtils.showSuccess("提醒发货成功!");
-//                                                            new SVProgressHUD(OrderDetailsActivity.this).showSuccessWithStatus("提醒发货成功!");
-//                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                ToastUtils.showInfo(netBean.getMessage());
-//                                                            new SVProgressHUD(OrderDetailsActivity.this).showInfoWithStatus(netBean.getMessage());
-//                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(HttpException error, String msg) {
-                                            mDialog.dismiss();
-                                            ToastUtils.showError("网络错误");
-//                                                        mDialog.showErrorWithStatus("网络错误");
-//                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent refundIntent = new Intent(OrderDetailsActivity.this, ApplyForRefundActivity.class);
-                                    refundIntent.putExtra("refundMoney", paymoney);
-                                    refundIntent.putExtra("rid", rid);
-                                    OrderDetailsActivity.this.startActivity(refundIntent);
-                                }
-                            });
-                            break;
-                        case 13://已退款
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(deleteOrder);
-                            mRightButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要删除订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            break;
-                        case 15://待收货
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(confirmReceived);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您要确认收货吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            break;
-                        case 16://待评价
-                            mLeftButton.setText(deleteOrder);
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(publishEvaluate);//发表评价
-                            mLeftButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要删除订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent in = new Intent(OrderDetailsActivity.this, PublishEvaluateActivity.class);
-                                    in.putExtra("rid", rid);
-                                    OrderDetailsActivity.this.startActivity(in);
-                                }
-                            });
-                            break;
-                        case 20://已完成状态
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(deleteOrder);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要删除订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            break;
-                        case -1://已过期
-                            mLeftButton.setVisibility(View.INVISIBLE);
-                            mRightButton.setText(deleteOrder);
-                            mRightButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    alertDialog.setTitle("您确定要删除订单吗？");
-                                    alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                        }
-                                    });
-                                    alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
-                                                @Override
-                                                public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                    toShopOrderListActivity();
-                                                }
-
-                                                @Override
-                                                public void onFailure(HttpException e, String s) {
-
-                                                }
-                                            });
-                                        }
-                                    });
-                                    alertDialog.show();
-
-                                }
-                            });
-                            break;
-                        case 12://从退货的查看详情点进来，底部那俩按钮都要消失
-                            mBottomLayout.setVisibility(View.GONE);
-                            break;
-                    }
-
-
-//                    ShoppingDetailBean.ExpressInfoEntity express_info;
-//                    List<ShoppingDetailBean.ItemsEntity> itemsEntityList;
-
-
-                    if ("0".equals(response.getData().getExist_sub_order())) {
-                        HttpResponse<ShoppingDetailBean2> response2 = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean2>>() { });
-                        ShoppingDetailBean2 shoppingDetailBean2 = response2.getData();
-                        ShoppingDetailBean2.ExpressInfoEntity express_info = shoppingDetailBean2.getExpress_info();
-                        mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
-                        mProvince.setText(express_info.getProvince());
-                        mCity.setText(express_info.getCity());
-                        mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
-                        mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
-                        mDetailsAddress.setText(express_info.getAddress());
-                        mPhone.setText(express_info.getPhone());
-
-                        if (mContainerLayout != null) {
-                            mContainerLayout.removeAllViews();
-                        }
-
-                        final List<ShoppingDetailBean2.ItemsEntity> itemsEntityList = shoppingDetailBean2.getItems();
-                        View view ;
-                        for (int k = 0; k < itemsEntityList.size(); k++) {
-                            view = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
-
-
-                            ImageView imageViewGoods = (ImageView) view.findViewById(R.id.imageView_goods);
-                            TextView textViewGoodsDescription = (TextView) view.findViewById(R.id.textView_goods_description);
-                            TextView textViewSpecification = (TextView) view.findViewById(R.id.textView_specification);
-                            TextView textViewStatus = (TextView) view.findViewById(R.id.textView_status);
-                            TextView textViewPrice = (TextView) view.findViewById(R.id.textView_price);
-
-                            TextView textView1 = (TextView) view.findViewById(R.id.textView1);
-                            TextView textView2 = (TextView) view.findViewById(R.id.textView2);
-
-
-
-                            GlideUtils.displayImage(itemsEntityList.get(k).getCover_url(), imageViewGoods);
-
-                            final int y = k;
-                            view.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-                                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
-                                    OrderDetailsActivity.this.startActivity(intent);
-                                }
-                            });
-                            mContainerLayout.addView(view);
-                        }
-                    } else {
-                        HttpResponse<ShoppingDetailBean> response2 = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() { });
-                        ShoppingDetailBean shoppingdDetailBean = response2.getData();
-                        ShoppingDetailBean.ExpressInfoEntity express_info = shoppingdDetailBean.getExpress_info();
-                        mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
-                        mProvince.setText(express_info.getProvince());
-                        mCity.setText(express_info.getCity());
-                        mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
-                        mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
-                        mDetailsAddress.setText(express_info.getAddress());
-                        mPhone.setText(express_info.getPhone());
-
-                        if (mContainerLayout != null) {
-                            mContainerLayout.removeAllViews();
-                        }
-
-                        final List<ShoppingDetailBean.ItemsEntity> itemsEntityList = shoppingdDetailBean.getItems();
-                        for (int k = 0; k < itemsEntityList.size(); k++) {
-                            mItemView = View.inflate(OrderDetailsActivity.this, R.layout.item_order_content, null);
-                            TextView mTitleItem = (TextView) mItemView.findViewById(R.id.tv_title_order_inner);
-                            TextView mColorItem = (TextView) mItemView.findViewById(R.id.tv_color_order_inner);
-                            TextView mMoneyItem = (TextView) mItemView.findViewById(R.id.tv_money_order_inner);
-                            TextView mCountItem = (TextView) mItemView.findViewById(R.id.tv_count_order_inner);
-                            ImageView mImageItem = (ImageView) mItemView.findViewById(R.id.image_order_inner);
-                            mBitmapUtils.display(mImageItem, itemsEntityList.get(k).getCover_url());
-                            mTitleItem.setText(itemsEntityList.get(k).getName());
-                            if ("null".equals(itemsEntityList.get(k).getSku_name())) {
-                                mColorItem.setVisibility(View.INVISIBLE);
-                            } else {
-                                mColorItem.setText(itemsEntityList.get(k).getSku_name());
-                            }
-                            mColorItem.setText(itemsEntityList.get(k).getSku_name());
-                            mCountItem.setText(String.format("× %s", itemsEntityList.get(k).getQuantity()));
-                            mMoneyItem.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
-                            final int y = k;
-                            mItemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-                                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
-                                    OrderDetailsActivity.this.startActivity(intent);
-                                }
-                            });
-                            mContainerLayout.addView(mItemView);
-                        }
-                    }
-
-
-
-//                List<OrderDetailsAddress> addresses = mDetailsList.get(i).getAddresses();
-//                    for (int j = 0; j < addresses.size(); j++) {
-//                        mDeliverMan.setText(String.format("收货人：%s", mDetailsList.get(i).getAddresses().get(j).getName()));
-//                        mProvince.setText(addresses.get(j).getProvince());
-//                        mCity.setText(addresses.get(j).getCity());
-//                        if (TextUtils.isEmpty(addresses.get(j).getCounty())){
-//                            mCounty.setText("");
-//                        }else {
-//                            mCounty.setText(addresses.get(j).getCounty());
-//                        }
-//
-//                        if (TextUtils.isEmpty(addresses.get(j).getTown())){
-//                            mTown.setText("");
-//                        }else {
-//                            mTown.setText(addresses.get(j).getTown());
-//                        }
-//
-//                        mDetailsAddress.setText(addresses.get(j).getAddress());
-//                        mPhone.setText(addresses.get(j).getPhone());
-//                    }
-//                    if (mContainerLayout != null) {
-//                        mContainerLayout.removeAllViews();
-//                    }
-//                    for (int k = 0; k < mDetailsList.get(i).getProducts().size(); k++) {
-//                        mItemView = View.inflate(OrderDetailsActivity.this,R.layout.item_order_content,null);
-////                        mItemView = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.item_order_content, null);
-//                        TextView mTitleItem = (TextView) mItemView.findViewById(R.id.tv_title_order_inner);
-//                        TextView mColorItem = (TextView) mItemView.findViewById(R.id.tv_color_order_inner);
-//                        TextView mMoneyItem = (TextView) mItemView.findViewById(R.id.tv_money_order_inner);
-//                        TextView mCountItem = (TextView) mItemView.findViewById(R.id.tv_count_order_inner);
-//                        ImageView mImageItem = (ImageView) mItemView.findViewById(R.id.image_order_inner);
-//                        mBitmapUtils.display(mImageItem, mDetailsList.get(i).getProducts().get(k).getCover_url());
-//                        mTitleItem.setText(mDetailsList.get(i).getProducts().get(k).getName());
-//                        if ("null".equals(mDetailsList.get(i).getProducts().get(k).getSku_name())) {
-//                            mColorItem.setVisibility(View.INVISIBLE);
-//                        } else {
-//                            mColorItem.setText(mDetailsList.get(i).getProducts().get(k).getSku_name());
-//                        }
-//                        mColorItem.setText(mDetailsList.get(i).getProducts().get(k).getSku_name());
-//                        mCountItem.setText(String.format("× %s", mDetailsList.get(i).getProducts().get(k).getQuantity()));
-//                        mMoneyItem.setText(String.format("¥%s", mDetailsList.get(i).getProducts().get(k).getSale_price()));
-//                        final int x = i;
-//                        final int y = k;
-//                        mItemView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-//                                intent.putExtra("id", mDetailsList.get(x).getProducts().get(y).getProduct_id());
-//                                OrderDetailsActivity.this.startActivity(intent);
-//                            }
-//                        });
-//                        mContainerLayout.addView(mItemView);
-//                    }
-//                }
-                    if (mDialog != null) {
-                        if (mDialog.isShowing()) {
-                            mDialog.dismiss();
-                        }
-                    }
+                    orderDetailBean = response.getData();
                 } catch (Exception e) {
                     LogUtil.e(TAG, "-----------> e: " + e);
+                }
+
+                refreshUI();
+
+                if (mDialog != null) {
+                    if (mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
                 }
             }
 
@@ -726,6 +135,67 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 ToastUtils.showError("网络错误");
             }
         });
+    }
+
+    private void refreshUI(){
+        initOrderStatus();
+        setBottomData();
+        setOrderGoodsList();
+    }
+
+    private void setOrderGoodsList() {
+        int exist_sub_order = orderDetailBean.getExist_sub_order();
+        if (mContainerLayout != null) {
+            mContainerLayout.removeAllViews();
+        }
+        if (exist_sub_order == 1) { //有子订单
+            List<OrderDetailBean.SubOrdersEntity> sub_orders = orderDetailBean.getSub_orders();
+            for (int m = 0; m < sub_orders.size(); m++) {
+                LinearLayout subOrderView = (LinearLayout) LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details3, null);
+                TextView textView1 = (TextView) subOrderView.findViewById(R.id.textView_order_number);
+                TextView textView2 = (TextView) subOrderView.findViewById(R.id.textView_order_status);
+                TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
+                TextView textViewExpressCode = (TextView) subOrderView.findViewById(R.id.textView_express_code);
+                LinearLayout linearLayoutContainerGoods = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_container_subOrder_details);
+
+                OrderDetailBean.SubOrdersEntity subOrdersEntity = sub_orders.get(m);
+
+                textView1.setText(subOrdersEntity.getId());
+                textView2.setVisibility(View.INVISIBLE);
+                textViewExpress.setText(subOrdersEntity.getExpress_company());
+                textViewExpressCode.setText(subOrdersEntity.getExpress_no());
+                final List<OrderDetailBean.SubOrdersEntity.ItemsEntity> items = subOrdersEntity.getItems();
+                setSubOrderGoodsItem(linearLayoutContainerGoods, items);
+                mContainerLayout.addView(subOrderView);
+            }
+        } else {
+            View subOrderView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details3, null);
+            TextView textView1 = (TextView) subOrderView.findViewById(R.id.textView_order_number);
+            TextView textView2 = (TextView) subOrderView.findViewById(R.id.textView_order_status);
+            TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
+            TextView textViewExpressCode = (TextView) subOrderView.findViewById(R.id.textView_express_code);
+            LinearLayout linearLayoutContainerGoods = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_container_subOrder_details);
+
+            textView1.setText(orderDetailBean.getRid());
+            textView2.setVisibility(View.INVISIBLE);
+            textViewExpress.setText(orderDetailBean.getExpress_company());
+            textViewExpressCode.setText(orderDetailBean.getExpress_no());
+
+            final List<OrderDetailBean.ItemsEntity> itemsEntityList = orderDetailBean.getItems();
+            setGoodsItem(linearLayoutContainerGoods, itemsEntityList);
+            mContainerLayout.addView(subOrderView);
+        }
+    }
+
+    private void setBottomData() {
+        OrderDetailBean.ExpressInfoEntity express_info = orderDetailBean.getExpress_info();
+        mDeliverMan.setText(String.format("收货人：%s", express_info.getName()));
+        mProvince.setText(express_info.getProvince());
+        mCity.setText(express_info.getCity());
+        mCounty.setText(TextUtils.isEmpty(express_info.getCounty()) ? "" : express_info.getCounty());
+        mTown.setText(TextUtils.isEmpty(express_info.getTown()) ? "" : express_info.getTown());
+        mDetailsAddress.setText(express_info.getAddress());
+        mPhone.setText(express_info.getPhone());
     }
 
     private void initView() {
@@ -760,18 +230,6 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         mCall.setOnClickListener(this);
         mRightButton.setOnClickListener(this);
         mLeftButton.setOnClickListener(this);
-
-        String diskCachePath = StorageUtils.getCacheDirectory(MainApplication.getContext()).getAbsolutePath();
-        mBitmapUtils = new BitmapUtils(this, diskCachePath)
-                .configMemoryCacheEnabled(true)
-                .configDefaultCacheExpiry(1024 * 1024 * 4)
-                .configDefaultBitmapMaxSize(300, 300)
-                .configDefaultBitmapConfig(Bitmap.Config.ALPHA_8)
-//                .configDefaultLoadingImage(R.mipmap.default_shopcart)
-//                .configDefaultLoadFailedImage(R.mipmap.default_shopcart)
-                .configThreadPoolSize(5)
-                .configDefaultImageLoadAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
-
     }
 
     @Override
@@ -795,6 +253,485 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                     }
                 });
                 alertDialog.show();
+                break;
+        }
+    }
+
+
+    /**
+     * 加载订单产品条目
+     *
+     * @param linearLayoutContainerGoods
+     * @param itemsEntityList
+     */
+    private void setGoodsItem(LinearLayout linearLayoutContainerGoods, final List<OrderDetailBean.ItemsEntity> itemsEntityList) {
+        for (int k = 0; k < itemsEntityList.size(); k++) {
+            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
+            ImageView imageViewGoods = (ImageView) subOrderGoodsItemView.findViewById(R.id.imageView_goods);
+            TextView textViewGoodsDescription = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_goods_description);
+            TextView textViewSpecification = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_specification);
+            TextView textViewStatus = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_status);
+            TextView textViewPrice = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_price);
+            TextView textView1 = (TextView) subOrderGoodsItemView.findViewById(R.id.textView1);
+            TextView textView2 = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_button_status);
+            GlideUtils.displayImage(itemsEntityList.get(k).getCover_url(), imageViewGoods);
+
+            textViewGoodsDescription.setText(itemsEntityList.get(k).getName());
+            if ("null".equals(itemsEntityList.get(k).getSku_name())) {
+                textViewSpecification.setVisibility(View.INVISIBLE);
+            } else {
+                textViewSpecification.setText(itemsEntityList.get(k).getSku_name());
+            }
+            textViewStatus.setText(itemsEntityList.get(k).getRefund_label());
+            textViewPrice.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
+//            textView1.setText(String.format("× %s", itemsEntityList.get(k).getQuantity()));
+//            textView2.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
+
+            final int refund_button = itemsEntityList.get(k).getRefund_button();
+            switch (refund_button) { //退款行为：0.隐藏；1.退款；2.退货／款
+                case 0: textView2.setVisibility(View.INVISIBLE);
+                    break;
+                case 1: textView2.setText("退款");
+                    break;
+                case 2: textView2.setText("退货");
+                    break;
+            }
+
+            final int y = k;
+            subOrderGoodsItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
+                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
+                    OrderDetailsActivity.this.startActivity(intent);
+                }
+            });
+            textView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = null;
+                    if (refund_button == 1) {
+                        intent = new Intent(OrderDetailsActivity.this, ChargeBackActivity.class);
+                    } else if (refund_button == 2) {
+                        intent = new Intent(OrderDetailsActivity.this, SalesReturnActivity.class);
+                    }
+                    if (intent != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+            linearLayoutContainerGoods.addView(subOrderGoodsItemView);
+        }
+    }
+
+    /**
+     * 加载子订单产品条目
+     *
+     * @param linearLayoutContainerGoods
+     * @param items
+     */
+    private void setSubOrderGoodsItem(LinearLayout linearLayoutContainerGoods, final List<OrderDetailBean.SubOrdersEntity.ItemsEntity> items) {
+        for (int k = 0; k < items.size(); k++) {
+            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
+            ImageView imageViewGoods = (ImageView) subOrderGoodsItemView.findViewById(R.id.imageView_goods);
+            TextView textViewGoodsDescription = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_goods_description);
+            TextView textViewSpecification = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_specification);
+            TextView textViewStatus = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_status);
+            TextView textViewPrice = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_price);
+            TextView textView1 = (TextView) subOrderGoodsItemView.findViewById(R.id.textView1);
+            TextView textView2 = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_button_status);
+            GlideUtils.displayImage(items.get(k).getCover_url(), imageViewGoods);
+
+            textViewGoodsDescription.setText(items.get(k).getName());
+            if ("null".equals(items.get(k).getSku_name())) {
+                textViewSpecification.setVisibility(View.INVISIBLE);
+            } else {
+                textViewSpecification.setText(items.get(k).getSku_name());
+            }
+            textViewStatus.setText(items.get(k).getRefund_label());
+            textViewPrice.setText(String.format("¥%s", items.get(k).getSale_price()));
+//            textView1.setText(String.format("× %s", items.get(k).getQuantity()));
+            final int refund_button = items.get(k).getRefund_button();
+            switch (refund_button) { //退款行为：0.隐藏；1.退款；2.退货／款
+                case 0: textView2.setVisibility(View.INVISIBLE);
+                    break;
+                case 1: textView2.setText("退款");
+                    break;
+                case 2: textView2.setText("退货");
+                    break;
+            }
+
+            final int y = k;
+            subOrderGoodsItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
+                    intent.putExtra("id", items.get(y).getProduct_id());
+                    OrderDetailsActivity.this.startActivity(intent);
+                }
+            });
+            textView2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = null;
+                    if (refund_button == 1) {
+                        intent = new Intent(OrderDetailsActivity.this, ChargeBackActivity.class);
+                    } else if (refund_button == 2) {
+                        intent = new Intent(OrderDetailsActivity.this, SalesReturnActivity.class);
+                    }
+                    if (intent != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+            linearLayoutContainerGoods.addView(subOrderGoodsItemView);
+        }
+    }
+
+    private void initOrderStatus() {
+        String rid1 = orderDetailBean.getRid();
+        String pay_money = orderDetailBean.getPay_money();
+        mOrderNum.setText(rid1);
+        mPayMoney.setText("¥" + pay_money);//实付金额
+
+        String payment_method = orderDetailBean.getPayment_method();
+        mPayway.setText(("a".equals(payment_method) ? "在线支付" : ("b".equals(payment_method) ? "货到付款" : "c".equals(payment_method) ? "其他" : "")));
+
+        mTotalMoney.setText("¥" + orderDetailBean.getTotal_money());//商品总额
+        mFreight.setText("¥" + orderDetailBean.getFreight());//运费
+        if (!orderDetailBean.getExpress_no().isEmpty()) {
+            mLogisticsCompanyLayout.setVisibility(View.VISIBLE);
+            mLogisticsNumberLayout.setVisibility(View.VISIBLE);
+            mLogisticsNumber.setText(orderDetailBean.getExpress_no());
+            mLogisticsCompany.setText(orderDetailBean.getExpress_company());
+        } else {
+            mLogisticsCompanyLayout.setVisibility(View.GONE);
+            mLogisticsNumberLayout.setVisibility(View.GONE);
+        }
+        final String paymoney = orderDetailBean.getPay_money();
+        final int status = orderDetailBean.getStatus();
+        final String rid = mRid;//订单唯一编号
+        String deleteOrder = "删除订单", payNow = "立即支付", applyForRefund = "申请退款", confirmReceived = "确认收货", publishEvaluate = "发表评价", cancelOrder = "取消订单";
+        switch (status) {
+            case 0://已取消状态
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(deleteOrder);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要删除订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+                    }
+                });
+                break;
+            case 1://待付款
+                mLeftButton.setText(cancelOrder);
+                mLeftButton.setVisibility(View.VISIBLE);
+                mRightButton.setText(payNow);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent paynowIntent = new Intent(OrderDetailsActivity.this, PayWayActivity.class);
+                        paynowIntent.putExtra("paymoney", paymoney);
+                        paynowIntent.putExtra("orderId", rid);
+                        startActivity(paynowIntent);
+                    }
+                });
+
+                mLeftButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要取消订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.cancelOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                break;
+            case 10://待发货
+                mLeftButton.setText("提醒发货");
+                mLeftButton.setVisibility(View.VISIBLE);
+                mRightButton.setText(applyForRefund);
+                mLeftButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!mDialog.isShowing()) {
+                            mDialog.show();
+                        }
+                        ClientDiscoverAPI.tixingFahuo(rid, new RequestCallBack<String>() {
+                            @Override
+                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                                mDialog.dismiss();
+                                NetBean netBean = new NetBean();
+                                try {
+                                    Gson gson = new Gson();
+                                    Type type = new TypeToken<NetBean>() {
+                                    }.getType();
+                                    netBean = gson.fromJson(responseInfo.result, type);
+                                } catch (JsonSyntaxException e) {
+                                    Log.e("<<<提醒发货", "数据解析异常");
+                                }
+                                if (netBean.isSuccess()) {
+                                    ToastUtils.showSuccess("提醒发货成功!");
+//                                                            new SVProgressHUD(OrderDetailsActivity.this).showSuccessWithStatus("提醒发货成功!");
+//                                                            Toast.makeText(OrderDetailsActivity.this, "提醒发货成功！", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    ToastUtils.showInfo(netBean.getMessage());
+//                                                            new SVProgressHUD(OrderDetailsActivity.this).showInfoWithStatus(netBean.getMessage());
+//                                                            Toast.makeText(OrderDetailsActivity.this, netBean.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(HttpException error, String msg) {
+                                mDialog.dismiss();
+                                ToastUtils.showError("网络错误");
+//                                                        mDialog.showErrorWithStatus("网络错误");
+//                                                        Toast.makeText(OrderDetailsActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent refundIntent = new Intent(OrderDetailsActivity.this, ApplyForRefundActivity.class);
+                        refundIntent.putExtra("refundMoney", paymoney);
+                        refundIntent.putExtra("rid", rid);
+                        OrderDetailsActivity.this.startActivity(refundIntent);
+                    }
+                });
+                break;
+            case 13://已退款
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(deleteOrder);
+                mRightButton.setVisibility(View.INVISIBLE);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要删除订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                break;
+            case 15://待收货
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(confirmReceived);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您要确认收货吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.confirmReceiveNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                break;
+            case 16://待评价
+                mLeftButton.setText(deleteOrder);
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(publishEvaluate);//发表评价
+                mLeftButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要删除订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(OrderDetailsActivity.this, PublishEvaluateActivity.class);
+                        in.putExtra("rid", rid);
+                        OrderDetailsActivity.this.startActivity(in);
+                    }
+                });
+                break;
+            case 20://已完成状态
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(deleteOrder);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要删除订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                break;
+            case -1://已过期
+                mLeftButton.setVisibility(View.INVISIBLE);
+                mRightButton.setText(deleteOrder);
+                mRightButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.setTitle("您确定要删除订单吗？");
+                        alertDialog.setNegativeButton("不了", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClientDiscoverAPI.deleteOrderNet(rid, new RequestCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        toShopOrderListActivity();
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException e, String s) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialog.show();
+
+                    }
+                });
+                break;
+            case 12://从退货的查看详情点进来，底部那俩按钮都要消失
+                mBottomLayout.setVisibility(View.GONE);
                 break;
         }
     }

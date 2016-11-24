@@ -25,7 +25,7 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.beans.ApplyForRefund;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.user.bean.ShoppingD;
+import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
@@ -79,13 +79,13 @@ public class ApplyForRefundActivity extends Activity implements View.OnClickList
                 if (TextUtils.isEmpty(responseInfo.result)) return;
 
                 try {
-                    HttpResponse<ShoppingD> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingD>>() {
+                    HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() {
                     });
                     if (response.isError()) {
                         LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
                         return;
                     }
-                    ShoppingD shoppingD = response.getData();
+                    ShoppingDetailBean shoppingD = response.getData();
                     mMoney.setText("¥" + shoppingD.getPay_money());
 
 

@@ -1,6 +1,9 @@
 package com.taihuoniao.fineix.personal;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -13,12 +16,18 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
+import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.bean.OrderDetailBean;
+import com.taihuoniao.fineix.utils.DPUtil;
+import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
 import com.taihuoniao.fineix.utils.WindowUtils;
 import com.taihuoniao.fineix.view.CustomHeadView;
@@ -31,7 +40,6 @@ public class ChargeBackActivity extends BaseActivity {
 
     private CustomHeadView customHead;
     private EditText editText1;
-    private LinearLayout linearLayoutChargebackCause;
     private TextView editText2;
     private EditText editText3;
     private Button buttonCommit;
@@ -46,41 +54,29 @@ public class ChargeBackActivity extends BaseActivity {
     protected void initView() {
         customHead = (CustomHeadView) findViewById(R.id.custom_head);
         editText1 = (EditText) findViewById(R.id.editText1);
-        linearLayoutChargebackCause = (LinearLayout) findViewById(R.id.linearLayout_chargeback_cause);
         editText2 = (TextView) findViewById(R.id.editText2);
         editText3 = (EditText) findViewById(R.id.editText3);
         buttonCommit = (Button) findViewById(R.id.button_commit);
         customHead.setHeadCenterTxtShow(true, TITLE);
         WindowUtils.chenjin(this);
+
     }
 
     @Override
     protected void installListener() {
         super.installListener();
-        linearLayoutChargebackCause.setOnClickListener(new View.OnClickListener() {
+        editText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showPopupWindow(v);
             }
         });
-
         buttonCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                requestChargeBack();
-                Toast.makeText(activity, "提交申请", Toast.LENGTH_SHORT).show();
-
-                ClientDiscoverAPI.getRefundList(new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        LogUtil.e(TAG, "--------> responseInfo: " + responseInfo.result);
-                    }
-
-                    @Override
-                    public void onFailure(HttpException e, String s) {
-
-                    }
-                });
+                requestChargeBack();
             }
         });
     }
@@ -94,9 +90,11 @@ public class ChargeBackActivity extends BaseActivity {
         Collections.addAll(list, chargeBackCause);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ChargeBackActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(ChargeBackActivity.this);
+        listView.setPadding(5,5,5,5);
+        listView.setBackgroundResource(R.drawable.background_border_white);
         listView.setAdapter(arrayAdapter);
 
-        popupWindow = new PopupWindow(listView, AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT,  true);
+        popupWindow = new PopupWindow(listView,  DPUtil.dip2px(ChargeBackActivity.this, 166), AbsListView.LayoutParams.WRAP_CONTENT,  true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(v);
@@ -111,17 +109,26 @@ public class ChargeBackActivity extends BaseActivity {
     }
 
     private void requestChargeBack(){
-        String rid = null;
-        String sku_id = null;
-        String refund_type = null;
-        String refund_reason = null;
-        String refund_content = null;
-        String refund_price = null;
+        String rid = "116112406518";
+        String sku_id = "1071045007";
+        String refund_type = "0";
+        String refund_reason = "不想要了";
+        String refund_content = "hvfnadkobvdj";
+        String refund_price = "678.00";
         ClientDiscoverAPI.getApplyProductRefund(rid, sku_id, refund_type, refund_reason, refund_content,
                 refund_price, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) {
+                    return;
+                }
+                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 LogUtil.e(TAG, "--------> responseInfo: " + responseInfo.result);
+
+                if (response.isSuccess()) {
+                    Toast.makeText(activity, "提交申请成功", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ChargeBackActivity.this, ChargeBackDetailsActivity.class));
+                }
             }
 
             @Override

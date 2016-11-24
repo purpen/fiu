@@ -16,6 +16,7 @@ import com.lidroid.xutils.BitmapUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.main.MainApplication;
+import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     private Context context = null;
     private LayoutInflater inflater = null;
     public BitmapUtils bitmapUtils_listview = null;
-    private List<ShoppingDetailBean.ItemsEntity> list = null;
+    private List<OrderDetailBean.ItemsEntity> list = null;
     private OnTwoClickedListener listener = null;//用来传星条数和评价内容两个
 
     public interface OnTwoClickedListener {
@@ -45,7 +46,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     }
 
 
-    public EvaluateAdapter(List<ShoppingDetailBean.ItemsEntity> list, Context context) {
+    public EvaluateAdapter(List<OrderDetailBean.ItemsEntity> list, Context context) {
         super(list, context);
         this.list = list;
         this.context = context;

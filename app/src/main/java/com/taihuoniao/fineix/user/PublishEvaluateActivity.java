@@ -19,6 +19,7 @@ import com.taihuoniao.fineix.adapters.EvaluateAdapter;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
+import com.taihuoniao.fineix.user.bean.OrderDetailBean;
 import com.taihuoniao.fineix.user.bean.ShoppingDetailBean;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -51,8 +52,8 @@ public class PublishEvaluateActivity extends Activity {
     private String mEditContent;
     private WaittingDialog dialog;
 
-    private ShoppingDetailBean shoppingDetailBean;
-    private List<ShoppingDetailBean.ItemsEntity> mListProducts;
+    private OrderDetailBean shoppingDetailBean;
+    private List<OrderDetailBean.ItemsEntity> mListProducts;
 
 
     @Override
@@ -153,7 +154,7 @@ public class PublishEvaluateActivity extends Activity {
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
                 if (TextUtils.isEmpty(responseInfo.result)) return;
-                HttpResponse<ShoppingDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ShoppingDetailBean>>() {});
+                HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() {});
                 if (response.isError()) {
                     LogUtil.e(TAG, "---------> responseInfo: "  + responseInfo.reasonPhrase);
                     return;

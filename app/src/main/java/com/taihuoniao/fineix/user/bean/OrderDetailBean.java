@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user.bean;
 
+
 import java.util.List;
 
 /**
@@ -7,12 +8,11 @@ import java.util.List;
  * Created by Stephen on 2016/11/23.
  */
 
-public class ShoppingDetailBean2 {
-
+public class OrderDetailBean {
     /**
      * _id : 583561a63ffca2043b8b4620
      * rid : 116112306511
-     * items : [{"sku":1031789046,"product_id":1011497002,"quantity":6,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"name":"华米手环","sku_name":"白色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"},{"sku":1031789101,"product_id":1011497002,"quantity":1,"price":0.03,"sale_price":0.03,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"name":"华米手环","sku_name":"绿色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"},{"sku":1081052995,"product_id":1081052995,"quantity":2,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"name":"这是第一个产品吗","sku_name":null,"cover_url":"http://frbird.qiniudn.com/stuff/150330/55193e5c3ffca25a6f8b4cd4-1-p500x500.jpg"}]
+     * items : [{"sku":1031789046,"product_id":1011497002,"quantity":6,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"华米手环","sku_name":"白色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"},{"sku":1031789101,"product_id":1011497002,"quantity":1,"price":0.03,"sale_price":0.03,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"华米手环","sku_name":"绿色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"},{"sku":1081052995,"product_id":1081052995,"quantity":2,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"这是第一个产品吗","sku_name":null,"cover_url":"http://frbird.qiniudn.com/stuff/150330/55193e5c3ffca25a6f8b4cd4-1-p500x500.jpg"}]
      * items_count : 3
      * total_money : 0.11
      * pay_money : 0.11
@@ -44,9 +44,9 @@ public class ShoppingDetailBean2 {
      * gift_money : 0
      * status_label : 等待付款
      * created_on : 1479893414
-     * updated_on : 1479893414
-     * exist_sub_order : 0
-     * sub_orders : [{"id":"116112200331-1","items":[{"sku":1012500678,"product_id":1012500678,"quantity":2,"price":0.03,"sale_price":0.03,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"name":"aaa","sku_name":null,"cover_url":"http://frbird.qiniudn.com/product/160125/56a600928ead0ec702be8170-p500x500.jpg"}]}]
+     * updated_on : 1479957733
+     * exist_sub_order : 1
+     * sub_orders : [{"id":"116112306511-1","items":[{"sku":1031789046,"product_id":1011497002,"quantity":6,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"华米手环","sku_name":"白色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"}],"items_count":1,"split_on":1479957733,"is_sended":0,"sended_on":0,"express_caty":"","express_no":"","supplier_id":"","split_at":"2016-11-24 11:22","sended_at":"1970-01-01 08:00","express_company":""},{"id":"116112306511-2","items":[{"sku":1031789101,"product_id":1011497002,"quantity":1,"price":0.03,"sale_price":0.03,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"华米手环","sku_name":"绿色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"},{"sku":1081052995,"product_id":1081052995,"quantity":2,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"这是第一个产品吗","sku_name":null,"cover_url":"http://frbird.qiniudn.com/stuff/150330/55193e5c3ffca25a6f8b4cd4-1-p500x500.jpg"}],"items_count":2,"split_on":1479957733,"is_sended":0,"sended_on":0,"express_caty":"","express_no":"","supplier_id":"","split_at":"2016-11-24 11:22","sended_at":"1970-01-01 08:00","express_company":""}]
      * created_at : 2016-11-23 17:30
      * current_user_id : 924912
      */
@@ -62,7 +62,7 @@ public class ShoppingDetailBean2 {
     private int discount;
     private int user_id;
     private String addbook_id;
-    private Object addbook;
+    private String addbook;
     private ExpressInfoEntity express_info;
     private int invoice_type;
     private int invoice_caty;
@@ -70,7 +70,7 @@ public class ShoppingDetailBean2 {
     private String invoice_content;
     private String payment_method;
     private String express_caty;
-    private Object express_company;
+    private String express_company;
     private String express_no;
     private int sended_date;
     private String card_code;
@@ -135,7 +135,7 @@ public class ShoppingDetailBean2 {
         this.addbook_id = addbook_id;
     }
 
-    public void setAddbook(Object addbook) {
+    public void setAddbook(String addbook) {
         this.addbook = addbook;
     }
 
@@ -167,7 +167,7 @@ public class ShoppingDetailBean2 {
         this.express_caty = express_caty;
     }
 
-    public void setExpress_company(Object express_company) {
+    public void setExpress_company(String express_company) {
         this.express_company = express_company;
     }
 
@@ -291,7 +291,7 @@ public class ShoppingDetailBean2 {
         return addbook_id;
     }
 
-    public Object getAddbook() {
+    public String getAddbook() {
         return addbook;
     }
 
@@ -323,7 +323,7 @@ public class ShoppingDetailBean2 {
         return express_caty;
     }
 
-    public Object getExpress_company() {
+    public String getExpress_company() {
         return express_company;
     }
 
@@ -560,6 +560,8 @@ public class ShoppingDetailBean2 {
          * vop_id :
          * refund_type : 0
          * refund_status : 0
+         * refund_label :
+         * refund_button : 0
          * name : 华米手环
          * sku_name : 白色
          * cover_url : http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg
@@ -574,6 +576,8 @@ public class ShoppingDetailBean2 {
         private String vop_id;
         private int refund_type;
         private int refund_status;
+        private String refund_label;
+        private int refund_button;
         private String name;
         private String sku_name;
         private String cover_url;
@@ -612,6 +616,14 @@ public class ShoppingDetailBean2 {
 
         public void setRefund_status(int refund_status) {
             this.refund_status = refund_status;
+        }
+
+        public void setRefund_label(String refund_label) {
+            this.refund_label = refund_label;
+        }
+
+        public void setRefund_button(int refund_button) {
+            this.refund_button = refund_button;
         }
 
         public void setName(String name) {
@@ -662,6 +674,14 @@ public class ShoppingDetailBean2 {
             return refund_status;
         }
 
+        public String getRefund_label() {
+            return refund_label;
+        }
+
+        public int getRefund_button() {
+            return refund_button;
+        }
+
         public String getName() {
             return name;
         }
@@ -677,15 +697,75 @@ public class ShoppingDetailBean2 {
 
     public static class SubOrdersEntity {
         /**
-         * id : 116112200331-1
-         * items : [{"sku":1012500678,"product_id":1012500678,"quantity":2,"price":0.03,"sale_price":0.03,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"name":"aaa","sku_name":null,"cover_url":"http://frbird.qiniudn.com/product/160125/56a600928ead0ec702be8170-p500x500.jpg"}]
+         * id : 116112306511-1
+         * items : [{"sku":1031789046,"product_id":1011497002,"quantity":6,"price":0.01,"sale_price":0.01,"kind":0,"vop_id":"","refund_type":0,"refund_status":0,"refund_label":"","refund_button":0,"name":"华米手环","sku_name":"白色","cover_url":"http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg"}]
+         * items_count : 1
+         * split_on : 1479957733
+         * is_sended : 0
+         * sended_on : 0
+         * express_caty :
+         * express_no :
+         * supplier_id :
+         * split_at : 2016-11-24 11:22
+         * sended_at : 1970-01-01 08:00
+         * express_company :
          */
 
         private String id;
+        private int items_count;
+        private int split_on;
+        private int is_sended;
+        private int sended_on;
+        private String express_caty;
+        private String express_no;
+        private String supplier_id;
+        private String split_at;
+        private String sended_at;
+        private String express_company;
         private List<ItemsEntity> items;
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public void setItems_count(int items_count) {
+            this.items_count = items_count;
+        }
+
+        public void setSplit_on(int split_on) {
+            this.split_on = split_on;
+        }
+
+        public void setIs_sended(int is_sended) {
+            this.is_sended = is_sended;
+        }
+
+        public void setSended_on(int sended_on) {
+            this.sended_on = sended_on;
+        }
+
+        public void setExpress_caty(String express_caty) {
+            this.express_caty = express_caty;
+        }
+
+        public void setExpress_no(String express_no) {
+            this.express_no = express_no;
+        }
+
+        public void setSupplier_id(String supplier_id) {
+            this.supplier_id = supplier_id;
+        }
+
+        public void setSplit_at(String split_at) {
+            this.split_at = split_at;
+        }
+
+        public void setSended_at(String sended_at) {
+            this.sended_at = sended_at;
+        }
+
+        public void setExpress_company(String express_company) {
+            this.express_company = express_company;
         }
 
         public void setItems(List<ItemsEntity> items) {
@@ -696,24 +776,66 @@ public class ShoppingDetailBean2 {
             return id;
         }
 
+        public int getItems_count() {
+            return items_count;
+        }
+
+        public int getSplit_on() {
+            return split_on;
+        }
+
+        public int getIs_sended() {
+            return is_sended;
+        }
+
+        public int getSended_on() {
+            return sended_on;
+        }
+
+        public String getExpress_caty() {
+            return express_caty;
+        }
+
+        public String getExpress_no() {
+            return express_no;
+        }
+
+        public String getSupplier_id() {
+            return supplier_id;
+        }
+
+        public String getSplit_at() {
+            return split_at;
+        }
+
+        public String getSended_at() {
+            return sended_at;
+        }
+
+        public String getExpress_company() {
+            return express_company;
+        }
+
         public List<ItemsEntity> getItems() {
             return items;
         }
 
         public static class ItemsEntity {
             /**
-             * sku : 1012500678
-             * product_id : 1012500678
-             * quantity : 2
-             * price : 0.03
-             * sale_price : 0.03
+             * sku : 1031789046
+             * product_id : 1011497002
+             * quantity : 6
+             * price : 0.01
+             * sale_price : 0.01
              * kind : 0
              * vop_id :
              * refund_type : 0
              * refund_status : 0
-             * name : aaa
-             * sku_name : null
-             * cover_url : http://frbird.qiniudn.com/product/160125/56a600928ead0ec702be8170-p500x500.jpg
+             * refund_label :
+             * refund_button : 0
+             * name : 华米手环
+             * sku_name : 白色
+             * cover_url : http://frbird.qiniudn.com/product/160121/56a0934f3ffca26c098ba90e-4-p500x500.jpg
              */
 
             private int sku;
@@ -725,8 +847,10 @@ public class ShoppingDetailBean2 {
             private String vop_id;
             private int refund_type;
             private int refund_status;
+            private String refund_label;
+            private int refund_button;
             private String name;
-            private Object sku_name;
+            private String sku_name;
             private String cover_url;
 
             public void setSku(int sku) {
@@ -765,11 +889,19 @@ public class ShoppingDetailBean2 {
                 this.refund_status = refund_status;
             }
 
+            public void setRefund_label(String refund_label) {
+                this.refund_label = refund_label;
+            }
+
+            public void setRefund_button(int refund_button) {
+                this.refund_button = refund_button;
+            }
+
             public void setName(String name) {
                 this.name = name;
             }
 
-            public void setSku_name(Object sku_name) {
+            public void setSku_name(String sku_name) {
                 this.sku_name = sku_name;
             }
 
@@ -813,11 +945,19 @@ public class ShoppingDetailBean2 {
                 return refund_status;
             }
 
+            public String getRefund_label() {
+                return refund_label;
+            }
+
+            public int getRefund_button() {
+                return refund_button;
+            }
+
             public String getName() {
                 return name;
             }
 
-            public Object getSku_name() {
+            public String getSku_name() {
                 return sku_name;
             }
 

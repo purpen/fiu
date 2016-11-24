@@ -42,7 +42,7 @@
         android:gravity="center_vertical|right">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView_button_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -51,4 +51,9 @@
             android:text="取消退货"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#88cccccc" />
 </LinearLayout>
