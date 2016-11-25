@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,9 +26,9 @@ import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.NetBean;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.personal.ChargeBackActivity;
-import com.taihuoniao.fineix.personal.SalesReturnActivity;
-import com.taihuoniao.fineix.product.ApplyForRefundActivity;
+import com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity;
+import com.taihuoniao.fineix.personal.salesevice.KEY;
+import com.taihuoniao.fineix.personal.salesevice.SalesReturnActivity;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
 import com.taihuoniao.fineix.product.PayWayActivity;
 import com.taihuoniao.fineix.user.bean.OrderDetailBean;
@@ -110,7 +111,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (TextUtils.isEmpty(responseInfo.result)) return;
                 try {
-                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() { });
+                    HttpResponse<OrderDetailBean> response = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<OrderDetailBean>>() {
+                    });
                     if (response.isError()) {
                         LogUtil.e(TAG, "---------> responseInfo: " + responseInfo.reasonPhrase);
                         return;
@@ -137,7 +139,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         });
     }
 
-    private void refreshUI(){
+    private void refreshUI() {
         initOrderStatus();
         setBottomData();
         setOrderGoodsList();
@@ -150,8 +152,13 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         }
         if (exist_sub_order == 1) { //有子订单
             List<OrderDetailBean.SubOrdersEntity> sub_orders = orderDetailBean.getSub_orders();
+
+            View inflate = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details_up_sub, null);
+            ((TextView)inflate.findViewById(R.id.textView_suborder_number)).setText(orderDetailBean.getExpress_no());
+            mContainerLayout.addView(inflate);
+
             for (int m = 0; m < sub_orders.size(); m++) {
-                LinearLayout subOrderView = (LinearLayout) LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details3, null);
+                LinearLayout subOrderView = (LinearLayout) LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.layout_goods_details_order_multi, null);
                 TextView textView1 = (TextView) subOrderView.findViewById(R.id.textView_order_number);
                 TextView textView2 = (TextView) subOrderView.findViewById(R.id.textView_order_status);
                 TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
@@ -162,14 +169,28 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
 
                 textView1.setText(subOrdersEntity.getId());
                 textView2.setVisibility(View.INVISIBLE);
-                textViewExpress.setText(subOrdersEntity.getExpress_company());
-                textViewExpressCode.setText(subOrdersEntity.getExpress_no());
+
+                if (TextUtils.isEmpty(subOrdersEntity.getExpress_company()) || TextUtils.isEmpty(subOrdersEntity.getExpress_no())) {
+                    LinearLayout llExpress = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_express_container);
+                    llExpress.removeAllViews();
+                    TextView textViewHint = new TextView(OrderDetailsActivity.this);
+                    textViewHint.setText("暂时没有物流信息");
+                    llExpress.setGravity(Gravity.CENTER);
+                    llExpress.addView(textViewHint);
+                } else {
+                    textViewExpress.setText(subOrdersEntity.getExpress_company());
+                    textViewExpressCode.setText(subOrdersEntity.getExpress_no());
+                }
+
+                TextView orderNumberTitle = (TextView) subOrderView.findViewById(R.id.textView_order_code_title);
+                orderNumberTitle.setText("子订单号:");
+
                 final List<OrderDetailBean.SubOrdersEntity.ItemsEntity> items = subOrdersEntity.getItems();
                 setSubOrderGoodsItem(linearLayoutContainerGoods, items);
                 mContainerLayout.addView(subOrderView);
             }
         } else {
-            View subOrderView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details3, null);
+            View subOrderView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details_order_single, null);
             TextView textView1 = (TextView) subOrderView.findViewById(R.id.textView_order_number);
             TextView textView2 = (TextView) subOrderView.findViewById(R.id.textView_order_status);
             TextView textViewExpress = (TextView) subOrderView.findViewById(R.id.textView_express);
@@ -178,8 +199,18 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
 
             textView1.setText(orderDetailBean.getRid());
             textView2.setVisibility(View.INVISIBLE);
-            textViewExpress.setText(orderDetailBean.getExpress_company());
-            textViewExpressCode.setText(orderDetailBean.getExpress_no());
+
+            if (TextUtils.isEmpty(orderDetailBean.getExpress_company()) || TextUtils.isEmpty(orderDetailBean.getExpress_no())) {
+                LinearLayout llExpress = (LinearLayout) subOrderView.findViewById(R.id.linearLayout_express_container);
+                llExpress.removeAllViews();
+                TextView textViewHint = new TextView(OrderDetailsActivity.this);
+                textViewHint.setText("暂时没有物流信息");
+                llExpress.setGravity(Gravity.CENTER);
+                llExpress.addView(textViewHint);
+            } else {
+                textViewExpress.setText(orderDetailBean.getExpress_company());
+                textViewExpressCode.setText(orderDetailBean.getExpress_no());
+            }
 
             final List<OrderDetailBean.ItemsEntity> itemsEntityList = orderDetailBean.getItems();
             setGoodsItem(linearLayoutContainerGoods, itemsEntityList);
@@ -266,7 +297,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
      */
     private void setGoodsItem(LinearLayout linearLayoutContainerGoods, final List<OrderDetailBean.ItemsEntity> itemsEntityList) {
         for (int k = 0; k < itemsEntityList.size(); k++) {
-            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
+            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details, null);
             ImageView imageViewGoods = (ImageView) subOrderGoodsItemView.findViewById(R.id.imageView_goods);
             TextView textViewGoodsDescription = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_goods_description);
             TextView textViewSpecification = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_specification);
@@ -282,18 +313,27 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             } else {
                 textViewSpecification.setText(itemsEntityList.get(k).getSku_name());
             }
-            textViewStatus.setText(itemsEntityList.get(k).getRefund_label());
+
+            String refund_label = itemsEntityList.get(k).getRefund_label();
+            if (TextUtils.isEmpty(refund_label)) {
+                textViewStatus.setVisibility(View.GONE);
+            } else {
+                textViewStatus.setText(refund_label);
+                textViewStatus.setVisibility(View.VISIBLE);
+            }
             textViewPrice.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
-//            textView1.setText(String.format("× %s", itemsEntityList.get(k).getQuantity()));
-//            textView2.setText(String.format("¥%s", itemsEntityList.get(k).getSale_price()));
 
             final int refund_button = itemsEntityList.get(k).getRefund_button();
             switch (refund_button) { //退款行为：0.隐藏；1.退款；2.退货／款
-                case 0: textView2.setVisibility(View.INVISIBLE);
+                case 0:
+                    textView2.setVisibility(View.INVISIBLE);
+                    textViewStatus.setVisibility(View.GONE);
                     break;
-                case 1: textView2.setText("退款");
+                case 1:
+                    textView2.setText("退款");
                     break;
-                case 2: textView2.setText("退货");
+                case 2:
+                    textView2.setText("退货");
                     break;
             }
 
@@ -302,7 +342,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-                    intent.putExtra("id", itemsEntityList.get(y).getProduct_id());
+                    intent.putExtra("id", String.valueOf(itemsEntityList.get(y).getProduct_id()));
                     OrderDetailsActivity.this.startActivity(intent);
                 }
             });
@@ -316,6 +356,9 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                         intent = new Intent(OrderDetailsActivity.this, SalesReturnActivity.class);
                     }
                     if (intent != null) {
+                        intent.putExtra(KEY.R_ID, orderDetailBean.getRid());
+                        int sku = itemsEntityList.get(y).getSku();
+                        intent.putExtra(KEY.SKU_ID, String.valueOf(sku));
                         startActivity(intent);
                     }
                 }
@@ -332,7 +375,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
      */
     private void setSubOrderGoodsItem(LinearLayout linearLayoutContainerGoods, final List<OrderDetailBean.SubOrdersEntity.ItemsEntity> items) {
         for (int k = 0; k < items.size(); k++) {
-            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details2, null);
+            View subOrderGoodsItemView = View.inflate(OrderDetailsActivity.this, R.layout.layout_goods_details, null);
             ImageView imageViewGoods = (ImageView) subOrderGoodsItemView.findViewById(R.id.imageView_goods);
             TextView textViewGoodsDescription = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_goods_description);
             TextView textViewSpecification = (TextView) subOrderGoodsItemView.findViewById(R.id.textView_specification);
@@ -353,11 +396,14 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
 //            textView1.setText(String.format("× %s", items.get(k).getQuantity()));
             final int refund_button = items.get(k).getRefund_button();
             switch (refund_button) { //退款行为：0.隐藏；1.退款；2.退货／款
-                case 0: textView2.setVisibility(View.INVISIBLE);
+                case 0:
+                    textView2.setVisibility(View.INVISIBLE);
                     break;
-                case 1: textView2.setText("退款");
+                case 1:
+                    textView2.setText("退款");
                     break;
-                case 2: textView2.setText("退货");
+                case 2:
+                    textView2.setText("退货");
                     break;
             }
 
@@ -366,7 +412,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(OrderDetailsActivity.this, BuyGoodsDetailsActivity.class);
-                    intent.putExtra("id", items.get(y).getProduct_id());
+                    intent.putExtra("id", String.valueOf(items.get(y).getProduct_id()));
                     OrderDetailsActivity.this.startActivity(intent);
                 }
             });
@@ -380,6 +426,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                         intent = new Intent(OrderDetailsActivity.this, SalesReturnActivity.class);
                     }
                     if (intent != null) {
+                        intent.putExtra(KEY.R_ID, orderDetailBean.getRid());
+                        intent.putExtra(KEY.SKU_ID, String.valueOf(items.get(y).getSku()));
                         startActivity(intent);
                     }
                 }
@@ -395,7 +443,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         mPayMoney.setText("¥" + pay_money);//实付金额
 
         String payment_method = orderDetailBean.getPayment_method();
-        mPayway.setText(("a".equals(payment_method) ? "在线支付" : ("b".equals(payment_method) ? "货到付款" : "c".equals(payment_method) ? "其他" : "")));
+//        mPayway.setText(("a".equals(payment_method) ? "在线支付" : ("b".equals(payment_method) ? "货到付款" : "c".equals(payment_method) ? "其他" : "")));
 
         mTotalMoney.setText("¥" + orderDetailBean.getTotal_money());//商品总额
         mFreight.setText("¥" + orderDetailBean.getFreight());//运费
@@ -404,10 +452,11 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
             mLogisticsNumberLayout.setVisibility(View.VISIBLE);
             mLogisticsNumber.setText(orderDetailBean.getExpress_no());
             mLogisticsCompany.setText(orderDetailBean.getExpress_company());
-        } else {
-            mLogisticsCompanyLayout.setVisibility(View.GONE);
-            mLogisticsNumberLayout.setVisibility(View.GONE);
         }
+
+        mLogisticsCompanyLayout.setVisibility(View.GONE);
+        mLogisticsNumberLayout.setVisibility(View.GONE);
+
         final String paymoney = orderDetailBean.getPay_money();
         final int status = orderDetailBean.getStatus();
         final String rid = mRid;//订单唯一编号
@@ -536,15 +585,9 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                         });
                     }
                 });
-                mRightButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent refundIntent = new Intent(OrderDetailsActivity.this, ApplyForRefundActivity.class);
-                        refundIntent.putExtra("refundMoney", paymoney);
-                        refundIntent.putExtra("rid", rid);
-                        OrderDetailsActivity.this.startActivity(refundIntent);
-                    }
-                });
+
+                // 取消底部申请退款按钮
+                mRightButton.setVisibility(View.INVISIBLE);
                 break;
             case 13://已退款
                 mLeftButton.setVisibility(View.INVISIBLE);

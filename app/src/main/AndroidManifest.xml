@@ -71,9 +71,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" />
         <activity
-            android:name=".product.ApplyForRefundActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".user.SelectAddressActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -475,11 +472,11 @@
             android:screenOrientation="portrait" />
 
         <!--退款/售后-->
-        <activity android:name="com.taihuoniao.fineix.personal.ChargeBackAndServiceActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.ChargeBackActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.ChargeBackDetailsActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.SalesReturnActivity" />
-        <activity android:name="com.taihuoniao.fineix.personal.SalesReturnDetailsActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackAndServiceActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.salesevice.ChargeBackDetailsActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.salesevice.SalesReturnActivity" />
+        <activity android:name="com.taihuoniao.fineix.personal.salesevice.SalesReturnDetailsActivity" />
 
     </application>
 

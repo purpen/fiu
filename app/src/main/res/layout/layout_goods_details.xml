@@ -1,71 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="95dp"
-    android:background="#FFFFFF">
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageView_goods"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="15dp"
-        android:src="@mipmap/default_load" />
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="13dp"
-        android:orientation="vertical">
+        android:layout_height="0.5dp"
+        android:background="#88cccccc" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/layout_goods_details_body" />
 
         <TextView
-            android:id="@+id/textView_goods_description"
+            android:id="@+id/textView_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:text="wowstick 1f 男人的口袋工具箱
-创意螺丝刀"
-            android:textColor="#222222"
-            android:textSize="13sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView_specification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLength="13"
-                android:text="颜色：蓝色，数量＊1"
-                android:textColor="#999999"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/textView_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                android:text="退款中"
-                android:textColor="#BE8914"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:maxLines="1"
-            android:text="¥288.00"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:text="退款中"
             android:textColor="#BE8914"
             android:textSize="12sp" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_button_status"
+            android:layout_width="60dp"
+            android:gravity="center"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/background_border_white"
+            android:padding="5dp"
+            android:text="取消退货"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#88cccccc" />
 
 </LinearLayout>

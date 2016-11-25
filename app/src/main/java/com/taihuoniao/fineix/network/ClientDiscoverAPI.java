@@ -1830,6 +1830,19 @@ public class ClientDiscoverAPI {
     }
 
     /**
+     *  获取退款信息
+     *  *
+     * @param callBack
+     */
+    public static HttpHandler<String> getChargeBackInfo(String rId, String skuId, RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/check_refund";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("rid", rId);
+        params.addQueryStringParameter("sku_id", skuId);
+        return MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
      * 申请退款
      *
      * @param callBack
@@ -1845,6 +1858,18 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("refund_reason", refund_reason);
         params.addQueryStringParameter("refund_content", refund_content);
         params.addQueryStringParameter("refund_price", refund_price);
+        return MD5Utils.sign(params, url, callBack);
+    }
+
+    /**
+     * 退款成功详情
+     *
+     * @param callBack
+     */
+    public static HttpHandler<String> getRefundSuccessInfo(String chargebackId,RequestCallBack<String> callBack) {
+        String url = NetworkConstance.BASE_URL + "/shopping/refund_view";
+        RequestParams params = new RequestParams(NetworkConstance.CHARSET);
+        params.addQueryStringParameter("id", chargebackId);
         return MD5Utils.sign(params, url, callBack);
     }
 }

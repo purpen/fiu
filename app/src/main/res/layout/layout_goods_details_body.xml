@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="95dp"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/imageView_goods"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_load" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_goods_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:text="wowstick 1f 男人的口袋工具箱
+创意螺丝刀"
+            android:textColor="#222222"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_specification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLength="13"
+                android:text="颜色：蓝色，数量＊1"
+                android:textColor="#999999"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:maxLines="1"
+            android:text="¥288.00"
+            android:textColor="#BE8914"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.taihuoniao.fineix.user;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import com.taihuoniao.fineix.adapters.OrderViewpagerAdapter;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
 import com.taihuoniao.fineix.beans.User;
+import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
 import com.taihuoniao.fineix.user.returnGoods.ReturnGoodsFragment;
@@ -193,5 +195,11 @@ public class ShopOrderListActivity extends BaseActivity implements TabLayout.OnT
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        startActivity(new Intent(ShopOrderListActivity.this, MainActivity.class));
     }
 }

@@ -1799,7 +1799,7 @@ public class DataPaser {
         });
     }*/
 
-    //申请退款
+  /*  //申请退款
     public static void applyForRefundParser(String rid, String option, String content, final Handler handler) {
         ClientDiscoverAPI.applyForRefundNet(rid, option, content, new RequestCallBack<String>() {
             @Override
@@ -1828,7 +1828,7 @@ public class DataPaser {
             }
         });
     }
-
+*/
     //账户处的订单列表
     public static void orderListParser(String status, String page, String size, final Handler handler) {
         ClientDiscoverAPI.orderListNet(status, page, size, new RequestCallBack<String>() {

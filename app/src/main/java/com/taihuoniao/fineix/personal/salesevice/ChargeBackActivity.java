@@ -1,16 +1,14 @@
-package com.taihuoniao.fineix.personal;
+package com.taihuoniao.fineix.personal.salesevice;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -23,9 +21,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.SubjectData;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
-import com.taihuoniao.fineix.user.bean.OrderDetailBean;
+import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackBean;
+import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultBean;
 import com.taihuoniao.fineix.utils.DPUtil;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -45,6 +43,9 @@ public class ChargeBackActivity extends BaseActivity {
     private Button buttonCommit;
 
     private static final String TITLE = "退款";
+    private String rId;
+    private String skuId;
+    private ChargeBackBean chargeBackBean;
 
     public ChargeBackActivity() {
         super(R.layout.activity_chargeback);
@@ -59,7 +60,6 @@ public class ChargeBackActivity extends BaseActivity {
         buttonCommit = (Button) findViewById(R.id.button_commit);
         customHead.setHeadCenterTxtShow(true, TITLE);
         WindowUtils.chenjin(this);
-
     }
 
     @Override
@@ -68,17 +68,29 @@ public class ChargeBackActivity extends BaseActivity {
         editText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 showPopupWindow(v);
             }
         });
         buttonCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                requestChargeBack();
-                requestChargeBack();
+                if (TextUtils.isEmpty(editText2.getText().toString())) {
+                    Toast.makeText(ChargeBackActivity.this, "退款原因不能为空!", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(editText3.getText().toString().trim())) {
+                    Toast.makeText(ChargeBackActivity.this, "退款说明不能为空！", Toast.LENGTH_SHORT).show();
+                } else {
+                    requestChargeBack(editText1.getText().toString(), editText2.getText().toString(), editText3.getText().toString());
+                }
             }
         });
+    }
+
+
+    @Override
+    protected void requestNet() {
+        rId = getIntent().getStringExtra(KEY.R_ID);
+        skuId = getIntent().getStringExtra(KEY.SKU_ID);
+        requestGetChargeBackInfo();
     }
 
     private void showPopupWindow(View v){
@@ -87,7 +99,14 @@ public class ChargeBackActivity extends BaseActivity {
             return;
         }
         List<String> list = new ArrayList<>();
-        Collections.addAll(list, chargeBackCause);
+        if (chargeBackBean != null) {
+            List<ChargeBackBean.RefundReasonEntity> refund_reason = chargeBackBean.getRefund_reason();
+            for (int i = 0; i < refund_reason.size(); i++) {
+                list.add(refund_reason.get(i).getTitle());
+            }
+        } else {
+            Collections.addAll(list, chargeBackCause);
+        }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ChargeBackActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(ChargeBackActivity.this);
         listView.setPadding(5,5,5,5);
@@ -98,7 +117,6 @@ public class ChargeBackActivity extends BaseActivity {
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(v);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,26 +126,51 @@ public class ChargeBackActivity extends BaseActivity {
         });
     }
 
-    private void requestChargeBack(){
-        String rid = "116112406518";
-        String sku_id = "1071045007";
-        String refund_type = "0";
-        String refund_reason = "不想要了";
-        String refund_content = "hvfnadkobvdj";
-        String refund_price = "678.00";
-        ClientDiscoverAPI.getApplyProductRefund(rid, sku_id, refund_type, refund_reason, refund_content,
-                refund_price, new RequestCallBack<String>() {
+    private void requestGetChargeBackInfo(){
+        ClientDiscoverAPI.getChargeBackInfo(rId, skuId, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 if (responseInfo == null) {
                     return;
                 }
-                HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
+                try {
+                    HttpResponse<ChargeBackBean> chargeBackBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackBean>>(){});
+                    if (chargeBackBeanHttpResponse.isSuccess()) {
+                        chargeBackBean = chargeBackBeanHttpResponse.getData();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                if (chargeBackBean != null) {
+                    editText1.setText(String.format("¥%s",chargeBackBean.getRefund_price()));
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
+    }
+
+    private void requestChargeBack(String price, String refundReason, String refundContent){
+        String refund_type = "1";
+        ClientDiscoverAPI.getApplyProductRefund(rId, skuId, refund_type, refundReason, refundContent,
+                price, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (responseInfo == null) {
+                    return;
+                }
+
+                HttpResponse<ChargeBackResultBean> chargeBackResultBeanHttpResponse = JsonUtil.json2Bean(responseInfo.result, new TypeToken<HttpResponse<ChargeBackResultBean>>(){});
                 LogUtil.e(TAG, "--------> responseInfo: " + responseInfo.result);
 
-                if (response.isSuccess()) {
+                if (chargeBackResultBeanHttpResponse.isSuccess()) {
                     Toast.makeText(activity, "提交申请成功", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChargeBackActivity.this, ChargeBackDetailsActivity.class));
+                    Intent intent = new Intent(ChargeBackActivity.this, ChargeBackDetailsActivity.class);
+                    intent.putExtra(KEY.CHARGEBACK_ID, chargeBackResultBeanHttpResponse.getData().getId());
+                    startActivity(intent);
                 }
             }
 

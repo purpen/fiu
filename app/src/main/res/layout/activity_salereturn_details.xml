@@ -46,6 +46,7 @@
             android:layout_height="85dp"
             android:background="#FFFFFF"
             android:orientation="vertical"
+            android:visibility="gone"
             android:paddingLeft="15dp">
 
             <TextView
@@ -96,8 +97,7 @@
             android:layout_marginTop="10dp"
             android:background="#88cccccc" />
 
-        <include layout="@layout/layout_goods_details" />
-
+        <include layout="@layout/layout_chargeback_goods_info" />
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"

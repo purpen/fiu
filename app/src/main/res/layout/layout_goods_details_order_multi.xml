@@ -11,7 +11,14 @@
         android:layout_height="0.5dp"
         android:background="#88cccccc" />
 
-    <include layout="@layout/layout_goods_details2_up" />
+    <include layout="@layout/layout_goods_details_up" />
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="#88cccccc" />-->
+
+    <!--<include layout="@layout/layout_goods_details_up_sub" />-->
 
     <LinearLayout
         android:id="@+id/linearLayout_container_subOrder_details"
@@ -21,6 +28,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/layout_goods_details2_down" />
+    <include layout="@layout/layout_goods_details_down" />
 
 </LinearLayout>
