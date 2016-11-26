@@ -53,7 +53,7 @@ public class PublishEvaluateActivity extends Activity {
     private WaittingDialog dialog;
 
     private OrderDetailBean shoppingDetailBean;
-    private List<OrderDetailBean.ItemsEntity> mListProducts;
+    private List<OrderDetailBean.ItemsBean> mListProducts;
 
 
     @Override

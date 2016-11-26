@@ -20,7 +20,6 @@ import com.taihuoniao.fineix.beans.User;
 import com.taihuoniao.fineix.main.MainActivity;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.user.fragments.ShopOrderFragment;
-import com.taihuoniao.fineix.user.returnGoods.ReturnGoodsFragment;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.utils.Util;

@@ -33,7 +33,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     private Context context = null;
     private LayoutInflater inflater = null;
     public BitmapUtils bitmapUtils_listview = null;
-    private List<OrderDetailBean.ItemsEntity> list = null;
+    private List<OrderDetailBean.ItemsBean> list = null;
     private OnTwoClickedListener listener = null;//用来传星条数和评价内容两个
 
     public interface OnTwoClickedListener {
@@ -46,7 +46,7 @@ public class EvaluateAdapter extends THNBaseAdapter {
     }
 
 
-    public EvaluateAdapter(List<OrderDetailBean.ItemsEntity> list, Context context) {
+    public EvaluateAdapter(List<OrderDetailBean.ItemsBean> list, Context context) {
         super(list, context);
         this.list = list;
         this.context = context;

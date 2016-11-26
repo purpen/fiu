@@ -4,12 +4,12 @@ import java.util.List;
 
 /**
  * Created by Stephen on 2016/11/25.
-     */
+ */
 
-    public class ChargeBackBean {
+public class ChargeBackBean {
 
-        /**
-         * product_id : 1081052995
+    /**
+     * product_id : 1081052995
      * quantity : 2
      * refund_price : 0.02
      * title : 这是第一个产品吗

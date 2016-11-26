@@ -561,11 +561,7 @@ public class FindFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getRawY() != lastY) {
-            if (event.getRawY() > lastY) {
-                isUp = false;
-            } else {
-                isUp = true;
-            }
+            isUp = event.getRawY() <= lastY;
             lastY = event.getRawY();
         }
         return false;

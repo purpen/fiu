@@ -537,11 +537,7 @@ public class WellGoodsFragment extends BaseFragment implements View.OnClickListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getRawY() != lastY) {
-            if (event.getRawY() > lastY) {
-                isUp = false;
-            } else {
-                isUp = true;
-            }
+            isUp = event.getRawY() <= lastY;
             lastY = event.getRawY();
         }
         return false;

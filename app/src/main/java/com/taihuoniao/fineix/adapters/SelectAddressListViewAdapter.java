@@ -116,11 +116,7 @@ public class SelectAddressListViewAdapter extends BaseAdapter {
                     if (row.isSelected){
                         row.isSelected=false;
                     }else {
-                        if (TextUtils.equals(item._id,row._id)){
-                            row.isSelected=true;
-                        }else {
-                            row.isSelected=false;
-                        }
+                        row.isSelected = TextUtils.equals(item._id, row._id);
                     }
                 }
                 if (!TextUtils.equals(item._id,addressId)){

@@ -322,11 +322,7 @@ public class ActivityDetailActivity extends BaseActivity implements View.OnClick
                 int size = prizeSights.data.size();
                 for (int i=0;i<size;i++){
                     if (size>1){
-                        if (i==size-1){
-                            prizeSights.data.get(i).showBottom=false;
-                        }else {
-                            prizeSights.data.get(i).showBottom=true;
-                        }
+                        prizeSights.data.get(i).showBottom = i != size - 1;
                     } else {
                         prizeSights.data.get(i).showBottom=false;
                     }
