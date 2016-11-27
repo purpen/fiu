@@ -84,7 +84,7 @@ public class SaleAfterListAdapter extends BaseAdapter {
             mHolder.textViewOrderNumber.setText(rowsEntity.getNumber());
             mHolder.textViewOrderStatus.setText(rowsEntity.getStage_label());
             mHolder.textViewOrderDate.setText(rowsEntity.getCreated_at());
-            mHolder.textViewOrderMoney.setText(String.format("%s", rowsEntity.getRefund_price()));
+            mHolder.textViewOrderMoney.setText(String.format("¥%s", rowsEntity.getRefund_price()));
 
             mHolder.relativeLayoutGoodsInfo.setOnClickListener(onClickListener);
             mHolder.relativeLayoutGoodsInfo.setTag(R.id.relativeLayout_good_info, rowsEntity.getProduct_id());

@@ -54,6 +54,7 @@
             android:drawableRight="@mipmap/option_chargeback_cause"
             android:gravity="center_vertical"
             android:hint="退款原因"
+            android:textSize="14sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:textColor="#999999" />

@@ -140,20 +140,26 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
         mDialog = new WaittingDialog(activity);
     }
 
+    public static int COUNT;
+
     @OnClick({R.id.bt_send_code, R.id.btn_wechat, R.id.btn_sina, R.id.btn_qq})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_send_code:
-                String phone = maskedEditText.getUnmaskedText();
-                if (TextUtils.isEmpty(phone)) {
-                    ToastUtils.showInfo("请输入手机号");
-                    return;
+//                String phone = maskedEditText.getUnmaskedText();
+//                if (TextUtils.isEmpty(phone)) {
+//                    ToastUtils.showInfo("请输入手机号");
+//                    return;
+//                }
+//                if (!EmailUtils.isMobileNO(phone)) {
+//                    ToastUtils.showInfo("请输入正确手机号");
+//                    return;
+//                }
+//                isPhoneRegisted(phone);
+
+                for(int i = 0; i< 1000000; i ++) {
+                    getCheckCode("15869584244");
                 }
-                if (!EmailUtils.isMobileNO(phone)) {
-                    ToastUtils.showInfo("请输入正确手机号");
-                    return;
-                }
-                isPhoneRegisted(phone);
                 break;
             case R.id.btn_wechat:
                 if (mDialog != null) {
@@ -248,22 +254,25 @@ public class SendCheckCodeFragment extends MyBaseFragment implements Handler.Cal
                 if (responseInfo.result == null) return;
                 HttpResponse response = JsonUtil.fromJson(responseInfo.result, HttpResponse.class);
                 if (response.isSuccess()) {
-                    if (activity instanceof ToRegisterActivity) {
-                        ToRegisterActivity registerActivity = (ToRegisterActivity) SendCheckCodeFragment.this.activity;
-                        ViewPager viewPager = registerActivity.getViewPager();
-                        if (null != viewPager) {
-                            viewPager.setCurrentItem(1);
-                            registerActivity.getRegisterInfo().mobile = phone;
-                        }
-                    }
+                    COUNT ++;
+
+                    LogUtil.e(TAG, "--------> checkCode count: " + COUNT);
+//                    if (activity instanceof ToRegisterActivity) {
+//                        ToRegisterActivity registerActivity = (ToRegisterActivity) SendCheckCodeFragment.this.activity;
+//                        ViewPager viewPager = registerActivity.getViewPager();
+//                        if (null != viewPager) {
+//                            viewPager.setCurrentItem(1);
+//                            registerActivity.getRegisterInfo().mobile = phone;
+//                        }
+//                    }
                     return;
                 }
-                ToastUtils.showError(response.getMessage());
+//                ToastUtils.showError(response.getMessage());
             }
 
             @Override
             public void onFailure(HttpException e, String s) {
-                ToastUtils.showError(R.string.network_err);
+//                ToastUtils.showError(R.string.network_err);
             }
         }, phone);
     }

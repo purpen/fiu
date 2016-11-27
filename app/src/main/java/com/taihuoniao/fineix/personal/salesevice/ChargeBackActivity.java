@@ -21,6 +21,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.main.MainApplication;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackBean;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultBean;
@@ -110,10 +111,12 @@ public class ChargeBackActivity extends BaseActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ChargeBackActivity.this, R.layout.simple_list_item_1, R.id.text1, list);
         ListView listView = new ListView(ChargeBackActivity.this);
         listView.setPadding(5,5,5,5);
+        listView.setDividerHeight(0);
         listView.setBackgroundResource(R.drawable.background_border_white);
         listView.setAdapter(arrayAdapter);
 
-        popupWindow = new PopupWindow(listView,  DPUtil.dip2px(ChargeBackActivity.this, 166), AbsListView.LayoutParams.WRAP_CONTENT,  true);
+        int listViewWidth = MainApplication.getContext().getScreenWidth() - DPUtil.dip2px(ChargeBackActivity.this, 30);
+        popupWindow = new PopupWindow(listView, listViewWidth , AbsListView.LayoutParams.WRAP_CONTENT,  true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(v);

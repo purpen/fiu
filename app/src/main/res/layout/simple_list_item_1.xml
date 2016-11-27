@@ -10,7 +10,8 @@
         android:id="@+id/text1"
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
+        android:textColor="@color/selector_text_color"
         android:maxLines="1"
         android:textSize="14sp" />
 
