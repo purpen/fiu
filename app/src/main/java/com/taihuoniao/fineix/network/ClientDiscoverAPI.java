@@ -1,7 +1,5 @@
 package com.taihuoniao.fineix.network;
 
-import android.text.TextUtils;
-
 import com.baidu.mapapi.model.LatLng;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
@@ -9,7 +7,6 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.beans.LoginInfo;
-import com.taihuoniao.fineix.common.Constant;
 import com.taihuoniao.fineix.user.EditUserInfoActivity;
 import com.taihuoniao.fineix.utils.Constants;
 import com.taihuoniao.fineix.utils.LogUtil;
@@ -1153,7 +1150,7 @@ public class ClientDiscoverAPI {
         String url = NetworkConstance.BASE_URL + "/shopping/checkout";
         RequestParams params = new RequestParams(NetworkConstance.CHARSET);
         params.addQueryStringParameter("array", array);
-        params.addQueryStringParameter("referral_code", TextUtils.isEmpty(SPUtil.read("referral_code")) ? Constant.SHARE_CODE : SPUtil.read("referral_code" ));
+        params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
     }
 
@@ -1203,7 +1200,7 @@ public class ClientDiscoverAPI {
         params.addQueryStringParameter("target_id", target_id);
         params.addQueryStringParameter("type", type);
         params.addQueryStringParameter("n", n);
-        params.addQueryStringParameter("referral_code", TextUtils.isEmpty(SPUtil.read("referral_code")) ? Constant.SHARE_CODE : SPUtil.read("referral_code" ));
+        params.addQueryStringParameter("referral_code", SPUtil.read("referral_code" ));
         HttpHandler<String> httpHandler = MD5Utils.sign(params, url, callBack);
         return httpHandler;
     }

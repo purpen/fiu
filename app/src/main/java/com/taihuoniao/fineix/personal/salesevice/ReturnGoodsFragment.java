@@ -14,12 +14,11 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseFragment;
 import com.taihuoniao.fineix.beans.HttpResponse;
-import com.taihuoniao.fineix.beans.OrderEntity;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.adapter.SaleAfterListAdapter;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackListBean;
 import com.taihuoniao.fineix.product.BuyGoodsDetailsActivity;
-import com.taihuoniao.fineix.user.OrderDetailsActivity;
 import com.taihuoniao.fineix.utils.JsonUtil;
 import com.taihuoniao.fineix.utils.ToastUtils;
 import com.taihuoniao.fineix.view.WaittingDialog;
@@ -43,18 +42,11 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.return_progressBar)
     ProgressBar progressBar;
 
-    private SaleAfterListAdapter mAdapter;
-    private List<OrderEntity> mList = new ArrayList<>();
-    private WaittingDialog mDialog;
-
     private int curPage = 1;
-    private String size = "8";
-    private List<ChargeBackListBean.RowsBean> rows;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+    private static final String size = "8";
+    private SaleAfterListAdapter mAdapter;
+    private WaittingDialog mDialog;
+    private List<ChargeBackListBean.RowsEntity> rows;
 
     @Override
     protected View initView() {
@@ -68,13 +60,12 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         }
         ListView listView_show = pullToRefreshView.getRefreshableView();
         listView_show.setCacheColorHint(0);
+
         //下拉监听
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //页码从新开始
                 curPage = 1;
-                //开始刷新
                 orderListParser();
             }
         });
@@ -108,20 +99,16 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
         orderListParser();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
-
     private void orderListParser() {
-
         if (!mDialog.isShowing()) {
             mDialog.show();
         }
-
         ClientDiscoverAPI.getRefundList(String.valueOf(curPage), size, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -137,19 +124,25 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ToastUtils.showError("加载错误");
+                    ToastUtils.showError(App.getString(R.string.hint_load_error));
                 }
 
                 pullToRefreshView.onRefreshComplete();
                 mDialog.dismiss();
-                if (refundListData != null) {
+                if (refundListData != null && refundListData.getRows() != null) {
                     if (curPage == 1) {
                         rows.clear();
                     }
+
                     rows.addAll(refundListData.getRows());
                     mAdapter.notifyDataSetChanged();
+                    try {
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    ToastUtils.showError("没有数据了");
+                    ToastUtils.showError(App.getString(R.string.hint_load_without_data));
                 }
             }
 
@@ -157,7 +150,7 @@ public class ReturnGoodsFragment extends BaseFragment implements View.OnClickLis
             public void onFailure(HttpException e, String s) {
                 progressBar.setVisibility(View.GONE);
                 mDialog.dismiss();
-                ToastUtils.showError("网络错误");
+                ToastUtils.showError(App.getString(R.string.hint_load_net_error));
             }
         });
     }

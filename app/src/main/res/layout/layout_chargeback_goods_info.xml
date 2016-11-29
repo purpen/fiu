@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="#FFFFFF"
-    tools:showIn="@layout/activity_chargeback_details">
+    tools:showIn="@layout/activity_salesafter_chargeback_details">
 
     <ImageView
         android:id="@+id/imageView_goods"
@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
@@ -29,9 +30,9 @@
             android:id="@+id/textView_goods_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="wowstick 1f 男人的口袋工具箱
-创意螺丝刀"
             android:textColor="#222222"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="13sp" />
 
         <TextView
@@ -39,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="颜色：蓝色，数量＊1"
             android:textColor="#999999"
             android:textSize="11sp" />
 
@@ -48,7 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
-            android:text="¥288.00"
             android:textColor="#BE8914"
             android:textSize="12sp" />
     </LinearLayout>

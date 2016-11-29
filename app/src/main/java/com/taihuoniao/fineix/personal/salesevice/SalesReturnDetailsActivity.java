@@ -14,6 +14,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.taihuoniao.fineix.R;
 import com.taihuoniao.fineix.base.BaseActivity;
 import com.taihuoniao.fineix.beans.HttpResponse;
+import com.taihuoniao.fineix.main.App;
 import com.taihuoniao.fineix.network.ClientDiscoverAPI;
 import com.taihuoniao.fineix.personal.salesevice.bean.ChargeBackResultDetailsBean;
 import com.taihuoniao.fineix.user.ShopOrderListActivity;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 public class SalesReturnDetailsActivity extends BaseActivity {
 
     @Bind(R.id.custom_head)
-    CustomHeadView custom_head;
+    CustomHeadView customHead;
     @Bind(R.id.textView_goods_district)
     TextView textViewGoodsDistrict;
     @Bind(R.id.textView_goods_address)
@@ -41,8 +42,6 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     TextView textViewGoodsDescription;
     @Bind(R.id.textView_specification)
     TextView textViewSpecification;
-    @Bind(R.id.textView_status)
-    TextView textViewStatus;
     @Bind(R.id.textView_price)
     TextView textViewPrice;
     @Bind(R.id.textView1)
@@ -53,19 +52,18 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     TextView textView3;
     @Bind(R.id.textView4)
     TextView textView4;
+    @Bind(R.id.textView_chargeBack_requst_date)
+    TextView textViewChargeBackRequstDate;
     @Bind(R.id.textView5)
     TextView textView5;
     @Bind(R.id.linearLayout_container)
     LinearLayout linearLayoutContainer;
-    @Bind(R.id.textView_chargeBack_requst_date)
-    TextView textViewChargeBackRequstDate;
 
-    private static final String TITLE = "退货详情";
     private String chargeBackId;
     private ChargeBackResultDetailsBean chargeBackResultDetailsBean;
 
     public SalesReturnDetailsActivity() {
-        super(R.layout.activity_salereturn_details);
+        super(R.layout.activity_salesafter_salereturn_details);
     }
 
     @Override
@@ -75,7 +73,7 @@ public class SalesReturnDetailsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        custom_head.setHeadCenterTxtShow(true, TITLE);
+        customHead.setHeadCenterTxtShow(true, App.getString(R.string.title_salesAfter_salesReturn_details));
         WindowUtils.chenjin(this);
     }
 
@@ -130,7 +128,7 @@ public class SalesReturnDetailsActivity extends BaseActivity {
         textView4.setText(String.valueOf(chargeBackResultDetailsBean.get_id()));
         String refund_at = chargeBackResultDetailsBean.getRefund_at();
         textView5.setText(TextUtils.isEmpty(refund_at) ? chargeBackResultDetailsBean.getCreated_at() : refund_at);
-        textViewChargeBackRequstDate.setText(TextUtils.isEmpty(refund_at) ? "申请时间" : "退货时间");
+        textViewChargeBackRequstDate.setText(TextUtils.isEmpty(refund_at) ? App.getString(R.string.text_salesAfter_chargeBack_details_initDate) : App.getString(R.string.text_salesAfter_chargeBack_details_finishDate));
     }
 
 
@@ -142,7 +140,6 @@ public class SalesReturnDetailsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 }

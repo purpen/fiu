@@ -109,41 +109,6 @@
     <string name="locating">定位中…</string>
     <string name="location_error">定位失败</string>
     <string name="complete">完成</string>
-    <string-array name="mine_gv_txt">
-        <item>订单</item>
-        <item>消息</item>
-        <item>订阅</item>
-        <item>收藏</item>
-        <item>赞过</item>
-        <item>积分</item>
-        <item>红包</item>
-        <item>收货地址</item>
-        <item>退款/售后</item>
-    </string-array>
-
-    <string-array name="partner_name">
-        <item>淘宝</item>
-        <item>天猫</item>
-        <item>京东</item>
-        <item>亚马逊</item>
-    </string-array>
-
-    <string-array name="favorite_tabs">
-        <item>情境</item>
-        <item>产品</item>
-    </string-array>
-
-    <string-array name="subject_tab">
-        <item>文章</item>
-        <item>活动</item>
-        <item>新品</item>
-        <item>促销</item>
-    </string-array>
-    <string-array name="activity_detail_tab">
-        <item>活动规则</item>
-        <item>参与的情境</item>
-        <item>活动结果</item>
-    </string-array>
     <string name="please_input">请输入</string>
     <string name="loading">加载中…</string>
     <string name="btn_done">OK</string>
@@ -169,11 +134,6 @@
     <string name="select_address">请选择地址</string>
     <string name="input_signature">您还没有个性签名</string>
     <string name="complete_user_info">选好了，开始Fiu之旅</string>
-    <string-array name="user_gender">
-        <item>男</item>
-        <item>女</item>
-        <item>保密</item>
-    </string-array>
     <string name="first_in_qing_title">情境定位</string>
     <string name="first_in_qing_des">挪动图标，发现全世界的美事儿，给心思找个落脚点</string>
     <string name="first_in_jing_title">情境布局</string>
@@ -187,37 +147,7 @@
     <string name="order_interest_qj">触动双眸的、与我共鸣的、鲜明新奇的，关注地盘给印象一个回忆的中轴线</string>
     <!--<string name="order_interest_qj">现在你可以订阅感兴趣的情境</string>-->
     <string name="complete_info">猜来猜去的游戏已落伍，取一个昵称，撕开日常标签，给同路者关注你的机会</string>
-    <string-array name="user_tags">
-        <item>创业先锋</item>
-        <item>IT互联网</item>
-        <item>设计师</item>
-        <item>女神</item>
-        <item>公务员</item>
-        <item>职场新人</item>
-        <item>女强人</item>
-        <item>白领</item>
-        <item>学生</item>
-        <item>买手</item>
-        <item>程序猿</item>
-        <item>BOSS</item>
-        <item>直男</item>
-        <item>驴友</item>
-        <item>吃货</item>
-        <item>单身</item>
-        <item>文艺范</item>
-    </string-array>
     <string name="select_tag_tip">选择一个标签或输入15字以内的描述</string>
-    <string-array name="official_tags">
-        <item>大咖</item>
-        <item>行家</item>
-        <item>媒体</item>
-        <item>摄影师</item>
-        <item>匠人</item>
-        <item>CEO</item>
-        <item>设计狮</item>
-        <item>红人</item>
-        <item>诗人</item>
-    </string-array>
     <string name="user_center_qj_tip">每个地盘都有故事，来都来了，讲讲你的故事吧</string>
     <string name="user_center_qj_tip1">你们好像在哪儿见过，来看看他的足迹吧</string>
     <string name="user_center_cj_tip">你还没有发表过新情境哦，快来Fiu一下嘛</string>
@@ -454,5 +384,24 @@
     <string name="jinghao">#</string>
     <string name="to_buy_and_take_comment">快购买商品评论一下吧</string>
     <string name="search_qj_and_user">搜索情境或用户</string>
+
+    <!--退款/售后-->
+    <string name="title_salesAfter_chargeBack">退款</string>
+    <string name="text_salesAfter_chargeBack_number">"退款编号: "</string>
+    <string name="warn_salesAfter_chargeBack_cause_error">退款原因不能为空!</string>
+    <string name="warn_salesAfter_chargeBack_explain_error">退款说明不能为空！</string>
+    <string name="hint_salesAfter_chargeBack_request_success">提交申请成功</string>
+    <string name="title_salesAfterList">退款/售后</string>
+    <string name="title_salesAfter_chargeBack_details">退款详情</string>
+    <string name="text_salesAfter_chargeBack_details_initDate">申请时间</string>
+    <string name="text_salesAfter_chargeBack_details_finishDate">退款时间</string>
+    <string name="title_salesAfter_chargeBack_result">退款详情</string>
+    <string name="hint_load_error">加载错误</string>
+    <string name="hint_load_without_data">没有数据了</string>
+    <string name="hint_load_net_error">网络错误</string>
+    <string name="title_salesAfter_salesReturn">退货</string>
+    <string name="warn_salesAfter_salesReturn_cause_error">退货原因不能为空!</string>
+    <string name="warn_salesAfter_salesReturn_explain_error">退货说明不能为空！</string>
+    <string name="title_salesAfter_salesReturn_details">退货详情</string>
 
 </resources>

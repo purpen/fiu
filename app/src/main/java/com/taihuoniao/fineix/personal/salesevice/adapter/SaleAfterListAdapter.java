@@ -25,21 +25,17 @@ import java.util.List;
 public class SaleAfterListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private AlertDialog.Builder alertDialog;
-    private WaittingDialog mdialog;
-    private View mView;
-    private List<ChargeBackListBean.RowsBean> list;
-    private View.OnClickListener onClickListener;
+    private List<ChargeBackListBean.RowsEntity> list;
+    private View.OnClickListener mOnClickListener;
 
-    public SaleAfterListAdapter(List<ChargeBackListBean.RowsBean> rows, Context context) {
+    public SaleAfterListAdapter(List<ChargeBackListBean.RowsEntity> rows, Context context) {
         this(rows, context, null);
     }
-    public SaleAfterListAdapter(List<ChargeBackListBean.RowsBean> rows, Context context, View.OnClickListener onClickListener) {
+
+    public SaleAfterListAdapter(List<ChargeBackListBean.RowsEntity> rows, Context context, View.OnClickListener onClickListener) {
         mInflater = LayoutInflater.from(context);
-        alertDialog = new AlertDialog.Builder(context);
-        mdialog = new WaittingDialog(context);
         this.list = rows;
-        this.onClickListener = onClickListener;
+        this.mOnClickListener = onClickListener;
     }
 
     @Override
@@ -62,12 +58,12 @@ public class SaleAfterListAdapter extends BaseAdapter {
         ViewHolder mHolder;
         if (convertView == null) {
             mHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.item_sale_after, null);
+            convertView = mInflater.inflate(R.layout.item_salesafter_goodsinfo, null);
             mHolder.textViewOrderCodeTitle = (TextView) convertView.findViewById(R.id.textView_order_code_title);
             mHolder.textViewOrderNumber = (TextView) convertView.findViewById(R.id.textView_order_number);
             mHolder.textViewOrderStatus = (TextView) convertView.findViewById(R.id.textView_order_status);
             mHolder.textViewOrderDate = (TextView) convertView.findViewById(R.id.textView_order_date);
-            mHolder.textViewOrderMoney = (TextView)convertView. findViewById(R.id.textView_order_money);
+            mHolder.textViewOrderMoney = (TextView) convertView.findViewById(R.id.textView_order_money);
             mHolder.imageViewGoods = (ImageView) convertView.findViewById(R.id.imageView_goods);
             mHolder.textViewGoodsDescription = (TextView) convertView.findViewById(R.id.textView_goods_description);
             mHolder.textViewSpecification = (TextView) convertView.findViewById(R.id.textView_specification);
@@ -78,9 +74,9 @@ public class SaleAfterListAdapter extends BaseAdapter {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        ChargeBackListBean.RowsBean rowsEntity = list.get(position);
+        ChargeBackListBean.RowsEntity rowsEntity = list.get(position);
         if (rowsEntity != null) {
-            mHolder.textViewOrderCodeTitle.setText("退款编号: ");
+            mHolder.textViewOrderCodeTitle.setText(R.string.text_salesAfter_chargeBack_number);
             mHolder.textViewOrderNumber.setText(String.valueOf(rowsEntity.get_id()));
             mHolder.textViewOrderStatus.setText(rowsEntity.getStage_label());
             mHolder.textViewOrderDate.setText(rowsEntity.getCreated_at());
@@ -89,7 +85,7 @@ public class SaleAfterListAdapter extends BaseAdapter {
 //            mHolder.relativeLayoutGoodsInfo.setOnClickListener(onClickListener);
 //            mHolder.relativeLayoutGoodsInfo.setTag(R.id.relativeLayout_good_info, rowsEntity.getProduct_id());
 
-            ChargeBackListBean.RowsBean.ProductBean product = rowsEntity.getProduct();
+            ChargeBackListBean.RowsEntity.ProductEntity product = rowsEntity.getProduct();
             if (product != null) {
                 GlideUtils.displayImageFadein(product.getCover_url(), mHolder.imageViewGoods);
                 mHolder.textViewGoodsDescription.setText(product.getTitle());

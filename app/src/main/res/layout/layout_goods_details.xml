@@ -24,7 +24,6 @@
             android:layout_centerInParent="true"
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
-            android:text="退款中"
             android:textColor="#BE8914"
             android:textSize="12sp" />
 

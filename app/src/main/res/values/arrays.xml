@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mine_gv_txt">
+        <item>订单</item>
+        <item>消息</item>
+        <item>订阅</item>
+        <item>收藏</item>
+        <item>赞过</item>
+        <item>积分</item>
+        <item>红包</item>
+        <item>收货地址</item>
+        <item>退款/售后</item>
+    </string-array>
+
+    <string-array name="partner_name">
+        <item>淘宝</item>
+        <item>天猫</item>
+        <item>京东</item>
+        <item>亚马逊</item>
+    </string-array>
+
+    <string-array name="favorite_tabs">
+        <item>情境</item>
+        <item>产品</item>
+    </string-array>
+
+    <string-array name="subject_tab">
+        <item>文章</item>
+        <item>活动</item>
+        <item>新品</item>
+        <item>促销</item>
+    </string-array>
+
+    <string-array name="activity_detail_tab">
+        <item>活动规则</item>
+        <item>参与的情境</item>
+        <item>活动结果</item>
+    </string-array>
+
+    <string-array name="user_gender">
+        <item>男</item>
+        <item>女</item>
+        <item>保密</item>
+    </string-array>
+
+    <string-array name="user_tags">
+        <item>创业先锋</item>
+        <item>IT互联网</item>
+        <item>设计师</item>
+        <item>女神</item>
+        <item>公务员</item>
+        <item>职场新人</item>
+        <item>女强人</item>
+        <item>白领</item>
+        <item>学生</item>
+        <item>买手</item>
+        <item>程序猿</item>
+        <item>BOSS</item>
+        <item>直男</item>
+        <item>驴友</item>
+        <item>吃货</item>
+        <item>单身</item>
+        <item>文艺范</item>
+    </string-array>
+
+    <string-array name="official_tags">
+        <item>大咖</item>
+        <item>行家</item>
+        <item>媒体</item>
+        <item>摄影师</item>
+        <item>匠人</item>
+        <item>CEO</item>
+        <item>设计狮</item>
+        <item>红人</item>
+        <item>诗人</item>
+    </string-array>
+
+    <string-array name="arrays_salesAfter_result_status">
+        <item>退款成功</item>
+        <item>商家已拒绝，请与客服联系。</item>
+    </string-array>
+</resources>

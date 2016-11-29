@@ -8,9 +8,9 @@ public class NetworkConstance {
     public static final String ALI_PAY = "alipay";
     public static final String WX_PAY = "weichat";
     public static final String JD_PAY = "jdpay";
-//    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
+    public static final String BASE_URL = "http://api.taihuoniao.com/app/api"; //线上
 //    public static final String BASE_URL = "http://m.taihuoniao.com/app/api";//生产环境
-    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
+//    public static final String BASE_URL = "http://t.taihuoniao.com/app/api";  // 测试环境
 
     public static final String CHARSET = "utf-8";
     public static final int CONN_TIMEOUT = 60000;

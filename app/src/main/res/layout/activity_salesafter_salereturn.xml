@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F7F7"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -36,14 +35,16 @@
             android:focusableInTouchMode="false"
             android:hint="¥0.00"
             android:paddingLeft="15dp"
-            android:textColor="#222222" />
+            android:textColor="#222222"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="退款原因"
-            android:textColor="#999999" />
+            android:text="退货原因"
+            android:textColor="#999999"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/editText2"
@@ -53,7 +54,7 @@
             android:background="@drawable/background_border_white"
             android:drawableRight="@mipmap/option_chargeback_cause"
             android:gravity="center_vertical"
-            android:hint="退款原因"
+            android:hint="退货原因"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:textColor="#222222"
@@ -63,7 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="退款说明" />
+            android:text="退货说明"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/editText3"
@@ -71,13 +73,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/background_border_white"
-            android:hint="请输入退款说明"
+            android:hint="请输入退货说明"
             android:maxLength="200"
             android:minHeight="44dp"
             android:paddingBottom="10dp"
             android:paddingLeft="15dp"
             android:paddingTop="10dp"
-            android:textColor="#222222" />
+            android:textColor="#222222"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

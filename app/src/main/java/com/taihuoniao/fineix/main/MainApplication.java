@@ -90,7 +90,7 @@ public class MainApplication extends Application {
 
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
-        MobclickAgent.setDebugMode(true);
+        MobclickAgent.setDebugMode(false);
         instance = this;
 
         //初始化universal_image_load
@@ -127,37 +127,6 @@ public class MainApplication extends Application {
 
     private void setDisplayMetrics(DisplayMetrics DisplayMetrics) {
         this.displayMetrics = DisplayMetrics;
-    }
-
-
-    private void initImageLoader() {
-        if (ImageLoader.getInstance().isInited()) {
-            return;
-        }
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.mipmap.default_background_750_1334)
-                .showImageOnFail(R.mipmap.default_background_750_1334)
-                .showImageOnLoading(R.mipmap.default_background_750_1334)
-                .cacheInMemory(true)
-                .considerExifParams(true)
-//                .displayer(new FadeInBitmapDisplayer(500))
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheOnDisk(true)
-                .build();
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .threadPriority(Thread.MIN_PRIORITY + 3/*Thread.NORM_PRIORITY - 2*/)
-                .defaultDisplayImageOptions(defaultOptions)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCache(new UnlimitedDiskCache(StorageUtils.getCacheDirectory(this)))
-                .diskCacheSize(100 * 1024 * 1024).tasksProcessingOrder(QueueProcessingType.LIFO)
-                .memoryCache(new LruMemoryCache((int) (Runtime.getRuntime().maxMemory() / 10)))
-//                .memoryCacheSize(4 * 1024 * 1024)
-                .memoryCacheSize((int) (Runtime.getRuntime().maxMemory() / 10))
-                .threadPoolSize(5)
-                .build();
-        ImageLoader.getInstance().init(config);
     }
 
     //获取应用的data/data/....File目录
